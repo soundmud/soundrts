@@ -1,0 +1,5 @@
+def mage
+can_use a_teleportation a_summon_dragon a_meteors
+
+def magestower
+can_research u_teleportation u_summon_dragon u_meteors

@@ -1,0 +1,445 @@
+0	unbekannt!
+1	Sie 
+
+3	vor Ihnen
+4	hinter Ihnen
+5	Wie sind Ihre Befehle?
+
+23	und
+
+38	Sie haben
+39	Lebenspunkte von
+40	Level
+
+54	auf
+55	Meter
+
+59	der Spieler
+60	Sie sind
+61	getötet
+
+65	Minuten
+66	Sekunden
+67	Norden
+68	Süden
+69	Osten
+70	Westen
+71	Nord-Osten
+72	Nord-Westen
+73	Süd-Osten
+74	Süd-Westen
+79	Aue
+80	Wald
+81	Goldmine
+82	Rathaus
+83	Farm
+84	Weg
+85	Arbeiter
+86	Soldat
+87	Schütze
+88	Feind
+89	Freund
+99	Baracke
+100	Gehe
+101	baue
+102	abbau von
+103	Patrouillieren
+104	Modus
+105	OK!
+106	Stop
+107	in
+108	im
+110	offensiv
+111	defensiv
+112	Position halten
+113	verdeckt
+114	Angriff
+115	zu
+116	im Osten
+117	im Westen
+118	repariere
+119	auf
+120	Kampf
+121	gegen
+122	Aue
+123	rekrutiere
+124	fertig!
+125									Sie befehligen
+126	abgeschlossen
+127	abbrechen von
+128	bauen
+129	benötigt
+130	Einheiten
+131	Gold
+132	Holz
+133	Nahrung
+134	enthält
+135	nicht genügend
+136	dasselbe !
+137	Nahrung
+138	Sie befehligen
+139	eine Gruppe
+
+142	Produktion angehalten
+143	die Warteschlange ist voll
+144	abgebaut,
+145	neutralisiert
+146	verloren
+147	Produktion
+148	Sägemühle 
+149	Sieg!
+150	Niederlage
+151	1
+152	Alarm
+153	Brücke
+154	offen
+155	Level abgeschlossen
+156	im Zentrum
+
+
+
+2008	Drücken Sie F5 für Wiederholung
+2010	drücken Sie
+2011	für
+2012	Tab
+2013	zu navigieren.
+2014	Eingabe
+2015	zu bestätigen.
+2016	A und Q
+2017	Geben Sie Ihre Befehle
+2018	Z und S
+2019	eine andere Einheit steuern
+2020	X und W
+2021	überprüfen Sie die ressourcen
+2022	1, 2 oder 3
+2023	Steuern Sie eine Gruppe
+2024	0
+2025	Steuern Sie eine einzelne Einheit
+2026	Rücktaste
+2027	führt die standard aktion des aktuellen ziel aus.
+2028	F5 und F6
+2029	die letzten meldungen wiederholen
+2030	Alt
+2031	unterbrechen Sie die sprachausgabe ...
+2032	escape
+2033	abzubrechen.
+2034	schift
+2035	in gegengesetzter Richtung.
+2036	das Öffnen des Menüs.
+2037	Pfeiltasten
+2038	das Navigieren auf der Karte.
+2039	steuerung
+2040	Hindernisse werden ignoriert.
+2041	bild runter
+2042	das Navigieren zum nächsten interessanten Sektor.
+2043	leertaste
+2044	das Navigieren zu der aktuell befehligten Einheit.
+2045	das Befehligen der nächsten Einheit im aktuellen Sektor.
+2046	das Auswählen des nächsten Ziels.
+2047	das Auswählen des nächsten Auftrags.
+2048	das Befehligen aller Einheiten des selben Typs im aktuellen Sektor.
+2049	das Bestätigen des gewählten Auftrags.
+2050	das Ausführen der Standardaktion.
+2051	das Abfragen von Gold, Holz und Nahrung.
+2052	das Abfragen der Gesundheit der aktuellen Einheit.
+2053	das Befehligen der hälfte aller Einheiten des selben Typs im aktuellen Sektor.
+2054	das Befehligen einer Einheit des selben Typs im aktuellen Sektor.
+2055	q
+2056	das Befehligen aller Kampfeinheiten im aktuellen Sektor.
+2057	das Befehligen aller Arbeiter im aktuellen Sektor.
+2058	das Befehligen des nächsten Gebäudes.
+2059	das Befehligen des nächsten Arbeiters.
+3000	0
+3001	1
+3002	2
+3003	3
+3004	4
+3005	5
+3006	6
+3007	7
+3008	8
+3009	9
+3010	10
+3011	11
+3012	12
+3013	13
+3014	14
+3015	15
+3016	16
+3017	17
+3018	18
+3019	19
+3020	20
+3021	21
+3030	30
+3031	31
+3040	40
+3041	41
+3050	50
+3051	51
+3060	60
+3061	61
+3070	70
+3071	71
+3080	80
+3090	90	
+3100	Hundert
+3101	Tausend
+3102	millionen
+
+4000	spiel
+4001	Internet
+4002	lokal
+4004	verarbeitung
+4005	fehler
+4006	erfolgreich!
+4007	bitte wählen Sie einen Eintrag.
+4008	bitte senden Sie kommentare an die E-Mail-Adresse: jlpo@free.fr
+4009	zurück,
+4010	Menü
+4011	Fortfahren
+4012	Version Fehler
+4014	Strategiespiel
+4015	Kapitel
+4016	Einzelspieler,
+4017	Karte
+4018	Mehrspieler,
+4019	wechsel
+4020	ziel: 
+4021	emun gegen feindliche angriffe.
+4022	produziert,
+4023	produziert,
+4024	benötigt
+4025	Gebäude
+4026	punkte
+
+4028	F1 für Hilfe
+4029	Hauptmenü,
+4030	bitte wählen Sie einen Eintrag.
+4031	Einzelspieler,
+4032	spielen Sie gegen den computer
+4033	Mehrspieler,
+4034	spielen Sie gegen Freunde
+4035	Server erstellen,
+4036	Erstellen Sie einen eigenen Server
+4037	einstellungen,
+4038	Konfigurieren Sie das Spiel
+
+4041	beenden,
+4042	Beenden Sie das Spiel
+4043	welche art von server?
+4044	einfacher server
+4045	Andere können keine Spiele erstellen
+4046	öffentlicher server
+4047	Andere können Spiele erstellen
+4048	zurück,
+4049	der Server konnte nicht erstellt werden. Bitte überprüfen Sie Ihre Internet-Verbindung.
+4051	Auf wiedersehen
+4052	drücken Sie TAB um einen Eintrag auszuwählen und bestätigen Sie ihn mit Eingabe.
+4053	akzeptieren Sie die einladung von:
+4054	wechsle zu spiel
+4055	Spiel starten
+4056	herzlich willkommen:
+4057	Fehler: es gibt zu viele Spiele
+4058	Spiel mit
+4059	start
+4060	Spiel abbrechen
+4061	verlassen dieses spiels.
+4062	das spiel startet in 5 sekunden...
+4063	das Spiel startet, wenn der Spielleiter bereit ist.
+4064	drücken Sie Eingabe um zu bestädigen.
+
+4066	drücken sie TAB um zwischen den sichtbaren objekten zu wählen. 
+4067	drücken sie TAB um ein ziel auszuwählen, und Enter um zu bestätigen.
+
+4070	Spiel abbrechen
+4071	Spiel fortsetzen
+4072	Die Verbindung zu dem Server konnte nicht hergestellt werden. Bitte überprüfen Sie Ihre Internet-Verbindung.
+4073	server wird verwaltet von:
+4074	für
+4075	zurück,
+4076	zurück,
+4077	fehler: Der server ist gerade nicht erreichbar, bitte versuchen Sie es später erneut.
+4078	server von:
+4079	benutzen die gleiche Version des Spiels wie Sie. Bitte wählen Sie einen Server aus und drücken Sie enter um zu verbinden.
+4080	fehler: der Server konnte nicht gestartet werden.
+4081	Fehler! Der Server ist nicht erreichbar. Gründe können sein: Der Server ist nicht online, der Server ist hinter einer Firewall oder einem Router.
+4082	Fehler! unbekannte Daten vom Server empfangen. Dies ist kein SoundRTS Server.
+4083	Fehler! Verbindung fehlgeschlagen. Dies ist kein SoundRTS Server
+4084	oder deine Anmeldung ist fehlgeschlagen.
+4085	fehler! Die Verbindung zum Server ist fehlgeschlagen.
+4086	bitte wählen Sie einen Eintrag.
+4087	Zugangsdaten ändern
+
+4096	speichern,
+4097	Einstellungen werden übernommen
+4098	zurück,
+4099	Einstellungen werden verworfen
+
+4101	ein neues fenster wird sich öffnen.
+4102	die verbindung wurde unterbrochen.
+4103	Langsames Spiel
+4104	Normales Spiel
+4105	Schnelles Spiel
+
+4112	Spiel speichern
+4113	Spiel laden
+4114	Spiel gegen den Computer.
+4115	Erzeuge einen Fehler im Spiel, und lasse den Computer gegen sich selbst spielen.
+
+4118	zurück,
+4119	wählen Sie einen Server
+4120	geben Sie die IP-Adresse des Servers ein.
+4121	privater server
+4122	Der Server wird nicht in die Liste aufgenommen
+
+4200	die Holz produktion wurde beschläunigt.
+4201	katapult
+4202	erwartet Ihre Befehle
+4203	von
+4204	Ein Gebäude kann hier nicht errichtet werden
+4205	es wird keine Einheit befehligt
+4206	der bbildschirm ist an.
+4207	der bildschirm ist aus.
+4208	unbekannt
+4209	Nebel
+4210	F10 für das öffnen des Menüs.
+4211	3D-Modus
+4212	kartenmodus
+4213	Schmiede
+4214	erweitern
+4215	schwerter
+4216	pfeile
+4217	rüstungen
+4218	rüstung für die Bogenschützen
+4219	auf
+4220	Bergfried
+4221	schloss
+4222	stall
+4223	das menü von
+4224	 hat sich gerade verändert
+4225	ritter
+4226	werkstatt
+4227	drachenhöhle
+4228	Turm des Magiers
+4229	Magier
+4230	flugmaschine
+4231	drache
+4232	server fehler
+4233	bogen reichweite
+4234	Eine neue Version ist auf der hersteller webseite verfügbar.
+4235	Geben Sie einen Benutzernamen ein.
+4236	Bitte benutzen Sie nur zahlen und buchstaben.
+4237	falsche Zugangsdaten
+4238	aktuelle Zugangsdaten werden beibehalten
+4239	neue Zugangsdaten
+4240	ist angemeldet
+4241	ist dem Spiel beigetreten
+4242	spieler von
+4243	läd Sie ein
+4244	nicht genug spieler für ein spiel, das minimum von spielern ist:
+4245	aktuelle Zugangsdaten
+4246	das Bevölkerungslimit wurde erreicht
+4247	Magiepunkte von
+4248	erforsche
+4249	wunderheilung
+4250	teleportation
+4251	test
+4252	nicht genügend Magie, warten Sie bitte bis sich die einheit erholt hat.
+4253	Prozent der Lautstärke
+4254	geschwindigkeit des Pferdes
+4255	lege einen neuen sammelpunkt für alle einheiten fest.
+4256	abgebaut,
+4257	aggressivem Computer
+4258	friedlichem computer
+4259	hat sich abgemeldet.
+4260	auf dem server von:
+4261	hat das spiel beendet.
+4262	zusätzliches Sound-pack
+4263	ist aktiviert.
+4264	ist deaktiviert.
+4265	schummel modus
+4266	neustart
+4267	Kampagne
+4268	neues angriffsziel
+4269	angriffsziel zerstört
+4270	mission beendet.
+4271	abschnitt
+4272	prolog
+4273	epilog
+4274	wandle um
+4275	Aussichtsturm
+4276	wachturm
+4277	kanonenturm
+4278	lade
+4279	lade alle von
+4280	lade ab
+4281	lade alle ab nach
+4282	gehe in
+4283	unsichtbarer schütze
+
+5000 a
+5001 b
+5002 c
+5003 d
+5004 e
+5005 f
+5006 g
+5007 h
+5008 i
+5009 j
+5010 k
+5011 l
+5012 m
+5013 n
+5014 o
+5015 p
+5016 q
+5017 r
+5018 s
+5019 t
+5020 u
+5021 v
+5022 w
+5023 x
+5024 y
+5025 z
+
+5026	punkt
+
+4284 bewege
+4285 zu Allianz
+4286 verbunden
+4287 sagt
+4288 geben Sie Ihre nachricht ein
+
+4289 unsichtbar
+4290 enttarnen
+4291 tarnen
+
+4292 auffordern
+4293 die toten aus den Gräbern holen
+4294 auferstehung
+
+4295 zombie
+4296 skellett
+
+4297 priester
+4298 tempel
+
+4299 fernsicht
+4300 heiliger blick
+
+4301 mensch
+4302 orc
+
+4303 necromancer
+4304 friedhof
+
+4305 nebel des todes
+4306 meteor
+
+4307 zurückholen
+
+4308 stein
+4309 steinbruch

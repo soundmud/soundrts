@@ -1,0 +1,37 @@
+; *BLACK+CROSS*
+; -------------
+; _ By: Christoff Eilers < christoff1@gmail.com >
+; _ You can write me in Bulgarian, French, English, Russian, Dutch, Spanish, or German.
+; _ I can't translate other languages! ^^
+; ======================================
+; This map is a square with a cross in his center. There's a river on the frontiers between the square and the "parts" of the cross. Minimum: 2 players; maximum: 4 players. There are many resources, but I used the preprocessor directives when I created the map, so this resources will be on different places... This map is very little for 4 people, then pay attention, else you'll be fastly submerged. HAVE FUN! :-) (AND DO NOT forget that the cross is a very good hiding-place if you have mages! ;)
+title 5002 5004 3005
+objective 145 88
+square_width 12
+nb_columns 4
+nb_lines 4
+west_east_paths a1 a4 b1 b4 c1 c4
+west_east_bridges a2 a3 c2 c3
+south_north_paths a1 a2 a3 d1 d2 d3
+south_north_bridges b1 b3 c1 c3
+#random_choice
+goldmines 150 a2 b4 c1 d3
+#end_choice
+goldmines 450 a3 b1 c4 d2
+#end_random_choice
+#random_choice
+woods 75 a2 b4 c1 d3
+#end_choice
+woods 390 a3 b1 c4 d2
+#end_choice
+woods 400 a2 b4 c1 d3
+#end_random_choice
+nb_meadows_by_square 3
+additional_meadows a1 a4 d1 d4
+remove_meadows b2 b3 c2 c3
+nb_players_min 2
+nb_players_max 4
+starting_squares b2 b3 c2 c3
+starting_units knight footman stables 2 knight blacksmith 2 farm 5 peasant townhall 5 peasant 2 farm 3 footman barracks 2 archer lumbermill 3 archer
+starting_resources 400 200
+global_food_limit 400

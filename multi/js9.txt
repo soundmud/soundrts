@@ -1,0 +1,55 @@
+; Multiplayer Map JS9: Death's Doorstep
+; By Jason Symes (president731@yahoo.com)
+
+title 5009 5018 3009
+objective 145 88
+
+; map size
+square_width 12
+nb_columns 9
+nb_lines 9
+
+; paths (give only the starting square)
+
+west_east_paths d2 e2 c3 d3 e3 f3 b4 c4 d4 e4 f4 g4 a5 b5 c5 d5
+west_east_paths e5 f5 g5 h5 b6 c6 d6 e6 f6 g6 c7 d7 e7 f7 d8 e8
+
+south_north_paths e1 d2 e2 f2 c3 d3 e3 f3 g3 b4 c4 d4 e4 f4 g4 h4 b5 c5 d5 e5
+south_north_paths f5 g5 h5 c6 d6 e6 f6 g6 d7 e7 f7 e8
+
+; resources
+goldmines 250 e1 a5 e9 i5
+goldmines 125 c3 g3 g7 c7
+goldmines 1500 e5
+
+#random_choice
+woods 80 d2
+#end_choice
+woods 80 f2
+#end_random_choice
+#random_choice
+woods 80 b4
+#end_choice
+woods 80 b6
+#end_random_choice
+#random_choice
+woods 80 d8
+#end_choice
+woods 80 f8
+#end_random_choice
+#random_choice
+woods 80 h4
+#end_choice
+woods 80 h6
+#end_random_choice
+woods 400 e5
+nb_meadows_by_square 4
+
+; players
+nb_players_min 2
+nb_players_max 4
+
+starting_squares e1 a5 e9 i5
+starting_units townhall 5 farm 8 peasant
+starting_resources 250 250
+global_food_limit 250

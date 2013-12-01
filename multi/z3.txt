@@ -1,0 +1,35 @@
+; zombie planet part 3.
+; made by valentin. all copyrights reserved.
+; contact me: ninutz2006@yahoo.com
+; only in english or romanian
+; also visit: http://ht-arena.com/echipaluininunzu.
+
+title 5025 3003
+objective 145 88
+
+square_width 12
+nb_columns 1
+nb_lines 40
+
+south_north_paths a1 a2 a3 a4 a5 a6 a7 a8 a9 a10
+south_north_paths a11 a12 a13 a14 a15 a16 a17 a18 a19 a20
+south_north_paths a21 a22 a23 a24 a25 a26 a27 a28 a29 a30
+south_north_paths a31 a32 a33 a34 a35 a36 a37 a38 a39
+
+goldmines 50 a3 a6 a8 a10 
+goldmines 100 a5 a15 a30 a33
+goldmines 1000 a4 a20 a40
+
+woods 75 a2 a8 a16 a31 a22
+woods 200 a5 a22 a37 a39
+woods 1000 a25 a40
+
+nb_meadows_by_square 6
+nb_players_min 2
+nb_players_max 9
+
+starting_squares a1 a5 a10 a15 a20 a25 a30 a35 a40
+starting_units townhall 11 farm stables barracks blacksmith dragonslair magestower
+starting_resources 1000 1000
+global_food_limit 600
+

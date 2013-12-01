@@ -1,0 +1,26 @@
+; buildings
+
+def pig_farm
+is_a farm
+title 7000
+noise repeat 15 1050
+
+def orc_barracks
+is_a barracks
+title 7001
+
+def great_hall
+is_a townhall
+title 7002
+noise repeat 6 1064
+
+
+; units
+
+def peon
+is_a peasant
+title 7003
+
+def grunt
+is_a footman
+title 7004

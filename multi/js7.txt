@@ -1,0 +1,78 @@
+; Multiplayer Map JS7 - The Hunt For Eldorado
+; By Jason Symes (president731@yahoo.com)
+; The famous campaign where the Spanish search for the historic city of Eldorado, and bump against the Central American natives in violent clashes.
+title 5009 5018 3007
+objective 4021 145 88
+
+; map size
+
+square_width 12
+nb_columns 11
+nb_lines 16
+
+; Peru
+
+west_east_paths c1 d1 e1 f1 i1 j1
+west_east_paths a2 b2 c2 d2 e2 f2 i2 j2
+west_east_paths c3 d3 e3 f3 i3 j3
+west_east_paths a4 d4 e4 f4 i4
+west_east_paths d5 e5 f5
+
+west_east_bridges g4 h4
+
+south_north_paths a1 c1 d1 e1 f1 g1 i1 j1 k1
+south_north_paths a2 c2 d2 e2 f2 g2 i2 j2 k2
+south_north_paths a3 d3 e3 f3 g3 i3 j3
+south_north_paths b4 d4 e4 f4 g4 i4
+
+south_north_bridges d5 e5
+
+goldmines 100 b4 c2 e5 g1
+goldmines 75 a3 i5
+woods 200 c1 b5
+woods 100 f1 g3 i4 k2
+#random_choice
+starting_squares g1
+#end_choice
+starting_squares b4
+#end_choice
+starting_squares c2
+#end_choice
+starting_squares e5
+#end_random_choice
+
+; Central America
+
+west_east_paths a16 b16 c16 d16 g16 h16 i16 j16
+west_east_paths a15 b15 c15 g15 h15 i15 j15
+west_east_paths a14 b14 c14 g14 h14 i14
+west_east_paths a13 b13 c13 g13 h13 i13
+west_east_paths b12 c12 g12 b11 c11 g11
+west_east_paths c10 g10 c9 f9 d8 e8 d7 d6
+
+south_north_bridges a15 b15 c15 d15 g15 h15 i15 j15 k15
+south_north_bridges a14 b14 c14 d14 g14 h14 i14 j14
+south_north_bridges a13 b13 c13 d13 g13 h13 i13 j13
+south_north_bridges b12 c12 d12 g12 h12 b11 c11 d11 g11 h11
+south_north_bridges c10 d10 g10 h10 c9 d9 g9 d8 f8 d7 e7 d6 e6
+
+goldmines 750 c16 h14 d7
+goldmines 250 c10 g9
+woods 100 a13 j16 e8
+woods 50 e6
+#random_choice
+starting_squares c16
+#end_choice
+starting_squares h14
+#end_choice
+starting_squares g9
+#end_choice
+starting_squares c10
+#end_random_choice
+
+nb_meadows_by_square 2
+nb_players_min 2
+nb_players_max 2
+starting_units townhall 3 farm magestower 8 peasant
+starting_resources 100 100
+global_food_limit 320

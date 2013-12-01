@@ -1,0 +1,1 @@
+SHIFT z: resource_status 2

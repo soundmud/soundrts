@@ -1,0 +1,152 @@
+; Multiplayer map 101 - Frontier
+; By Bryan Smart (bryansmart@bryansmart.com)
+; Last modified 10/22/2007
+;
+; War begins with up to four tiny factions locked in mortal combat in a city fortress. Each
+; faction must decide to spend its limited resources in an effort to gain and keep control
+; of the treasures in the city square, or else must venture out to build new bases and serve
+; revenge from the frontier.
+
+title 3001 3000 3001
+objective 145 88
+
+; map size
+
+square_width 12
+
+nb_columns 13
+nb_lines 13
+
+; paths (give only the starting square)
+
+; southern home
+
+west_east_paths f4 g4
+west_east_paths f5 g5
+
+south_north_paths f4 h5
+
+; Central home
+west_east_paths f6 g6
+west_east_bridges f7 g7
+west_east_paths f8 g8
+
+south_north_paths f6 f7
+south_north_bridges g6 g7
+south_north_paths h6 h7
+
+; northern home
+west_east_paths f9 g9
+west_east_paths f10 g10
+
+south_north_paths f8 h9
+
+; Western home
+south_north_paths d6 e6 d7 e7
+west_east_paths e6 d8
+
+; Eastern home
+south_north_paths i6 j6 i7 j7
+west_east_paths h8 i6
+
+; Frontier
+
+; lower frontier
+
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1
+south_north_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1
+
+west_east_paths a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 k2 l2
+south_north_paths a2 b2 l2 m2
+south_north_bridges c2 d2 e2 f2 g2 h2 i2 j2 k2
+
+west_east_paths a3 c3 d3 e3 f3 g3 h3 i3 j3 l3
+west_east_bridges b3 k3
+south_north_paths a3 b3 c3 h3 k3 l3 m3
+
+; middle frontier
+west_east_paths a4 b4 k4 l4
+west_east_paths a5 l5
+west_east_paths a6 l6
+west_east_paths a7 l7
+west_east_paths a8 l8
+west_east_paths a9 l9
+west_east_paths a10 l10
+
+west_east_bridges b4 k4
+west_east_bridges b5 k5
+west_east_bridges b6 k6
+west_east_bridges b7 k7
+west_east_bridges b8 k8
+west_east_bridges b9 k9
+west_east_bridges b10 k10
+
+south_north_paths a4 b4 c4 k4 l4 m4
+south_north_paths a5 b5 c5 k5 l5 m5
+south_north_paths a6 b6 c6 k6 l6 m6
+south_north_paths a7 b7 c7 k7 l7 m7
+south_north_paths a8 b8 c8 k8 l8 m8
+south_north_paths a9 b9 c9 k9 l9 m9
+south_north_paths a10 b10 c10 k10 l10 m10
+
+west_east_paths c6 j8
+
+; upper frontier
+
+west_east_paths a11 c11 d11 e11 f11 g11 h11 i11 j11 l11
+west_east_bridges b11 k11
+
+south_north_paths a11 b11 l11 m11
+south_north_bridges c11 d11 e11 f11 g11 h11 i11 j11 k11
+
+west_east_paths a12 b12 c12 d12 e12 f12 g12 h12 i12 j12 k12 l12
+south_north_paths a12 b12 c12 d12 e12 f12 g12 h12 i12 j12 k12 l12 m12
+
+west_east_paths a13 b13 c13 d13 e13 f13 g13 h13 i13 j13 k13 l13
+
+south_north_paths f10
+
+; home resources
+
+goldmines 200 f4 h10 d8 j6
+woods 150 f4 h10 d8 j6
+
+; Central resources
+
+goldmines 1500 g7
+woods 500 g7 g7
+
+; Frontier resources
+
+goldmines 150 a1 g1 m1 a7 m7 a13 g13 m13
+goldmines 200 d2 j2 d12 j12
+
+; Outer ring
+woods 75 b1 e1 i1 l1
+woods 75 b13 e13 i13 l13
+woods 75 a2 a5 a9 a12
+woods 75 m2 m5 m9 m12
+
+woods 75 c2 k2
+woods 75 c12 k12
+woods 75 b3 b11
+woods 75 l3 l11
+
+nb_meadows_by_square 2
+
+; Home meadows
+additional_meadows f4 h10 d8 j6
+
+; Central resource meadows
+additional_meadows g7 g7
+; corners
+additional_meadows a1 m1 a13 m13
+
+; players
+
+nb_players_min 2
+nb_players_max 4
+
+starting_squares f4 h10 d8 j6
+starting_units townhall farm 2 peasant
+starting_resources 25 25

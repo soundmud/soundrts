@@ -1,0 +1,39 @@
+; multiplayer map mb6
+title 5012 5001 3006
+
+ 
+objective 145 88
+
+; map size
+
+square_width 12
+
+nb_columns 6
+nb_lines 6
+
+; paths (give only the starting square) 
+west_east_paths a1 a2 a3 a4 a5 a6 c1 c2 c3 c4 c5 c6 e1 e2 e3 e4 e5 e6 
+south_north_paths 
+; resources
+goldmines 100 a1 a2 a3 a4 a5 a6 
+goldmines 100 c1 c2 c3 c4 c5 c6 
+goldmines 100 f1 f2 f3 f4 f5 f6
+woods 100 a1 a2 a3 a4 a5 a6 
+woods 100 c1 c2 c3 c4 c5 c6 
+woods 100 f1 f2 f3 f4 f5 f6
+
+
+nb_meadows_by_square 4
+additional_meadows 
+
+global_food_limit 80
+
+
+; players
+
+nb_players_min 2
+nb_players_max 4
+
+starting_squares a1 a2 a3 a4 a5 a6 c1 c2 c3 c4 c5 c6 f1 f2 f3 f4 f5 f6
+starting_units townhall magestower farm peasant mage
+starting_resources 100 100

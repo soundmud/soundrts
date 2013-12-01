@@ -1,0 +1,24 @@
+title 5010 5004 5011 3004 1130 1130
+objective 1130 1174
+
+; map size
+square_width 12
+nb_columns 13
+nb_lines 13
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 a3 b3 c3 d3 e3 f3 g3 h3 i3 j3 k3 l3 a5 b5 c5 d5 e5 f5 g5 h5 i5 j5 k5 l5 a7 b7 c7 d7 e7 f7 g7 h7 i7 j7 k7 l7 a9 b9 c9 d9 e9 f9 g9 h9 i9 j9 k9 l9 a11 b11 c11 d11 e11 f11 g11 h11 i11 j11 k11 l11 a13 b13 c13 d13 e13 f13 g13 h13 i13 j13 k13 l13
+south_north_paths g1 g2 g3 g4 g5 g6 g7 g8 g9 g10 g11 g12 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 m1 m2 m3 m4 m5 m6 m7 m8 m9 m10 m11 m12
+goldmines 250 d1 d13 j1 j13
+goldmines 300 d3 d11 j3 j11
+goldmines 400 d5 d9 j5 j9
+goldmines 500 a1 a3 a5 a7 a9 a11 a13 m1 m3 m5 m7 m9 m11 m13 d7 j7
+woods 25 d1 d3 d5 d7 d9 d11 d13 j1 j3 j5 j7 j9 j11 j13
+woods 50 a1 a3 a5 a7 a9 a11 a13 m1 m3 m5 m7 m9 m11 m13
+nb_meadows_by_square 5
+
+; players
+nb_players_min 2
+nb_players_max 7
+starting_squares g1 g3 g5 g7 g9 g11 g13
+starting_units townhall 2 farm 2 barracks lumbermill 16 peasant
+starting_resources 500 500
+global_food_limit 1750

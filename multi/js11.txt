@@ -1,0 +1,63 @@
+; Multiplayer Map JS11
+; By Jason Symes (president731@yahoo.com)
+; A good, tough map for up to 8 players.
+; Your goal is to illiminate all enemy opposition and take control of h8, where loads of gold and wood are located.
+; Enjoy.
+
+title 5009 5018 3011
+objective 145 88
+
+; map size
+square_width 12
+nb_columns 15
+nb_lines 15
+
+; paths (give only the starting square)
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1
+west_east_paths a15 b15 c15 d15 e15 f15 g15 h15 i15 j15 k15 l15 m15 n15
+west_east_paths g8 h8
+
+west_east_bridges a2 b3 c4 d5 e6 f7 n14 m13 l12 k11 j10 i9
+west_east_bridges a14 b13 c12 d11 e10 f9 n2 m3 l4 k5 j6 i7
+west_east_bridges a8 b8 c8 d8 e8 f8 i8 j8 k8 l8 m8 n8
+
+south_north_paths a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13 a14
+south_north_paths o1 o2 o3 o4 o5 o6 o7 o8 o9 o10 o11 o12 o13 o14
+
+south_north_bridges b2 c3 d4 e5 f6 g7 i8 j9 k10 l11 m12 n13
+south_north_bridges b13 c12 d11 e10 f9 g8 n2 m3 l4 k5 j6 i7
+south_north_bridges h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11 h12 h13 h14
+
+; resources
+goldmines 100 a1 a15 o1 o15 h1 h15 a8 o8
+goldmines 200 c3 e5 g7 c13 e11 g9 m3 k5 i7 m13 k11 i9
+goldmines 200 c8 e8 g8 h3 h5 h7 i8 k8 m8 h9 h11 h13
+goldmines 750 h8 h8
+
+woods 50 a1 a8 a15 h1 h15 o1 o8 o15
+woods 100 c3 e5 g7 c13 e11 g9 m3 k5 i7 m13 k11 i9
+woods 100 c8 e8 g8 h3 h5 h7 i8 k8 m8 h9 h11 h13
+woods 250 h8 h8
+
+nb_meadows_by_square 3
+remove_meadows a2 a2 a2 a14 a14 a14 o14 o14 o14 o2 o2 o2 b2 b2 b2 b14 b14 b14 n14 n14 n14 n2 n2 n2
+remove_meadows c4 c4 c4 c12 c12 c12 m12 m12 m12 m4 m4 m4 d4 d4 d4 d12 d12 d12 l12 l12 l12 l4 l4 l4
+remove_meadows e6 e6 e6 e10 e10 e10 k10 k10 k10 k6 k6 k6 f6 f6 f6 f10 f10 f10 j10 j10 j10 j6 j6 j6
+remove_meadows b1 b1 b1 c1 c1 c1 d1 d1 d1 e1 e1 e1 f1 f1 f1 g1 g1 g1
+remove_meadows i1 i1 i1 j1 j1 j1 k1 k1 k1 l1 l1 l1 m1 m1 m1 n1 n1 n1
+remove_meadows a3 a3 a3 a4 a4 a4 a5 a5 a5 a6 a6 a6 a7 a7 a7 a9 a9 a9 a10 a10 a10 a11 a11 a11 a12 a12 a12 a13 a13 a13
+remove_meadows b15 b15 b15 c15 c15 c15 d15 d15 d15 e15 e15 e15 f15 f15 f15 g15 g15 g15 i15 i15 i15 j15 j15 j15 k15 k15 k15 l15 l15 l15 m15 m15 m15 n15 n15 n15
+remove_meadows o13 o13 o13 o12 o12 o12 o11 o11 o11 o10 o10 o10 o10 o9 o9 o9 o7 o7 o7 o6 o6 o6 o5 o5 o5 o4 o4 o4 o3 o3 o3
+
+; players
+
+computer_only 0 0 h8 20 catapult 20 knight 20 archer 20 dragon 20 mage townhall
+nb_players_min 2
+nb_players_max 8
+starting_squares a1 a8 a15 h1 h15 o1 o8 o15
+starting_units townhall 5 farm 10 peasant knight catapult stables blacksmith lumbermill
+starting_resources 100 100
+global_food_limit 330
+trigger players (no_enemy_left) (victory)
+trigger players (no_building_left) (defeat)
+trigger computers (no_unit_left) (defeat)

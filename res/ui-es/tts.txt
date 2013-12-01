@@ -1,0 +1,436 @@
+0	Nada!
+1	estás
+
+3	Delante de ti
+4	Detrás de ti
+5	¿Qué deseas hacer?
+
+23	i
+
+38	Tienes
+39	puntos de vida
+40	nivel
+
+54	en
+55	metros
+
+59	el jugador
+60	has
+61	muerto
+
+65	minutos
+66	segundos
+67	norte
+68 sur
+69	este
+70	oeste
+71	noreste
+72	noroeste
+73	sureste
+74	suroeste
+79	en un claro rodeado de árboles
+80	bosque
+81	mina de oro
+82	ayuntamiento
+83	granja
+84	un camino
+85	peón
+86	soldado raso
+87	arquero
+88	enemigo
+89	amigo
+99	cuartel
+100	ir
+101	construir
+102	explotar
+103	patrullar
+104	modo
+105	bien!
+106	detener
+107	en
+108	hacia el
+110	ofensivo
+111	defensivo
+112	mantener posición
+113	robado
+114	ataque
+115	a
+116	hacia el este
+117	hacia el oeste
+118	reparar
+119	en
+120	combate
+121 contra
+122	un terreno
+123	reclutar
+124	listo!
+125	reunión
+126	completado
+127	cancelar
+128	construcción
+129 requiere
+130	unidades
+131	de oro
+132	de madera
+133	raciones
+134	contiene
+135	insuficiente
+136	lo mismo!
+137	raciones
+138	están a tus órdenes
+139	para grupo
+
+142	producción pausada
+143	la lista está llena
+144	agotado
+145	neutralizado
+146	perdido
+147	producción
+148	aserradero
+149	Victoria
+150	Derrota
+151	1
+152	alerta
+153	un puente
+154 abrir
+155	has alcanzado el nivel
+156	en el centro
+
+
+
+2008	Pulsa f5 para escucharlo de nuevo
+2010	pulsa
+2011	para
+2012	Tab
+2013	select
+2014	Enter
+2015	confirma
+2016	A y Q
+2017	da una orden
+2018	Z y S
+2019	controlar otra unidad
+2020	X o W
+2021	comprobar recursos
+2022	1, 2 o 3
+2023	controlar un grupo
+2024	0
+2025	controlar sólo una unidad
+2026	tecla de borrado
+2027	da la orden por defecto
+2028	F5 y F6
+2029	historial
+2030	Alt
+2031	interrumpe la verbalización de texto
+2032	escape
+2033	cancelar
+2034	shift
+2035	volver atrás
+2036	abrir el menú
+2037	flechas de dirección
+2038	moverse por el mapa
+2039	control
+2040	ignorando los obstáculos
+2041	page down
+2042	moverse a la siguiente casilla interesante
+2043	espacio
+2044	va a la casilla de la unidad que está siendo controlada, y la sigue
+2045	controla la siguiente unidad local
+2046	selecciona el siguiente objetivo
+2047	selecciona la siguiente orden
+2048	selecciona todas las unidades del mismo tipo y en la misma casilla que la unidad seleccionada
+2049	confirma la orden dada
+2050	da la orden más lógica para el objetivo seleccionado
+2051	saber cuánto oro, madera y comida tienes
+2052	saber la salud de la unidad seleccionada
+2053	controlar la mitad de las unidades del mismo tipo y en la misma casilla que la unidad seleccionada
+2054	controlar sólo una unidad
+2055	q
+2056	controlar todos los soldados de la casilla seleccionada
+2057	controlar todos los peones de la casilla seleccionada
+2058	controlar la construcción siguiente
+2059	controlar el peón siguiente
+3000	0
+3001	1
+3002	2
+3003	3
+3004	4
+3005	5
+3006	6
+3007	7
+3008	8
+3009	9
+3010	10
+3011	11
+3012	12
+3013	13
+3014	14
+3015	15
+3016	16
+3017	17
+3018	18
+3019	19
+3020	20
+3021	21
+3030	30
+3031	31
+3040	40
+3041	41
+3050	50
+3051	51
+3060	60
+3061	61
+3071	71
+3100	100
+3101	1000
+3102	millón
+
+4000	juego
+4001	Internet
+4002	local
+4004	procesando
+4005	error
+4006	correcto
+4007	¿qué deseas hacer?
+4008	por favor, comentarios y sugerencias a jlpo@free.fr
+4009	Salir
+4010	Menú
+4011	continuar
+4012	error de versión
+4014	juego de estrategia
+4015	capítulo
+4016	un sólo jugador
+4017	mapa
+4018	multijugador
+4019	unirse
+4020	objetivos: 
+4021	resistir el ataque enemigo
+4022	producido
+4023	producidos
+4024	consumido
+4025	construcción
+4026	puntuación
+
+4028	para ayuda, pulsa f1
+4029	menú principal
+4030	¿qué deseas hacer?
+4031	un sólo jugador,
+4032	jugar en tu ordenador
+4033	multijugador,
+4034	jugar a través de Internet
+4035	servidor,
+4036	iniciar un servidor en tu ordenador para partidas multijugador
+4037	opciones,
+4038	modificar la configuración
+
+4041	salir,
+4042	salir del juego
+4043	¿qué tipo de servidor?
+4044	servidor simple
+4045	solo tú podrás crear partidas
+4046	servidor público
+4047	los visitantes podrán crear partidas
+4048	cancelar
+4049	El servidor no puede conectarse al metaservidor. Es posible que tu conexión a internet esté fallando.
+4051	adiós
+4052	Pulsa tab para seleccionar, pulsa enter para confirmar.
+4053	unirse a la partida de
+4054	rejoindre en cours de route la partie de
+4055	iniciar
+4056	bienvenido
+4057	Error: demasiadas partidas
+4058	invitar
+4059	empezar
+4060	cancelar la partida
+4061	retirarse de esta partida
+4062	la partida empieza en 5 segundos
+4063	la partida empezará cuando el organizador lo decida
+4064	pulsa enter para confirmar
+
+4066	pulsa tab varias veces para seleccionar cada objeto visible
+4067	pulsa tab para seleccionar el objetivo, enter para confirmar
+
+4070	cancelar partida
+4071	continuar partida
+4072	imposible acceder a la lista de servidores. podrías no estar conectado a Internet
+4073	servidor de
+4074	para
+4075	cancelar
+4076	ir al menú anterior
+4077	no hay servidores registrados en Internet por ahora
+4078	servidores activos
+4079	usando la misma versión del juego. ¿a qué servidor deseas conectar?
+4080	error: imposible iniciar el servidor
+4081	Servidor no disponible. El servidor está cerrado o bloqueado por un firewall.
+4082	failure: Respuesta inesperada del servidor. no es un servidor válido de SoundRTS
+4083	Conexión rechazada por el servidor. No es un servidor válido de SoundRTS
+4084	o tu nombre de usuario ha sido rechazado
+4085	error en la conexión con el servidor
+4086	menú de opciones
+4087	modificar tu nombre de usuario
+
+4096	guardar,
+4097	guardar los cambios y regresar al menú principal
+4098	cancelar,
+4099	regresar al menú principal sin guardar los cambios
+
+4101	se arirá una nueva ventana
+4102	conexión interrumpida
+4103	partida lenta
+4104	partida a velocidad normal
+4105	partida rápida
+
+4112	guardar partida
+4113	cargar partida
+4114	contra el ordenador
+4115	ordenador contra ordenador
+
+4118	atrás
+4119	elegir el servidor en una lista
+4120	inscribir la direccion I P del servidor
+4121	servidor privado
+4122	El servidor no estara agregado a la lista.
+
+4200	la producción de madera ha mejorado
+4201	catapulta
+4202	esperando órdenes
+4203	de
+4204	no puedes construir ahí
+4205	no estás controlando ninguna unidad
+4206	mostrar activado
+4207	mostrar desactivado
+4208	desconocido
+4209	niebla de guerra
+4210	F10 para acceder al menú
+4211	modo primera persona
+4212	modo mapa
+4213	forja
+4214	mejorar
+4215	espadas
+4216	flechas
+4217	armaduras de los soldados rasos
+4218	armaduras de los arqueros
+4219	y convertir en
+4220	fortaleza
+4221	castillo
+4222	establos
+4223	el menú de
+4224	 ha cambiado.
+4225	caballero
+4226	taller
+4227	guarida de dragones
+4228	torre de hechicería
+4229	hechicero
+4230	máquina voladora
+4231	dragón
+4232	error del servidor
+4233	tu alcance
+4234	hay una versión más reciente del programa en Internet
+4235	introduce tu nuevo nombre de usuario
+4236	usa números y letras únicamente
+4237	nombre de usuario incorrecto
+4238	nombre de usuario en uso
+4239	nuevo nombre de usuario
+4240	se ha conectado
+4241	se ha unido
+4242	jugadores en
+4243	te invita
+4244	se necesitan más jugadores para empezar. El mínimo es de
+4245	nombre de usuario actual
+4246	límite de población alcanzado
+4247	puntos de mana
+4248	investigar
+4249	super sanador
+4250	teletransporte
+4251	a
+4252	no hay mana suficiente
+4253	porcentaje del volumen
+4254	velocidad de los caballo
+4255	define el punto de reunión para las nuevas unidades
+4256	recolectado
+4257	ordenador en modo agresivo
+4258	ordenador en modo no agresivo
+4259	se ha desconectado
+4260	del servidor de
+4261	a salido de la partida
+4262	pack de sonidos
+4263	activado
+4264	desactivado
+4265	cheat mode
+4266	reiniciar
+4267	campaña
+4268	nuevo objetivo
+4269	objetivo cumplido
+4270	misión cumplida
+4271	capítulo
+4272	prólogo
+4273	epílogo
+4274	conversión
+4275	torre
+4276	torre con arqueros
+4277	torre con cañones
+4278	cargar
+4279	cargar todos desde
+4280	descargar
+4281	descargar todos en
+4282	entrar en
+
+5000 a
+5001 b
+5002 c
+5003 d
+5004 e
+5005 f
+5006 g
+5007 h
+5008 i
+5009 j
+5010 k
+5011 l
+5012 m
+5013 n
+5014 o
+5015 p
+5016 q
+5017 r
+5018 s
+5019 t
+5020 u
+5021 v
+5022 w
+5023 x
+5024 y
+5025 z
+
+5026	punto
+
+4283 arquero oscuro
+
+4284 mover
+4285 a la alianza
+4286 aliado
+
+4287 dice
+
+4288 enter your message
+
+4289 invisible
+4290 detector
+4291 cloaker
+
+4292 invocar
+4293 despertar a los muertos
+4294 resurreccion
+
+4295 zombi
+4296 esqueleto
+
+4297 sacerdote
+4298 templo
+
+4299 visión sagrada
+4300 exorcismo
+
+
+4301 humano
+4302 orco
+

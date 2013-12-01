@@ -1,0 +1,78 @@
+; Map js4 Collide, Part 4 (Double Trouble)
+; By Jason Symes
+title 5009 5018 3004
+objective 145 88
+
+; map size
+
+square_width 15
+nb_columns 5
+nb_lines 10
+
+; paths (give only the starting square)
+
+west_east_paths a3 d3 a1
+west_east_paths a5 d1 d5
+west_east_paths b7 c9
+
+west_east_bridges b2 c4
+west_east_bridges a8 d8 a6
+west_east_bridges a10 d6 d10
+
+south_north_paths a1 a4 e1 e4
+south_north_paths b3 c2 d3
+south_north_paths a7 a8 e7 e8
+south_north_paths b7 c8 d7
+south_north_paths c6 c9 c5
+
+south_north_bridges a2 a3 e2 e3
+south_north_bridges b2 c3 d2
+south_north_bridges c1 c4
+south_north_bridges a6 a9 e6 e9
+south_north_bridges b8 c7 d8
+
+; resources
+
+goldmines 200 b1 b5 d1 d5
+goldmines 200 b6 b10 d6 d10
+goldmines 750 c3 c8
+#random_choice
+goldmines 150 b2
+#end_choice
+goldmines 150 b4
+#end_random_choice
+#random_choice
+goldmines 150 b7
+#end_choice
+goldmines 150 b9
+#end_random_choice
+#random_choice
+goldmines 150 d2
+#end_choice
+goldmines 150 d4
+#end_random_choice
+#random_choice
+goldmines 150 d7
+#end_choice
+goldmines 150 d9
+#end_random_choice
+
+woods 75 a1 a5 e1 e5
+woods 75 a6 a10 e6 e10
+woods 75 b3 d3 b8 d8
+woods 150 c1 c5 c6 c10
+
+nb_meadows_by_square 2
+additional_meadows a1 a5 e1 e5
+additional_meadows a6 a10 e6 e10
+
+; players
+
+nb_players_min 2
+nb_players_max 8
+
+starting_squares b1 b5 d1 d5
+starting_squares b6 b10 d6 d10
+starting_units townhall 2 farm 5  peasant 2 knight
+starting_resources 100 100
+global_food_limit 320

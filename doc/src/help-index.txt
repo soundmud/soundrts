@@ -1,0 +1,6 @@
+Documentation
+=============
+
+- `Game manual <manual.htm>`_
+- `Map making guide <mapmaking.htm>`_
+- `Modding guide <modding.htm>`_ (work in progress)

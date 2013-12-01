@@ -1,0 +1,316 @@
+; Multiplayer Map JS10: Shifting Alliances
+; By Jason Symes (president731@yahoo.com)
+; This is a good map for up to five players.
+; I've tried to build it in a way that it's never quite the same each time it's played.
+
+title 5009 5018 3010
+objective 145 88
+
+; map size
+square_width 12
+nb_columns 20
+nb_lines 2
+
+; paths (give only the starting square)
+#random_choice
+west_east_paths a1 b2 c1 d2 e1 f2 g1 h2 i1 j2 k1 l2 m1 n2 o1 p2 q1 r2 s1
+#end_choice
+west_east_paths a2 b1 c2 d1 e2 f1 g2 h1 i2 j1 k2 l1 m2 n1 o2 p1 q2 r1 s2
+#end_random_choice
+
+#random_choice
+south_north_paths a1 c1 e1 g1 i1 k1 m1 o1 q1 s1
+south_north_bridges b1 d1 f1 h1 j1 l1 n1 p1 r1 t1
+#end_choice
+south_north_paths b1 d1 f1 h1 j1 l1 n1 p1 r1 t1
+south_north_bridges a1 c1 e1 g1 i1 k1 m1 o1 q1 s1
+#end_random_choice
+
+; resources
+#random_choice
+goldmines 150 a1
+#end_choice
+goldmines 150 a2
+#end_choice
+goldmines 150 b1
+#end_choice
+goldmines 150 b2
+#end_random_choice
+#random_choice
+goldmines 225 c1
+#end_choice
+goldmines 225 c2
+#end_choice
+goldmines 225 d1
+#end_choice
+goldmines 225 d2
+#end_random_choice
+#random_choice
+goldmines 150 e1
+#end_choice
+goldmines 150 e2
+#end_choice
+goldmines 150 f1
+#end_choice
+goldmines 150 f2
+#end_random_choice
+#random_choice
+goldmines 225 g1
+#end_choice
+goldmines 225 g2
+#end_choice
+goldmines 225 h1
+#end_choice
+goldmines 225 h2
+#end_random_choice
+#random_choice
+goldmines 150 i1
+#end_choice
+goldmines 150 i2
+#end_choice
+goldmines 150 j1
+#end_choice
+goldmines 150 j2
+#end_random_choice
+#random_choice
+goldmines 225 k1
+#end_choice
+goldmines 225 k2
+#end_choice
+goldmines 225 l1
+#end_choice
+goldmines 225 l2
+#end_random_choice
+#random_choice
+goldmines 150 m1
+#end_choice
+goldmines 150 m2
+#end_choice
+goldmines 150 n1
+#end_choice
+goldmines 150 n2
+#end_random_choice
+#random_choice
+goldmines 225 o1
+#end_choice
+goldmines 225 o2
+#end_choice
+goldmines 225 p1
+#end_choice
+goldmines 225 p2
+#end_random_choice
+#random_choice
+goldmines 150 q1
+#end_choice
+goldmines 150 q2
+#end_choice
+goldmines 150 r1
+#end_choice
+goldmines 150 r2
+#end_random_choice
+#random_choice
+goldmines 225 s1
+#end_choice
+goldmines 225 s2
+#end_choice
+goldmines 225 t1
+#end_choice
+goldmines 225 t2
+#end_random_choice
+#random_choice
+goldmines 750 j1 k2
+#end_choice
+goldmines 750 j2 k1
+#end_random_choice
+
+#random_choice
+woods 60 a1
+#end_choice
+woods 60 a2
+#end_choice
+woods 60 b1
+#end_choice
+woods 60 b2
+#end_random_choice
+#random_choice
+woods 85 c1
+#end_choice
+woods 85 c2
+#end_choice
+woods 85 d1
+#end_choice
+woods 85 d2
+#end_random_choice
+#random_choice
+woods 60 e1
+#end_choice
+woods 60 e2
+#end_choice
+woods 60 f1
+#end_choice
+woods 60 f2
+#end_random_choice
+#random_choice
+woods 85 g1
+#end_choice
+woods 85 g2
+#end_choice
+woods 85 h1
+#end_choice
+woods 85 h2
+#end_random_choice
+#random_choice
+woods 60 i1
+#end_choice
+woods 60 i2
+#end_choice
+woods 60 j1
+#end_choice
+woods 60 j2
+#end_random_choice
+#random_choice
+woods 85 k1
+#end_choice
+woods 85 k2
+#end_choice
+woods 85 l1
+#end_choice
+woods 85 l2
+#end_random_choice
+#random_choice
+woods 60 m1
+#end_choice
+woods 60 m2
+#end_choice
+woods 60 n1
+#end_choice
+woods 60 n2
+#end_random_choice
+#random_choice
+woods 85 o1
+#end_choice
+woods 85 o2
+#end_choice
+woods 85 p1
+#end_choice
+woods 85 p2
+#end_random_choice
+#random_choice
+woods 60 q1
+#end_choice
+woods 60 q2
+#end_choice
+woods 60 r1
+#end_choice
+woods 60 r2
+#end_random_choice
+#random_choice
+woods 85 s1
+#end_choice
+woods 85 s2
+#end_choice
+woods 85 t1
+#end_choice
+woods 85 t2
+#end_random_choice
+#random_choice
+woods 200 j1 k2
+#end_choice
+woods 200 j2 k1
+#end_random_choice
+
+nb_meadows_by_square 3
+
+; players
+nb_players_min 2
+nb_players_max 5
+
+#random_choice
+starting_squares a1
+#end_choice
+starting_squares a2
+#end_choice
+starting_squares b1
+#end_choice
+starting_squares b2
+#end_choice
+starting_squares c1
+#end_choice
+starting_squares c2
+#end_choice
+starting_squares d1
+#end_choice
+starting_squares d2
+#end_random_choice
+#random_choice
+starting_squares e1
+#end_choice
+starting_squares e2
+#end_choice
+starting_squares f1
+#end_choice
+starting_squares f2
+#end_choice
+starting_squares g1
+#end_choice
+starting_squares g2
+#end_choice
+starting_squares h1
+#end_choice
+starting_squares h2
+#end_random_choice
+#random_choice
+starting_squares i1
+#end_choice
+starting_squares i2
+#end_choice
+starting_squares j1
+#end_choice
+starting_squares j2
+#end_choice
+starting_squares k1
+#end_choice
+starting_squares k2
+#end_choice
+starting_squares l1
+#end_choice
+starting_squares l2
+#end_random_choice
+#random_choice
+starting_squares m1
+#end_choice
+starting_squares m2
+#end_choice
+starting_squares n1
+#end_choice
+starting_squares n2
+#end_choice
+starting_squares o1
+#end_choice
+starting_squares o2
+#end_choice
+starting_squares p1
+#end_choice
+starting_squares p2
+#end_random_choice
+#random_choice
+starting_squares q1
+#end_choice
+starting_squares q2
+#end_choice
+starting_squares r1
+#end_choice
+starting_squares r2
+#end_choice
+starting_squares s1
+#end_choice
+starting_squares s2
+#end_choice
+starting_squares t1
+#end_choice
+starting_squares t2
+#end_random_choice
+
+starting_units farm 8 peasant
+starting_resources 100 100
+global_food_limit 250

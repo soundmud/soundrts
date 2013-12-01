@@ -1,0 +1,70 @@
+; note: I have copy-pasted human classes because "is_a" has side effects concerning requirements (ex: a keep "is a" townhall)
+; Using "is_a" might be possible though.
+
+; races
+
+def orc_race
+class race
+townhall great_hall
+farm pig_farm
+peasant peon
+easy orc_easy
+aggressive orc_aggressive
+
+; units
+
+def peon
+class worker
+cost 4 0
+food_cost 1
+time_cost 10
+hp_max 4
+speed 1.5
+can_build pig_farm orc_barracks great_hall
+range 0.8
+cooldown 1
+damage 1.5
+
+def grunt
+class soldier
+cost 6 0
+food_cost 1
+time_cost 12
+hp_max 15
+speed 1.5
+armor 0.5
+armor_bonus 1
+range 1
+cooldown 1.5
+damage 3.5
+damage_bonus 2.5
+
+; buildings
+
+def pig_farm
+class building
+cost 5 5
+food_provided 8; 4 * 2
+hp_max 133.3;  400/3
+time_cost 45
+requirements great_hall
+
+def orc_barracks
+class building
+cost 7 9
+food_provided 0
+hp_max 266.7;  800/3
+time_cost 90
+requirements great_hall
+can_train grunt
+
+def great_hall
+class building
+cost 12 16
+food_provided 1
+hp_max 400;  1200/3
+time_cost 135
+heal_level 1
+storable_resource_types 0 1
+can_train peon
+

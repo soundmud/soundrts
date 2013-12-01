@@ -1,0 +1,31 @@
+; Map name: Show Down
+; Created by Kelvin Tan
+
+; This map is created for precisely this purpose, a show down between 2 enemies! It is a 3 by 10 map with a reasonable amount of resources to start with, and with lots more just to the left and right side of the 2 starting squares. Each player is also given 20 archers and 20 foot men to start with. However, meadows are pity scarce in this map, or should i say, both players have to make peasants work to uncover meadows for building buildings.
+
+; Keep a cool head, and keep your fingers working, and i am sure you will have no problem defeating your opponent in show down!
+; Enjoy!
+title 5010 5004 5011 3001 1130 1302
+objective 1130 1130 1078
+square_width 12
+nb_columns 3
+nb_lines 10
+west_east_paths a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 b1 b2 b3 b4 b5 b6 b7 b8 b9 b10
+south_north_paths a1 a2 a3 a4 a5 a6 a7 a8 a9 b1 b2 b3 b4 b5 b6 b7 b8 b9 c1 c2 c3 c4 c5 c6 c7 c8 c9
+goldmines 10 a2 a3 a4 a5 c6 c7 c8 c9
+goldmines 150 b1 b10
+goldmines 150 a1 a10 c1 c10
+goldmines 2000 b5 b6
+woods 1000 b5 b6
+woods 75 a1 a10 c1 c10
+woods 16 b5 b6
+woods 10 c2 c3 c4 c5 a6 a7 a8 a9
+nb_meadows_by_square 1
+remove_meadows b1 b10 b5 b6 a2 a3 a4 a5 a6 a7 a8 a9 c2 c3 c4 c5 c6 c7 c8 c9
+nb_players_min 2
+nb_players_max 2
+starting_squares b1 b10
+starting_units lumbermill blacksmith barracks stables 20 peasant workshop townhall 8 farm dragonslair magestower 22 footman 22 archer
+starting_resources 50 50
+global_food_limit 260
+

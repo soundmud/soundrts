@@ -1,0 +1,59 @@
+;   Uneasy allies
+;   by Steady Goh
+;   story line by Sun Wu Kong
+
+;  You and several nations formed an alliance to attack and destroy The 3 central  nations and their allies.  There has been rumors that these 3 nations are wealthy enough to produce an army strong enough to rule the world.  You don't know how strong is their combined army at this time, but if you don't act soon, it just might be too late!  You also know that your allies are also power hungry and that if they defeat the enemy and gain the resources before you do, they will not hesitate to break the alliance and declare war on each other along with yourself!
+
+title 5018 5006 3001
+objective 145 88
+
+; map size
+
+square_width 12
+
+nb_columns 11
+nb_lines 11
+
+; paths (give only the starting square)
+
+west_east_paths a1 b2 c3 d4 e5 f5 c4 b5
+west_east_paths a11 b10 c9 d8 e7 c8 b7
+west_east_paths j1 i2 h3 g4 h4 i5
+west_east_paths j11 i10 h9 g8 f7 h8 i7
+west_east_paths a6 b6 c6 d6 g6 h6 i6 j6
+
+west_east_bridges e6 f6
+
+south_north_paths b1 c2 d3 e4 e5 c4 b5
+south_north_paths b10 c9 d8 e7 e6 c7 b6
+south_north_paths j1 i2 h3 g4 g5 i4 j5
+south_north_paths j10 i9 h8 g7 g6 i7 j6
+
+south_north_bridges f5 f6
+
+; resources
+goldmines 75 c3 c9 i3 i9
+goldmines 200 a6 k6
+goldmines 500 e6 g6
+goldmines 2000 f6
+
+woods 75 c3 c9 i3 i9
+woods 100 a6 k6
+woods 200 e6 g6
+woods 500 f6
+
+nb_meadows_by_square 4
+
+; players
+nb_players_min 2
+nb_players_max 4
+
+starting_squares a1 a11 k1 k11
+starting_units townhall barracks farm 5 peasant 2 knight
+starting_resources 100 100
+global_food_limit 200
+computer_only 100 100 f6 50 footman 20 peasant townhall
+computer_only 100 100 e6 10 footman 5 peasant townhall
+computer_only 100 100 g6 10 footman 5 peasant townhall
+computer_only 100 100 a6 5 footman 3 peasant townhall
+computer_only 100 100 k6 5 footman 3 peasant townhall

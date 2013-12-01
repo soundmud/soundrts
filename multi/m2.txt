@@ -1,0 +1,108 @@
+; A simple map for 9 players
+; Made by Masackru http://acces.wordpress.com or http://masackru.wordpress.com
+; Copyright Masackru, all rights reserved
+
+title 5012 3002
+objective 145 88
+
+square_width 12
+nb_columns 15
+nb_lines 15
+
+west_east_paths a1 a2 a3 a4 a5
+west_east_paths a6 a7 a8 a9 a10
+west_east_paths a11 a12 a13 a14 a15
+west_east_paths b1 b2 b3 b4 b5
+west_east_paths b6 b7 b8 b9 b10
+west_east_paths b11 b12 b13 b14 b15
+west_east_paths c1 c2 c3 c4 c5
+west_east_paths c6 c7 c8 c9 c10
+west_east_paths c11 c12 c13 c14 c15
+west_east_paths d1 d2 d3 d4 d5
+west_east_paths d6 d7 d8 d9 d10
+west_east_paths d11 d12 d13 d14 d15
+west_east_paths e3 e8 e13
+west_east_paths f1 f2 f3 f4 f5
+west_east_paths f6 f7 f8 f9 f10
+west_east_paths f11 f12 f13 f14 f15
+west_east_paths g1 g2 g3 g4 g5
+west_east_paths g6 g7 g8 g9 g10
+west_east_paths g11 g12 g13 g14 g15
+west_east_paths h1 h2 h3 h4 h5
+west_east_paths h6 h7 h8 h9 h10
+west_east_paths h11 h12 h13 h14 h15
+west_east_paths i1 i2 i3 i4 i5
+west_east_paths i6 i7 i8 i9 i10
+west_east_paths i11 i12 i13 i14 i15
+west_east_paths j3 j8 j13
+west_east_paths k1 k2 k3 k4 k5
+west_east_paths k6 k7 k8 k9 k10
+west_east_paths k11 k12 k13 k14 k15
+west_east_paths l1 l2 l3 l4 l5
+west_east_paths l6 l7 l8 l9 l10
+west_east_paths l11 l12 l13 l14 l15
+west_east_paths m1 m2 m3 m4 m5
+west_east_paths m6 m7 m8 m9 m10
+west_east_paths m11 m12 m13 m14 m15
+west_east_paths n1 n2 n3 n4 n5
+west_east_paths n6 n7 n8 n9 n10
+west_east_paths n11 n12 n13 n14 n15
+
+south_north_paths a1 a2 a3 a4
+south_north_paths a6 a7 a8 a9
+south_north_paths a11 a12 a13 a14
+south_north_paths b1 b2 b3 b4
+south_north_paths b6 b7 b8 b9
+south_north_paths b11 b12 b13 b14
+south_north_paths c1 c2 c3 c4 c5
+south_north_paths c6 c7 c8 c9 c10
+south_north_paths c11 c12 c13 c14
+south_north_paths d1 d2 d3 d4
+south_north_paths d6 d7 d8 d9
+south_north_paths d11 d12 d13 d14
+south_north_paths e1 e2 e3 e4
+south_north_paths e6 e7 e8 e9
+south_north_paths e11 e12 e13 e14
+south_north_paths f1 f2 f3 f4
+south_north_paths f6 f7 f8 f9
+south_north_paths f11 f12 f13 f14
+south_north_paths g1 g2 g3 g4 g6 g7 g8 g9 g11 g12 g13 g14
+south_north_paths h1 h2 h3 h4 h6 h7 h8 h9 h11 h12 h13 h14
+south_north_paths i1 i2 i3 i4 i6 i7 i8 i9 i11 i12 i13 i14
+south_north_paths j1 j2 j3 j4
+south_north_paths j6 j7 j8 j9
+south_north_paths j11 j12 j13 j14
+south_north_paths k1 k2 k3 k4
+south_north_paths k6 k7 k8 k9
+south_north_paths k11 k12 k13 k14
+south_north_paths l1 l2 l3 l4
+south_north_paths l6 l7 l8 l9
+south_north_paths l11 l12 l13 l14
+south_north_paths m1 m2 m3 m4 m5
+south_north_paths m6 m7 m8 m9
+south_north_paths m10 m11 m12 m13 m14
+south_north_paths n1 n2 n3 n4 n6 n7 n8 n9 n11 n12 n13 n14
+south_north_paths o1 o2 o3 o4 o6 o7 o8 o9 o11 o12 o13 o14
+
+goldmines 150 a1 a5 a6 a10 a11 a15
+goldmines 150 e1 e5 e6 e10 e11 e15
+goldmines 150 f1 f5 f6 f10 f11 f15
+goldmines 150 j1 j5 j6 j10 j11 j15
+goldmines 150 k1 k5 k6 k10 k11 k15
+goldmines 150 o1 o5 o6 o10 o11 o15
+goldmines 500 c3 c8 c13
+goldmines 500 h3 h8 h13
+goldmines 500 m3 m8 m13
+
+woods 150 b2 b7 b12 g2 g7 g12 l2 l7 l12
+woods 150 d4 d9 d14 i4 i9 i14 n4 n9 n14
+
+nb_meadows_by_square 4
+
+nb_players_min 2
+nb_players_max 9
+
+starting_squares c3 c8 c13 h3 h8 h13 m3 m8 m13
+starting_units townhall 2 farm 5 peasant
+starting_resources 250 250
+global_food_limit 4500

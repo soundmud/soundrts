@@ -1,0 +1,531 @@
+; messages
+
+def messages
+the_queue_is_full 143
+not_enough_resource_0 135 131
+not_enough_resource_1 135 132
+not_enough_food 135 133
+population_limit_reached 4246
+production_deferred 142
+cannot_build_here 4204
+not_enough_mana 4252
+not_enough_space 1027
+
+; miscellaneous parameters
+
+def parameters
+no_path_in_this_direction 1027
+requires 129
+and 23
+resource_0_title 131
+resource_1_title 132
+food_title 133
+
+; units menus
+
+def enter
+title 4282
+; no index (won't appear in the menu)
+
+def go
+title 100 115
+index 1
+
+def patrol
+title 103 115
+index 2
+
+def load
+title 4278
+index 3
+
+def load_all
+title 4279
+index 3
+
+def unload
+title 4280 $1 115
+index 3
+
+def unload_all
+title 4281
+index 3
+
+def gather
+title 102
+index 3
+
+def use
+title $1
+index 4
+
+def build
+title 101 $1 119 ; if the order is "build farm", $1 is replaced with the title of "farm"
+index 5
+
+def build_phase_two ; working on a construction site
+title 101
+; no index (won't appear in the menu)
+
+def repair
+title 118
+index 6
+
+def train
+title 123 $1 ; if the order is "train peasant", $1 is replaced with the title of "peasant"
+index 7
+
+def research
+title 4248 $1
+index 8
+
+;def upgrade
+;title 4214 $1
+
+def upgrade_to
+title 4214 4219 $1 ; if the order is "upgrade_to keep", $1 is replaced with the title of "keep"
+index 9
+
+def mode_offensive
+title 104 110
+index 10
+
+def mode_defensive
+title 104 111
+index 10
+
+def cancel_building
+title 127 128
+index 10
+
+def cancel_upgrading
+title 127 4214
+index 10
+
+def cancel_training
+title 127 147
+index 10
+
+def rallying_point
+title 125 115
+comment 4255
+index 11
+
+def stop
+title 106
+index 12
+
+; abilities?
+
+def a_teleportation
+title 4250 4251
+alert 1328
+
+def a_recall
+title 4307
+alert 1328
+
+def a_holy_vision
+title 4299
+alert 1339
+
+def a_conversion
+title 4274
+alert 6114
+
+def a_summon_dragon
+title 4292 4231
+alert 1338
+
+def a_deadly_fog
+title 4305
+alert
+
+def a_raise_dead
+title 4293
+alert 1340
+
+def a_resurrection
+title 4294
+alert 1339
+
+def a_meteors
+title 4306
+alert
+
+def a_exorcism
+title 4300
+alert
+
+; upgrades
+
+def melee_weapon
+title 4215
+
+def melee_armor
+title 4217
+
+def archer_weapon
+title 4216
+
+def archer_armor
+title 4218
+
+def archer_range
+title 4233
+
+def horse_speed
+title 4254
+
+; research
+
+def superhealer
+title 4249
+
+def u_teleportation
+title 4250
+
+def u_recall
+title 4307
+
+def u_conversion
+title 4274
+
+def u_summon_dragon
+title 4292 4231
+
+def u_deadly_fog
+title 4305
+
+def u_raise_dead
+title 4293
+
+def u_resurrection
+title 4294
+
+def u_meteors
+title 4306
+
+def u_exorcism
+title 4300
+
+
+; "abstract" classes (not used directly)
+
+def thing
+title
+noise
+missed 1012
+attack_hit
+death
+proportion_0 if_me 6100 else 6000
+proportion_1 if_me 6101 else 6001
+proportion_2 if_me 6102 else 6002
+proportion_3 if_me 6103 else 6003
+proportion_4 if_me 6104 else 6004
+proportion_5 if_me 6105 else 6005
+proportion_6 if_me 6106 else 6006
+proportion_7 if_me 6107 else 6007
+proportion_8 if_me 6108 else 6008
+proportion_9 if_me 6109 else 6009
+proportion_10 if_me 6110 else 6010
+ground
+lose_fight 1324
+order_ok if_me 1194 1195 1196 else 1094 1095 1096
+order_impossible 1029
+research_complete_msg 4248 126
+added 1329
+added_msg $1 
+enter 1330
+exit 1331
+
+def unit
+is_a thing
+complete
+complete_msg $1 124
+launch_attack
+death if_me 1310 else 1309 1051
+alert 1078 ; horn
+production 1327 ; research, train or upgrade_to
+win_fight if_me 1326 else 1325
+attack if_me 1130 else 1030
+flee if_me 1174 else 1074
+healed 1097
+blocked 1027
+noise_if_damaged if_me repeat 12 1172 else repeat 12 1072
+noise_if_very_damaged if_me repeat 12 1173 else repeat 12 1073
+
+def building
+is_a unit
+complete if_me 1200 else 1100
+complete_msg $1 126
+death 1047
+alert 1079 ; bell
+noise_if_damaged loop 1016 .5 ; half volume
+noise_if_very_damaged loop 1016
+ground grass
+keyboard building
+
+def walking_unit
+is_a unit
+move 1053 1054
+move_on_grass 1053 1054
+move_on_leaves 1069 1070
+move_on_gravel 1068 1068
+move_on_wood 1067 1067
+
+def resource_deposit
+is_a thing
+exhausted
+
+; buildings
+
+def buildingsite
+is_a building
+title 107 128
+noise_if_damaged
+noise_if_very_damaged
+ground gravel
+
+def farm
+is_a building
+title 83
+noise repeat 15 1050
+
+def lumbermill
+is_a building
+title 148
+noise repeat 15 1052
+
+def barracks
+is_a building
+title 99
+
+def townhall
+is_a building
+title 82
+noise repeat 6 1064
+
+def keep
+is_a townhall
+title 4220
+noise repeat 6 1307
+
+def castle
+is_a keep
+title 4221
+noise repeat 6 1308
+
+def blacksmith
+is_a building
+title 4213
+noise repeat 15 1300
+
+def stables
+is_a building
+title 4222
+noise repeat 15 1305 1306
+
+def workshop
+is_a building
+title 4226
+noise repeat 15 1321
+
+def dragonslair
+is_a building
+title 4227
+noise repeat 15 1320
+
+def magestower
+is_a building
+title 4228
+noise repeat 15 1319
+
+def temple
+is_a building
+title 4298
+
+def necropolis
+is_a building
+title 4304
+
+def scouttower
+is_a building
+title 4275
+noise repeat 6 6111
+
+def guardtower
+is_a building
+title 4276
+noise repeat 6 6112
+launch_attack 1042
+attack_hit 1301
+
+def cannontower
+is_a building
+title 4277
+noise repeat 6 6113
+launch_attack 1084
+attack_hit 1085
+
+; units
+
+def peasant
+is_a walking_unit
+title 85
+noise_when_exploiting_goldmine repeat 1.6 1038 ; 1081
+noise_when_exploiting_wood repeat 1.5 1034 1035 1036 1037
+noise_when_building repeat 4 1046 1048 1049
+attack_hit 1008
+store_resource_0 1099
+store_resource_1 1098
+keyboard worker
+
+def footman
+is_a walking_unit
+title 86
+attack_hit 1039 1040 1041
+attack_hit_level_1 1302
+keyboard soldier1
+
+def zombie
+is_a footman
+title 4295
+noise if_me repeat 6 1336 else repeat 6 1335
+attack 1031
+
+def archer
+is_a walking_unit
+title 87
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+keyboard soldier2
+
+def darkarcher
+is_a archer
+title 4283
+
+def skeleton
+is_a archer
+title 4296
+noise repeat 6 1337
+attack 1031
+
+def knight
+is_a unit
+title 4225
+noise repeat 30 1305 1306
+attack_hit 1039 1040 1041
+attack_hit_level_1 1302
+move 1303 1304
+keyboard soldier3
+
+def catapult
+is_a unit
+title 4201
+noise repeat 9 1311 1312 1313 ; 1082 1083 ?
+launch_attack 1084
+attack_hit 1085
+move 1082 1083
+keyboard soldier4
+
+def dragon
+is_a unit
+title 4231
+noise repeat 6 1314
+launch_attack 1084
+attack_hit 1085
+death 1316
+move 1317 1318
+keyboard soldier5
+
+def mage
+is_a walking_unit
+title 4229
+launch_attack 1322
+attack_hit 1323
+keyboard soldier6
+
+def priest
+is_a walking_unit
+title 4297
+keyboard soldier6
+
+def necromancer
+is_a walking_unit
+title 4303
+keyboard soldier6
+
+def new_flyingmachine
+is_a unit
+title 4230
+move 1317 1318
+keyboard soldier7
+
+def flyingmachine ; old flying machine
+is_a new_flyingmachine
+title 110 4230 ; offensive flying machine
+launch_attack 1322
+attack_hit 1323
+
+def holy_vision
+is_a thing
+title
+alert
+
+def meteors
+is_a thing
+noise ambient repeat .5 1341
+
+def exorcism
+is_a thing
+noise ambient repeat .5 1339
+
+; resources
+
+def goldmine
+is_a resource_deposit
+title 81
+exhausted 1047
+ground gravel
+
+def wood
+is_a resource_deposit
+title 80
+noise repeat 6 1055 1056 1057 1058 9999 9999
+ground leaves
+
+def meadow
+is_a thing
+title 122
+noise repeat 1.5 1059 1060 1061 1062 1063 9999 9999 9999 9999 9999 9999 9999 9999 9999 9999
+ground grass
+
+def corpse
+is_a thing
+title
+noise repeat 6 1332 1333 1334 9999 9999 9999 9999 9999 9999 9999 9999 9999 9999
+
+; passages
+
+def path
+title 84
+noise repeat 15 1000
+ground grass
+when_moving_through 1091
+
+def bridge
+title 153
+noise loop 1065
+ground wood .5 ; smaller area of effect
+when_moving_through 1092
+
+
+; races
+
+def random_race
+title 4310
+
+def human_race
+title 4301

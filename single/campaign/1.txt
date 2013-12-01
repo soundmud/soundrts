@@ -1,0 +1,59 @@
+; solo map 1
+;
+;  *******
+; 3* + + *
+;  *+*****
+; 2* + + *
+;  ***+***
+; 1* + + *
+;  *******
+;   A B C
+
+title 4271 3001
+intro 7501
+
+; map size
+
+square_width 12
+
+nb_columns 3
+nb_lines 3
+
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 a2 b2 a3 b3
+west_east_bridges
+
+south_north_paths a2
+south_north_bridges b1
+
+
+; resources
+
+goldmines 25 a1
+goldmines 50 c3
+
+woods 75 a1 c1
+
+nb_meadows_by_square 1
+additional_meadows c2
+remove_meadows a3 b2
+
+; players
+
+player 5 10 -townhall -lumbermill -blacksmith a1 townhall peasant c1 farm footman
+computer_only 0 0 a3 footman c3 2 footman c2 footman
+
+; triggers
+
+timer_coefficient 1
+
+trigger player1 (timer 0) (add_objective 1 101 151 83)
+trigger player1 (timer 0) (add_objective 2 101 151 99)
+
+trigger player1 (has 2 farm) (add_objective 2 101 151 99)
+trigger player1 (has 2 farm) (objective_complete 1)
+
+trigger player1 (has 2 farm barracks) (cut_scene 7502)
+trigger player1 (has barracks) (objective_complete 2)

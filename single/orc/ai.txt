@@ -1,0 +1,14 @@
+; an easy AI with small random attacks
+def orc_easy
+label beginning
+
+goto_random grunt grunts
+label grunt
+get 6 peon 10 grunt
+attack
+goto beginning
+
+label grunts
+get 6 peon 15 grunt
+attack
+goto beginning

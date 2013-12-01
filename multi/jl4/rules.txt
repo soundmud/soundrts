@@ -1,0 +1,36 @@
+; misc parameters
+
+def parameters
+nb_of_resource_types 3 ; gold, wood and stone
+
+
+; resource deposits
+
+def quarry
+class deposit
+resource_type 2 ; stone
+extraction_time 20
+extraction_qty 2
+
+
+; buildings
+
+def townhall
+storable_resource_types 0 1 2
+
+def magestower
+can_train mage stone_golem
+
+
+; units
+
+def stone_golem
+class soldier
+cost 0 0 10
+food_cost 0
+time_cost 24
+hp_max 30
+speed 1
+range 1
+cooldown 2
+damage 7

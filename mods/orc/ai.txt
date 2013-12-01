@@ -1,0 +1,30 @@
+; an easy AI
+def orc_easy
+
+get 6 peon 5 grunt
+get 8 peon 15 grunt
+goto -1
+
+; an agressive AI, attacking when each wave is ready (sometimes earlier if the strength is sufficient)
+def orc_aggressive
+
+watchdog 600 ; never stay on the same line for more than 10 minutes
+constant_attacks 1 ; constantly attack if powerful enough
+
+label beginning
+
+goto_random grunt grunts lots_of_grunts
+label grunt
+get 6 peon 1 grunt
+attack
+goto beginning
+
+label grunts
+get 6 peon 10 grunt
+attack
+goto beginning
+
+label lots_of_grunts
+get 6 peon 100 grunt
+attack
+goto beginning

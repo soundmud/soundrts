@@ -1,0 +1,51 @@
+; Map 6 Collide, Part 3
+; By Jason Symes
+title 5009 5018 3003
+objective 145 88
+
+
+; map size
+
+square_width 15
+
+nb_columns 5
+nb_lines 5
+
+
+; paths (give only the starting square)
+
+west_east_paths a3 d3 a1
+west_east_paths a5 d1 d5
+
+west_east_bridges b2 c4 d3
+
+south_north_paths a1 a4 e1 e4
+south_north_paths b3 c2 d3
+
+south_north_bridges a2 a3 e2 e3
+south_north_bridges b2 c3 d2
+south_north_bridges c1 c4
+
+
+; resources
+goldmines 200 b1 b5 d1 d5
+goldmines 150 b2 d4
+goldmines 750 c3
+
+woods 50 a1 a5 e1 e5
+woods 50 b3 d3
+woods 100 c1 c5
+
+nb_meadows_by_square 2
+additional_meadows a1 a5 e1 e5
+
+
+; players
+
+nb_players_min 2
+nb_players_max 4
+
+starting_squares b1 b5 d1 d5
+starting_units townhall 2 farm 5  peasant
+starting_resources 100 100
+

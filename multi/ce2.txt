@@ -1,0 +1,27 @@
+; DRAGONS BATTLE              ==========
+; --------------              /* 1314 */
+; _ By: Christoff Eilers < christoff1@gmail.com >
+; _ You can write me in Bulgarian, French, English, Russian, Dutch, Spanish, or German.
+; _ I can't translate other languages! ^^
+; ======================================
+; This map has a special structure, very complicated, you'll fight with your ennemies dragons, flying machines, and mages. In each square, you'll find a different "bonus" : a gold mine, a wood, or a free meadow. But pay attention, it will be very difficult to find the way because the structure is very complicated... Minimum : two players; maximum : six player; the game is finely when the map is full (= six players... ). Have fun !!! :-))   N.B. : A little advice : don't waste your starting resources to build new buildings, because the resources on the map are limited... ?)
+title 5002 5004 3002
+objective 145 88
+square_width 12
+nb_columns 7
+nb_lines 7
+west_east_bridges a1 a2 a3 a4 a5 a6 a7 b1 b2 b4 b6 b7 c1 c2 c4 c6 c7 d1 d2 d4 d6 d7 e1 e2 e4 e6 e7 f1 f2 f3 f4 f5 f6 f7
+south_north_bridges a2 a3 a4 a5 a6 b2 b3 b4 b5 c1 c3 c4 c6 d2 d3 d4 d5 e1 e3 e4 e6 f2 f3 f4 f5 g1 g2 g3 g4 g5
+goldmines 100 b2 b6 d2 d6 f2 f6
+goldmines 250 a1 c7 e1 g7
+goldmines 1300 d4
+woods 300 a7 d1 d7 g1
+woods 800 d4
+nb_meadows_by_square 1
+additional_meadows b3 b3 b5 b5 d3 d3 d4 d4 d5 d5 f3 f3 f5 f5
+nb_players_min 2
+nb_players_max 6
+starting_squares b3 b5 d3 d5 f3 f5
+starting_units farm dragonslair 4 dragon farm 5 peasant farm magestower 3 mage farm 4 flyingmachine farm
+starting_resources 250 100
+global_food_limit 1800

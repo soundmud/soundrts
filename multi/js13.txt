@@ -1,0 +1,118 @@
+; map js13: Universe Warriors
+; By Jason Symes (president731@yahoo.com)
+; A good map for a minimum of 4 and up to 16 players.
+
+title 5009 5018 3013
+objective 145 88
+
+; map size
+square_width 10
+nb_columns 20
+nb_lines 20
+
+; paths (give only the starting square)
+; south_west home1
+west_east_paths c3 b2 c2 b4 c4 d4 d1 c1 b1 a1 a5 b5 c5 d5
+
+west_east_bridges e1 e5 e6 e10 e11 e15 e16 e20 o1 o5 o6 o10 o11 o15 o16 o20 j1 j5 j6 j10 j11 j15 j16 j20
+
+south_north_paths b2 b3 d2 e3 e2 e1 a1 a2 a3 a4
+
+south_north_bridges a5 a10 a15 j5 j10 j15 k5 k10 k15 t5 t10 t15
+
+; north_west home1
+west_east_paths c8 c9 b9 b7 c7 d7 d10 c10 b10 a10 a6 b6 c6 d6
+
+south_north_paths a6 a7 a8 a9 d8 b8 b7 e7 e8 e9
+
+; south_east home1
+west_east_paths f5 g5 h5 i5 i1 h1 g1 f1 g2 h2 g3 f4 g4 h4
+
+south_north_paths f1 f2 f3 j1 j2 j3 j4 g2 i2 i3
+
+; north_east_home1
+west_east_paths f6 g6 h6 i6 f10 g10 h10 i10 f7 g7 h7 g9 h9 g8
+
+south_north_paths j6 j7 j8 j9 f7 f8 f9 g8 i7 i8
+
+; south_west home2
+west_east_paths c13 b12 c12 b14 c14 d14 d11 c11 b11 a11 a15 b15 c15 d15
+
+south_north_paths b12 b13 d12 e13 e12 e11 a11 a12 a13 a14
+
+; north_west home2
+west_east_paths c18 c19 b19 b17 c17 d17 d20 c20 b20 a20 a16 b16 c16 d16
+
+south_north_paths a16 a17 a18 a19 d18 b18 b17 e17 e18 e19
+
+; south_east home2
+west_east_paths f15 g15 h15 i15 i11 h11 g11 f11 g12 h12 g13 f14 g14 h14
+
+south_north_paths f11 f12 f13 j11 j12 j13 j14 g12 i12 i13
+
+; north_east_home2
+west_east_paths f16 g16 h16 i16 f20 g20 h20 i20 f17 g17 h17 g19 h19 g18
+
+south_north_paths j16 j17 j18 j19 f17 f18 f19 g18 i17 i18
+
+; south_west home3
+west_east_paths m3 l2 m2 l4 m4 n4 n1 m1 l1 k1 k5 l5 m5 n5
+
+south_north_paths l2 l3 n2 o3 o2 o1 k1 k2 k3 k4
+
+; north_west home3
+west_east_paths m8 m9 l9 l7 m7 n7 n10 m10 l10 k10 k6 l6 m6 n6
+
+south_north_paths k6 k7 k8 k9 n8 l8 l7 o7 o8 o9
+
+; south_east home3
+west_east_paths p5 q5 r5 s5 s1 r1 q1 p1 q2 r2 q3 p4 q4 r4
+
+south_north_paths p1 p2 p3 t1 t2 t3 t4 q2 s2 s3
+
+; north_east_home3
+west_east_paths p6 q6 r6 s6 p10 q10 r10 s10 p7 q7 r7 q9 r9 q8
+
+south_north_paths t6 t7 t8 t9 p7 p8 p9 q8 s7 s8
+
+; south_west home4
+west_east_paths m13 l12 m12 l14 m14 n14 n11 m11 l11 k11 k15 l15 m15 n15
+
+south_north_paths l12 l13 n12 o13 o12 o11 k11 k12 k13 k14
+
+; north_west home4
+west_east_paths m18 m19 l19 l17 m17 n17 n20 m20 l20 k20 k16 l16 m16 n16
+
+south_north_paths k16 k17 k18 k19 n18 l18 l17 o17 o18 o19
+
+; south_east home4
+west_east_paths p15 q15 r15 s15 s11 r11 q11 p11 q12 r12 q13 p14 q14 r14
+
+south_north_paths p11 p12 p13 t11 t12 t13 t14 q12 s12 s13
+
+; north_east_home4
+west_east_paths p16 q16 r16 s16 p20 q20 r20 s20 p17 q17 r17 q19 r19 q18
+
+south_north_paths t16 t17 t18 t19 p17 p18 p19 q18 s17 s18
+
+;resources
+
+goldmines 250 c3 c8 h3 h8 c13 c18 h13 h18 m3 m8 m13 m18 r3 r8 r13 r18
+goldmines 750 b4 b7 b14 b17 i4 i7 i14 i17 l4 l7 l14 l17 s4 s7 s14 s17
+goldmines 2250 a2 a9 a12 a19 j2 j9 j12 j19 k2 k12 k9 k19 t2 t12 t9 t19
+
+woods 83 c3 c8 c13 c18 h3 h8 h13 h18 m3 m8 m13 m18 r3 r8 r13 r18
+woods 250 b4 b7 b14 b17 i4 i7 i14 i17 l4 l7 l14 l17 s4 s7 s14 s17
+woods 750 a2 a9 a12 a19 j2 j9 j12 j19 k2 k12 k9 k19 t2 t12 t9 t19
+
+nb_meadows_by_square 3
+additional_meadows b4 b7 b14 b17 i4 i7 i14 i17 a2 a9 a12 a19 j2 j9 j12 j19 l4 l7 l14 l17 s4 s7 s14 s17 k2 k9 k12 k19 t2 t12 t9 t19
+
+; players
+
+nb_players_min 4
+nb_players_max 16
+starting_squares c3 c13 c8 c18 h3 h13 h8 h18 m3 m8 m13 m18 r3 r8 r13 r18
+starting_units townhall 5 farm 10 peasant knight catapult mage dragon blacksmith lumbermill
+starting_resources 100 100
+global_food_limit 400

@@ -1,0 +1,48 @@
+title 4271 3005
+trigger player1 (timer 0) (add_objective 1 100 115 5003 3001)
+
+
+; map size
+
+square_width 12
+
+nb_columns 4
+nb_lines 1
+
+
+; paths (give only the starting square)
+
+west_east_paths
+west_east_bridges
+
+south_north_paths 
+south_north_bridges 
+
+
+; resources
+
+goldmines 75 a1
+
+woods 75 b1 b1 b1 b1 b1 c1 c1 c1 c1 c1
+
+nb_meadows_by_square 0
+additional_meadows a1 d1
+remove_meadows 
+
+
+; players (human or computer)
+
+player 1000 1000 a1 priest u_exorcism u_conversion u_resurrection
+
+; computer only
+
+computer_only 0 0 c1 new_flyingmachine
+
+; triggers
+
+timer_coefficient 80
+
+trigger computer1 (timer 0) (order (c1 new_flyingmachine) ((go a1)))
+
+trigger player1 (has_entered d1) (objective_complete 1)
+trigger all (no_unit_left) (defeat)

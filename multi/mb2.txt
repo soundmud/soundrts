@@ -1,0 +1,53 @@
+; multiplayer map mb2
+title 5012 5001 3002
+
+objective 145 88
+
+; map size
+
+square_width 12
+
+nb_columns 10
+nb_lines 10
+
+
+; paths (give only the starting square)
+
+west_east_paths c1 d1 f1 g1
+west_east_paths c2 d2 f2 g2
+west_east_paths a3 i3
+west_east_paths a4 b4 c4 d4 e4 f4 g4 h4 i4
+west_east_paths a5 i5
+west_east_paths a6 i6
+west_east_paths a7 b7 c7 d7 e7 f7 g7 h7 i7
+west_east_paths a8 i8 
+west_east_paths c9 d9 f9 g9 
+west_east_paths c10 d10 f10 g10 
+
+south_north_paths a3 a4 a6 a7
+south_north_paths b3 b4 b6 b7
+south_north_paths c1 c9
+south_north_paths d1 d2 d3 d4 d5 d6 d7 d8 d9
+south_north_paths e1 e9
+south_north_paths f1 f9
+south_north_paths g1 g2 g3 g4 g5 g6 g7 g8 g9
+south_north_paths h1 h9
+south_north_paths i3 i4 i6 i7 
+south_north_paths j3 j4 j6 j7 
+
+; resources
+goldmines 800 a5 a6 e1 e10 f1 f10 j5 j6
+woods 750 a3 a8 c1 c10 h1 h10 j3 j8
+
+nb_meadows_by_square 2
+
+
+
+; players
+
+nb_players_min 2
+nb_players_max 8
+
+starting_squares a4 a7 d1 g1 d10 g10 j4 j7
+starting_units townhall 2 farm 2 peasant 
+starting_resources 20 20

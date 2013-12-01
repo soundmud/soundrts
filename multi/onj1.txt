@@ -1,0 +1,74 @@
+; multiplayer map by Onj.  http://www.AndreLouis.COM
+;  -- Modified map 3 to sute my needs.
+;  ***************
+; 7*   *     *   *
+;  * *** *** * * *
+; 6*   *       * *
+;  *** * * *******
+; 5*   *         *
+;  * * * * * * * *
+; 4* *    x    * * 
+;  * * * * * * * *
+; 3*         *   *
+;  ******* * * ***
+; 2*x*       *   *
+;  * * * *** *** *
+; 1*   *x   x*   *
+;  ***************
+;   A B C D E F G
+
+title 5014 5013 5009 3001 9999 3004 3101 131 23 132
+objective 145 88
+
+
+; map size
+
+square_width 15
+
+nb_columns 7
+nb_lines 7
+
+
+; paths (give only the starting square)
+
+west_east_paths a1 c1 d1 f1
+west_east_paths b2 c2 d2 f2
+west_east_paths b3 c3 d3
+west_east_paths c4 b4 d4 e4
+west_east_paths c5 d5 e5
+west_east_paths a6 c6 d6 e6
+west_east_paths a7 c7 d7 f7
+
+west_east_bridges a3 f3
+west_east_bridges a5 f5
+
+south_north_paths a1 a3 a4 a6
+south_north_paths b1 b3 b4 b5
+south_north_paths c3 c4 c5
+south_north_paths d2 d3 d4 d5
+south_north_paths e2 e3 e4
+south_north_paths f2 f3 f4 f6
+south_north_paths g1 g3 g4 g6
+
+south_north_bridges c1 c6
+south_north_bridges e1 e6
+
+
+; resources - taken out for this map apart from 500 gold and wood in D4.  Incentive to find it!
+
+goldmines 500 d4
+woods 500 d4
+
+nb_meadows_by_square 8
+additional_meadows a2 b7 g6 f1
+
+
+; players
+
+nb_players_min 2
+nb_players_max 8
+
+global_food_limit 300
+starting_squares a2 b7 d7 d1 g6 a4 g4 f1
+starting_units townhall 8 farm lumbermill 5 peasant 2 knight 6 flyingmachine
+starting_resources 4000 4000

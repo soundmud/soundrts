@@ -1,0 +1,168 @@
+def peasant
+desc The peasant is important but fragile. The peasant collects gold or wood, builds and repairs buildings. Many peasants can help building or repairing a building to go faster. When a peasant can build a new type of building, this new option is added at the end of the list.\nThe peasant can fight, and can join a total attack with the command Control + Alt + S.
+
+def footman
+desc The footman fights with his sword. He must be close to the target to hit it.
+
+def melee_weapon
+name melee weapon upgrade
+
+def melee_armor
+name melee armor upgrade
+
+def archer
+desc The archer fights with a bow (ranged attack). If the archers are numerous enough, the enemy footmen die before even reaching them.
+
+def archer_armor
+name archer armor upgrade
+
+def archer_weapon
+name archer weapon upgrade
+
+def archer_range
+name archer range upgrade
+
+def new_flyingmachine
+name flying machine
+desc This new version of the flying machine have the ability to transport units and to detect invisible units but cannot defend itself. Transported units can't attack from a flying machine. If the transport is destroyed, the units inside are destroyed too.\nTo load units:\n- Method 1: control the unit(s) to carry, target the flying machine and press backspace.\n- Method 2: control the flying machine(s), target the unit to carry and press backspace.\n- Method 3: control the flying machine(s), target the square where the units are, select in the menu "load all the units from...", and press Enter.\nTo unload units: control the flying machine(s), select the "unload" action in the menu, target the destination and press Enter.
+
+def knight
+desc The knight fights with his sword and moves fast.
+
+def horse_speed
+name horse speed upgrade
+
+def darkarcher
+name dark archer
+desc Any archer can become a dark archer.
+
+def priest
+desc The priest heals automatically all the friendly units located in the same square (0.13 hit point per second initially, and 1.33 hit points per second after the "super healer" upgrade). The priest cannot directly attack though.
+
+def superhealer
+name super healer upgrade
+
+def a_conversion
+name conversion
+desc Conversion is a way to take control of an enemy unit. The unit will be one of your units. Buildings can be converted too.\nTo convert an enemy unit:\n1. select the caster for orders\n2. select the conversion order\n3. select an enemy unit or building as a target (warning: if you are selecting a mobile unit in a currently unobserved square, the unit might be actually elsewhere and the order will be canceled when the caster arrives in the square)\n4. validate the order
+
+def a_exorcism
+name exorcism
+desc Exorcism damages any undead unit in the same square.\n\n- duration: 15 seconds\n- damage: 0.27 hit point per second
+
+def a_holy_vision
+name holy vision
+desc Reveals any square for 10 seconds. Detects invisible units.
+
+def a_resurrection
+name resurrection
+desc Resurrects up to 6 nearby units, with 33 percent of their hit points. Affects only your units.
+
+def u_conversion
+name conversion research
+
+def u_exorcism
+name exorcism research
+
+def u_resurrection
+name resurrection research
+
+def catapult
+desc The catapult can strike units and buildings located in an adjacent square. The catapult can also damage several enemies at a time.\nOn the other hand, the catapult is very fragile and cannot even defend itself against a unit in the same square. It moves very slowly too.
+
+def dragon
+desc The dragon, flying creature, cannot be reached by peasants or footmen or knights or catapults. It flies directly to its destination, without having to follow the ground paths.
+
+def mage
+
+def a_meteors
+name meteors
+desc Meteors damage all the units and buildings in the targeted square.\n\n- duration: 15 seconds\n- damage: 0.13 hit point per second
+
+def u_meteors
+name meteors research
+
+def a_summon_dragon
+name summon dragon
+desc Summons 2 dragons for 2 minutes. See dragon_ .
+
+def u_summon_dragon
+name summon dragon research
+
+def a_teleportation
+class not_in_the_manual
+name teleportation
+desc Teleportation is the ability to instantly move units to another place. The affected units are the friendly units in the same square than the caster. The destination is any square of your choice.
+
+def u_teleportation
+class not_in_the_manual
+name teleportation research
+
+def a_recall
+name recall
+desc Recall is the ability to instantly move units to the caster's place. The affected units are the friendly units in the targeted square.
+
+def u_recall
+name recall research
+
+def necromancer
+desc Necromancers raise armies of animated corpses.
+
+def a_deadly_fog
+name deadly fog
+desc The deadly fog damages any healable unit in the targeted square. \n\n- duration: 15 seconds\n- damage: 0.13 hit point per second
+
+def u_deadly_fog
+name deadly fog research
+
+def a_raise_dead
+name raise dead
+desc Animates up to 10 corpses in the same square. An animated corpse is either a zombie_ or a skeleton_. After 10 minutes, the animated corpses will crumble to dust.
+
+def flyingmachine
+name offensive flying machine
+
+def townhall
+name town hall
+
+def keep
+name
+desc
+
+def castle
+name
+desc
+
+def farm
+desc Farms provide food rations.
+
+def lumbermill
+name lumber mill
+desc The lumber mill can store wood. If a lumber mill is nearer than the townhall, the peasant can bring back the wood there to save time. Moreover, having at least one lumber mill gives a 25 % bonus for the wood production.
+
+def scouttower
+name scout tower
+desc The scout tower can't defend itself, but it can quickly evolve to a guard tower (requires a sawmill) or a cannon tower (requires a blacksmith). In the early game, the scout tower is sometimes built "just in case" of a rushed attack, with a smaller investment than the cost of a fully equipped tower. A tower doesn't require food and can be built anywhere (not only on a meadow).
+
+def guardtower
+name guard tower
+desc The guard tower shoots arrows, like an archer.
+
+def cannontower
+name cannon tower
+desc The cannon tower only attacks ground units.
+
+def dragonslair
+name dragons lair
+
+def magestower
+name mages tower
+
+def blacksmith
+
+def skeleton
+
+def holy_vision
+class not_in_the_manual
+
+def zombie

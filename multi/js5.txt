@@ -1,0 +1,245 @@
+; Multiplayer Map JS5 - Strategic Locations
+; Revision 3
+; By Jason Symes (president731@yahoo.com)
+; You're located in one of the four corners of the world, and you must push out and conquer up to three other enemies vying for the same resources.
+; The neighboring boarder lands and your homelands all can be easily defended with a few troops placed in strategic choke points.
+; To take and hold the center stage, you must have overwhelming force on your side, though.
+; May the superior strategerist win!
+
+title 5009 5018 3005
+objective 145 88
+
+; map size
+
+square_width 15
+nb_columns 8
+nb_lines 8
+
+; paths (give only the starting square)
+
+; starting squares
+west_east_paths a2 a4 a5 a7 d7 d2 g1 g7 g4 g5
+#random_choice
+west_east_bridges b1
+#end_choice
+west_east_bridges b2
+#end_random_choice
+#random_choice
+west_east_bridges e1
+#end_choice
+west_east_bridges e2
+#end_random_choice
+#random_choice
+west_east_bridges c7
+#end_choice
+west_east_bridges c8
+#end_random_choice
+#random_choice
+west_east_bridges f7
+#end_choice
+west_east_bridges f8
+#end_random_choice
+south_north_paths a1 b1 a7 b7 g7 h7 g1 h1
+south_north_paths d1 e1 b4 d7 e7 g4
+#random_choice
+south_north_bridges g2
+#end_choice
+south_north_bridges h2
+#end_random_choice
+#random_choice
+south_north_bridges g5
+#end_choice
+south_north_bridges h5
+#end_random_choice
+#random_choice
+south_north_bridges a6
+#end_choice
+south_north_bridges b6
+#end_random_choice
+#random_choice
+south_north_bridges a3
+#end_choice
+south_north_bridges b3
+#end_random_choice
+
+; fronteer
+west_east_paths a3 c3 e3 g3
+west_east_paths b6 d6 f6 d4 c5 e5
+west_east_bridges b3 d3 f3 c4 e4 d5
+west_east_bridges a6 c6 e6 g6
+south_north_paths c2 c4 c6 d3 d5 e4
+south_north_paths f1 f3 f5 f7
+south_north_bridges c1 c3 c5 c7
+south_north_bridges d4 e3 e5 f2 f4 f6
+
+; resources
+
+; home resources
+#random_choice
+goldmines 250 a1
+goldmines 150 b1
+woods 75 b1
+additional_meadows b1
+starting_squares b1
+#end_choice
+goldmines 250 b1
+goldmines 150 a1
+woods 75 a1
+additional_meadows a1
+starting_squares a1
+#end_random_choice
+#random_choice
+goldmines 250 b7
+goldmines 150 a8
+woods 75 a8
+additional_meadows a8
+starting_squares a8
+#end_choice
+goldmines 250 a8
+goldmines 150 b7
+woods 75 b7
+additional_meadows b7
+starting_squares b7
+#end_random_choice
+#random_choice
+goldmines 250 h2
+goldmines 150 g1
+woods 75 g1
+additional_meadows g1
+starting_squares g1
+#end_choice
+goldmines 250 g1
+goldmines 150 h2
+woods 75 h2
+additional_meadows h2
+starting_squares h2
+#end_random_choice
+#random_choice
+goldmines 250 g8
+goldmines 150 h8
+woods 75 h8
+additional_meadows h8
+starting_squares h8
+#end_choice
+goldmines 250 h8
+goldmines 150 g8
+woods 75 g8
+additional_meadows g8
+starting_squares g8
+#end_random_choice
+#random_choice
+goldmines 250 a4
+goldmines 150 a5
+woods 75 a5
+additional_meadows a5
+starting_squares a5
+#end_choice
+goldmines 250 a5
+goldmines 150 a4
+woods 75 a4
+additional_meadows a4
+starting_squares a4
+#end_random_choice
+#random_choice
+goldmines 250 h4
+goldmines 150 h5
+woods 75 h5
+additional_meadows h5
+starting_squares h5
+#end_choice
+goldmines 250 h5
+goldmines 150 h4
+woods 75 h4
+additional_meadows h4
+starting_squares h4
+#end_random_choice
+#random_choice
+goldmines 250 e1
+goldmines 150 d1
+woods 75 d1
+additional_meadows d1
+starting_squares d1
+#end_choice
+goldmines 250 d1
+goldmines 150 e1
+woods 75 e1
+additional_meadows e1
+starting_squares e1
+#end_random_choice
+#random_choice
+goldmines 250 e8
+goldmines 150 d8
+woods 75 d8
+additional_meadows d8
+starting_squares d8
+#end_choice
+goldmines 250 d8
+goldmines 150 e8
+woods 75 e8
+additional_meadows e8
+starting_squares e8
+#end_random_choice
+
+; additional home woods
+#random_choice
+woods 100 a2
+#end_choice
+woods 100 b2
+#end_random_choice
+#random_choice
+woods 100 b4
+#end_choice
+woods 100 b5
+#end_random_choice
+#random_choice
+woods 100 a7
+#end_choice
+woods 100 b8
+#end_random_choice
+#random_choice
+woods 100 d7
+#end_choice
+woods 100 e7
+#end_random_choice
+#random_choice
+woods 100 g7
+#end_choice
+woods 100 h7
+#end_random_choice
+#random_choice
+woods 100 g4
+#end_choice
+woods 100 g5
+#end_random_choice
+#random_choice
+woods 100 g2
+#end_choice
+woods 100 h1
+#end_random_choice
+#random_choice
+woods 100 e2
+#end_choice
+woods 100 d2
+#end_random_choice
+
+; central resources
+#random_choice
+goldmines 500 d4 e5
+woods 150 d5 e4
+#end_choice
+goldmines 500 d5 e4
+woods 150 d4 e5
+#end_random_choice
+
+nb_meadows_by_square 2
+remove_meadows c3 c3 d3 d3 e3 e3 f3 f3
+remove_meadows c6 c6 d6 d6 e6 e6 f6 f6
+remove_meadows c4 c4 c5 c5 f4 f4 f5 f5
+
+; players
+
+nb_players_min 2
+nb_players_max 8
+starting_units townhall 5 peasant farm
+starting_resources 100 100
+global_food_limit 320

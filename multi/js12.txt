@@ -1,0 +1,57 @@
+; map js12 Galaxy Warrios
+; By Jason Symes (president731@yahoo.com)
+
+title 5009 5018 3012
+objective 145 88
+
+; map size
+square_width 10
+nb_columns 10
+nb_lines 10
+
+; paths (give only the starting square)
+; south_west home
+west_east_paths c3 b2 c2 b4 c4 d4 d1  c1 b1 a1 a5 b5 c5 d5
+
+west_east_bridges e5 e6 e1 e10
+
+south_north_paths b2 b3 d2 e3 e2 e1 a1 a2 a3 a4
+
+south_north_bridges a5 j5
+
+; north_west home
+west_east_paths c8 c9 b9 b7 c7 d7 d10 c10 b10 a10 a6 b6 c6 d6
+
+south_north_paths a6 a7 a8 a9 d8 b8 b7 e7 e8 e9
+
+; south_east home
+west_east_paths f5 g5 h5 i5 i1 h1 g1 f1 g2 h2 g3 f4 g4 h4
+
+south_north_paths f1 f2 f3 j1 j2 j3 j4 g2 i2 i3
+
+; north_east_home
+west_east_paths f6 g6 h6 i6 f10 g10 h10 i10 f7 g7 h7 g9 h9 g8
+
+south_north_paths j6 j7 j8 j9 f7 f8 f9 g8 i7 i8
+
+;resources
+
+goldmines 250 c3 c8 h3 h8
+goldmines 750 b4 b7 i4 i7
+goldmines 2250 a2 a9 j2 j9
+
+woods 83 c3 c8 h3 h8
+woods 250 b4 b7 i4 i7
+woods 750 a2 a9 j2 j9
+
+nb_meadows_by_square 3
+additional_meadows b4 b7 i4 i7 a2 a9 j2 j9
+
+; players
+
+nb_players_min 2
+nb_players_max 4
+starting_squares c3 c8 h3 h8
+starting_units townhall 5 farm 10 peasant knight catapult mage dragon blacksmith lumbermill
+starting_resources 100 100
+global_food_limit 300

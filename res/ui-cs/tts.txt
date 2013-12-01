@@ -1,0 +1,372 @@
+; coding: Windows-1250
+
+0	nic!
+1	jste
+
+3	před vámi
+4	za vámi
+5	Jaké jsou vaše rozkazy?
+
+23	a
+
+38	máte
+39	hitpointů z
+40	level
+
+54	na
+55	metrů
+
+59	hráč
+60	jste
+61	zabit
+
+65	minut
+66	sekund
+67	sever
+68	jih
+69	východ
+70	západ
+71	severovýchod
+72	severozápad
+73	jihovýchod
+74	jihozápad
+79	na louce porostlé stromy
+80	les
+81	zlatý důl
+82	radnice
+83	farma
+84	cesta
+85	rolník
+86	pěšák
+87	lučištník
+88	nepřítel
+89	přítel
+99	kasárna
+100	jít
+101	postavit
+102	těžit
+103	hlídkovat
+104	režim
+105	OK!
+106	zastavit
+107	na
+108	na
+110	útoční
+111	obranní
+112	zůstat na místě
+113	maskovat se
+114	útok
+115	na
+116	na východ
+117	na západ
+118	opravit
+119	na
+120	boj
+121	proti
+122	louka
+123	naverbovat
+124	připraven!
+125	shromáždit
+126	dokončen
+127	zrušit
+128	stavba
+129	vyžaduje
+130	jednotky
+131	zlata
+132	dřeva
+133	jídla
+134	obsahuje
+135	není dost
+137	jídla
+138	ovládáte
+139	skupinu
+
+142	produkce pozastavena
+143	fronta je plná
+144	vyčerpán
+145	neutralizováno
+146	ztraceno
+147	produkce
+148	pila
+149	vítězství!
+150	porážka
+152	varování
+153	most
+154	otevřeno
+155	postoupili ste
+156	v centru
+
+
+
+2008	stiskněte F5 pro opakovaný poslech
+2010	stiskněte
+2011	na
+2013	zvolte
+2015	potvrzení
+2016	A a Q
+2017	rozkaz
+2018	Z a S
+2019	ovládání další jednotky
+2020	X nebo W
+2021	zkontrolování zdrojů
+2022	1, 2 nebo 3
+2023	ovládání skupiny
+2025	ovládání jednoho z jednotky
+2027	dát typický příkaz pro vámi zvolený cíl
+2028	F5 a F6
+2029	historie
+2031	přerušení řeči
+2033	zrušit
+2035	zpět
+2036	otevření menu
+2037	kurzorové šipky
+2038	pohyb po mapě
+2040	ignorování překážek
+2042	přesun na další zajímavé políčko
+2043	mezerník
+2044	přesun na políčko jednotky, kterou právě ovládáte a sledovat ji
+2045	ovládání místní jednotky
+2046	výběr dalšího cíle
+2047	výběr dalšího rozkazu
+2048	ovládání jednotky stejného typu na stejném políčku, jako je vámi zvolená jednotka
+2049	potvrzení vámi zvoleného příkazu
+2050	společný rozkaz pro vámi zvolený cíl
+2051	poslech, kolik máte zlata, dřeva a jídla
+2051	poslech zdraví vámi zvolené jednotky
+2052	ovládání poloviny jednotky stejného typu na stejném políčku, jako jste zvolili
+2054	ovládání jednoho z jednotky
+2055	Q
+2056	ovládání všech vojáků na stejném políčku
+2057	ovládání všech rolníků na vámi zvoleném políčku
+2058	ovládání další stavby
+2059	ovládání dalšího rolníka
+
+
+4000	hra
+4001	na internetu
+4002	na počítači
+4004	pracuje se
+4005	selhalo
+4006	úspěšně
+4007	zvolte si
+4008	odešlete své připomínky na jlpo@free.fr
+4009	ukončit
+4010	menu
+4011	pokračovat
+4012	chyba verze
+4014	strategická hra
+4015	kapitola
+4016	jeden hráč
+4017	mapa
+4018	více hráčů
+4019	připojit se
+4020	úkol:
+4021	ubránit se nepřátelským útokům
+4022	produkován
+4023	produkováno
+4024	využito
+
+4025	stavba
+4026	skóre
+
+4028	stiskněte F1 pro nápovědu
+4029	hlavní menu
+4030	zvolte si
+4031	jeden hráč
+4032	hrát na vašem počítači
+4033	více hráčů
+4034	hrát na internetu
+4035	server
+4036	spustit server na vašem počítači pro vytváření her pro více hráčů
+4037	nastavení
+4038	změňte své parametry
+
+4041	konec
+4042	ukončit tento program
+4043	jaký druh serveru
+4044	jednoduchý server
+4045	jenom vy můžete vytvářet hry
+4046	veřejný server
+4047	hráč může vytvářet hry
+4048	zrušit
+4049	váš server nemůže být registrován na metaserveru. Zkontrolujte vaše připojení k internetu.
+4051	nashledanou
+4052	stiskněte tab na výběr. stiskněte enter na potvrzení
+4053	příjmout pozvání od
+4054	připojit se
+4055	začít hru na
+4056	vítejte
+4057	chyba: je příliš mnoho her!
+4058	pozvat
+4059	začít
+4060	zrušit tuto hru
+4061	opustit tuto hru
+4062	hra začne o 5 sekund
+4063	hra začne, když organizátor bude připraven
+4064	stiskněte enter pro potvrzení
+
+4066	stiskněte opakovaně tab pro okruh všech viditelných objektů
+4067	ztiskněte tab na volbu cíle a potom enter pro potvrzení
+
+4070	zrušit hru
+4071	pokračovat ve hře
+4072	nedá se spojit s metaserverem
+4073	server vytvořen uživatelem
+4074	pro
+4075	zrušit
+4076	zpět na předešlé menu
+4077	momentálně není žádný server registrován na metaserveru
+4078	servery na
+4079	použíte kompatibilní verzi
+4080	chyba: server se nemůže spustit.
+4081	chyba: server nedosažitelný. Server je pravděpodobně uzavřen za routrem, či bránou Firewall.
+4082	chyba: nežádoucí údaje bili odeslány z tohoto serveru. Toto není Sound RTS server.
+4083	chyba: připojení zamítnuto serverem. Toto není Sound RTS server.
+4084	nebo vaše přihlašovací jméno bilo zamítnuto
+4085	chyba při připojení na server
+4086	menu nastavení
+4087	změňte vaše přihlašovací jméno
+
+4096	uložit
+4097	uložit vaše nastavení a návrat do hlavního menu
+4098	zrušit
+4099	vrátit se do hlavního menu bez uložení nastavení
+
+4101	nové okno bude otevřeno
+4102	připojení bilo přerušeno
+4103	nastavit rychlost hry na pomalou
+4104	nastavit rychlost hry na normální
+4105	nastavit rychlost hry na rychlou
+
+4112	uložit hru
+4113	obnovit uloženou hru
+4114	hrát proti počítači
+4115	počítač verzus počítač
+
+4118	zpět na předcházející menu
+4119	vybrat server ze seznamu
+4120	vložit IP adresu serveru
+4121	soukromý server
+4122	server nebude přidán do seznamu
+4200	těžba dřeva byla vylepšena
+4201	katapult
+4202	čeká na vaše rozkazy
+4203	z
+4204	tam stavět nemůžete
+4205	neovládáte žádnou jednotku
+4206	grafika je nyní zapnutá
+4207	grafika je nyní vypnutá
+4208	neznámý
+4209	v mlze války
+4210	F10 pro přístup do menu
+4211	režim z pohledu první osoby
+4212	režim mapy
+4213	kovárna
+4214	vylepšit
+4215	meče
+4216	šípy
+4217	brnění pěšáků
+4218	brnění lučištníků
+4219	na
+4220	tvrz
+4221	hrad
+4222	stáje
+4223	nabídka
+4224	se právě změnila
+4225	rytíř
+4226	dílna
+4227	dračí doupě
+4228	věž mágů
+4229	mág
+4230	létající stroj
+4231	drak
+4232	chyba serveru
+4233	dostřel luku
+4234	nová verze je dostupná na internetu
+4235	zadej tvé nové přihlašovací jméno
+4236	používejte jenom písmena a čísla
+4237	špatné přihlašovací jméno
+4238	vaše předchozí přihlašovací jméno bilo ponecháno
+4239	nové přihlašovací jméno
+4240	sse právě přihlásil
+4241	se právě připojil
+4242	hráčů
+4243	vás zve
+4244	není dost na zahájení hry
+4245	aktuální přihlašovací jméno
+4246	limit populace bil dosažen
+4247	mana bodů z
+4248	trénovat
+4249	super léčitel
+4250	teleportace
+4251	na
+4252	není dost many
+4253	procent hlasitosti
+4254	rychlost koní
+4255	určete shromáždění pro další jednotki
+4256	získáno
+4257	agresivní počítač
+4258	pasivní počítač
+4259	se právě odhlásil
+4260	na serveru
+4261	právě opustil hru
+4262	přídavný zvukový balík
+4263	je nyní zapnutý
+4264	je nyní vypnutý
+4265	režim podvádění
+4266	restartovat
+4267	kampaň
+4268	nový úkol
+4269	úkol splněn
+4270	mise splněna
+4271	kapitola
+4272	prolog
+4273	epylog
+4274	proměna
+4275	průzkumnická věž
+4276	strážní věž
+4277	dělová věž
+4278	naložit
+4279	naložit všechno z
+4280	vyložit
+4281	vyložit vše na
+4282	vlož do
+4283	temný lučištník
+
+5026	tečka
+
+4284	přesuň
+4285	do aliance
+4286	příbuzní
+4287	řekl
+4288	napiš svou zprávu
+
+4289	neviditelní
+4290	detektor
+4291	zahalovač
+4292	přivolat
+4293	získat smrt
+4294	oživit
+
+4295	zombi
+4296	kostlivec
+
+4297	mnich
+4298	chrám
+
+4299	svatá vize
+4300	zaříkání
+
+4301	člověk
+4302	skřet
+
+4303	nekromancer
+4304	nekropolis
+
+4305	smrtící mlha
+4306	meteory
+
+4307	povolání
+
+4308	kamene
+4309	kamenolom

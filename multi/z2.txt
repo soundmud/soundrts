@@ -1,0 +1,47 @@
+; zombie planet part 2
+; made by valentin. all copyrights reserved.
+; contact me: ninutz2006@yahoo.com
+; only in english or romanian
+; also visit http://ht-arena.com/echipaluininunzu/
+
+title 5025 3002
+objective 145 88
+
+square_width 12
+nb_columns 7
+nb_lines 7
+
+west_east_paths b2 b3 b4 b5 b6 
+west_east_paths c2 c3 c4 c5 c6 
+west_east_paths d2 d3 d4 d5 d6
+west_east_paths e2 e3 e4 e5 e6 
+west_east_paths f2 f3 f4 f5 f6 
+
+west_east_bridges a1 b1 c1 d1 e1 f1
+west_east_bridges a7 b7 c7 d7 e7 f7
+
+south_north_paths a1 b1 c1 d1 e1 f1 g1
+south_north_paths a2 b2 c2 d2 e2 f2 g2
+south_north_paths a3 b3 c3 d3 e3 f3 g3
+south_north_paths a4 b4 c4 d4 e4 f4 g4
+south_north_paths a5 b5 c5 d5 e5 f5 g5
+south_north_paths a6 b6 c6 d6 e6 f6 g6
+
+goldmines 50 a4 c2 d3 e7 g1
+goldmines 100 a1 b2 d7 f5 
+goldmines 1000 e5
+
+woods 50 b6 c2 e5 f1 g7
+woods 100 a7 b3 c5 g4
+woods 1000 e4
+
+nb_meadows_by_square 4
+nb_players_min 2
+nb_players_max 6
+
+starting_squares a1 a7 b1 b7 c1 c7
+starting_units townhall 10 farm 10 peasant barracks dragonslair magestower blacksmith 5 flyingmachine 5 mage stables
+starting_resources 1000 1000
+global_food_limit 4500
+
+

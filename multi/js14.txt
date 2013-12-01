@@ -1,0 +1,96 @@
+; Multiplayer Map JS14
+; By Jason Symes (president731@yahoo.com)
+
+title 5009 5018 3014
+objective 145 88
+
+; map size
+square_width 10
+nb_columns 13
+nb_lines 13
+
+; paths (give only the starting square)
+
+;Home triangles
+west_east_paths a1 b1 c1 d1 e1 a2 b2 c2 d2 a3 b3 c3 a4 b4 a5
+west_east_paths a13 b13 c13 d13 e13 a12 b12 c12 d12 a11 b11 c11 a10 b10 a9
+west_east_paths h13 i13 j13 k13 l13 i12 j12 k12 l12 j11 k11 l11 k10 l10 l9
+west_east_paths h1 i1 j1 k1 l1 i2 j2 k2 l2 j3 k3 l3 k4 l4 l5
+west_east_bridges f1 g1 f13 g13
+south_north_paths a1 b1 c1 d1 e1 a2 b2 c2 d2 a3 b3 c3 a4 b4 a5
+south_north_paths a8 a9 b9 a10 b10 c10 a11 b11 c11 d11 a12 b12 c12 d12 e12
+south_north_paths m8 l9 m9 k10 l10 m10 j11 k11 l11 m11 i12 j12 k12 l12 m12
+south_north_paths i1 j1 k1 l1 m1 j2 k2 l2 m2 k3 l3 m3 l4 m4 m5
+south_north_bridges a6 a7 m6 m7
+
+;middle triangles
+west_east_paths f2 g2 e3 f3 g3 h3 a7
+west_east_paths f12 g12 e11 f11 g11 h11 l7
+west_east_paths b6 b7 b8 k6 k7 k8
+#random_choice
+west_east_bridges c9
+#end_choice
+west_east_bridges c8
+#end_choice
+west_east_bridges c7
+#end_choice
+west_east_bridges c6
+#end_choice
+west_east_bridges c5
+#end_random_choice
+#random_choice
+west_east_bridges j9
+#end_choice
+west_east_bridges j8
+#end_choice
+west_east_bridges j7
+#end_choice
+west_east_bridges j6
+#end_choice
+west_east_bridges j5
+#end_random_choice
+south_north_paths b6 b7 c5 c6 c7 c8 g1
+south_north_paths l6 l7 k5 k6 k7 k8 g12
+south_north_paths f11 g11 h11 f2 g2 h2
+#random_choice
+south_north_bridges e3
+#end_choice
+south_north_bridges f3
+#end_choice
+south_north_bridges g3
+#end_choice
+south_north_bridges h3
+#end_choice
+south_north_bridges i3
+#end_random_choice
+
+;interior
+west_east_paths d4 e4 f4 g4 h4 i4 d5 e5 f5 g5 h5 i5
+west_east_paths d6 e6 f6 g6 h6 i6 d7 e7 f7 g7 h7 i7
+west_east_paths d8 e8 f8 g8 h8 i8 d9 e9 f9 g9 h9 i9
+west_east_paths d10 e10 f10 g10 h10 i10
+south_north_paths d4 e4 f4 g4 h4 i4 j4 d5 f5 g5 h5 i5 j5
+south_north_paths d6 e6 f6 g6 h6 i6 j6 d7 e7 f7 g7 h7 i7 j7
+south_north_paths d8 e8 f8 g8 h8 i8 j8 d9 e9 f9 g9 h9 i9 j9
+
+; resources
+goldmines 80 a1 a13 m13 m1
+goldmines 130 a7 g13 m7 g1
+goldmines 260 d4 d10 j4 j10
+goldmines 750 g7 g7
+woods 60 a1 a13 m13 m1
+woods 100 a7 g13 m7 g1
+woods 180 d4 d10 j4 j10
+woods 340 g7 g7
+
+nb_meadows_by_square 2
+additional_meadows g7 g7
+
+; players
+nb_players_min 2
+nb_players_max 4
+
+starting_squares a1 a13 m13 m1
+starting_units townhall 3 farm 10 peasant lumbermill 2 knight stables blacksmith 2 mage 2 catapult
+starting_resources 100 100
+global_food_limit 210

@@ -1,0 +1,28 @@
+;pm2!
+;the...
+;grouped wars
+;the playing area is 4 by 4.
+;player 1 will have the normal troops. this would be the footman, archer, and knight.
+;player 2, on the other hand will have an army of catapults, dragons, and mages.
+;each persons 2 by 2 field is also containing a small group of
+;peasants, and a nice collection of farms.
+title 5015 5012 3002 1039 1040 1041
+objective 114 88
+square_width 12
+nb_lines 4
+nb_columns 4
+west_east_paths a1 c1 a2 c2
+west_east_bridges b1 b2
+south_north_paths b2 a2 d2 b1 a1 d1
+goldmines 100 a1 b1 c1 d1 a2 b2 c2 d2
+goldmines 1000 b1 b2 a1 a2
+woods 100 a1 b1 c1 d1 a2 b2 c2 d2
+woods 1000 a2 b2
+nb_meadows_by_square 9
+additional_meadows b1 b2
+remove_meadows a1 b1 a2 b2
+nb_players_min 2
+nb_players_max 2
+player 1000 200 a1 5 footman 6 archer 11 knight b1 townhall 4 farm 6 peasant c1 barracks workshop dragonslair magestower d1 10 farm lumbermill stables blacksmith
+player 2 200 999 a2 6 dragon 5 catapult 9 mage b2 townhall 4 farm 5 peasant c2 4 barracks d2 lumbermill blacksmith stables
+;end of map

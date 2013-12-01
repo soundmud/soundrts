@@ -1,0 +1,48 @@
+; Map 5 Collide, Part 2: Mini
+; By Jason Symes
+title 5009 5018 3002
+objective 145 88
+
+
+; map size
+
+square_width 12
+
+nb_columns 7
+nb_lines 7
+
+
+; paths (give only the starting square)
+
+west_east_paths a2 b3 c4
+west_east_paths f2 e3 d4
+west_east_paths a6 b5 f6 e5
+
+south_north_bridges a1 b2 c3
+south_north_bridges g1 f2 e3
+south_north_bridges a6 b5 c4
+south_north_bridges g6 f5 e4
+
+
+; resources
+goldmines 100 a1 g1 a7 g7
+goldmines 150 b2 c3 f2 e3
+goldmines 150 b6 c5 f6 e5
+goldmines 750 d4
+
+woods 75 a1 b2 c3 g1 f2 e3
+woods 75 a7 b6 c5 g7 f6 e5
+woods 200 d4
+
+nb_meadows_by_square 2
+additional_meadows a1 g1 a7 g7 d4
+
+
+; players
+
+nb_players_min 2
+nb_players_max 4
+
+starting_squares a1 g1 a7 g7
+starting_units townhall farm 2 peasant
+starting_resources 25 25

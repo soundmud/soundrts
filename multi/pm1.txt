@@ -1,0 +1,27 @@
+;pm1!
+objective 145 88
+square_width 12
+nb_lines 2
+nb_columns 15
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1
+west_east_bridges a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 k2 l2 m2 n2
+south_north_paths d1 e1
+south_north_bridges n1
+goldmines 10 a1 b1 c1 d1
+goldmines 20 e1 f1
+goldmines 50 g1 h1 i1 j1
+goldmines 1 k1 l1 m1 n1 o1
+goldmines 1000 a2 b2 c2 e2 f2 g2 h2 i2 j2 k2 l2 m2 n2 o2
+goldmines 10000 d2
+woods 1 a1 b1 c1
+woods 10 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1 o1
+woods 1000 a2 b2 c2 e2 f2 g2 h2 i2 j2 k2 l2 m2 n2 o2
+woods 10000 d2
+nb_meadows_by_square 6
+additional_meadows a1 o1
+remove_meadows b1 n1
+nb_players_min 2
+nb_players_max 2
+player 100 1000 a1 10 peasant b1 10 peasant c1 footman d1 archer e1 knight f1 barracks lumbermill magestower blacksmith g1 10 catapult 12 mage 3 dragon h1 farm i1 farm j1 farm k1 farm l1 farm m1 farm n1 farm
+player 1000 1000 o1 townhall peasant farm
+computer_only 0 0 a2 catapult b2 catapult c2 catapult d2 30 knight 20 dragon 20 archer e2 peasant f2 peasant g2 townhall h2 barracks i2 stables j2 workshop k2 dragonslair l2 magestower m2 knight n2 2 knight o2 4 catapult 7 dragon

@@ -1,0 +1,39 @@
+; messages
+
+def messages
+not_enough_resource_2 135 4308
+
+
+; miscellaneous parameters
+
+def parameters
+resource_2_title 4308
+
+
+; units
+
+def peasant
+noise_when_exploiting_quarry repeat 1.6 1038 1081
+store_resource_2 1099
+
+def stone_golem
+is_a footman
+title 9000
+noise repeat 6 9001
+attack 9001
+attack_hit 9001
+move 9001
+move_on_grass 9001
+move_on_leaves 9001
+move_on_gravel 9001
+move_on_wood 9001
+
+
+; resources
+
+def quarry
+is_a resource_deposit
+title 4309
+exhausted 1047
+ground gravel
+

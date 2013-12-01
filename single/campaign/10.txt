@@ -1,0 +1,46 @@
+title 4271 3010
+trigger player1 (timer 0) (add_objective 1 145 88)
+
+
+; map size
+
+square_width 12
+
+nb_columns 3
+nb_lines 1
+
+
+; paths (give only the starting square)
+
+west_east_paths
+west_east_bridges b1
+
+south_north_paths 
+south_north_bridges 
+
+
+; resources
+
+goldmines 75 a1
+
+woods 75 b1 b1 b1 b1 b1
+
+nb_meadows_by_square 0
+additional_meadows a1
+remove_meadows 
+
+
+; players (human or computer)
+
+player 1000 1000 b1 mage u_recall a1 130 footman
+
+; computer only
+
+computer_only 0 0 c1 3 cannontower
+
+; triggers
+
+timer_coefficient 80
+
+trigger player1 (no_enemy_left) (objective_complete 1)
+trigger all (no_unit_left) (defeat)

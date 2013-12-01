@@ -1,0 +1,447 @@
+0	nothing!
+1	You are
+
+3	In front of you
+4	Behind you
+5	What are your orders?
+
+23	and
+
+38	You have
+39	hit points on
+40	level
+
+54	at
+55	meters
+
+59	the player
+60	you are
+61	killed
+
+65	minutes
+66	seconds
+67	north
+68	south
+69	east
+70	west
+71	northeast
+72	northwest
+73	southeast
+74	southwest
+79	in a meadow rounded with trees
+80	wood
+81	gold mine
+82	town hall
+83	farm
+84	a path
+85	peasant
+86	footman
+87	archer
+88	enemy
+89	friend
+99	barracks
+100	go
+101	build
+102	exploit
+103	patrol
+104	mode
+105	ok!
+106	stop
+107	at
+108	to the
+110	offensive
+111	defensive
+112	hold position
+113	stealth
+114	attack
+115	to
+116	to the east
+117	to the west
+118	repair
+119	on
+120	combat
+121	against
+122	a meadow
+123	recruit
+124	ready!
+125	rally
+126	complete
+127	cancel
+128	building
+129	requires
+130	units
+131	gold
+132	wood
+133	food
+134	contains
+135	not enough
+136	idem!
+137	food
+138	You control
+139	a group
+
+142	production paused
+143	the queue is full
+144	exhausted
+145	neutralized
+146	lost
+147	production
+148	sawmill
+149	Victory!
+150	Defeat
+151	1
+152	alert
+153	a bridge
+154	open
+155	you reached level
+156	at the center
+
+
+
+2008	press F5 to listen again
+2010	press
+2011	to
+2012	Tab
+2013	select
+2014	Enter
+2015	confirm
+2016	A and Q
+2017	give an order
+2018	Z and S
+2019	control another unit
+2020	X or W
+2021	check resources
+2022	1, 2 or 3
+2023	control a group
+2024	0
+2025	control a single unit
+2026	backspace
+2027	give the typical order for the selected target
+2028	F5 and F6
+2029	history
+2030	Alt
+2031	interrupt speech
+2032	escape
+2033	cancel
+2034	shift
+2035	backward
+2036	open the menu
+2037	direction arrows
+2038	move on the map
+2039	control
+2040	ignoring obstacles
+2041	page down
+2042	move to the next interesting square
+2043	space
+2044	move to the square of the unit that is currently being controlled, and follow this unit
+2045	control the next local unit
+2046	select the next target
+2047	select the next order
+2048	control all units that are of the same type and located in the same square as the current unit
+2049	confirm the current order
+2050	give the most common order for the current target
+2051	hear how much gold, wood and food you have
+2052	hear the health of the current unit
+2053	control half of the units of the same type and in the same square than the current unit
+2054	control only 1 unit
+2055	q
+2056	control all of the soldiers that are located in the current square
+2057	control all of the peasants that are located in the current square
+2058	control the next building
+2059	control the next peasant
+3000	0
+3001	1
+3002	2
+3003	3
+3004	4
+3005	5
+3006	6
+3007	7
+3008	8
+3009	9
+3010	10
+3011	11
+3012	12
+3013	13
+3014	14
+3015	15
+3016	16
+3017	17
+3018	18
+3019	19
+3020	20
+3021	21
+3030	30
+3031	31
+3040	40
+3041	41
+3050	50
+3051	51
+3060	60
+3061	61
+3070	70
+3071	71
+3080	80
+3090	90	
+3100	hundred
+3101	thousand
+3102	million
+
+4000	game
+4001	Internet
+4002	local
+4004	processing
+4005	failure
+4006	success!
+4007	please make a selection
+4008	please send comments to jlpo@free.fr
+4009	Quit
+4010	Menu
+4011	continue
+4012	version error
+4014	strategy game
+4015	chapter
+4016	single player
+4017	map
+4018	multiplayer
+4019	join
+4020	objective: 
+4021	resist ennemy attacks
+4022	produced
+4023	produced
+4024	consumed
+4025	building
+4026	score
+
+4028	press F1 for help
+4029	main menu
+4030	please make a selection
+4031	single player,
+4032	play on your computer
+4033	multiplayer,
+4034	play on the Internet
+4035	server,
+4036	launch a server on your computer to host multiplayer games
+4037	options,
+4038	modify your parameters
+
+4041	quit,
+4042	quit this program
+4043	what kind of server?
+4044	simple server
+4045	only you can create games
+4046	public server
+4047	a guest can create games
+4048	cancel
+4049	Your server couldn't probably register itself to the metaserver. Please check your connection to the Internet.
+4051	good bye
+4052	press Tab to select. press Enter to confirm.
+4053	accept the invitation from
+4054	rejoin game
+4055	start a game on
+4056	welcome
+4057	error : there are too many games
+4058	invite
+4059	start
+4060	cancel this game
+4061	leave this game
+4062	the game will start in 5 seconds
+4063	the game will start when the organizer is ready
+4064	press enter to confirm
+
+4066	press tab repeatedly to cycle through each of the visible objects
+4067	press tab to select the target and then press enter to confirm
+
+4070	cancel game
+4071	continue game
+4072	Cannot contact the metaserver. Please check your connection to the Internet.
+4073	server hosted by
+4074	for
+4075	cancel
+4076	go back to previous menu
+4077	At the moment, there aren't any servers registered on the metaserver. Please try again later.
+4078	servers on
+4079	use a compatible version. Please select a server.
+4080	error: the server couldn't start
+4081	error: the server is unreachable. The server is closed, or behind a firewall, or behind a router.
+4082	error: unexpected data was received from the server. This is not a SoundRTS server
+4083	error: connection rejected by the server. This is not a SoundRTS server
+4084	or your login has been rejected
+4085	error while connecting to the server
+4086	options menu
+4087	Modify your login
+
+4096	save,
+4097	save the modifications and then return to the main menu
+4098	cancel,
+4099	return to the main menu without saving the modifications
+
+4101	a new window will open
+4102	the connection was interrupted
+4103	set the game speed to slow
+4104	set the game speed to normal
+4105	set the game speed to fast
+
+4112	save the game
+4113	restore a saved game
+4114	play against the computer on map
+4115	computer versus computer
+
+4118	go back to the previous menu
+4119	choose a server in a list
+4120	enter the I P address of the server
+4121	private server
+4122	The server won't be added to the list.
+
+4200	the wood production is improved
+4201	catapult
+4202	awaiting your orders
+4203	of
+4204	cannot build there
+4205	you are not controlling any unit
+4206	the display is now on
+4207	the display is now off
+4208	unknown
+4209	in the fog of war
+4210	F10 to access to the menu
+4211	first person mode
+4212	map mode
+4213	blacksmith
+4214	upgrade
+4215	swords
+4216	arrows
+4217	footmen armors
+4218	archers armors
+4219	to
+4220	keep
+4221	castle
+4222	stables
+4223	the menu of
+4224	 has just changed.
+4225	knight
+4226	workshop
+4227	dragons lair
+4228	mages tower
+4229	mage
+4230	flying machine
+4231	dragon
+4232	server error
+4233	bows range
+4234	a newer version of this program is available on the Internet
+4235	enter your new login name
+4236	use letters and numbers only
+4237	bad login
+4238	the current login was kept
+4239	new login
+4240	has just logged in
+4241	has just joined
+4242	players on
+4243	invites you
+4244	Not enough players to start. The minimum is
+4245	current login
+4246	the population limit has been reached
+4247	mana points on
+4248	research
+4249	super healer
+4250	teleportation
+4251	to
+4252	not enough mana
+4253	percent of the volume
+4254	horses speed
+4255	define the rally point for the new units
+4256	gathered
+4257	agressive computer
+4258	quiet computer
+4259	has just logged out
+4260	on the server of
+4261	has just quit the game
+4262	optional sound pack
+4263	is now on
+4264	is now off
+4265	cheat mode
+4266	restart
+4267	campaign
+4268	new objective
+4269	objective complete
+4270	mission complete
+4271	chapter
+4272	prologue
+4273	epilogue
+4274	conversion
+4275	scout tower
+4276	guard tower
+4277	cannon tower
+4278	load
+4279	load all from
+4280	unload
+4281	unload all to
+4282	enter in
+4283	dark archer
+
+5000 a
+5001 b
+5002 c
+5003 d
+5004 e
+5005 f
+5006 g
+5007 h
+5008 i
+5009 j
+5010 k
+5011 l
+5012 m
+5013 n
+5014 o
+5015 p
+5016 q
+5017 r
+5018 s
+5019 t
+5020 u
+5021 v
+5022 w
+5023 x
+5024 y
+5025 z
+
+5026	dot
+
+4284 move
+4285 to alliance
+4286 allied
+4287 says
+4288 enter your message
+
+4289 invisible
+4290 detector
+4291 cloaker
+
+4292 summon
+4293 raise dead
+4294 resurrection
+
+4295 zombie
+4296 skeleton
+
+4297 priest
+4298 temple
+
+4299 holy vision
+4300 exorcism
+
+4301 human
+4302 orc
+
+4303 necromancer
+4304 necropolis
+
+4305 deadly fog
+4306 meteors
+
+4307 recall
+
+4308 stone
+4309 quarry
+
+4310 random race

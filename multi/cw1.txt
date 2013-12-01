@@ -1,0 +1,121 @@
+; shadows of war
+; copyrighted 2008 cw
+; The shadows of trees and the shadow of wars are two different things.
+; ever sense the deth of the king without airs the kingdom has fragmented.
+; with each  to his own the differents between the shadows of trees and the shadows of war become clear.
+; you know there are other groups out there that would take the kingdom for themselves.
+; are you going to let them?
+title 5018 5014 5022
+objective 145 88
+
+
+; map size
+
+square_width 26
+
+nb_columns 24
+nb_lines 24
+
+
+; paths (give only the starting square)
+
+west_east_paths a1 c1 d1 e1 f1 h1 k1 m1 n1 o1 p1 q1 r1 s1 u1 w1
+west_east_paths c2 d2 f2 o2 p2 q2 r2 t2 u2 v2
+west_east_paths b3 c3 d3 h3 j3 l3 k3 n3 p3 q3 r3 s3 t3 u3 v3
+west_east_paths c4 b4 d4 e4 g4 h4 i4 j4 o4 p4 q4 s4 t4 v4
+west_east_paths c5 d5 e5 h5 i5 j5 k5 l5 o5 p5 r5 u5 w5
+west_east_paths a6 c6 d6 e6 f6 g6 h6 l6 m6 n6 o6 p6 r6 s6 t6
+west_east_paths a7 c7 d7 f7 h7 j7 l7 m7 n7 o7 p7 q7 r7 s7 t7 u7 v7 w7
+west_east_paths a8 c8 e8 h8 j8 l8 m8 n8 o8 p8 q8 s8 u8 v8 w8
+west_east_paths a9 d9 g9 h9 j9 l9 o9 s9 w9
+west_east_paths g10 h10 i10 
+west_east_paths c11 m11 n11 o11 r11 s11 t11 u11 v11 w11
+west_east_paths f12 g12 m12 q12 r12 s12 t12
+west_east_paths f13 g13 h13 i13 j13 k13 l13 m13 n13 p13 q13 r13 s13 t13 v13 w13
+west_east_paths a14 b14 c14 d14 e14 f14 g14 l14 m14
+west_east_paths a15 d15 g15 h15 i15 m15 o15 s15 t15 u15 v15 w15
+west_east_paths f16 l16 m16 n16 s16 v16
+west_east_paths d17 k17 r17
+west_east_paths q18 r18 s18
+west_east_paths e19 f19 g19 h19 k19 m19 n19 u19 v19
+west_east_paths a21 i21 q21 r21 s21
+west_east_paths a23 f23 k23 l23
+west_east_paths a24 b24 c24 g24 h24 i24 j24 k24 o24 p24 q24 r24 t24 u24 v24 w24
+west_east_bridges a3 b3 c3 f3 i3 p3
+west_east_bridges a5 f5 n5
+west_east_bridges a6 b6  d6 f6 i6 j6 l6 n6 q6
+west_east_bridges  g11
+west_east_bridges  h12
+west_east_bridges a13
+west_east_bridges d14
+west_east_bridges d24
+
+south_north_paths a1 a3 a4 a6 a7 a8 a9 a10 a11 a12 a14 a16 a17 a18 a19 a20 a22 a23
+south_north_paths b1 b2 b3 b4 b5 b7 b8 b9 b10 b11 b12 b13 b14 b15 b16 b17 b18 b19 b20 b21 b22 b23
+south_north_paths c3 c4 c5 c6 c8 c9 c12 c13 c14 c16 c17 c18 c19 c21 c22 c23
+south_north_paths d2 d3 d4 d5 d7 d9 d10 d11 d12 d13 d15 d16 d18 d20 d21 d22 d23
+south_north_paths e2 e3 e4 e7 e9 e10 e11 e12 e13 e15 e16 e17 e18 e20 e21 e22 e23
+south_north_paths f2 f3 f4 f6 f7 f8 f9 f10 f11 f12 f13 f14 f15 f17 f18 f20 f21 f22 f23
+south_north_paths g1 g3 g4 g6 g8 g10 g14 g15 g16 g17 g18 g19 g20 g21 g22 g23
+south_north_paths h1 h2 h3 h4 h5 h6 h11 h12 h13 h14 h16 h17 h18 h19 h21 h22 h23
+south_north_paths i1 i2 i3 i5 i6 i7 i8 i9 i11 i14 i16 i17 i18 i19 i20 i22 i23
+south_north_paths j1 j2 j3 j5 j6 j7 j8 j10 j11 j12 j13 j14 j15 j16 j18 j19 j20 j21 j22 j23
+south_north_paths k1 k2 k4 k5 k6 k7 k8 k9 k10 k11 k12 k13 k14 k15 k16 k17 k18 k20 k22 k23
+south_north_paths l2 l3 l4 l5 l6 l9 l10 l11 l12 l14 l15 l17 l18 l19 l20 l21 l22 l23
+south_north_paths m2 m3 m4 m5 m9 m10 m16 m17 m18 m19 m20 m21 m22 m23
+south_north_paths n5 n6 n7 n9 n10 n12 n14 n15 n17 n18 n19 n20 n21 n22 n23
+south_north_paths o2 o3 o4 o5 o6 o7 o8 o9 o10 o11 o12 o13 o14 o16 o17 o18 o19 o20 o21 o22 o23
+south_north_paths p1 p2 p8 p9 p10 p11 p12 p14 p15 p16 p17 p18 p19 p20 p21 p22 p23
+south_north_paths q9 q10 q11 q12 q13 q14 q15 q16 q17 q18 q19 q20 q21 q22 q23
+south_north_paths r4 r5 r6 r8 r9 r10 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23
+south_north_paths s1 s2 s3 s4 s5 s6 s7 s8 s11 s12 s13 s14 s15 s16 s19 s20 s21 s22 s23
+south_north_paths t5 t8 t9 t10 t14 t16 t17 t18 t19 t20 t21 t22 t23
+south_north_paths  u1 u2 u3 u4 u5 u6 u9 u10 u11 u12 u13 u15 u16 u17 u18 u20 u21 u22 u23
+south_north_paths v4 v5 v6 v9 v10 v12 v14 v17 v18 v19 v21 v22 v23
+south_north_paths w2 w3 w4 w6 w10 w12 w14 w16 w17 w18 w19 w20 w21 w22 w23
+south_north_paths x1 x2 x3 x4 x6 x7 x8 x12 x13 x14 x15 x16 x17 x18 x20 x21 x22 x23
+
+south_north_bridges c1 c6 c10 c15 c20
+south_north_bridges d8 d19
+south_north_bridges e1 e3 e6 e22
+south_north_bridges j1 j4 j9 j17
+south_north_bridges l1
+south_north_bridges m15
+south_north_bridges n2 n4
+south_north_bridges q3 q5
+south_north_bridges o1
+south_north_bridges s10 s17
+south_north_bridges v1
+south_north_bridges x5 x9 x10 x18 x19
+
+; resources
+; gold
+goldmines 250 a2 b7 f1 g6 j24 m13 o15 t12
+goldmines 150 c1 a5 e7 g3 h1 i15 j20 k1 l11 o5 p9
+goldmines 50 e1 a3 c7 g5 h17 l14 x10 k20 n10 
+goldmines 750 d4 f15 h4 l5 p2 r20 t10 v14  w13 c12 c14 c17
+goldmines 6000 k11
+goldmines 75 a1 a23 b18 x15 f13 l19 g3 g21 i23 j2 k21 n16 p9 r2 x23
+
+; woods
+woods 75 a1 a7 g7 g1 i1 i12 i20 k7 l14 l15 l17 l20 r5 u6 u8
+woods 250 e1 c7 a3 g5
+woods 75 e2 c6 b3 f5 a3 a23 b16 x17 f13 l21 g1 g21 i23 j2 k21 n17 p10 r2 x23
+woods 90 e2 c6 b3 f5 g5 h5 i5 k5 o5 s5 t5 u10
+woods 175 c1 a16 e17 x13 x24 w12 q1 q3 t11 t13 t10 t6
+woods 150 d4 d4 h4 l4 t4 u4 w4 w21 i20 g24 o6 q10
+woods 6000 k11
+woods 700 a6 a10 b11 c9 g6 g8 h11 l14 n16 p11 r6 t4 u2 v16
+
+nb_meadows_by_square 12
+additional_meadows a2 b7 g6 f1 i9 h12 k13 l16 o6 t17 x12
+
+global_food_limit 1999
+; players
+
+nb_players_min 2
+nb_players_max 15
+
+starting_squares a2 a24 b17 x16 f12 l20 g2 g20 i24 j1 k20 n18 p10 r1 x24
+starting_units townhall 26 farm 10 peasant 5 footman 5 archer 5 knight 5 catapult 5 dragon 5 mage dragonslair barracks lumbermill blacksmith stables workshop magestower
+starting_resources 500 500

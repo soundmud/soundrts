@@ -1,0 +1,3 @@
+*.pyc
+profiles
+/doc/src/stats.inc

@@ -1,0 +1,109 @@
+; Multiplayer Map JS8: Mage Menagerie
+; By Jason Symes (president731@yahoo.com)
+
+title 5009 5018 3008 1328 1323 1322 1325 1324 1329
+objective 145 88
+square_width 12
+nb_columns 9
+nb_lines 10
+
+west_east_paths a1 c1 e1 g1
+west_east_paths b2 d2 f2
+west_east_paths a3 c3 e3
+west_east_paths b4 d4 h4
+west_east_paths a5 c5 g5
+west_east_paths b6 f6 h6
+west_east_paths a7 e7 g7
+west_east_paths d8 f8 h8
+west_east_paths c9 e9 g9
+west_east_paths b10 d10 f10 h10
+
+west_east_bridges b1 d1 f1 h1
+west_east_bridges a2 c2 e2 g2
+west_east_bridges b3 d3 f3 h3
+west_east_bridges a4 c4 e4 g4
+west_east_bridges b5 d5 f5 h5
+west_east_bridges a6 c6 e6 g6
+west_east_bridges b7 d7 f7 h7
+west_east_bridges a8 c8 e8 g8
+west_east_bridges b9 d9 f9 h9
+west_east_bridges a10 c10 e10 g10
+
+south_north_paths b1 d1 f1 h1
+south_north_paths a2 c2 e2 g2 i2
+south_north_paths b3 d3 f3 h3
+south_north_paths a4 c4 e4 g4 i4
+south_north_paths b5 d5 f5 h5
+south_north_paths a6 c6 e6 g6 i6
+south_north_paths b7 d7 f7 h7
+south_north_paths a8 c8 e8 g8 i8
+south_north_paths b9 d9 f9 h9
+
+south_north_bridges a1 c1 e1 g1
+south_north_bridges b2 d2 f2
+south_north_bridges a3 c3 e3 i3
+south_north_bridges b4 d4 h4
+south_north_bridges a5 c5 g5 i5
+south_north_bridges b6 f6 h6
+south_north_bridges a7 e7 g7 i7
+south_north_bridges d8 f8 h8
+south_north_bridges c9 e9 g9 i9
+
+#random_choice
+goldmines 100 a1
+goldmines 200 a9
+goldmines 500 i1
+woods 50 a1
+woods 100 a9
+woods 150 i1
+starting_squares a1
+#end_choice
+goldmines 100 i1
+goldmines 200 a1
+goldmines 500 a9
+woods 50 i1
+woods 100 a1
+woods 150 a9
+starting_squares i1
+#end_choice
+goldmines 100 a9
+goldmines 200 i1
+goldmines 500 a1
+woods 50 a9
+woods 100 i1
+woods 150 a1
+starting_squares a9
+#end_random_choice
+
+#random_choice
+goldmines 100 i10
+goldmines 200 i2
+goldmines 500 a10
+woods 50 i10
+woods 100 i2
+woods 150 a10
+starting_squares i10
+#end_choice
+goldmines 100 a10
+goldmines 200 i10
+goldmines 500 i2
+woods 50 a10
+woods 100 i10
+woods 150 i2
+starting_squares a10
+#end_choice
+goldmines 100 i2
+goldmines 200 a10
+goldmines 500 i10
+woods 50 i2
+woods 100 a10
+woods 150 i10
+starting_squares i2
+#end_random_choice
+nb_meadows_by_square 3
+
+nb_players_min 2
+nb_players_max 2
+starting_units townhall 3 farm magestower 10 peasant lumbermill
+starting_resources 125 100
+global_food_limit 118

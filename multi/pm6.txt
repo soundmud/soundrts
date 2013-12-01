@@ -1,0 +1,31 @@
+;pm7
+;hellrun
+;a large west_east 12 square map
+;3 players
+;a lot of resources
+;a heavily guarded giant goldmine and wood collection. who ever gets there is superb
+;resources to start an army, but nno such army exists  at the beginning
+;and, a lot of fast pased killing!
+
+title 5015 5012 3007 1039 1040 1041
+objective 1 2
+square_width 12
+nb_lines 1
+nb_columns 20
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1
+west_east_bridges n1 o1 p1 q1 r1 s1
+nb_meadows_by_square 2
+additional_meadows a1 j1 t1
+remove_meadows d1
+goldmines 1000 a1 b1 c1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1 o1 p1 q1 r1 s1 t1
+goldmines 10000 d1
+
+woods 1000 a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1 o1 p1 r1 s1 t1
+woods 10000 d1
+nb_players_min 2
+nb_players_max 3
+starting_squares a1 j1 t1
+starting_resources 10000 10000
+starting_units 25 peasant townhall 5 barracks lumbermill blacksmith 5 workshop 5 dragonslair 5 magestower 10 farm
+computer_only 0 0 d1 10 dragon 5 catapult 3 mage
+global_food_limit 3000

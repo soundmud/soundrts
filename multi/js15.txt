@@ -1,0 +1,76 @@
+; Multiplayer Map JS15
+; By Jason Symes (president731@yahoo.com)
+
+title 5009 5018 3015
+objective 145 88
+
+; map size
+square_width 10
+nb_columns 7
+nb_lines 7
+
+; paths (give only the starting square)
+
+;Home triangles
+west_east_paths a1 a2 b1 a6 a7 b7 e7 f6 f7 e1 f1 f2
+west_east_bridges c1  c7 d7 d1
+south_north_paths a1 a2 b1 a5 a6 b6 f6 g5 g6 f1 g1 g2
+south_north_bridges a3 a4 g4 g3
+
+;middle triangles
+west_east_paths a4 c6 d6 f4 c2 d2
+south_north_paths b3 b4 d6 f3 f4 d1
+#random_choice
+west_east_bridges b3
+#end_choice
+west_east_bridges b4
+#end_choice
+west_east_bridges b5
+#end_random_choice
+#random_choice
+west_east_bridges e3
+#end_choice
+west_east_bridges e4
+#end_choice
+west_east_bridges e5
+#end_random_choice
+#random_choice
+south_north_bridges c5
+#end_choice
+south_north_bridges d5
+#end_choice
+south_north_bridges e5
+#end_random_choice
+#random_choice
+south_north_bridges c2
+#end_choice
+south_north_bridges d2
+#end_choice
+south_north_bridges e2
+#end_random_choice
+
+;interior
+west_east_paths c3 d3 c4 d4 c5 d5
+south_north_paths c3 d3 e3 c4 d4 e4
+
+; resources
+goldmines 80 a1 a7 g7 g1
+goldmines 130 a4 d7 g4 d1
+goldmines 260 c3 c5 e3 e5
+goldmines 750 d4 d4
+woods 60 a1 a7 g7 g1
+woods 100 a4 d7 g4 d1
+woods 180 c3 c5 e3 e5
+woods 340 d4 d4
+
+nb_meadows_by_square 3
+additional_meadows d4
+
+; players
+nb_players_min 2
+nb_players_max 4
+
+starting_squares a1 a7 g7 g1
+starting_units townhall 3 farm 10 peasant lumbermill 2 knight stables blacksmith 2 mage 2 catapult
+starting_resources 100 100
+global_food_limit 80

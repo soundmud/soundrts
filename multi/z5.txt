@@ -1,0 +1,30 @@
+; zombie planet part 5
+;   made by valentin. all copyrights reserved.
+; contact me: ninutz2006@yahoo.com.
+; only in english or romanian.
+; also visit http://ht-arena.com/echipaluininunzu/
+
+title 5025 3005
+objective 1041 1309 1326
+
+square_width 12
+nb_columns 3
+nb_lines 3
+
+west_east_paths b2 a3 b3
+
+south_north_paths a1 b1 c1 a2 b2 c2
+
+goldmines 100 a1 c1
+
+woods 100 a1 c1
+
+nb_meadows_by_square 10
+nb_players_min 2
+nb_players_max 2
+
+starting_squares a1 c1
+starting_units townhall 15 farm 10 peasant barracks blacksmith stables 2 magestower dragonslair 
+starting_resources 5000 5000
+global_food_limit 1000
+computer_only 5000 5000 b3 20 footman 20 archer 20 knight 5 dragon 4 mage

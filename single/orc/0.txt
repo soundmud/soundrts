@@ -1,0 +1,57 @@
+; solo map 1
+;
+;  *******
+; 3* + + *
+;  *+*****
+; 2* + + *
+;  ***+***
+; 1* + + *
+;  *******
+;   A B C
+
+title 4271 3001
+
+; map size
+
+square_width 12
+
+nb_columns 3
+nb_lines 3
+
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 a2 b2 a3 b3
+west_east_bridges
+
+south_north_paths a2
+south_north_bridges b1
+
+
+; resources
+
+goldmine 250 a1
+goldmine 500 c3
+
+wood 750 a1 c1 c3
+
+nb_meadows_by_square 1
+additional_meadows c2
+remove_meadows a3 b2
+
+; players
+
+player 5 10 -townhall -lumbermill -blacksmith a1 townhall peasant c1 farm footman
+computer_only 20 20 c3 3 peon pig_farm grunt
+
+; triggers
+
+timer_coefficient 1
+
+trigger computer1 (timer 0) (ai easy)
+trigger computer1 (timer 0) (race orc_race) ; useful for the AI to build a "farm" or a "townhall" (and more, if the AI is not race specific)
+
+trigger player1 (timer 0) (add_objective 1 145 88)
+
+trigger player1 (no_enemy_left) (objective_complete 1)
+trigger all (no_unit_left) (defeat)

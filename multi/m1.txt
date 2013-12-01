@@ -1,0 +1,39 @@
+; A verry simple map for 4 players
+; Made by Masackru http://acces.wordpress.com or http://masackru.wordpress.com
+; You can whryte me @ masacru_tb@yahoo.com
+; English, French or romanian only
+; Enjoy
+; Copyright Masackru, all rights reserved
+
+title 5012 3001
+objective 145 88
+
+square_width 12
+nb_columns 6
+nb_lines 6
+
+west_east_paths b2 b3 b4 b5
+west_east_paths d2 d3 d4 d5
+
+west_east_bridges a1 b1 c1 d1 e1
+west_east_bridges a6 b6 c6 d6 e6
+
+south_north_paths b1 b2 c2 d2 e1 e2
+south_north_paths b4 b5 c4 d4 e4 e5
+
+south_north_bridges a1 a2 a3 a4 a5
+south_north_bridges f1 f2 f3 f4 f5
+
+goldmines 150 c2 d2 c5 d5
+woods 150 a1 f1 a6 f6
+
+nb_meadows_by_square 2
+additional_meadows c3 d3 c4 d4
+
+nb_players_min 2
+nb_players_max 4
+
+starting_squares c3 d3 c4 d4
+starting_units townhall farm 3 peasant footman archer
+starting_resources 150 150
+global_food_limit 100

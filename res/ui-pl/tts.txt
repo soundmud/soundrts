@@ -1,0 +1,401 @@
+; coding: iso8859_2
+
+0	nic!
+1	jesteœ
+
+3 przed tob¹
+4	za tob¹
+5	Co robisz?
+
+23	i
+
+38	masz
+39	¿ycia
+40	poziom
+
+54	na
+55	metrów
+
+59	gracz
+60	jesteœ
+61	zabity
+
+65	minut
+66	sekund
+67	pó³noc
+68	po³udnie
+69	wschód
+70	zachód
+71	pó³nocny wschód
+72	pó³nocny zachód
+73	po³udniowy wschód
+74	po³udniowy zachód
+79	Na ³¹ce otoczonej drzewami
+80	las
+81	kopalnia z³ota
+82	ratusz
+83	farma
+84	œcie¿ka
+85	ch³op
+86	piechór
+87	³ucznik
+88	przeciwnik
+89	przyjaciel
+99	baraki
+100	idŸ
+101	zbuduj
+102	wydobywaj z
+103	patroluj
+104	tryb
+105	ok!
+106	przerwij
+107	na
+108	do
+110	napastnika
+111	obroñcy
+112 utrzymaj pozycjê
+113 czaj siê!	
+114	atakuj
+115	do
+116	na wschód
+117	na zachód
+118	napraw
+119	na
+120	pojedynek
+121	przeciwko
+122	³¹ka
+123 rekrutuj
+124	gotowy!
+125	zgromadŸ
+126	ukoñczone
+127	zaprzestañ
+128	budynek
+129	wymaga
+130 jednostek
+131	z³ota
+132	drewna
+133	jedzenia
+134	zawiera
+135	brak wystarczaj¹cej iloœci
+136	równie¿!
+137	jedzenie
+138	sterujesz
+139	grup¹
+
+142	produkcja wstrzymana
+143	kolejka jest pe³na
+144	wyczerpano
+145	zneutralizowano
+146	stracono
+147	produkcja
+148	tartak
+149	zwyciêstwo!
+150	pokonano
+151	1
+152	alert
+153	most
+154	otwórz
+155	dotar³eœ na poziom
+156	w œrodku
+
+
+
+2008	Naciœnij F5, by wys³uchaæ raz jeszcze
+2010	naciœnij
+2011	do
+2012	Tab
+2013 wybierz
+2014	wprowadŸ
+2015	potwierdŸ
+2016	A i Q
+2017	wydaj rozkaz
+2018	Z i S
+2019	Steruj nastêpn¹ jednostk¹
+2020	X lub W
+2021	sprawdŸ zasoby
+2022	1, 2 lub 3
+2023	Steruj grup¹
+2024	0
+2025	Steruj tylko jedn¹ jednostk¹
+2026	backspace
+2027	Wydaj domyœlny rozkaz
+2028	F5 i F6
+2029	historia
+2030	Alt
+2031 Przerwij aktualnie wypowiadane zdania
+2032	escape
+2033	anuluj
+2034	shift
+2035	od ty³u
+2036	otwórz menu
+2037	strza³ki kierunku
+2038	Poruszaj siê po mapie
+2039	control
+2040	ignorowanie przeszkód
+2041	page down
+2042	Przemieszcza do nastêpnej interesuj¹cej lokacji
+2043	space
+2044 przemieszcza do lokacji, w której znajduje siê aktualnie kontrolowana jednostka i œledzi j¹	
+2045	Steruj nastêpn¹ lokaln¹ jednostk¹
+2046	Wybierz nastêpny cel
+2047	Wybierz nastêpny rozkaz
+2048	Steruj wszystkimi jednostkami tego samego typu i w tej samej lokacji co aktualnie sterowana jednostka
+2049	PotwierdŸ aktualny rozkaz
+2050	Wydaj rozkaz najbardziej logiczny dla wybranego celu
+2051	Dowiedz siê jak du¿o z³ota drewna i jedzenia masz
+2052	Poznaj stan zdrowia aktualnie sterowanej jednostki
+2053	Steruj po³ow¹ jednostek tego samego typu i w tej samej lokacji co aktualnie sterowana jednostka
+2054	steruj tylko jedn¹ jednostk¹
+2055	q
+2056	Steruj wszystkimi ¿o³nierzami w lokacji
+2057	Steruj wszystkimi ch³opami w lokacji
+2058	Steruj nastêpnym budynkiem
+2059	Steruj nastêpnym ch³opem
+3000	0
+3001	1
+3002	2
+3003	3
+3004	4
+3005	5
+3006	6
+3007	7
+3008	8
+3009	9
+3010	10
+3011	11
+3012	12
+3013	13
+3014	14
+3015	15
+3016	16
+3017	17
+3018	18
+3019	19
+3020	20
+3021	21
+3030	30
+3031	31
+3040	40
+3041	41
+3050	50
+3051	51
+3060	60
+3061	61
+3070	70
+3071	71
+3080	80
+3090	90	
+3100	hundred
+3101	thousand
+3102	million
+
+4000	gra
+4001	Internet
+4002	lokalna
+4004	przetwarzanie
+4005	niepowodzenie
+4006 sukces!
+4007	Co chcesz zrobiæ??
+4008	Proszê wysy³aæ komentarze na adres jlpo@free.fr
+4009	wyjœcie
+4010	Menu
+4011	kontynuuj
+4012	b³¹d wersji
+4014	gra strategiczna
+4015	rozdzia³
+4016	gra jednoosobowa
+4017	mapa
+4018	gra wieloosobowa
+4019	do³¹cz
+4020	cel: 
+4021	odpieraj ataki przeciwnika
+4022	wyprodukowano
+4023	wyprodukowano
+4024	zu¿yto
+4025	budynek
+4026	wynik
+
+4028	Naciœnij F1, aby uzyskaæ pomoc
+4029	menu g³ówne
+4030	Czego chcesz?
+4031	gra jednoosobowa,
+4032	graj na komputerze
+4033	gra wieloosobowa,
+4034	Zagraj w sieci
+4035	serwer,
+4036	Uruchom serwer na twoim komputerze, by hostowaæ gry wieloosobowe
+4037	opcje,
+4038	Zmieñ swoje parametry
+
+4041	Wyjœcie,
+4042	WyjdŸ z gry
+4043	Jaki typ serwera?
+4044	serwer prosty
+4045	Tylko ty mo¿esz tworzyæ gry
+4046	serwer publiczny
+4047	Goœæ mo¿e stworzyæ grê
+4048	Anuluj
+4049 Serwer prawdopodobnie nie móg³ zarejestrowaæ siê na metaserwerze. SprawdŸ czy masz po³¹czenie z internetem.
+4051	dowidzenia
+4052	Naciœnij tab, by wybraæ, naciœnij enter, by potwierdziæ.
+4053	s'inscrire pour la partie de
+4054	rejoindre en cours de route la partie de
+4055	uruchom
+4056	Witaj
+4057	B³¹d: zbyt wiele gier
+4058	zaproœ
+4059	zacznij
+4060	Anuluj t¹ grê
+4061 wycofaj siê z gry	
+4062	Gra rozpocznie siê za 5 sekund
+4063	Gra rozpocznie siê, gdy jej za³o¿yciel tak zdecyduje
+4064	Naciœnij enter, by potwierdziæ
+
+4066	Naciœnij tab wiele razy, by wybraæ ka¿dy widoczny obiekt
+4067	Naciœnij tab, by wybraæ cel, a potem enter, by potwierdziæ
+
+4070	anuluj grê
+4071	kontynuuj grê
+4072	Nie mogê uzyskaæ dostêpu do listy serweruw. SprawdŸ czy jesteœ po³¹czony z internetem.
+4073	serwer za³o¿ony przez
+4074	dla
+4075	Anuluj
+4076	Wróæ do poprzedniego menu
+4077	W tej chwili brak serwerów zarejestrowanych w internecie
+4078	serwerów na
+4079	u¿ywaj¹ tej samej wersji co ty, do którego z nich chcesz siê po³¹czyæ??
+4080	Niepowodzenie: serwer nie móg³ zostaæ uruchomiony
+4081	niepowodzenie: serwer jest nieosi¹galny. Serwer jest zablokowany lub za firewallem b¹dŸ Routerem.
+4082	Niepowodzenie: nieoczekiwana odpowiedŸ z serwera. To nie jest serwer gry Sound RTS
+4083	Niepowodzenie: odrzucono po³¹czenie. To nie jest serwer gry Sound RTS.
+4084	lub twój login zosta³ odrzucony
+4085	B³¹d podczas ³¹czenia z serwerem.
+4086	menu opcji
+4087	Modyfikuj login
+
+4096	zapisz,
+4097	Zapisz zmiany i wróæ do poprzedniego menu
+4098	Anuluj,
+4099	Wróæ do enu g³ównego bez zapisywania zmian
+
+4101	Zostanie otwarte nowe okno
+4102	po³¹czenie przerwane
+4103	gra w wolnym tempie
+4104	gra w umiarkowanym tempie
+4105	gra w szybkim tempie
+
+4112	Zapisz grê
+4113	Przywróæ zapisan¹ grê
+4114	przeciwko komputerowi
+4115	komputer przeciwko komputerowi
+
+4118	wróæ
+4119	wybierz serwer z listy
+4120	WprowadŸ adres IP serwera
+4121	serwer prywatny
+4122	Serwer nie zostanie dodany do listy.
+
+4200	Produkcja drewna poprawi³a siê
+4201	katapulta
+4202	oczekuje na rozkazy
+
+4204	nie mo¿esz tu budowaæ
+4205	nie sterujesz ¿adn¹ jednostk¹
+4206	wyœwietlanie jest teraz w³¹czone
+4207	wyœwietlanie jest teraz wy³¹czone
+4208	nieznane
+4209	w kurzu bitewnym
+4210	F10, by uzyskaæ dostêp do menu
+4211	tryb pierwszoosobowy
+4212	tryb mapy
+4213	kuŸnia
+4214	ulepsz
+4215	miecze
+4216 strza³y
+4217	zbroje piechórów
+4218	zbroje ³uczników
+4219	do
+4220	forteca
+4221	zamek
+4222 stajnie
+4223	menu
+4224	 w³aœnie siê zmieni³o.
+4225	rycerz
+4226	warsztat
+4227	smocza pieczara
+4228	wie¿a magów
+4229	mag
+4230 lataj¹ca maszyna
+4231	smok
+4232	b³¹d serwera
+4233	zasiêg ³uków
+4234	Dostêpna jest nowsza wersja gry
+4235	WprowadŸ nowy login
+4236	use u¿ywaj tylko liter i cyfr
+4237	z³y login
+4238	obecny login zachowany
+4239	nowy login
+4240	w³aœnie siê zalogowa³
+4241	w³aœnie do³¹czy³
+4242	graczy na
+4243	zaprasza ciê
+4244	Brak wystarczaj¹cej liczby graczy, by zacz¹æ. Minimum to
+4245	obecny login
+4246	Osi¹gniêto limit populacji
+4247	punktów many
+4248	badaj
+4249	uzdrowiciela
+4250	teleportacjê
+4251	do
+4252	brak wystarczaj¹cej iloœci many
+4253	procent g³oœnoœci
+4254	prêdkoœæ koni
+4255	Zdefiniuj punkt zbiorczy nowych jednostek
+4256	zebrano
+4257	komputer agresywny
+4258	spokojny komputer
+4259	w³aœnie siê wylogowa³
+4260	na serwerze
+4261	w³aœnie wyszed³ z gry
+4262	opcjonalny pakiet dŸwiêkowy
+4263	jest teraz w³¹czony
+4264	jest teraz wy³¹czony
+4265	tryb z kodami
+4266	restart
+4267	kampania
+4268	nowy cel
+4269	cel osi¹gniêty
+4270	Misja wykonana
+4271	rozdzia³
+4272	prolog
+4273	epilog
+
+5000 a
+5001 b
+5002 c
+5003 d
+5004 e
+5005 f
+5006 g
+5007 h
+5008 i
+5009 j
+5010 k
+5011 l
+5012 m
+5013 n
+5014 o
+5015 p
+5016 q
+5017 r
+5018 s
+5019 t
+5020 u
+5021 v
+5022 w
+5023 x
+5024 y
+5025 z
+
+5026	kropka
+

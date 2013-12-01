@@ -1,0 +1,22 @@
+; Carte multijoueur simple pour 12 joueurs
+; Crée par QuentinC http://quentinc.net/
+;2ème version de la carte à 12 joueurs, avec aucune ressource. Avec une telle carte il faut changer sa stratégie et revoir le nombre de paysans à la baisse...
+;
+title 5016 5002 3003
+objective 145 88
+nb_players_min 2
+nb_players_max 12
+square_width 12
+nb_columns 12
+nb_lines 12
+nb_meadows_by_square 2
+starting_squares a1 l1 a12 l12 a5 a8 l5 l8 e1 h1 e12 h12
+starting_units townhall farm 3 peasant
+starting_resources 800 500
+global_food_limit 480
+;//javascript:var s = ''; var t = ['a','b','d','e','g','h','j','k']; for (var i=1; i<=12; i++) { for (var j=0; j<t.length; j++) { s+=" "+t[j]+i; }} prompt(s,s);
+;//javascript:var s = ''; var t = [1,2,4,5,7,8,10,11]; for (var i=0; i<12; i++) { for (var j=0; j<t.length; j++) { s+=" "+String.fromCharCode(97+i)+t[j]; }} prompt(s,s);
+west_east_paths  a1 b1 d1 e1 g1 h1 j1 k1 a2 b2 d2 e2 g2 h2 j2 k2 a3 b3 d3 e3 g3 h3 j3 k3 a4 b4 d4 e4 g4 h4 j4 k4 a5 b5 d5 e5 g5 h5 j5 k5 a6 b6 d6 e6 g6 h6 j6 k6 a7 b7 d7 e7 g7 h7 j7 k7 a8 b8 d8 e8 g8 h8 j8 k8 a9 b9 d9 e9 g9 h9 j9 k9 a10 b10 d10 e10 g10 h10 j10 k10 a11 b11 d11 e11 g11 h11 j11 k11 a12 b12 d12 e12 g12 h12 j12 k12
+south_north_paths  a1 a2 a4 a5 a7 a8 a10 a11 b1 b2 b4 b5 b7 b8 b10 b11 c1 c2 c4 c5 c7 c8 c10 c11 d1 d2 d4 d5 d7 d8 d10 d11 e1 e2 e4 e5 e7 e8 e10 e11 f1 f2 f4 f5 f7 f8 f10 f11 g1 g2 g4 g5 g7 g8 g10 g11 h1 h2 h4 h5 h7 h8 h10 h11 i1 i2 i4 i5 i7 i8 i10 i11 j1 j2 j4 j5 j7 j8 j10 j11 k1 k2 k4 k5 k7 k8 k10 k11 l1 l2 l4 l5 l7 l8 l10 l11
+west_east_paths c2 f2 i2 c11 f11 i11
+south_north_paths b3 b6 b9 k3 k6 k9

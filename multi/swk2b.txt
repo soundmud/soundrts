@@ -1,0 +1,38 @@
+; The Close  Combat Series part II: (contending for the central resources)
+; ; _ BY SunWukong
+; Special Thanks to Steady Goh, creaters of the SG series and to Kelvin Tan, creater of the kel series for testing these.
+
+; description: Second in a series where combat will take place quickly.  Only 1 gold mine and woods in the center, so it will ; take strategy to take b2 and be able to keep it.
+
+title 5018 5022 5010 3002 5001
+objective 145 88
+
+
+; map size
+
+square_width 12
+nb_columns 3
+nb_lines 3
+
+west_east_paths a1   b3
+
+west_east_bridges a2 b2
+
+south_north_paths a2 c1 
+
+south_north_bridges b1 b2
+
+; resources
+goldmines 1000 b2
+woods 500 b2
+
+nb_meadows_by_square 10
+
+; players
+
+nb_players_min 2
+nb_players_max 4
+
+starting_squares a1 c1 a3 c3
+starting_units townhall 10 farm 5 peasant
+starting_resources 1500 250

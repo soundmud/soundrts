@@ -1,0 +1,54 @@
+; BLINDzeln's Goldrush - multiplayer map B2
+;
+;        *******
+; 8      *     *
+;        * * * *
+; 7      * *** *
+;        *     *
+; 6********* *********
+;  *     *     *     *
+; 5* *** *     * *** *
+;  *   *         *   *
+; 4* *** *     * *** *
+;  *     *     *     *
+; 3********* *********
+;        *     *
+; 2      * *** *
+;        * * * *
+; 1      *     *
+;        *******
+;   A B C D E F G H I
+
+title 5001 3002
+objective 145 88
+
+; map size
+square_width 12
+nb_columns 9
+nb_lines 9
+
+; paths (give only the starting square)
+west_east_paths d1 e1 d3 e3 a4 b4 d4 e4 g4 h4 a6 b6 d6 e6 g6 h6 d7 e7 d9 e9
+west_east_bridges a5 c5 d5 e5 f5 h5
+south_north_paths d1 f1 d2 f2 a4 c4 d4 f4 g4 i4 a5 c5 d5 f5 g5 i5 d7 f7 d8 f8
+south_north_bridges e1 e3 e4 e5 e6 e8
+
+; resources
+goldmines 75 e2 b5 e8 h5
+goldmines 100 d1 a6 f9 i3
+goldmines 150 f3 c4 d7 g6
+goldmines 300 e5
+woods 75 e1 a5 e9 i5
+woods 100 f2 c4 d8 h6
+woods 125 e2 b5 e8 h5
+woods 250 e5
+nb_meadows_by_square 2
+additional_meadows
+
+; players
+nb_players_min 2
+nb_players_max 4
+starting_squares e2 b5 e8 h5
+starting_units townhall farm peasant
+starting_resources 10 10
+global_food_limit 100

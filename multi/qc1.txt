@@ -1,0 +1,38 @@
+; Carte multijoueur simple pour 8 joueurs
+; Crée par QuentinC http://quentinc.net/
+
+title 5016 5002 3001
+objective 145 88
+nb_players_min 2
+nb_players_max 8
+square_width 12
+nb_columns 12
+nb_lines 12
+nb_meadows_by_square 2
+starting_squares e2 h2 e11 h11 b5 b8 k5 k8
+starting_units townhall farm peasant
+starting_resources 15 15
+west_east_paths d1 e1 g1 h1 d12 e12 g12 h12
+west_east_paths d3 e3 g3 h3 d10 e10 g10 h10
+south_north_paths a4 a5 a7 a8 l4 l5 l7 l8
+south_north_paths c4 c5 c7 c8 j4 j5 j7 j8
+south_north_paths d1 e1 f1 g1 h1 i1 d2 f2 g2 i2 d11 e11 f11 g11 h11 i11 d10 f10 g10 i10
+west_east_paths a4 a5 a6 a7 a8 a9 b4 b6 b7 b9 k4 k5 k6 k7 k8 k9 j4 j6 j7 j9
+south_north_bridges e3 h3 e9 h9 f4 g4 f8 g8
+west_east_bridges c5 c8 i5 i8 d6 d7 h6 h7
+west_east_paths d4 e4 f4 g4 h4 d9 e9 f9 g9 h9
+south_north_paths d4 d5 d6 d7 d8 i4 i5 i6 i7 i8
+west_east_paths e5 e6 e7 e8 f5 f6 f7 f8 g5 g6 g7 g8 
+south_north_paths e5 e6 e7 f5 f6 f7 g5 g6 g7 h5 h6 h7
+west_east_paths a1 a2 a3 b1 b2 b3 a10 a11 a12 b10 b11 b12 j1 j2 j3 k1 k2 k3 j10 j11 j12 k10 k11 k12
+south_north_paths a1 b1 c1 a2 b2 c2 j1 k1 l1 j2 k2 l2 a10 a11 b10 b11 c10 c11 j10 j11 k10 k11 l10 l11
+goldmines 150 d3 e2 f1 g1 h2 i3 j4 k5 l6 l7 k8 j9 i10 h11 g12 f12 e11 d10 c9 b8 a7 a6 b5 c4
+woods 75 d1 e2 f3 g3 h2 i1 l4 k5 j6 j7 k8 l9 i12 h11 g10 f10 e11 d12 a9 b8 c7 c6 b5 a4
+woods 75 e2 h2 e11 h11 b5 b8 k5 k8
+goldmines 150 f6 g6 f7 g7
+woods 75 f6 g6 f7 g7
+goldmines 50 e5 e8 h5 h8 a1 b2 c3 a12 b11 c10 l1 k2 j3 l12 k11 j10
+woods 25 e5 e8 h5 h8 a3 b2 c1 a10 b11 c12 l3 k2 j1 l10 k11 j12
+additional_meadows e3 h3 e10 h10 c5 c8 j5 j8
+remove_meadows f6 f7 g6 g7 d6 e6 d7 e7 d6 e6 d7 e7 h6 i6 h7 i7 h6 h7 i6 i7 f4 f5 f8 f9 g4 g5 g8 g9 f4 f5 f8 f9 g4 g5 g8 g9 e4 h4 e9 h9 e4 h4 e9 h9 d5 d8 i5 i8 d5 d8 i5 i8
+global_food_limit 160

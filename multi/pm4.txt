@@ -1,0 +1,49 @@
+;pm5
+;knight wars
+;the idea of this map is a showdown between 2 enemies
+;the grid is 3 by 3 fully open.
+;line 1 and 3 are taken by the players, while line 2 is a spot with a lot of resources.
+;the players start with an overwelming amount of barracks and knights, and a few peasants.
+;the basics
+title 1016 1014 3005
+
+objective 145 88
+
+square_width 12
+nb_lines 3
+nb_columns 3
+west_east_paths a1 b1 a2 b2
+west_east_bridges a3 b3
+south_north_paths a1 a2 b1 b2
+south_north_bridges c1 c2
+goldmines 100 a2 b2 c2
+goldmines 500 a2 b2 c2
+goldmines 750 a2 b2 c2
+goldmines 1000 a2 b2 c2
+goldmines 1500 a2 b2 c2
+goldmines 2000 a2 b2 c2
+goldmines 5000 a2 b2 c2
+goldmines 10000 c2
+
+woods 100 a2 b2 c2
+
+woods 500 a2 b2 c2
+woods 750 a2 b2 c2
+woods 1000 a2 b2 c2
+woods 1500 a2 b2 c2
+woods 2000 a2 b2 c2
+woods 5000 a2 b2 c2
+woods 10000 c2
+nb_meadows_by_square 9
+additional_meadows c2
+remove_meadows a2 b2
+nb_players_min 2
+nb_players_max 2
+starting_squares a1 c1
+starting_resources 200 200
+starting_units townhall 10 farm 10 peasant 5 barracks lumbermill blacksmith workshop dragonslair magestower
+computer_only 0 0 b2 10 darkarcher
+
+
+
+

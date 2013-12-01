@@ -1,0 +1,188 @@
+; Multiplayer Map JS6 - Block Busters
+; By Jason Symes (president731@yahoo.com)
+; A good map for up to 5 players.
+
+title 5009 5018 3006
+objective 145 88
+
+; map size
+
+square_width 12
+nb_columns 14
+nb_lines 8
+
+; boarder crossings
+west_east_paths a1 c1 e1 g1 i1 k1 m1
+west_east_paths b2 d2 f2 h2 j2 l2
+west_east_paths a7 c7 e7 g6 i7 k7 m7
+west_east_paths b8 d8 f7 h7  j8 l8
+west_east_paths a3 a5 m4 m6
+
+west_east_bridges b1 d1 f1 h1 j1 l1
+west_east_bridges a2 c2 e2 g2 i2 k2 m2
+west_east_bridges b7 d7 f6 h6 j7 l7
+west_east_bridges a8 c8 e8 g7 i8 k8 m8
+west_east_bridges a4 a6 m3 m5
+
+south_north_paths b1 d1 f1 h1 j1 l1 n1
+south_north_paths a2 a4 a6 b3 b5 b7
+south_north_paths f3 f5 f7 i2 i4 i6
+south_north_paths m2 m4 m6 n3 n5 n7
+south_north_paths b7 d7 h6 j7 l7
+
+south_north_bridges a1 c1 e1 g1 i1 k1 m1
+south_north_bridges a3 a5 a7 b2 b4 b6
+south_north_bridges f2 f4 f6 i3 i5 i7
+south_north_bridges m1 m3 m5 m7 n2 n4 n6
+south_north_bridges c7 e7 g6 k7
+
+; home
+#random_choice
+west_east_paths c4 e4
+west_east_bridges b3 d3
+south_north_paths d3
+south_north_bridges c3 e3
+goldmines 75 d4
+goldmines 150 c3 e3
+woods 75 d3
+woods 50 c4 e4
+starting_squares d4
+#end_choice
+west_east_paths c3 e3
+west_east_bridges b4 d4
+south_north_paths c3 e3
+south_north_bridges d3
+goldmines 75 d3
+goldmines 150 c4 e4
+woods 75 d4
+woods 50 c3 e3
+starting_squares d3
+#end_random_choice
+additional_meadows c3 c4 d3 d4 e3 e4
+additional_meadows c3 c4 d3 d4 e3 e4
+#random_choice
+west_east_paths c6 e6
+west_east_bridges b5 d5
+south_north_paths d5
+south_north_bridges c5 e5
+goldmines 75 d6
+goldmines 150 c5 e5
+woods 75 d5
+woods 50 c6 e6
+starting_squares d6
+#end_choice
+west_east_paths c5 e5
+west_east_bridges b6 d6
+south_north_paths c5 e5
+south_north_bridges d5
+goldmines 75 d5
+goldmines 150 c6 e6
+woods 75 d6
+woods 50 c5 e5
+starting_squares d5
+#end_random_choice
+additional_meadows c5 c6 d5 d6 e5 e6
+additional_meadows c5 c6 d5 d6 e5 e6
+#random_choice
+west_east_paths j6 l6
+west_east_bridges i5 k5
+south_north_paths k5
+south_north_bridges j5 l5
+goldmines 75 k6
+goldmines 150 j5 l5
+woods 75 k5
+woods 50 j6 l6
+starting_squares k6
+#end_choice
+west_east_paths j5 l5
+west_east_bridges i6 k6
+south_north_paths j5 l5
+south_north_bridges k5
+goldmines 75 k5
+goldmines 150 j6 l6
+woods 75 k6
+woods 50 j5 l5
+starting_squares k5
+#end_random_choice
+additional_meadows j5 j6 k5 k6 l5 l6
+additional_meadows j5 j6 k5 k6 l5 l6
+#random_choice
+west_east_paths j4 l4
+west_east_bridges i3 k3
+south_north_paths k3
+south_north_bridges j3 l3
+goldmines 75 k4
+goldmines 150 j3 l3
+woods 75 k3
+woods 50 j4 l4
+starting_squares k4
+#end_choice
+west_east_paths j3 l3
+west_east_bridges i4 k4
+south_north_paths j3 l3
+south_north_bridges k3
+goldmines 75 k3
+goldmines 150 j4 l4
+woods 75 k4
+woods 50 j3 l3
+starting_squares k3
+#end_random_choice
+additional_meadows j3 j4 k3 k4 l3 l4
+additional_meadows j3 j4 k3 k4 l3 l4
+#random_choice
+west_east_paths g3 g5
+west_east_bridges g4
+south_north_paths g2 g4
+south_north_bridges h3 h5
+goldmines 75 g4
+goldmines 150 h3 h5
+woods 75 h4
+woods 50 g3 g5
+starting_squares g4
+#end_choice
+west_east_paths g4
+west_east_bridges g3 g5
+south_north_paths h2 h4
+south_north_bridges g3 g5
+goldmines 75 h4
+goldmines 150 g3 g5
+woods 75 g4
+woods 50 h3 h5
+starting_squares h4
+#end_random_choice
+additional_meadows g3 g4 g5 h3 h4 h5
+additional_meadows g3 g4 g5 h3 h4 h5
+
+; fronteer
+goldmines 200 a1 a8 n1 n8
+woods 50 a2 b1 a7 b8 m8 n7 n2 m1
+additional_meadows a1 a1 a8 a8 n1 n1 n8 n8
+#random_choice
+west_east_paths h8
+west_east_bridges g8
+goldmines 200 g8
+woods 50 h8
+#end_choice
+west_east_paths f8
+west_east_bridges g8
+goldmines 200 h8
+woods 50 g8
+#end_choice
+west_east_bridges g8
+goldmines 200 h8
+woods 50 g8
+#end_choice
+west_east_bridges g8
+goldmines 200 g8
+woods 50 h8
+#end_random_choice
+additional_meadows g8 h8
+nb_meadows_by_square 0
+
+; players
+
+nb_players_min 2
+nb_players_max 5
+starting_units townhall magestower 4 farm 5 peasant
+starting_resources 100 100
+global_food_limit 200

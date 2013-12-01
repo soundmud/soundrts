@@ -1,0 +1,51 @@
+; multiplayer map mb9
+title 5012 5001 3009
+objective 145 88
+
+
+; map size
+
+square_width 12
+
+nb_columns 9
+nb_lines 9
+
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 d1 e1 g1 h1
+west_east_paths a2 b2 d2 e2 f2 g2 h2
+west_east_paths a3 b3 d3 e3 g3 h3
+west_east_paths a4 b4 d4 e4 g4 h4
+west_east_paths a5 b5 c5 d5 e5 f5 g5 h5
+west_east_paths a6 b6 d6 e6 g6 h6
+west_east_paths a7 b7 d7 e7 g7 h7
+west_east_paths a8 b8 c8 d8 e8 g8 h8
+west_east_paths a9 b9 d9 e9 g9 h9
+
+south_north_paths a1 a2 a4 a5 a7 a8
+south_north_paths b1 b2 b3 b4 b5 b7 b8
+south_north_paths c1 c2 c4 c5 c7 c8
+south_north_paths d1 d2 d4 d5 d7 d8
+south_north_paths e1 e2 e3 e4 e5 e6 e7 e8
+south_north_paths f1 f2 f4 f5 f7 f8
+south_north_paths g1 g2 g4 g5 g7 g8
+south_north_paths h1 h2 h4 h5 h6 h7 h8
+south_north_paths i1 i2 i4 i5 i7 i8
+
+; resources
+goldmines 50 a1 a3 a4 a6  a7 a9 c1 c3 c4 c6 c7 c9 d1 d3 d4 d6 d7 d9 e5 f1 f3 f4 f6 f7 f9 g1 g3 g4 g6 g7 g9 i1 i3 i4 i6 i7 i9 
+woods 50 a1 a3 a4 a6  a7 a9 c1 c3 c4 c6 c7 c9 d1 d3 d4 d6 d7 d9 e5 f1 f3 f4 f6 f7 f9 g1 g3 g4 g6 g7 g9 i1 i3 i4 i6 i7 i9 
+
+nb_meadows_by_square 2
+additional_meadows b2 b8 h2 h8 
+
+
+; players
+
+nb_players_min 2
+nb_players_max 4
+
+starting_squares b2 b8 h2 h8
+starting_units townhall farm 2 peasant 
+starting_resources 100 100

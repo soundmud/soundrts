@@ -1,0 +1,57 @@
+; ONE LINE
+; --------
+; _ By: Christoff Eilers < christoff1@gmail.com >
+; _ You can write me in Bulgarian, French, English, Russian, Dutch, Spanish, or German.
+; _ I can't translate other languages! ^^
+; ======================================
+; All is in the title... CHEER UP! :D
+title 5002 5004 3004
+objective 145 88
+square_width 12
+nb_columns 15
+nb_lines 1
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1
+goldmines 25 c1 m1
+goldmines 50 b1 n1
+goldmines 100 a1 f1 j1 o1
+goldmines 150 d1 l1
+goldmines 250 g1 i1
+#random_choice
+goldmines 100 h1
+#end_choice
+goldmines 200 h1
+#end_choice
+goldmines 300 h1
+#end_choice
+goldmines 400 h1
+#end_choice
+goldmines 500 h1
+#end_choice
+goldmines 600 h1
+#end_choice
+goldmines 700 h1
+#end_choice
+goldmines 800 h1
+#end_choice
+goldmines 900 h1
+#end_choice
+goldmines 1000 h1
+#end_random_choice
+woods 10 c1 d1 e1 g1 i1 k1 l1 m1 n1
+woods 75 f1 j1
+woods 100 a1 o1
+#random_choice
+woods 20 h1
+#end_choice
+woods 200 h1
+#end_choice
+woods 500 h1
+#end_random_choice
+nb_meadows_by_square 3
+additional_meadows a1 h1 h1 o1
+nb_players_min 2
+nb_players_max 2
+starting_squares b1 n1
+starting_units knight 2 peasant blacksmith mage stables 3 peasant farm 2 peasant townhall mage knight magestower farm barracks
+starting_resources 150 50
+global_food_limit 300

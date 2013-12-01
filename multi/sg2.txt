@@ -1,0 +1,57 @@
+; Monster Doom
+; You are aware of the approaching doom but is helpless to avoid it. That's unfortunate but it isn't the end of the world.
+
+
+title 5018 5006 3002
+objective 2023 23 100 114
+
+; map size
+square_width 15
+nb_columns 7
+nb_lines 2
+west_east_paths a1 b1 c1 d1 e1 f1 a2 b2 c2 d2 e2 f2
+
+south_north_paths a1 g1
+
+goldmines 1000 a1 a2
+goldmines 200 c1 c2
+goldmines 300 d1 d2
+goldmines 400 e1 e2
+goldmines 500 f1 f2
+
+woods 500 a1 a2
+woods 100 c1 c2 d1 d2
+woods 200 e1 e2 f1 f2
+
+nb_meadows_by_square 3
+
+; players
+nb_players_min 2
+nb_players_max 2
+starting_squares b1 b2
+
+starting_units townhall 8 farm barracks blacksmith stables workshop dragonslair 10 peasant 3 knight 2 mage 3 dragon
+starting_resources 500 300
+global_food_limit 1750
+
+computer_only 0 0 b1 5 dragon 4 knight
+computer_only 0 0 b2 5 dragon 4 knight
+
+computer_only 0 0 c1 6 mage 6 catapult 2 dragon townhall
+computer_only 0 0 c2 6 mage 6 catapult 2 dragon townhall
+
+computer_only 0 0 d1 10 mage 10 catapult 2 dragon townhall
+computer_only 0 0 d2 10 mage 10 catapult 2 dragon townhall
+
+computer_only 0 0 e1 10 mage 10 catapult 2 dragon townhall 10 knight
+computer_only 0 0 e2 10 mage 10 catapult 2 dragon townhall 10 knight
+
+computer_only 0 0 f1 15 mage 15 catapult 20 footman 10 dragon townhall 15 knight
+computer_only 0 0 f2 15 mage 15 catapult 20 footman 10 dragon townhall 15 knight
+
+computer_only 0 0 a1 20 mage 20 catapult 20 archer 20 footman 15 dragon townhall 20 knight
+computer_only 0 0 a2 20 mage 20 catapult 20 archer 20 footman 15 dragon townhall 20 knight
+
+trigger players (no_enemy_left) (victory)
+trigger players (no_building_left) (defeat)
+trigger computers (no_unit_left) (defeat)

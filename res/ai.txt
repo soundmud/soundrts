@@ -1,0 +1,76 @@
+; a defensive AI, never attacking first, but retaliating if attacked
+def easy
+get 8 peasant 5 footman 15 archer
+;get 9 peasant 3 guardtower 1 cannontower
+get 9 peasant 10 knight 30 archer 5 catapult 1 new_flyingmachine 5 priest 10 mage 1 darkarcher 10 dragon 10 flyingmachine
+get 9 peasant 20 knight 60 archer
+goto -1
+
+; an agressive AI, attacking when each wave is ready
+def aggressive
+
+watchdog 600 ; never stay on the same line for more than 10 minutes
+constant_attacks 1 ; constantly attack if powerful enough
+research 1 ; do the research if enough resources
+teleportation 1 ; use teleportation
+
+label phase1
+goto_random very_early_rush early_rush rush phase2
+
+label very_early_rush
+get 3 peasant 1 footman
+attack
+goto_random early_rush phase2
+
+label early_rush
+get 4 peasant 5 footman
+attack
+goto_random rush phase2
+
+label rush
+get 9 peasant 5 footman 8 knight
+attack
+
+label phase2
+get 9 peasant 15 archer 1 new_flyingmachine 5 knight 5 priest
+goto_random basic_defense darkarchers dragons knights footmen archers
+
+label basic_defense
+get 9 peasant 30 archer 1 new_flyingmachine 10 catapult
+get 9 peasant 60 archer 1 new_flyingmachine 20 catapult
+get 10 guardtower 5 cannontower
+goto phase3
+
+label darkarchers
+get 9 peasant 1 darkarcher
+attack
+get 9 peasant 3 darkarcher
+attack
+goto phase3
+
+label dragons
+get 9 peasant 3 dragonslair 60 dragon
+attack
+goto phase3
+
+label knights
+get 9 peasant 50 knight
+attack
+goto phase3
+
+label footmen
+get 9 peasant 20 footman
+attack
+goto phase3
+
+label archers
+get 9 peasant 60 archer
+attack
+goto phase3
+
+label phase3
+goto_random phase1 phase2
+
+; a passive AI, useful for heavily scripted maps (using triggers with timers)
+def timers
+retaliate 0 ; don't retaliate if a unit is attacked or flees

@@ -1,0 +1,27 @@
+;pm3!
+;basically everyone starts with not much. no farms, just a knight, and a peasant.
+;and enough resources to build 2 farms.
+;there is a small squadran of enemy forces in the middle, from a2 to o2.
+;these are AI computer forces, mostly peasants and footman, and in the o section there is a lot of resources, and farms to make your self space for empire!
+title 5015 5012 3003 1038
+objective 38 115 5001 111
+square_width 12
+nb_lines 3
+nb_columns 15
+west_east_paths a1 b1 c1 d1 e1 f1 g1 i1 j1 k1 l1 m1 n1 a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 k2 l2 m2 n2 a3 b3 c3 d3 e3 f3 g3 h3 i3 j3 k3 l3 m3 n3
+west_east_bridges
+south_north_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1 o1 a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 k2 l2 m2 n2 o2
+goldmines 10 a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1 o1 a3 b3 c3 d3 e3 f3 g3 h3 i3 j3 k3 l3 m3 n3 o3
+goldmines 5000 o2
+goldmines 100 a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 k2 l2 m2 n2
+woods 10 o1 o3 b1 b3 h3 g3 h1 g1 l1 l3 m1 n3
+woods 5000 o2
+woods 1000 b2 d2 g2 j2 l2 n2
+nb_meadows_by_square 1
+additional_meadows o2
+remove_meadows a1 b1 c1 a3 b3 c3
+nb_players_min 2
+nb_players_max 2
+player 10 10 a1 townhall b1 peasant o1 knight
+player 10 10 a3 townhall b3 peasant o3 knight
+computer_only 1500 1500 a2 3 peasant b2 3 peasant c2 footman d2 footman e2 footman f2 footman g2 footman h2 footman i2 footman j2 footman k2 footman l2 footman m2 footman n2 2 footman o2 4 archer 4 footman 10 farm townhall 5 peasant

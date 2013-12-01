@@ -1,0 +1,17 @@
+title 5010 5004 5011 3005 1130
+objective 1130 1130 1078
+square_width 24
+nb_columns 1
+nb_lines 3
+south_north_paths a1 a2
+goldmines 1 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3 a1 a3
+goldmines 75 a1 a3 a1 a3
+nb_meadows_by_square 6
+
+nb_players_min 2
+nb_players_max 2
+starting_squares a1 a3
+starting_units lumbermill blacksmith barracks stables 5 peasant workshop townhall 5 farm dragonslair magestower 1 footman 1 archer 1 knight 1 catapult 1 dragon 1 mage
+starting_resources 600 600
+global_food_limit 200
+

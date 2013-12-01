@@ -1,0 +1,26 @@
+; map name: Square
+; Created by Kelvin Tan
+; description: As the map name says, all the playable squares on this map are all along the 4 sides of this map, which is in the shape of a square. It's a map for a maximum of 4 players. starting squares are situated on the 4 corners of this map.
+; Enjoy!
+title 5010 5004 5011 3003 1310
+objective 1130 1130
+square_width 12
+nb_columns 10
+nb_lines 10
+south_north_paths a1 a2 a3 a4 a5 a6 a7 a8 a9 j1 j2 j3 j4 j5 j6 j7 j8 j9
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 a10 b10 c10 d10 e10 f10 g10 h10 i10
+goldmines 10 a1 a1 a10 a10 j1 j1 j10 j10
+goldmines 20 a2 a2 a9 a9 b10 b10 i10 i10 j9 j9 j2 j2 b1 b1 i1 i1
+goldmines 30 a3 a3 a8 a8 c10 c10 h10 h10 j8 j8 j3 j3 c1 c1 h1 h1
+goldmines 40 a4 a4 a7 a7 d10 d10 g10 g10 j7 j7 j4 j4 d1 d1 g1 g1
+goldmines 50 a5 a5 a6 a6 e10 e10 f10 f10 j6 j6 j5 j5 e1 e1 f1 f1
+woods 10 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 j1 j2 j3 j4 j5 j6 j7 j8 j9 j10 b1 c1 d1 e1 f1 g1 h1 i1 b10 c10 d10 e10 f10 g10 h10 i10
+
+nb_meadows_by_square 1
+nb_players_min 2
+nb_players_max 4
+starting_squares a1 a10 j1 j10
+starting_units 10 peasant townhall barracks lumbermill 2 farm 2 mage
+starting_resources 400 400
+global_food_limit 400
+

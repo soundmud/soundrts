@@ -1,0 +1,77 @@
+; Monster Doom
+; You are aware of the approaching doom but is helpless to avoid it. That's unfortunate but it isn't the end of the world.
+
+
+title 5018 5006 3004
+objective 2023 23 100 114
+
+; map size
+square_width 15
+nb_columns 13
+nb_lines 3
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 k2 l2 a3 b3 c3 d3 e3 f3 g3 h3 i3 j3 k3 l3 
+
+south_north_paths a1 a2 g1 g2 m1 m2
+
+goldmines 1000 a1 a2 a3 m1 m2 m3
+goldmines 200 c1 c2 c3 k1 k2 k3
+goldmines 300 d1 d2 d3 j1 j2 j3
+goldmines 400 e1 e2 e3 i1 i2 i3
+goldmines 500 f1 f2 f3 h1 h2 h3
+
+woods 500 a1 a2 a3 m1 m2 m3
+woods 100 c1 c2 c3 d1 d2 d3 k1 k2 k3 j1 j2 j3
+woods 200 e1 e2 e3 f1 f2 f3 i1 i2 i3 h1 h2 h3
+
+nb_meadows_by_square 3
+
+; players
+nb_players_min 2
+nb_players_max 6
+starting_squares b1 b2 b3 l1 l2 l3
+
+starting_units townhall 8 farm barracks blacksmith stables workshop dragonslair 10 peasant 3 knight 2 mage 3 dragon
+starting_resources 500 300
+global_food_limit 1750
+
+computer_only 0 0 b1 5 dragon 4 knight
+computer_only 0 0 b2 5 dragon 4 knight
+computer_only 0 0 b3 5 dragon 4 knight
+computer_only 0 0 l1 5 dragon 4 knight
+computer_only 0 0 l2 5 dragon 4 knight
+computer_only 0 0 l3 5 dragon 4 knight
+
+computer_only 0 0 c1 6 mage 6 catapult 2 dragon townhall
+computer_only 0 0 c2 6 mage 6 catapult 2 dragon townhall
+computer_only 0 0 c3 6 mage 6 catapult 2 dragon townhall
+computer_only 0 0 k1 6 mage 6 catapult 2 dragon townhall
+computer_only 0 0 k2 6 mage 6 catapult 2 dragon townhall
+computer_only 0 0 k3 6 mage 6 catapult 2 dragon townhall
+
+computer_only 0 0 d1 10 mage 10 catapult 2 dragon townhall
+computer_only 0 0 d2 10 mage 10 catapult 2 dragon townhall
+computer_only 0 0 d3 10 mage 10 catapult 2 dragon townhall
+computer_only 0 0 j1 10 mage 10 catapult 2 dragon townhall
+computer_only 0 0 j2 10 mage 10 catapult 2 dragon townhall
+computer_only 0 0 j3 10 mage 10 catapult 2 dragon townhall
+
+computer_only 0 0 e1 10 mage 10 catapult 2 dragon townhall 10 knight
+computer_only 0 0 e2 10 mage 10 catapult 2 dragon townhall 10 knight
+computer_only 0 0 e3 10 mage 10 catapult 2 dragon townhall 10 knight
+computer_only 0 0 i1 10 mage 10 catapult 2 dragon townhall 10 knight
+computer_only 0 0 i2 10 mage 10 catapult 2 dragon townhall 10 knight
+computer_only 0 0 i3 10 mage 10 catapult 2 dragon townhall 10 knight
+
+computer_only 0 0 f1 15 mage 15 catapult 20 archer 10 dragon townhall 15 knight
+computer_only 0 0 f2 15 mage 15 catapult 20 archer 10 dragon townhall 15 knight
+computer_only 0 0 f3 15 mage 15 catapult 20 archer 10 dragon townhall 15 knight
+computer_only 0 0 h1 15 mage 15 catapult 20 archer 10 dragon townhall 15 knight
+computer_only 0 0 h2 15 mage 15 catapult 20 archer 10 dragon townhall 15 knight
+computer_only 0 0 h3 15 mage 15 catapult 20 archer 10 dragon townhall 15 knight
+
+computer_only 0 0 a1 20 mage 20 catapult 20 footman 15 dragon townhall 20 knight
+computer_only 0 0 a2 20 mage 20 catapult 20 footman 15 dragon townhall 20 knight
+computer_only 0 0 a3 20 mage 20 catapult 20 footman 15 dragon townhall 20 knight
+computer_only 0 0 m1 20 mage 20 catapult 20 footman 15 dragon townhall 20 knight
+computer_only 0 0 m2 20 mage 20 catapult 20 footman 15 dragon townhall 20 knight
+computer_only 0 0 m3 20 mage 20 catapult 20 footman 15 dragon townhall 20 knight

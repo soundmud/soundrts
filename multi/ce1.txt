@@ -1,0 +1,28 @@
+; DESTRUCTION DEVELOPMENT     __________
+; -----------------------     /* 1047 */
+; _ By: Christoff Eilers < christoff1@gmail.com >
+; _ You can write me in Bulgarian, French, English, Russian, Dutch, Spanish, or German.
+; _ I can't translate other languages ! ^^
+; ======================================
+; You'll begin with three farms, six peasants, five flying machines, and one of each existing building sorts. You begin also with 600 gold and 350 wood. In the middle of the map, there's a river, and on each side of it you'll find "big resources" : one gold mine of 2000 units and two woods of 1000 units on each side of the river. But pay attention, they aren't on the same square ! Now, break your ennemy, win, develop the destruction !!! :-D
+title 5002 5004 3001
+objective 145 88
+square_width 12
+nb_columns 3
+nb_lines 6
+west_east_paths a1 a2 a3 a4 a5 a6 b1 b2 b3 b4 b5 b6
+south_north_paths a1 a2 a4 a5 b1 b2 b4 b5 c1 c2 c4 c5
+south_north_bridges a3 b3 c3
+goldmines 100 a1 a6 b1 b6 c1 c6
+goldmines 2000 b3 b4
+woods 100 a2 a5 b2 b5 c2 c5
+woods 1000 a3 a4 c3 c4
+nb_meadows_by_square 4
+additional_meadows a3 a4 b3 b4 c3 c4
+remove_meadows a1 a1 a2 a2 a5 a5 a6 a6 b2 b2 b5 b5 c1 c1 c2 c2 c5 c5 c6 c6
+nb_players_min 2
+nb_players_max 2
+starting_squares b1 b6
+starting_units farm flyingmachine lumbermill peasant blacksmith flyingmachine barracks peasant farm flyingmachine stables peasant workshop flyingmachine townhall peasant farm flyingmachine dragonslair peasant magestower
+starting_resources 600 350
+global_food_limit 400
