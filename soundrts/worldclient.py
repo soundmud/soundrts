@@ -32,7 +32,7 @@ def send_platform_version_to_metaserver(game, nb):
     send_error_to_metaserver(error_msg)
 
 
-class DummyClient:
+class DummyClient(object):
 
     login = "ai"
 
@@ -49,7 +49,7 @@ class HalfDummyClient(DummyClient):
         self.login = login
 
 
-class DirectClient:
+class DirectClient(object):
 
     player = None
     data = ""
@@ -78,7 +78,7 @@ class DirectClient:
         self.game_session.save()
 
 
-class Coordinator:
+class Coordinator(object):
 
     data = ""
     world = None

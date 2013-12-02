@@ -19,7 +19,7 @@ from commun import *
 import config
 
 
-class Objective:
+class Objective(object):
 
     def __init__(self, number, description):
         self.number = number

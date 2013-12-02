@@ -15,7 +15,7 @@ import config
 
 
 
-class Message:
+class Message(object):
 
     def __init__(self, lns, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME, said=False, expiration_delay=45, update_type=None):
         self.lns = lns

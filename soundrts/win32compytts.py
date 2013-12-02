@@ -12,7 +12,7 @@ tts_async = 1
 tts_purge_before_speak = 2
 
 
-class TTS:
+class TTS(object):
 
     def __init__(self):
         pass

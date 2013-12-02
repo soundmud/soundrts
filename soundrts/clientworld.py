@@ -520,7 +520,7 @@ class Objet(object):
             voice.info(substitute_args(self.get_style("added_msg"), [self.ext_title]))
 
 
-class GridView:
+class GridView(object):
 
     def __init__(self, interface):
         self.interface = interface

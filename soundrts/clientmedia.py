@@ -14,7 +14,7 @@ if platform.system() == "Windows":
     os.environ["SDL_VIDEODRIVER"] = "windib"
 
 
-class LowLevelInterface:
+class LowLevelInterface(object):
 
     def __init__(self, mixer_freq):
         self.set_pygame(mixer_freq)

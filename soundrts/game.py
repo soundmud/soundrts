@@ -19,7 +19,7 @@ from world import *
 from worldclient import *
 
 
-class _Game:
+class _Game(object):
 
     default_triggers = () # empty tuple; a tuple is immutable
     seed = None
@@ -140,7 +140,7 @@ class MultiplayerGame(_MultiplayerGame):
         return computers, humans
 
 
-class _Savable:
+class _Savable(object):
 
     def save(self):
         f = open(SAVE_PATH, "w")
@@ -287,7 +287,7 @@ class CutSceneChapter:
             self._get_next().run()
 
 
-class Campaign:
+class Campaign(object):
 
     def __init__(self, path, title=None):
         self.path = path

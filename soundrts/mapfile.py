@@ -14,7 +14,7 @@ from lib import zipdir
 import world
 
 
-class Map:
+class Map(object):
 
     map_string = None
 

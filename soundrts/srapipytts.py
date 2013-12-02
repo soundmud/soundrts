@@ -17,7 +17,7 @@ tts_purge_before_speak = 0
 _srapi = ctypes.windll.ScreenReaderAPI
 
 
-class TTS:
+class TTS(object):
 
     _end_time = None
 

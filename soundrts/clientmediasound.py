@@ -119,7 +119,7 @@ def find_idle_channel():
             return pygame.mixer.Channel(n)
 
 
-class SoundManager:
+class SoundManager(object):
 
     soundsources = []
     soundtime = {}
@@ -187,7 +187,7 @@ class SoundManager:
 psounds = SoundManager() # psounds = positionned sounds (3D)
 
 
-class _SoundSource:
+class _SoundSource(object):
 
     channel = None
     previous_vol = (0, 0)
@@ -286,7 +286,7 @@ class LoopingSoundSource(_SoundSource):
         return 1, 1
 
 
-class VoiceChannel:
+class VoiceChannel(object):
 
     _queue = [] # sounds of the message currently said
     _starting_time = 0
@@ -407,7 +407,7 @@ def sound_stop(stop_voice_too=True):
             pygame.mixer.Channel(_id).stop()
 
 
-class SoundCache:
+class SoundCache(object):
 
     default_sounds = {}
     default_txt = {}

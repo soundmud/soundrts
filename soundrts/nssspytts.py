@@ -14,7 +14,7 @@ tts_purge_before_speak = 0
 _engine = NSSpeechSynthesizer.alloc().init()
 
 
-class TTS:
+class TTS(object):
 
     def __init__(self):
         pass

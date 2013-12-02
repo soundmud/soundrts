@@ -27,7 +27,7 @@ from worldunit import *
 GLOBAL_FOOD_LIMIT = 80
 
 
-class Type:
+class Type(object):
 
     def init_dict(self, target):
         target.type_name = self.type_name
@@ -65,7 +65,7 @@ class Type:
 # ... except for the resources and tech?!!! and alliances, ennemies
 # rename "player" to "economy", "country", "tribe", "side",
 # "force", "faction", "team"?)
-class World:
+class World(object):
 
     def __init__(self, default_triggers, seed=None):
         self.default_triggers = default_triggers

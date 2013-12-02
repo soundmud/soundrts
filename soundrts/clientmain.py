@@ -48,7 +48,7 @@ for line in _s.split("\n"):
         exec("%s = %s" % (words[0], words[1:]))
 
 
-class Application:
+class Application(object):
 
     def choose_server_ip_in_a_list(self):
         servers_list = None

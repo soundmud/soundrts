@@ -57,7 +57,7 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default=""):
 END_LOOP = 1
 
 
-class Menu:
+class Menu(object):
 
     server = None
 

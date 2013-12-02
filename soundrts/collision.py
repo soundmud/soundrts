@@ -19,7 +19,7 @@ SHAPE = (
 ##                 )
 
 
-class CollisionMatrix:
+class CollisionMatrix(object):
 
     def __init__(self, xmax, res):
         if debug_mode:
@@ -75,7 +75,7 @@ class CollisionMatrix:
 
 
 if __name__ == "__main__":
-    class O:
+    class O(object):
         pass
     m = CollisionMatrix(200, 2)
 #    assert m._key(0, 0) == 0

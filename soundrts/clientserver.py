@@ -67,7 +67,7 @@ def connect_and_play(host="127.0.0.1", port=config.port):
         exception("error during connection to server")
 
 
-class ConnectionToServer:
+class ConnectionToServer(object):
 
     data = ""
     tn = None

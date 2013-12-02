@@ -66,7 +66,7 @@ def _get_language():
     return _best_language_match(lang)
     
 
-class ResourceLoader:
+class ResourceLoader(object):
 
     def __init__(self):
         self.packages = []

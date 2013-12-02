@@ -11,7 +11,7 @@ from lib.log import *
 from paths import TMP_PATH
 
 
-class _State:
+class _State(object):
 
     def send_menu(self, client):
         pass
@@ -67,7 +67,7 @@ class Playing(_State):
                         "say")
 
 
-class _Computer:
+class _Computer(object):
 
     login = "ai"
 
@@ -87,7 +87,7 @@ class _Computer:
         pass
 
 
-class Game:
+class Game(object):
 
     started = False
     speed = 1

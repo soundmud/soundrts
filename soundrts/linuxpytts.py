@@ -11,7 +11,7 @@ tts_async = 0
 tts_purge_before_speak = 0
 
 
-class TTS:
+class TTS(object):
 
     _is_speaking = False
 

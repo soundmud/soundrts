@@ -1,4 +1,4 @@
-class Sequence:
+class Sequence(object):
 
     def __init__(self, sequence):
         self.sequence = [str(x) for x in sequence]

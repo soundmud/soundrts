@@ -23,7 +23,7 @@ def square_spiral(x, y, step=COLLISION_RADIUS * 25 / 10):
         sign *= -1
 
 
-class Square:
+class Square(object):
 
     transport_capacity = 0
 

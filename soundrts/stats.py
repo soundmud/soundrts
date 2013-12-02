@@ -14,7 +14,7 @@ import urllib
 from lib.log import *
 
 
-class Stats:
+class Stats(object):
 
     def __init__(self, filepath, server):
         self.filepath = filepath

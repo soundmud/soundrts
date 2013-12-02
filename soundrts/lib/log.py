@@ -56,7 +56,7 @@ class SecureFileHandler(logging.FileHandler):
                     self.stream.write("*** too many records, logging stopped ***\n")
 
 
-class _NeverCrash:
+class _NeverCrash(object):
     """
     Prevents crash with pythonw.exe (problems with stdout or stderr).
     """
