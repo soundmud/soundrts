@@ -1,1 +1,1 @@
-@c:\python25\python.exe build-game.py %1
+@python.exe build-game.py %1

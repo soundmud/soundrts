@@ -1,2 +1,2 @@
-c:\python25\python C:\Python25\Lib\site-packages\pylint\lint.py python\clientmain.py -e
+python -m pylint.lint soundrts\clientmain.py
 pause

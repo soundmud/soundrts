@@ -1,11 +1,11 @@
 @echo off
 
-c:\python25\python.exe soundrts/rules2doc.py
+python.exe soundrts/rules2doc.py
 if errorlevel 1 pause
 
 cd doc\src
 
-c:\python25\python.exe ../buildhtml.py
+python.exe ../buildhtml.py
 if errorlevel 1 pause
 
 rename *.html *.htm
