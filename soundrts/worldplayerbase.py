@@ -53,9 +53,8 @@ class Player(object):
             self.number = world.get_next_player_number()
         else:
             self.number = None
-        self.perception = []
-        self.previous_perception = []
-        self.memory = []
+        self.perception = set()
+        self.memory = set()
         self.id = world.get_next_id()
         self.world = world
         self.client = client
@@ -185,8 +184,8 @@ class Player(object):
         if self.is_perceiving(o):
             if o not in self.perception:
                 # add to perception
-                self.perception.append(o)
-                for m in self.memory:
+                self.perception.add(o)
+                for m in list(self.memory):
                     if m.initial_model is o:
                         # forget it because you are perceiving it again
                         self._forget(m)
@@ -219,7 +218,7 @@ class Player(object):
                     p.update_perception_of_object(o)
                 if square in p.observed_squares:
                     # forget what is remembered there
-                    for m in p.memory[:]:
+                    for m in list(p.memory):
                         if m.place is square:
                             p._forget(m)
 
@@ -231,7 +230,7 @@ class Player(object):
         remembrance = copy.copy(o)
         remembrance.time_stamp = self.world.time
         remembrance.initial_model = o
-        self.memory.append(remembrance)
+        self.memory.add(remembrance)
 
     def _forget(self, o):
         self.memory.remove(o)
