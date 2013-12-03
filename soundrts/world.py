@@ -6,6 +6,7 @@ except ImportError:
 import os.path
 import re
 import string
+import time
 
 import collision
 from commun import *
@@ -638,6 +639,11 @@ class World(object):
         for player in self.players:
             player.init_position()
         self.admin = players[0] # define get_admin()?
+
+    def loop(self):
+        while(self.__dict__): # cf clean()
+            info("world loop")
+            time.sleep(1)
 
 
 class MapError(Exception):

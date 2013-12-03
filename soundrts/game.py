@@ -2,6 +2,7 @@ import ConfigParser
 import pickle
 import re
 import sys
+import threading
 import time
 
 from clientmedia import *
@@ -52,6 +53,7 @@ class _Game(object):
                 self.map.get_additional("ui/bindings.txt"))
             self.world.populate_map(self.players, self.alliances, self.races)
             self.nb_human_players = self.world.current_nb_human_players()
+            threading.Thread(target=self.world.loop).start()
             self.interface.loop()
             self._record_stats(self.world)
             self.post_run()
