@@ -63,7 +63,7 @@ class DirectClient(object):
             debug("received no_end_of_update_yet")
             return
         if self.player:
-            self.player.execute_command(s)
+            self.player.world.queue_command(self.player, s)
             debug("client: %s", s)
         else:
             debug("couldn't send client command (no player): %s", s)
@@ -151,7 +151,7 @@ class Coordinator(object):
                         direct_player = self.get_client_by_login(player).player
                         if direct_player:
                             debug("player: %s  order: %s", player, order)
-                            direct_player.execute_command(order) # TODO NEXT: queue commands
+                            direct_player.world.queue_command(direct_player, order)
                         if order != "update" and not order.startswith("control"):
                             self._all_orders += order.replace("order 0 0 ", "") + ";"
                             self._all_orders = self._all_orders[-100:]

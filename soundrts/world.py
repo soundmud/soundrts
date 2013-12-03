@@ -4,6 +4,7 @@ try:
 except ImportError:
     from md5 import md5
 import os.path
+import Queue
 import re
 import string
 import time
@@ -81,6 +82,7 @@ class World(object):
         self.unit_classes = {}
         self.objects = {}
         self.harm_target_types = {}
+        self._command_queue = Queue.Queue()
 
     def remove_links_for_savegame(self): # avoid pickle recursion problem
         for z in self.squares:
@@ -642,8 +644,14 @@ class World(object):
 
     def loop(self):
         while(self.__dict__): # cf clean()
-            info("world loop")
-            time.sleep(1)
+            if not self._command_queue.empty():
+                player, order = self._command_queue.get()
+                player.execute_command(order)
+            else:
+                time.sleep(.01)
+
+    def queue_command(self, player, order):
+        self._command_queue.put((player, order))
 
 
 class MapError(Exception):
