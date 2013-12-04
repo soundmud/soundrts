@@ -84,6 +84,15 @@ class World(object):
         self.harm_target_types = {}
         self._command_queue = Queue.Queue()
 
+    def __getstate__(self):
+        odict = self.__dict__.copy()
+        del odict["_command_queue"]
+        return odict
+
+    def __setstate__(self, dict):
+        self.__dict__.update(dict)
+        self._command_queue = Queue.Queue()
+
     def remove_links_for_savegame(self): # avoid pickle recursion problem
         for z in self.squares:
 ##            z.spt = {} # the shortest path cache may cause recursion problems if big enough (never happened, though)
