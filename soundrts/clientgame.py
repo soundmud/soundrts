@@ -541,13 +541,6 @@ class GameInterface(object):
                 o.animate()
             self.previous_animation = time.time()
 
-    def safe_update(self):
-        for e in pygame.event.get((USEREVENT, USEREVENT + 1)):
-            if e.type == USEREVENT:
-                voice.update()
-            elif e.type == USEREVENT + 1:
-                psounds.update()
-
     def _process_events(self):
         # Warning: only sound/voice/keyboard events here, no server event.
         # Because a bad loop might occur when called from a function

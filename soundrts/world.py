@@ -163,17 +163,11 @@ class World(object):
     _previous_slow_update = 0
 
     def update(self):
-        
-        def client_update():
-            pass
-        
         # normal updates
         for p in self.players[:]:
             if p in self.players:
                 try:
                     p.update()
-                    if p.is_local_human():
-                        client_update = p.client.interface.safe_update
                 except:
                     exception("")
         for o in self.active_objects[:]:
@@ -181,7 +175,6 @@ class World(object):
             if o.place is not None:
                 try:
                     o.update()
-                    client_update()
                 except:
                     exception("")
 
@@ -192,7 +185,6 @@ class World(object):
                 if o.place is not None:
                     try:
                         o.slow_update()
-                        client_update()
                     except:
                         exception("")
             for p in self.players[:]:
