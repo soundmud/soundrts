@@ -239,7 +239,7 @@ class Player(object):
 
     def send_event(self, o, e):
         if self.is_local_human():
-            self.client.interface.d_srv_event(copy.copy(o), e) # TODO NEXT: queue events
+            self.client.interface.queue_srv_event(copy.copy(o), e)
 
     def pay(self, cost):
         for i, c in enumerate(cost):

@@ -2,6 +2,7 @@
 
 import os
 import os.path
+import Queue
 import re
 import time
 
@@ -105,6 +106,16 @@ class GameInterface(object):
         self.set_self_as_listener()
         voice.silent_flush()
         self.set_screen()
+        self._srv_event_queue = Queue.Queue()
+
+    def __getstate__(self):
+        odict = self.__dict__.copy()
+        del odict["_srv_event_queue"]
+        return odict
+
+    def __setstate__(self, dict):
+        self.__dict__.update(dict)
+        self._srv_event_queue = Queue.Queue()
 
     def set_self_as_listener(self):
         psounds.set_listener(self)
@@ -162,16 +173,14 @@ class GameInterface(object):
         elif not re.match('^ *$', s):
             warning("Not recognized: %s" % s)
 
-    def d_srv_event(self, o, e): # "direct" server event
+    def _render_srv_event(self, o, e):
         try:
             if hasattr(self, "next_update") and \
                time.time() > self.next_update + EVENT_LIMIT:
                 return
             Objet(self, o).notify(e)
-##            # add some interactivity (quicker UI)
-##            self._process_events()
         except:
-            exception("problem during d_srv_event")
+            exception("problem during _render_srv_event")
 
     def cmd_say_players(self):
         l = []
@@ -489,6 +498,12 @@ class GameInterface(object):
     # loop
 
     def srv_voila(self, s):
+        # TODO NEXT: remove this while loop (it can slow down the UI) and move
+        # srv_* events ("voila", "voice_important", "alert"...) in _srv_event_queue
+        while not self._srv_event_queue.empty():
+            o, e = self._srv_event_queue.get()
+            self._render_srv_event(o, e)
+
         self.last_virtual_time = float(s) / 1000.0
         interval = VIRTUAL_TIME_INTERVAL / 1000.0 / self.speed
         # before write_line...
@@ -630,6 +645,14 @@ class GameInterface(object):
             except:
                 exception("error in pygame.event.get() loop")
 
+    def queue_srv_event(self, o ,e):
+        self._srv_event_queue.put((o, e))
+
+    def _process_srv_events(self):
+        if not self._srv_event_queue.empty():
+            o, e = self._srv_event_queue.get()
+            self._render_srv_event(o, e)
+
     def loop(self):
         from clientserver import ConnectionAbortedError # TODO: remove the cyclic dependencies
         g.game = True
@@ -642,6 +665,7 @@ class GameInterface(object):
                 self._remind_server_if_needed()
                 self._animate_objects()
                 self._process_events()
+                self._process_srv_events()
                 voice.update() # XXX useful for SAPI
                 time.sleep(.01)
             except SystemExit:
