@@ -27,6 +27,10 @@ setup(windows=["soundrts.py"],
 ##                   + glob.glob(r"%s/*.dll" % PYGAME_DIR)
                    ),
                   ],
-      options = {'py2exe': {'bundle_files':1} },
+      options = {'py2exe': {
+      'bundle_files': 1,
+      'excludes': ['tkinter', '_tkinter', 'Tkinter', 'numpy', ], 
+      'dll_excludes': ['libiomp5md.dll',],
+} },
 ##      zipfile = None,
       )

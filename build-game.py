@@ -94,14 +94,14 @@ copy("soundrts.py", _d("bin"))
 copy("server.py", _d("bin"))
 chdir(_d("bin"))
 cmd = "%s setup.py -q py2exe" % sys.executable
-# cmd = "%s -OO setup.py -q py2exe" % sys.executable # and add "optimize: 2" to setup.py
+# cmd = "%s -OO setup.py -v py2exe" % sys.executable # and add "optimize: 2" to setup.py
 print "py2exe... (%s)" % cmd
 my_execute(cmd)
 os.remove("setup.py")
 
 print "multiplatform version"
-my_copy("", "soundrts.py", "multi")
-my_copy("", "server.py", "multi")
+my_copy(".", "soundrts.py", "multi")
+my_copy(".", "server.py", "multi")
 my_copytree("soundrts", "multi/soundrts")
 chdir("multi")
 for pythonver in (4, 6, 7, 5):
@@ -125,7 +125,7 @@ chdir(SRC_DIR)
 
 copy("doc/readme.txt", _d("bin/multi"))
 print "copying build_tts lib..."
-my_copy("", ".dll", _d("bin/dist"))
+my_copy(".", ".dll", _d("bin/dist"))
 
 for n in ("version.txt", "version-name.txt", "cfg/stage.txt",
           "stage-name.txt"):
