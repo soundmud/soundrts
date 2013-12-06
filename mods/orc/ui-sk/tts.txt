@@ -1,0 +1,7 @@
+; coding: Windows-1250
+
+7000 ošipáreò
+7001 kasáreò
+7002 ve¾ká sála
+7003 otrok
+7004 reváè

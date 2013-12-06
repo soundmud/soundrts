@@ -1,0 +1,3 @@
+; coding: Windows-1250
+
+9000	kamenný golem
