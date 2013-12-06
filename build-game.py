@@ -31,6 +31,7 @@ def my_mkdir(path):
         os.makedirs(path)
 
 def my_copy(src, ext, dest):
+    if src == "": src = "."
     my_mkdir(dest)
     for n in listdir(src):
         if n[-len(ext):] == ext:
