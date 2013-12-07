@@ -1439,7 +1439,7 @@ class GameInterface(object):
         if self.place is None: # first position
             if self.units():
                 self._select_and_say_square(self.units(sort=True)[0].place)
-            else:
+            elif self.player.world.time != 0:
                 warning("no unit defined")
         self._follow_if_needed()
         if self.immersion and self.group and self.group[0] in self.dobjets:
