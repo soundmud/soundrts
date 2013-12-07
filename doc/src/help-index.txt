@@ -4,3 +4,4 @@ Documentation
 - `Game manual <manual.htm>`_
 - `Map making guide <mapmaking.htm>`_
 - `Modding guide <modding.htm>`_ (work in progress)
+- `Making AIs Tutorial <aimaking.htm>`_
