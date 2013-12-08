@@ -389,6 +389,7 @@ class Objet(object):
 
     def render_hp(self):
         if hasattr(self, "hp"):
+            if self.hp < 0: return # TODO: remove this line (isolate the UI or use a deep copy of perception)
             if self.hp != self.previous_hp:
                 self.render_hp_evolution()
                 self.previous_hp = self.hp
