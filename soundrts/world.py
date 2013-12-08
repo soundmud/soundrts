@@ -4,8 +4,10 @@ try:
 except ImportError:
     from md5 import md5
 import os.path
+import Queue
 import re
 import string
+import time
 
 import collision
 from commun import *
@@ -80,6 +82,16 @@ class World(object):
         self.unit_classes = {}
         self.objects = {}
         self.harm_target_types = {}
+        self._command_queue = Queue.Queue()
+
+    def __getstate__(self):
+        odict = self.__dict__.copy()
+        del odict["_command_queue"]
+        return odict
+
+    def __setstate__(self, dict):
+        self.__dict__.update(dict)
+        self._command_queue = Queue.Queue()
 
     def remove_links_for_savegame(self): # avoid pickle recursion problem
         for z in self.squares:
@@ -160,17 +172,11 @@ class World(object):
     _previous_slow_update = 0
 
     def update(self):
-        
-        def client_update():
-            pass
-        
         # normal updates
         for p in self.players[:]:
             if p in self.players:
                 try:
                     p.update()
-                    if p.is_local_human():
-                        client_update = p.client.interface.safe_update
                 except:
                     exception("")
         for o in self.active_objects[:]:
@@ -178,7 +184,6 @@ class World(object):
             if o.place is not None:
                 try:
                     o.update()
-                    client_update()
                 except:
                     exception("")
 
@@ -189,7 +194,6 @@ class World(object):
                 if o.place is not None:
                     try:
                         o.slow_update()
-                        client_update()
                     except:
                         exception("")
             for p in self.players[:]:
@@ -638,6 +642,17 @@ class World(object):
         for player in self.players:
             player.init_position()
         self.admin = players[0] # define get_admin()?
+
+    def loop(self):
+        while(self.__dict__): # cf clean()
+            if not self._command_queue.empty():
+                player, order = self._command_queue.get()
+                player.execute_command(order)
+            else:
+                time.sleep(.01)
+
+    def queue_command(self, player, order):
+        self._command_queue.put((player, order))
 
 
 class MapError(Exception):

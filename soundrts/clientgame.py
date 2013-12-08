@@ -541,13 +541,6 @@ class GameInterface(object):
                 o.animate()
             self.previous_animation = time.time()
 
-    def safe_update(self):
-        for e in pygame.event.get((USEREVENT, USEREVENT + 1)):
-            if e.type == USEREVENT:
-                voice.update()
-            elif e.type == USEREVENT + 1:
-                psounds.update()
-
     def _process_events(self):
         # Warning: only sound/voice/keyboard events here, no server event.
         # Because a bad loop might occur when called from a function
@@ -1446,7 +1439,7 @@ class GameInterface(object):
         if self.place is None: # first position
             if self.units():
                 self._select_and_say_square(self.units(sort=True)[0].place)
-            else:
+            elif self.player.world.time != 0:
                 warning("no unit defined")
         self._follow_if_needed()
         if self.immersion and self.group and self.group[0] in self.dobjets:
