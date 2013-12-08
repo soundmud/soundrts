@@ -1,9 +1,13 @@
+import ctypes
 import StringIO
 import textwrap
 
 import pygame
 
+from lib.log import *
+
 import g
+
 
 pygame.font.init()
 FONT = pygame.font.Font("freesansbold.ttf", 12)
@@ -15,14 +19,22 @@ def draw_rect(color, left, top, width, height, width2):
     pygame.draw.rect(g.screen, color, pygame.Rect(left, top, width, height),
                      width2)
 
-def get_desktop_screen_mode():
+def _get_desktop_screen_mode():
     try:
-        # get the biggest fullscreen resolution
-        # note: sorting is required by pygame 1.7.1 only
-        x, y = sorted(pygame.display.list_modes())[-1]
+        user32 = ctypes.windll.user32
+        return user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
     except:
-        x, y = 640, 480
-    return x, y
+        if pygame.display.get_init():
+            warning("Info() must be called before set_mode()")
+        pygame.display.init()
+        i = pygame.display.Info()
+        try:
+            return i.current_w, i.current_h
+        except:
+            return 640, 480
+
+def get_desktop_screen_mode():
+    return _x, _y
 
 
 class GraphicConsole(StringIO.StringIO):
@@ -52,3 +64,6 @@ class GraphicConsole(StringIO.StringIO):
 
     def display(self):
         g.screen.blit(self.text_screen, (g.screen.get_width() - 200, 0))
+
+
+_x, _y = _get_desktop_screen_mode()
