@@ -137,7 +137,8 @@ class Coordinator(object):
 
     def get_all_orders_from_server(self):
         # assertion: the orders arrive in the right order (guaranteed by the server)
-        for s in self.main_server.read_line():
+        s = self.main_server.read_line()
+        if s is not None:
             debug("main server data for %s: %s", self.login, s)
             args = s.split()
             if args[0] == "all_orders":

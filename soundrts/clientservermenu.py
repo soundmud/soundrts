@@ -23,15 +23,13 @@ class _ServerMenu(Menu):
             warning("not recognized by ServerMenu: %s", s)
 
     def _process_server(self):
-        lines = self.server.read_line()
-        if not lines:
+        s = self.server.read_line()
+        if s is None:
             self.server_is_done = True # don't read more
-            return
-        for s in lines: # one at a time
-            if re.match(r'^msg \[[0-9a-zA-Z, \.\[\]"\']+\]$', s):
-                voice.info(*eval(s.split(' ', 1)[1]))
-            else:
-                self._process_server_event(s)
+        elif re.match(r'^msg \[[0-9a-zA-Z, \.\[\]"\']+\]$', s):
+            voice.info(*eval(s.split(' ', 1)[1]))
+        else:
+            self._process_server_event(s)
 
     def loop(self):
         debug("%s loop...", self.__class__.__name__)

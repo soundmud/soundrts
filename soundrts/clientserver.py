@@ -97,14 +97,15 @@ class ConnectionToServer(object):
     def close(self):
         self.tn.close()
 
-    def read_line(self, max_lines_nb=1):
+    def read_line(self):
         try:
             self.data += self.tn.read_very_eager()
         except: # EOFError or (10054, 'Connection reset by peer')
             raise ConnectionAbortedError
-        lines = self.data.split("\n", max_lines_nb)
+        lines = self.data.split("\n", 1)
         self.data = lines.pop()
-        return lines
+        if lines:
+            return lines[0]
 
     def write_line(self, s):
         try:
