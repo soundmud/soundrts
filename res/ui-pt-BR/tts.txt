@@ -79,7 +79,7 @@
 135        insuficiente
 136        o mesmo!
 137        unidades de comida
-138        estão as suas órdens:
+138        estão as suas ordens:
 139        para grupos
 
 142        produção pausada
@@ -127,21 +127,21 @@
 2033        cancelar
 2034        shift
 2035        voltar
-2036        abrir o menú
+2036        abrir o menu
 2037        setas de direção
 2038        mover-se no mapa
 2039        control
 2040        ignorando os obstáculos
 2041        page down
-2042        mover-se ao seguinte  quadrado interessante
+2042        mover-se ao próximo  quadrado interessante
 2043 barra de espaço
-2044        vai ao quadrado da  unidade que está sendo controlada, e a segue
-2045        controla a seguinte unidade local
-2046        seleciona o seguinte objetivo
-2047        seleciona a seguinte ordem
-2048        seleciona as mesmas unidades do mesmo tipo e no mesmo quadrado
-2049        confirma a ordem dada
-2050        dá a ordem mais lógica para o objetivo selecionado
+2044        ir ao quadrado da  unidade que está sendo controlada, e a segue
+2045        controlar a seguinte unidade local
+2046        selecionar o seguinte objetivo
+2047        selecionar a próxima ordem
+2048        selecionar as mesmas unidades do mesmo tipo e no mesmo quadrado
+2049        confirmar a ordem dada
+2050        dar a ordem mais lógica para o objetivo selecionado
 2051        saber quanto de ouro, madeira e comida tem
 2052        saber a saúde da unidade selecionada
 2053        controlar a metade das unidades do mesmo tipo e no mesmo quadrado que a unidade selecionada
@@ -204,7 +204,7 @@
 4016        jogar sozinho
 4017        mapa
 4018        multijogador
-4019        unirse
+4019        unir-se
 4020        objetivos:
 4021        resistir ao ataque inimigo
 4022        produzido
@@ -233,7 +233,7 @@
 4046        servidor público
 4047        os visitantes poderão criar partidas
 4048        cancelar
-4049        O servidor não pode conectar-se al metaservidor. É possível que sua conexão a internet esteja falhando.
+4049        O servidor não pode conectar-se ao metaservidor. É possível que sua conexão à internet esteja falhando.
 4051        adeus
 4052        Aperte Tab para selecionar, e aperte Enter para confirmar.
 4053        Juntar-se à partida de
@@ -259,12 +259,13 @@
 4074        para
 4075        cancelar
 4076        ir ao menu anterior
-4077        não ha servidores registrados na Internet agora
+4077        não há servidores registrados na Internet agora
 4078        servidores ativos
 4079        usando a mesma versão do jogo. A que servidor você deseja conectar?
 4080        erro: impossível iniciar o servidor
-4081        Servidor não disponível. O servidor está fechado ou bloqueado por un firewall.
-4082        falha: Resposta inesperada do servidor. Não é un servidor válido de Sound RTS
+4081        Servidor não disponível. O servidor está fechado ou bloqueado por
+um firewall.
+4082        falha: Resposta inesperada do servidor. Não é um servidor válido de Sound RTS
 4083        Conexão recusada pelo servidor. Não é um servidor válido de Sound RTS.
 4084        ou seu nome de usuário foi recusado
 4085        erro na conexão com o servidor
@@ -285,7 +286,7 @@
 4112        salvar partida
 4113        carregar partida
 4114        contra o computador
-'4115        computador contra computador
+4115        computador contra computador
 
 4118        voltar
 4119        escolher o servidor em uma lista
@@ -295,7 +296,7 @@
 
 4200        a produção de madeira melhorou.
 4201        catapulta
-4202        esperando órdens
+4202        esperando ordens
 4203        de
 4204        não pode construir aqui
 4205        não está controlando nenhuma unidade.
@@ -330,7 +331,7 @@
 4234        já existe uma nova atualização do programa na Internet.
 4235        Digite seu novo nome de usuário
 4236        use somente números e letras
-4237        nome de usuário incorréto
+4237        nome de usuário incorreto
 4238        nome de usuário em uso
 4239        novo nome de usuário
 4240        conectou
@@ -340,18 +341,18 @@
 4244        é necessário mais jogadores para começar. o mínimo é de
 4245        nome de usuário atual
 4246        limite de população alcançado.
-4247        pontos de mana
+4247        pontos de mana de
 4248        investir em
 4249        super curativo
 4250        teletranspórte
 4251        à
 4252        não há mana suficiente.
 4253        porcentagem do volume
-4254        velocidade dos cavallos
+4254        velocidade dos cavalos
 4255        define o ponto de encontro para as novas unidades
 4256        recolhido
 4257        computador em modo agressivo
-4258        computador em modo não agressivo
+4258        computador em modo calmo
 4259        desconectou
 4260        ao servidor hospedado por
 4261        saindo da partida
@@ -369,8 +370,8 @@
 4273        encerramento
 4274        conversão
 4275        torre de monitoramento
-4276        torre con arqueiros
-4277        torre con canhões
+4276        torre com arqueiros
+4277        torre com canhões
 4278        carregar
 4279        carregar todos de
 4280        descarregar
@@ -422,7 +423,7 @@
 
 4292 invocar
 4293 reanimar os mortos
-4294 ressurreissão
+4294 ressurreição
 
 4295 zumbi
 4296 esqueleto
@@ -441,3 +442,10 @@
 
 4305 névoa mortal
 4306 meteoro
+
+4307 retornar
+
+4308 de pedra
+4309 rocha
+
+4310 raça aleatória

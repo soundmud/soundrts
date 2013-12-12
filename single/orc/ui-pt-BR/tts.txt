@@ -1,0 +1,7 @@
+; coding: utf-8
+
+7000 fazenda de porcos
+7001 quartel
+7002 grande edifício
+7003 peão
+7004 soldado orc
