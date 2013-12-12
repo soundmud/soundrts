@@ -58,6 +58,7 @@ class WaitingForTheGameToStart(_State):
     def send_menu(self, client):
         client.push("map_title %s\n" % " ".join(map(str, client.game.scenario.title)))
         client.push("map_races %s\n" % " ".join(client.game.scenario.races))
+        client.push("registered_players %s\n" % " ".join(["%s,%s,%s" % (p.login, p.alliance, p.race) for p in client.game.players]))
         client.push("update_menu\n")
 
 

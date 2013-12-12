@@ -50,26 +50,6 @@ class _ServerMenu(Menu):
 
     def srv_update_menu(self, unused_args):
         self.update_menu(self.make_menu())
-        
-    def srv_game_admin_menu(self, unused_args):
-        GameAdminMenu(self.server).loop()
-
-    def srv_game_guest_menu(self, unused_args):
-        GameGuestMenu(self.server).loop()
-
-    def srv_start_game(self, args):
-        players, alliances, races = zip(*[p.split(",") for p in args[0].split(";")])
-        alliances = map(int, alliances)
-        me = args[1]
-        seed = int(args[2])
-        speed = float(args[3])
-        server_map = mapfile.Map()
-        server_map.unpack(" ".join(args[4:])) # warning: args is splitted from a stripped string
-        game = MultiplayerGame(server_map, players, me, self.server, seed, speed)
-        game.alliances = alliances
-        game.races = races
-        game.run()
-        self.end_loop = True
 
     def srv_quit(self, unused_args):
         voice.flush()
@@ -78,18 +58,10 @@ class _ServerMenu(Menu):
     def srv_sequence(self, args):
         sounds.play_sequence(args)
 
-    def srv_map_title(self, args):
-        self.map_title = args
-
-    def srv_map_races(self, args):
-        self.map_races = args
-        load_style(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with races defined in the map
-#       TODO: use self.map.additional_style (and self.map.campaign_style ?)
-
     def srv_e(self, args):
         assert args[0].split(",")[0] == 'new_player'
         login = args[0].split(",")[1]
-        if login != self.login:
+        if login != self.server.login:
             voice.info([login, 4240]) # ... has just logged in
 ##        if login not in self.players:
 ##            self.players.append(login)
@@ -129,8 +101,8 @@ class ServerMenu(_ServerMenu):
         return menu
 
     def srv_welcome(self, args):
-        self.login, server_login = args
-        voice.important([4056, self.login, 4260, server_login])
+        self.server.login, server_login = args
+        voice.important([4056, self.server.login, 4260, server_login])
 
     def srv_invitations(self, args):
         self.invitations = [x.split(",") for x in args]
@@ -138,12 +110,55 @@ class ServerMenu(_ServerMenu):
     def srv_maps(self, args):
         self.maps = [x.split(",") for x in args]
 
+    def srv_game_admin_menu(self, unused_args):
+        GameAdminMenu(self.server).loop()
 
-class GameAdminMenu(_ServerMenu):
+    def srv_game_guest_menu(self, unused_args):
+        GameGuestMenu(self.server).loop()
+
+
+class _BeforeGameMenu(_ServerMenu):
+
+    map_title = ()
+    registered_players = ()
+
+    def srv_map_title(self, args):
+        self.map_title = args
+
+    def srv_map_races(self, args):
+        self.map_races = args
+        load_style(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with races defined in the map
+#       TODO: use self.map.additional_style (and self.map.campaign_style ?)
+
+    def srv_registered_players(self, args):
+        self.registered_players = [p.split(",") for p in args]
+
+    def _add_race_menu(self, menu, pn, p, pr):
+        if len(self.map_races) > 1:
+            for r in ["random_race"] + self.map_races:
+                if r != pr:
+                    menu.append([p,] + get_style(r, "title"),
+                                (self.server.write_line,
+                                 "race %s %s" % (pn, r)))
+
+    def srv_start_game(self, args):
+        players, alliances, races = zip(*[p.split(",") for p in args[0].split(";")])
+        alliances = map(int, alliances)
+        me = args[1]
+        seed = int(args[2])
+        speed = float(args[3])
+        server_map = mapfile.Map()
+        server_map.unpack(" ".join(args[4:])) # warning: args is splitted from a stripped string
+        game = MultiplayerGame(server_map, players, me, self.server, seed, speed)
+        game.alliances = alliances
+        game.races = races
+        game.run()
+        self.end_loop = True
+
+
+class GameAdminMenu(_BeforeGameMenu):
 
     available_players = ()
-    registered_players = ()
-    map_title = ()
     nb_players_min = nb_players_max = 0
 
     def make_menu(self):
@@ -165,12 +180,8 @@ class GameAdminMenu(_ServerMenu):
                     menu.append([4284, p, 4285] + nombre(a),
                                 (self.server.write_line,
                                  "move_to_alliance %s %s" % (pn, a)))
-            if len(self.map_races) > 1:
-                for r in ["random_race"] + self.map_races:
-                    if r != pr:
-                        menu.append([p,] + get_style(r, "title"),
-                                    (self.server.write_line,
-                                     "race %s %s" % (pn, r)))
+            if p in (self.server.login, "ai"):
+                self._add_race_menu(menu, pn, p, pr)
         menu.append([4048, 4060], (self.server.write_line, "cancel_game"))
         return menu
 
@@ -180,15 +191,16 @@ class GameAdminMenu(_ServerMenu):
     def srv_available_players(self, args):
         self.available_players = args
 
-    def srv_registered_players(self, args):
-        self.registered_players = [p.split(",") for p in args]
 
+class GameGuestMenu(_BeforeGameMenu):
 
-class GameGuestMenu(_ServerMenu):
-
-    map_title = ()
+    def _get_player(self):
+        for pn, (p, pa, pr) in enumerate(self.registered_players):
+            if p == self.server.login:
+                return pn, p, pr
 
     def make_menu(self):
         menu = Menu(self.map_title)
+        self._add_race_menu(menu, *self._get_player())
         menu.append([4041, 4061], (self.server.write_line, "unregister"))
         return menu
