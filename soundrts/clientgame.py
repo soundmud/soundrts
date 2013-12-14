@@ -490,13 +490,8 @@ class GameInterface(object):
 
     def srv_voila(self, s):
         self.last_virtual_time = float(s) / 1000.0
-        interval = VIRTUAL_TIME_INTERVAL / 1000.0 / self.speed
-        # before write_line...
-        if time.time() > self.next_update + interval: # too late
-            # compromise (keep some time for the interface)
-            self.next_update = time.time() + interval / 2
-        else:
-            self.next_update += interval
+        if not self.asked_to_update:
+            self._ask_for_update()
         self.asked_to_update = False
 
         self.talking_clock()
@@ -513,20 +508,21 @@ class GameInterface(object):
 
     asked_to_update = False
 
+    def _ask_for_update(self):
+        self._play_tick()
+        self.asked_to_update = True
+        self.server.write_line("update")
+        interval = VIRTUAL_TIME_INTERVAL / 1000.0 / self.speed
+        self.next_update = max(time.time(), self.next_update + interval)
+
     def _ask_for_update_if_needed(self):
         # ask server: "what's new?" (the clients activate the server update)
         if not self.asked_to_update and time.time() >= self.next_update:
-            self._play_tick()
             if len(self.server.data) != 0:
                 debug("It's time to send cmd_update... "
                       "and all data is not received!")
                 debug("The data is:\n%s", self.server.data)
-            # ... to avoid counting the simulation time
-            #     in single player mode (and in multiplayer?)
-            # ... call this update from the world just before
-            #     the update? (using a notification or hook?)
-            self.asked_to_update = True
-            self.server.write_line("update")
+            self._ask_for_update()
 
     def _remind_server_if_needed(self):
         if self.asked_to_update and time.time() >= self.next_update:
