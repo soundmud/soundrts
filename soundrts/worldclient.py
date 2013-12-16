@@ -122,12 +122,12 @@ class Coordinator(object):
     def get_digest(self):
         d = md5(self.orders_digest.hexdigest())
         d.update(self.world.get_digest())
-        return d.hexdigest()
+        return "%s-%s" % (self.world.time, d.hexdigest())
 
     def get_sync_debug_msg_1(self):
-        return "out_of_sync_error: map=%s version=%s platform=%s python=%s md5=%s" % (
+        return "out_of_sync_error: map=%s version=%s platform=%s python=%s md5=%s time=%s" % (
             self.world.map.get_name(), VERSION, platform.platform(), sys.version.replace("\n", " "),
-            self.get_digest(), )
+            self.get_digest(), self.world.time)
 
     def get_sync_debug_msg_2(self):
         return "out_of_sync_error:debug_info orders=%s objects=%s" % (

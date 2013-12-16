@@ -213,6 +213,10 @@ class Game(object):
         check_strings = [queue[0][1] for queue in self.all_orders.values()]
         if check_strings.count(check_strings[0]) != len(check_strings) \
             and self._nb_allowed_alerts > 0:
+            time_strings = [s.split("-", 1) for s in check_strings]
+            if time_strings.count(time_strings[0]) != len(time_strings):
+                info("minor mismatch in game %s at %s", self.id, self.time)
+                return
             warning("mismatch in game %s at %s: %s",
                     self.id, self.time, check_strings)
             self._nb_allowed_alerts -= 1
