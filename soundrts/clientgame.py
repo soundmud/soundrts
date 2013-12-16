@@ -106,33 +106,19 @@ class GameInterface(object):
         self.set_self_as_listener()
         voice.silent_flush()
         self.set_screen()
-        self._srv_event_queue = Queue.Queue()
+        self._srv_queue = Queue.Queue()
 
     def __getstate__(self):
         odict = self.__dict__.copy()
-        del odict["_srv_event_queue"]
+        del odict["_srv_queue"]
         return odict
 
     def __setstate__(self, dict):
         self.__dict__.update(dict)
-        self._srv_event_queue = Queue.Queue()
+        self._srv_queue = Queue.Queue()
 
     def set_self_as_listener(self):
         psounds.set_listener(self)
-
-    @property
-    def memory(self):
-        try:
-            return self.server.player.memory
-        except:
-            return []
-
-    @property
-    def perception(self):
-        try:
-            return self.server.player.perception
-        except:
-            return []
 
     @property
     def player(self):
@@ -163,24 +149,21 @@ class GameInterface(object):
             self._square_width = self.server.player.world.square_width / 1000.0
         return self._square_width
 
-    def process_server_event(self, s):
-        l = s.split(' ', 1)
-        if len(l) == 1:
-            l.append("")
-        cmd = "srv_" + l[0]
+    def process_server_event(self, *e):
+        cmd = "srv_" + e[0]
         if hasattr(self, cmd):
-            getattr(self, cmd)(l[1])
-        elif not re.match('^ *$', s):
-            warning("Not recognized: %s" % s)
+            getattr(self, cmd)(*e[1:])
+        else:
+            warning("Not recognized: %s" % e[0])
 
-    def _render_srv_event(self, o, e):
+    def srv_event(self, o, e):
         try:
             if hasattr(self, "next_update") and \
                time.time() > self.next_update + EVENT_LIMIT:
                 return
             Objet(self, o).notify(e)
         except:
-            exception("problem during _render_srv_event")
+            exception("problem during srv_event")
 
     def cmd_say_players(self):
         l = []
@@ -212,7 +195,7 @@ class GameInterface(object):
     def srv_sequence(self, s):
         sounds.play_sequence(s.split())
 
-    def srv_quit(self, unused_s):
+    def srv_quit(self):
         voice.silent_flush()
         sound_stop()
         self.end_loop = True
@@ -497,14 +480,8 @@ class GameInterface(object):
 
     # loop
 
-    def srv_voila(self, s):
-        # TODO NEXT: remove this while loop (it can slow down the UI) and move
-        # srv_* events ("voila", "voice_important", "alert"...) in _srv_event_queue
-        while not self._srv_event_queue.empty():
-            o, e = self._srv_event_queue.get()
-            self._render_srv_event(o, e)
-
-        self.last_virtual_time = float(s) / 1000.0
+    def srv_voila(self, t, memory, perception):
+        self.last_virtual_time = float(t) / 1000.0
         interval = VIRTUAL_TIME_INTERVAL / 1000.0 / self.speed
         # before write_line...
         if time.time() > self.next_update + interval: # too late
@@ -514,6 +491,9 @@ class GameInterface(object):
             self.next_update += interval
         self.asked_to_update = False
 
+        self.memory = set(memory)
+        self.perception = set(perception)
+        
         self.talking_clock()
         self.send_resource_alerts_if_needed()
         if self.previous_menus == {}:
@@ -646,11 +626,11 @@ class GameInterface(object):
                 exception("error in pygame.event.get() loop")
 
     def queue_srv_event(self, o ,e):
-        self._srv_event_queue.put((o, e))
+        self._srv_queue.put((o, e))
 
     def _process_srv_events(self):
-        if not self._srv_event_queue.empty():
-            o, e = self._srv_event_queue.get()
+        if not self._srv_queue.empty():
+            o, e = self._srv_queue.get()
             self._render_srv_event(o, e)
 
     def loop(self):

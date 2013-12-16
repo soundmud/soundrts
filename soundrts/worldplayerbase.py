@@ -239,7 +239,7 @@ class Player(object):
 
     def send_event(self, o, e):
         if self.is_local_human():
-            self.client.interface.queue_srv_event(copy.copy(o), e)
+            self.client.push("event", copy.copy(o), e)
 
     def pay(self, cost):
         for i, c in enumerate(cost):
@@ -286,7 +286,7 @@ class Player(object):
 
     def quit_game(self):
         debug("quit_game %s", self.name)
-        self.push("quit\n")
+        self.push("quit")
         if self in self.world.true_players():
             self.broadcast_to_others_only([self.name, 4261])
         for u in self.units[:]:
@@ -302,9 +302,9 @@ class Player(object):
     def is_human(self):
         return False
 
-    def push(self, msg):
+    def push(self, *args):
         if self.client:
-            self.client.push(msg)
+            self.client.push(*args)
 
     def execute_command(self, data):
         args = string.split(data)
@@ -315,7 +315,7 @@ class Player(object):
             warning("executing command: '%s' (%s)" % (cmd, data))
 
     def send_voice_important(self, msg):
-        self.push("voice_important %s\n" % encode_msg(msg))
+        self.push("voice_important", encode_msg(msg))
 
     def update_eventuel(self):
         for p in self.world.players:
