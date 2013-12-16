@@ -168,6 +168,7 @@ class _Savable(object):
         clientstyle._style = self._style
         clientworld.update_orders_list() # when style has changed
         self.interface.set_self_as_listener()
+        threading.Thread(target=self.world.loop).start()
         self.interface.loop()
         self._record_stats(self.world)
         self.post_run()
