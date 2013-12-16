@@ -2,6 +2,7 @@
 
 import os
 import os.path
+import Queue
 import re
 import time
 
@@ -105,23 +106,19 @@ class GameInterface(object):
         self.set_self_as_listener()
         voice.silent_flush()
         self.set_screen()
+        self._srv_queue = Queue.Queue()
+
+    def __getstate__(self):
+        odict = self.__dict__.copy()
+        del odict["_srv_queue"]
+        return odict
+
+    def __setstate__(self, dict):
+        self.__dict__.update(dict)
+        self._srv_queue = Queue.Queue()
 
     def set_self_as_listener(self):
         psounds.set_listener(self)
-
-    @property
-    def memory(self):
-        try:
-            return self.server.player.memory
-        except:
-            return []
-
-    @property
-    def perception(self):
-        try:
-            return self.server.player.perception
-        except:
-            return []
 
     @property
     def player(self):
@@ -152,26 +149,21 @@ class GameInterface(object):
             self._square_width = self.server.player.world.square_width / 1000.0
         return self._square_width
 
-    def process_server_event(self, s):
-        l = s.split(' ', 1)
-        if len(l) == 1:
-            l.append("")
-        cmd = "srv_" + l[0]
+    def process_server_event(self, *e):
+        cmd = "srv_" + e[0]
         if hasattr(self, cmd):
-            getattr(self, cmd)(l[1])
-        elif not re.match('^ *$', s):
-            warning("Not recognized: %s" % s)
+            getattr(self, cmd)(*e[1:])
+        else:
+            warning("Not recognized: %s" % e[0])
 
-    def d_srv_event(self, o, e): # "direct" server event
+    def srv_event(self, o, e):
         try:
             if hasattr(self, "next_update") and \
                time.time() > self.next_update + EVENT_LIMIT:
                 return
             Objet(self, o).notify(e)
-##            # add some interactivity (quicker UI)
-##            self._process_events()
         except:
-            exception("problem during d_srv_event")
+            exception("problem during srv_event")
 
     def cmd_say_players(self):
         l = []
@@ -203,7 +195,7 @@ class GameInterface(object):
     def srv_sequence(self, s):
         sounds.play_sequence(s.split())
 
-    def srv_quit(self, unused_s):
+    def srv_quit(self):
         voice.silent_flush()
         sound_stop()
         self.end_loop = True
@@ -488,12 +480,15 @@ class GameInterface(object):
 
     # loop
 
-    def srv_voila(self, s):
-        self.last_virtual_time = float(s) / 1000.0
+    def srv_voila(self, t, memory, perception):
+        self.last_virtual_time = float(t) / 1000.0
         if not self.asked_to_update:
             self._ask_for_update()
         self.asked_to_update = False
 
+        self.memory = set(memory)
+        self.perception = set(perception)
+        
         self.talking_clock()
         self.send_resource_alerts_if_needed()
         if self.previous_menus == {}:
@@ -626,6 +621,14 @@ class GameInterface(object):
             except:
                 exception("error in pygame.event.get() loop")
 
+    def queue_srv_event(self, o ,e):
+        self._srv_queue.put((o, e))
+
+    def _process_srv_events(self):
+        if not self._srv_queue.empty():
+            o, e = self._srv_queue.get()
+            self._render_srv_event(o, e)
+
     def loop(self):
         from clientserver import ConnectionAbortedError # TODO: remove the cyclic dependencies
         g.game = True
@@ -638,6 +641,7 @@ class GameInterface(object):
                 self._remind_server_if_needed()
                 self._animate_objects()
                 self._process_events()
+                self._process_srv_events()
                 voice.update() # XXX useful for SAPI
                 time.sleep(.01)
             except SystemExit:

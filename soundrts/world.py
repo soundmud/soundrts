@@ -210,7 +210,7 @@ class World(object):
             if p.is_human():
                 p.ready = False
                 try:
-                    p.push("voila %s\n" % self.time)
+                    p.push("voila", self.time, copy.copy(p.memory), copy.copy(p.perception))
                 except:
                     exception("")
 

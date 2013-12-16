@@ -39,7 +39,7 @@ class DummyClient(object):
     def __init__(self, AI_type="timers"):
         self.AI_type = AI_type
 
-    def push(self, msg):
+    def push(self, *args):
         pass
 
 
@@ -68,8 +68,8 @@ class DirectClient(object):
         else:
             debug("couldn't send client command (no player): %s", s)
 
-    def push(self, s):
-        self.interface.process_server_event(s[:-1])
+    def push(self, *args):
+        self.interface.process_server_event(*args)
 
     def has_victory(self):
         return self.player.has_victory
@@ -169,6 +169,5 @@ class Coordinator(object):
             self.main_server.write_line("timeout")
             self._previous_update += 5.0
 
-    def push(self, s):
-        debug("internal server data for %s: %s", self.login, s)
-        self.interface.process_server_event(s[:-1])
+    def push(self, *args):
+        self.interface.process_server_event(*args)

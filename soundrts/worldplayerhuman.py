@@ -17,7 +17,7 @@ class Human(Player):
         pass
 
     def send_alert(self, square, sound):
-        self.push("alert %s,%s\n" % (square.id, sound))
+        self.push("alert", square.id, sound)
 
     def is_human(self):
 	return True
@@ -63,7 +63,7 @@ class Human(Player):
     def cmd_speed(self, args):
         if self._is_admin():
             for p in self.world.players:
-                p.push("speed %s\n" % float(args[0]))
+                p.push("speed", float(args[0]))
         else:
             warning("non admin client tried to change game speed")
 
