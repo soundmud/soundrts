@@ -69,7 +69,7 @@ class DirectClient(object):
             debug("couldn't send client command (no player): %s", s)
 
     def push(self, *args):
-        self.interface.process_server_event(*args)
+        self.interface.queue_srv_event(*args)
 
     def has_victory(self):
         return self.player.has_victory
@@ -170,4 +170,4 @@ class Coordinator(object):
             self._previous_update += 5.0
 
     def push(self, *args):
-        self.interface.process_server_event(*args)
+        self.interface.queue_srv_event(*args)

@@ -149,7 +149,7 @@ class GameInterface(object):
             self._square_width = self.server.player.world.square_width / 1000.0
         return self._square_width
 
-    def process_server_event(self, *e):
+    def _process_srv_event(self, *e):
         cmd = "srv_" + e[0]
         if hasattr(self, cmd):
             getattr(self, cmd)(*e[1:])
@@ -621,13 +621,13 @@ class GameInterface(object):
             except:
                 exception("error in pygame.event.get() loop")
 
-    def queue_srv_event(self, o ,e):
-        self._srv_queue.put((o, e))
+    def queue_srv_event(self, *e):
+        self._srv_queue.put(e)
 
     def _process_srv_events(self):
         if not self._srv_queue.empty():
-            o, e = self._srv_queue.get()
-            self._render_srv_event(o, e)
+            e = self._srv_queue.get()
+            self._process_srv_event(*e)
 
     def loop(self):
         from clientserver import ConnectionAbortedError # TODO: remove the cyclic dependencies
