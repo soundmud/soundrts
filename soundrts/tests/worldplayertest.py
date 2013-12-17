@@ -31,9 +31,9 @@ class ObjectiveTestCase(unittest.TestCase):
 
 class DummyClient(worldclient.DummyClient):
 
-    def push(self, txt):
+    def push(self, *args):
         if False: # remove this to check the values
-            print txt
+            print args
  
 
 class ComputerTestCase(unittest.TestCase):
