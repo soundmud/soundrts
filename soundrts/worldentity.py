@@ -39,6 +39,10 @@ class Entity(object):
     speed = 0
     is_moving = False
 
+    @property
+    def is_memory(self):
+        return hasattr(self, "time_stamp")
+
     def update_all_dicts(self, inc):
         if getattr(self, "player", None) is not None:
             self.player.update_all_dicts(self, inc)

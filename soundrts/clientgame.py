@@ -107,6 +107,8 @@ class GameInterface(object):
         voice.silent_flush()
         self.set_screen()
         self._srv_queue = Queue.Queue()
+        self.scouted_squares = ()
+        self.scouted_before_squares = ()
 
     def __getstate__(self):
         odict = self.__dict__.copy()
@@ -126,20 +128,6 @@ class GameInterface(object):
             return self.server.player
         except:
             return None
-
-    @property
-    def scouted_squares(self):
-        try:
-            return self.server.player.observed_squares.keys()
-        except:
-            return []
-
-    @property
-    def scouted_before_squares(self):
-        try:
-            return self.server.player.observed_before_squares
-        except:
-            return []
 
     _square_width = None
     
@@ -295,30 +283,12 @@ class GameInterface(object):
         voice.item(msg)
 
     def cmd_toggle_cheatmode(self):
-        if self.server.player.cheatmode:
-            self.server.player.cheatmode = False
-            self.player._update_dict(self.player.observed_squares, self.player.world.squares, -1)
-            self.player._update_dict(self.player.detected_squares, self.player.world.squares, -1)
-            for sq in self.player.world.squares:
-                for o in sq.objects:
-                    o.update_perception()
-            # assertion:
-            # observed_before_squares is not affected by _update_dict
-            # (only update_all_dicts() would do that)
-            for o in self.player.memory[:]:
-                if o.place not in self.player.observed_before_squares:
-                    self.player.memory.remove(o)
-            self.update_fog_of_war()
-            voice.item([4265, 4264]) # is now off
-        elif self.single_player():
-            self.server.player.cheatmode = True
-            self.player._update_dict(self.player.observed_squares, self.player.world.squares, 1)
-            self.player._update_dict(self.player.detected_squares, self.player.world.squares, 1)
-            for sq in self.player.world.squares:
-                for o in sq.objects:
-                    o.update_perception()
-            self.update_fog_of_war()
-            voice.item([4265, 4263]) # is now on
+        if self.single_player():
+            self.server.write_line("toggle_cheatmode")
+            if self.server.player.cheatmode:
+                voice.item([4265, 4264]) # is now off
+            else:
+                voice.item([4265, 4263]) # is now on
         else:
             voice.item([1029]) # hostile sound
 
@@ -480,14 +450,16 @@ class GameInterface(object):
 
     # loop
 
-    def srv_voila(self, t, memory, perception):
+    def srv_voila(self, t, memory, perception, scouted_squares, scouted_before_squares):
         self.last_virtual_time = float(t) / 1000.0
         if not self.asked_to_update:
             self._ask_for_update()
         self.asked_to_update = False
 
-        self.memory = set(memory)
-        self.perception = set(perception)
+        self.memory = memory
+        self.perception = perception
+        self.scouted_squares = scouted_squares
+        self.scouted_before_squares = scouted_before_squares
         
         self.talking_clock()
         self.send_resource_alerts_if_needed()
@@ -771,28 +743,43 @@ class GameInterface(object):
             self.group.remove(_id)
 
     def update_fog_of_war(self):
-        # add new objects
-        models = set([o.model for o in self.dobjets.values()])
-        pm = set(self.memory)
-        pm.update(self.perception)
-        for m in pm - models:
-            if m.id in self.dobjets: # memory becomes perception again (or the reverse)
-                self._delete_object(m.id)
-            else: # really new
+        # updates dobjets (the dictionary of view objects)
+        
+        # add or update objects
+        for m in self.memory:
+            if m.id in self.dobjets and not self.dobjets[m.id].is_memory:
+                self._delete_object(m.id) # memory will replace perception
+            if m.id not in self.dobjets:
+                self.dobjets[m.id] = Objet(self, m)
+                if self.target and m.id == self.target.id: # keep target
+                    self.target = self.dobjets[m.id]
+            else:
+                self.dobjets[m.id].model = m
+        for m in self.perception:
+            if m.id not in self.dobjets:
                 if self.player.is_an_enemy(m) or \
                    getattr(m, "resource_type", None) is not None:
                     self.scout_info.add(m.place)
-            self.dobjets[m.id] = Objet(self, m)
-            if self.target and m.id == self.target.id: # keep target
-                self.target = self.dobjets[m.id]
+            elif self.dobjets[m.id].is_memory:
+                self._delete_object(m.id) # perception will replace memory
+            if m.id not in self.dobjets:
+                self.dobjets[m.id] = Objet(self, m)
+                if self.target and m.id == self.target.id: # keep target
+                    self.target = self.dobjets[m.id]
+            else:
+                self.dobjets[m.id].model = m
+
         # remove missing objects
-        models = set([o.model for o in self.dobjets.values()])
-        for m in models - pm:
-            self._delete_object(m.id)
-            if self.target and m.id == self.target.id:
+        pm = set(o.id for o in self.memory)
+        pm.update(o.id for o in self.perception)
+        for i in self.dobjets.keys():
+            if i in pm:
+                continue
+            self._delete_object(i)
+            if self.target and i == self.target.id:
                 self.target = None
         if VERSION[-4:] == "-dev":
-            for m in models & pm:
+            for m in self.perception.union(self.memory):
                 if m.place is None:
                     warning("%s.model is in memory or perception "
                             "and yet its place is None", m.type_name)

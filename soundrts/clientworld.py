@@ -612,7 +612,7 @@ class GridView(object):
                and not (self.interface.already_asked_to_quit or
                         self.interface.end_loop):
                 warning("%s.place is None", o.type_name)
-                if hasattr(o, "time_stamp"):
+                if o.is_memory:
                     warning("(memory)")
 
     def _update_coefs(self):

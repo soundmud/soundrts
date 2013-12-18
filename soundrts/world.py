@@ -210,7 +210,10 @@ class World(object):
             if p.is_human():
                 p.ready = False
                 try:
-                    p.push("voila", self.time, copy.copy(p.memory), copy.copy(p.perception))
+                    def _copy(l):
+                        return set(copy.copy(o) for o in l)
+                    p.push("voila", self.time, _copy(p.memory), _copy(p.perception),
+                           p.observed_squares.keys(), p.observed_before_squares)
                 except:
                     exception("")
 

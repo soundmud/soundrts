@@ -595,3 +595,25 @@ class Player(object):
             return warehouses[0][1]
         else:
             return None
+
+    def cmd_toggle_cheatmode(self, unused_args):
+        if self.cheatmode:
+            self.cheatmode = False
+            self._update_dict(self.observed_squares, self.world.squares, -1)
+            self._update_dict(self.detected_squares, self.world.squares, -1)
+            for sq in self.world.squares:
+                for o in sq.objects:
+                    o.update_perception()
+            # assertion:
+            # observed_before_squares is not affected by _update_dict
+            # (only update_all_dicts() would do that)
+            for o in self.memory[:]:
+                if o.place not in self.observed_before_squares:
+                    self.memory.remove(o)
+        else:
+            self.cheatmode = True
+            self._update_dict(self.observed_squares, self.world.squares, 1)
+            self._update_dict(self.detected_squares, self.world.squares, 1)
+            for sq in self.world.squares:
+                for o in sq.objects:
+                    o.update_perception()
