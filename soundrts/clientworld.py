@@ -622,7 +622,7 @@ class GridView(object):
 
     def _collision_display(self):
         for t, c in (("ground", (0, 0, 255)), ("air", (255, 0, 0))):
-            for ox, oy in self.interface.server.player.world.collision[t].xy_set():
+            for ox, oy in self.interface.collision_debug[t].xy_set():
                 ox /= 1000.0
                 oy /= 1000.0
                 x = int(ox / self.interface.square_width * self.square_view_width)
@@ -634,7 +634,7 @@ class GridView(object):
         self._display()
         self.display_objects()
         self.active_square_view_display()
-        if self.interface.server.player.cheatmode:
+        if self.interface.collision_debug:
             self._collision_display()
 
     def square_from_mousepos(self, pos):

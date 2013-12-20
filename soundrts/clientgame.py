@@ -90,6 +90,7 @@ class GameInterface(object):
     x = y = o = 0
     place = None
     mouse_select_origin = None
+    collision_debug = None
 
     def __init__(self, server, speed=config.speed):
         self.server = server
@@ -450,7 +451,7 @@ class GameInterface(object):
 
     # loop
 
-    def srv_voila(self, t, memory, perception, scouted_squares, scouted_before_squares):
+    def srv_voila(self, t, memory, perception, scouted_squares, scouted_before_squares, collision_debug):
         self.last_virtual_time = float(t) / 1000.0
         if not self.asked_to_update:
             self._ask_for_update()
@@ -460,7 +461,8 @@ class GameInterface(object):
         self.perception = perception
         self.scouted_squares = scouted_squares
         self.scouted_before_squares = scouted_before_squares
-        
+        self.collision_debug = collision_debug
+
         self.talking_clock()
         self.send_resource_alerts_if_needed()
         if self.previous_menus == {}:
@@ -1052,11 +1054,13 @@ class GameInterface(object):
 
     def cmd_unit_status(self):
         self.update_group()
-        if self.group != [] and \
-           self.place is not self.dobjets[self.group[0]].place:
-            self.move_to_square(self.dobjets[self.group[0]].place)
-        self.say_group(self.place.title)
-        self.follow_mode = True
+        if not self.group:
+            voice.item([4205]) # no unit controled
+        else:
+            if self.place is not self.dobjets[self.group[0]].place:
+                self.move_to_square(self.dobjets[self.group[0]].place)
+            self.say_group(self.place.title)
+            self.follow_mode = True
 
     def cmd_help(self, incr):
         incr = int(incr)
@@ -1310,6 +1314,8 @@ class GameInterface(object):
                                             # sounds
 
     def say_square(self, place, prefix=[]):
+        if place is None:
+            return
         if place in self.scouted_squares:
             postfix = []
         elif place in self.scouted_before_squares:
@@ -1426,8 +1432,6 @@ class GameInterface(object):
         if self.place is None: # first position
             if self.units():
                 self._select_and_say_square(self.units(sort=True)[0].place)
-            elif self.player.world.time != 0:
-                warning("no unit defined")
         self._follow_if_needed()
         if self.immersion and self.group and self.group[0] in self.dobjets:
             self.x = self.dobjets[self.group[0]].x

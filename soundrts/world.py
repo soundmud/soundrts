@@ -212,8 +212,11 @@ class World(object):
                 try:
                     def _copy(l):
                         return set(copy.copy(o) for o in l)
+                    collision_debug = None
+#                    collision_debug = copy.deepcopy(self.collision)
                     p.push("voila", self.time, _copy(p.memory), _copy(p.perception),
-                           p.observed_squares.keys(), p.observed_before_squares)
+                           p.observed_squares.keys(), p.observed_before_squares,
+                           collision_debug)
                 except:
                     exception("")
 
