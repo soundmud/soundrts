@@ -1,1 +1,0 @@
-@python.exe build-game.py %1

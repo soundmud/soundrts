@@ -94,8 +94,8 @@ copy("install/setup.py", _d("bin"))
 copy("soundrts.py", _d("bin"))
 copy("server.py", _d("bin"))
 chdir(_d("bin"))
-cmd = "%s setup.py -q py2exe" % sys.executable
-# cmd = "%s -OO setup.py -q py2exe" % sys.executable # and add "optimize: 2" to setup.py
+cmd = "c:\\python27\\python.exe setup.py -q py2exe"
+# cmd = "c:\\python27\\python.exe -OO setup.py -q py2exe" # and add "optimize: 2" to setup.py
 print "py2exe... (%s)" % cmd
 my_execute(cmd)
 os.remove("setup.py")
@@ -105,7 +105,7 @@ my_copy("", "soundrts.py", "multi")
 my_copy("", "server.py", "multi")
 my_copytree("soundrts", "multi/soundrts")
 chdir("multi")
-for pythonver in (4, 6, 7, 5):
+for pythonver in (4, 5, 6, 7):
     print "compiling all using 2.%s..." % pythonver
     # force compilation
     for base in ("soundrts", "soundrts/lib"):
