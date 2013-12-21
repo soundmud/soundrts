@@ -1,6 +1,3 @@
-# SoundRTS, a sound-only real time strategy game.
-# Copyright (C) 2005-2008  Jean-Luc Pontico
-
 from lib import log
 from commun import VERSION
 from paths import CLIENT_LOG_PATH
