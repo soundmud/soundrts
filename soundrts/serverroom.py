@@ -9,6 +9,7 @@ import config
 from constants import *
 from lib.log import *
 from paths import TMP_PATH
+import version
 
 
 class _State(object):
@@ -215,7 +216,8 @@ class Game(object):
             and self._nb_allowed_alerts > 0:
             time_strings = [s.split("-", 1) for s in check_strings]
             if time_strings.count(time_strings[0]) != len(time_strings):
-                info("minor mismatch in game %s at %s", self.id, self.time)
+                if version.VERSION.endswith("-dev"):
+                    info("minor mismatch in game %s at %s", self.id, self.time)
                 return
             warning("mismatch in game %s at %s: %s",
                     self.id, self.time, check_strings)
