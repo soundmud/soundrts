@@ -327,11 +327,12 @@ class Computer(Player):
                     starting_place = self.units[0].place
             else:
                 starting_place = self.units[0].place
-        candidates = [o for o in self.perception + self.memory if self.check_type(o, c) and
+        candidates = [o for o in self.perception.union(self.memory) if self.check_type(o, c) and
                       o.place is not None and
                       (resource_type is None or
                        self.is_ok_for_warehouse(o.place, resource_type)
                        and self.warehouse_not_already_there(o.place, resource_type))]
+        candidates = sorted(candidates, key=lambda x: x.id) # avoid synchronization errors
         if len(candidates) > 10:
             candidates = self._remove_far_candidates(candidates, starting_place, 1)
         else:
