@@ -23,7 +23,13 @@ def data_files_from_tree(source_dir): # the installation directory must have the
 
 setup(windows=["soundrts.py"],
       console=["server.py"],
-      data_files=[("", [r"%s/freesansbold.ttf" % PYGAME_DIR]
+      data_files=[("", [r"%s/freesansbold.ttf" % PYGAME_DIR,
+                        r"%s/SDL.dll" % PYGAME_DIR,
+                        r"%s/SDL_ttf.dll" % PYGAME_DIR,
+                        r"%s/libfreetype-6.dll" % PYGAME_DIR,
+                        r"%s/libogg-0.dll" % PYGAME_DIR,
+                        r"%s/zlib1.dll" % PYGAME_DIR,
+                        ]
 ##                   + glob.glob(r"%s/*.dll" % PYGAME_DIR)
                    ),
                   ],
