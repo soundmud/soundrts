@@ -39,7 +39,7 @@
 87	Schütze
 88	Feind
 89	Freund
-99	Baracke
+99	kaserne
 100	Gehe
 101	baue
 102	abbau von
@@ -361,8 +361,8 @@
 4265	schummel modus
 4266	neustart
 4267	Kampagne
-4268	neues angriffsziel
-4269	angriffsziel zerstört
+4268	Neuer Auftrag
+4269	Auftrag erledigt
 4270	mission beendet.
 4271	abschnitt
 4272	prolog
@@ -417,7 +417,7 @@
 4290 enttarnen
 4291 tarnen
 
-4292 auffordern
+4292 herbeirufen von
 4293 die toten aus den Gräbern holen
 4294 auferstehung
 
@@ -431,9 +431,9 @@
 4300 heiliger blick
 
 4301 mensch
-4302 orc
+4302 ork
 
-4303 necromancer
+4303 nekromant
 4304 friedhof
 
 4305 nebel des todes
@@ -443,3 +443,4 @@
 
 4308 stein
 4309 steinbruch
+4310 zufällige Rasse

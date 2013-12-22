@@ -1,0 +1,5 @@
+7000 schweinefarm
+7001 kaserne
+7002 haupthaus
+7003 peon
+7004 grunzer
