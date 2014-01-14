@@ -12,5 +12,6 @@ Running the game from the source (soundrts.py for the client, server.py for the 
 
 Building the binaries (with build-all.bat) might require:
 * py2exe (Windows binary)
+* Inno Setup 5 (Windows installer)
 
 Official SoundRTS web site: http://jlpo.free.fr/soundrts
