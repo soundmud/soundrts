@@ -606,7 +606,7 @@ class Player(object):
             # assertion:
             # observed_before_squares is not affected by _update_dict
             # (only update_all_dicts() would do that)
-            for o in self.memory[:]:
+            for o in list(self.memory):
                 if o.place not in self.observed_before_squares:
                     self.memory.remove(o)
         else:
