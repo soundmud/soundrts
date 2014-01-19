@@ -656,7 +656,10 @@ class World(object):
         while(self.__dict__): # cf clean()
             if not self._command_queue.empty():
                 player, order = self._command_queue.get()
-                player.execute_command(order)
+                try:
+                    player.execute_command(order)
+                except:
+                    exception("")
             else:
                 time.sleep(.01)
 
