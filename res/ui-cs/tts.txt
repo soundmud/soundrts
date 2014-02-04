@@ -1,4 +1,4 @@
-; coding: Windows-1250
+; coding: utf_8
 
 0	nic!
 1	jste
