@@ -333,7 +333,7 @@ class GameInterface(object):
             pygame.event.clear()
             self.already_asked_to_quit = True
         else:
-            self.srv_quit("") # forced quit
+            self.srv_quit() # forced quit
             self.forced_quit = True
 
     def _set_speed(self, speed):
