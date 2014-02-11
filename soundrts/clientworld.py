@@ -93,22 +93,22 @@ class Objet(object):
         except:
             exception("problem with %s.ext_title", self.type_name)
 
-    @property
-    def menu(self):
+    def _menu(self, strict=False):
         menu = []
         try: # XXX remove this "try... except" when rules.txt checking is implemented
-            for order_class in ORDERS_LIST:
-                menu.extend(order_class.menu(self))
+            for order_class in _orders_list:
+                menu.extend(order_class.menu(self, strict=strict))
         except:
             exception("problem with %s.menu() of %s", order_class, self.type_name)
         return menu
 
     @property
+    def menu(self):
+        return self._menu()
+
+    @property
     def strict_menu(self):
-        menu = []
-        for order_class in ORDERS_LIST:
-            menu.extend(order_class.menu(self, strict=True))
-        return menu
+        return self._menu(strict=True)
 
     @property
     def orders_txt(self):
@@ -769,9 +769,11 @@ def _ord_index(keyword):
 def _has_ord_index(keyword):
     return has_style(keyword, "index")
 
+_orders_list = ()
+
 def update_orders_list():
-    global ORDERS_LIST
+    global _orders_list
     # this sorted list of order classes is used when generating the menu
-    ORDERS_LIST = sorted([_x for _x in ORDERS_DICT.values()
+    _orders_list = sorted([_x for _x in ORDERS_DICT.values()
                           if _has_ord_index(_x.keyword)],
                          key=lambda x:_ord_index(x.keyword))
