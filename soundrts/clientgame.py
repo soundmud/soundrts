@@ -1351,7 +1351,7 @@ class GameInterface(object):
         if new_square is self.place:
             prefix = get_style("parameters", "no_path_in_this_direction")
             collision = True
-        elif not objects:
+        elif self.place not in self.scouted_before_squares:
             prefix = []
             collision = False
         else:
