@@ -8,9 +8,11 @@ import urllib
 FULL_FORMAT = "%(asctime)s %(levelname)s: %(message)s"
 SHORT_FORMAT = "%(levelname)s: %(message)s"
 
+_version = "unknown version"
+
 def set_version(version):
-    global _VERSION
-    _VERSION = version
+    global _version
+    _version = version
 
 
 class HTTPHandler(logging.Handler):
@@ -24,9 +26,9 @@ class HTTPHandler(logging.Handler):
     def emit(self, record):
         if self._done:
             return
+        msg = "exception with %s:\n%s" % (_version, record.exc_text)
+        params = urllib.urlencode({"msg": msg})
         try:
-            msg = "exception with %s:\n%s" % (_VERSION, record.exc_text)
-            params = urllib.urlencode({"msg": msg})
             urllib.urlopen("%s/logging_errors.php?%s" % (self._url, params)).read()
         except:
             pass
