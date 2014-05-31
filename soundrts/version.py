@@ -2,6 +2,7 @@ try:
     from hashlib import md5
 except ImportError:
     from md5 import md5
+import os
 import sys
 
 import res
@@ -33,18 +34,10 @@ def compatibility_version():
 
 COMPATIBILITY_VERSION = compatibility_version()
 
-
-# The following code have been removed because:
-# - old files don't call only_work_with()
-# - old code would probably cause exceptions anyway
-
-##def only_work_with(v):
-##    v1 = _remove_dev(v)
-##    v2 = _remove_dev(VERSION)
-##    if v1 != v2:
-##        print "different versions in some Python files: %s and %s" % (v1, v2)
-##        sys.exit()
-
-# Add this to the begining of each file:
-##from version import only_work_with
-##only_work_with("1.1-a9")
+# VERSION_FOR_BUG_REPORTS helps ignoring automatic bug reports related to
+# modified code.
+try:
+    _s = os.path.getsize("library.zip")
+except os.error:
+    _s = 0
+VERSION_FOR_BUG_REPORTS = "%s (%s)" % (VERSION, _s)
