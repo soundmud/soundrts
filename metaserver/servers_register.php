@@ -45,9 +45,9 @@ $link = mysql_connect($dbhost, $dbuser, $dbpasswd)
 mysql_select_db($dbname)
 	or die("error: could not select database");
 
-// remove the servers with this IP address from the database
+// remove the servers with this IP address and port number from the database
 
-$query = 'DELETE FROM soundrts_servers WHERE ip = "'.$rvar_ip.'"';
+$query = 'DELETE FROM soundrts_servers WHERE ip = "'.$rvar_ip.'" AND port = "'.$rvar_port.'"';
 mysql_query($query) or die('error: query failed: '.mysql_error());
 
 // insert the server in the database
