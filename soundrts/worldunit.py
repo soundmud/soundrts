@@ -1056,6 +1056,9 @@ class Order(object):
             self.target = p.get_object_by_id(t.id)
 
     def move_to_or_fail(self, target):
+        if self.unit.speed == 0:
+            self.mark_as_impossible()
+            return
         self.unit.cible = self.unit.next_stage(target)
         if self.unit.cible is None: # target is unreachable
             self.mark_as_impossible()
