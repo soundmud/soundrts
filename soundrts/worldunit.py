@@ -1754,6 +1754,10 @@ class UseOrder(ComplexOrder):
                          and self._target_square() is not self.unit.place:
                 self.move_to_or_fail(self.target)
                 return
+        # the target is close enough, but is the target real?
+        if self.type.effect[0] == "conversion" and self.target.is_memory:
+            self.mark_as_impossible()
+            return
         # check cost
         if self.unit.mana < self.type.mana_cost:
             self.mark_as_impossible("not_enough_mana")
