@@ -229,7 +229,7 @@ Another option is to use Skype (or any similar software) if you know the other p
 
 The teams must be created before the game starts. They can't be changed during the game.
 
-Allied players share the knowledge of the map, the victory, and their units can help each other. A worker can use an allied warehouse to store a resource (the resource will still be added to the worker's army).
+Allied players share the knowledge of the map, the victory, the upgrades (new in SoundRTS 1.2 alpha 9), and their units can help each other. A worker can use an allied warehouse to store a resource (the resource will still be added to the worker's army).
 
 In a server game, the computers are not allied by default.
 

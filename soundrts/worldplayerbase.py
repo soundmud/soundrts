@@ -115,8 +115,15 @@ class Player(object):
             for res, bonus in enumerate(u.storage_bonus):
                 self.storage_bonus[res] = max(self.storage_bonus[res], bonus)
 
+    def _update_allied_upgrades(self):
+        for p in self.allied:
+            for upgrade_name in p.upgrades:
+                while self.level(upgrade_name) < p.level(upgrade_name):
+                    self.world.unit_class(upgrade_name).upgrade_player(self)
+
     def update(self):
         self._update_storage_bonus()
+        self._update_allied_upgrades()
         self.play()
 
     def level(self, type_name):
