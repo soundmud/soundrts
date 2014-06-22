@@ -102,8 +102,10 @@ class Computer(Player):
                         if not self.get(n, self.equivalent(w)):
                             done = False
                             break
+                        n = 1
                     else:
                         warning("get: unknown unit: '%s' (in ai.txt)", w)
+                        n = 1
                 if done:
                     self._line_nb += 1
             else:
