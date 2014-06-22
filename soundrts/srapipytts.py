@@ -23,7 +23,6 @@ class TTS(object):
 
     def __init__(self):
         _srapi.sapiEnable(1) # fall back to SAPI if no screen reader
-        _srapi.sayStringA("ScreenReaderAPI", 1)
 
     def IsSpeaking(self):
         if self._end_time is None:
