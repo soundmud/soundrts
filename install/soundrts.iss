@@ -32,7 +32,7 @@ ShowLanguageDialog=auto
 PrivilegesRequired=none
 
 [Files]
-Source: soundrts-{#MyAppVer}-windows\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: soundrts-{#MyAppVer}-windows\*; Excludes: \user; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Dirs]
 Name: {userappdata}\SoundRTS {#MyAppStage}

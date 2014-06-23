@@ -144,8 +144,7 @@ try:
     print "copying data files..."
     for dest in (_d("soundrts-%s-windows/" % (VERSION,)), multi):
         print dest
-        if dest == multi:
-            my_mkdir(dest + "user")
+        my_mkdir(dest + "user")
         my_copytree("res", dest + "res")
         my_copytree("single", dest + "single")
         my_copytree("multi", dest + "multi")
