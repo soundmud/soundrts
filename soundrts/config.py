@@ -75,7 +75,7 @@ def load():
         try:
             srapi = c.getint("tts", "srapi")
         except:
-            srapi = 0
+            srapi = 1
             error = True
     if error and not new_file:
         warning("rewriting SoundRTS.ini...")

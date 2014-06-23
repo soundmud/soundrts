@@ -14,7 +14,7 @@ In this game, you will explore the surroundings, exploit goldmines and woods, bu
 The game is by default in map mode : you are heading north, and you can select all the object without rotating.
 But you can also play in first person mode, nice for exploration and attack.
 
-Windows uses SAPI 5 (or a screen reader).
+Windows uses a screen reader (or SAPI 5).
 Linux uses Speech Dispatcher.
 Mac OS X uses NS Speech Synthesis.
 Recorded speech is still possible, but the files are no longer included in the main packages.
@@ -297,6 +297,11 @@ Recorded speech
 In `Soundrts.ini`_, make sure that "recorded_speech = 1" to use recorded speech.
 You'll probably need to copy the recorded files (and maybe a customized numbers.txt) to res/ui.
 You can also install the files as a mod from http://jlpo.free.fr/soundrts/contribs . Most mods contain a readme.txt file for instructions.
+
+SAPI 5 (Windows)
+^^^^^^^^^^^^^^^^
+
+In `Soundrts.ini`_, if "srapi = 0" and "recorded_speech = 0", the default SAPI 5 voice will be used directly.
 
 Windows srapi parameter
 ^^^^^^^^^^^^^^^^^^^^^^^
