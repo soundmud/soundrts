@@ -39,7 +39,7 @@ Name: {userappdata}\SoundRTS {#MyAppStage}
 
 [Icons]
 Name: {group}\SoundRTS; Filename: {app}\soundrts.exe; WorkingDir: {app}
-Name: {group}\Manual; Filename: {app}\help-index.htm
+Name: {group}\Manual; Filename: {app}\doc\help-index.htm
 Name: {group}\Web site; Filename: http://jlpo.free.fr/soundrts
 Name: {group}\{cm:UninstallProgram, SoundRTS}; Filename: {uninstallexe}
 Name: {group}\user; Filename: {userappdata}\SoundRTS {#MyAppStage}
