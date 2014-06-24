@@ -15,7 +15,7 @@ def save():
     c = ConfigParser.SafeConfigParser()
     c.add_section("general")
     c.set("general", "login", login)
-    c.set("general", "mods", mods)
+    c.set("general", "mods", _mods)
     c.set("general", "num_channels", repr(num_channels))
     c.set("general", "speed", repr(speed))
     c.add_section("tts")
@@ -26,7 +26,7 @@ def save():
     c.write(open(CONFIG_FILE_PATH, "w"))
 
 def load():
-    global login, num_channels, speed, mods
+    global login, num_channels, speed, _mods
     global recorded_speech, srapi, srapi_wait
     error = False
     new_file = False
@@ -57,9 +57,9 @@ def load():
         speed = 1
         error = True
     try:
-        mods = c.get("general", "mods")
+        _mods = c.get("general", "mods")
     except:
-        mods = ""
+        _mods = ""
         error = True
     try:
         recorded_speech = c.getint("tts", "recorded_speech")
@@ -88,12 +88,13 @@ def load():
     save()
 
 def _parse_options():
-    global port, record_games
+    global options, port, record_games
     default_port = 2500
     parser = optparse.OptionParser()
+    parser.add_option("-m", "--mods", type="string")
     parser.add_option("-p", type="int", help=optparse.SUPPRESS_HELP)
     parser.add_option("-g", action="store_true", help=optparse.SUPPRESS_HELP)
-    parser.set_defaults(p=default_port, g=False, s=False, n=False)
+    parser.set_defaults(mods=None, p=default_port, g=False)
     options, _ = parser.parse_args()
     port = options.p
     record_games = options.g
@@ -104,4 +105,12 @@ def _parse_options():
 
 _parse_options()
 load()
+# If config.save() is called (for example when the player's name is recorded),
+# the "--mods=" command-line option must not be saved in SoundRTS.ini .
+# That's why the "mods =" parameter from SoundRTS.ini is kept in a separate
+# variable.
+if options.mods is not None:
+    mods = options.mods
+else:
+    mods = _mods
 mixer_freq = 44100 # 22050 # 16000 # 11025

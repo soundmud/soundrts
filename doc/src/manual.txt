@@ -286,6 +286,13 @@ SoundRTS.ini
 
 This file is located in the `User folder`_ . It contains various parameters about how the game works. When SoundRTS starts, if SoundRTS.ini contains an error, a new file will be generated with as many parameters as possible recovered from the corrupted file. 
 
+Command-line options
+^^^^^^^^^^^^^^^^^^^^
+
+From the command-line, the -h option gives the list of available options.
+
+The --mods option overrides the "mods =" line from SoundRTS.ini_ . For example, to start SoundRTS with the soundpack mod and the orc mod: soundrts.exe --mods=soundpack,orc
+
 Sound pack
 ^^^^^^^^^^
 
