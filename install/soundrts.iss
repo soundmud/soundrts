@@ -39,6 +39,11 @@ Name: {userappdata}\SoundRTS {#MyAppStage}
 
 [Icons]
 Name: {group}\SoundRTS; Filename: {app}\soundrts.exe; WorkingDir: {app}
+Name: {group}\mods\Sound pack; Filename: {app}\soundrts.exe; Parameters: --mods=soundpack; WorkingDir: {app}
+Name: {group}\mods\CrazyMod 8.2 (if installed); Filename: {app}\soundrts.exe; Parameters: --mods=soundpack,CrazyMod8.2; WorkingDir: {app}
+Name: {group}\mods\Orcs; Filename: {app}\soundrts.exe; Parameters: --mods=orc; WorkingDir: {app}
+Name: {group}\mods\Teleportation; Filename: {app}\soundrts.exe; Parameters: --mods=teleportation; WorkingDir: {app}
+Name: {group}\mods\Vanilla (no mod); Filename: {app}\soundrts.exe; Parameters: --mods=; WorkingDir: {app}
 Name: {group}\Manual; Filename: {app}\doc\help-index.htm
 Name: {group}\Web site; Filename: http://jlpo.free.fr/soundrts
 Name: {group}\{cm:UninstallProgram, SoundRTS}; Filename: {uninstallexe}
