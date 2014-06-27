@@ -20,6 +20,7 @@ and 23
 resource_0_title 131
 resource_1_title 132
 food_title 133
+recommended_maps jl1 jl2 jl3 onj1
 
 ; units menus
 
