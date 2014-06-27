@@ -3,6 +3,7 @@ import os
 import re
 
 import config
+from lib.log import *
 import paths
 
 
@@ -62,7 +63,13 @@ def _get_language():
     if cfg:
         lang = cfg
     else:
-        lang = locale.getdefaultlocale()[0]
+        try:
+            lang = locale.getdefaultlocale()[0]
+        except ValueError:
+            lang = "en"
+            warning("Couldn't get the system language. "
+                    "To use another language, edit 'cfg/language.txt' "
+                    "and write 'pl' for example.")
     return _best_language_match(lang)
     
 
