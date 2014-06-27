@@ -1,4 +1,7 @@
-from game import *
+import os
+
+from campaign import Campaign
+from paths import MAPS_PATHS
 
 
 def _get_campaigns():
