@@ -118,17 +118,6 @@ class Application(object):
             warning("savegame file is not from this machine")
             voice.alert([1029]) # hostile sound
 
-##    def cmd_restore(self, args):
-##        self.disparaitre(True)
-##        self.client.cmd_restore(args)
-
-##    # restore
-##
-####        player.__dict__["client"] = client # avoid bug
-####                                           # (cf __setattr__ of Human)
-####                                           # (instead of:
-####                                           #     player.client = client)
-
     def training_menu_invite(self, ai_type):
         self.players.append(ai_type)
         self.menu.update_menu(self.build_training_menu_after_map())

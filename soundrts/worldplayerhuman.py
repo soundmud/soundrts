@@ -71,9 +71,5 @@ class Human(Player):
         self.ready = True
         self.update_eventuel()
 
-##    def cmd_restore(self, args):
-##        self.disparaitre(True)
-##        self.client.cmd_restore(args)
-
     def cmd_quit(self, unused_args):
         self.defeat()
