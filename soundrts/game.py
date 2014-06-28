@@ -177,10 +177,10 @@ class TrainingGame(_MultiplayerGame, _Savable):
 
     game_type_name = "training"
 
-    def __init__(self, map, computers):
+    def __init__(self, map, players):
         self.map = map
         self.me = DirectClient(config.login, self)
-        self.players = [self.me] + [DummyClient(x) for x in computers]
+        self.players = [self.me] + [DummyClient(x) for x in players[1:]]
 
 
 class MissionGame(_Game, _Savable):

@@ -19,6 +19,7 @@ from lib.log import *
 from clientmedia import *
 from clientmenu import *
 from clientserver import *
+from clientstyle import load_style, get_style
 from clientversion import *
 from commun import *
 import config
@@ -120,26 +121,44 @@ class Application(object):
 
     def training_menu_invite(self, ai_type):
         self.players.append(ai_type)
+        self.races.append("random_race")
         self.menu.update_menu(self.build_training_menu_after_map())
 
     def training_menu_after_map(self, m):
-        self.players = []
+        load_style(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with races defined in the map
+        self.players = [config.login]
+        self.races = ["random_race"]
         self.map = m
         self.menu = self.build_training_menu_after_map()
         self.menu.loop()
 
     def start_training_game(self):
-        TrainingGame(self.map, self.players).run()
+        game = TrainingGame(self.map, self.players)
+        game.races = self.races
+        game.run()
         return END_LOOP
+
+    def set_race(self, pn, r):
+        self.races[pn] = r
+        self.menu.update_menu(self.build_training_menu_after_map())
+
+    def _add_race_menu(self, menu, pn, p, pr):
+        if len(self.map.races) > 1:
+            for r in ["random_race"] + self.map.races:
+                if r != pr:
+                    menu.append([p,] + get_style(r, "title"),
+                                (self.set_race, (pn, r)))
 
     def build_training_menu_after_map(self):
         menu = Menu()
-        if len(self.players) + 1 < self.map.nb_players_max:
+        if len(self.players) < self.map.nb_players_max:
             menu.append([4058, 4258], (self.training_menu_invite, "easy"))
             menu.append([4058, 4257], (self.training_menu_invite,
                                        "aggressive"))
-        if len(self.players) + 1 >= self.map.nb_players_min:
+        if len(self.players) >= self.map.nb_players_min:
             menu.append([4059], self.start_training_game)
+        for pn, (p, pr) in enumerate(zip(self.players, self.races)):
+            self._add_race_menu(menu, pn, p, pr)
         menu.append([4048, 4060], END_LOOP)
         return menu
 
