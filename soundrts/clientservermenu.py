@@ -174,8 +174,7 @@ class GameAdminMenu(_BeforeGameMenu):
             menu.append([4059], (self.server.write_line, "start"))
         for pn, (p, pa, pr) in enumerate(self.registered_players):
             pa = int(pa)
-            for a in range(len(self.registered_players)):
-                a += 1
+            for a in range(1, len(self.registered_players) + 1):
                 if a != pa:
                     menu.append([4284, p, 4285] + nombre(a),
                                 (self.server.write_line,
