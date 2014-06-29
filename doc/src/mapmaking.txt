@@ -313,11 +313,11 @@ Trigger example:
 Cut_scene (action in a trigger)
 ...............................
 
+Note: the distinction between streaming sounds and preloaded sounds have been removed in SoundRTS 1.2. All the sounds are loaded in advance.
+
 A cut scene can be triggered in the middle of a game: when something is discovered, when reinforcements arrive, etc.
 
 "cut_scene 7500 7501" means: play the cut scene made up of the sounds 7500 and 7501.
-
-The sounds must be in the "stream" folder.
 
 Trigger example:
 
@@ -331,7 +331,9 @@ Timer and timer_coefficient (condition in a trigger)
 Syntax of a cut scene chapter file
 ''''''''''''''''''''''''''''''''''
 
-A cut scene chapter is an interruptible sequence of streaming sounds. When the cut scene chapter has been played, the next chapter is unlocked.
+Note: the distinction between streaming sounds and preloaded sounds have been removed in SoundRTS 1.2. All the sounds are loaded in advance.
+
+A cut scene chapter is an interruptible sequence of sounds. When the cut scene chapter has been played, the next chapter is unlocked.
 Do not confuse with shorter cut scenes run by a trigger during a mission when a condition is met (discovery of a square for example), or with the mission's introduction (or briefing).
 
 The cut scene chapters have only 3 lines. For example:
@@ -340,5 +342,5 @@ title 7000
 sequence 7500 7501 7502
 
 The first line is a keyword used to tell the game that this chapter is a cut scene and not a mission.
-The title line is used in the campaign menu. The sound must be a preloaded sound, not a streaming sound.
-The sequence line means: "play the sound 7500.ogg followed by 7501 and 7502 in streaming mode; if the player presses a key, skip the current sound and play the next one." 
+The title line is used in the campaign menu.
+The sequence line means: "play the sound 7500.ogg followed by 7501 and 7502; if the player presses a key, skip the current sound and play the next one." 
