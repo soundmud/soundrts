@@ -65,18 +65,15 @@ Hint : group your combat units. To do this, control them (with the S key) and ma
 - Use the defensive mode to scout. A unit in defensive mode will flee if it encouters strongers enemies. This way you can know how many enemies are in a square without sacrificing the scouting unit. The peasants are in defensive mode by default but the soldiers can be put in this mode too.
 - A fleeing unit forgets its orders. For example, a peasant who is gathering gold won't go back to work after fleeing, while if he fought and survived he would have went on gathering gold.
 
-3. Reference guide
-------------------
-
-3.1 Commands list
-^^^^^^^^^^^^^^^^^
+3. Commands list
+----------------
 
 The game consists in giving orders to your units and buildings. To give an order to a unit, you must control it first.
 If you press F10 during the game, you will go to the game menu.
 If you use Jaws or another screen review, you may have to unactivate it to access to the keyboard.
 
 Moving on the map
-,,,,,,,,,,,,,,,,,
+^^^^^^^^^^^^^^^^^
 
 The arrow keys make you move from a square to another square in the map. If a direct path exists between the current square and the new square, you will hear a noise depending on the type of the path (path or bridge). If no direct path exists, you will hear a collision noise and you will stay at the same square (press control + arrow keys to fly above an obstacle). If you don't know yet if a path exists (unknown square) then no noise will be heard.
 
@@ -88,7 +85,7 @@ Another way to move on the map is to press Page Up, which will lead you to the n
 When you control a unit and you press Space, you will automatically follow it when it moves from one square to another one.
 
 Choosing a unit to control
-,,,,,,,,,,,,,,,,,,,,,,,,,,
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To control the next local unit, press Q.
 
@@ -114,7 +111,7 @@ To control all the soldiers and the pesants, press Alt + S.
 When a key makes you control a group of local units, the same key combined with control makes you control a group from all the map. For example, to control all the footment, press Control + R or Control + F.
 
 Giving an order: main method
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To give an order to a controlled unit, the main method consists in choosing the order in a list and selecting the target if the action requires it.
 
@@ -125,12 +122,12 @@ If you must select a target, press Tab (and Shift Tab) to select the target. To 
 Press Enter to confirm your choice.
 
 Giving an order: alternate, faster method
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A second method to give an order consists in selecting the target with Tab (or the arrow keys) and then pressing Backspace. The default order will be given. For example, a peasant targetting a gold mine will exploit it if you press Backspace.
 
 Examining the situation
-,,,,,,,,,,,,,,,,,,,,,,,
+^^^^^^^^^^^^^^^^^^^^^^^
 
 To check the controlled unit (or the controlled group), press Space. Moreover, you will move to the square occupied by the unit (or the group leader).
 
@@ -141,7 +138,7 @@ To know the health of the current unit press V.
 To examine again an object selected with Tab, press Control.
 
 Giving an order without cancelling the previous ones (queuing commands)
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Hold down Shift before pressing Enter to confirm the order.
 
@@ -155,7 +152,7 @@ Here are some situations where queuing commands would be useful:
 - Example 2: you want a peasant to exploit several resources. Target a resource, press Shift + Backspace. Repeat. When a resource is exhausted, the peasant will exploit the next one.
 
 Giving an imperative order
-,,,,,,,,,,,,,,,,,,,,,,,,,,
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you hold down Control before pressing Enter or Backspace, the order will be imperative.
 
@@ -169,14 +166,14 @@ Here are some situations where an imperative command would be useful:
 You can queue imperative commands too. Hold down Control + Shift instead of Shift. 
 
 Attacking a friendly unit
-,,,,,,,,,,,,,,,,,,,,,,,,,
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Target the unit and press Shift Backspace: the units will attack the target.
 
 Exception: if the target is a damaged building (or a repairable unit like a catapult) and you are controlling workers, they will repair the target.
 
 Other commands
-,,,,,,,,,,,,,,
+^^^^^^^^^^^^^^
 
 F5 and F6: previous/next message in the history.
 Alt: interrupt the current sentence.
@@ -199,8 +196,6 @@ Alt + R reselects the previously given order. Useful to train the same unit or b
 Alt + G reselects the previously given order and validate it if no additional parameter is required. For example, to train 5 additional archers, press Alt + G 5 times.
 Since SoundRTS 1.1 alpha 3, Alt + A is the same than Alt + G.
 
-
-.. include:: stats.inc
 
 
 4. Multiplayer games

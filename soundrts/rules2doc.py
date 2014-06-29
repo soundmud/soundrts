@@ -123,10 +123,10 @@ def can_use(c, t):
 
 load_rules(open("res/rules.txt", "rU").read(),
            open("doc/rules_doc.txt", "rU").read())
-for cat in (("3.2 Units", ("worker", "soldier")),
-            ("3.3 Buildings", ("building", )),
-            ("3.4 Abilities", ("ability", )),
-            ("3.5 Upgrades and research", ("upgrade", ))):
+for cat in (("1. Units", ("worker", "soldier")),
+            ("2. Buildings", ("building", )),
+            ("3. Abilities", ("ability", )),
+            ("4. Upgrades and research", ("upgrade", ))):
     pr(underline(cat[0], "^"))
     for c in sorted(get_rule_classnames(), key=kcost):
         if get_rule(c, "class")[0] not in cat[1]:
