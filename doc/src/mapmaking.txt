@@ -289,8 +289,10 @@ The following commands are not used in a single player mission: nb_players_min, 
 Intro
 .....
 
-Example: "intro 7500 7501 7502" means: "before the game starts, play 7500.ogg, 7501.ogg and 7502.ogg".
-The intro command defines a sequence of sounds that will be played before the game starts. When the player presses a key, the next sound in the sequence is played. An intro can be for example a title with music, then a scene with a discussion between characters, then a briefing. After the intro, the game will tell the objectives of the mission.
+Note: a number can represent a text message defined in tts.txt (new in SoundRTS 1.2 alpha 9).
+
+Example: "intro 7500 7501 7502" means: "before the game starts, play 7500.ogg, 7501.ogg and 7502.ogg (or text if defined in tts.txt)".
+The intro command defines a sequence of sounds and texts that will be played before the game starts. When the player presses a key, the next element in the sequence is played. An intro can be for example a title with music, then a scene with a discussion between characters, then a briefing. After the intro, the game will tell the objectives of the mission.
 
 Add_objective
 .............
@@ -315,6 +317,8 @@ Cut_scene (action in a trigger)
 
 Note: the distinction between streaming sounds and preloaded sounds have been removed in SoundRTS 1.2. All the sounds are loaded in advance.
 
+Note: a number can represent a text message defined in tts.txt (new in SoundRTS 1.2 alpha 9).
+
 A cut scene can be triggered in the middle of a game: when something is discovered, when reinforcements arrive, etc.
 
 "cut_scene 7500 7501" means: play the cut scene made up of the sounds 7500 and 7501.
@@ -332,6 +336,8 @@ Syntax of a cut scene chapter file
 ''''''''''''''''''''''''''''''''''
 
 Note: the distinction between streaming sounds and preloaded sounds have been removed in SoundRTS 1.2. All the sounds are loaded in advance.
+
+Note: a number can represent a text message defined in tts.txt (new in SoundRTS 1.2 alpha 9).
 
 A cut scene chapter is an interruptible sequence of sounds. When the cut scene chapter has been played, the next chapter is unlocked.
 Do not confuse with shorter cut scenes run by a trigger during a mission when a condition is met (discovery of a square for example), or with the mission's introduction (or briefing).

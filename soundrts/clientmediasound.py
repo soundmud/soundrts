@@ -498,15 +498,10 @@ class SoundCache(object):
         self.map_txt = {}
         
     def play_sequence(self, names):
+        from clientmediavoice import voice # outsourcing the job...
         sound_stop()
-        for n in names:
-            self.play(n)
-            while pygame.mixer.get_busy():
-                time.sleep(.1)
-                for e in pygame.event.get():
-                    if e.type == KEYDOWN:
-                        sound_stop()
-                        return
+        for name in names:
+            voice.important([name]) # each element is interruptible
 
 
 def _incr_value(v, incr):

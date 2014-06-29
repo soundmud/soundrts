@@ -194,7 +194,7 @@ class MissionGame(_Game, _Savable):
         self.players = [self.me]
 
     def pre_run(self):
-        if self.world.intro: # only in missions (streaming sound)
+        if self.world.intro:
             sounds.play_sequence(self.world.intro)
 
     def post_run(self):
