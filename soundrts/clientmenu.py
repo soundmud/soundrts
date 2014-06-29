@@ -1,3 +1,4 @@
+import os
 import re
 import sys
 import time
@@ -8,6 +9,7 @@ from pygame.locals import *
 from clienthelp import help_msg
 from clientmedia import *
 from commun import *
+from paths import TMP_PATH
 
 
 def string_to_msg(s):
@@ -53,6 +55,8 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default=""):
             voice.update()
         voice.update() # XXX useful for SAPI
 
+def _remember_path(menu_name):
+    return os.path.join(TMP_PATH, menu_name + ".txt")
 
 END_LOOP = 1
 
@@ -61,7 +65,7 @@ class Menu(object):
 
     server = None
 
-    def __init__(self, title=None, choices=None, default_choice_index=0):
+    def __init__(self, title=None, choices=None, default_choice_index=0, remember=None):
         if not title:
             title = []
         self.title = title
@@ -70,6 +74,12 @@ class Menu(object):
         self.choices = choices
         self.choice_index = None
         self.default_choice_index = default_choice_index
+        self.remember = remember
+        if self.remember is not None:
+            try:
+                self._remembered_choice = open(_remember_path(remember)).read()
+            except:
+                self._remembered_choice = ""
 
     def _say_choice(self):
         voice.item(self.choices[self.choice_index][0])
@@ -145,6 +155,8 @@ class Menu(object):
 
     def append(self, label, action):
         self.choices.append((label, action))
+        if self.remember is not None and self._remembered_choice == repr(label):
+            self.default_choice_index = len(self.choices) - 1
 
     def update_menu(self, menu):
         debug("update_menu...")
@@ -164,14 +176,8 @@ class Menu(object):
             if old_choice in self.choices:
                 self.choice_index = self.choices.index(old_choice)
 
-    def choice(self):
-        try:
-            return self.choices[self.choice_index][1]
-        except (IndexError, TypeError):
-            return None
-
     def _execute_choice(self):
-        action = self.choice()
+        label, action = self.choices[self.choice_index]
         if hasattr(action, "run"):
             if action.run() == END_LOOP:
                 self.end_loop = True
@@ -183,7 +189,14 @@ class Menu(object):
                 self.end_loop = True
         elif action == END_LOOP:
             self.end_loop = True
-        self.reset()
+        if self.remember is not None and action is not None:
+            open(_remember_path(self.remember), "w").write(repr(label))
+            # default_choice_index might be useful soon
+            # for example: ServerMenu._get_creation_submenu()
+            self.default_choice_index = self.choice_index
+        else:
+            self.default_choice_index = 0
+        self.choice_index = None
 
     def _try_to_get_choice(self, e):
         if e.type == QUIT:
@@ -218,9 +231,3 @@ class Menu(object):
         self.end_loop = False
         while not self.end_loop:
             self.run()
-
-    def reset(self):
-        self.choice_index = None
-        self.default_choice_index = 0
-##        self.title = []
-##        self.choices = []

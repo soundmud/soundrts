@@ -86,7 +86,7 @@ class ServerMenu(_ServerMenu):
              default_choice_index=1).run() # XXX not a ServerMenu
         
     def _get_creation_submenu(self):
-        menu = Menu([4055])
+        menu = Menu([4055], remember="mapmenu")
         for n, m in enumerate(self.maps):
             menu.append(m, (self._create_game, (n, m)))
         menu.append([4048], None)

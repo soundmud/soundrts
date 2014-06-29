@@ -163,7 +163,7 @@ class Application(object):
         return menu
 
     def training_menu(self):
-        menu = Menu([4055])
+        menu = Menu([4055], remember="mapmenu")
         for m in worlds_multi():
             menu.append(m.title, (self.training_menu_after_map, m))
         menu.append([4041], None)
