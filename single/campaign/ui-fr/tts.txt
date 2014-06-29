@@ -1,0 +1,3 @@
+7500 Une horde d'ennemis est arrivée de nulle part et détruit tout sur son passage ! Il faut faire quelque chose !
+7501 Votre seigneur vous a envoyé construire une base près de la frontière. Ne vous éloignez pas trop car des ennemis ont été vus dans les environs.
+7502 Bien joué!
