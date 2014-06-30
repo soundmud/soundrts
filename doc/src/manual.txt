@@ -235,11 +235,15 @@ Tip: to play a single player game with a computer as an ally, launch a private s
 4.4 How to make your server accessible to other players
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Here are some hints if nobody can connect to your server.
+To check if your server is accessible from outside your local network, wait for a player to connect, or ideally ask a friend to connect from outside. As a last resort, you can also use a port forwarding tester website (google "port forwarding tester" for example). Be cautious: I can't guarantee that this kind of website isn't malicious! The web site shouldn't require you to install a tool, for example.
 
-If you are behind a firewall you must allow the port 2500 (in TCP).
+In most cases you will have to configure your router to forward incoming TCP connections through port 2500 to the local IP address of your server.
 
-Moreover, if you use a router, you must add a virtual server for the port 2500 to the IP address of your server. Without that, the router won't know to which machine it will forward the packets. In the case of a virtual server, you may need to give a fixed IP to your server with DHCP.
+You might also have to configure DHCP in the router to make sure that your server have always the same local IP address.
+
+If you are behind a firewall, you might have to make sure that incoming TCP connections through port 2500 are allowed.
+
+About standalone servers: even if your standalone server is accessible from outside, you might not be able to connect to it from your local network using "choose a server in a list". "Enter the IP address of the server" works in most cases, but it doesn't mean that the server is accessible from outside.
 
 4.5 How to download a map from a server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
