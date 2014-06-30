@@ -215,10 +215,14 @@ class World(object):
                     collision_debug = None
 #                    collision_debug = copy.deepcopy(self.collision)
                     if p.is_local_human(): # avoid unnecessary copies
+                        if p.cheatmode:
+                            observed_before_squares = self.squares
+                        else:
+                            observed_before_squares = p.observed_before_squares
                         p.push("voila", self.time,
                                _copy(p.memory), _copy(p.perception),
                                p.observed_squares.keys(),
-                               p.observed_before_squares,
+                               observed_before_squares,
                                collision_debug)
                 except:
                     exception("")
