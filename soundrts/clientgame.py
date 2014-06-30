@@ -196,8 +196,21 @@ class GameInterface(object):
 
     target = None
 
-    def priority(self, o):
-        return [len(o.title), self.distance(o)]
+    def _priority(self, o):
+        p = 10
+        if self.mode == "parametre_ordre":
+            if self.order.startswith("build") and o.is_a_building_land:
+                p = 0
+        else:
+            if o.qty > 0:
+                p = 1 + o.resource_type / 100.0 # less than 100 resource types
+            elif o.is_repairable and o.hp < o.hp_max:
+                p = 2
+            elif o.is_a_building_land:
+                p = 3
+            elif hasattr(o, "other_side"):
+                p = 4
+        return [p, len(o.title), self.distance(o)]
 
     def is_visible(self, o):
         if self.place is not o.place or not o.title:
@@ -224,7 +237,7 @@ class GameInterface(object):
                 not types or getattr(o, "type_name", None) in types
                 or "useful" in types and o.is_a_useful_target()):
                 choices.append(o)
-        choices.sort(key=self.priority)
+        choices.sort(key=self._priority)
         if inc == -1:
             choices.reverse()
         return choices
