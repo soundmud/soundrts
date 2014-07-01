@@ -154,6 +154,14 @@ class Square(object):
     lcombattants = []
     last_information = 0
 
+    def find_nearest_meadow(self, unit):
+        def _d(o):
+            # o.id to make sure that the result is the same on any computer
+            return (int_distance(o.x, o.y, unit.x, unit.y), o.id)
+        meadows = sorted([o for o in self.objects if isinstance(o, Meadow)], key=_d)
+        if meadows:
+            return meadows[0]
+        
     def find_and_remove_meadow(self, item_type):
         if item_type.is_buildable_anywhere:
             return self.x, self.y

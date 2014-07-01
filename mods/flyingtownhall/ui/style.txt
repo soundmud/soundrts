@@ -1,0 +1,4 @@
+def flying_townhall
+is_a townhall
+title 7000
+move 1317 1318
