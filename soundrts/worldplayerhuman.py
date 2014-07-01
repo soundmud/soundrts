@@ -3,6 +3,8 @@ from worldplayerbase import *
 
 class Human(Player):
 
+    observer_if_defeated =True
+
     def update_attack_squares(self, unit):
         pass
 
@@ -72,4 +74,4 @@ class Human(Player):
         self.update_eventuel()
 
     def cmd_quit(self, unused_args):
-        self.defeat()
+        self.defeat(force_quit=True)

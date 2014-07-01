@@ -439,3 +439,7 @@
 4309 carrière
 
 4310 race aléatoire
+
+4311 a été vaincu
+4312 Vous avez perdu.
+4313 Vous êtes à présent en mode observateur.

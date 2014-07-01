@@ -371,32 +371,6 @@ class GameInterface(object):
     def gm_save(self):
             self.server.save_game()
 
-##    def gm_restore(self):
-##            self.server.write_line("restore")
-
-    def get_score_msgs(self):
-        if self.player.has_victory:
-            victory_or_defeat = [149]
-        else:
-            victory_or_defeat = [150]
-        t = self.player.world.time / 1000
-        m = int(t / 60)
-        s = int(t - m * 60)
-        msgs = []
-        msgs.append(victory_or_defeat + [107] + nombre(m) + [65] + nombre(s) + [66]) # in ... minutes and ... seconds
-        msgs.append(nombre(self.player.nb_units_produced) + [130, 4023, 9998]
-                    + nombre(self.player.nb_units_lost) + [146, 9998]
-                    + nombre(self.player.nb_units_killed) + [145])
-        msgs.append(nombre(self.player.nb_buildings_produced) + [4025, 4022, 9998]
-                    + nombre(self.player.nb_buildings_lost) + [146, 9998]
-                    + nombre(self.player.nb_buildings_killed) + [145])
-        res_msg = []
-        for i, _ in enumerate(self.player.resources):
-            res_msg += nombre(self.player.gathered_resources[i] / PRECISION) + get_style("parameters", "resource_%s_title" % i) + [4256, 9998] \
-                        + nombre(self.player.consumed_resources()[i] / PRECISION) + [4024, 9999]
-        msgs.append(res_msg[:-1])
-        msgs.append([4026] + nombre(self.player.get_score()) + [2008])
-        return msgs
 
     # clock
 

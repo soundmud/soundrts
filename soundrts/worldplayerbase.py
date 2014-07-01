@@ -41,7 +41,9 @@ class Player(object):
     used_food = 0
     food = 0
     neutral = False
+    observer_if_defeated = False
     has_victory = False
+    has_been_defeated = False
     race = "human_race"
 
     group = ()
@@ -78,6 +80,10 @@ class Player(object):
         self._enemy_menace = {}
         self._enemy_menace_time = {}
         self.enemy_doors = set()
+
+    @property
+    def is_playing(self):
+        return not (self.has_victory or self.has_been_defeated)
 
     def react_arrives(self, someone, door=None):
         if door is not None:
@@ -376,11 +382,13 @@ class Player(object):
         self.gathered_resources[_type] += qty
 
     def run_triggers(self):
+        if not self.is_playing:
+            return
         for t in self.triggers[:]:
             condition, action = t
             if self.my_eval(condition):
                 self.my_eval(action)
-                if self.has_quit(): # after victory or defeat
+                if not self.is_playing: # after victory or defeat
                     break
                 else:
                     self.triggers.remove(t)
@@ -477,10 +485,12 @@ class Player(object):
                 multiplicator = 1
             
     def lang_no_enemy_left(self, unused_args):
-        return not [p for p in self.world.players if self.is_an_enemy(p)]
+        return not [p for p in self.world.players if self.is_an_enemy(p)
+                    and p.is_playing]
 
     def lang_no_enemy_player_left(self, unused_args):
-        return not [p for p in self.world.true_players() if self.is_an_enemy(p)]
+        return not [p for p in self.world.true_players() if self.is_an_enemy(p)
+                    and p.is_playing]
 
     def lang_no_unit_left(self, unused_args):
         return not self.units
@@ -494,23 +504,80 @@ class Player(object):
     def consumed_resources(self):
         return [self.gathered_resources[i] - self.resources[i] for i, c in enumerate(self.resources)]
 
-    def get_score(self):
+    def _get_score(self):
         score = self.nb_units_produced - self.nb_units_lost + self.nb_units_killed + self.nb_buildings_produced - self.nb_buildings_lost + self.nb_buildings_killed
         for i, _ in enumerate(self.resources):
             score += (self.gathered_resources[i] + self.consumed_resources()[i]) / PRECISION
         return score
 
-    def victory(self):
-        self.has_victory = True
-        self.quit_game()
+    def _get_score_msgs(self):
+        if self.has_victory:
+            victory_or_defeat = [149]
+        else:
+            victory_or_defeat = [150]
+        t = self.world.time / 1000
+        m = int(t / 60)
+        s = int(t - m * 60)
+        msgs = []
+        msgs.append(victory_or_defeat + [107] + nombre(m) + [65]
+                    + nombre(s) + [66]) # in ... minutes and ... seconds
+        msgs.append(nombre(self.nb_units_produced) + [130, 4023, 9998]
+                    + nombre(self.nb_units_lost) + [146, 9998]
+                    + nombre(self.nb_units_killed) + [145])
+        msgs.append(nombre(self.nb_buildings_produced) + [4025, 4022, 9998]
+                    + nombre(self.nb_buildings_lost) + [146, 9998]
+                    + nombre(self.nb_buildings_killed) + [145])
+        res_msg = []
+        for i, _ in enumerate(self.resources):
+            res_msg += nombre(self.gathered_resources[i] / PRECISION) \
+                       + get_style("parameters", "resource_%s_title" % i) \
+                       + [4256, 9998] \
+                       + nombre(self.consumed_resources()[i] / PRECISION) \
+                       + [4024, 9999]
+        msgs.append(res_msg[:-1])
+        msgs.append([4026] + nombre(self._get_score()) + [2008])
+        return msgs
 
-    def defeat(self):
-        self.quit_game()
+    score_msgs = ()
+    
+    def store_score(self):
+        self.score_msgs = self._get_score_msgs()
+
+    def victory(self):
+        for p in self.world.players:
+            if p.is_playing:
+                if p in self.allied_victory:
+                    p.has_victory = True
+                    p.store_score()
+                else:
+                    p.defeat()
+
+    def defeat(self, force_quit=False):
+        self.has_been_defeated = True
+        self.store_score()
+        if self in self.world.true_players():
+            self.broadcast_to_others_only([self.name, 4311]) # "defeated"
+        for u in self.units[:]:
+            u.delete()
+        if force_quit:
+            self.quit_game()
+        elif self.observer_if_defeated and self.world.true_playing_players:
+            the_game_will_probably_continue = False
+            allied_victory = self.world.true_playing_players[0].allied_victory
+            for p in self.world.true_playing_players:
+                if p not in allied_victory:
+                    the_game_will_probably_continue = True
+                    break
+            if the_game_will_probably_continue:
+                self.send_voice_important([4312, 4313]) # "defeated" "observer mode"
+            else:
+                self.send_voice_important([4312]) # "defeated"
+            if not self.cheatmode:
+                self.cmd_toggle_cheatmode()
+        else:
+            self.quit_game()
 
     def lang_victory(self, unused_args):
-        for p in self.world.players:
-            if self.is_an_enemy(p):
-                p.defeat() # everybody else lose
         self.victory()
 
     def lang_defeat(self, unused_args):
@@ -533,7 +600,7 @@ class Player(object):
             del self.objectives[n]
             if self.objectives == {}:
                 self.send_voice_important([4270])
-                self.lang_victory(None)
+                self.victory()
 
     def lang_ai(self, args):
         self.set_ai(args[0])
@@ -602,7 +669,7 @@ class Player(object):
         else:
             return None
 
-    def cmd_toggle_cheatmode(self, unused_args):
+    def cmd_toggle_cheatmode(self, unused_args=None):
         if self.cheatmode:
             self.cheatmode = False
             self._update_dict(self.observed_squares, self.world.squares, -1)

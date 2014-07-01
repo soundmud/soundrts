@@ -227,6 +227,11 @@ class World(object):
                 except:
                     exception("")
 
+        # if no "true" player is playing any more, end the game
+        if not self.true_playing_players:
+            for p in self.players:
+                p.quit_game()
+
     ground = []
     global_food_limit = GLOBAL_FOOD_LIMIT
 
@@ -610,6 +615,10 @@ class World(object):
 
     def true_players(self):
         return [p for p in self.players if not p.neutral]
+
+    @property
+    def true_playing_players(self):
+        return [p for p in self.true_players() if p.is_playing]
 
     @property
     def food_limit(self):

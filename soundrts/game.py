@@ -69,7 +69,7 @@ class _Game(object):
         self.say_score()
 
     def say_score(self):
-        for msg in self.interface.get_score_msgs():
+        for msg in self.me.player.score_msgs:
             voice.info(msg)
         voice.flush()
 
