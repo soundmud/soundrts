@@ -33,7 +33,7 @@
 79        em uma clareira rodeada de árvores
 80        bosque
 81        mina de ouro
-82        edifício principal
+82        prefeitura
 83        fazenda
 84        um caminho
 85        operário
@@ -122,7 +122,7 @@
 2028        F5 e F6
 2029        histórico
 2030        Alt
-2031        interrompe a fala
+2031        interromper a fala
 2032        escape
 2033        cancelar
 2034        shift
@@ -236,9 +236,9 @@
 4049        O servidor não pode conectar-se ao metaservidor. É possível que sua conexão à internet esteja falhando.
 4051        adeus
 4052        Aperte Tab para selecionar, e aperte Enter para confirmar.
-4053        Juntar-se à partida de
+4053        Aceitar o convite de
 4054 rejuntar-se à partida de
-4055        iniciar
+4055        iniciar jogo em
 4056        bem-vindo
 4057        Erro: muitas partidas
 4058        convidar
@@ -246,7 +246,7 @@
 4060        cancelar a partida
 4061        sair desta partida
 4062        a partida começará em 5 segundos
-4063        a partida irá começar quando o organizador decidir
+4063        a partida irá começar quando o organizador estiver pronto
 4064        aperte enter para confirmar
 
 4066        aperte tab várias vezes para selecionar cada objeto visível
@@ -261,12 +261,11 @@
 4076        ir ao menu anterior
 4077        não há servidores registrados na Internet agora
 4078        servidores ativos
-4079        usando a mesma versão do jogo. A que servidor você deseja conectar?
+4079        usam uma versão compatível. A que servidor você deseja conectar?
 4080        erro: impossível iniciar o servidor
-4081        Servidor não disponível. O servidor está fechado ou bloqueado por
-um firewall.
+4081        Servidor não disponível. O servidor está fechado ou bloqueado por um firewall.
 4082        falha: Resposta inesperada do servidor. Não é um servidor válido de Sound RTS
-4083        Conexão recusada pelo servidor. Não é um servidor válido de Sound RTS.
+4083        Erro: Conexão recusada pelo servidor. Não é um servidor válido de Sound RTS.
 4084        ou seu nome de usuário foi recusado
 4085        erro na conexão com o servidor
 4086        menu de opções
@@ -285,7 +284,7 @@ um firewall.
 
 4112        salvar partida
 4113        carregar partida
-4114        contra o computador
+4114        Jogue contra o computador no mapa
 4115        computador contra computador
 
 4118        voltar
@@ -303,7 +302,7 @@ um firewall.
 4206        tela ativada
 4207        tela desativada
 4208        desconhecido
-4209        nevoeiro de guerra
+4209        no nevoeiro de guerra
 4210        F10 para acessar o menu
 4211        modo primeira pessoa
 4212        modo mapa
@@ -332,22 +331,22 @@ um firewall.
 4235        Digite seu novo nome de usuário
 4236        use somente números e letras
 4237        nome de usuário incorreto
-4238        nome de usuário em uso
+4238        o nome de usuário atual foi mantido
 4239        novo nome de usuário
 4240        conectou
 4241        juntou-se
 4242        jogadores em
-4243        te convida
+4243        te convida para
 4244        é necessário mais jogadores para começar. o mínimo é de
 4245        nome de usuário atual
 4246        limite de população alcançado.
 4247        pontos de mana de
 4248        investir em
 4249        super curativo
-4250        teletranspórte
+4250        teletransporte
 4251        à
 4252        não há mana suficiente.
-4253        porcentagem do volume
+4253        porcento do volume
 4254        velocidade dos cavalos
 4255        define o ponto de encontro para as novas unidades
 4256        recolhido
@@ -366,11 +365,11 @@ um firewall.
 4269        objetivo cumprido
 4270        missão cumprida
 4271        capítulo
-4272        missões em seqüência
+4272        prólogo
 4273        encerramento
 4274        conversão
 4275        torre de monitoramento
-4276        torre com arqueiros
+4276        torre de guarda
 4277        torre com canhões
 4278        carregar
 4279        carregar todos de
@@ -449,3 +448,7 @@ um firewall.
 4309 rocha
 
 4310 raça aleatória
+
+4311 foi derrotado
+4312 Você foi derrotado.
+4313 Você está agora no modo de observação.
