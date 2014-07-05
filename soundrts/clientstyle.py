@@ -152,6 +152,7 @@ def _read_to_dict(s, d):
             "is_a_cloaker",
             "universal_notification",
             "presence",
+            "is_ballistic",
             ):
             d[name][words[0]] = int(words[1])
         elif words[0] in PRECISION_STATS:

@@ -39,6 +39,15 @@ unit properties
 
 Note: a unit can also be a building.
 
+is_ballistic
+============
+
+New in SoundRTS 1.2 alpha 9.
+
+`is_ballistic 1`
+
+The unit can attack units located in an adjacent square if their altitude is lower. Units having special range (like catapults) do not need this property because they can attack units in an adjacent square, even if the altitude of the target is higher.
+
 storage_bonus
 =============
 

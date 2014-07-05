@@ -48,6 +48,13 @@ class Square(object):
 ##        self.spt = {}
 
     @property
+    def height(self):
+        if self.high_ground:
+            return 1
+        else:
+            return 0
+
+    @property
     def neighbours(self):
         result = []
         for dc, dr in ((0, 1), (0, -1), (1, 0), (-1, 0)):

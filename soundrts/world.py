@@ -304,6 +304,7 @@ class World(object):
                 square = Square(self, col, row, self.square_width)
                 self.grid[square.name] = square
                 self.grid[(col, row)] = square
+                square.high_ground = square.name in self.high_grounds
         xmax = self.nb_columns * self.square_width
         res = COLLISION_RADIUS * 2 / 3
         self.collision = {"ground": collision.CollisionMatrix(xmax, res),
@@ -472,7 +473,9 @@ class World(object):
         self.players_starts = []
         self.starting_units = []
 
-        squares_words = ["starting_squares", "additional_meadows", "remove_meadows"]
+        squares_words = ["starting_squares",
+                         "additional_meadows", "remove_meadows",
+                         "high_grounds"]
 
         self.square_width = 12 # default value
         self.nb_lines = 0
@@ -487,6 +490,7 @@ class World(object):
         self.starting_squares = []
         self.additional_meadows = []
         self.remove_meadows = []
+        self.high_grounds = []
 
         self.starting_resources = [0 for _ in range(self.nb_res)]
         self.nb_players_min = 1

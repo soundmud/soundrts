@@ -77,6 +77,7 @@ class Creature(Entity):
     damage_radius = 0
     target_types = ["ground"]
     range = None
+    is_ballistic = 0
     special_range = 0
     cooldown = None
     next_attack_time = 0
@@ -166,12 +167,20 @@ class Creature(Entity):
     def contains_enemy(self, player): # XXXXXXXXXX required by transport
         return False
 
+    @property
+    def height(self):
+        if self.airground_type == "air":
+            return 2
+        else:
+            return self.place.height
+
     def get_observed_squares(self):
         if self.is_inside or self.place is None:
             return []
         result = [self.place]
-        if self.sight_range == 1:
-            result.extend(self.place.neighbours)
+        for sq in self.place.neighbours:
+            if self.height > sq.height or self.sight_range == 1 and self.height >= sq.height:
+                result.append(sq)
         return result
 
     @property
@@ -272,14 +281,15 @@ class Creature(Entity):
         self.cible = (self.place.x, self.place.y)
 
     def _near_enough_to_use(self, target):
-        # catapult
-        if self.is_an_enemy(target) and self.special_range == 1:
-            return self.can_attack(target)
-        # other unit
-        if target.place != self.place:
-            return False
-        d = target.use_range(self)
-        return square_of_distance(self.x, self.y, target.x, target.y) < d * d
+        if self.is_an_enemy(target):
+            if self.range and target.place is self.place:
+                d = target.use_range(self)
+                return square_of_distance(self.x, self.y, target.x, target.y) < d * d
+            elif self.is_ballistic or self.special_range:
+                return self.can_attack(target)
+        elif target.place is self.place:
+            d = target.use_range(self)
+            return square_of_distance(self.x, self.y, target.x, target.y) < d * d
 
     def be_used_by(self, actor):
         if actor.is_an_enemy(self):
@@ -344,19 +354,16 @@ class Creature(Entity):
         else:
             self.action_complete()
 
-    def act_attack(self):
-        if self.special_range == 1: # catapult
-            if self.place.is_near(getattr(self.cible, "place", None)):
-                self.aim(self.cible)
-            else:
-                self.action_complete()
-        else: # other
-            if self.cible in self.place.objects:
-                self.action_reach_and_use()
-            elif self.airground_type == "air":
-                self.action_fly_to_remote_target()
-            else:
-                self.action_complete()
+    def act_attack(self): # without moving to another square
+        if self.range and self.cible in self.place.objects:
+            self.action_reach_and_use()
+        elif self.is_ballistic and self.place.is_near(getattr(self.cible, "place", None)) \
+             and self.height > self.cible.height:
+            self.aim(self.cible)
+        elif self.special_range and self.place.is_near(getattr(self.cible, "place", None)):
+            self.aim(self.cible)
+        else:
+            self.action_complete()
 
     def update(self):
         assert isinstance(self.hp, int)
@@ -383,7 +390,9 @@ class Creature(Entity):
             self._execute_orders()
         else:
             # catapult try to find enemy # XXXXX later: do this in triggers
-            if self.special_range == 1 and self.action_type != "attack":
+            if self.special_range and self.action_type != "attack": # XXXX if self.special_range or self.range?
+                self.choose_enemy()
+            if self.is_ballistic and self.height == 1 and self.action_type != "attack":
                 self.choose_enemy()
             # execute orders if the unit is not fighting (targetting an enemy)
             if self.orders and self.action_type != "attack":
@@ -481,7 +490,7 @@ class Creature(Entity):
 
     # choose enemy
 
-    def can_attack(self, other):
+    def can_attack(self, other): # without moving to another square
         # assert other in self.player.perception # XXX false
         # assert not self.is_inside # XXX not sure
 
@@ -495,10 +504,13 @@ class Creature(Entity):
             return False
         if not other.is_vulnerable:
             return False
-        if self.special_range == 1:
-            return self.place.is_near(other.place)
-        elif self.range is not None:
-            return other.place == self.place
+        if self.range and other.place is self.place:
+            return True
+        if self.place.is_near(other.place):
+            if self.special_range:
+                return True
+            if self.is_ballistic and self.height > other.height:
+                return True
 
 ##    def _can_be_reached_by(self, player):
 ##        for u in player.units:
@@ -531,18 +543,22 @@ class Creature(Entity):
             self.cible = someone
             self.notify("attack") # XXX move this into set_cible()?
             return
-        if self.special_range == 1:
+        if self.range and self._choose_enemy(self.place):
+            return
+        if self.is_ballistic:
+            for p in self.place.neighbours:
+                if self.height > p.height and self._choose_enemy(p):
+                    break
+        if self.special_range:
             for p in self.place.neighbours:
                 if self._choose_enemy(p):
                     break
-        else:
-            self._choose_enemy(self.place)
 
     #
 
     def on_wounded(self, attacker, notify):
-        if attacker.special_range == 1 and self.player is not None:
-            self.player.observe(attacker) # useful for catapults
+        if self.player is not None:
+            self.player.observe(attacker)
         # Why level 0 only for "wounded,type,0":
         # maybe a single sound would be better: simpler,
         # allowing more levels of upgrade, and examining

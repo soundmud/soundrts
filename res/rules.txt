@@ -267,6 +267,7 @@ armor 0
 cooldown 1.5
 target_types ground air
 range 3
+is_ballistic 1
 damage 2.5
 can_upgrade_to darkarcher
 
@@ -283,6 +284,7 @@ armor 0
 cooldown 3
 target_types ground air
 range 5
+is_ballistic 1
 damage 10
 is_invisible 1
 
@@ -296,6 +298,7 @@ armor 0
 cooldown 1.5
 target_types ground air
 range 3
+is_ballistic 1
 damage 2.5
 corpse 0
 is_healable 0
@@ -578,6 +581,7 @@ hp_max 43;  130/3
 time_cost 140
 sight_range 1 ; can see the adjacent squares
 range 5
+is_ballistic 1
 cooldown 1.5
 damage 6 ; 6-16
 target_types ground air
@@ -593,6 +597,7 @@ hp_max 53;  160/3
 time_cost 190
 sight_range 1 ; can see the adjacent squares
 range 6
+is_ballistic 1
 cooldown 4
 damage 8 ; 10-50
 target_types ground

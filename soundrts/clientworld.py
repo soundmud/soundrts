@@ -541,6 +541,8 @@ class GridView(object):
                 else:
                     color = (0, 0, 0)
                     continue
+                if sq.high_ground:
+                    color = (color[0]*2, color[1]*2, color[2]*2)
                 draw_rect(color, x, y - self.square_view_height, self.square_view_width, self.square_view_height, 0)
         # grid
         color = (100, 100, 100)

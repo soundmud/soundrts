@@ -2,7 +2,7 @@ import unittest
 
 from soundrts.commun import PRECISION
 from soundrts import worldclient
-from soundrts.multimaps import worlds_multi
+from soundrts.mapfile import Map
 ###from server import *
 from soundrts.world import *
 ##from worldbuilding import *
@@ -41,7 +41,7 @@ class ComputerTestCase(unittest.TestCase):
 ##    def set_up(self):
 ##        w = World([])
 ##        w.introduction = []
-##        w.load_and_build_map(worlds_multi()[0])
+##        w.load_and_build_map(Map("soundrts/tests/jl1.txt"))
 ##        cl = _DummyClient()
 ##        cp = Computer(w, cl, False)
 ##        w.players_starts[0][1].append(("b1", w.unit_class("new_flyingmachine")))
@@ -55,7 +55,7 @@ class ComputerTestCase(unittest.TestCase):
     def set_up(self, alliance=(1, 2), cloak=False):
         w = World([])
         w.introduction = []
-        w.load_and_build_map(worlds_multi()[0])
+        w.load_and_build_map(Map("soundrts/tests/jl1.txt"))
         w.players_starts[0][1].append(("b1", w.unit_class("new_flyingmachine")))
         w.players_starts[0][1].append(("b1", w.unit_class("flyingmachine")))
         w.players_starts[0][1].append(("b1", w.unit_class("dragon")))
@@ -503,7 +503,7 @@ class PlayerBaseTestCase(unittest.TestCase):
     def set_up(self, alliance=(1, 2), cloak=False):
         w = World([])
         w.introduction = []
-        w.load_and_build_map(worlds_multi()[0])
+        w.load_and_build_map(Map("soundrts/tests/jl1.txt"))
         w.players_starts[1][1].append(("b4", w.unit_class("lumbermill")))
         cl = DummyClient()
         cl2 = DummyClient()

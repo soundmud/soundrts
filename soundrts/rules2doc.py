@@ -156,6 +156,10 @@ for cat in (("1. Units", ("worker", "soldier")),
         pr(_int("- damage radius (area of effect): ", "damage_radius", "meters"))        
         pr(_int("- attack upgrade bonus: ", "damage_bonus", "hit points"))
         pr(_int("- attack range: ", "range", "meters"))
+        if get_rule(c, "special_range") == 1:
+            pr("- can attack units located in an adjacent square")
+        if get_rule(c, "is_ballistic") == 1:
+            pr("- can attack units located in an adjacent square if their altitude is lower (new in SoundRTS 1.2 alpha 9).")
         pr(_int("- speed: ", "speed", ("meter per second", "meters per second")))
         pr(_sint("- food provided:", "food_provided", "rations"))
         pr(_sint("- healing power:", "heal_level", ""))

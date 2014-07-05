@@ -1303,12 +1303,14 @@ class GameInterface(object):
     def say_square(self, place, prefix=[]):
         if place is None:
             return
+        postfix = []
         if place in self.scouted_squares:
-            postfix = []
+            if place.high_ground: postfix += [4314] # "plateau"
         elif place in self.scouted_before_squares:
-            postfix = [4209] # "in the fog"
+            if place.high_ground: postfix += [4314] # "plateau"
+            postfix += [4209] # "in the fog"
         else:
-            postfix = [4208] # "unknown"
+            postfix += [4208] # "unknown"
         voice.item(prefix + place.title + postfix + self.place_summary(place))
 
     def _select_and_say_square(self, square, prefix=[]):

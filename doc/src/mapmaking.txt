@@ -145,6 +145,13 @@ Remove_meadows
 
 remove_meadows do the opposite of additional_meadows.
 
+High_grounds
+''''''''''''
+
+New in SoundRTS 1.2 alpha 9.
+
+"high_grounds a2 b7" means: "a2 and b7 will have a higher altitude"
+
 
 Defining the starting resources of the players
 """"""""""""""""""""""""""""""""""""""""""""""
