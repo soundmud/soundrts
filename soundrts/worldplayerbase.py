@@ -80,6 +80,7 @@ class Player(object):
         self._enemy_menace = {}
         self._enemy_menace_time = {}
         self.enemy_doors = set()
+        self._affected_squares = []
 
     @property
     def is_playing(self):
@@ -288,7 +289,7 @@ class Player(object):
                 self.free_resources(project)
 
     def send_alert(self, square, sound):
-        pass
+        self.push("alert", square.id, sound)
 
     def play(self):
         pass # play() is defined for computers
@@ -324,7 +325,7 @@ class Player(object):
         if hasattr(self, cmd):
             getattr(self, cmd)(args[1:])
         else:
-            warning("executing command: '%s' (%s)" % (cmd, data))
+            warning("unknown command: '%s' (%s)" % (cmd, data))
 
     def send_voice_important(self, msg):
         self.push("voice_important", encode_msg(msg))
@@ -690,3 +691,23 @@ class Player(object):
             for sq in self.world.squares:
                 for o in sq.objects:
                     o.update_perception()
+
+    def _is_admin(self):
+        return self.client == self.world.admin
+
+    def cmd_speed(self, args):
+        if self._is_admin():
+            for p in self.world.players:
+                p.push("speed", float(args[0]))
+        else:
+            warning("non admin client tried to change game speed")
+
+    def cmd_quit(self, unused_args):
+        self.defeat(force_quit=True)
+
+    @property
+    def allied_control_units(self):
+        result = []
+        for p in self.allied_control:
+            result.extend(p.units)
+        return result

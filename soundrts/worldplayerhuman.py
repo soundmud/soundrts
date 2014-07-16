@@ -3,7 +3,7 @@ from worldplayerbase import *
 
 class Human(Player):
 
-    observer_if_defeated =True
+    observer_if_defeated = True
 
     def update_attack_squares(self, unit):
         pass
@@ -18,18 +18,8 @@ class Human(Player):
     def on_target_destroyed(self, unit):
         pass
 
-    def send_alert(self, square, sound):
-        self.push("alert", square.id, sound)
-
     def is_human(self):
 	return True
-
-    @property
-    def allied_control_units(self):
-        result = []
-        for p in self.allied_control:
-            result.extend(p.units)
-        return result
 
     def cmd_order(self, args):
         self.group_had_enough_mana = False
@@ -59,19 +49,6 @@ class Human(Player):
                     self.group.append(u)
                     break
 
-    def _is_admin(self):
-        return self.client == self.world.admin
-
-    def cmd_speed(self, args):
-        if self._is_admin():
-            for p in self.world.players:
-                p.push("speed", float(args[0]))
-        else:
-            warning("non admin client tried to change game speed")
-
     def cmd_update(self, unused_args):
         self.ready = True
         self.update_eventuel()
-
-    def cmd_quit(self, unused_args):
-        self.defeat(force_quit=True)

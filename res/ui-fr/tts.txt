@@ -443,3 +443,6 @@
 4311 a été vaincu
 4312 Vous avez perdu.
 4313 Vous êtes à présent en mode observateur.
+
+4315 observer une partie enregistrée
+4316 Appuyez sur Control Maj F4 pour observer un autre joueur.

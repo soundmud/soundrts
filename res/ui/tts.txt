@@ -451,3 +451,6 @@
 4313 You are now in observer mode.
 
 4314 plateau
+
+4315 observe a recorded game
+4316 Press Control Shift F4 to observe another player.

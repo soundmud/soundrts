@@ -69,11 +69,10 @@ class Type(object):
 # "force", "faction", "team"?)
 class World(object):
 
-    def __init__(self, default_triggers, seed=None):
+    def __init__(self, default_triggers, seed=0):
         self.default_triggers = default_triggers
         self.id = self.get_next_id()
-        if seed is not None: # if seed == 0 then seed() MUST be called!
-            worldrandom.seed(int(seed))
+        worldrandom.seed(int(seed))
         self.time = 0
         self.squares = []
         self.active_objects = []
@@ -209,23 +208,23 @@ class World(object):
         for p in self.players[:]:
             if p.is_human():
                 p.ready = False
-                try:
-                    def _copy(l):
-                        return set(copy.copy(o) for o in l)
-                    collision_debug = None
+            try:
+                def _copy(l):
+                    return set(copy.copy(o) for o in l)
+                collision_debug = None
 #                    collision_debug = copy.deepcopy(self.collision)
-                    if p.is_local_human(): # avoid unnecessary copies
-                        if p.cheatmode:
-                            observed_before_squares = self.squares
-                        else:
-                            observed_before_squares = p.observed_before_squares
-                        p.push("voila", self.time,
-                               _copy(p.memory), _copy(p.perception),
-                               p.observed_squares.keys(),
-                               observed_before_squares,
-                               collision_debug)
-                except:
-                    exception("")
+                if p.is_local_human(): # avoid unnecessary copies
+                    if p.cheatmode:
+                        observed_before_squares = self.squares
+                    else:
+                        observed_before_squares = p.observed_before_squares
+                    p.push("voila", self.time,
+                           _copy(p.memory), _copy(p.perception),
+                           p.observed_squares.keys(),
+                           observed_before_squares,
+                           collision_debug)
+            except:
+                exception("")
 
         # if no "true" player is playing any more, end the game
         if not self.true_playing_players:

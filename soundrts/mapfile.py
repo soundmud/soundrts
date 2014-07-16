@@ -134,7 +134,11 @@ class Map(object):
         self._check_digest()
         self._extract_nb_players(s)
 
+    _original_map_string = None
+
     def pack(self):
+        if self._original_map_string is not None:
+            return self._original_map_string
         if os.path.isfile(self.mapfile):
             map_name = os.path.split(self.mapfile)[-1]
             content = base64.b64encode(open(self.mapfile, "rb").read())
@@ -147,6 +151,7 @@ class Map(object):
             return "zip" + "***" + content
 
     def unpack(self, map_string):
+        self._original_map_string = map_string
         try:
             self.mapfile, content = map_string.split("***", 1)
             if self.mapfile != "zip":

@@ -163,14 +163,6 @@ class GameInterface(object):
         for n, name in l:
             voice.info(nombre(n) + [9998, name, 9999])
 
-    def single_player(self):
-        def is_human(p):
-            return p.name not in ["ai", "npc_ai"]
-        for p in self.server.player.world.players:
-            if p is not self.player and is_human(p):
-                return False
-        return True
-
     def srv_msg(self, s):
         voice.info(*eval_msg_and_volume(s))
 
@@ -297,7 +289,7 @@ class GameInterface(object):
         voice.item(msg)
 
     def cmd_toggle_cheatmode(self):
-        if self.single_player():
+        if self.server.allow_cheatmode:
             self.server.write_line("toggle_cheatmode")
             if self.server.player.cheatmode:
                 voice.item([4265, 4264]) # is now off
@@ -306,6 +298,13 @@ class GameInterface(object):
         else:
             voice.item([1029]) # hostile sound
 
+    def cmd_change_player(self):
+        if self.server.allow_cheatmode:
+            self.server.write_line("change_player")
+            voice.item([60] + [self.player.name]) # "You are..."
+        else:
+            voice.item([1029]) # hostile sound
+        
     def cmd_volume(self, inc=1):
         inc = int(inc)
         modify_volume(inc)

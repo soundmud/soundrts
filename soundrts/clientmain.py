@@ -6,11 +6,18 @@ log.add_secure_file_handler(CLIENT_LOG_PATH, "w")
 log.add_http_handler("http://jlpo.free.fr/soundrts/metaserver")
 log.add_console_handler()
 
+import locale
+try:
+    locale.setlocale(locale.LC_ALL, '')
+except:
+    warning("couldn't set locale")
+
 import os.path
 import pickle
 import random
 import re
 import sys
+import time
 import urllib
 
 import pygame
@@ -23,8 +30,9 @@ from clientstyle import load_style, get_style
 from clientversion import *
 from commun import *
 import config
-from game import TrainingGame
+from game import TrainingGame, ReplayGame
 from multimaps import worlds_multi
+from paths import REPLAYS_PATH
 from singlemaps import campaigns
 
 
@@ -169,6 +177,17 @@ class Application(object):
         menu.append([4041], None)
         menu.run()
 
+    def replay(self, n):
+        ReplayGame(os.path.join(REPLAYS_PATH, n)).run()
+
+    def replay_menu(self):
+        menu = Menu([4315])
+        for n in sorted(os.listdir(REPLAYS_PATH), reverse=True):
+            if n.endswith(".txt"):
+                menu.append([time.strftime("%c", time.localtime(int(n[:-4])))], (self.replay, n))
+        menu.append([4041], None)
+        menu.run()
+
     def modify_login(self):
         login = input_string([4235, 4236], "^[a-zA-Z0-9]$") # type your new
                                         # login ; use alphanumeric characters
@@ -212,6 +231,7 @@ class Application(object):
             [MAIN_MENU_SINGLE_PLAYER_LABEL, single_player_menu.loop],
             [MAIN_MENU_MULTIPLAYER_LABEL, self.multiplayer_menu],
             [MAIN_MENU_SERVER_LABEL, server_menu],
+            [[4315], self.replay_menu],
             [MAIN_MENU_OPTIONS_LABEL, options_menu.loop],
             [MAIN_MENU_QUIT_LABEL, END_LOOP],
             ])

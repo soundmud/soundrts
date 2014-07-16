@@ -183,6 +183,8 @@ F3: say_time
 CTRL SHIFT F3: toggle_tick
 CTRL F3: toggle_talking_clock
 
+CTRL SHIFT F4: change_player
+
 F5: history_previous
 F6: history_next
 

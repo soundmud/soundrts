@@ -2,7 +2,7 @@ import os
 import os.path
 
 
-def _my_mkdir(path):
+def _mkdir(path):
     if not os.path.exists(path):
         try:
             os.mkdir(path)
@@ -25,12 +25,13 @@ elif os.environ.has_key("HOME"): # Linux
     CONFIG_DIR_PATH = os.path.join(os.environ["HOME"], ".SoundRTS%s" % _get_stage())
 else: # Windows 95, Windows 98 ?
     CONFIG_DIR_PATH = os.getcwd()
-if not os.path.exists(CONFIG_DIR_PATH):
-    os.mkdir(CONFIG_DIR_PATH)
+_mkdir(CONFIG_DIR_PATH)
 
 TMP_PATH = os.path.join(CONFIG_DIR_PATH, "tmp")
-if not os.path.exists(TMP_PATH):
-    os.mkdir(TMP_PATH)
+_mkdir(TMP_PATH)
+
+REPLAYS_PATH = os.path.join(CONFIG_DIR_PATH, "replays")
+_mkdir(REPLAYS_PATH)
 
 CLIENT_LOG_PATH = os.path.join(TMP_PATH, "client.log")
 SERVER_LOG_PATH = os.path.join(TMP_PATH, "server.log")
@@ -46,6 +47,6 @@ MAPS_PATHS = ["", CONFIG_DIR_PATH]
 if MAPS_PATHS[0] == MAPS_PATHS[1]:
     del MAPS_PATHS[1]
 else:
-    _my_mkdir(os.path.join(CONFIG_DIR_PATH, "single"))
-    _my_mkdir(os.path.join(CONFIG_DIR_PATH, "multi"))
-    _my_mkdir(os.path.join(CONFIG_DIR_PATH, "mods"))
+    _mkdir(os.path.join(CONFIG_DIR_PATH, "single"))
+    _mkdir(os.path.join(CONFIG_DIR_PATH, "multi"))
+    _mkdir(os.path.join(CONFIG_DIR_PATH, "mods"))

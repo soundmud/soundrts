@@ -10,7 +10,7 @@ import urllib
 from commun import VERSION
 from constants import *
 from lib.log import *
-
+from paths import *
 
 
 def send_error_to_metaserver(error_msg):
@@ -32,24 +32,44 @@ def send_platform_version_to_metaserver(game, nb):
     send_error_to_metaserver(error_msg)
 
 
-class DummyClient(object):
+class _Client(object):
+
+    @property
+    def allow_cheatmode(self):
+        return self.game_session.allow_cheatmode
+
+    def push(self, *args):
+        self.interface.queue_srv_event(*args)
+
+    def queue_command(self, player, s):
+        if player not in self.player.world.players:
+            debug("didn't send the order for player %s: %s", player, s)
+            return
+        if self.game_session.record_replay:
+            player_index = self.player.world.players.index(player)
+            self.game_session.replay_write(str(player_index) + " " + s)
+        self.player.world.queue_command(player, s)
+
+
+class DummyClient(object): # dummy client for computers
 
     login = "ai"
 
     def __init__(self, AI_type="timers"):
         self.AI_type = AI_type
+        self.login = self.AI_type
 
     def push(self, *args):
         pass
 
 
-class HalfDummyClient(DummyClient):
+class HalfDummyClient(DummyClient): # dummy client for remote players
 
     def __init__(self, login):
         self.login = login
 
 
-class DirectClient(object):
+class DirectClient(_Client): # client for single player games
 
     player = None
     data = ""
@@ -63,13 +83,10 @@ class DirectClient(object):
             debug("received no_end_of_update_yet")
             return
         if self.player:
-            self.player.world.queue_command(self.player, s)
+            self.queue_command(self.player, s)
             debug("client: %s", s)
         else:
             debug("couldn't send client command (no player): %s", s)
-
-    def push(self, *args):
-        self.interface.queue_srv_event(*args)
 
     def has_victory(self):
         return self.player.has_victory
@@ -78,12 +95,40 @@ class DirectClient(object):
         self.game_session.save()
 
 
-class Coordinator(object):
+class ReplayClient(DirectClient):
+
+    def write_line(self, s):
+        if s == "change_player":
+            players = self.player.world.players
+            new_player_index = (players.index(self.player) + 1) % len(players)
+            new_player = players[new_player_index]
+            self.player.client = new_player.client
+            self.player = new_player
+            self.player.client = self
+            self.interface.update_fog_of_war()
+        elif s == "update":
+            # send the recorded commands until the next "update" command
+            while True:
+                command = self.game_session.replay_read()
+                if not command:
+                    # the replay will probably close soon
+                    debug("no command left in the replay")
+                    return
+                player, command = command.split(" ", 1)
+                player = self.player.world.players[int(player)]
+                self.queue_command(player, command)
+                if command in ("update", "quit"):
+                    return
+        elif not s.startswith(("control", "order", "no_end_of_update_yet")):
+            self.queue_command(self.player, s)
+
+
+class Coordinator(_Client): # client coordinator for multiplayer games
 
     data = ""
     world = None
     
-    def __init__(self, login, main_server, clients):
+    def __init__(self, login, main_server, clients, game_session):
         self.login = login
         self.main_server = main_server
         self.clients = clients
@@ -91,6 +136,7 @@ class Coordinator(object):
         self.orders_digest = md5()
         self._all_orders = ""
         self._previous_update = time.time()
+        self.game_session = game_session
 
     def get_client_by_login(self, login):
         for c in self.clients:
@@ -152,7 +198,7 @@ class Coordinator(object):
                         direct_player = self.get_client_by_login(player).player
                         if direct_player:
                             debug("player: %s  order: %s", player, order)
-                            direct_player.world.queue_command(direct_player, order)
+                            self.queue_command(direct_player, order)
                         if order != "update" and not order.startswith("control"):
                             self._all_orders += order.replace("order 0 0 ", "") + ";"
                             self._all_orders = self._all_orders[-100:]
@@ -168,6 +214,3 @@ class Coordinator(object):
         if time.time() > self._previous_update + 5.0:
             self.main_server.write_line("timeout")
             self._previous_update += 5.0
-
-    def push(self, *args):
-        self.interface.queue_srv_event(*args)
