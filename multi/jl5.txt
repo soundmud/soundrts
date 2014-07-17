@@ -11,12 +11,12 @@ west_east_paths c1 d1 e1 f1 d2 e2 a3 c3 d3 e3 f3 a4 b4 d4 e4 f4 g4 i4 a5 b5 d5 e
 south_north_paths a3 a5 b3 b4 c4 d1 d3 d4 d5 d8 e1 e3 e4 e5 e6 e8 f1 f3 f4 f5 f6 f8 g1 g2 g3 g4 g5 g6 g7 g8 h1 h4 h6 i5 i6 j1 j6 j7
 
 ; resources
-goldmines 150 a3 c1 d9 j8
+goldmines 300 a3 c1 d9 j8
 woods 75 a3 c1 d9 j8 a3 c1 d9 j8
-goldmines 150 a6 g2 g9 j5
+goldmines 300 a6 g2 g9 j5
 woods 75 a6 g2 g9 j5 a6 g2 g9 j5
-goldmines 150 c6 e7 f3 g6
-goldmines 150 a9 b9 j1 j2
+goldmines 300 c6 e7 f3 g6
+goldmines 300 a9 b9 j1 j2
 woods 75 a9 j1 a9 j1 
 nb_meadows_by_square 3
 remove_meadows a1 b1 i1 a2 b2 c2 i2 h3 i3 j3 c7 d7 a8 b8 c8 h8 i8 c9 j9
