@@ -155,7 +155,7 @@ class Application(object):
             for r in ["random_race"] + self.map.races:
                 if r != pr:
                     menu.append([p,] + style.get(r, "title"),
-                                (self.set_race, (pn, r)))
+                                (self.set_race, pn, r))
 
     def build_training_menu_after_map(self):
         menu = Menu()
