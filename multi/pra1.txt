@@ -1,0 +1,88 @@
+; Pragma 1
+; http://pragmapragma.free.fr
+
+
+
+title 5015 5017 5000 3001
+objective 145 88
+
+
+; map size
+
+square_width 12
+
+nb_columns 12
+nb_lines 11
+
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 c1 d1 h1 i1 j1 k1
+west_east_paths a11 b11 c11 d11 h11 i11 j11 k11
+
+west_east_paths a2 b2 c2 e2 g2 i2 j2 k2
+west_east_paths a10 b10 c10 e10 g10 i10 j10 k10 
+
+west_east_paths a3 b3 d3 e3 g3 h3 j3 k3
+west_east_paths a9 b9 d9 e9 g9 h9 j9 k9
+
+west_east_paths a4 c4 d4 e4 g4 h4 i4 k4
+west_east_paths a8 c8 d8 e8 g8 h8 i8 k8
+
+west_east_paths b5 c5 d5 f5 h5 i5 j5
+west_east_paths b7 c7 d7 f7 h7 i7 j7
+
+west_east_paths a6 b6 c6 d6 e6 f6 g6 h6 i6 j6 k6
+
+west_east_bridges e1 g1 e11 g11
+
+south_north_paths a1 a2 a3 a4 a7 a8 a9 a10
+south_north_paths l1 l2 l3 l4 l7 l8 l9 l10
+
+south_north_paths b1 b2 b3 b5 b6 b8 b9 b10
+south_north_paths k1 k2 k3 k5 k6 k8 k9 k10
+
+south_north_paths c1 c2 c4 c5 c6 c7 c9 c10
+south_north_paths j1 j2 j4 j5 j6 j7 j9 j10
+
+south_north_paths d1 d3 d4 d5 d6 d7 d8 d10
+south_north_paths i1 i3 i4 i5 i6 i7 i8 i10
+
+south_north_paths e2 e3 e4 e5 e6 e7 e8 e9
+south_north_paths h2 h3 h4 h5 h6 h7 h8 h9
+
+south_north_paths f1 f2 f3 f5 f6 f8 f9 f10
+south_north_paths g1 g2 g3 g5 g6 g8 g9 g10
+
+
+
+
+; resources
+goldmines 200 a1 a11 l1 l11
+goldmines 125 c3 c9 j3 j9
+goldmines 100 a3 a9 l3 l9
+goldmines 500 a6 l6
+goldmines 800 e5 e7 h5 h7
+goldmines 1000 f6 g6
+
+woods 200 a1 a11 l1 l11
+woods 125 c3 c9 j3 j9
+woods 100 c1 c11 j1 j11
+woods 150 e2 e10 h2 h10
+woods 500 a6 l6
+woods 800 e5 e7 h5 h7
+woods 1000 f6 g6
+
+nb_meadows_by_square 4
+additional_meadows a1 a1 a1 a1 a11 a11 a11 a11 l1 l1 l1 l1 l11 l11 l11 l11
+additional_meadows f5 f5 f5 f5 f7 f7 f7 f7 g5 g5 g5 g5 g7 g7 g7 g7
+
+; players
+
+nb_players_min 2
+nb_players_max 4
+
+starting_squares a1 a11 l1 l11
+starting_units townhall 4 farm 10 peasant 1 scouttower
+starting_resources 100 100
+global_food_limit 2000

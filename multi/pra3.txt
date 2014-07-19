@@ -1,0 +1,124 @@
+; Pragma 3
+; http://pragmapragma.free.fr
+
+
+
+title 5015 5017 5000 3003
+objective 145 88
+
+
+; map size
+
+square_width 12
+
+nb_columns 11
+nb_lines 11
+
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1
+west_east_paths c2 d2 g2 h2 i2
+west_east_paths b3 c3 d3 g3 h3 i3
+west_east_paths b4 c4 d4 g4 h4 i4
+west_east_paths b5 c5 d5 g5 h5 i5
+west_east_paths b6 c6 d6 g6 h6 i6
+west_east_paths b7 c7 d7 g7 h7 i7
+west_east_paths b8 c8 d8 g8 h8 i8
+west_east_paths b9 c9 d9 g9 h9 i9
+west_east_paths b10 c10 d10 g10 h10
+west_east_paths a11 b11 c11 d11 e11 f11 g11 h11 i11 j11
+
+
+
+south_north_paths a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 
+south_north_paths b2 b3 b4 b7 b8
+south_north_paths c2 c3 c4 c7 c8 c9
+south_north_paths d2 d3 d4 d7 d8 d9
+south_north_paths e2 e3 e4 e7 e8 e9
+south_north_paths f2 f3 f4 f7 f8 f9
+south_north_paths g2 g3 g4 g7 g8 g9
+south_north_paths h2 h3 h4 h7 h8 h9
+south_north_paths i2 i3 i4 i7 i8 i9
+south_north_paths j3 j4 j7 j8 j9
+south_north_paths k1 k2 k3 k4 k5 k6 k7 k8 k9 k10 
+
+#random_choice
+west_east_bridges f2 e10
+south_north_bridges b5 j6
+#end_choice
+goldmines 100 g2 e10 b5 j7
+woods 100 g2 e10 b5 j7
+#end_random_choice
+
+#random_choice
+west_east_bridges e6 f6
+south_north_bridges f5 f6
+additional_meadows f6 f6 f6 f6 f6 f6 f6 f6
+#end_choice
+goldmines 100 d6 h6 f4 f8
+woods 100 d6 h6 f4 f8
+additional_meadows d6 h6 f4 f8 d6 h6 f4 f8 d6 h6 f4 f8 d6 h6 f4 f8 d6 h6 f4 f8
+#end_random_choice
+
+
+
+; resources
+goldmines 1000 b2 b10 j2 j10
+goldmines 600 e6 g6 f5 f7
+goldmines 200 c1 c11 i1 i11 a3 k3 a9 k9 
+goldmines 150 e5 e7 g5 g7
+goldmines 75 f3 f9 c6 h6
+goldmines 100 a6 k6 f1 f11
+
+woods 1000 b2 b10 j2 j10
+woods 600 e6 g6 f5 f7
+woods 200 c1 c11 i1 i11 a3 k3 a9 k9 
+woods 150 e5 e7 g5 g7
+woods 75 f3 f9 c6 h6
+woods 100 a6 k6 f1 f11
+
+
+
+nb_meadows_by_square 0
+
+additional_meadows e5 e7 g5 g7
+additional_meadows e5 e7 g5 g7
+additional_meadows e5 e7 g5 g7
+additional_meadows e5 e7 g5 g7
+additional_meadows e5 e7 g5 g7
+additional_meadows e5 e7 g5 g7
+additional_meadows e5 e7 g5 g7
+additional_meadows e5 e7 g5 g7
+
+
+additional_meadows f3 f9 c6 h6
+additional_meadows f3 f9 c6 h6
+
+additional_meadows b2 b10 j2 j10
+additional_meadows b2 b10 j2 j10
+additional_meadows b2 b10 j2 j10
+additional_meadows b2 b10 j2 j10
+additional_meadows b2 b10 j2 j10
+additional_meadows b2 b10 j2 j10
+
+additional_meadows b2 b3 b4 b5 b6 b7 b8 b9 j2 j3 j4 j5 j6 j7 j8 j9 c2 d2 e2 f2 g2 h2 i2 c10 d10 e10 f10 g10 h10 i10
+additional_meadows b2 b3 b4 b5 b6 b7 b8 b9 j2 j3 j4 j5 j6 j7 j8 j9 c2 d2 e2 f2 g2 h2 i2 c10 d10 e10 f10 g10 h10 i10
+additional_meadows b2 b3 b4 b5 b6 b7 b8 b9 j2 j3 j4 j5 j6 j7 j8 j9 c2 d2 e2 f2 g2 h2 i2 c10 d10 e10 f10 g10 h10 i10
+
+additional_meadows a1 a11 k1 k11
+additional_meadows a1 a11 k1 k11
+additional_meadows a1 a11 k1 k11
+additional_meadows a1 a11 k1 k11
+
+
+; players
+
+nb_players_min 2
+nb_players_max 4
+
+starting_squares b2 b10 j2 j10
+starting_units townhall 4 farm 10 peasant 1 scouttower
+starting_resources 100 100
+
+global_food_limit 4000

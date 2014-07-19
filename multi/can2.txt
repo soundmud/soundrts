@@ -1,0 +1,231 @@
+
+title 5002 5000 5013 3002
+objective 145 88
+square_width 12
+nb_columns 20
+nb_lines 20
+
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1 o1 p1 q1 r1 s1
+west_east_paths a20 b20 c20 d20 e20 f20 g20 h20 i20 j20 k20 l20 m20 n20 o20 p20 q20 r20 s20
+west_east_paths a10 b10 c10 d10 e10 f10 g10 h10 i10 j10 k10 l10 m10 n10 o10 p10 q10 r10 s10
+west_east_paths b5 c5 d5 e5 f5 g5 h5
+west_east_paths c6 f6 g6
+west_east_paths b7 c7 f7 g7 h7
+west_east_paths c8 f8 g8
+west_east_paths b9 c9 f9 g9 h9
+west_east_paths c3 c4 c2
+west_east_paths f3 g3
+west_east_paths f4 g4 f2 g2
+west_east_paths b15 c15 d15 e15 f15 g15 h15
+west_east_paths b11 c11 d11 e11 f11 g11 h11
+west_east_paths b19 c19 d19 e19 f19 g19 h19
+west_east_paths f12 g12 f13 g13 f14 g14
+west_east_paths c14 c12 c13
+west_east_paths c16 c17 c18
+west_east_paths f16 g16 f17 g17 f18 g18
+west_east_paths k5 l5 m5 n5 o5 p5 q5 r5
+west_east_paths k2 l2 m2 n2 o2 p2 q2 r2
+west_east_paths k9 l9 m9 n9 o9 p9 q9 r9
+west_east_paths l3 m3 l4 m4
+west_east_paths p3 q3 p4 q4
+west_east_paths l6 m6 l7 m7 l8 m8
+west_east_paths p6 q6 p7 q7 p8 q8
+west_east_paths k15 l15 m15 n15 o15 p15 q15 r15
+west_east_paths k11 l11 m11 n11 o11 p11 q11 r11
+west_east_paths k13 l13 m13 l14 m14 l12 m12 
+west_east_paths l19 m19
+west_east_paths l16 m16 l17 m17 l18 m18
+west_east_paths p13 q13 r13 
+west_east_paths p12 q12 p14 q14
+west_east_paths p19 q19 p18 q18 p17 q17 p16 q16
+west_east_paths d9 e9
+
+south_north_paths j1 j2 j3 j4 j5 j6 j7 j8 j9 j10 j11 j12 j13 j14 j15 j16 j17 j18 j19
+south_north_paths a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13 a14 a15 a16 a17 a18 a19
+south_north_paths t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15 t16 t17 t18 t19
+south_north_paths e2 e3 e4 e5 e6 e7 e8
+south_north_paths b6 b7 b8
+south_north_paths c6 c7 d6 d7
+south_north_paths i6 i7 i8 f6 f7 g6 g7 h6 h7
+south_north_paths i2 i3 b2 b3
+south_north_paths c2 c3 d2 d3
+south_north_paths f2 f3 g2 g3 h2 h3
+south_north_paths e11 e12 e13 e14 e15 e16 e17 e18
+south_north_paths i11 i12 i13 i14 i15 i16 i17 i18 b11 b12 b13 b16 b17 b18
+south_north_paths g11 g12 g13 h12 h13 f12 f13
+south_north_paths c12 c13 d12 d13
+south_north_paths c16 c17 d16 d17
+south_north_paths g16 g17 g18 f16 f17 h16 h17
+south_north_paths o2 o3 o4 o5 o6 o7 o8
+south_north_paths k2 k3 k4 k5 k6 k7 k8
+south_north_paths s2 s3 s6 s7 s8
+south_north_paths m2 m3 l3 n3
+south_north_paths p3 q3 r3
+south_north_paths m6 m7 m8 l6 l7 n6 n7
+south_north_paths p6 p7 q6 q7 r6 r7
+south_north_paths o11 o12 o13 o14 o15 o16 o17 o18
+south_north_paths k11 k12 k13 k14 k15 k16 k17 k18 s11 s12 s13 s14 s15 s16 s17 s18
+south_north_paths l12 l13 m12 m13 n12 n13
+south_north_paths l16 l17 l18 m16 m17 m18 n16 n17 n18
+south_north_paths p12 p13 q12 q13 r12 r13
+south_north_paths p16 p17 p18 q16 q17 q18 r16 r17 r18
+south_north_paths b4 b5 i4 i5
+
+south_north_bridges e1 o19
+
+west_east_bridges a15 s5
+west_east_bridges b16 b14
+west_east_bridges r6 r4
+west_east_bridges k19 r19
+west_east_bridges b2 h2
+
+goldmines 20000 f7 g16 m6 n13
+goldmines 10000 c18 f14 c12 d4 c6 f4 l4 r3 r8 n16 p12 r16
+woods 2000 d18 h14 d12 c4 d6 h4 n4 p3 p8 l16 p14 p16
+woods 20000 f7 g16 m6 n13
+
+
+nb_meadows_by_square 0
+additional_meadows f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7 f7
+additional_meadows g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16 g16
+additional_meadows m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6 m6
+additional_meadows n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13 n13
+additional_meadows f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+additional_meadows f6 f6 f6 f6 f6 f6 f6 f6 f6 f6 f6 f6 f6 f6 f6 f6 f6 f6 f6 f6
+additional_meadows g6 g6 g6 g6 g6 g6 g6 g6 g6 g6 g6 g6 g6 g6 g6 g6 g6 g6 g6 g6
+additional_meadows g7 g7 g7 g7 g7 g7 g7 g7 g7 g7 g7 g7 g7 g7 g7 g7 g7 g7 g7 g7
+additional_meadows g8 g8 g8 g8 g8 g8 g8 g8 g8 g8 g8 g8 g8 g8 g8 g8 g8 g8 g8 g8
+additional_meadows h6 h6 h6 h6 h6 h6 h6 h6 h6 h6 h6 h6 h6 h6 h6 h6 h6 h6 h6 h6
+additional_meadows  h7 h7 h7 h7 h7 h7 h7 h7 h7 h7 h7 h7 h7 h7 h7 h7 h7 h7 h7 h7
+additional_meadows h8 h8 h8 h8 h8 h8 h8 h8 h8 h8 h8 h8 h8 h8 h8 h8 h8 h8 h8 h8
+additional_meadows f16 f16 f16 f16 f16 f16 f16 f16 f16 f16 f16 f16 f16 f16 f16 f16 f16 f16 f16 f16
+additional_meadows h16 h16 h16 h16 h16 h16 h16 h16 h16 h16 h16 h16 h16 h16 h16 h16 h16 h16 h16 h16
+additional_meadows f17 f17 f17 f17 f17 f17 f17 f17 f17 f17 f17 f17 f17 f17 f17 f17 f17 f17 f17 f17
+additional_meadows g17 g17 g17 g17 g17 g17 g17 g17 g17 g17 g17 g17 g17 g17 g17 g17 g17 g17 g17 g17
+additional_meadows h17 h17 h17 h17 h17 h17 h17 h17 h17 h17 h17 h17 h17 h17 h17 h17 h17 h17 h17 h17
+additional_meadows f18 f18 f18 f18 f18 f18 f18 f18 f18 f18 f18 f18 f18 f18 f18 f18 f18 f18 f18 f18
+additional_meadows g18 g18 g18 g18 g18 g18 g18 g18 g18 g18 g18 g18 g18 g18 g18 g18 g18 g18 g18 g18
+additional_meadows h18 h18 h18 h18 h18 h18 h18 h18 h18 h18 h18 h18 h18 h18 h18 h18 h18 h18 h18 h18
+additional_meadows l6 l6 l6 l6 l6 l6 l6 l6 l6 l6 l6 l6 l6 l6 l6 l6 l6 l6 l6 l6
+additional_meadows n6 n6 n6 n6 n6 n6 n6 n6 n6 n6 n6 n6 n6 n6 n6 n6 n6 n6 n6 n6
+additional_meadows l7 l7 l7 l7 l7 l7 l7 l7 l7 l7 l7 l7 l7 l7 l7 l7 l7 l7 l7 l7
+additional_meadows m7 m7 m7 m7 m7 m7 m7 m7 m7 m7 m7 m7 m7 m7 m7 m7 m7 m7 m7 m7
+additional_meadows n7 n7 n7 n7 n7 n7 n7 n7 n7 n7 n7 n7 n7 n7 n7 n7 n7 n7 n7 n7
+additional_meadows l8 l8 l8 l8 l8 l8 l8 l8 l8 l8 l8 l8 l8 l8 l8 l8 l8 l8 l8 l8
+additional_meadows m8 m8 m8 m8 m8 m8 m8 m8 m8 m8 m8 m8 m8 m8 m8 m8 m8 m8 m8 m8
+additional_meadows n8 n8 n8 n8 n8 n8 n8 n8 n8 n8 n8 n8 n8 n8 n8 n8 n8 n8 n8 n8
+additional_meadows n12 n12 n12 n12 n12 n12 n12 n12 n12 n12 n12 n12 n12 n12 n12 n12 n12 n12 n12 n12
+additional_meadows n14 n14 n14 n14 n14 n14 n14 n14 n14 n14 n14 n14 n14 n14 n14 n14 n14 n14 n14 n14
+additional_meadows m12 m12 m12 m12 m12 m12 m12 m12 m12 m12 m12 m12 m12 m12 m12 m12 m12 m12 m12 m12
+additional_meadows m13 m13 m13 m13 m13 m13 m13 m13 m13 m13 m13 m13 m13 m13 m13 m13 m13 m13 m13 m13
+additional_meadows m14 m14 m14 m14 m14 m14 m14 m14 m14 m14 m14 m14 m14 m14 m14 m14 m14 m14 m14 m14
+additional_meadows l12 l12 l12 l12 l12 l12 l12 l12 l12 l12 l12 l12 l12 l12 l12 l12 l12 l12 l12 l12
+additional_meadows l13 l13 l13 l13 l13 l13 l13 l13 l13 l13 l13 l13 l13 l13 l13 l13 l13 l13 l13 l13
+additional_meadows l14 l14 l14 l14 l14 l14 l14 l14 l14 l14 l14 l14 l14 l14 l14 l14 l14 l14 l14 l14
+additional_meadows c16 c16 c16 c16 c16 c16 c16 c16 c16 c16 c16 c16 c16 c16 c16 c16 c16 c16 c16 c16
+additional_meadows d16 d16 d16 d16 d16 d16 d16 d16 d16 d16 d16 d16 d16 d16 d16 d16 d16 d16 d16 d16
+additional_meadows c17 c17 c17 c17 c17 c17 c17 c17 c17 c17 c17 c17 c17 c17 c17 c17 c17 c17 c17 c17
+additional_meadows d17 d17 d17 d17 d17 d17 d17 d17 d17 d17 d17 d17 d17 d17 d17 d17 d17 d17 d17 d17
+additional_meadows c18 c18 c18 c18 c18 c18 c18 c18 c18 c18 c18 c18 c18 c18 c18 c18 c18 c18 c18 c18
+additional_meadows d18 d18 d18 d18 d18 d18 d18 d18 d18 d18 d18 d18 d18 d18 d18 d18 d18 d18 d18 d18
+additional_meadows f12 f12 f12 f12 f12 f12 f12 f12 f12 f12 f12 f12 f12 f12 f12 f12 f12 f12 f12 f12
+additional_meadows g12 g12 g12 g12 g12 g12 g12 g12 g12 g12 g12 g12 g12 g12 g12 g12 g12 g12 g12 g12
+additional_meadows h12 h12 h12 h12 h12 h12 h12 h12 h12 h12 h12 h12 h12 h12 h12 h12 h12 h12 h12 h12
+additional_meadows f13 f13 f13 f13 f13 f13 f13 f13 f13 f13 f13 f13 f13 f13 f13 f13 f13 f13 f13 f13
+additional_meadows g13 g13 g13 g13 g13 g13 g13 g13 g13 g13 g13 g13 g13 g13 g13 g13 g13 g13 g13 g13
+additional_meadows h13 h13 h13 h13 h13 h13 h13 h13 h13 h13 h13 h13 h13 h13 h13 h13 h13 h13 h13 h13
+additional_meadows f14 f14 f14 f14 f14 f14 f14 f14 f14 f14 f14 f14 f14 f14 f14 f14 f14 f14 f14 f14
+additional_meadows g14 g14 g14 g14 g14 g14 g14 g14 g14 g14 g14 g14 g14 g14 g14 g14 g14 g14 g14 g14
+additional_meadows h14 h14 h14 h14 h14 h14 h14 h14 h14 h14 h14 h14 h14 h14 h14 h14 h14 h14 h14 h14
+additional_meadows c12 c12 c12 c12 c12 c12 c12 c12 c12 c12 c12 c12 c12 c12 c12 c12 c12 c12 c12 c12
+additional_meadows d12 d12 d12 d12 d12 d12 d12 d12 d12 d12 d12 d12 d12 d12 d12 d12 d12 d12 d12 d12
+additional_meadows c13 c13 c13 c13 c13 c13 c13 c13 c13 c13 c13 c13 c13 c13 c13 c13 c13 c13 c13 c13
+additional_meadows d13 d13 d13 d13 d13 d13 d13 d13 d13 d13 d13 d13 d13 d13 d13 d13 d13 d13 d13 d13
+additional_meadows c14 c14 c14 c14 c14 c14 c14 c14 c14 c14 c14 c14 c14 c14 c14 c14 c14 c14 c14 c14
+additional_meadows d14 d14 d14 d14 d14 d14 d14 d14 d14 d14 d14 d14 d14 d14 d14 d14 d14 d14 d14 d14
+
+additional_meadows c2 c2 c2 c2 c2 c2 c2 c2 c2 c2 c2 c2 c2 c2 c2 c2 c2 c2 c2 c2
+additional_meadows d2 d2 d2 d2 d2 d2 d2 d2 d2 d2 d2 d2 d2 d2 d2 d2 d2 d2 d2 d2
+additional_meadows c3 c3 c3 c3 c3 c3 c3 c3 c3 c3 c3 c3 c3 c3 c3 c3 c3 c3 c3 c3
+additional_meadows d3 d3 d3 d3 d3 d3 d3 d3 d3 d3 d3 d3 d3 d3 d3 d3 d3 d3 d3 d3
+additional_meadows c4 c4 c4 c4 c4 c4 c4 c4 c4 c4 c4 c4 c4 c4 c4 c4 c4 c4 c4 c4
+additional_meadows d4 d4 d4 d4 d4 d4 d4 d4 d4 d4 d4 d4 d4 d4 d4 d4 d4 d4 d4 d4
+
+additional_meadows c6 c6 c6 c6 c6 c6 c6 c6 c6 c6 c6 c6 c6 c6 c6 c6 c6 c6 c6 c6
+additional_meadows d6 d6 d6 d6 d6 d6 d6 d6 d6 d6 d6 d6 d6 d6 d6 d6 d6 d6 d6 d6
+additional_meadows c7 c7 c7 c7 c7 c7 c7 c7 c7 c7 c7 c7 c7 c7 c7 c7 c7 c7 c7 c7
+additional_meadows d7 d7 d7 d7 d7 d7 d7 d7 d7 d7 d7 d7 d7 d7 d7 d7 d7 d7 d7 d7
+additional_meadows c8 c8 c8 c8 c8 c8 c8 c8 c8 c8 c8 c8 c8 c8 c8 c8 c8 c8 c8 c8
+additional_meadows d8 d8 d8 d8 d8 d8 d8 d8 d8 d8 d8 d8 d8 d8 d8 d8 d8 d8 d8 d8
+
+additional_meadows f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2
+additional_meadows g2 g2 g2 g2 g2 g2 g2 g2 g2 g2 g2 g2 g2 g2 g2 g2 g2 g2 g2 g2
+additional_meadows h2 h2 h2 h2 h2 h2 h2 h2 h2 h2 h2 h2 h2 h2 h2 h2 h2 h2 h2 h2
+additional_meadows f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3
+additional_meadows g3 g3 g3 g3 g3 g3 g3 g3 g3 g3 g3 g3 g3 g3 g3 g3 g3 g3 g3 g3
+additional_meadows h3 h3 h3 h3 h3 h3 h3 h3 h3 h3 h3 h3 h3 h3 h3 h3 h3 h3 h3 h3
+additional_meadows f4 f4 f4 f4 f4 f4 f4 f4 f4 f4 f4 f4 f4 f4 f4 f4 f4 f4 f4 f4
+additional_meadows g4 g4 g4 g4 g4 g4 g4 g4 g4 g4 g4 g4 g4 g4 g4 g4 g4 g4 g4 g4
+additional_meadows h4 h4 h4 h4 h4 h4 h4 h4 h4 h4 h4 h4 h4 h4 h4 h4 h4 h4 h4 h4
+
+additional_meadows l3 l3 l3 l3 l3 l3 l3 l3 l3 l3 l3 l3 l3 l3 l3 l3 l3 l3 l3 l3
+additional_meadows l4 l4 l4 l4 l4 l4 l4 l4 l4 l4 l4 l4 l4 l4 l4 l4 l4 l4 l4 l4
+additional_meadows m3 m3 m3 m3 m3 m3 m3 m3 m3 m3 m3 m3 m3 m3 m3 m3 m3 m3 m3 m3
+additional_meadows m4 m4 m4 m4 m4 m4 m4 m4 m4 m4 m4 m4 m4 m4 m4 m4 m4 m4 m4 m4
+additional_meadows n3 n3 n3 n3 n3 n3 n3 n3 n3 n3 n3 n3 n3 n3 n3 n3 n3 n3 n3 n3
+additional_meadows n4 n4 n4 n4 n4 n4 n4 n4 n4 n4 n4 n4 n4 n4 n4 n4 n4 n4 n4 n4
+
+additional_meadows p3 p3 p3 p3 p3 p3 p3 p3 p3 p3 p3 p3 p3 p3 p3 p3 p3 p3 p3 p3
+additional_meadows p4 p4 p4 p4 p4 p4 p4 p4 p4 p4 p4 p4 p4 p4 p4 p4 p4 p4 p4 p4
+additional_meadows q3 q3 q3 q3 q3 q3 q3 q3 q3 q3 q3 q3 q3 q3 q3 q3 q3 q3 q3 q3
+additional_meadows q4 q4 q4 q4 q4 q4 q4 q4 q4 q4 q4 q4 q4 q4 q4 q4 q4 q4 q4 q4
+additional_meadows r3 r3 r3 r3 r3 r3 r3 r3 r3 r3 r3 r3 r3 r3 r3 r3 r3 r3 r3 r3
+additional_meadows r4 r4 r4 r4 r4 r4 r4 r4 r4 r4 r4 r4 r4 r4 r4 r4 r4 r4 r4 r4
+
+additional_meadows p6 p6 p6 p6 p6 p6 p6 p6 p6 p6 p6 p6 p6 p6 p6 p6 p6 p6 p6 p6
+additional_meadows p7 p7 p7 p7 p7 p7 p7 p7 p7 p7 p7 p7 p7 p7 p7 p7 p7 p7 p7 p7
+additional_meadows p8 p8 p8 p8 p8 p8 p8 p8 p8 p8 p8 p8 p8 p8 p8 p8 p8 p8 p8 p8
+additional_meadows q6 q6 q6 q6 q6 q6 q6 q6 q6 q6 q6 q6 q6 q6 q6 q6 q6 q6 q6 q6
+additional_meadows q7 q7 q7 q7 q7 q7 q7 q7 q7 q7 q7 q7 q7 q7 q7 q7 q7 q7 q7 q7
+additional_meadows q8 q8 q8 q8 q8 q8 q8 q8 q8 q8 q8 q8 q8 q8 q8 q8 q8 q8 q8 q8
+additional_meadows r6 r6 r6 r6 r6 r6 r6 r6 r6 r6 r6 r6 r6 r6 r6 r6 r6 r6 r6 r6
+additional_meadows r7 r7 r7 r7 r7 r7 r7 r7 r7 r7 r7 r7 r7 r7 r7 r7 r7 r7 r7 r7
+additional_meadows r8 r8 r8 r8 r8 r8 r8 r8 r8 r8 r8 r8 r8 r8 r8 r8 r8 r8 r8 r8
+
+additional_meadows l16 l16 l16 l16 l16 l16 l16 l16 l16 l16 l16 l16 l16 l16 l16 l16 l16 l16 l16 l16
+additional_meadows l17 l17 l17 l17 l17 l17 l17 l17 l17 l17 l17 l17 l17 l17 l17 l17 l17 l17 l17 l17
+additional_meadows l18 l18 l18 l18 l18 l18 l18 l18 l18 l18 l18 l18 l18 l18 l18 l18 l18 l18 l18 l18
+additional_meadows m16 m16 m16 m16 m16 m16 m16 m16 m16 m16 m16 m16 m16 m16 m16 m16 m16 m16 m16 m16
+additional_meadows m17 m17 m17 m17 m17 m17 m17 m17 m17 m17 m17 m17 m17 m17 m17 m17 m17 m17 m17 m17
+additional_meadows m18 m18 m18 m18 m18 m18 m18 m18 m18 m18 m18 m18 m18 m18 m18 m18 m18 m18 m18 m18
+additional_meadows n16 n16 n16 n16 n16 n16 n16 n16 n16 n16 n16 n16 n16 n16 n16 n16 n16 n16 n16 n16
+additional_meadows n17 n17 n17 n17 n17 n17 n17 n17 n17 n17 n17 n17 n17 n17 n17 n17 n17 n17 n17 n17
+additional_meadows n18 n18 n18 n18 n18 n18 n18 n18 n18 n18 n18 n18 n18 n18 n18 n18 n18 n18 n18 n18
+
+additional_meadows p12 p12 p12 p12 p12 p12 p12 p12 p12 p12 p12 p12 p12 p12 p12 p12 p12 p12 p12 p12
+additional_meadows p13 p13 p13 p13 p13 p13 p13 p13 p13 p13 p13 p13 p13 p13 p13 p13 p13 p13 p13 p13
+additional_meadows p14 p14 p14 p14 p14 p14 p14 p14 p14 p14 p14 p14 p14 p14 p14 p14 p14 p14 p14 p14
+additional_meadows q12 q12 q12 q12 q12 q12 q12 q12 q12 q12 q12 q12 q12 q12 q12 q12 q12 q12 q12 q12
+additional_meadows q13 q13 q13 q13 q13 q13 q13 q13 q13 q13 q13 q13 q13 q13 q13 q13 q13 q13 q13 q13
+additional_meadows q14 q14 q14 q14 q14 q14 q14 q14 q14 q14 q14 q14 q14 q14 q14 q14 q14 q14 q14 q14
+additional_meadows r12 r12 r12 r12 r12 r12 r12 r12 r12 r12 r12 r12 r12 r12 r12 r12 r12 r12 r12 r12
+additional_meadows r13 r13 r13 r13 r13 r13 r13 r13 r13 r13 r13 r13 r13 r13 r13 r13 r13 r13 r13 r13
+additional_meadows r14 r14 r14 r14 r14 r14 r14 r14 r14 r14 r14 r14 r14 r14 r14 r14 r14 r14 r14 r14
+
+additional_meadows p16 p16 p16 p16 p16 p16 p16 p16 p16 p16 p16 p16 p16 p16 p16 p16 p16 p16 p16 p16
+additional_meadows p17 p17 p17 p17 p17 p17 p17 p17 p17 p17 p17 p17 p17 p17 p17 p17 p17 p17 p17 p17
+additional_meadows p18 p18 p18 p18 p18 p18 p18 p18 p18 p18 p18 p18 p18 p18 p18 p18 p18 p18 p18 p18
+additional_meadows q16 q16 q16 q16 q16 q16 q16 q16 q16 q16 q16 q16 q16 q16 q16 q16 q16 q16 q16 q16
+additional_meadows q17 q17 q17 q17 q17 q17 q17 q17 q17 q17 q17 q17 q17 q17 q17 q17 q17 q17 q17 q17
+additional_meadows q18 q18 q18 q18 q18 q18 q18 q18 q18 q18 q18 q18 q18 q18 q18 q18 q18 q18 q18 q18
+additional_meadows r16 r16 r16 r16 r16 r16 r16 r16 r16 r16 r16 r16 r16 r16 r16 r16 r16 r16 r16 r16
+additional_meadows r17 r17 r17 r17 r17 r17 r17 r17 r17 r17 r17 r17 r17 r17 r17 r17 r17 r17 r17 r17
+additional_meadows r18 r18 r18 r18 r18 r18 r18 r18 r18 r18 r18 r18 r18 r18 r18 r18 r18 r18 r18 r18
+
+
+nb_players_min 2
+nb_players_max 4
+starting_squares f7 g16 m6 n13
+starting_units townhall 4 farm 10 peasant 1 scouttower
+starting_resources 100 100
+global_food_limit 2000

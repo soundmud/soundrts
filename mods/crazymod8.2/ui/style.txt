@@ -1,0 +1,1094 @@
+; CrazyMod v8.2
+
+; messages
+
+
+; miscellaneous parameters
+
+
+; abilities
+
+def a_recall
+alert 77964 ; 1328
+
+
+; upgrades
+
+
+; research
+
+
+; "abstract" classes (not used directly)
+
+def thing
+lose_fight 77640 77645 77646 77541 77542 77699 ;1324
+order_impossible 77642 ;1029
+
+def unit
+alert 77647 77648 77649 77650 77651 77652 ; 1078 horn
+win_fight if_me 1326 77637 77638 77639 77643 77644 77538 77543 else 1325
+
+
+; buildings
+
+
+def townhall
+is_a point_de_depart
+
+def stables
+noise repeat 25 1305 1306 77720 77721
+
+def necropolis
+noise repeat 20 77798 77799 77805
+
+
+; units
+
+def peasant
+noise_when_exploiting_mine_de_cristal repeat 3 77976
+store_resource_2 1099
+
+
+; resources
+
+def mine_de_cristal
+is_a resource_deposit
+title 77214
+exhausted 1047
+ground gravel
+
+
+; passages
+
+
+
+; races
+
+
+
+; Mod des cinglés
+
+
+def bombardier_dirigeable
+is_a unit
+title 77000
+move 77509
+keyboard soldier5
+noise repeat 20 77504 77505 77506
+death 77508 77661
+launch_attack 77507
+attack_hit 77500
+
+def poudriere
+is_a building
+title 77001
+
+def poudre_de_haute_qualite
+title 77002
+
+def poudre_de_tres_haute_qualite
+title 77198
+
+def a_faire_exploser_poudriere
+title 77003
+alert 77704
+
+def exploitation_fruitiere
+is_a building
+title 77007
+noise repeat 30 77512 77513 77514
+
+def hopital
+is_a building
+title 77011
+noise repeat 30 77520 77521 77522
+
+def sante_publique
+title 77012
+
+def mousquetaire
+is_a walking_unit
+title 77014
+noise repeat 25 77529 77530 77531 77532
+launch_attack 77525
+attack_hit 77523
+keyboard soldier1
+
+def extracteur_de_magnesite
+is_a building
+title 77015
+noise repeat 30 77716
+
+def piege_electrique
+is_a building
+title 77016
+launch_attack 77539
+attack_hit 77548 77549 77550 77551
+
+
+; nouveautés v2
+
+def orage_magnetique
+is_a unit
+title 77018
+noise loop 77556
+launch_attack 77552 77553 77554
+attack_hit 77548 77549 77550 77551
+death 77564
+
+def a_orage_magnetique
+title 77018
+alert 77555
+
+def a_onde_hypnose
+title 77019
+alert 77557
+
+def tour_magnetique
+is_a building
+title 77020
+noise repeat 40 77558 77559 77560 77561 77562
+attack_hit 77563
+
+def a_envoutement
+title 77026
+alert 77580
+
+def ectoplasme
+is_a unit
+title 77027
+noise repeat 10 77576 77577 77578 77579
+move 77641
+death 77581
+keyboard soldier6
+
+def a_appeler_ectoplasme
+title 77028
+alert 77582
+
+def a_brume_malefique
+title 77029
+alert 77583
+
+def brume_malefique
+is_a thing
+title 77029
+
+def tour_spectrale
+is_a building
+title 77030
+noise repeat 30 77566 77567 77568
+
+def goule
+is_a walking_unit
+title 77031
+noise repeat 30 77584 77585
+attack_hit 77573 77574 77593
+keyboard soldier1
+
+def cimetiere
+is_a building
+title 77032
+noise repeat 30 77575
+
+def a_semer_arbre_des_tenebres
+title 77035
+alert 77597
+
+def a_semer_arbre_de_la_serenite
+title 77036
+alert 77597
+
+def arbre_des_tenebres
+is_a unit
+title 77037
+noise repeat 30 77603 77604 77605
+attack_hit 77598 77599 77600
+death 77601 77602
+keyboard soldier7
+
+def arbre_de_la_serenite
+is_a unit
+title 77038
+noise repeat 30 77606 77607 77608
+death 77601 77602
+keyboard soldier7
+
+def a_recycler_en_plante_carnivore
+title 77039
+alert 77609
+
+def a_recycler_en_plante_medicinale
+title 77040
+alert 77609
+
+def plante_carnivore
+is_a unit
+title 77041
+noise repeat 20 77616 77617 77618 77619
+attack_hit 77612 77613 77614 77615
+death 77620
+
+def plante_medicinale
+is_a unit
+title 77042
+noise repeat 30 77653 77654 77655
+death 77656
+
+def magnesite_de_haute_qualite
+title 77043
+
+def magnesite_de_tres_haute_qualite
+title 77044
+
+def transporteur_dirigeable
+is_a unit
+title 77047
+noise repeat 25 77658 77659 77660
+move 77657
+death 77508 77661
+keyboard soldier6
+
+
+def lance_grenade
+is_a walking_unit
+title 77052
+noise repeat 18 77683 77684 77685 77686
+launch_attack 77682
+attack_hit 77681
+keyboard soldier2
+
+def point_de_depart
+is_a building
+title 77053
+
+def chatelet
+is_a building
+title 77055
+
+def serf
+is_a peasant
+title 77056
+
+def plante_epineuse
+is_a unit
+title 77058
+noise repeat 30 77707 77708 77709
+attack_hit 77711
+death 77710
+
+def mairie
+is_a building
+title 77059
+noise repeat 25 77722
+
+def siege_du_gouverneur
+is_a mairie
+title 77060
+
+def palais_du_chancelier
+is_a mairie
+title 77061
+
+def camp_militaire
+is_a building
+title 77063
+noise repeat 20 77621 77622
+
+def travailleur
+is_a peasant
+title 77066
+
+def chantier_aeronaval
+is_a building
+title 77070
+noise repeat 20 77623 77624
+
+def dirigeable_d_observation
+is_a bombardier_dirigeable
+title 77074
+move 77712
+keyboard soldier3
+
+def chasseur_dirigeable
+is_a bombardier_dirigeable
+title 77082
+move 77719
+launch_attack 77524
+attack_hit 77523
+keyboard soldier4
+
+
+def garage
+is_a building
+title 77084
+noise repeat 30 77731 77732
+
+def ordinateur
+is_a building
+title 77085
+noise repeat 30 77736
+
+def calculateur
+is_a building
+title 77086
+noise repeat 30 77728 77729 77730 77737
+
+def supercalculateur
+is_a building
+title 77087
+noise repeat 30 77733 77734 77735 77738 77770
+
+def usine_robotique
+is_a building
+title 77089
+noise repeat 35 77726 77727
+
+def laboratoire_optique
+is_a building
+title 77090
+noise repeat 30 77768
+
+def modulateur_de_signal
+is_a building
+title 77092
+noise repeat 45 77769
+
+def accelerateur_de_particules
+is_a building
+title 77093
+noise repeat 45 77767
+
+def tour_laser
+is_a building
+title 77094
+launch_attack 77828
+attack_hit 77762
+
+def tour_radar
+is_a building
+title 77095
+noise repeat 30 77749 77776
+
+def geek
+is_a peasant
+title 77096
+
+def tireur_laser
+is_a unit
+title 77098
+noise repeat 10 77739 77740 77741 77742 77743
+move 77886 77887
+launch_attack 77752
+attack_hit 77762
+keyboard soldier2
+
+def canon_magnetique
+is_a unit
+title 77100
+move 77753
+launch_attack 77771
+attack_hit 77772
+keyboard soldier3
+
+def canon_plasma
+is_a unit
+title 77101
+move 77756
+launch_attack 77761
+attack_hit 77759 77760
+keyboard soldier4
+
+def capteur_mobile
+is_a unit
+title 77103
+move 77754
+keyboard soldier5
+
+def drone
+is_a unit
+title 77105
+move 77745
+keyboard soldier6
+
+def vaisseau_laser
+is_a unit
+title 77106
+move 77744
+launch_attack 77751
+attack_hit 77762
+keyboard soldier7
+
+def puissance_laser
+title 77108
+
+def puissance_plasma
+title 77109
+
+def a_image_radar
+title 77110
+alert 77750
+
+def earthquake
+is_a thing
+title 77111
+noise loop 77748
+
+
+
+def mausolee
+is_a building
+title 77113
+noise repeat 20 77796 77797 77805
+
+def caveau
+is_a building
+title 77114
+
+def crypte
+is_a building
+title 77117
+noise repeat 30 77800
+
+def piege_d_os
+is_a building
+title 77119
+attack_hit 77816
+
+def fossoyeur
+is_a peasant
+title 77120
+attack_hit 77811
+
+def spectre_en_armure
+is_a unit
+title 77123
+noise repeat 30 77626 77627 77628 77629 77630
+move 77794 77795
+attack_hit 77960 77961 77962 77963
+keyboard soldier7
+
+def fantome
+is_a unit
+title 77122
+noise repeat 15 77806 77807 77808
+move 77819
+launch_attack 77809
+attack_hit 77810
+keyboard soldier7
+
+def gargouille_maudite
+is_a unit
+title 77057
+noise repeat 12 77511 77515
+move 77786 77787
+keyboard soldier6
+
+def sombral
+is_a unit
+title 77126
+noise repeat 12 77783 77784 77785
+move 77786 77787
+launch_attack 77788 77789
+attack_hit 77793 77959 77592 77501 77586
+keyboard soldier5
+
+def liche
+is_a walking_unit
+title 77128
+noise repeat 18 77820 77821 77822
+launch_attack 77823
+attack_hit 77824
+keyboard soldier4
+
+def a_passe_muraille
+title 77130
+alert 77831
+
+def deadly_fog
+title 4305
+
+def feu_follet
+is_a unit
+title 77131
+noise repeat 18 77827
+attack_hit 77817
+death 77518
+
+def a_appeler_feu_follet
+title 77132
+alert 77818
+
+def u_portail_instable
+title 77136
+
+def a_portail_instable
+title 77136
+alert 77832
+
+def u_portail_stable
+title 77137
+
+def a_portail_stable
+title 77137
+alert 1328
+
+
+
+
+def clairiere
+is_a building
+title 77141
+
+def cite_arboricole
+is_a building
+title 77142
+noise repeat 30 77849
+
+def domaine
+is_a building
+title 77143
+noise repeat 30 77845 77846
+
+def arene_boisee
+is_a building
+title 77144
+
+def jardin_feuillu
+is_a building
+title 77145
+noise repeat 30 77850 77851
+
+def bois_enchante
+is_a building
+title 77148
+noise repeat 30 77847 77848
+
+def piege_de_racines
+is_a building
+title 77149
+attack_hit 77863
+
+def recolteur
+is_a peasant
+title 77150
+
+def archerot
+is_a archer
+title 77152
+keyboard soldier1
+
+def archer_des_forets
+is_a archer
+title 77153
+
+def centaure
+is_a unit
+title 77154
+noise repeat 20 77860 77861 77862
+move 77852 77853
+launch_attack 77859
+attack_hit 1301
+keyboard soldier3
+
+def druide
+is_a walking_unit
+title 77159
+attack_hit 77537
+keyboard soldier6
+
+def ensorceleuse
+is_a walking_unit
+title 77160
+noise repeat 25 77899 77900
+launch_attack 77896
+attack_hit 77897 77898
+keyboard soldier3
+
+def fee
+is_a peasant
+title 77161
+noise repeat 20 77879 77880
+move 77878
+
+def essaim
+is_a thing
+title 77165
+noise loop 77873
+
+def a_essaim
+title 77165
+alert 77867
+
+def tempete_verte
+is_a thing
+title 77167
+noise loop 77874
+
+def a_tempete_verte
+title 77167
+alert 77866
+
+
+
+def campement
+is_a building
+title 77175
+
+def campement_fortifie
+is_a building
+title 77176
+
+def forteresse
+is_a building
+title 77177
+
+def fausse
+is_a building
+title 77178
+
+def enclos
+is_a building
+title 77179
+noise repeat 30 77953 77956
+
+def nid
+is_a building
+title 77181
+
+def tipi
+is_a building
+title 77182
+noise repeat 20 77631
+
+def piege_a_pointes
+is_a building
+title 77183
+launch_attack 77971
+attack_hit 77972
+
+def peon
+is_a peasant
+title 77184
+keyboard worker
+
+def cogneur
+is_a walking_unit
+title 77185
+attack_hit 77919 77920 77921
+keyboard soldier1
+
+def troll
+is_a walking_unit
+title 77186
+noise repeat 20 77925 77926 77927
+attack_hit 77922 77923 77924
+keyboard soldier2
+
+def ogre_lanceur_de_roche
+is_a walking_unit
+title 77189
+noise repeat 20 77916 77917 77918
+launch_attack 77957
+attack_hit 77977
+keyboard soldier3
+
+def serpent_aile
+is_a unit
+title 77192
+noise repeat 30 77942 77943
+move 77947 77948
+launch_attack 77944 9999 9999 9999
+attack_hit 77592 77610 77595 77596
+keyboard soldier4
+
+def hippogriffe
+is_a unit
+title 77193
+noise repeat 30 77934 77935 77936
+move 77884 77885
+attack_hit 77502 77503
+keyboard soldier5
+
+def pretre_vaudou
+is_a walking_unit
+title 77194
+keyboard soldier6
+
+def kamikaze
+is_a walking_unit
+title 77196
+attack_hit 77544 77569 77570 77571 77572
+keyboard soldier6
+
+
+
+def a_possession
+title 77199
+alert 77931
+
+
+def traditionnel
+title 77200
+
+def technique
+title 77201
+
+def robotique
+title 77202
+
+def tenebre
+title 77203
+
+def elfique
+title 77204
+
+def orc
+title 77205
+
+
+def illusion_boisee
+title 77208
+death 77518
+
+def a_illusion_boisee
+title 77208
+alert 77932
+
+def a_faire_exploser_kamikaze
+title 77003
+alert 77975
+
+def grande_agressivite
+title 77212
+
+
+
+
+def cercle_des_elements
+is_a building
+title 77218
+launch_attack 77980
+attack_hit 77908
+
+def tour_du_feu
+is_a building
+title 77219
+noise repeat 30 77997
+launch_attack 77869
+attack_hit 77870
+
+def tour_de_l_eau
+is_a building
+title 77220
+noise repeat 30 77987
+launch_attack 77984
+attack_hit 77985
+
+def tour_de_l_air
+is_a building
+title 77221
+noise repeat 30 77983
+launch_attack 77812
+attack_hit 77973
+
+def tour_de_la_terre
+is_a building
+title 77222
+noise repeat 30 77986
+launch_attack 77888
+
+def elemental_de_feu
+is_a unit
+title 77223
+noise loop 77998
+launch_attack 77988
+attack_hit 77993
+keyboard soldier2
+
+def elemental_d_eau
+is_a unit
+title 77224
+noise loop 77996
+launch_attack 77994
+attack_hit 77995
+keyboard soldier3
+
+def elemental_d_air
+is_a unit
+title 77225
+move 77981 77982
+launch_attack 77978
+attack_hit 77897 77898
+keyboard soldier4
+
+def elemental_de_terre
+is_a unit
+title 77226
+move 77989 77990
+attack_hit 77979
+keyboard soldier1
+
+def elementale
+title 77227
+
+def bombe_camouflee
+is_a building
+title 77216
+
+def a_faire_exploser_bombe_camouflee
+title 77003
+alert 77975
+
+def structure_renforcee
+title 77217
+
+def tireur_magnetique
+is_a unit
+title 77228
+noise repeat 10 77739 77740 77741 77742 77743
+move 77886 77887
+launch_attack 77991
+attack_hit 77992
+keyboard soldier1
+
+def perfectionnement_draconique
+title 77004
+
+def boule_de_transport
+is_a unit
+title 77197
+move 77928
+death 77929 77930
+keyboard soldier7
+
+def arbaletrier
+is_a archer
+title 77050
+attack_hit 77676 77677 77678 77679
+keyboard soldier1
+
+def loup
+is_a unit
+title 77023
+noise repeat 30 77587 77588 77589 77590
+move 77611 77914
+launch_attack 77591 9999 9999 9999
+attack_hit 77592 77610 77595 77596
+death 77634 77635 77636
+keyboard soldier5
+
+def a_dompter_loup
+title 77033
+alert 77632 77633
+
+def lion
+is_a unit
+title 77048
+noise repeat 35 77662 77663 77664
+move 77671 77915
+launch_attack 77665 77666 77667 9999 9999 9999
+attack_hit 77668 77669 77670
+death 77672
+keyboard soldier6
+
+def a_dompter_lion
+title 77049
+alert 77674 77675
+
+def serpent
+is_a unit
+title 77190
+noise repeat 30 77942 77943
+move 77965 77966
+launch_attack 77944 9999 9999 9999
+attack_hit 77592 77610 77595 77596
+keyboard soldier4
+
+def a_dompter_serpent
+title 77213
+alert 77909 77911
+
+def terrier
+is_a building
+title 77005
+
+def sauvage
+title 77006
+
+def planque
+is_a building
+title 77008
+
+def bosquet_des_brigands
+is_a building
+title 77009
+
+def bois_des_flibustiers
+is_a building
+title 77010
+
+def bivouac_d_entrainement
+is_a building
+title 77013
+
+def cage_aux_fauves
+is_a building
+title 77017
+noise repeat 20 77625
+
+def hutte_des_sortileges
+is_a building
+title 77021
+
+def gredin
+is_a peasant
+title 77072
+launch_attack 77700
+attack_hit 77701 77702 77703
+keyboard worker
+
+def chasseresse
+is_a walking_unit
+title 77022
+attack_hit 77545 77546 77547 77540 1302
+keyboard soldier1
+
+def racines_penetrantes
+is_a thing
+title 77169
+noise loop  77903
+
+def a_racines_penetrantes
+title 77169
+alert 77904
+
+def arbre_sentinelle
+is_a unit
+title 77024
+noise repeat 10 77893
+attack_hit 77598 77599 77600
+death 77601 77602
+
+def a_semer_arbre_sentinelle
+title 77025
+alert 77597
+
+def paladin
+is_a knight
+title 77034
+move 77533 77534
+keyboard soldier3
+
+def super_armure
+title 77075
+
+def super_attaque
+title 77076
+
+def super_vie
+title 77077
+
+def super_vitesse
+title 77078
+
+def petite_explosion
+is_a thing
+title 77045
+
+def grande_explosion
+is_a thing
+title 77045
+
+def foudre
+is_a thing
+title 77046
+noise 77510
+
+def a_foudre
+title 77046
+alert 77510
+
+def holy_vision
+is_a thing
+title 77054
+
+def labyrinthe
+is_a building
+title 77118
+noise repeat 15 77781 77782 77801 
+
+def dca
+is_a building
+title 77062
+launch_attack 77516
+attack_hit 77523
+
+def necromancer
+keyboard soldier3
+
+def zombie
+keyboard soldier7
+
+def boule_d_energie
+is_a unit
+title 77064
+noise loop 77517
+launch_attack 77536
+attack_hit 77897 77898
+death 77518
+keyboard soldier5
+
+def a_boule_d_energie
+title 77065
+alert 77526
+
+def erudit
+is_a walking_unit
+title 77067
+launch_attack 77902
+attack_hit 77901
+keyboard soldier4
+
+def tempete_de_nuages
+is_a thing
+title 77068
+noise loop 77528
+
+def a_tempete_de_nuages
+title 77068
+alert 77535
+
+def archerot_clone
+is_a archerot
+title 77073
+death 77518
+
+def a_clonage
+title 77071
+alert 77565
+
+def super_exorcisme
+title 77079
+
+def knight
+keyboard soldier2
+
+def canon_plasma_surchauffe
+is_a canon_plasma
+title 77080
+noise repeat 2 77594
+
+def gaz_lacrymogene
+is_a thing
+title 77051
+
+def a_gaz_lacrymogene
+title 77051
+alert 77718
+
+def priest
+keyboard soldier5
+
+def dragon
+keyboard soldier6

@@ -1,0 +1,218 @@
+; Pragma 4
+; http://pragmapragma.free.fr
+
+
+
+title 5015 5017 5000 3004
+objective 145 88
+
+
+; map size
+
+square_width 12
+
+nb_columns 15
+nb_lines 11
+
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 d1 e1 g1 h1 j1 k1 m1 n1
+west_east_paths a2 b2 d2 e2 g2 h2 j2 k2 m2 n2
+west_east_paths a3 b3 d3 e3 g3 h3 j3 k3 m3 n3
+west_east_paths a4 b4 d4 e4 g4 h4 j4 k4 m4 n4
+west_east_paths a5 b5 d5 e5 g5 h5 j5 k5 m5 n5
+west_east_paths a6 b6 d6 e6 g6 h6 j6 k6 m6 n6
+west_east_paths a7 b7 d7 e7 g7 h7 j7 k7 m7 n7
+west_east_paths a8 b8 d8 e8 g8 h8 j8 k8 m8 n8
+west_east_paths a9 b9 d9 e9 g9 h9 j9 k9 m9 n9
+west_east_paths a10 b10 d10 e10 g10 h10 j10 k10 m10 n10
+west_east_paths a11 b11 d11 e11 g11 h11 j11 k11 m11 n11
+
+west_east_bridges c3 f3 i3 l3 o3
+west_east_bridges c4 f4 i4 l4 o4
+west_east_bridges c5 f5 i5 l5 o5
+west_east_bridges c6 f6 i6 l6 o6
+west_east_bridges c7 f7 i7 l7 o7
+west_east_bridges c8 f8 i8 l8 o8
+west_east_bridges c9 f9 i9 l9 o9
+
+south_north_paths a1 a2 a3 a4 a7 a8 a9 a10
+south_north_paths b1 b2 b3 b4 b7 b8 b9 b10
+south_north_paths c1 c2 c3 c4 c7 c8 c9 c10
+south_north_paths d1 d2 d3 d4 d7 d8 d9 d10
+south_north_paths e1 e2 e3 e4 e7 e8 e9 e10
+south_north_paths f1 f2 f3 f4 f7 f8 f9 f10
+south_north_paths g1 g2 g3 g4 g7 g8 g9 g10
+south_north_paths h1 h2 h3 h4 h7 h8 h9 h10
+south_north_paths i1 i2 i3 i4 i7 i8 i9 i10
+south_north_paths j1 j2 j3 j4 j7 j8 j9 j10
+south_north_paths k1 k2 k3 k4 k7 k8 k9 k10
+south_north_paths l1 l2 l3 l4 l7 l8 l9 l10
+south_north_paths m1 m2 m3 m4 m7 m8 m9 m10
+south_north_paths n1 n2 n3 n4 n7 n8 n9 n10
+south_north_paths o1 o2 o3 o4 o7 o8 o9 o10
+
+south_north_bridges a5 a6 b5 b6 c5 c6 d5 d6 e5 e6 f5 f6 g5 g6 h5 h6 i5 i6 j5 j6 k5 k6 l5 l6 m5 m6 n5 n6 o5 o6
+
+
+
+; resources
+goldmines 150 b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+woods 150 b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+
+
+#random_choice
+goldmines 2000 a6
+#end_choice
+woods 2000 a6
+#end_choice
+additional_meadows a6
+#end_random_choice
+
+#random_choice
+goldmines 2000 b6
+#end_choice
+woods 2000 b6
+#end_choice
+additional_meadows b6
+#end_random_choice
+
+#random_choice
+goldmines 2000 c6
+#end_choice
+woods 2000 c6
+#end_choice
+additional_meadows c6
+#end_random_choice
+
+#random_choice
+goldmines 2000 d6
+#end_choice
+woods 2000 d6
+#end_choice
+additional_meadows d6
+#end_random_choice
+
+#random_choice
+goldmines 2000 e6
+#end_choice
+woods 2000 e6
+#end_choice
+additional_meadows e6
+#end_random_choice
+
+#random_choice
+goldmines 2000 f6
+#end_choice
+woods 2000 f6
+#end_choice
+additional_meadows f6
+#end_random_choice
+
+#random_choice
+goldmines 2000 g6
+#end_choice
+woods 2000 g6
+#end_choice
+additional_meadows g6
+#end_random_choice
+
+#random_choice
+goldmines 2000 h6
+#end_choice
+woods 2000 h6
+#end_choice
+additional_meadows h6
+#end_random_choice
+
+#random_choice
+goldmines 2000 i6
+#end_choice
+woods 2000 i6
+#end_choice
+additional_meadows i6
+#end_random_choice
+
+#random_choice
+goldmines 2000 j6
+#end_choice
+woods 2000 j6
+#end_choice
+additional_meadows j6
+#end_random_choice
+
+#random_choice
+goldmines 2000 k6
+#end_choice
+woods 2000 k6
+#end_choice
+additional_meadows k6
+#end_random_choice
+
+#random_choice
+goldmines 2000 l6
+#end_choice
+woods 2000 l6
+#end_choice
+additional_meadows l6
+#end_random_choice
+
+#random_choice
+goldmines 2000 m6
+#end_choice
+woods 2000 m6
+#end_choice
+additional_meadows m6
+#end_random_choice
+
+#random_choice
+goldmines 2000 n6
+#end_choice
+woods 2000 n6
+#end_choice
+additional_meadows n6
+#end_random_choice
+
+#random_choice
+goldmines 2000 o6
+#end_choice
+woods 2000 o6
+#end_choice
+additional_meadows o6
+#end_random_choice
+
+
+
+nb_meadows_by_square 0
+additional_meadows b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+additional_meadows b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+additional_meadows b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+additional_meadows b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+additional_meadows b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+additional_meadows b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+additional_meadows b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+additional_meadows b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+additional_meadows b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+
+additional_meadows a1 c1 d1 f1 g1 i1 j1 l1 m1 o1 a11 c11 d11 f11 g11 i11 j11 l11 m11 o11
+additional_meadows a1 c1 d1 f1 g1 i1 j1 l1 m1 o1 a11 c11 d11 f11 g11 i11 j11 l11 m11 o11
+additional_meadows a1 c1 d1 f1 g1 i1 j1 l1 m1 o1 a11 c11 d11 f11 g11 i11 j11 l11 m11 o11
+additional_meadows a1 c1 d1 f1 g1 i1 j1 l1 m1 o1 a11 c11 d11 f11 g11 i11 j11 l11 m11 o11
+
+
+additional_meadows a2 c2 d2 f2 g2 i2 j2 l2 m2 o2 a10 c10 d10 f10 g10 i10 j10 l10 m10 o10
+additional_meadows a2 c2 d2 f2 g2 i2 j2 l2 m2 o2 a10 c10 d10 f10 g10 i10 j10 l10 m10 o10
+additional_meadows a2 c2 d2 f2 g2 i2 j2 l2 m2 o2 a10 c10 d10 f10 g10 i10 j10 l10 m10 o10
+additional_meadows a2 c2 d2 f2 g2 i2 j2 l2 m2 o2 a10 c10 d10 f10 g10 i10 j10 l10 m10 o10
+
+
+; players
+
+nb_players_min 2
+nb_players_max 10
+
+starting_squares b1 e1 h1 k1 n1 b11 e11 h11 k11 n11
+starting_units townhall 4 farm 10 peasant 1 scouttower
+starting_resources 100 100 10 100
+global_food_limit 5000

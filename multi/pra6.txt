@@ -1,0 +1,118 @@
+; Pragma 6
+; http://pragmapragma.free.fr
+
+
+
+title 5015 5017 5000 3006
+objective 145 88
+
+
+; map size
+
+square_width 12
+
+nb_columns 21
+nb_lines 10
+
+
+; paths (give only the starting square)
+
+west_east_paths b1 c1 d1 e1 g1 i1 j1 k1 l1 n1 p1 q1 r1 s1 u1
+west_east_paths b10 c10 d10 e10 g10 i10 j10 k10 l10 n10 p10 q10 r10 s10 u10
+
+west_east_paths a2 c2 d2 f2 h2 j2 k2 m2 o2 q2 r2 t2
+west_east_paths a9 c9 d9 f9 h9 j9 k9 m9 o9 q9 r9 t9
+
+west_east_paths b3 c3 d3 e3 g3 i3 j3 k3 l3 n3 p3 q3 r3 s3 u3
+west_east_paths b8 c8 d8 e8 g8 i8 j8 k8 l8 n8 p8 q8 r8 s8 u8
+
+west_east_paths b4 c4 d4 e4 g4 i4 j4 k4 l4 n4 p4 q4 r4 s4 u4
+west_east_paths b7 c7 d7 e7 g7 i7 j7 k7 l7 n7 p7 q7 r7 s7 u7
+
+west_east_paths a5 b5 e5 f5 g5 h5 i5 l5 m5 n5 o5 p5 s5 t5 u5
+west_east_paths a6 b6 e6 f6 g6 h6 i6 l6 m6 n6 o6 p6 s6 t6 u6
+
+
+south_north_paths a1 a2 a4 a6 a8 a9
+south_north_paths g1 g2 g4 g6 g8 g9
+south_north_paths h1 h2 h4 h6 h8 h9
+south_north_paths n1 n2 n4 n6 n8 n9
+south_north_paths o1 o2 o4 o6 o8 o9
+south_north_paths u1 u2 u4 u6 u8 u9
+
+south_north_paths b1 b2 b3 b7 b8 b9
+south_north_paths f1 f2 f3 f7 f8 f9
+south_north_paths i1 i2 i3 i7 i8 i9
+south_north_paths m1 m2 m3 m7 m8 m9
+south_north_paths p1 p2 p3 p7 p8 p9
+south_north_paths t1 t2 t3 t7 t8 t9
+
+south_north_paths c2 c3 c4 c6 c7 c8
+south_north_paths e2 e3 e4 e6 e7 e8
+south_north_paths j2 j3 j4 j6 j7 j8
+south_north_paths l2 l3 l4 l6 l7 l8
+south_north_paths q2 q3 q4 q6 q7 q8
+south_north_paths s2 s3 s4 s6 s7 s8
+
+south_north_paths d3 d4 d6 d7 
+south_north_paths k3 k4 k6 k7 
+south_north_paths r3 r4 r6 r7 
+
+
+
+south_north_bridges a5 b5 c5 d5 e5 f5 g5 h5 i5 j5 k5 l5 m5 n5 o5 p5 q5 r5 s5 t5 u5
+
+
+
+
+; resources
+goldmines 75 a5 a6 g5 g6 h5 h6 n5 n6 o5 o6 u5 u6
+goldmines 150 b5 b6 f5 f6 i5 i6 m5 m6 p5 p6 t5 t6
+goldmines 300 c5 c6 e5 e6 j5 j6 l5 l6 q5 q6 s5 s6
+goldmines 600 d5 d6 k5 k6 r5 r6
+
+woods 50 a4 a7 g4 g7 h4 h7 n4 n7 o4 o7 u4 u7
+woods 45 d4 d7 k4 k7 r4 r7
+woods 75 b3 b8 c3 c8 e3 e8 f3 f8 i3 i8 j3 j8 l3 l8 m3 m8 p3 p8 q3 q8 s3 s8 t3 t8
+woods 150 a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 k2 l2 m2 n2 o2 p2 q2 r2 s2 t2 u2 a9 b9 c9 d9 e9 f9 g9 h9 i9 j9 k9 l9 m9 n9 o9 p9 q9 r9 s9 t9 u9
+woods 200 a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1 o1 p1 q1 r1 s1 t1 u1 a10 b10 c10 d10 e10 f10 g10 h10 i10 j10 k10 l10 m10 n10 o10 p10 q10 r10 s10 t10 u10
+
+
+
+nb_meadows_by_square 0
+
+additional_meadows a4 b4 c4 d4 e4 f4 g4 h4 i4 j4 k4 l4 m4 n4 o4 p4 q4 r4 s4 t4 u4 a7 b7 c7 d7 e7 f7 g7 h7 i7 j7 k7 l7 m7 n7 o7 p7 q7 r7 s7 t7 u7
+additional_meadows a4 b4 c4 d4 e4 f4 g4 h4 i4 j4 k4 l4 m4 n4 o4 p4 q4 r4 s4 t4 u4 a7 b7 c7 d7 e7 f7 g7 h7 i7 j7 k7 l7 m7 n7 o7 p7 q7 r7 s7 t7 u7
+additional_meadows a4 b4 c4 d4 e4 f4 g4 h4 i4 j4 k4 l4 m4 n4 o4 p4 q4 r4 s4 t4 u4 a7 b7 c7 d7 e7 f7 g7 h7 i7 j7 k7 l7 m7 n7 o7 p7 q7 r7 s7 t7 u7
+additional_meadows a4 b4 c4 d4 e4 f4 g4 h4 i4 j4 k4 l4 m4 n4 o4 p4 q4 r4 s4 t4 u4 a7 b7 c7 d7 e7 f7 g7 h7 i7 j7 k7 l7 m7 n7 o7 p7 q7 r7 s7 t7 u7
+
+additional_meadows a3 b3 c3 d3 e3 f3 g3 h3 i3 j3 k3 l3 m3 n3 o3 p3 q3 r3 s3 t3 u3 a8 b8 c8 d8 e8 f8 g8 h8 i8 j8 k8 l8 m8 n8 o8 p8 q8 r8 s8 t8 u8
+additional_meadows a3 b3 c3 d3 e3 f3 g3 h3 i3 j3 k3 l3 m3 n3 o3 p3 q3 r3 s3 t3 u3 a8 b8 c8 d8 e8 f8 g8 h8 i8 j8 k8 l8 m8 n8 o8 p8 q8 r8 s8 t8 u8
+additional_meadows a3 b3 c3 d3 e3 f3 g3 h3 i3 j3 k3 l3 m3 n3 o3 p3 q3 r3 s3 t3 u3 a8 b8 c8 d8 e8 f8 g8 h8 i8 j8 k8 l8 m8 n8 o8 p8 q8 r8 s8 t8 u8
+
+additional_meadows a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 k2 l2 m2 n2 o2 p2 q2 r2 s2 t2 u2 a9 b9 c9 d9 e9 f9 g9 h9 i9 j9 k9 l9 m9 n9 o9 p9 q9 r9 s9 t9 u9
+additional_meadows a2 b2 c2 d2 e2 f2 g2 h2 i2 j2 k2 l2 m2 n2 o2 p2 q2 r2 s2 t2 u2 a9 b9 c9 d9 e9 f9 g9 h9 i9 j9 k9 l9 m9 n9 o9 p9 q9 r9 s9 t9 u9
+
+additional_meadows a1 a10 g1 g10 h1 h10 n1 n10 o1 o10 u1 u10
+
+additional_meadows d1 d10 k1 k10 r1 r10
+additional_meadows d1 d10 k1 k10 r1 r10
+additional_meadows d1 d10 k1 k10 r1 r10
+additional_meadows d1 d10 k1 k10 r1 r10
+additional_meadows d1 d10 k1 k10 r1 r10
+additional_meadows d1 d10 k1 k10 r1 r10
+additional_meadows d1 d10 k1 k10 r1 r10
+additional_meadows d1 d10 k1 k10 r1 r10
+
+
+
+
+; players
+
+nb_players_min 2
+nb_players_max 6
+
+starting_squares d1 d10 k1 k10 r1 r10
+starting_units townhall 4 farm 10 peasant 1 scouttower
+starting_resources 100 100
+global_food_limit 5000

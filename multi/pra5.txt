@@ -1,0 +1,128 @@
+; Pragma 5
+; http://pragmapragma.free.fr
+
+
+
+title 5015 5017 5000 3005
+objective 145 88
+
+
+; map size
+
+square_width 12
+
+nb_columns 11
+nb_lines 21
+
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 c1 d1 g1 h1 i1 j1
+west_east_paths a6 b6 c6 d6 g6 h6 i6 j6
+west_east_paths a11 b11 c11 d11 g11 h11 i11 j11
+west_east_paths a16 b16 c16 d16 g16 h16 i6 j6
+west_east_paths a21 b21 c21 d21 g21 h21 i21 j21
+
+west_east_paths a2 b2 d2 e2 f2 g2 i2 j2
+west_east_paths a7 b7 d7 e7 f7 g7 i7 j7
+west_east_paths a12 b12 d12 e12 f12 g12 i12 j12
+west_east_paths a17 b17 d17 e17 f17 g17 i17 j17
+
+west_east_paths a3 c3 d3 e3 f3 g3 h3 j3
+west_east_paths a8 c8 d8 e8 f8 g8 h8 j8
+west_east_paths a13 c13 d13 e13 f13 g13 h13 j13
+west_east_paths a18 c18 d18 e18 f18 g18 h18 j18
+
+west_east_paths c4 d4 e4 f4 g4 h4
+west_east_paths c9 d9 e9 f9 g9 h9
+west_east_paths c14 d14 e14 f14 g14 h14
+west_east_paths c19 d19 e19 f19 g19 h19
+
+west_east_paths a5 c5 d5 e5 f5 g5 h5 j5
+west_east_paths a10 c10 d10 e10 f10 g10 h10 j10
+west_east_paths a15 c15 d15 e15 f15 g15 h15 j15
+west_east_paths a20 c20 d20 e20 f20 g20 h20 j20
+
+
+
+south_north_paths a2 a4 a7 a9 a12 a14 a17 a19
+south_north_paths k2 k4 k7 k9 k12 k14 k17 k19
+
+south_north_paths b3 b4 b8 b9 b13 b14 b18 b19
+south_north_paths j3 j4 j8 j9 j13 j14 j18 j19
+
+south_north_paths c3 c4 c5 c8 c9 c10 c13 c14 c15 c18 c19 c20
+south_north_paths i3 i4 i5 i8 i9 i10 i13 i14 i15 i18 i19 i20
+
+south_north_paths d1 d2 d3 d4 d5 d6 d7 d8 d9 d10 d11 d12 d13 d14 d15 d16 d17 d18 d19 d20
+south_north_paths h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11 h12 h13 h14 h15 h16 h17 h18 h19 h20
+
+south_north_paths e1 e2 e3 e4 e5 e6 e7 e8 e9 e10 e11 e12 e13 e14 e15 e16 e17 e18 e19 e20
+south_north_paths g1 g2 g3 g4 g5 g6 g7 g8 g9 g10 g11 g12 g13 g14 g15 g16 g17 g18 g19 g20
+
+south_north_paths f2 f3 f4 f7 f8 f9 f12 f13 f14 f17 f18 f19
+
+
+south_north_bridges c2 c7 c12 c17
+south_north_bridges i2 i7 i12 i17
+
+
+
+; resources
+goldmines 350 a4 a9 a14 a19 k4 k9 k14 k19
+goldmines 75 b2 b7 b12 b17 j2 j7 j12 j17
+goldmines 200 f3 f8 f13 f18
+
+woods 150 a3 a8 a13 a18 k3 k8 k13 k18
+woods 50 b2 b7 b12 b17 j2 j7 j12 j17
+woods 100 e5 e10 e15 e20 g5 g10 g15 g20
+
+
+
+nb_meadows_by_square 4
+additional_meadows a4 a9 a14 a19 k4 k9 k14 k19
+additional_meadows a4 a9 a14 a19 k4 k9 k14 k19
+additional_meadows a4 a9 a14 a19 k4 k9 k14 k19
+additional_meadows a4 a9 a14 a19 k4 k9 k14 k19
+additional_meadows a4 a9 a14 a19 k4 k9 k14 k19
+additional_meadows a4 a9 a14 a19 k4 k9 k14 k19
+additional_meadows a4 a9 a14 a19 k4 k9 k14 k19
+additional_meadows a4 a9 a14 a19 k4 k9 k14 k19
+additional_meadows a4 a9 a14 a19 k4 k9 k14 k19
+additional_meadows a4 a9 a14 a19 k4 k9 k14 k19
+
+remove_meadows a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1
+remove_meadows a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1
+remove_meadows a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1
+remove_meadows a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1
+
+remove_meadows a6 b6 c6 d6 e6 f6 g6 h6 i6 j6 k6
+remove_meadows a6 b6 c6 d6 e6 f6 g6 h6 i6 j6 k6
+remove_meadows a6 b6 c6 d6 e6 f6 g6 h6 i6 j6 k6
+remove_meadows a6 b6 c6 d6 e6 f6 g6 h6 i6 j6 k6
+
+remove_meadows a11 b11 c11 d11 e11 f11 g11 h11 i11 j11 k11
+remove_meadows a11 b11 c11 d11 e11 f11 g11 h11 i11 j11 k11
+remove_meadows a11 b11 c11 d11 e11 f11 g11 h11 i11 j11 k11
+remove_meadows a11 b11 c11 d11 e11 f11 g11 h11 i11 j11 k11
+
+remove_meadows a16 b16 c16 d16 e16 f16 g16 h16 i16 j16 k16
+remove_meadows a16 b16 c16 d16 e16 f16 g16 h16 i16 j16 k16
+remove_meadows a16 b16 c16 d16 e16 f16 g16 h16 i16 j16 k16
+remove_meadows a16 b16 c16 d16 e16 f16 g16 h16 i16 j16 k16
+
+remove_meadows a21 b21 c21 d21 e21 f21 g21 h21 i21 j21 k21
+remove_meadows a21 b21 c21 d21 e21 f21 g21 h21 i21 j21 k21
+remove_meadows a21 b21 c21 d21 e21 f21 g21 h21 i21 j21 k21
+remove_meadows a21 b21 c21 d21 e21 f21 g21 h21 i21 j21 k21
+
+
+; players
+
+nb_players_min 2
+nb_players_max 8
+
+starting_squares a4 a9 a14 a19 k4 k9 k14 k19
+starting_units townhall 4 farm 10 peasant 1 scouttower
+starting_resources 100 100
+global_food_limit 5000
