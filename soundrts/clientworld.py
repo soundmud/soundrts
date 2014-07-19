@@ -4,7 +4,7 @@ import time
 import pygame
 
 from clientmedia import *
-from clientstyle import *
+from definitions import *
 from commun import *
 from constants import *
 from worldunit import *
@@ -25,7 +25,7 @@ R = int(0.5 * 10)
 R2 = R * R
 
 def compute_title(type_name):
-    t = get_style(type_name, "title")
+    t = style.get(type_name, "title")
     if t is None:
         return []
     else:
@@ -171,7 +171,7 @@ class Objet(object):
     def upgrades_status(self):
         result = []
         for u in self.upgrades:
-            result += get_style(u, "title")
+            result += style.get(u, "title")
         return result
 
     @property
@@ -179,7 +179,7 @@ class Objet(object):
         d = []
         try:
             if hasattr(self, "qty") and self.qty:
-                d += [134] + nombre(self.qty) + get_style("parameters", "resource_%s_title" % self.resource_type)
+                d += [134] + nombre(self.qty) + style.get("parameters", "resource_%s_title" % self.resource_type)
             if hasattr(self, "hp"):
                 d += self.hp_status
             if hasattr(self, "mana"):
@@ -194,7 +194,7 @@ class Objet(object):
             if getattr(self, "is_a_cloaker", 0):
                 d += [9998, 4291]
         except:
-            pass # a warning is given by get_style()
+            pass # a warning is given by style.get()
         return d
 
     def is_a_useful_target(self):
@@ -224,14 +224,14 @@ class Objet(object):
 
     def footstepnoise(self):
         # assert: "only immobile objects must be taken into account"
-        result = get_style(self.type_name, "move")
+        result = style.get(self.type_name, "move")
         if self.airground_type == "ground":
             d_min = 9999999
             for m in self.place.objects:
                 if getattr(m, "speed", 0):
                     continue
-                g = get_style(m.type_name, "ground")
-                if g and has_style(self.type_name, "move_on_%s" % g[0]):
+                g = style.get(m.type_name, "ground")
+                if g and style.has(self.type_name, "move_on_%s" % g[0]):
                     try:
                         k = float(g[1])
                     except IndexError:
@@ -242,7 +242,7 @@ class Objet(object):
                         continue
                     d = distance(o.x, o.y, self.x, self.y) / k
                     if d < d_min:
-                        result = get_style(self.type_name, "move_on_%s" % g[0])
+                        result = style.get(self.type_name, "move_on_%s" % g[0])
                         d_min = d
         return result
 
@@ -266,7 +266,7 @@ class Objet(object):
             self.next_step = None
 
     def get_style(self, attr):
-        st = get_style(self.type_name, attr)
+        st = style.get(self.type_name, attr)
         if st and st[0] == "if_me":
             if self.player in self.interface.player.allied:
                 try:
@@ -332,7 +332,7 @@ class Objet(object):
             self.launch_event(s, priority=priority)
 
     def on_use_complete(self, ability):
-        st = get_style(ability, "alert")
+        st = style.get(ability, "alert")
         if not st:
             return
         s = random.choice(st)
@@ -423,10 +423,10 @@ class Objet(object):
         if self.player is not self.interface.player: return
         self.launch_event_style("order_impossible", alert=True)
         if reason is not None:
-            voice.info(get_style("messages", reason))
+            voice.info(style.get("messages", reason))
 
     def on_production_deferred(self):
-        voice.info(get_style("messages", "production_deferred"))
+        voice.info(style.get("messages", "production_deferred"))
 
     def on_win_fight(self):
         self.launch_event_style("win_fight", alert=True)
@@ -471,7 +471,7 @@ class Objet(object):
     def on_wounded(self, attacker_type, attacker_id, level):
         if self.player == self.interface.player:
             self.unit_attacked_alert()
-        s = get_style(attacker_type, "attack_hit_level_%s" % level)
+        s = style.get(attacker_type, "attack_hit_level_%s" % level)
         if s is not None:
             if s:
                 self.launch_event(random.choice(s))
@@ -690,7 +690,7 @@ class OrderView(object):
     def __init__(self, model, interface=None):
         self.model = model
         self.interface = interface
-        for k, v in get_style_dict(model.keyword).items():
+        for k, v in style.get_dict(model.keyword).items():
             if hasattr(self, k):
                 setattr(self, k, v)
             else:
@@ -705,20 +705,20 @@ class OrderView(object):
         msg = []
         for t in self.missing_requirements:
             and_index = len(msg)
-            msg += get_style(t, "title")
+            msg += style.get(t, "title")
         if not self.missing_requirements:
             for i, c in enumerate(self.cost):
                 if c:
                     and_index = len(msg)
-                    msg += nombre(c / PRECISION) + get_style("parameters", "resource_%s_title" % i)
+                    msg += nombre(c / PRECISION) + style.get("parameters", "resource_%s_title" % i)
             if self.food_cost:
                 and_index = len(msg)
-                msg += nombre(self.food_cost, genre="f") + get_style("parameters", "food_title")
+                msg += nombre(self.food_cost, genre="f") + style.get("parameters", "food_title")
         # add "and" if there are at least 2 requirements
         if and_index > 0:
-            msg[and_index:and_index] = get_style("parameters", "and")
+            msg[and_index:and_index] = style.get("parameters", "and")
         if msg:
-            msg[0:0] = get_style("parameters", "requires")
+            msg[0:0] = style.get("parameters", "requires")
         return msg
 
     @property
@@ -727,18 +727,18 @@ class OrderView(object):
 
     def title_msg(self, nb=1):
         if self.is_deferred:
-            result = get_style("messages", "production_deferred")
+            result = style.get("messages", "production_deferred")
         else:
             result = []
         result += self.title
         if self.type is not None:
-            t = get_style(self.type.type_name, "title")
+            t = style.get(self.type.type_name, "title")
             if nb != 1:
                 t = number(nb) + t
             result = substitute_args(result, [t])
         if self.target is not None:
             if self.keyword == "build_phase_two":
-                result += get_style(self.target.type.type_name, "title")
+                result += style.get(self.target.type.type_name, "title")
             else:
                 result += Objet(self.interface, self.target).title
         return result
@@ -746,12 +746,12 @@ class OrderView(object):
 
 def order_title(order):
     o = order.split()
-    t = get_style(o[0], "title")
+    t = style.get(o[0], "title")
     if t is None:
         t = []
         warning("%s.title is None", o[0])
     if len(o) > 1:
-        t2 = get_style(o[1], "title")
+        t2 = style.get(o[1], "title")
         if t2 is None:
             warning("%s.title is None", o[1])
         else:
@@ -763,13 +763,13 @@ def order_index(x):
 
 def _ord_index(keyword):
     try:
-        return float(get_style(keyword, "index")[0])
+        return float(style.get(keyword, "index")[0])
     except:
         warning("%s.index should be a number (check style.txt)", keyword)
         return 9999 # end of the list
 
 def _has_ord_index(keyword):
-    return has_style(keyword, "index")
+    return style.has(keyword, "index")
 
 _orders_list = ()
 

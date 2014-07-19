@@ -26,7 +26,7 @@ from lib.log import *
 from clientmedia import *
 from clientmenu import *
 from clientserver import *
-from clientstyle import load_style, get_style
+from definitions import style
 from clientversion import *
 from commun import *
 import config
@@ -133,7 +133,7 @@ class Application(object):
         self.menu.update_menu(self.build_training_menu_after_map())
 
     def training_menu_after_map(self, m):
-        load_style(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with races defined in the map
+        style.load(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with races defined in the map
         self.players = [config.login]
         self.races = ["random_race"]
         self.map = m
@@ -154,7 +154,7 @@ class Application(object):
         if len(self.map.races) > 1:
             for r in ["random_race"] + self.map.races:
                 if r != pr:
-                    menu.append([p,] + get_style(r, "title"),
+                    menu.append([p,] + style.get(r, "title"),
                                 (self.set_race, (pn, r)))
 
     def build_training_menu_after_map(self):

@@ -1892,7 +1892,7 @@ class UseOrder(ComplexOrder):
 
     @classmethod
     def additional_condition(cls, unused_unit, type_name):
-        e = get_rule(type_name, "effect")
+        e = rules.get(type_name, "effect")
         return e and hasattr(cls, "execute_%s" % e[0])
 
 

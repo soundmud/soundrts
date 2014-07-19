@@ -1,5 +1,5 @@
 from clientmenu import *
-from clientstyle import load_style, get_style
+from definitions import style
 from game import MultiplayerGame
 import mapfile
 
@@ -127,7 +127,7 @@ class _BeforeGameMenu(_ServerMenu):
 
     def srv_map_races(self, args):
         self.map_races = args
-        load_style(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with races defined in the map
+        style.load(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with races defined in the map
 #       TODO: use self.map.additional_style (and self.map.campaign_style ?)
 
     def srv_registered_players(self, args):
@@ -137,7 +137,7 @@ class _BeforeGameMenu(_ServerMenu):
         if len(self.map_races) > 1:
             for r in ["random_race"] + self.map_races:
                 if r != pr:
-                    menu.append([p,] + get_style(r, "title"),
+                    menu.append([p,] + style.get(r, "title"),
                                 (self.server.write_line,
                                  "race %s %s" % (pn, r)))
 

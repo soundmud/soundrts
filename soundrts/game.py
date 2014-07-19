@@ -8,7 +8,7 @@ import time
 from clientmedia import *
 import clientgame
 import clientmenu
-import clientstyle
+import definitions
 import clientworld
 import config
 from constants import *
@@ -62,7 +62,7 @@ class _Game(object):
             self.create_replay()
         self.world = World(self.default_triggers, self.seed)
         if self.world.load_and_build_map(self.map):
-            load_style(res.get_text("ui/style", append=True, locale=True),
+            style.load(res.get_text("ui/style", append=True, locale=True),
                        self.map.campaign_style,
                        self.map.additional_style)
             sounds.enter_map(self.map.mapfile)
@@ -172,7 +172,7 @@ class _Savable(object):
 
     def __getstate__(self):
         odict = self.__dict__.copy()
-        del odict['_replay_file']
+        odict.pop('_replay_file', None)
         return odict
 
     def save(self):
@@ -180,9 +180,9 @@ class _Savable(object):
         i = stats.Stats(None, None)._get_weak_user_id()
         f.write("%s\n" % i)
         self.world.remove_links_for_savegame()
-        self._rules = clientstyle._rules
-        self._ai = clientstyle._ai
-        self._style = clientstyle._style
+        self._rules = rules
+        self._ai = definitions._ai
+        self._style = style
         if self.record_replay:
             self._replay_file.flush()
             os.fsync(self._replay_file.fileno()) # just to be sure
@@ -201,9 +201,9 @@ class _Savable(object):
             self._replay_file.write(self._replay_file_content)
         sounds.enter_map(self.map.mapfile)
         self.world.restore_links_for_savegame()
-        clientstyle._rules = self._rules
-        clientstyle._ai = self._ai
-        clientstyle._style = self._style
+        rules.copy(self._rules)
+        definitions._ai = self._ai
+        style.copy(self._style)
         clientworld.update_orders_list() # when style has changed
         self.interface.set_self_as_listener()
         threading.Thread(target=self.world.loop).start()

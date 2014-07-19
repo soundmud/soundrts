@@ -1,10 +1,10 @@
 import unittest
 
-from clientstyle import *
+from definitions import *
 from clientworld import *
 
-load_rules("rules.txt")
-load_style("ui/style.txt")
+rules.load("rules.txt")
+style.load("ui/style.txt")
 
 class NbArgsTestCase(unittest.TestCase):
 

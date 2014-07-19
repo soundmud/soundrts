@@ -2,7 +2,7 @@ import worldrandom
 import sys
 import time
 
-from clientstyle import *
+from definitions import *
 from commun import *
 
 

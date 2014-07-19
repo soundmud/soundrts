@@ -250,14 +250,14 @@ class World(object):
         """
         if not self.unit_classes.has_key(s):
             try:
-                base = self.unit_base_classes[get_rule(s, "class")[0]]
+                base = self.unit_base_classes[rules.get(s, "class")[0]]
             except:
-                if get_rule(s, "class") != ["race"]:
+                if rules.get(s, "class") != ["race"]:
                     warning("no class defined for %s", s)
                 self.unit_classes[s] = None
                 return
             try:
-                dct = get_rule_dict(s)
+                dct = rules.get_dict(s)
                 t = Type(s, (base,), dct)
                 if base is Upgrade:
                     t = base(s, dct) # factory-prototypes are only for units
@@ -270,7 +270,7 @@ class World(object):
 
     def _get_classnames(self, condition):
         result = []
-        for c in get_rule_classnames():
+        for c in rules.classnames():
             uc = self.unit_class(c)
             if uc is not None and condition(uc):
                 result.append(c)
@@ -395,7 +395,7 @@ class World(object):
 
     @property
     def nb_res(self):
-        return int(get_rule("parameters", "nb_of_resource_types")[0])
+        return int(rules.get("parameters", "nb_of_resource_types")[0])
 
     def _add_start(self, w, words, line):
         # get start type
@@ -520,7 +520,7 @@ class World(object):
                     if _w and _w[0] == "-": _w = _w[1:]
                     if re.match("^([a-z]+[0-9]+|[0-9]+(.[0-9]*)?|.[0-9]+)$", _w) is None and \
                        not hasattr(Player, "lang_" + _w) and \
-                       _w not in get_rule_classnames() and \
+                       _w not in rules.classnames() and \
                        _w not in get_ai_names() and \
                        _w not in ["(", ")", "all", "players", "computers"] and \
                        _w not in ORDERS_DICT:
@@ -554,7 +554,7 @@ class World(object):
                         self.starting_resources.append(to_int(c))
                     except:
                         map_error(line, "expected an integer but found %s" % c)
-            elif get_rule(w, "class") == ["deposit"]:
+            elif rules.get(w, "class") == ["deposit"]:
                 for sq in words[2:]: # TODO: error msg (squares)
                     self.map_objects.append([sq, w, words[1]])
             elif w in ["starting_units"]:
@@ -587,7 +587,7 @@ class World(object):
             except:
                 warning("cannot remove map error file")
         try:
-            load_rules(res.get_text("rules", append=True), map.campaign_rules, map.additional_rules)
+            rules.load(res.get_text("rules", append=True), map.campaign_rules, map.additional_rules)
             load_ai(res.get_text("ai", append=True), map.campaign_ai, map.additional_ai)
             self._load_map(map)
             self.map = map
@@ -604,8 +604,8 @@ class World(object):
         return True
 
     def get_races(self):
-        return [c for c in get_rule_classnames()
-                if get_rule(c, "class") == ["race"]]
+        return [c for c in rules.classnames()
+                if rules.get(c, "class") == ["race"]]
 
     # move this to Game?
 

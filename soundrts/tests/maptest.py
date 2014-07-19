@@ -9,7 +9,7 @@ from soundrts.worldclient import *
 class CoordinatorTestCase(unittest.TestCase):
 
     def testSyncError(self):
-        c = Coordinator(None, None, None)
+        c = Coordinator(None, None, None, None)
         c.world = World([])
         c.world.load_and_build_map(Map("multi/m2.txt"))
         c.get_sync_debug_msg_1()

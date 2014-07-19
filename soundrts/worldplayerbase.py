@@ -27,7 +27,7 @@ class Objective(object):
 
 
 def normalize_cost_or_resources(lst):
-    n = int(get_rule("parameters", "nb_of_resource_types")[0])
+    n = int(rules.get("parameters", "nb_of_resource_types")[0])
     while len(lst) < n:
         lst += [0]
     while len(lst) > n:
@@ -345,16 +345,16 @@ class Player(object):
     nb_buildings_killed = 0
 
     def equivalent(self, tn):
-        if get_rule(self.race, tn):
-            return get_rule(self.race, tn)[0]
+        if rules.get(self.race, tn):
+            return rules.get(self.race, tn)[0]
         return tn
         
     def init_position(self):
 
         def equivalent_type(t):
             tn = getattr(t, "type_name", "")
-            if get_rule(self.race, tn):
-                return self.world.unit_class(get_rule(self.race, tn)[0])
+            if rules.get(self.race, tn):
+                return self.world.unit_class(rules.get(self.race, tn)[0])
             return t
 
         self.resources = self.start[0][:]
@@ -374,8 +374,8 @@ class Player(object):
                     type_(self, place, x, y)
         self.triggers = self.start[2]
 
-        if get_rule(self.race, getattr(self, "AI_type", "")):
-            self.set_ai(get_rule(self.race, self.AI_type)[0])
+        if rules.get(self.race, getattr(self, "AI_type", "")):
+            self.set_ai(rules.get(self.race, self.AI_type)[0])
 
     def store(self, _type, qty):
         qty += self.storage_bonus[_type]
@@ -531,7 +531,7 @@ class Player(object):
         res_msg = []
         for i, _ in enumerate(self.resources):
             res_msg += nombre(self.gathered_resources[i] / PRECISION) \
-                       + get_style("parameters", "resource_%s_title" % i) \
+                       + style.get("parameters", "resource_%s_title" % i) \
                        + [4256, 9998] \
                        + nombre(self.consumed_resources()[i] / PRECISION) \
                        + [4024, 9999]

@@ -98,7 +98,7 @@ class Computer(Player):
                 for w in cmd[1:]:
                     if re.match("^[0-9]+$", w):
                         n = int(w)
-                    elif w in get_rule_classnames():
+                    elif w in rules.classnames():
                         if not self.get(n, self.equivalent(w)):
                             done = False
                             break

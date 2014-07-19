@@ -12,7 +12,7 @@ from pygame.locals import *
 from clienthelp import help_msg
 from clientmedia import *
 import clientmenu
-from clientstyle import *
+from definitions import *
 from clientworld import *
 import commun
 from constants import *
@@ -1192,9 +1192,9 @@ class GameInterface(object):
         idle = "idle" in args
         even_if_no_menu = "even_if_no_menu" in args
         keyboard_types = [x for x in args if x not in ("local", "idle", "even_if_no_menu")]
-        types = [x for x in get_style_classnames()
-                 if has_style(x, "keyboard")
-                 and get_style(x, "keyboard")[0] in keyboard_types]
+        types = [x for x in style.classnames()
+                 if style.has(x, "keyboard")
+                 and style.get(x, "keyboard")[0] in keyboard_types]
         return types, local, idle, even_if_no_menu
 
     def cmd_select_unit(self, decalage, *args):
@@ -1335,15 +1335,15 @@ class GameInterface(object):
     def _get_prefix_and_collision(self, new_square, dxc, dyc):
         objects = [o for o in self.dobjets.values() if o.place is self.place
                  and self.is_selectable(o)
-                 and has_style(o.type_name, "when_moving_through")]
+                 and style.has(o.type_name, "when_moving_through")]
         if new_square is self.place:
-            prefix = get_style("parameters", "no_path_in_this_direction")
+            prefix = style.get("parameters", "no_path_in_this_direction")
             collision = True
         elif self.place not in self.scouted_before_squares:
             prefix = []
             collision = False
         else:
-            prefix = get_style("parameters", "no_path_in_this_direction")
+            prefix = style.get("parameters", "no_path_in_this_direction")
             collision = True
             xc, yc = self.coords_in_map(self.place)
             x, y = (xc + .5) * self.square_width, (yc + .5) * self.square_width
@@ -1352,7 +1352,7 @@ class GameInterface(object):
                    dxc == -1 and o.x < x or \
                    dyc == 1 and o.y > y or \
                    dyc == -1 and o.y < y:
-                    prefix = get_style(o.type_name, "when_moving_through")
+                    prefix = style.get(o.type_name, "when_moving_through")
                     collision = False
                     break
         return prefix, collision
@@ -1497,7 +1497,7 @@ class GameInterface(object):
 
     def cmd_resource_status(self, resource_type):
         resource_type = int(resource_type)
-        voice.item(nombre(self.resources[resource_type]) + get_style(
+        voice.item(nombre(self.resources[resource_type]) + style.get(
             "parameters", "resource_%s_title" % resource_type))
 
     def cmd_food_status(self):
@@ -1522,7 +1522,7 @@ class GameInterface(object):
             if r != self._previous_resources[i]:
                 self._previous_resources[i] = r
                 if must_be_said(r):
-                    self.send_msg_if_playing(nombre(r) + get_style(
+                    self.send_msg_if_playing(nombre(r) + style.get(
                         "parameters", "resource_%s_title" % i),
                         update_type="resource_%s" % i)
         if self.available_food != self._previous_available_food or \
