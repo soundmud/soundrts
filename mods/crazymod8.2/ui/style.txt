@@ -5,6 +5,9 @@
 
 ; miscellaneous parameters
 
+def parameters
+recommended_maps pra1 pra2 pra3 pra4 pra5 pra6 pra7 pra8 pra9 pra10 pra11 can1 can2 can3 can4 can5 jl5
+
 
 ; abilities
 
