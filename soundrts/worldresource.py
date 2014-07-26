@@ -1,6 +1,6 @@
 import copy
 
-from commun import to_int
+from nofloat import to_int
 from constants import *
 from worldentity import *
 

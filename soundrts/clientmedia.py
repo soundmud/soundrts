@@ -5,7 +5,7 @@ import time
 from clientmediascreen import *
 from clientmediasound import *
 from clientmediavoice import *
-from commun import VERSION
+from version import VERSION
 import g
 
 

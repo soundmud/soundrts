@@ -7,7 +7,7 @@ import sys
 import time
 import urllib
 
-from commun import VERSION
+from version import VERSION
 from constants import *
 from lib.log import *
 from paths import *

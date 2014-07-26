@@ -14,7 +14,6 @@ from clientmedia import *
 import clientmenu
 from definitions import *
 from clientworld import *
-import commun
 from constants import *
 import group
 from lib.log import *

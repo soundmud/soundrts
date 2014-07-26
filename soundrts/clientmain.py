@@ -1,5 +1,5 @@
 from lib import log
-from commun import VERSION_FOR_BUG_REPORTS
+from version import VERSION_FOR_BUG_REPORTS
 from paths import CLIENT_LOG_PATH
 log.set_version(VERSION_FOR_BUG_REPORTS)
 log.add_secure_file_handler(CLIENT_LOG_PATH, "w")

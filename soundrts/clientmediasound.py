@@ -50,7 +50,7 @@ def translate_and_collapse_lns(lns, remove_sounds=False):
     return result
 
 def display(lns):
-    from commun import VERSION
+    from version import VERSION
     if VERSION[-4:] != "-dev": return # don't show ugly orthography
     import g
     txt = translate_and_collapse_lns(lns, remove_sounds=True)

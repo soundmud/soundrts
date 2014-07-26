@@ -1,6 +1,5 @@
 from lib.log import *
 from commun import *
-import commun
 from worldresource import Meadow
 
 from priodict import priorityDictionary
