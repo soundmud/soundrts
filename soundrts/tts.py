@@ -5,9 +5,7 @@ import config
 from version import VERSION
 
 
-if config.recorded_speech == 1:
-    pass
-elif platform.system() == "Windows":
+if platform.system() == "Windows":
     if config.srapi == 0:
         try:
             import win32compytts as pyTTS

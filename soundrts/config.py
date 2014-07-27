@@ -19,7 +19,6 @@ def save():
     c.set("general", "num_channels", repr(num_channels))
     c.set("general", "speed", repr(speed))
     c.add_section("tts")
-    c.set("tts", "recorded_speech", repr(recorded_speech))
     if platform.system() == "Windows":
         c.set("tts", "srapi", repr(srapi))
         c.set("tts", "srapi_wait", repr(srapi_wait))
@@ -27,7 +26,7 @@ def save():
 
 def load():
     global login, num_channels, speed, _mods
-    global recorded_speech, srapi, srapi_wait
+    global srapi, srapi_wait
     error = False
     new_file = False
     try:
@@ -60,11 +59,6 @@ def load():
         _mods = c.get("general", "mods")
     except:
         _mods = ""
-        error = True
-    try:
-        recorded_speech = c.getint("tts", "recorded_speech")
-    except:
-        recorded_speech = 0
         error = True
     if platform.system() == "Windows":
         try:

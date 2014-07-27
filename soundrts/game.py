@@ -83,8 +83,7 @@ class _Game(object):
             self.world.clean()
         else:
             voice.alert([1029]) # hostile sound
-            if tts.is_available:
-                voice.alert([self.world.map_error])
+            voice.alert([self.world.map_error])
         if self.record_replay:
             self._replay_file.close()
 

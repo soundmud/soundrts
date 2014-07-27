@@ -12,7 +12,6 @@ from lib.log import *
 
 from clientmediascreen import FONT
 import encoding
-from number import *
 import res
 import tts
 
@@ -295,31 +294,6 @@ class VoiceChannel(object):
     def __init__(self):
         self.c = pygame.mixer.Channel(0)
 
-    def _classic_play(self, lns, lv, rv):
-        def translate_lns(lns):
-            result = []
-            for s in lns:
-                s = "%s" % s
-                if sounds.get_sound(s):
-                    result.append(s)
-                else:
-                    if re.match("^[0-9]+$", s) is not None:
-                        if int(s) >= 1000000:
-                            result.extend(nb_to_msg(int(s) - 1000000))
-                            continue
-                        else:
-                            warning("this sound may be missing: %s", s)
-                    for k in self._spell(s):
-                        result.append(k)
-            return result
-        self.stop()
-        for s in translate_lns(lns):
-            snd = sounds.get_sound(s)
-            if snd:
-                self._queue.append([snd, lv, rv])
-        self.update()
-        self._starting_time = time.time()
-        
     def _tts_play(self, lns, lv, rv):
         self.stop()
         if (lv, rv) != (DEFAULT_VOLUME, DEFAULT_VOLUME):
@@ -331,10 +305,7 @@ class VoiceChannel(object):
         self._starting_time = time.time()
 
     def play(self, lns, lv, rv):
-        if tts.is_available:
-            self._tts_play(lns, lv, rv)
-        else:
-            self._classic_play(lns, lv, rv)
+        self._tts_play(lns, lv, rv)
         display(lns)
 
     def is_almost_done(self):
@@ -460,7 +431,7 @@ class SoundCache(object):
                 for n in files:
                     if n[-4:] == ".ogg":
                         k = n[:-4]
-                        if tts.is_available and self.is_text(k) and \
+                        if self.is_text(k) and \
                            k not in ["9998", "9999"]:
                             continue
                         if k not in d:
