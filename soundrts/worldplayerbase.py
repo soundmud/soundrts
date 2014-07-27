@@ -11,7 +11,6 @@ from constants import *
 import group
 from lib.log import *
 from worldunit import *
-from servermsg import *
 import stats
 
 from commun import *
@@ -585,7 +584,7 @@ class Player(object):
         self.defeat()
 
     def lang_cut_scene(self, args):
-        Sequence(args).send(self.client)
+        self.push("sequence %s\n" % " ".join(args))
 
     def lang_add_objective(self, args):
         n = args[0]

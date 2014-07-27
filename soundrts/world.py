@@ -16,7 +16,6 @@ from constants import *
 import g
 from paths import MAPERROR_PATH
 import res
-from servermsg import * # XXXXXXX
 import stats
 import worldclient
 from worldexit import *
