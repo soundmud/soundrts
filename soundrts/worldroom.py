@@ -1,5 +1,9 @@
+import string
+
+from constants import COLLISION_RADIUS
 from lib.log import *
-from commun import *
+from nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
+from msgs import nb2msg
 from worldresource import Meadow
 
 from priodict import priorityDictionary
@@ -35,7 +39,7 @@ class Square(object):
         world.squares.append(self)
         world.objects[self.id] = self
         self.place = world
-        self.title = [5000 + col] + nombre(row + 1)
+        self.title = [5000 + col] + nb2msg(row + 1)
         self.objects = []
         self.exits = []
         self.xmin = col * width

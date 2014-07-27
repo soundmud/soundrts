@@ -8,7 +8,7 @@ from pygame.locals import *
 
 from clienthelp import help_msg
 from clientmedia import *
-from commun import *
+from msgs import nb2msg
 from paths import TMP_PATH
 
 
@@ -18,7 +18,7 @@ def string_to_msg(s):
         if c == ".":
             l.extend([5026])
         elif c in "0123456789":
-            l.extend(nombre(c))
+            l.extend(nb2msg(c))
         else:
             l.extend(c)
     return l

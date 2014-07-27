@@ -10,6 +10,7 @@ import locale
 try:
     locale.setlocale(locale.LC_ALL, '')
 except:
+    from lib.log import warning
     warning("couldn't set locale")
 
 import os.path
@@ -28,12 +29,13 @@ from clientmenu import *
 from clientserver import *
 from definitions import style
 from clientversion import *
-from commun import *
 import config
 from game import TrainingGame, ReplayGame
 from multimaps import worlds_multi
+from msgs import nb2msg
 from paths import REPLAYS_PATH
 from singlemaps import campaigns
+from version import COMPATIBILITY_VERSION
 
 
 _ds = open("cfg/default_servers.txt").readlines()
@@ -81,7 +83,7 @@ class Application(object):
             nb += 1
             if version == COMPATIBILITY_VERSION:
                 menu.append([login, 4073, login], (connect_and_play, ip, port))
-        menu.title = nombre(len(menu.choices)) + [4078] + nombre(nb) + [4079]
+        menu.title = nb2msg(len(menu.choices)) + [4078] + nb2msg(nb) + [4079]
         menu.append([4075, 4076], None)
         menu.run()
 

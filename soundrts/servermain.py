@@ -7,10 +7,11 @@ import time
 import urllib
 
 from lib.log import *
-from commun import *
+
 from serverclient import *
 from serverroom import *
 from ticker import *
+from version import COMPATIBILITY_VERSION
 
 import config
 

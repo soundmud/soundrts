@@ -5,6 +5,7 @@ import time
 from clientmediascreen import *
 from clientmediasound import *
 from clientmediavoice import *
+from msgs import nb2msg
 from version import VERSION
 import g
 
@@ -44,4 +45,4 @@ def init_media(*args):
 def modify_volume(incr=1):
     incr_volume(incr)
     sound_stop()
-    voice.item(nombre(round(get_volume() * 100)) + [4253])
+    voice.item(nb2msg(round(get_volume() * 100)) + [4253])

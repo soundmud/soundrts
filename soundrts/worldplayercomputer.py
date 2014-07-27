@@ -1,3 +1,4 @@
+from version import VERSION
 from worldplayerbase import *
 
 

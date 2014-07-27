@@ -2,7 +2,7 @@ import threading
 import urllib
 
 from clientmedia import *
-from commun import *
+
 import config
 from constants import *
 import stats

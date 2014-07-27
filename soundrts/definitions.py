@@ -217,6 +217,8 @@ def _read_ai_to_dict(s, d):
         else:
             warning("'def <AI_name>' is missing (check ai.txt)")
 
+_ai = {}
+
 def load_ai(*strings):
     global _ai
     _ai = {}

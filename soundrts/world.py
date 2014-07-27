@@ -10,7 +10,7 @@ import string
 import time
 
 import collision
-from commun import *
+
 import config
 from constants import *
 import g

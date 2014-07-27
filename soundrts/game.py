@@ -13,6 +13,7 @@ import clientworld
 import config
 from constants import *
 from mapfile import *
+from msgs import nb2msg
 from paths import *
 import random
 import res
@@ -130,7 +131,7 @@ class MultiplayerGame(_MultiplayerGame):
     def _countdown(self):
         voice.important([4062]) # "the game starts in 5 seconds"
         for n in [5, 4, 3, 2, 1, 0]:
-            voice.item(nombre(n))
+            voice.item(nb2msg(n))
             time.sleep(1)
         pygame.event.clear(KEYDOWN)
 

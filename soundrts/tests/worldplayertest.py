@@ -1,6 +1,6 @@
 import unittest
 
-from soundrts.commun import PRECISION
+from soundrts.nofloat import PRECISION
 from soundrts import worldclient
 from soundrts.mapfile import Map
 ###from server import *

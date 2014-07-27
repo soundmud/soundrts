@@ -1,5 +1,6 @@
 # -*- coding: cp1252 -*-
 
+import math
 import os
 import os.path
 import Queue
@@ -17,6 +18,7 @@ from clientworld import *
 from constants import *
 import group
 from lib.log import *
+from msgs import nb2msg, eval_msg_and_volume
 from worldunit import *
 
 import config
@@ -160,7 +162,7 @@ class GameInterface(object):
                 l.append([p.number, p.name])
         l.sort()
         for n, name in l:
-            voice.info(nombre(n) + [9998, name, 9999])
+            voice.info(nb2msg(n) + [9998, name, 9999])
 
     def srv_msg(self, s):
         voice.info(*eval_msg_and_volume(s))
@@ -212,7 +214,7 @@ class GameInterface(object):
             else:
                 # visible if in front of you (190 degrees field)
                 a = angle(self.x, self.y, o.x, o.y, self.o)
-                return math.cos(a) > cos_deg(95)
+                return math.cos(a) > math.cos(math.radians(95))
         else:
             return True
 
@@ -243,7 +245,7 @@ class GameInterface(object):
     def get_description_of(self, o):
         if self.immersion:
             vg, vd = vision_stereo(self.x, self.y, o.x, o.y, self.o)
-            return o.title + [54] + nombre(self.distance(o)) + [55] \
+            return o.title + [54] + nb2msg(self.distance(o)) + [55] \
                    + self.direction(o) + o.description, vg, vd
         else:
             self.o = 90
@@ -325,7 +327,7 @@ class GameInterface(object):
             ([4103], self.gm_slow_speed),
             ([4104], self.gm_normal_speed),
             ([4105], self.gm_fast_speed),
-            ([4105] + nombre(4), self.gm_very_fast_speed),
+            ([4105] + nb2msg(4), self.gm_very_fast_speed),
             ])
         if self.can_save():
             menu.append([4112], self.gm_save)
@@ -387,12 +389,12 @@ class GameInterface(object):
         if self.talking_clock_enabled:
             nb_minutes = int(self.last_virtual_time / 60)
             if self.last_nb_minutes != nb_minutes:
-                voice.important([1003]) # + nombre(nb_minutes) + [65])
+                voice.important([1003]) # + nb2msg(nb_minutes) + [65])
                 self.last_nb_minutes = nb_minutes
 
     def cmd_say_time(self):
         m, s = divmod(int(self.last_virtual_time), 60)
-        voice.item(nombre(m) + [65] + nombre(s) + [66])
+        voice.item(nb2msg(m) + [65] + nb2msg(s) + [66])
 
     _must_play_tick = False
 
@@ -862,7 +864,7 @@ class GameInterface(object):
                 result += [23] # "... and ..."
             elif t != types[0]:
                 result += [9998]
-            result += nombre(group.count(t)) + t
+            result += nb2msg(group.count(t)) + t
         return result
 
     def place_summary(self, place, me=True):
@@ -1496,12 +1498,12 @@ class GameInterface(object):
 
     def cmd_resource_status(self, resource_type):
         resource_type = int(resource_type)
-        voice.item(nombre(self.resources[resource_type]) + style.get(
+        voice.item(nb2msg(self.resources[resource_type]) + style.get(
             "parameters", "resource_%s_title" % resource_type))
 
     def cmd_food_status(self):
-        voice.item(nombre(self.available_food, genre="f") + [137, 2011] +
-                   nombre(self.used_food))
+        voice.item(nb2msg(self.available_food, genre="f") + [137, 2011] +
+                   nb2msg(self.used_food))
         # other possibility: available_food + [137,133,2011] + food
 
     def send_msg_if_playing(self, msg, update_type=None):
@@ -1521,7 +1523,7 @@ class GameInterface(object):
             if r != self._previous_resources[i]:
                 self._previous_resources[i] = r
                 if must_be_said(r):
-                    self.send_msg_if_playing(nombre(r) + style.get(
+                    self.send_msg_if_playing(nb2msg(r) + style.get(
                         "parameters", "resource_%s_title" % i),
                         update_type="resource_%s" % i)
         if self.available_food != self._previous_available_food or \
@@ -1530,9 +1532,9 @@ class GameInterface(object):
             self._previous_used_food == self.available_food):
             if 0 <= self.available_food - self.used_food <= \
                self.available_food * .20:
-                self.send_msg_if_playing(nombre(self.available_food, genre="f")
+                self.send_msg_if_playing(nb2msg(self.available_food, genre="f")
                                          + [137, 2011]
-                                         + nombre(self.used_food),
+                                         + nb2msg(self.used_food),
                                          update_type="food")
             self._previous_available_food = self.available_food
             self._previous_used_food = self.used_food

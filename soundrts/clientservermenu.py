@@ -2,6 +2,7 @@ from clientmenu import *
 from definitions import style
 from game import MultiplayerGame
 import mapfile
+from msgs import nb2msg, eval_msg_and_volume
 
 
 class _ServerMenu(Menu):
@@ -79,8 +80,8 @@ class ServerMenu(_ServerMenu):
         Menu([4055] + title,
              [([4103], (self.server.write_line, "create %s 0.5" % n)),
               ([4104], (self.server.write_line, "create %s 1.0" % n)),
-              ([4105] + nombre(2), (self.server.write_line, "create %s 2.0" % n)),
-              ([4105] + nombre(4), (self.server.write_line, "create %s 4.0" % n)),
+              ([4105] + nb2msg(2), (self.server.write_line, "create %s 2.0" % n)),
+              ([4105] + nb2msg(4), (self.server.write_line, "create %s 4.0" % n)),
               ([4048], None),
               ],
              default_choice_index=1).run() # XXX not a ServerMenu
@@ -176,7 +177,7 @@ class GameAdminMenu(_BeforeGameMenu):
             pa = int(pa)
             for a in range(1, len(self.registered_players) + 1):
                 if a != pa:
-                    menu.append([4284, p, 4285] + nombre(a),
+                    menu.append([4284, p, 4285] + nb2msg(a),
                                 (self.server.write_line,
                                  "move_to_alliance %s %s" % (pn, a)))
             if p in (self.server.login, "ai"):

@@ -1,6 +1,6 @@
 import worldrandom
 
-from commun import *
+
 from constants import *
 from worldentity import *
 from worldresource import *

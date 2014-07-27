@@ -4,11 +4,13 @@ import sys
 import time
 import traceback
 
-from commun import *
+
 import config
 from lib.log import *
+from msgs import insert_silences, encode_msg
 from multimaps import worlds_multi
 from serverroom import *
+from version import COMPATIBILITY_VERSION
 
 
 class ConnectionToClient(asynchat.async_chat):

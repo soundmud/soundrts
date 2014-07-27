@@ -11,6 +11,13 @@ from lib.log import *
 from paths import *
 
 
+login = "player"
+num_channels = 16
+speed = 1
+srapi = 1
+srapi_wait = .1
+_mods = ""
+
 def save():
     c = ConfigParser.SafeConfigParser()
     c.add_section("general")
@@ -43,33 +50,27 @@ def load():
         if re.match("^[a-zA-Z0-9]{1,20}$", login) == None:
             raise ValueError
     except:
-        login = "player"
         error = True
     try:
         num_channels = c.getint("general", "num_channels")
     except:
-        num_channels = 16
         error = True
     try:
         speed = c.getint("general", "speed")
     except:
-        speed = 1
         error = True
     try:
         _mods = c.get("general", "mods")
     except:
-        _mods = ""
         error = True
     if platform.system() == "Windows":
         try:
             srapi_wait = c.getfloat("tts", "srapi_wait")
         except:
-            srapi_wait = .1
             error = True
         try:
             srapi = c.getint("tts", "srapi")
         except:
-            srapi = 1
             error = True
     if error and not new_file:
         warning("rewriting SoundRTS.ini...")
@@ -81,9 +82,12 @@ def load():
             warning("could not make a copy of old config file")
     save()
 
+port = 2500
+record_games = False
+
 def _parse_options():
     global options, port, record_games
-    default_port = 2500
+    default_port = port
     parser = optparse.OptionParser()
     parser.add_option("-m", "--mods", type="string")
     parser.add_option("-p", type="int", help=optparse.SUPPRESS_HELP)

@@ -8,9 +8,10 @@ import time
 from clientmedia import *
 from clientservermenu import ServerMenu
 from clientversion import *
-from commun import *
+
 import config
 import servermain
+from version import COMPATIBILITY_VERSION
 
 
 class _Error(Exception): pass

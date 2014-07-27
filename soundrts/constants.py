@@ -1,6 +1,9 @@
 # constants used in more than one module
 # Some of them might find a better home later.
 
+
+MAIN_METASERVER_URL = open("cfg/metaserver.txt").read().strip()
+
 # old value used by some features (stats, ...)
 METASERVER_URL = "http://jlpo.free.fr/soundrts/metaserver/"
 

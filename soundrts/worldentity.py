@@ -1,9 +1,9 @@
-import worldrandom
 import sys
 import time
 
+from constants import COLLISION_RADIUS, USE_RANGE_MARGIN
 from definitions import *
-from commun import *
+import worldrandom
 
 
 class NotEnoughSpaceError(Exception): pass

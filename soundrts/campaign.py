@@ -2,6 +2,7 @@ import ConfigParser
 import re
 
 from game import *
+from msgs import nb2msg
 
 
 class MissionChapter(Map):
@@ -57,7 +58,7 @@ class CutSceneChapter:
             l = m.group(1).split(" ")
             l = [int(x) for x in l]
         else:
-            l = number(self.id)
+            l = nb2msg(self.id)
         self.title = l
         # content
         m = re.search("(?m)^sequence[ \t]+([0-9 ]+)$", s)

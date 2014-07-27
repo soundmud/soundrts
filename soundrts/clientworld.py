@@ -4,9 +4,9 @@ import time
 import pygame
 
 from clientmedia import *
-from definitions import *
-from commun import *
 from constants import *
+from definitions import *
+from msgs import nb2msg
 from worldunit import *
 
 import g
@@ -143,11 +143,11 @@ class Objet(object):
             title = self.short_title[:]
         if self.player:
             if self.player == self.interface.player:
-                title += nombre(self.number)
+                title += nb2msg(self.number)
             elif self.player in self.interface.player.allied:
-                title += [4286] + nombre(self.player.number) # "allied 2"
+                title += [4286] + nb2msg(self.player.number) # "allied 2"
             elif hasattr(self.player, "number") and self.player.number:
-                title += [88] + nombre(self.player.number) # "ennemy 2"
+                title += [88] + nb2msg(self.player.number) # "ennemy 2"
             else: # "npc_ai"
                 title += [88] # enemy
         return title
@@ -158,12 +158,12 @@ class Objet(object):
 
     @property
     def hp_status(self):
-        return nombre(self.hp) + [39] + nombre(self.hp_max)
+        return nb2msg(self.hp) + [39] + nb2msg(self.hp_max)
 
     @property
     def mana_status(self):
         if self.mana_max > 0:
-            return nombre(self.mana) + [4247] + nombre(self.mana_max)
+            return nb2msg(self.mana) + [4247] + nb2msg(self.mana_max)
         else:
             return []
 
@@ -179,7 +179,7 @@ class Objet(object):
         d = []
         try:
             if hasattr(self, "qty") and self.qty:
-                d += [134] + nombre(self.qty) + style.get("parameters", "resource_%s_title" % self.resource_type)
+                d += [134] + nb2msg(self.qty) + style.get("parameters", "resource_%s_title" % self.resource_type)
             if hasattr(self, "hp"):
                 d += self.hp_status
             if hasattr(self, "mana"):
@@ -710,10 +710,10 @@ class OrderView(object):
             for i, c in enumerate(self.cost):
                 if c:
                     and_index = len(msg)
-                    msg += nombre(c / PRECISION) + style.get("parameters", "resource_%s_title" % i)
+                    msg += nb2msg(c / PRECISION) + style.get("parameters", "resource_%s_title" % i)
             if self.food_cost:
                 and_index = len(msg)
-                msg += nombre(self.food_cost, genre="f") + style.get("parameters", "food_title")
+                msg += nb2msg(self.food_cost, genre="f") + style.get("parameters", "food_title")
         # add "and" if there are at least 2 requirements
         if and_index > 0:
             msg[and_index:and_index] = style.get("parameters", "and")
@@ -734,7 +734,7 @@ class OrderView(object):
         if self.type is not None:
             t = style.get(self.type.type_name, "title")
             if nb != 1:
-                t = number(nb) + t
+                t = nb2msg(nb) + t
             result = substitute_args(result, [t])
         if self.target is not None:
             if self.keyword == "build_phase_two":

@@ -4,10 +4,10 @@ import re
 import string
 import time
 
-from commun import *
 import config
 from constants import *
 from lib.log import *
+from msgs import insert_silences, nb2msg
 from paths import TMP_PATH
 import version
 
@@ -198,7 +198,7 @@ class Game(object):
     def get_status_msg(self):
         return [4018] + self.scenario.title + [9999]\
                + insert_silences([p.login for p in self.human_players]) + [9999]\
-               + nombre(self.get_nb_minutes()) + [65]
+               + nb2msg(self.get_nb_minutes()) + [65]
 
     def close(self):
         info("closed game %s after %s turns (played for %s minutes)", self.id,
@@ -281,7 +281,7 @@ class Game(object):
     def move_to_alliance(self, player_index, alliance):
         player = self.players[int(player_index)]
         player.alliance = int(alliance)
-        self.broadcast([4284, player.login, 4285] + nombre(player.alliance))
+        self.broadcast([4284, player.login, 4285] + nb2msg(player.alliance))
 
     def broadcast(self, msg):
         for client in self.players:
@@ -304,11 +304,11 @@ class Game(object):
 
     def status(self):
         assert not self.started
-        msg = nombre(len(self.players)) + [4242] + nombre(self.scenario.nb_players_max)
+        msg = nb2msg(len(self.players)) + [4242] + nb2msg(self.scenario.nb_players_max)
         if len(self.players) >= self.scenario.nb_players_min:
             msg += [4063]
         else:
-            msg += [4244] + nombre(self.scenario.nb_players_min)
+            msg += [4244] + nb2msg(self.scenario.nb_players_min)
         msg += [9999] + insert_silences([p.login for p in self.players])
         return msg
 
