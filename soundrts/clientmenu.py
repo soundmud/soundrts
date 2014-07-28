@@ -35,7 +35,7 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default=""):
             pygame.event.clear()
             if e.key in [K_LSHIFT, K_RSHIFT]:
                 continue
-            if e.key == K_RETURN:
+            if e.key in (K_RETURN, K_KP_ENTER):
                 return s
             elif e.key == K_ESCAPE:
                 return None
@@ -128,7 +128,7 @@ class Menu(object):
             self._select_previous_choice()
         elif e.key in [K_TAB, K_DOWN]:
             self._select_next_choice()
-        elif e.key in [K_RETURN, K_RIGHT]:
+        elif e.key in (K_RETURN, K_KP_ENTER, K_RIGHT):
             return self._confirm_choice()
         elif e.key == K_F2 and e.mod & KMOD_CTRL:
             toggle_fullscreen()
