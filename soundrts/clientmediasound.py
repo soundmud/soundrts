@@ -1,17 +1,15 @@
 import math
+import os
 import random
 import re
 import string
-import sys
 import time
 
 import pygame
-from pygame.locals import *
 
-from lib.log import *
-
-from clientmediascreen import FONT
+from clientmedia import screen_subtitle_set
 import encoding
+from lib.log import warning
 import res
 import tts
 
@@ -51,19 +49,12 @@ def translate_and_collapse_lns(lns, remove_sounds=False):
 def display(lns):
     from version import VERSION
     if VERSION[-4:] != "-dev": return # don't show ugly orthography
-    import g
     txt = translate_and_collapse_lns(lns, remove_sounds=True)
     if txt:
         txt = txt[0]
     else:
         txt = ""
-    if g.game:
-        g.subtitle = txt
-    else:
-        ren = FONT.render(txt, 1, (200, 200, 200))
-        g.screen.fill((0, 0, 0))
-        g.screen.blit(ren, (0, 0))
-        pygame.display.flip()
+    screen_subtitle_set(txt)
 
 TXT_FILE = "ui/tts"
 
@@ -183,7 +174,7 @@ class SoundManager(object):
             s.stop()
 
 
-psounds = SoundManager() # psounds = positionned sounds (3D)
+psounds = SoundManager() # psounds = positional sounds (3D)
 
 
 class _SoundSource(object):
@@ -220,8 +211,7 @@ class _SoundSource(object):
                self.channel.get_sound() == self.sound
 
     def _volume_too_low(self):
-        return max(psounds.get_stereo_volume(self)) < .02 # volume less than
-                                                          # 2 per cent
+        return max(psounds.get_stereo_volume(self)) < .02
 
     def _update_volume(self, force=False):
         if self._volume_too_low():
@@ -358,16 +348,6 @@ class VoiceChannel(object):
         return ls
 
 
-def sound_pre_init(mixer_freq):
-    if mixer_freq == 44100 and sys.platform == "win32":
-        # increase buffer to avoid scratchy sounds
-        pygame.mixer.pre_init(mixer_freq, -16, 2, 1024 * 3)
-    else:
-        pygame.mixer.pre_init(mixer_freq)
-
-def sound_init():
-    pygame.mixer.set_reserved(1)
-
 def sound_stop(stop_voice_too=True):
     psounds.stop()
     if stop_voice_too:
@@ -427,7 +407,7 @@ class SoundCache(object):
 
     def _load(self, path, d):
         if os.path.isdir(path):
-            for root, dirs, files in os.walk(path):
+            for root, _, files in os.walk(path):
                 for n in files:
                     if n[-4:] == ".ogg":
                         k = n[:-4]
@@ -475,26 +455,16 @@ class SoundCache(object):
             voice.important([name]) # each element is interruptible
 
 
-def _incr_value(v, incr):
-    return min(1, max(0, v + .1 * incr))
-
 volume = .5
 
 def get_volume():
     return volume
 
-def incr_volume(incr):
+def set_volume(v):
     global volume
-    volume = _incr_value(volume, incr)
+    volume = v
 
 voice_volume = 1.0
-
-def get_voice_volume():
-    return voice_volume
-
-def incr_voice_volume(incr):
-    global voice_volume
-    voice_volume = _incr_value(voice_volume, incr)
 
 def _read_txt(root=None):
     path = TXT_FILE
@@ -521,5 +491,10 @@ def _read_txt(root=None):
     result["9998"] = u","
     result["9999"] = u"."
     return result
+
+def init_sound():
+    pygame.mixer.pre_init(44100, -16, 2, 1024)
+    pygame.init()
+    pygame.mixer.set_reserved(1)
 
 sounds = SoundCache()

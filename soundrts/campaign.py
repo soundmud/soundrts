@@ -1,6 +1,7 @@
 import ConfigParser
 import re
 
+import clientmenu
 from game import *
 from msgs import nb2msg
 

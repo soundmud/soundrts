@@ -3,7 +3,7 @@ This module behaves like pyTTS. It runs on Linux.
 The only behavior provided is the behavior that tts.py needs.
 """
 
-import speechd
+import speechd  # @UnresolvedImport
 
 
 # not used; provided for compatibility

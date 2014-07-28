@@ -13,7 +13,6 @@ import collision
 
 import config
 from constants import *
-import g
 from paths import MAPERROR_PATH
 import res
 import stats

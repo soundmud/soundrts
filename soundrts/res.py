@@ -1,9 +1,8 @@
 import locale
 import os
-import re
 
 import config
-from lib.log import *
+from lib.log import warning
 import paths
 
 

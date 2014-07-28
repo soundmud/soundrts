@@ -9,8 +9,6 @@ from definitions import *
 from msgs import nb2msg
 from worldunit import *
 
-import g
-
 
 ##color_table = {81: "gold", 80: "forestgreen", 82: "white", 83: "hotpink",
 ##                  84: "dimgray", 99: "violetred", 122: "yellowgreen", 153: "blue",
@@ -114,6 +112,7 @@ class Objet(object):
     def orders_txt(self):
         t = []
         prev = None
+        nb = 0
         for o in self.orders:
             if prev:
                 if o.keyword == "train" and prev.type == o.type:
@@ -477,17 +476,17 @@ class Objet(object):
                 self.launch_event(random.choice(s))
         else:
             warning("no sound found for: %s %s", attacker_type, "attack_hit_level_%s" % level)
-        if g.fullscreen and attacker_id in self.interface.dobjets:
+        if get_fullscreen() and attacker_id in self.interface.dobjets:
             a = self.interface.dobjets[attacker_id]
             self.interface.grid_view._update_coefs()
             if self.interface.player.is_an_enemy(a):
                 color = (255, 0, 0)
             else:
                 color = (0, 255, 0)
-            pygame.draw.line(g.screen, color,
+            pygame.draw.line(get_screen(), color,
                              self.interface.grid_view.object_coords(self),
                              self.interface.grid_view.object_coords(a))
-            pygame.draw.circle(g.screen, (100, 100, 100),
+            pygame.draw.circle(get_screen(), (100, 100, 100),
                                self.interface.grid_view.object_coords(self), R*3/2, 0)
             pygame.display.flip() # not very clean but seems to work (persistence of vision?)
             # better: interface.anims queue to render when the time has come
@@ -576,7 +575,7 @@ class GridView(object):
         if isinstance(o.model, (Building, BuildingSite)):
             draw_rect(o.corrected_color(), x-R, y-R, R*2, R*2, width)
         else:
-            pygame.draw.circle(g.screen, o.corrected_color(), (x, y), R, width)
+            pygame.draw.circle(get_screen(), o.corrected_color(), (x, y), R, width)
         if getattr(o.model, "player", None) is not None:
             if o.id in self.interface.group:
                 color = (0,255,0)
@@ -588,7 +587,7 @@ class GridView(object):
                 color = (155,0,0)
             else:
                 color = (0, 0, 0)
-            pygame.draw.circle(g.screen, color, (x, y), R/2, 0)
+            pygame.draw.circle(get_screen(), color, (x, y), R/2, 0)
             if getattr(o, "hp", None) is not None and \
                o.hp != o.hp_max:
                 hp_prop = 100 * o.hp / o.hp_max
@@ -600,10 +599,10 @@ class GridView(object):
                     color = (255, 0, 0)
                 W = R - 2
                 if color != (0, 255, 0):
-                    pygame.draw.line(g.screen, (0, 55, 0),
+                    pygame.draw.line(get_screen(), (0, 55, 0),
                                  (x - W, y - R - 2),
                                  (x - W + 2 * W, y - R - 2))
-                pygame.draw.line(g.screen, color,
+                pygame.draw.line(get_screen(), color,
                                  (x - W, y - R - 2),
                                  (x - W + hp_prop * (2 * W) / 100, y - R - 2))
 
@@ -618,8 +617,8 @@ class GridView(object):
                     warning("(memory)")
 
     def _update_coefs(self):
-        self.square_view_width = self.square_view_height = min((g.screen.get_width() - 200) / (self.interface.xcmax + 1),
-            g.screen.get_height() / (self.interface.ycmax + 1)) # 200 = graphic console
+        self.square_view_width = self.square_view_height = min((get_screen().get_width() - 200) / (self.interface.xcmax + 1),
+            get_screen().get_height() / (self.interface.ycmax + 1)) # 200 = graphic console
         self.ymax = self.square_view_height * (self.interface.ycmax + 1)
 
     def _collision_display(self):
@@ -629,7 +628,7 @@ class GridView(object):
                 oy /= 1000.0
                 x = int(ox / self.interface.square_width * self.square_view_width)
                 y = int(self.ymax - oy / self.interface.square_width * self.square_view_height)
-                pygame.draw.circle(g.screen, c, (x, y), 0, 0)
+                pygame.draw.circle(get_screen(), c, (x, y), 0, 0)
 
     def display(self):
         self._update_coefs()

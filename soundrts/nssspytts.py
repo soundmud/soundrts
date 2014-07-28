@@ -4,7 +4,7 @@ It runs on Mac OS X with NSSpeechSynthesizer.
 The only behavior provided is the behavior that tts.py needs.
 """
 
-from AppKit import NSSpeechSynthesizer
+from AppKit import NSSpeechSynthesizer  # @UnresolvedImport
 
 
 # not used; provided for compatibility

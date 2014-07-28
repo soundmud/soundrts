@@ -8,8 +8,8 @@ import time
 from clientmedia import *
 from clientservermenu import ServerMenu
 from clientversion import *
-
 import config
+from lib.log import info, exception
 import servermain
 from version import COMPATIBILITY_VERSION
 

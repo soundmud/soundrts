@@ -13,16 +13,14 @@ from pygame.locals import *
 from clienthelp import help_msg
 from clientmedia import *
 import clientmenu
-from definitions import *
 from clientworld import *
+import config
 from constants import *
+from definitions import *
 import group
 from lib.log import *
 from msgs import nb2msg, eval_msg_and_volume
 from worldunit import *
-
-import config
-import g
 
 
 my_cursors = {}
@@ -107,7 +105,7 @@ class GameInterface(object):
         self.grid_view = GridView(self)
         self.set_self_as_listener()
         voice.silent_flush()
-        self.set_screen()
+#        set_screen()
         self._srv_queue = Queue.Queue()
         self.scouted_squares = ()
         self.scouted_before_squares = ()
@@ -307,8 +305,7 @@ class GameInterface(object):
             voice.item([1029]) # hostile sound
         
     def cmd_volume(self, inc=1):
-        inc = int(inc)
-        modify_volume(inc)
+        modify_volume(int(inc))
 
     def cmd_history_previous(self):
         voice.previous()
@@ -333,9 +330,9 @@ class GameInterface(object):
             menu.append([4112], self.gm_save)
 ##            menu.append([4113], self.gm_restore)
         menu.append([4071], None)
-        g.game = False
+        set_game_mode(False)
         menu.run()
-        g.game = True
+        set_game_mode(True)
 
     already_asked_to_quit = False
     forced_quit = False
@@ -419,19 +416,8 @@ class GameInterface(object):
             tps = 1 / self._average_game_turn_time
             basic_tps = 1 / (VIRTUAL_TIME_INTERVAL / 1000.0)
             relative = tps / basic_tps
-            text = "tps=%.0f" % tps
-            ren = FONT.render(text, True, (200, 200, 200), (0, 0, 0))
-            g.screen.blit(ren, (0, 0))
-            text = "%.1f" % relative
-            ren = FONT.render(text, True, (200, 200, 200), (0, 0, 0))
-            g.screen.blit(ren, (0, 15))
-
-    def display_subtitle(self):
-        if g.subtitle:
-            text = g.subtitle
-            ren = FONT.render(text, True, (200, 200, 200), (0, 0, 0))
-            g.screen.blit(ren, ((g.screen.get_width() - ren.get_width()) / 2,
-                                g.screen.get_height() - ren.get_height()))
+            screen_render("tps=%.0f" % tps, (0, 0))
+            screen_render("%.1f" % relative, (0, 15))
 
     def cmd_toggle_tick(self):
         self._must_play_tick = not self._must_play_tick
@@ -516,7 +502,7 @@ class GameInterface(object):
                             break
 #                    self.execute_keydown_event(e)
                     self.display()
-                elif g.fullscreen:
+                elif get_fullscreen():
                     if e.type == MOUSEMOTION:
                         square = self.grid_view.square_from_mousepos(e.pos)
                         target = self.grid_view.object_from_mousepos(e.pos)
@@ -592,7 +578,7 @@ class GameInterface(object):
 
     def loop(self):
         from clientserver import ConnectionAbortedError # TODO: remove the cyclic dependencies
-        g.game = True
+        set_game_mode(True)
         pygame.event.clear()
         self.next_update = time.time()
         self.end_loop = False
@@ -611,7 +597,7 @@ class GameInterface(object):
                 raise
             except:
                 exception("error in clientgame loop")
-        g.game = False
+        set_game_mode(False)
 
     mode = None
     indexunite = -1
@@ -1441,46 +1427,23 @@ class GameInterface(object):
 
     def display(self):
 #        print getattr(self.target, "id", None), getattr(self.place, "id", None), self.mode
-        if g.screen is None:
+        if get_screen() is None:
             return # this might allow some machines to work without any display
-        g.screen.fill((0, 0, 0))
-        if g.fullscreen:
+        get_screen().fill((0, 0, 0))
+        if get_fullscreen():
             self.grid_view.display()
-            g.text_screen.display()
             if self.mouse_select_origin and self.mouse_select_origin != pygame.mouse.get_pos():
                 x, y = self.mouse_select_origin
                 x2, y2 = pygame.mouse.get_pos()
-                pygame.draw.rect(g.screen, (255, 255, 255), (min(x, x2), min(y, y2), abs(x - x2), abs(y - y2)), 1)
+                pygame.draw.rect(get_screen(), (255, 255, 255), (min(x, x2), min(y, y2), abs(x - x2), abs(y - y2)), 1)
         else:
-            self.print_F2_message()
+            screen_render("[Ctrl + F2] display.", (5, 45))
         self.display_tps()
-        self.display_subtitle()
+        screen_render_subtitle()
         pygame.display.flip()
 
     def cmd_fullscreen(self):
-        g.fullscreen = not g.fullscreen
-        self.set_screen()
-        if g.fullscreen:
-            voice.item([4206])
-        else:
-            voice.item([4207])
-
-    def set_screen(self):
-        if g.fullscreen:
-            x, y = get_desktop_screen_mode()
-            window_style = 0 | FULLSCREEN
-        else:
-            x, y = g.DISPLAY_RES
-            window_style = 0
-            pygame.mouse.set_visible(True)
-        try:
-            g.screen = pygame.display.set_mode((x, y), window_style)
-        except:
-            g.screen = pygame.display.set_mode((640, 480))
-
-    def print_F2_message(self):
-        ren = FONT.render("[Ctrl + F2] pour l'affichage.", 1, (200, 200, 200))
-        g.screen.blit(ren, (5, 45))
+        toggle_fullscreen()
 
     # resources
 

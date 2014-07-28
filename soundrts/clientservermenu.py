@@ -1,6 +1,7 @@
 from clientmenu import *
 from definitions import style
 from game import MultiplayerGame
+from lib.log import debug
 import mapfile
 from msgs import nb2msg, eval_msg_and_volume
 

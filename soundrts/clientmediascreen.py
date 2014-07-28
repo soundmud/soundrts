@@ -1,22 +1,19 @@
 import ctypes
-import StringIO
-import textwrap
 
 import pygame
+from pygame.locals import FULLSCREEN
 
-from lib.log import *
-
-import g
+from lib.log import warning
 
 
 pygame.font.init()
-FONT = pygame.font.Font("freesansbold.ttf", 12)
+_font = pygame.font.Font("freesansbold.ttf", 12)
 
 def draw_line(color, xy1, xy2):
-    pygame.draw.line(g.screen, color, xy1, xy2)
+    pygame.draw.line(_screen, color, xy1, xy2)
 
 def draw_rect(color, left, top, width, height, width2):
-    pygame.draw.rect(g.screen, color, pygame.Rect(left, top, width, height),
+    pygame.draw.rect(_screen, color, pygame.Rect(left, top, width, height),
                      width2)
 
 def _get_desktop_screen_mode():
@@ -36,34 +33,48 @@ def _get_desktop_screen_mode():
 def get_desktop_screen_mode():
     return _x, _y
 
+def screen_render(text, xy):
+    ren = _font.render(text, True, (200, 200, 200), (0, 0, 0))
+    _screen.blit(ren, xy)
 
-class GraphicConsole(StringIO.StringIO):
+def screen_render_subtitle():
+    ren = _font.render(_subtitle, True, (200, 200, 200), (0, 0, 0))
+    x = (_screen.get_width() - ren.get_width()) / 2
+    y = _screen.get_height() - ren.get_height()
+    _screen.blit(ren, (x, y))
 
-    cursor = 0
+def screen_subtitle_set(txt):
+    global _subtitle
+    if _game_mode:
+        # render later
+        _subtitle = txt
+    else:
+        get_screen().fill((0, 0, 0))
+        screen_render(txt, (0, 0))
+        pygame.display.flip()
 
-    def __init__(self):
-        self.buffer = ""
-        self.height = get_desktop_screen_mode()[1]
-        self.text_screen = pygame.Surface((200, self.height))
-        StringIO.StringIO.__init__(self)
+def set_game_mode(m):
+    global _game_mode
+    _game_mode = m
 
-    def _write_line(self, text):
-        ren = FONT.render(text, True, (200, 200, 200), (0, 0, 0))
-        self.text_screen.blit(ren, (0, 20 * self.cursor))
-        if self.cursor >= self.height / 20 - 2:
-            self.text_screen.blit(self.text_screen, (0, -20))
-        else:
-            self.cursor += 1
+def set_screen(fullscreen):
+    global _screen
+    if fullscreen:
+        x, y = get_desktop_screen_mode()
+        window_style = 0 | FULLSCREEN
+    else:
+        x, y = 400, 40
+        window_style = 0
+        pygame.mouse.set_visible(True)
+    try:
+        _screen = pygame.display.set_mode((x, y), window_style)
+    except:
+        _screen = pygame.display.set_mode((640, 480))
 
-    def write(self, s):
-        self.buffer += s
-        if (self.buffer != "") and (self.buffer[-1] == "\n"):
-            for text in textwrap.wrap(self.buffer, 40):
-                self._write_line(text)
-            self.buffer = ""
-
-    def display(self):
-        g.screen.blit(self.text_screen, (g.screen.get_width() - 200, 0))
-
+def get_screen():
+    return _screen
 
 _x, _y = _get_desktop_screen_mode()
+_screen = None
+_game_mode = False
+_subtitle = ""

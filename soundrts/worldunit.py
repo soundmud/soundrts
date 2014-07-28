@@ -1,6 +1,5 @@
 import worldrandom
 
-
 from constants import *
 from worldentity import *
 from worldresource import *

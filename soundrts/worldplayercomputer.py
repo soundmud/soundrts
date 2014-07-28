@@ -1,3 +1,4 @@
+from lib.log import debug, info, warning
 from version import VERSION
 from worldplayerbase import *
 
@@ -61,10 +62,6 @@ class Computer(Player):
         line = self._plan[self._line_nb]
         cmd = line.split()
         if cmd:
-##            if self._prev_line_nb != self._line_nb:
-##                print self.AI_type
-##                print line
-##                self._prev_line_nb = self._line_nb
             if cmd[0] == "goto":
                 if re.match("^[+-][0-9]+$", cmd[1]):
                     self._line_nb += int(cmd[1])
@@ -77,8 +74,7 @@ class Computer(Player):
                     self._line_nb += 1
             elif cmd[0] == "label":
                 self._line_nb += 1
-                if VERSION[-4:] == "-dev":
-                    print cmd[1]
+                info(cmd[1])
             elif cmd[0] == "goto_random":
                 dest = worldrandom.choice(cmd[1:])
                 if "label " + dest in self._plan:
@@ -206,7 +202,6 @@ class Computer(Player):
                     if VERSION[-4:] == "-dev":
                         exception("")
                     self._line_nb += 1 # go to next step; useful?
-                    print "recursion error!"
                     self.AI_timer = 100 # probably not, so make a big pause
 #            else:
 #                self.send_some_peasants_to_building_site() # Don't know if it will be needed,
@@ -399,7 +394,7 @@ class Computer(Player):
     def _get(self, nb, types):
         self._safe_cnt += 1
         if self._safe_cnt > 10:
-            print "*** safe ***"
+            info("AI has trouble getting: %s %s", nb, types)
             self.AI_timer = 100
             return False
         if isinstance(types, str):

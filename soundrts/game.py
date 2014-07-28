@@ -5,9 +5,11 @@ import sys
 import threading
 import time
 
-from clientmedia import *
+import pygame
+from pygame.locals import KEYDOWN
+
+from clientmedia import sounds, voice
 import clientgame
-import clientmenu
 import definitions
 import clientworld
 import config
@@ -18,7 +20,7 @@ from paths import *
 import random
 import res
 import tts
-from version import *
+from version import VERSION, compatibility_version, COMPATIBILITY_VERSION
 from world import *
 from worldclient import *
 

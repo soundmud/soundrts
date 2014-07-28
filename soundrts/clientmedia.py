@@ -1,48 +1,45 @@
 import os
 import platform
+import sys
 import time
 
-from clientmediascreen import *
-from clientmediasound import *
-from clientmediavoice import *
+import pygame
+
+from clientmediascreen import *#GraphicConsole
+from clientmediasound import *#sounds, sound_pre_init, sound_init, incr_volume, sound_stop, get_volume
+from clientmediavoice import *#voice
 from msgs import nb2msg
 from version import VERSION
-import g
 
 
 if platform.system() == "Windows":
     # problem with F10 and DirectX, so use windib
     os.environ["SDL_VIDEODRIVER"] = "windib"
 
+def init_media():
+    init_sound()
+    voice.init()
+    set_screen(fullscreen)
+    pygame.display.set_caption("SoundRTS %s" % VERSION)
+    pygame.key.set_repeat()
+    sounds.load_default()
+    time.sleep(.25) # the first sound is truncated
 
-class LowLevelInterface(object):
-
-    def __init__(self, mixer_freq):
-        self.set_pygame(mixer_freq)
-        g.text_screen = sys.stderr = sys.stdout = GraphicConsole()
-        sounds.load_default()
-        time.sleep(.25) # the first sound is truncated
-
-    def set_pygame(self, mixer_freq):
-        sound_pre_init(mixer_freq)
-        pygame.init()
-        sound_init()
-        voice.init()
-        self.set_display()
-        pygame.key.set_repeat()
-
-    def set_display(self):
-        try:
-            g.screen = pygame.display.set_mode(g.DISPLAY_RES)
-        except:
-            g.screen = pygame.display.set_mode()
-        pygame.display.set_caption("SoundRTS %s" % VERSION)
-
-
-def init_media(*args):
-    LowLevelInterface(*args)
-
-def modify_volume(incr=1):
-    incr_volume(incr)
+def modify_volume(incr):
+    set_volume(min(1, max(0, get_volume() + .1 * incr)))
     sound_stop()
     voice.item(nb2msg(round(get_volume() * 100)) + [4253])
+
+def toggle_fullscreen():
+    global fullscreen
+    fullscreen = not fullscreen
+    set_screen(fullscreen)
+    if fullscreen:
+        voice.item([4206])
+    else:
+        voice.item([4207])
+
+def get_fullscreen():
+    return fullscreen
+
+fullscreen = False

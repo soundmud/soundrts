@@ -17,6 +17,7 @@ speed = 1
 srapi = 1
 srapi_wait = .1
 _mods = ""
+mods = ""
 
 def save():
     c = ConfigParser.SafeConfigParser()
@@ -111,4 +112,3 @@ if options.mods is not None:
     mods = options.mods
 else:
     mods = _mods
-mixer_freq = 44100 # 22050 # 16000 # 11025

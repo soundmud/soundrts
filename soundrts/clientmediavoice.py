@@ -1,18 +1,10 @@
-import math
-import os
 import threading
 import time
-import sys
 
 import pygame
-from pygame.locals import *
+from pygame.locals import KEYDOWN
 
-
-from clientmedia import *
-
-import config
-
-
+from clientmediasound import DEFAULT_VOLUME, VoiceChannel
 
 
 class Message(object):
@@ -85,41 +77,35 @@ class _Voice(object):
         return self._exists(self.unsaid)
 
     def alert(self, *args, **keywords):
-        self._dire_absolument(couper=False, *args, **keywords)
+        self._say_now(interruptible=False, *args, **keywords)
 
     def important(self, *args, **keywords):
-        self._dire_absolument(*args, **keywords)
+        self._say_now(*args, **keywords)
 
     def confirmation(self, *args, **keywords):
-        self._dire_absolument(keep_key=True, *args, **keywords)
+        self._say_now(keep_key=True, *args, **keywords)
 
     def menu(self, *args, **keywords):
-        self._dire_absolument(keep_key=True, *args, **keywords)
+        self._say_now(keep_key=True, *args, **keywords)
 
-    def info(self, *args, **keywords):
-        self._dire(*args, **keywords)
-
-    def item(self, *args, **keywords):
-        self._dire_vite(*args, **keywords)
-
-    def _dire(self, lns, *args, **keywords):
+    def info(self, lns, *args, **keywords):
         """Say sooner or later."""
         if lns:
             self.msgs.append(Message(lns, *args, **keywords))
             self.update()
         
-    def _dire_absolument(self, lns, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME, couper=True, keep_key=False):
+    def _say_now(self, lns, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME, interruptible=True, keep_key=False):
         """Say now (give up saying sentences not said yet) until the end or a keypress."""
         if lns:
             self.lock.acquire()
             self._give_up_current_if_partially_said()
             self.channel.play(lns, lv, rv)
             while self.channel.get_busy():
-                if couper and self._key_hit(keep_key=keep_key):
+                if interruptible and self._key_hit(keep_key=keep_key):
                     break
                 time.sleep(.1)
                 self.channel.update()
-            if not couper:
+            if not interruptible:
                 pygame.event.get([KEYDOWN])
             self.msgs.append(Message(lns, lv, rv, said=True))
             self._go_to_next_unsaid() # or next_current?
@@ -140,7 +126,7 @@ class _Voice(object):
         if self._current_message_is_unsaid() and self.channel.is_almost_done():
             self._mark_current_as_said()
 
-    def _dire_vite(self, lns, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME):
+    def item(self, lns, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME):
         """Say now without recording."""
         if lns:
             self.lock.acquire()
@@ -195,22 +181,19 @@ class _Voice(object):
         for m in self.msgs:
             m.said = True
 
-    def flush(self, couper=True):
-        self._attendre_dire(couper)
-
-    def _attendre_dire(self, couper=False):
+    def flush(self, interruptible=True):
         while True:
             self.update()
             if not (self._unsaid_exists() or self.channel.get_busy()):
                 break
-            elif couper and self._key_hit(): # keep_key=False? (and remove next line?)
+            elif interruptible and self._key_hit(): # keep_key=False? (and remove next line?)
                 if self._unsaid_exists():
                     self.next()
                     pygame.event.get([KEYDOWN]) # consequence: _key_hit() == False
                 else:
                     break
             time.sleep(.1)
-        if not couper:
+        if not interruptible:
             pygame.event.get([KEYDOWN])
 
     def _key_hit(self, keep_key=True):
