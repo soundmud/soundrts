@@ -257,11 +257,12 @@ class GameInterface(object):
             self.say_square(self.place)
 
     def _next_choice(self, choice, choices):
-        if choice in choices:
+        sel = 0
+        try:
             sel = choices.index(choice) + 1
-            if sel >= len(choices):
-                sel = 0
-        else:
+        except ValueError:
+            pass
+        if sel >= len(choices):
             sel = 0
         return choices[sel]
 
