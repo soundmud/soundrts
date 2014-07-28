@@ -855,16 +855,21 @@ class GameInterface(object):
         return result
 
     def place_summary(self, place, me=True):
-        enemies = [x.short_title for x in self.dobjets.values()
-                   if x.place is place and self.player.is_an_enemy(x.model)]
-        allies = [x.short_title for x in self.dobjets.values()
-                   if x.place is place and x.model.player in self.player.allied
-                  and not x.model in self.player.units]
-        units = [x.short_title for x in self.dobjets.values()
-                   if x.place is place and x.model in self.player.units]
-        resources = [x.short_title for x in self.dobjets.values()
-                   if x.place is place and
-                     getattr(x.model, "resource_type", None) is not None]
+        enemies = []
+        allies = []
+        units = []
+        resources = []
+        for obj in self.dobjets.values():
+            if obj.place is not place:
+                continue
+            if self.player.is_an_enemy(obj.model):
+                enemies.append(obj.short_title)
+            if obj.model.player in self.player.allied and not obj.model in self.player.units:
+                allies.append(obj.short_title)
+            if obj.model in self.player.units:
+                units.append(obj.short_title)
+            if getattr(obj.model, "resource_type", None) is not None:
+                resources.append(obj.short_title)
         result = []
         if enemies:
             result += [9998] + self.summary(enemies) + [88]
