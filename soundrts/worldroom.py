@@ -201,11 +201,13 @@ class Square(object):
         
     def balance(self, player):
         self.update_menace()
-        balance = self.menace[player]
+        balance = 0
         for p in self.world.players:
             if p.is_an_enemy(player):
                 balance -= self.menace[p]
-        return  balance
+            elif p in player.allied:
+                balance += self.menace[p]
+        return balance
 
     def north_side(self):
         return self, self.x, self.ymax, -90
