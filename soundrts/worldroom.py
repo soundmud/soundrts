@@ -48,7 +48,7 @@ class Square(object):
         self.ymax = self.ymin + width
         self.x = (self.xmax + self.xmin) / 2
         self.y = (self.ymax + self.ymin) / 2
-##        self.spt = {}
+
 
     @property
     def height(self):
@@ -94,15 +94,9 @@ class Square(object):
 ##        if len(self.exits) == 1: # small optimization
 ##            return self.exits[0]
         return self._shortest_path_to(dest)[0]
-##        if not self.spt.has_key(dest):
-##            self.spt[dest] = self._shortest_path_to(dest)
-##        return self.spt[dest][0]
 
     def shortest_path_distance_to(self, dest):
         return self._shortest_path_to(dest)[1]
-##        if not self.spt.has_key(dest):
-##            self.spt[dest] = self._shortest_path_to(dest)
-##        return self.spt[dest][1]
 
     def _shortest_path_to(self, dest):
         """Returns the next exit to the shortest path from self to dest

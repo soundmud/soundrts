@@ -94,7 +94,6 @@ class World(object):
 
     def remove_links_for_savegame(self): # avoid pickle recursion problem
         for z in self.squares:
-##            z.spt = {} # the shortest path cache may cause recursion problems if big enough (never happened, though)
             for e in z.exits:
                 e.place = None
 
