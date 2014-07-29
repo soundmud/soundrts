@@ -160,6 +160,7 @@ class Rules(_Definitions):
                     "universal_notification",
                     "presence",
                     "is_ballistic",
+                    "is_teleportable",
                     )
     precision_properties = _precision_properties_extended
     int_list_properties = ("storable_resource_types",)

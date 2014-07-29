@@ -1,5 +1,3 @@
-import worldrandom
-
 import copy
 import inspect
 import re
@@ -7,16 +5,15 @@ import string
 import sys
 import time
 
+import config
 from constants import *
 import group
 from lib.log import *
 from msgs import encode_msg
-from worldunit import *
 import stats
-
-
-
-import config
+import worldrandom
+from worldunit import *
+from worldupgrade import Upgrade
 
 
 class Objective(object):

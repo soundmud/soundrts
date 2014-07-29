@@ -23,6 +23,7 @@ class Entity(object):
     is_repairable = False
     is_healable = False
     is_undead = False
+    is_teleportable = False
 
     is_a_building_land =False
 

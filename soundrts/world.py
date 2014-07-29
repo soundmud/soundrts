@@ -16,12 +16,14 @@ from constants import *
 from paths import MAPERROR_PATH
 import res
 import stats
+from worldability import Ability
 import worldclient
 from worldexit import *
 from worldplayer import *
 import worldrandom
 from worldroom import *
 from worldunit import *
+from worldupgrade import Upgrade
 
 
 GLOBAL_FOOD_LIMIT = 80
