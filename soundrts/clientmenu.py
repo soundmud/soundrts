@@ -150,7 +150,7 @@ class Menu(object):
             if self.server is None:
                 voice.item([1029]) # hostile sound
             else:
-                msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 ?!]$")
+                msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$")
                 if msg:
                     self.server.write_line("say %s" % msg)
         elif e.key not in [K_LSHIFT,K_RSHIFT]:
