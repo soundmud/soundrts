@@ -213,9 +213,9 @@ Tip: when you are waiting for players online, you can launch SoundRTS a second t
 4.2 Chatting
 ^^^^^^^^^^^^
 
-You can chat only in the server lobby and in the pre-game room. The organizer of the game is temporarily unavailable during the selection of the map and of the game speed though.
+You can chat in the server lobby, in the pre-game room, and during the game. The organizer of the game is temporarily unavailable during the selection of the map and of the game speed though.
 
-To say something to everybody in the same room, press S, type your message, and press enter.
+To say something to everybody in the same room or game, press F7 (pressing S also works except during a game), type your message, and press enter.
 
 Another option is to use Skype (or any similar software) if you know the other players.
 
