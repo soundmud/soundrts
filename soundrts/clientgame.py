@@ -153,6 +153,14 @@ class GameInterface(object):
         except:
             exception("problem during srv_event")
 
+
+    def cmd_say(self):
+        msg = clientmenu.input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$")
+        if not msg:
+            return
+        voice.info([self.player.client.login, 4287, msg])
+        self.server.write_line("say %s" % msg)
+
     def cmd_say_players(self):
         l = []
         for p in self.server.player.world.players:

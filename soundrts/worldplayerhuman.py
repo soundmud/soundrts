@@ -52,3 +52,7 @@ class Human(Player):
     def cmd_update(self, unused_args):
         self.ready = True
         self.update_eventuel()
+
+    def cmd_say(self, args):
+        msg = [self.client.login] + [4287] + [" ".join(args)]
+        self.broadcast_to_others_only(msg)

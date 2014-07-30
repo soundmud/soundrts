@@ -201,6 +201,8 @@ ALT F4: gamemenu
 
 F11: say_players
 
+F7: say
+
 HOME: volume
 KP_PLUS: volume
 END: volume -1 

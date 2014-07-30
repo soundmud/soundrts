@@ -146,7 +146,7 @@ class Menu(object):
             modify_volume(1)
         elif e.key in [K_END, K_KP_MINUS]:
             modify_volume(-1)
-        elif e.unicode.lower() == "s":
+        elif e.unicode.lower() == "s" or e.key == K_F7:
             if self.server is None:
                 voice.item([1029]) # hostile sound
             else:
