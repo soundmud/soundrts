@@ -47,6 +47,8 @@ ALT PAGEUP: select_unknown_square -1
 SHIFT PAGEDOWN: select_resource_square 1
 SHIFT PAGEUP: select_resource_square -1
 
+F8: toggle_zoom
+
 ; select a target
 
 TAB: select_target 1 

@@ -10,6 +10,7 @@ import time
 import pygame
 from pygame.locals import *
 
+from clientgamezoom import Zoom
 from clienthelp import help_msg
 from clientmedia import *
 import clientmenu
@@ -90,6 +91,8 @@ class GameInterface(object):
     place = None
     mouse_select_origin = None
     collision_debug = None
+    zoom_mode = False
+    zoom = None
 
     def __init__(self, server, speed=config.speed):
         self.server = server
@@ -1297,8 +1300,7 @@ class GameInterface(object):
         for o in self.dobjets.values():
             if o.place is not self.place:
                 o.stop()
-        sound_stop(stop_voice_too=False) # cut the long nonlooping environment
-                                            # sounds
+        sound_stop(stop_voice_too=False) # cut the long nonlooping environment sounds
 
     def say_square(self, place, prefix=[]):
         if place is None:
@@ -1367,6 +1369,9 @@ class GameInterface(object):
                 self.cmd_rotate_left()
             elif (dxc, dyc) == (1, 0):
                 self.cmd_rotate_right()
+        elif self.zoom_mode:
+            self.zoom.move(dxc, dyc)
+            self.zoom.say()
         elif self.place is not None:
             new_square = self._compute_move(dxc, dyc)
             prefix, collision = self._get_prefix_and_collision(new_square, dxc,
@@ -1436,6 +1441,14 @@ class GameInterface(object):
 ##            self.y = self.square_width / 8.0 # self.y = 0 ?
             if self.place not in self.scouted_squares:
                 self.y -= self.square_width # lower sounds if fog of war
+
+    def cmd_toggle_zoom(self):
+        self.zoom_mode = not self.zoom_mode
+        if self.zoom_mode:
+            self.zoom = Zoom(self)
+            voice.item([4317, 4263]) # is now on
+        else:
+            voice.item([4317, 4264]) # is now off
 
     # display
 
