@@ -144,9 +144,9 @@ class Objet(object):
             if self.player == self.interface.player:
                 title += nb2msg(self.number)
             elif self.player in self.interface.player.allied:
-                title += [4286] + nb2msg(self.player.number) # "allied 2"
+                title += [4286] + nb2msg(self.player.number) + [self.player.client.login] # "allied 2"
             elif hasattr(self.player, "number") and self.player.number:
-                title += [88] + nb2msg(self.player.number) # "ennemy 2"
+                title += [88] + nb2msg(self.player.number) + [self.player.client.login] # "ennemy 2"
             else: # "npc_ai"
                 title += [88] # enemy
         return title
