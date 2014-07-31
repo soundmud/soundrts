@@ -223,7 +223,7 @@ class ConnectionToClient(asynchat.async_chat):
         self.server.update_menus()
 
     def cmd_race(self, args):
-        self.game.players[int(args[0])].race = args[1]
+        self.game.set_race(args[0], args[1])
         self.server.update_menus()
 
     # "waiting for the game to start" commands
