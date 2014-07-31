@@ -97,21 +97,20 @@ class _Voice(object):
     def _say_now(self, lns, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME, interruptible=True, keep_key=False):
         """Say now (give up saying sentences not said yet) until the end or a keypress."""
         if lns:
-            self.lock.acquire()
-            self._give_up_current_if_partially_said()
-            self.channel.play(lns, lv, rv)
-            while self.channel.get_busy():
-                if interruptible and self._key_hit(keep_key=keep_key):
-                    break
-                time.sleep(.1)
-                self.channel.update()
-            if not interruptible:
-                pygame.event.get([KEYDOWN])
-            self.msgs.append(Message(lns, lv, rv, said=True))
-            self._go_to_next_unsaid() # or next_current?
-            self.active = False
-#            self.update()
-            self.lock.release()
+            with self.lock:
+                self._give_up_current_if_partially_said()
+                self.channel.play(lns, lv, rv)
+                while self.channel.get_busy():
+                    if interruptible and self._key_hit(keep_key=keep_key):
+                        break
+                    time.sleep(.1)
+                    self.channel.update()
+                if not interruptible:
+                    pygame.event.get([KEYDOWN])
+                self.msgs.append(Message(lns, lv, rv, said=True))
+                self._go_to_next_unsaid() # or next_current?
+                self.active = False
+#                self.update()
 
     def _mark_current_as_said(self):
         self.msgs[self.current].said = True
@@ -129,13 +128,12 @@ class _Voice(object):
     def item(self, lns, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME):
         """Say now without recording."""
         if lns:
-            self.lock.acquire()
-            self._give_up_current_if_partially_said()
-            self._go_to_next_unsaid()
-            self.channel.play(lns, lv, rv)
-            self.active = False
-            self.history = False
-            self.lock.release()
+            with self.lock:
+                self._give_up_current_if_partially_said()
+                self._go_to_next_unsaid()
+                self.channel.play(lns, lv, rv)
+                self.active = False
+                self.history = False
 
     def _expired(self, index):
         msg = self.msgs[index]
