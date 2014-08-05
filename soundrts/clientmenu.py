@@ -36,6 +36,7 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default=""):
             if e.key in [K_LSHIFT, K_RSHIFT]:
                 continue
             if e.key in (K_RETURN, K_KP_ENTER):
+                voice.item([s])
                 return s
             elif e.key == K_ESCAPE:
                 return None
