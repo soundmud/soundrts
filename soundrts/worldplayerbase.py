@@ -582,7 +582,7 @@ class Player(object):
         self.defeat()
 
     def lang_cut_scene(self, args):
-        self.push("sequence %s\n" % " ".join(args))
+        self.push("sequence", args)
 
     def lang_add_objective(self, args):
         n = args[0]

@@ -180,8 +180,8 @@ class GameInterface(object):
     def srv_speed(self, s):
         self.speed = float(s)
 
-    def srv_sequence(self, s):
-        sounds.play_sequence(s.split())
+    def srv_sequence(self, parts):
+        sounds.play_sequence(parts)
 
     def srv_quit(self):
         voice.silent_flush()
