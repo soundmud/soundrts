@@ -13,7 +13,9 @@ from msgs import nb2msg
 from paths import TMP_PATH
 
 
-def string_to_msg(s):
+def string_to_msg(s, spell=True):
+    if not spell:
+        return [s]
     l = []
     for c in s:
         if c == ".":
@@ -24,7 +26,7 @@ def string_to_msg(s):
             l.extend(c)
     return l
 
-def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default=""):
+def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
     voice.menu(msg)
     s = default
     while True:
@@ -42,17 +44,17 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default=""):
                 return None
             elif e.key == K_BACKSPACE:
                 s = s[:-1]
-                voice.item(string_to_msg(s))
+                voice.item(string_to_msg(s, spell))
             elif re.match(pattern, e.unicode) != None:
                 try:
                     c = e.unicode.encode("ascii") # telnetlib doesn't like unicode
                     s += c
-                    voice.item(string_to_msg(c) + [9999] + string_to_msg(s))
+                    voice.item(string_to_msg(c) + [9999] + string_to_msg(s, spell))
                 except:
                     warning("error reading character from keyboard")
-                    voice.item([1003, 9999] + string_to_msg(s))
+                    voice.item([1003, 9999] + string_to_msg(s, spell))
             else:
-                voice.item([1003, 9999] + string_to_msg(s))
+                voice.item([1003, 9999] + string_to_msg(s, spell))
         elif e.type == USEREVENT:
             voice.update()
         voice.update() # XXX useful for SAPI
@@ -151,7 +153,7 @@ class Menu(object):
             if self.server is None:
                 voice.item([1029]) # hostile sound
             else:
-                msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$")
+                msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
                 if msg:
                     self.server.write_line("say %s" % msg)
         elif e.key not in [K_LSHIFT,K_RSHIFT]:

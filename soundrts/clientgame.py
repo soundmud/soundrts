@@ -155,7 +155,7 @@ class GameInterface(object):
 
 
     def cmd_say(self):
-        msg = clientmenu.input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$")
+        msg = clientmenu.input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
         if not msg:
             return
         voice.info([self.player.client.login, 4287, msg])
