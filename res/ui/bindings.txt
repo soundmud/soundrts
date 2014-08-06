@@ -209,3 +209,5 @@ END: volume -1
 KP_MINUS: volume -1 
 
 CTRL SPACE: immersion
+
+BACKQUOTE: console

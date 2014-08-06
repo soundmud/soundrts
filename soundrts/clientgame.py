@@ -306,6 +306,16 @@ class GameInterface(object):
         else:
             voice.item([1029]) # hostile sound
 
+    def cmd_console(self):
+        if self.server.allow_cheatmode:
+            cmd = clientmenu.input_string(msg=[4317], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
+            if cmd:
+                # This direct way of executing the command might be a bit buggy,
+                # but at the moment this feature is just for cheating or testing anyway.
+                self.player.my_eval(cmd.split())
+        else:
+            voice.item([1029]) # hostile sound
+
     def cmd_change_player(self):
         if self.server.allow_cheatmode:
             self.server.write_line("change_player")

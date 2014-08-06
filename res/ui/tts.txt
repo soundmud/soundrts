@@ -454,3 +454,5 @@
 
 4315 observe a recorded game
 4316 Press Control Shift F4 to observe another player.
+
+4317 Enter a command.
