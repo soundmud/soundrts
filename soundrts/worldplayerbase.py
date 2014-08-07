@@ -495,7 +495,7 @@ class Player(object):
 
     def lang_no_building_left(self, unused_args):
         for u in self.units:
-            if isinstance(u, Building):
+            if u.provides_survival:
                 return False
         return True
 

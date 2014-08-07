@@ -67,6 +67,7 @@ class Creature(Entity):
 
     is_vulnerable = True
     is_healable = True
+    provides_survival = False
 
     sight_range = 0
 
@@ -1003,15 +1004,8 @@ class BuildingSite(_Building):
 class Building(_Building):
 
     is_buildable_anywhere = False
+    provides_survival = True
 
     def __init__(self, prototype, player, place, x, y):
         _Building.__init__(self, prototype, player, place, x, y)
         self.player.nb_buildings_produced += 1
-
-
-
-
-
-
-
-

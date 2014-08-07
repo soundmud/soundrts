@@ -159,6 +159,7 @@ class Rules(_Definitions):
                     "is_a_cloaker",
                     "universal_notification",
                     "presence",
+                    "provides_survival",
                     "is_ballistic",
                     "is_teleportable",
                     )
