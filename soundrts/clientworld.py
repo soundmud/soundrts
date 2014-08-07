@@ -674,6 +674,9 @@ def order_comment(order, unit):
 def order_args(order, unit):
     return create_order(order, unit).nb_args
 
+def order_shortcut(order, unit):
+    return create_order(order, unit).get_shortcut()
+
 def create_order(order, unit):
     """Create Order instance from string."""
     o = order.split()
@@ -685,6 +688,7 @@ class OrderView(object):
     comment = []
     title = []
     index = None
+    shortcut = None
 
     def __init__(self, model, interface=None):
         self.model = model
@@ -741,6 +745,14 @@ class OrderView(object):
             else:
                 result += Objet(self.interface, self.target).title
         return result
+
+    def get_shortcut(self):
+        if self.shortcut:
+            return unicode(self.shortcut[0])
+        if self.type and self.type.type_name:
+            s = style.get(self.type.type_name, "shortcut", False)
+            if s:
+                return unicode(s[0])
 
 
 def order_title(order):

@@ -1,0 +1,32 @@
+def a_deadly_fog
+shortcut n
+
+def lumbermill
+shortcut s
+
+def barracks
+shortcut c
+
+def townhall
+shortcut h
+
+def blacksmith
+shortcut g
+
+def stables
+shortcut e
+
+def workshop
+shortcut a
+
+def darkarcher
+shortcut s
+
+def knight
+shortcut h
+
+def new_flyingmachine
+shortcut v
+
+def flyingmachine
+shortcut v

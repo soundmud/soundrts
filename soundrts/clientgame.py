@@ -90,6 +90,7 @@ class GameInterface(object):
     place = None
     mouse_select_origin = None
     collision_debug = None
+    shortcut_mode = False
 
     def __init__(self, server, speed=config.speed):
         self.server = server
@@ -514,8 +515,10 @@ class GameInterface(object):
                     sys.exit()
                 elif e.type == KEYDOWN:
                     if e.key == K_TAB and e.mod & KMOD_ALT:
-                        return
-#                        continue
+                        return # continue ?
+                    if self.shortcut_mode:
+                        self._execute_order_shortcut(e)
+                        continue
                     for binding in self.bindings:
                         if self._launch_binding_if_event(e, *binding):
                             break
@@ -670,6 +673,15 @@ class GameInterface(object):
                 warning("line ignored in bindings.txt: %s", line)
         # (without this, ctrl F2 would not work because of the unsorted list)
         self.bindings.sort(key=nb_modifiers, reverse=True)
+
+    def _execute_order_shortcut(self, e):
+        for o in self.orders():
+            first_unit = self.dobjets[self.group[0]].model
+            if order_shortcut(o, first_unit) == e.unicode:
+                self._select_order(o)
+                if order_args(o, first_unit) == 0:
+                    self.cmd_validate()
+        self.shortcut_mode = False
 
     def _launch_binding_if_event(self, e, mods, key, cmd, args=()):
         if e.key == key:
@@ -1269,6 +1281,19 @@ class GameInterface(object):
         elif index >= len(orders):
             index = 0
         self._select_order(orders[index])
+
+    def cmd_order_shortcut(self):
+        if self.group:
+            msg = []
+            first_unit = self.dobjets[self.group[0]].model
+            for o in self.orders():
+                if order_shortcut(o, first_unit):
+                    msg += [order_shortcut(o, first_unit)] + order_title(o) + [9998]
+            if msg:
+                voice.item(msg)
+                self.shortcut_mode = True
+                return
+        voice.item([1029]) # hostile sound
 
     def cmd_do_again(self, *args):
         if self._previous_order is not None and self.group:

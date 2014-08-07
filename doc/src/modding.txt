@@ -239,3 +239,19 @@ Possible values:
 * anywhere: any distance is allowed
 
 If the current distance is greater than the required distance, the caster will try to move to a closer place and use the ability from there.
+
+style
+-----
+
+The style is defined in "ui/style.txt" and in the localized version of "style.txt".
+
+shortcut
+>>>>>>>>
+
+Simple orders, building orders, training orders, orders using an ability can be given with a shortcut, if a shortcut is defined.
+
+To define a shortcut, define a "shortcut" property followed by the corresponding letter. The letter must be in lowercase.
+
+If the order is a simple order, the shortcut must be defined by the order (ex: patrol).
+If the order is a complex order (train, build, use an ability), the shortcut must be defined by the second part of the order.
+For example, define an "m" shortcut for the meteor ability so the mage will have the "m" shortcut to cast meteors.

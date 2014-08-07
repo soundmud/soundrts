@@ -126,6 +126,12 @@ Giving an order: alternate, faster method
 
 A second method to give an order consists in selecting the target with Tab (or the arrow keys) and then pressing Backspace. The default order will be given. For example, a peasant targetting a gold mine will exploit it if you press Backspace.
 
+Giving an order: using shortcuts
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To give an order with a shortcut, press Alt + A. A message will tell the list of available shortcuts for the currently controlled unit.
+Press the shortcut and the order will be executed immediately, unless a target needs to be selected.
+
 Examining the situation
 ^^^^^^^^^^^^^^^^^^^^^^^
 
