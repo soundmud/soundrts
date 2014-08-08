@@ -3,11 +3,13 @@ import time
 
 import pygame
 
-from clientmedia import *
-from constants import *
-from definitions import *
+from clientmedia import voice, distance, psounds, get_screen, draw_line, draw_rect, get_fullscreen
+from constants import FOOTSTEP_LIMIT  
+from definitions import style
+from lib.log import warning, exception
 from msgs import nb2msg
-from worldunit import *
+from nofloat import PRECISION, square_of_distance
+from worldunit import Building, BuildingSite, ORDERS_DICT
 
 
 ##color_table = {81: "gold", 80: "forestgreen", 82: "white", 83: "hotpink",

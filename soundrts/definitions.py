@@ -1,8 +1,8 @@
 import re
 
-from nofloat import *
-from lib.log import *
-from lib.defs import *
+from nofloat import to_int
+from lib.log import debug, warning
+from lib.defs import preprocess
 
 
 class _Definitions:

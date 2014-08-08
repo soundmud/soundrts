@@ -1,13 +1,11 @@
 import os.path
 import random
-import re
-import string
 import time
 
 import config
-from constants import *
+from constants import NEWLINE_REPLACEMENT, SPACE_REPLACEMENT, VIRTUAL_TIME_INTERVAL
 from definitions import Style
-from lib.log import *
+from lib.log import debug, info, warning
 from msgs import insert_silences, nb2msg
 from paths import TMP_PATH
 import res

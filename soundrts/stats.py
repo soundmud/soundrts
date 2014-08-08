@@ -1,17 +1,11 @@
 try:
-    from ctypes import *
+    from ctypes import create_string_buffer, sizeof, windll, c_ulong, byref
 except:
     pass
-import platform
 import os
-import os.path
 import urllib
-##try:
-##    import wmi
-##except:
-##    info("can't import wmi")
 
-from lib.log import *
+from lib.log import debug
 
 
 class Stats(object):
@@ -93,14 +87,6 @@ class Stats(object):
     def _get_weak_user_id(self):
         # truncated hash of various parameters
         # used to approximate the number of users, not more
-##        try:
-##            processor_id = wmi.WMI().Win32_Processor()[0].ProcessorId
-##        except:
-##            info("can't get processor id")
-##            processor_id = "unknown"
-##        platform_uname = repr(platform.uname()) # can change over time (but not too often)
-##        volume_id = repr(_get_volume_serial_number())
-##        thing_to_hash = processor_id + volume_id + platform_uname
         thing_to_hash = self._get_volume_serial_number()
         user_id = "%s" % abs(hash(thing_to_hash))
         user_id = user_id[:4] # collisions are probable
@@ -118,12 +104,12 @@ class Stats(object):
             lpFileSystemFlags = c_ulong()
             lpFileSystemNameBuffer = create_string_buffer(1024)
             nFileSystemNameSize = sizeof(lpFileSystemNameBuffer)
-            windll.kernel32.GetVolumeInformationA( \
-                lpRootPathName, \
-                lpVolumeNameBuffer, nVolumeNameSize, \
-                byref(lpVolumeSerialNumber), \
+            windll.kernel32.GetVolumeInformationA( # @UndefinedVariable
+                lpRootPathName,
+                lpVolumeNameBuffer, nVolumeNameSize,
+                byref(lpVolumeSerialNumber),
                 byref(lpMaximumComponentLength),
-                byref(lpFileSystemFlags), \
+                byref(lpFileSystemFlags),
                 lpFileSystemNameBuffer, nFileSystemNameSize)
             return lpVolumeSerialNumber.value
         except:

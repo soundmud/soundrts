@@ -1,10 +1,11 @@
 import worldrandom
 
-from constants import *
-from worldentity import *
-from worldorders import *
-from worldresource import *
-from worldroom import *
+from constants import MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
+from lib.log import debug, warning, exception
+from nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
+from worldentity import Entity
+from worldorders import ORDERS_DICT, GoOrder, RallyingPointOrder, BuildPhaseTwoOrder, UpgradeToOrder
+from worldresource import Meadow, Corpse, Deposit
 
 
 class Creature(Entity):

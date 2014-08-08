@@ -8,9 +8,8 @@ import time
 import urllib
 
 from version import VERSION
-from constants import *
-from lib.log import *
-from paths import *
+from constants import METASERVER_URL, NEWLINE_REPLACEMENT, SPACE_REPLACEMENT
+from lib.log import debug, warning, exception
 
 
 def send_error_to_metaserver(error_msg):

@@ -1,16 +1,14 @@
 import asyncore
-import os.path
 import re
 import sys
 import socket
-import time
 import urllib
 
-from lib.log import *
-
-from serverclient import *
-from serverroom import *
-from ticker import *
+from constants import MAIN_METASERVER_URL
+from lib.log import debug, info, warning, exception
+from serverclient import ConnectionToClient
+from serverroom import InTheLobby, OrganizingAGame, Playing
+from ticker import Ticker
 from version import COMPATIBILITY_VERSION
 
 import config

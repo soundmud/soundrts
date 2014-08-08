@@ -1,6 +1,12 @@
-from lib.log import debug, info, warning
+import re
+
+from definitions import get_ai, rules
+from lib.log import debug, info, warning, exception
 from version import VERSION
-from worldplayerbase import *
+from worldplayerbase import Player
+import worldrandom
+from worldresource import Meadow, Deposit, Corpse
+from worldunit import Worker, BuildingSite, Soldier
 
 
 class Computer(Player):

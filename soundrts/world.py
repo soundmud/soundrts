@@ -1,4 +1,4 @@
-import math
+import copy
 try:
     from hashlib import md5
 except ImportError:
@@ -10,19 +10,23 @@ import string
 import time
 
 import collision
-
-import config
-from constants import *
+from constants import COLLISION_RADIUS, VIRTUAL_TIME_INTERVAL
+from definitions import rules, get_ai_names, load_ai
+from lib.log import warning, exception
+from nofloat import to_int, int_distance
 from paths import MAPERROR_PATH
 import res
-import stats
 from worldability import Ability
 import worldclient
-from worldexit import *
-from worldplayer import *
+from worldexit import passage
+from worldorders import ORDERS_DICT
+from worldplayerbase import Player, normalize_cost_or_resources
+from worldplayercomputer import Computer
+from worldplayerhuman import Human
 import worldrandom
-from worldroom import *
-from worldunit import *
+from worldresource import Deposit, Meadow
+from worldroom import Square
+from worldunit import Unit, Worker, Soldier, Building, Effect
 from worldupgrade import Upgrade
 
 

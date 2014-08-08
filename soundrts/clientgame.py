@@ -1,26 +1,26 @@
 # -*- coding: cp1252 -*-
 
 import math
-import os
-import os.path
 import Queue
 import re
+import sys
 import time
 
 import pygame
-from pygame.locals import *
+from pygame.locals import KEYDOWN, QUIT, USEREVENT, K_TAB, KMOD_ALT, MOUSEBUTTONDOWN, KMOD_SHIFT, KMOD_CTRL, MOUSEBUTTONUP, MOUSEMOTION
 
 from clienthelp import help_msg
-from clientmedia import *
+from clientmedia import voice, sounds, psounds, sound_stop, angle, stereo, vision_stereo, modify_volume, set_game_mode, screen_render, distance, get_fullscreen, get_screen, toggle_fullscreen, screen_render_subtitle
 import clientmenu
-from clientworld import *
+from clientworld import GridView, Objet, order_title, order_shortcut, order_args, order_comment, order_index, must_be_said
 import config
-from constants import *
-from definitions import *
+from constants import ALERT_LIMIT, EVENT_LIMIT, VIRTUAL_TIME_INTERVAL
+from definitions import style
 import group
-from lib.log import *
+from lib.log import debug, warning, exception
 from msgs import nb2msg, eval_msg_and_volume
-from worldunit import *
+from nofloat import PRECISION
+from version import VERSION
 
 
 my_cursors = {}

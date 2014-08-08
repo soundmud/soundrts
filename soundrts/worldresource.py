@@ -1,8 +1,7 @@
 import copy
 
-from nofloat import to_int
-from constants import *
-from worldentity import *
+from nofloat import to_int, PRECISION
+from worldentity import Entity
 
 
 class Deposit(Entity):

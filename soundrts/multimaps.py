@@ -1,5 +1,8 @@
+import os
+
 from definitions import Style
-from mapfile import *
+from mapfile import Map
+from paths import MAPS_PATHS
 import res
 
 

@@ -1,5 +1,4 @@
 import os
-import os.path
 
 
 def _mkdir(path):

@@ -2,17 +2,14 @@ import copy
 import inspect
 import re
 import string
-import sys
-import time
 
-import config
-from constants import *
-import group
-from lib.log import *
-from msgs import encode_msg
-import stats
-import worldrandom
-from worldunit import *
+from constants import MAX_NB_OF_RESOURCE_TYPES
+from definitions import rules, style
+from lib.log import debug, warning
+from msgs import encode_msg, nb2msg
+from nofloat import PRECISION
+from worldentity import NotEnoughSpaceError
+from worldresource import Corpse
 from worldupgrade import Upgrade
 
 

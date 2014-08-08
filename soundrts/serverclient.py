@@ -1,15 +1,13 @@
 import asynchat
+import re
 import string
 import sys
 import time
-import traceback
 
-
-import config
-from lib.log import *
+from lib.log import debug, info, warning, exception
 from msgs import insert_silences, encode_msg
 from multimaps import worlds_multi
-from serverroom import *
+from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
 from version import COMPATIBILITY_VERSION
 
 

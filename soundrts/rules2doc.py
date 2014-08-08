@@ -1,7 +1,7 @@
 from lib import log
 log.add_console_handler()
 
-from definitions import *
+from definitions import Rules
 
 
 class RulesForDoc(Rules):

@@ -4,11 +4,11 @@ import sys
 import time
 
 import pygame
-from pygame.locals import *
+from pygame.locals import QUIT, KEYDOWN, K_LSHIFT, K_RSHIFT, K_KP_ENTER, K_RETURN, K_ESCAPE, K_BACKSPACE, USEREVENT, K_TAB, KMOD_ALT, K_LEFT, K_UP, KMOD_SHIFT, K_DOWN, K_RIGHT, K_F2, KMOD_CTRL, K_F1, K_F5, K_LALT, K_RALT, K_F6, K_HOME, K_KP_PLUS, K_END, K_KP_MINUS, K_F7
 
 from clienthelp import help_msg
-from clientmedia import *
-from lib.log import debug
+from clientmedia import voice, modify_volume, toggle_fullscreen
+from lib.log import debug, warning
 from msgs import nb2msg
 from paths import TMP_PATH
 

@@ -1,11 +1,11 @@
 import threading
 import urllib
 
-from clientmedia import *
-
-import config
-from constants import *
+from clientmedia import voice
+from constants import METASERVER_URL
+from paths import STATS_PATH, OLD_STATS_PATH
 import stats
+from version import VERSION
 
 
 class RevisionChecker(threading.Thread):
@@ -21,8 +21,8 @@ class RevisionChecker(threading.Thread):
             rev = urllib.urlopen(url).read().strip()
             if (rev != VERSION) and (rev.find("404") == -1):
                 voice.important([4234])
-            stats.Stats(config.OLD_STATS_PATH, METASERVER_URL).send()
-            stats.Stats(config.STATS_PATH, METASERVER_URL).send()
+            stats.Stats(OLD_STATS_PATH, METASERVER_URL).send()
+            stats.Stats(STATS_PATH, METASERVER_URL).send()
         except:
             pass
 

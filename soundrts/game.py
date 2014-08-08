@@ -1,4 +1,3 @@
-import os
 import os.path
 import pickle
 import sys
@@ -13,16 +12,18 @@ import clientgame
 import definitions
 import clientworld
 import config
-from constants import *
-from mapfile import *
+from constants import METASERVER_URL
+from definitions import style, rules
+from lib.log import warning, exception
+from mapfile import Map
 from msgs import nb2msg
-from paths import *
+from paths import REPLAYS_PATH, SAVE_PATH, STATS_PATH
 import random
 import res
-import tts
+import stats
 from version import VERSION, compatibility_version, COMPATIBILITY_VERSION
-from world import *
-from worldclient import *
+from world import World
+from worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, HalfDummyClient, send_platform_version_to_metaserver 
 
 
 class _Game(object):

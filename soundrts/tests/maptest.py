@@ -1,9 +1,8 @@
 import unittest
 
-
-from soundrts.mapfile import *
-from soundrts.world import *
-from soundrts.worldclient import *
+from soundrts.mapfile import Map
+from soundrts.world import World
+from soundrts.worldclient import Coordinator
 
 
 class CoordinatorTestCase(unittest.TestCase):

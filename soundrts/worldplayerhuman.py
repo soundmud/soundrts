@@ -1,4 +1,6 @@
-from worldplayerbase import *
+import group
+from lib.log import exception
+from worldplayerbase import Player
 
 
 class Human(Player):
@@ -19,7 +21,7 @@ class Human(Player):
         pass
 
     def is_human(self):
-	return True
+        return True
 
     def cmd_order(self, args):
         self.group_had_enough_mana = False
