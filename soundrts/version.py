@@ -8,7 +8,7 @@ import sys
 import res
 
 
-VERSION = "1.2-a9-dev"
+VERSION = "1.2-a9"
 
 if VERSION.endswith("-dev"):
     import collision
