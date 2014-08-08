@@ -677,6 +677,7 @@ class Creature(Entity):
             warning("unknown order: %s", o)
             return
         if not cls.is_allowed(self, *o[1:]):
+            self.notify("order_impossible")
             debug("wrong order to %s: %s", self.type_name, o)
             return
         if forget_previous and not cls.never_forget_previous:
