@@ -320,7 +320,7 @@ def townhall
 is_a building
 title 82
 noise repeat 6 1064
-shortcut t
+shortcut h
 
 def keep
 is_a townhall
