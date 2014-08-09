@@ -7,9 +7,6 @@ shortcut s
 def barracks
 shortcut c
 
-def townhall
-shortcut h
-
 def blacksmith
 shortcut g
 
