@@ -35,6 +35,7 @@ index 1
 def patrol
 title 103 115
 index 2
+shortcut p
 
 def load
 title 4278
@@ -121,42 +122,52 @@ index 12
 def a_teleportation
 title 4250 4251
 alert 1328
+shortcut t
 
 def a_recall
 title 4307
 alert 1328
+shortcut r
 
 def a_holy_vision
 title 4299
 alert 1339
+shortcut v
 
 def a_conversion
 title 4274
 alert 6114
+shortcut c
 
 def a_summon_dragon
 title 4292 4231
 alert 1338
+shortcut d
 
 def a_deadly_fog
 title 4305
 alert
+shortcut f
 
 def a_raise_dead
 title 4293
 alert 1340
+shortcut r
 
 def a_resurrection
 title 4294
 alert 1339
+shortcut r
 
 def a_meteors
 title 4306
 alert
+shortcut m
 
 def a_exorcism
 title 4300
 alert
+shortcut e
 
 ; upgrades
 
@@ -292,20 +303,24 @@ def farm
 is_a building
 title 83
 noise repeat 15 1050
+shortcut f
 
 def lumbermill
 is_a building
 title 148
 noise repeat 15 1052
+shortcut l
 
 def barracks
 is_a building
 title 99
+shortcut b
 
 def townhall
 is_a building
 title 82
 noise repeat 6 1064
+shortcut h
 
 def keep
 is_a townhall
@@ -321,39 +336,47 @@ def blacksmith
 is_a building
 title 4213
 noise repeat 15 1300
+shortcut k
 
 def stables
 is_a building
 title 4222
 noise repeat 15 1305 1306
+shortcut s
 
 def workshop
 is_a building
 title 4226
 noise repeat 15 1321
+shortcut w
 
 def dragonslair
 is_a building
 title 4227
 noise repeat 15 1320
+shortcut d
 
 def magestower
 is_a building
 title 4228
 noise repeat 15 1319
+shortcut m
 
 def temple
 is_a building
 title 4298
+shortcut p
 
 def necropolis
 is_a building
 title 4304
+shortcut n
 
 def scouttower
 is_a building
 title 4275
 noise repeat 6 6111
+shortcut t
 
 def guardtower
 is_a building
@@ -381,6 +404,7 @@ attack_hit 1008
 store_resource_0 1099
 store_resource_1 1098
 keyboard worker
+shortcut p
 
 def footman
 is_a walking_unit
@@ -388,6 +412,7 @@ title 86
 attack_hit 1039 1040 1041
 attack_hit_level_1 1302
 keyboard soldier1
+shortcut f
 
 def zombie
 is_a footman
@@ -402,10 +427,12 @@ launch_attack 1042
 attack_hit 1043
 attack_hit_level_1 1301
 keyboard soldier2
+shortcut a
 
 def darkarcher
 is_a archer
 title 4283
+shortcut d
 
 def skeleton
 is_a archer
@@ -421,6 +448,7 @@ attack_hit 1039 1040 1041
 attack_hit_level_1 1302
 move 1303 1304
 keyboard soldier3
+shortcut k
 
 def catapult
 is_a unit
@@ -430,6 +458,7 @@ launch_attack 1084
 attack_hit 1085
 move 1082 1083
 keyboard soldier4
+shortcut c
 
 def dragon
 is_a unit
@@ -440,6 +469,7 @@ attack_hit 1085
 death 1316
 move 1317 1318
 keyboard soldier5
+shortcut d
 
 def mage
 is_a walking_unit
@@ -447,28 +477,33 @@ title 4229
 launch_attack 1322
 attack_hit 1323
 keyboard soldier6
+shortcut m
 
 def priest
 is_a walking_unit
 title 4297
 keyboard soldier6
+shortcut p
 
 def necromancer
 is_a walking_unit
 title 4303
 keyboard soldier6
+shortcut n
 
 def new_flyingmachine
 is_a unit
 title 4230
 move 1317 1318
 keyboard soldier7
+shortcut f
 
 def flyingmachine ; old flying machine
 is_a new_flyingmachine
 title 110 4230 ; offensive flying machine
 launch_attack 1322
 attack_hit 1323
+shortcut f
 
 def holy_vision
 is_a thing

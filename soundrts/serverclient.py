@@ -1,15 +1,13 @@
 import asynchat
+import re
 import string
 import sys
 import time
-import traceback
 
-
-import config
-from lib.log import *
+from lib.log import debug, info, warning, exception
 from msgs import insert_silences, encode_msg
 from multimaps import worlds_multi
-from serverroom import *
+from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
 from version import COMPATIBILITY_VERSION
 
 
@@ -223,7 +221,7 @@ class ConnectionToClient(asynchat.async_chat):
         self.server.update_menus()
 
     def cmd_race(self, args):
-        self.game.players[int(args[0])].race = args[1]
+        self.game.set_race(args[0], args[1])
         self.server.update_menus()
 
     # "waiting for the game to start" commands

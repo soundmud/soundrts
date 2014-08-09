@@ -1,13 +1,12 @@
-import os
 import socket
 import sys
 import telnetlib
 import threading
 import time
 
-from clientmedia import *
+from clientmedia import voice
 from clientservermenu import ServerMenu
-from clientversion import *
+from clientversion import revision_checker
 import config
 from lib.log import info, exception
 import servermain
@@ -22,6 +21,8 @@ class ConnectionAbortedError(_Error): pass
 
 
 class ServerInAThread(threading.Thread):
+
+    daemon = True
 
     def __init__(self, parameters):
         threading.Thread.__init__(self)

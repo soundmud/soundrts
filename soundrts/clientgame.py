@@ -1,27 +1,27 @@
 # -*- coding: cp1252 -*-
 
 import math
-import os
-import os.path
 import Queue
 import re
+import sys
 import time
 
 import pygame
-from pygame.locals import *
+from pygame.locals import KEYDOWN, QUIT, USEREVENT, K_TAB, KMOD_ALT, MOUSEBUTTONDOWN, KMOD_SHIFT, KMOD_CTRL, MOUSEBUTTONUP, MOUSEMOTION
 
 from clientgamezoom import Zoom
 from clienthelp import help_msg
-from clientmedia import *
+from clientmedia import voice, sounds, psounds, sound_stop, angle, stereo, vision_stereo, modify_volume, set_game_mode, screen_render, distance, get_fullscreen, get_screen, toggle_fullscreen, screen_render_subtitle
 import clientmenu
-from clientworld import *
+from clientworld import GridView, Objet, order_title, order_shortcut, order_args, order_comment, order_index, must_be_said
 import config
-from constants import *
-from definitions import *
+from constants import ALERT_LIMIT, EVENT_LIMIT, VIRTUAL_TIME_INTERVAL
+from definitions import style
 import group
-from lib.log import *
+from lib.log import debug, warning, exception
 from msgs import nb2msg, eval_msg_and_volume
-from worldunit import *
+from nofloat import PRECISION
+from version import VERSION
 
 
 my_cursors = {}
@@ -91,6 +91,7 @@ class GameInterface(object):
     place = None
     mouse_select_origin = None
     collision_debug = None
+    shortcut_mode = False
     zoom_mode = False
     zoom = None
 
@@ -158,7 +159,7 @@ class GameInterface(object):
 
 
     def cmd_say(self):
-        msg = clientmenu.input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$")
+        msg = clientmenu.input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
         if not msg:
             return
         voice.info([self.player.client.login, 4287, msg])
@@ -183,8 +184,8 @@ class GameInterface(object):
     def srv_speed(self, s):
         self.speed = float(s)
 
-    def srv_sequence(self, s):
-        sounds.play_sequence(s.split())
+    def srv_sequence(self, parts):
+        sounds.play_sequence(parts)
 
     def srv_quit(self):
         voice.silent_flush()
@@ -306,6 +307,16 @@ class GameInterface(object):
                 voice.item([4265, 4264]) # is now off
             else:
                 voice.item([4265, 4263]) # is now on
+        else:
+            voice.item([1029]) # hostile sound
+
+    def cmd_console(self):
+        if self.server.allow_cheatmode:
+            cmd = clientmenu.input_string(msg=[4317], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
+            if cmd:
+                # This direct way of executing the command might be a bit buggy,
+                # but at the moment this feature is just for cheating or testing anyway.
+                self.player.my_eval(cmd.split())
         else:
             voice.item([1029]) # hostile sound
 
@@ -507,8 +518,10 @@ class GameInterface(object):
                     sys.exit()
                 elif e.type == KEYDOWN:
                     if e.key == K_TAB and e.mod & KMOD_ALT:
-                        return
-#                        continue
+                        return # continue ?
+                    if self.shortcut_mode:
+                        self._execute_order_shortcut(e)
+                        continue
                     for binding in self.bindings:
                         if self._launch_binding_if_event(e, *binding):
                             break
@@ -663,6 +676,15 @@ class GameInterface(object):
                 warning("line ignored in bindings.txt: %s", line)
         # (without this, ctrl F2 would not work because of the unsorted list)
         self.bindings.sort(key=nb_modifiers, reverse=True)
+
+    def _execute_order_shortcut(self, e):
+        for o in self.orders():
+            first_unit = self.dobjets[self.group[0]].model
+            if order_shortcut(o, first_unit) == e.unicode:
+                self._select_order(o)
+                if order_args(o, first_unit) == 0:
+                    self.cmd_validate()
+        self.shortcut_mode = False
 
     def _launch_binding_if_event(self, e, mods, key, cmd, args=()):
         if e.key == key:
@@ -1263,6 +1285,19 @@ class GameInterface(object):
             index = 0
         self._select_order(orders[index])
 
+    def cmd_order_shortcut(self):
+        if self.group:
+            msg = []
+            first_unit = self.dobjets[self.group[0]].model
+            for o in self.orders():
+                if order_shortcut(o, first_unit):
+                    msg += [order_shortcut(o, first_unit)] + order_title(o) + [9998]
+            if msg:
+                voice.item(msg)
+                self.shortcut_mode = True
+                return
+        voice.item([1029]) # hostile sound
+
     def cmd_do_again(self, *args):
         if self._previous_order is not None and self.group:
             self._select_order(self._previous_order)
@@ -1446,9 +1481,9 @@ class GameInterface(object):
         self.zoom_mode = not self.zoom_mode
         if self.zoom_mode:
             self.zoom = Zoom(self)
-            voice.item([4317, 4263]) # is now on
+            voice.item([4318, 4263]) # is now on
         else:
-            voice.item([4317, 4264]) # is now off
+            voice.item([4318, 4264]) # is now off
 
     # display
 

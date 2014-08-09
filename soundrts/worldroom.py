@@ -1,12 +1,10 @@
 import string
 
 from constants import COLLISION_RADIUS
-from lib.log import *
-from nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
 from msgs import nb2msg
-from worldresource import Meadow
-
+from nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
 from priodict import priorityDictionary
+from worldresource import Meadow
 
 
 SPACE_LIMIT = 144

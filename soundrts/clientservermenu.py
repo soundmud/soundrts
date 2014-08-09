@@ -1,9 +1,14 @@
-from clientmenu import *
+import re
+import time
+
+from clientmedia import voice, sounds
+from clientmenu import Menu
 from definitions import style
 from game import MultiplayerGame
-from lib.log import debug
+from lib.log import debug, warning
 import mapfile
 from msgs import nb2msg, eval_msg_and_volume
+import res
 
 
 class _ServerMenu(Menu):

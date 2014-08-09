@@ -1,10 +1,11 @@
 import worldrandom
 
-from constants import *
-from worldentity import *
-from worldorders import *
-from worldresource import *
-from worldroom import *
+from constants import MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
+from lib.log import debug, warning, exception
+from nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
+from worldentity import Entity
+from worldorders import ORDERS_DICT, GoOrder, RallyingPointOrder, BuildPhaseTwoOrder, UpgradeToOrder
+from worldresource import Meadow, Corpse, Deposit
 
 
 class Creature(Entity):
@@ -67,6 +68,7 @@ class Creature(Entity):
 
     is_vulnerable = True
     is_healable = True
+    provides_survival = False
 
     sight_range = 0
 
@@ -676,6 +678,7 @@ class Creature(Entity):
             warning("unknown order: %s", o)
             return
         if not cls.is_allowed(self, *o[1:]):
+            self.notify("order_impossible")
             debug("wrong order to %s: %s", self.type_name, o)
             return
         if forget_previous and not cls.never_forget_previous:
@@ -1003,15 +1006,8 @@ class BuildingSite(_Building):
 class Building(_Building):
 
     is_buildable_anywhere = False
+    provides_survival = True
 
     def __init__(self, prototype, player, place, x, y):
         _Building.__init__(self, prototype, player, place, x, y)
         self.player.nb_buildings_produced += 1
-
-
-
-
-
-
-
-

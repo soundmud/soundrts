@@ -572,6 +572,7 @@ time_cost 60
 sight_range 1 ; can see the adjacent squares
 can_upgrade_to guardtower cannontower
 is_buildable_anywhere 1
+provides_survival 0
 
 def guardtower
 class building
@@ -588,6 +589,7 @@ target_types ground air
 armor 1 ; armor 20
 can_use archer_weapon archer_range
 is_buildable_anywhere 1
+provides_survival 0
 
 def cannontower
 class building
@@ -605,6 +607,7 @@ damage_radius 1
 splash 1
 armor 1 ; armor 20
 is_buildable_anywhere 1
+provides_survival 0
 
 ; other units
 

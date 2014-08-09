@@ -126,6 +126,12 @@ Giving an order: alternate, faster method
 
 A second method to give an order consists in selecting the target with Tab (or the arrow keys) and then pressing Backspace. The default order will be given. For example, a peasant targetting a gold mine will exploit it if you press Backspace.
 
+Giving an order: using shortcuts
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To give an order with a shortcut, press Alt + A. A message will tell the list of available shortcuts for the currently controlled unit.
+Press the shortcut and the order will be executed immediately, unless a target needs to be selected.
+
 Examining the situation
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -196,6 +202,7 @@ Alt + R reselects the previously given order. Useful to train the same unit or b
 Alt + G reselects the previously given order and validate it if no additional parameter is required. For example, to train 5 additional archers, press Alt + G 5 times.
 Since SoundRTS 1.1 alpha 3, Alt + A is the same than Alt + G.
 
+Backquote (the key below Escape): console command (only in single player mode). The only useful commands at the moment are add_units (to get units or buildings instantly) and victory (to win, for example to skip a chapter). Example of a "add_units" command: "add_units a1 100 archer". New in SoundRTS 1.2 alpha 9.
 
 
 4. Multiplayer games

@@ -1,9 +1,13 @@
 import ConfigParser
+import os
 import re
 
+from clientmedia import voice, sounds
 import clientmenu
-from game import *
+from game import MissionGame
+from mapfile import Map
 from msgs import nb2msg
+from paths import CAMPAIGNS_CONFIG_PATH
 
 
 class MissionChapter(Map):

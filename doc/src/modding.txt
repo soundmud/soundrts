@@ -34,6 +34,21 @@ the rules
 
 Since SoundRTS 1.1, the rules of the game are stored in a file called rules.txt.
 
+races
+>>>>>
+
+Each race is defined in rules.txt . For example::
+
+	def orc_race
+	class race
+
+It is possible to use the word "faction" instead of "race". For example::
+
+	def orc_faction
+	class faction
+
+Note: the "orc_faction" name ends with "_faction" just to avoid name clashes. This "_faction" suffix is not mandatory as long as the name is unique.
+
 unit properties
 >>>>>>>>>>>>>>>
 
@@ -56,6 +71,15 @@ New in SoundRTS 1.2 alpha 9.
 `is_teleportable 1`
 
 The unit (or building) is affected by the teleportation effect or the recall effect.
+
+provides_survival
+=================
+
+New in SoundRTS 1.2 alpha 9.
+
+`provides_survival 1`
+
+Having at least one unit (or building) with "provides_survival" equal to 1 prevents a player from losing in a multiplayer game (not in a single player campaign). The affected trigger is "no_building_left". By default only the buildings have this property set to 1. Construction sites have this property set to 0 and it cannot be changed.
 
 storage_bonus
 =============
@@ -215,3 +239,19 @@ Possible values:
 * anywhere: any distance is allowed
 
 If the current distance is greater than the required distance, the caster will try to move to a closer place and use the ability from there.
+
+style
+-----
+
+The style is defined in "ui/style.txt" and in the localized version of "style.txt".
+
+shortcut
+>>>>>>>>
+
+Simple orders, building orders, training orders, orders using an ability can be given with a shortcut, if a shortcut is defined.
+
+To define a shortcut, define a "shortcut" property followed by the corresponding letter. The letter must be in lowercase.
+
+If the order is a simple order, the shortcut must be defined by the order (ex: patrol).
+If the order is a complex order (train, build, use an ability), the shortcut must be defined by the second part of the order.
+For example, define an "m" shortcut for the meteor ability so the mage will have the "m" shortcut to cast meteors.

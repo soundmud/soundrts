@@ -4,16 +4,18 @@ import sys
 import time
 
 import pygame
-from pygame.locals import *
+from pygame.locals import QUIT, KEYDOWN, K_LSHIFT, K_RSHIFT, K_KP_ENTER, K_RETURN, K_ESCAPE, K_BACKSPACE, USEREVENT, K_TAB, KMOD_ALT, K_LEFT, K_UP, KMOD_SHIFT, K_DOWN, K_RIGHT, K_F2, KMOD_CTRL, K_F1, K_F5, K_LALT, K_RALT, K_F6, K_HOME, K_KP_PLUS, K_END, K_KP_MINUS, K_F7
 
 from clienthelp import help_msg
-from clientmedia import *
-from lib.log import debug
+from clientmedia import voice, modify_volume, toggle_fullscreen
+from lib.log import debug, warning
 from msgs import nb2msg
 from paths import TMP_PATH
 
 
-def string_to_msg(s):
+def string_to_msg(s, spell=True):
+    if not spell:
+        return [s]
     l = []
     for c in s:
         if c == ".":
@@ -24,7 +26,7 @@ def string_to_msg(s):
             l.extend(c)
     return l
 
-def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default=""):
+def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
     voice.menu(msg)
     s = default
     while True:
@@ -36,22 +38,23 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default=""):
             if e.key in [K_LSHIFT, K_RSHIFT]:
                 continue
             if e.key in (K_RETURN, K_KP_ENTER):
+                voice.item([s])
                 return s
             elif e.key == K_ESCAPE:
                 return None
             elif e.key == K_BACKSPACE:
                 s = s[:-1]
-                voice.item(string_to_msg(s))
+                voice.item(string_to_msg(s, spell))
             elif re.match(pattern, e.unicode) != None:
                 try:
                     c = e.unicode.encode("ascii") # telnetlib doesn't like unicode
                     s += c
-                    voice.item(string_to_msg(c) + [9999] + string_to_msg(s))
+                    voice.item(string_to_msg(c) + [9999] + string_to_msg(s, spell))
                 except:
                     warning("error reading character from keyboard")
-                    voice.item([1003, 9999] + string_to_msg(s))
+                    voice.item([1003, 9999] + string_to_msg(s, spell))
             else:
-                voice.item([1003, 9999] + string_to_msg(s))
+                voice.item([1003, 9999] + string_to_msg(s, spell))
         elif e.type == USEREVENT:
             voice.update()
         voice.update() # XXX useful for SAPI
@@ -150,7 +153,7 @@ class Menu(object):
             if self.server is None:
                 voice.item([1029]) # hostile sound
             else:
-                msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$")
+                msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
                 if msg:
                     self.server.write_line("say %s" % msg)
         elif e.key not in [K_LSHIFT,K_RSHIFT]:

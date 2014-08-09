@@ -105,22 +105,14 @@ my_copy("", "soundrts.py", "multi")
 my_copy("", "server.py", "multi")
 my_copytree("soundrts", "multi/soundrts")
 chdir("multi")
-for pythonver in (4, 5, 6, 7):
-    print "compiling all using 2.%s..." % pythonver
-    # force compilation
-    for base in ("soundrts", "soundrts/lib"):
-        for nf in os.listdir(base):
-            if nf[-4:] == ".pyc":
-                os.remove(os.path.join(base, nf))
-            
-    my_execute("c:\\python2%s\\python.exe -m compileall -ql soundrts soundrts/lib" % pythonver)
-    my_copy("soundrts", ".pyc", "soundrts_python2%s" % pythonver)
-    my_copy("soundrts/lib", ".pyc", "soundrts_python2%s/lib" % pythonver)
+pythonver = 7
+print "compiling all using 2.%s..." % pythonver
+my_execute("c:\\python2%s\\python.exe -m compileall -ql soundrts soundrts/lib" % pythonver)
+# remove the *.py source files
 for base in ("soundrts", "soundrts/lib"):
     for nf in os.listdir(base):
         if nf[-3:] == ".py": # and nf not in ("soundrts.py", "server.py"):
             os.remove(os.path.join(base, nf))
-print "2.%s is kept as a default for the multiplatform version." % pythonver
 
 chdir(SRC_DIR)
 

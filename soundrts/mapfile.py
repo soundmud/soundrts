@@ -7,10 +7,9 @@ import os.path
 import re
 import shutil
 
-from config import *
-from constants import *
-from lib.log import *
+from lib.log import debug, exception
 from lib import zipdir
+from paths import TMP_PATH
 import world
 
 

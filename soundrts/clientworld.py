@@ -3,11 +3,14 @@ import time
 
 import pygame
 
-from clientmedia import *
-from constants import *
-from definitions import *
+from clientmedia import voice, distance, psounds, get_screen, draw_line, draw_rect, get_fullscreen
+from constants import FOOTSTEP_LIMIT  
+from definitions import style
+from lib.log import warning, exception
 from msgs import nb2msg
-from worldunit import *
+from nofloat import PRECISION, square_of_distance
+from worldorders import ORDERS_DICT
+from worldunit import Building, BuildingSite
 
 
 ##color_table = {81: "gold", 80: "forestgreen", 82: "white", 83: "hotpink",
@@ -674,6 +677,9 @@ def order_comment(order, unit):
 def order_args(order, unit):
     return create_order(order, unit).nb_args
 
+def order_shortcut(order, unit):
+    return create_order(order, unit).get_shortcut()
+
 def create_order(order, unit):
     """Create Order instance from string."""
     o = order.split()
@@ -685,6 +691,7 @@ class OrderView(object):
     comment = []
     title = []
     index = None
+    shortcut = None
 
     def __init__(self, model, interface=None):
         self.model = model
@@ -741,6 +748,14 @@ class OrderView(object):
             else:
                 result += Objet(self.interface, self.target).title
         return result
+
+    def get_shortcut(self):
+        if self.shortcut:
+            return unicode(self.shortcut[0])
+        if self.type and self.type.type_name:
+            s = style.get(self.type.type_name, "shortcut", False)
+            if s:
+                return unicode(s[0])
 
 
 def order_title(order):

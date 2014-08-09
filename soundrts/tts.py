@@ -1,4 +1,5 @@
 import platform
+import threading
 import time
 
 import config
@@ -27,7 +28,7 @@ elif platform.system() == "Darwin":
     except:
         print "Couldn't use Appkit.NSSpeechSynthesizer."
 
-from lib.log import *
+from lib.log import warning, exception
 
 
 MINIMAL_PLAYING_TIME = 1 # in seconds
@@ -54,37 +55,47 @@ def is_speaking():
     # The TTS doesn't always start speaking at once, but we don't want to wait.
     # So we consider that the TTS is speaking during the first milliseconds,
     # even if _tts.IsSpeaking() returns False.
-    return _tts.IsSpeaking() or time.time() < _tts_previous_start_time + TTS_TIMEOUT
+    with _lock:
+        return _tts.IsSpeaking() or time.time() < _tts_previous_start_time + TTS_TIMEOUT
 
 @warn_if_slow
 def speak(text):
     assert isinstance(text, unicode)
     global _tts_previous_start_time
     if not is_available: return
-    try:
-        _tts.Speak(text, pyTTS.tts_async, pyTTS.tts_purge_before_speak)
-    except:
-        exception("error during tts_speak('%s'): back to recorded speech", text)
-    _tts_previous_start_time = time.time()
+    with _lock:
+        try:
+            _tts.Speak(text, pyTTS.tts_async, pyTTS.tts_purge_before_speak)
+        except:
+            exception("error during tts_speak('%s'): back to recorded speech", text)
+        _tts_previous_start_time = time.time()
 
 @warn_if_slow
 def stop():
     if not is_available: return
     global _tts_previous_start_time
-    if _tts_previous_start_time:
-        try:
-            _tts.Stop()
-        except:
-            pass # speak() will have a similar error and fall back to sounds
-    _tts_previous_start_time = 0
+    with _lock:
+        if _tts_previous_start_time:
+            try:
+                _tts.Stop()
+            except:
+                pass # speak() will have a similar error and fall back to sounds
+        _tts_previous_start_time = 0
 
 def init():
-    global _tts, is_available
+    global _tts, is_available, _lock
+    _lock = threading.Lock()
     try:
         _tts = pyTTS.Create()
     except:
         is_available = False
     else:
         is_available = True
+
+def close():
+    if not is_available: return
+    # speech dispatcher must be closed or the program won't close
+    if hasattr(_tts, "_client"):
+        _tts._client.close()
 
 init()

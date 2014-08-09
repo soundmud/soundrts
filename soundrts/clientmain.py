@@ -15,28 +15,25 @@ except:
 
 import os.path
 import pickle
-import random
-import re
 import sys
 import time
 import urllib
 
-import pygame
-
-from lib.log import *
-from clientmedia import *
-from clientmenu import *
-from clientserver import *
-from definitions import style
-from clientversion import *
+from clientmedia import voice, init_media, close_media
+from clientmenu import Menu, input_string, END_LOOP
+from clientserver import connect_and_play, start_server_and_connect
+from clientversion import revision_checker
 import config
+from constants import MAIN_METASERVER_URL
+from definitions import style
 from game import TrainingGame, ReplayGame
+from lib.log import exception
 from multimaps import worlds_multi
 from msgs import nb2msg
-from paths import REPLAYS_PATH
+from paths import REPLAYS_PATH, SAVE_PATH
 import res
 from singlemaps import campaigns
-import tts
+import stats
 from version import COMPATIBILITY_VERSION
 
 
@@ -97,7 +94,7 @@ class Application(object):
         menu.run()
 
     def restore_game(self):
-        n = config.SAVE_PATH
+        n = SAVE_PATH
         if not os.path.exists(n):
             voice.alert([1029]) # hostile sound
             return
@@ -245,10 +242,7 @@ def main():
         except:
             exception("error")
     finally:
-        sound_stop()
-        # speech dispatcher must be closed or the program won't close
-        if hasattr(tts._tts, "_client"):
-            tts._tts._client.close()
+        close_media()
 
 
 if __name__ == "__main__":

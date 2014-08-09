@@ -1,4 +1,3 @@
-import os
 import os.path
 import pickle
 import sys
@@ -13,16 +12,18 @@ import clientgame
 import definitions
 import clientworld
 import config
-from constants import *
-from mapfile import *
+from constants import METASERVER_URL
+from definitions import style, rules
+from lib.log import warning, exception
+from mapfile import Map
 from msgs import nb2msg
-from paths import *
+from paths import REPLAYS_PATH, SAVE_PATH, STATS_PATH
 import random
 import res
-import tts
+import stats
 from version import VERSION, compatibility_version, COMPATIBILITY_VERSION
-from world import *
-from worldclient import *
+from world import World
+from worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, HalfDummyClient, send_platform_version_to_metaserver 
 
 
 class _Game(object):
@@ -78,7 +79,9 @@ class _Game(object):
                 self.map.get_additional("ui/bindings.txt"))
             self.world.populate_map(self.players, self.alliances, self.races)
             self.nb_human_players = self.world.current_nb_human_players()
-            threading.Thread(target=self.world.loop).start()
+            t = threading.Thread(target=self.world.loop)
+            t.daemon = True
+            t.start()
             self.interface.loop()
             self._record_stats(self.world)
             self.post_run()
@@ -208,7 +211,9 @@ class _Savable(object):
         style.copy(self._style)
         clientworld.update_orders_list() # when style has changed
         self.interface.set_self_as_listener()
-        threading.Thread(target=self.world.loop).start()
+        t = threading.Thread(target=self.world.loop)
+        t.daemon = True
+        t.start()
         self.interface.loop()
         self._record_stats(self.world)
         self.post_run()

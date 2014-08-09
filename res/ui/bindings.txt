@@ -63,6 +63,8 @@ CTRL SHIFT TAB: select_target -1 useful
 a: select_order 1
 SHIFT a: select_order -1
 
+ALT a: order_shortcut ; order shortcuts are defined in style.txt
+
 RETURN: validate
 SHIFT RETURN: validate queue_order
 CTRL RETURN: validate imperative
@@ -75,9 +77,7 @@ CTRL SHIFT BACKSPACE: default imperative queue_order
 
 ALT r: do_again ; reselect the previously validated order
 ALT g: do_again now ; if no target is required, validate the order
-ALT a: do_again now ; if no target is required, validate the order
 SHIFT ALT g: do_again now queue_order ; if no target is required, validate the order
-SHIFT ALT a: do_again now queue_order ; if no target is required, validate the order
 
 ; select one or several units for orders
 
@@ -211,3 +211,5 @@ END: volume -1
 KP_MINUS: volume -1 
 
 CTRL SPACE: immersion
+
+BACKQUOTE: console

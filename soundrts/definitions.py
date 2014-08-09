@@ -1,8 +1,8 @@
 import re
 
-from nofloat import *
-from lib.log import *
-from lib.defs import *
+from nofloat import to_int
+from lib.log import debug, warning
+from lib.defs import preprocess
 
 
 class _Definitions:
@@ -159,6 +159,7 @@ class Rules(_Definitions):
                     "is_a_cloaker",
                     "universal_notification",
                     "presence",
+                    "provides_survival",
                     "is_ballistic",
                     "is_teleportable",
                     )
@@ -169,6 +170,7 @@ class Rules(_Definitions):
     def load(self, *strings):
         self._dict = {}
         for s in strings:
+            s = re.sub(r"^[ \t]*class +faction\b", "class race", s, flags=re.M)
             self.read(s)
         self.apply_inheritance(expanded_is_a=True)
 

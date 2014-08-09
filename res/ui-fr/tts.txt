@@ -446,3 +446,5 @@
 
 4315 observer une partie enregistrée
 4316 Appuyez sur Control Maj F4 pour observer un autre joueur.
+
+4317 Entrez une commande.

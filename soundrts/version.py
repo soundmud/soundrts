@@ -3,12 +3,11 @@ try:
 except ImportError:
     from md5 import md5
 import os
-import sys
 
 import res
 
 
-VERSION = "1.2-a9-dev"
+VERSION = "1.2-a10-dev"
 
 if VERSION.endswith("-dev"):
     import collision

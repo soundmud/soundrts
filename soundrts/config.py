@@ -6,9 +6,8 @@ import platform
 import re
 import shutil
 
-from lib.log import *
-
-from paths import *
+from lib.log import warning
+from paths import CONFIG_FILE_PATH
 
 
 login = "player"

@@ -1,7 +1,7 @@
 import unittest
 
-from soundrts.world import *
-from soundrts.mapfile import *
+from soundrts.world import World
+from soundrts.mapfile import Map
 
 
 class WorldTestCase(unittest.TestCase):
