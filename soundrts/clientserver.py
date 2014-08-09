@@ -22,6 +22,8 @@ class ConnectionAbortedError(_Error): pass
 
 class ServerInAThread(threading.Thread):
 
+    daemon = True
+
     def __init__(self, parameters):
         threading.Thread.__init__(self)
         self.parameters = parameters

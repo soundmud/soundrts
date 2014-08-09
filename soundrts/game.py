@@ -79,7 +79,9 @@ class _Game(object):
                 self.map.get_additional("ui/bindings.txt"))
             self.world.populate_map(self.players, self.alliances, self.races)
             self.nb_human_players = self.world.current_nb_human_players()
-            threading.Thread(target=self.world.loop).start()
+            t = threading.Thread(target=self.world.loop)
+            t.daemon = True
+            t.start()
             self.interface.loop()
             self._record_stats(self.world)
             self.post_run()
@@ -209,7 +211,9 @@ class _Savable(object):
         style.copy(self._style)
         clientworld.update_orders_list() # when style has changed
         self.interface.set_self_as_listener()
-        threading.Thread(target=self.world.loop).start()
+        t = threading.Thread(target=self.world.loop)
+        t.daemon = True
+        t.start()
         self.interface.loop()
         self._record_stats(self.world)
         self.post_run()

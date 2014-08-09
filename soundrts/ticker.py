@@ -9,6 +9,8 @@ class Ticker(_Thread):
     t.cancel() # stop the ticker's action
     """
 
+    daemon = True
+
     def __init__(self, interval, function, args=[], kwargs={}):
         _Thread.__init__(self)
         self.interval = interval

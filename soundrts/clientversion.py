@@ -10,6 +10,7 @@ from version import VERSION
 
 class RevisionChecker(threading.Thread):
 
+    daemon = True
     never_started = True
 
     def run(self):
