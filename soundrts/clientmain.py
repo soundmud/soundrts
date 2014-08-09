@@ -19,7 +19,7 @@ import sys
 import time
 import urllib
 
-from clientmedia import voice, init_media, sound_stop
+from clientmedia import voice, init_media, close_media
 from clientmenu import Menu, input_string, END_LOOP
 from clientserver import connect_and_play, start_server_and_connect
 from clientversion import revision_checker
@@ -34,7 +34,6 @@ from paths import REPLAYS_PATH, SAVE_PATH
 import res
 from singlemaps import campaigns
 import stats
-import tts
 from version import COMPATIBILITY_VERSION
 
 
@@ -243,10 +242,7 @@ def main():
         except:
             exception("error")
     finally:
-        sound_stop()
-        # speech dispatcher must be closed or the program won't close
-        if hasattr(tts._tts, "_client"):
-            tts._tts._client.close()
+        close_media()
 
 
 if __name__ == "__main__":

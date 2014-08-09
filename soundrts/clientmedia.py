@@ -42,4 +42,9 @@ def toggle_fullscreen():
 def get_fullscreen():
     return fullscreen
 
+def close_media():
+    sound_stop()
+    pygame.quit()
+    tts.close()
+
 fullscreen = False

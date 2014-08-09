@@ -92,4 +92,10 @@ def init():
     else:
         is_available = True
 
+def close():
+    if not is_available: return
+    # speech dispatcher must be closed or the program won't close
+    if hasattr(_tts, "_client"):
+        _tts._client.close()
+
 init()
