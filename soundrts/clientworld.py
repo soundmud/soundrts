@@ -9,7 +9,8 @@ from definitions import style
 from lib.log import warning, exception
 from msgs import nb2msg
 from nofloat import PRECISION, square_of_distance
-from worldunit import Building, BuildingSite, ORDERS_DICT
+from worldorders import ORDERS_DICT
+from worldunit import Building, BuildingSite
 
 
 ##color_table = {81: "gold", 80: "forestgreen", 82: "white", 83: "hotpink",
