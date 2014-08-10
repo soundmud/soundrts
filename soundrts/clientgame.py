@@ -1,5 +1,3 @@
-# -*- coding: cp1252 -*-
-
 import math
 import Queue
 import re
@@ -25,28 +23,28 @@ from nofloat import PRECISION
 from version import VERSION
 
 
-def direction_a_dire(o):
-    o = round(o / 45.0) * 45.0 # arrondir
-    while o >= 360: # normaliser o !*! formule plus simple ? (moins bourrin)
-        o = o - 360
+def direction_to_msgpart(o):
+    o = round(o / 45.0) * 45.0
+    while o >= 360:
+        o -= 360
     while o < 0:
-        o = o + 360
+        o += 360
     if o == 0:
-        s = 69 # est
+        s = 69 # E
     elif o == 45:
-        s = 71 # n-e
+        s = 71 # NE
     elif o == 90:
-        s = 67 # n
+        s = 67 # N
     elif o == 135:
-        s = 72 # n-o
+        s = 72 # NW
     elif o == 180:
-        s = 70 # ouest
+        s = 70 # W
     elif o == 225:
-        s = 74 # s-o
+        s = 74 # SW
     elif o == 270:
-        s = 68 # sud
+        s = 68 # S
     elif o == 315:
-        s = 73 # s-e
+        s = 73 # SE
     return s
 
 
@@ -224,11 +222,11 @@ class GameInterface(object):
         if self.immersion:
             vg, vd = vision_stereo(self.x, self.y, o.x, o.y, self.o)
             return o.title + [54] + nb2msg(self.distance(o)) + [55] \
-                   + self.direction(o) + o.description, vg, vd
+                   + self.direction_to_msg(o) + o.description, vg, vd
         else:
             self.o = 90
             vg, vd = vision_stereo(self.x, self.y, o.x, o.y, self.o)
-            return o.title + self.direction(o) + o.description, vg, vd
+            return o.title + self.direction_to_msg(o) + o.description, vg, vd
 
     def cmd_examine(self):
         if self.target is not None:
@@ -761,24 +759,24 @@ class GameInterface(object):
                     warning("%s.model is in memory or perception "
                             "and yet its place is None", m.type_name)
 
-    def direction(self, o):
+    def direction_to_msg(self, o):
         x, y = self.place_xy
         d = distance(x, y, o.x, o.y)
         if d < self.square_width / 3 / 2:
-            return [156] # "au centre"
-        s = direction_a_dire(math.degrees(angle(x, y, o.x, o.y, 0)))
+            return [156] # "at the center"
+        s = direction_to_msgpart(math.degrees(angle(x, y, o.x, o.y, 0)))
         if s == 69:
-            return [116] # à l'est
+            return [116] # to the east (special case, in French)
         if s == 70:
-            return [117] # à l'ouest
-        return [108, s] # "au" + direction
+            return [117] # to the west (special case, in French)
+        return [108, s] # "to the" + direction
 
     # immersive mode
 
     previous_compass = None
 
     def say_compass(self):
-        s = direction_a_dire(self.o)
+        s = direction_to_msgpart(self.o)
         if s != self.previous_compass:
             voice.item([s])
             self.previous_compass = s
