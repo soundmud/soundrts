@@ -130,4 +130,4 @@ def create_order(order, unit):
     o = order.split()
     return OrderView(ORDERS_DICT[o[0]](unit, o[1:]))
 
-from clientworld import EntityView, substitute_args
+from clientgameentity import EntityView, substitute_args
