@@ -12,6 +12,7 @@ from pygame.locals import KEYDOWN, QUIT, USEREVENT, K_TAB, KMOD_ALT, MOUSEBUTTON
 from clientgamezoom import Zoom
 from clienthelp import help_msg
 from clientmedia import voice, sounds, psounds, sound_stop, angle, stereo, vision_stereo, modify_volume, set_game_mode, screen_render, distance, get_fullscreen, get_screen, toggle_fullscreen, screen_render_subtitle
+from clientmediamouse import set_cursor
 import clientmenu
 from clientworld import GridView, Objet, order_title, order_shortcut, order_args, order_comment, order_index, must_be_said
 import config
@@ -23,41 +24,6 @@ from msgs import nb2msg, eval_msg_and_volume
 from nofloat import PRECISION
 from version import VERSION
 
-
-my_cursors = {}
-
-def record_cursor(name, center, strings):
-    data, mask = pygame.cursors.compile(strings)
-    my_cursors[name] = ((len(strings), ) * 2, center, data, mask)
-    
-record_cursor("square", (4, 4), (
-      "XXXXXXXX",
-      "X      X",
-      "X      X",
-      "X      X",
-      "X      X",
-      "X      X",
-      "X      X",
-      "XXXXXXXX",
-))
-
-record_cursor("target", (4, 4), (
-      "  XXXX  ",
-      " X    X ",
-      "X      X",
-      "X  XX  X",
-      "X  XX  X",
-      "X      X",
-      " X    X ",
-      "  XXXX  ",
-))
-
-def set_cursor(name):
-    if name in my_cursors:
-        cursor = my_cursors[name]
-    else:
-        cursor = getattr(pygame.cursors, name)
-    pygame.mouse.set_cursor(*cursor)
 
 def direction_a_dire(o):
     o = round(o / 45.0) * 45.0 # arrondir
