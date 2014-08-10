@@ -8,7 +8,7 @@ import pygame
 from pygame.locals import KEYDOWN, QUIT, USEREVENT, K_TAB, KMOD_ALT, MOUSEBUTTONDOWN, KMOD_SHIFT, KMOD_CTRL, MOUSEBUTTONUP, MOUSEMOTION
 
 from clientgamegridview import GridView 
-from clientgamezoom import Zoom
+from clientgamefocus import Zoom
 from clienthelp import help_msg
 from clientmedia import voice, sounds, psounds, sound_stop, angle, stereo, vision_stereo, modify_volume, set_game_mode, screen_render, distance, get_fullscreen, get_screen, toggle_fullscreen, screen_render_subtitle
 from clientmediamouse import set_cursor
