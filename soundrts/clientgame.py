@@ -7,12 +7,14 @@ import time
 import pygame
 from pygame.locals import KEYDOWN, QUIT, USEREVENT, K_TAB, KMOD_ALT, MOUSEBUTTONDOWN, KMOD_SHIFT, KMOD_CTRL, MOUSEBUTTONUP, MOUSEMOTION
 
+from clientgamegridview import GridView 
 from clientgamezoom import Zoom
 from clienthelp import help_msg
 from clientmedia import voice, sounds, psounds, sound_stop, angle, stereo, vision_stereo, modify_volume, set_game_mode, screen_render, distance, get_fullscreen, get_screen, toggle_fullscreen, screen_render_subtitle
 from clientmediamouse import set_cursor
 import clientmenu
-from clientworld import GridView, Objet, order_title, order_shortcut, order_args, order_comment, order_index, must_be_said
+from clientworld import EntityView, must_be_said
+from clientgameorder import order_title, order_shortcut, order_args, order_comment, order_index
 import config
 from constants import ALERT_LIMIT, EVENT_LIMIT, VIRTUAL_TIME_INTERVAL
 from definitions import style
@@ -73,7 +75,6 @@ class GameInterface(object):
         self.grid_view = GridView(self)
         self.set_self_as_listener()
         voice.silent_flush()
-#        set_screen()
         self._srv_queue = Queue.Queue()
         self.scouted_squares = ()
         self.scouted_before_squares = ()
@@ -117,7 +118,7 @@ class GameInterface(object):
             if hasattr(self, "next_update") and \
                time.time() > self.next_update + EVENT_LIMIT:
                 return
-            Objet(self, o).notify(e)
+            EntityView(self, o).notify(e)
         except:
             exception("problem during srv_event")
 
@@ -725,7 +726,7 @@ class GameInterface(object):
             if m.id in self.dobjets and not self.dobjets[m.id].is_memory:
                 self._delete_object(m.id) # memory will replace perception
             if m.id not in self.dobjets:
-                self.dobjets[m.id] = Objet(self, m)
+                self.dobjets[m.id] = EntityView(self, m)
                 if self.target and m.id == self.target.id: # keep target
                     self.target = self.dobjets[m.id]
             else:
@@ -738,7 +739,7 @@ class GameInterface(object):
             elif self.dobjets[m.id].is_memory:
                 self._delete_object(m.id) # perception will replace memory
             if m.id not in self.dobjets:
-                self.dobjets[m.id] = Objet(self, m)
+                self.dobjets[m.id] = EntityView(self, m)
                 if self.target and m.id == self.target.id: # keep target
                     self.target = self.dobjets[m.id]
             else:
@@ -831,7 +832,7 @@ class GameInterface(object):
     def send_menu_alerts_if_needed(self):
         done = []
         for u in self.player.units:
-            u = Objet(self, u)
+            u = EntityView(self, u)
             if u.type_name not in done:
                 self._send_menu_alert_if_needed(u.type_name, u.strict_menu, u.short_title)
                 done.append(u.type_name)
@@ -1157,7 +1158,7 @@ class GameInterface(object):
 
     def command_unit(self, unit, silent=False):
         if not silent:
-            voice.item(unit.ext_title + unit.orders_txt + [4202]) # "à vos ordres"
+            voice.item(unit.ext_title + unit.orders_txt + [4202]) # "awaiting your orders"
         self.group = [unit.id]
 
     def cmd_command_unit(self):
