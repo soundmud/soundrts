@@ -1,6 +1,7 @@
 import random
 import time
 
+from clientgamenews import must_be_said
 from clientmedia import voice, distance, psounds, get_fullscreen
 from constants import FOOTSTEP_LIMIT  
 from definitions import style
@@ -17,7 +18,7 @@ from worldunit import BuildingSite
 ##for k, v in color_table.items():
 ##    color_table[k] = pygame.Color(v)
 ##warning("uh oh")
-# precalculated dictionnary (crashes with pygame 1.8.1)
+# precalculated dictionary (crashes with pygame 1.8.1)
 color_table = {99: (208, 32, 144, 255), 80: (34, 139, 34, 255), 81: (255, 215, 0, 255), 82: (255, 255, 255, 255), 83: (255, 105, 180, 255), 84: (105, 105, 105, 255), 85: (165, 42, 42, 255), 86: (255, 0, 0, 255), 87: (255, 140, 0, 255), 153: (0, 0, 255, 255), 122: (154, 205, 50, 255)}
 
 def compute_title(type_name):
@@ -34,14 +35,6 @@ def substitute_args(t, args):
             del t[i]
             t[i:i] = args[0]
         return t
-
-def must_be_said(nb):
-    if nb <= 10:
-        return True
-    elif nb <= 100:
-        return nb % 10 == 0
-    else:
-        return nb % 100 == 0
 
 
 class EntityView(object):
@@ -77,8 +70,8 @@ class EntityView(object):
                 del odict[k] # remove Sound entry
         return odict
 
-    def __setstate__(self, dict):
-        self.__dict__.update(dict)   # update attributes
+    def __setstate__(self, dictionary):
+        self.__dict__.update(dictionary)   # update attributes
         self.loop_source = None
         self.repeat_source = None
 

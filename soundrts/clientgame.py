@@ -13,7 +13,8 @@ from clienthelp import help_msg
 from clientmedia import voice, sounds, psounds, sound_stop, angle, stereo, vision_stereo, modify_volume, set_game_mode, screen_render, distance, get_fullscreen, get_screen, toggle_fullscreen, screen_render_subtitle
 from clientmediamouse import set_cursor
 import clientmenu
-from clientgameentity import EntityView, must_be_said
+from clientgameentity import EntityView
+from clientgamenews import must_be_said
 from clientgameorder import order_title, order_shortcut, order_args, order_comment, order_index
 import config
 from constants import ALERT_LIMIT, EVENT_LIMIT, VIRTUAL_TIME_INTERVAL
@@ -84,8 +85,8 @@ class GameInterface(object):
         del odict["_srv_queue"]
         return odict
 
-    def __setstate__(self, dict):
-        self.__dict__.update(dict)
+    def __setstate__(self, dictionary):
+        self.__dict__.update(dictionary)
         self._srv_queue = Queue.Queue()
 
     def set_self_as_listener(self):
