@@ -216,6 +216,8 @@ class GameInterface(object):
         return [p, len(o.title), self.distance(o)]
 
     def is_visible(self, o):
+        if self.zoom_mode and not self.zoom.contains(o):
+            return False
         if self.place is not o.place or not o.title:
             return False
         if self.immersion:
@@ -887,13 +889,15 @@ class GameInterface(object):
             result += nb2msg(group.count(t)) + t
         return result
 
-    def place_summary(self, place, me=True):
+    def place_summary(self, place, me=True, zoom=None):
         enemies = []
         allies = []
         units = []
         resources = []
         for obj in self.dobjets.values():
             if obj.place is not place:
+                continue
+            if zoom and not zoom.contains(obj):
                 continue
             if self.player.is_an_enemy(obj.model):
                 enemies.append(obj.short_title)
@@ -1011,7 +1015,10 @@ class GameInterface(object):
         if self.target is not None:
             return self.target
         else:
-            return self.place
+            if self.zoom_mode:
+                return self.zoom
+            else:
+                return self.place
 
     _previous_order = None
 
@@ -1054,7 +1061,10 @@ class GameInterface(object):
         confirmation = []
         for msg in msgs:
             confirmation += msg + [9998]
-        voice.item(confirmation)
+        if confirmation:
+            voice.item(confirmation)
+        else:
+            voice.item([1029]) # hostile sound
 
     def cmd_default(self, *args):
         if not self.group:
@@ -1161,7 +1171,8 @@ class GameInterface(object):
             units = self.units()
             for t in types:
                 m = [x.id for x in units if x.type_name == t and \
-                     (not local or x.place is initial_unit.place) and \
+                     (not local or self.zoom_mode and self.zoom.contains(x)
+                      or not self.zoom_mode and x.place is initial_unit.place) and \
                      (not idle or not x.orders)] # or == self.place
                 self.group += m[: len(m) / portion]
             if initial_unit.id not in self.group \
@@ -1194,7 +1205,10 @@ class GameInterface(object):
         if types:
             units = [x for x in units if x.type_name in types]
         if local:
-            units = [x for x in units if x.place is self.place]
+            if self.zoom_mode:
+                units = [x for x in units if self.zoom.contains(x)]
+            else:
+                units = [x for x in units if x.place is self.place]
         if idle:
             units = [x for x in units if not x.orders]
         if not units:
@@ -1337,9 +1351,7 @@ class GameInterface(object):
                 o.stop()
         sound_stop(stop_voice_too=False) # cut the long nonlooping environment sounds
 
-    def say_square(self, place, prefix=[]):
-        if place is None:
-            return
+    def square_postfix(self, place):
         postfix = []
         if place in self.scouted_squares:
             if place.high_ground: postfix += [4314] # "plateau"
@@ -1348,6 +1360,12 @@ class GameInterface(object):
             postfix += [4209] # "in the fog"
         else:
             postfix += [4208] # "unknown"
+        return postfix
+        
+    def say_square(self, place, prefix=[]):
+        if place is None:
+            return
+        postfix = self.square_postfix(place)
         voice.item(prefix + place.title + postfix + self.place_summary(place))
 
     def _select_and_say_square(self, square, prefix=[]):
@@ -1406,6 +1424,7 @@ class GameInterface(object):
                 self.cmd_rotate_right()
         elif self.zoom_mode:
             self.zoom.move(dxc, dyc)
+            self.zoom.select()
             self.zoom.say()
         elif self.place is not None:
             new_square = self._compute_move(dxc, dyc)
