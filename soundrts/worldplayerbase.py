@@ -708,3 +708,7 @@ class Player(object):
         for p in self.allied_control:
             result.extend(p.units)
         return result
+
+    def cmd_neutral_quit(self, unused_args):
+        if self in self.world.players:
+            self.quit_game()

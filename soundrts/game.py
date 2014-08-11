@@ -283,7 +283,13 @@ class ReplayGame(_Game):
         self.races = self.replay_read().split()
         self.seed = int(self.replay_read())
         self.me = ReplayClient(players[0], self)
-        self.players = [self.me] + [DummyClient(x) for x in players[1:]]
+        self.players = [self.me]
+        for x in players[1:]:
+            if x in ["aggressive", "easy"]: # the "ai_" prefix wasn't recorded
+                self.players += [DummyClient(x)]
+            else:
+                self.players += [HalfDummyClient(x)]
+                self.me.nb_humans += 1
 
     def replay_read(self):
         s = self._file.readline()
