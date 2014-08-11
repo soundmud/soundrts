@@ -96,6 +96,8 @@ class DirectClient(_Client): # client for single player games
 
 class ReplayClient(DirectClient):
 
+    nb_humans = 1
+
     def write_line(self, s):
         if s == "change_player":
             players = self.player.world.players
@@ -107,17 +109,30 @@ class ReplayClient(DirectClient):
             self.interface.update_fog_of_war()
         elif s == "update":
             # send the recorded commands until the next "update" command
+            nb_updates = 0
+            nb_quit = 0
             while True:
                 command = self.game_session.replay_read()
                 if not command:
                     # the replay will probably close soon
                     debug("no command left in the replay")
+                    # this is useful if only computers are left
+                    for player in self.player.world.players:
+                        self.queue_command(player, "neutral_quit")
                     return
                 player, command = command.split(" ", 1)
                 player = self.player.world.players[int(player)]
                 self.queue_command(player, command)
-                if command in ("update", "quit"):
+                if command == "quit":
+                    # an update from this player will follow anyway
+                    nb_quit += 1
+                if command == "update":
+                    nb_updates += 1
+                if nb_updates == self.nb_humans:
+                    self.nb_humans -= nb_quit
                     return
+        elif s == "quit":
+            self.queue_command(self.player, "neutral_quit")
         elif not s.startswith(("control", "order", "no_end_of_update_yet")):
             self.queue_command(self.player, s)
 

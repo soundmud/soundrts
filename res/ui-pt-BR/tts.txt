@@ -452,3 +452,10 @@
 4311 foi derrotado
 4312 Você foi derrotado.
 4313 Você está agora no modo de observação.
+
+4314 plateau
+
+4315 observar um jogo gravado
+4316 Pressione Control Shift F4 para observar outro jogador.
+
+4317 Digite um comando.
