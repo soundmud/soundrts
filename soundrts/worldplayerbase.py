@@ -8,9 +8,21 @@ from definitions import rules, style
 from lib.log import debug, warning
 from msgs import encode_msg, nb2msg
 from nofloat import PRECISION
-from worldentity import NotEnoughSpaceError
+from worldentity import NotEnoughSpaceError, Entity
 from worldresource import Corpse
 from worldupgrade import Upgrade
+
+
+class ZoomTarget(Entity):
+    
+    def __init__(self, i, player):
+        # Entity.__init__() isn't called because ZoomTarget isn't
+        # a part of the world. Entity provides use_range().
+        self.id = i
+        _, place_id, x, y = i.split("-")
+        self.x = int(x)
+        self.y = int(y)
+        self.place = player.get_object_by_id(place_id)
 
 
 class Objective(object):
@@ -145,6 +157,8 @@ class Player(object):
         return True
 
     def get_object_by_id(self, i):
+        if i and i.startswith("zoom"):
+            return ZoomTarget(i, self)
         if i in self.world.grid:
             return self.world.grid[i]
         if i in self.world.objects:

@@ -27,9 +27,9 @@ class Zoom(object):
         sq = self.parent.place
         xstep = (sq.xmax - sq.xmin) / 3.0
         ystep = (sq.ymax - sq.ymin) / 3.0
-        x = sq.x + (self.x + 1) * xstep
-        y = sq.y + (self.y + 1) * ystep
-        return "zoom-%s-%s-%s" % (sq.id, x, y)
+        x = sq.x + self.x * xstep
+        y = sq.y + self.y * ystep
+        return "zoom-%s-%s-%s" % (sq.id, int(x), int(y))
 
     @property
     def title(self):
