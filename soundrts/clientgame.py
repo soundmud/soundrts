@@ -26,6 +26,9 @@ from nofloat import PRECISION
 from version import VERSION
 
 
+ORDER = 1 # an order is selected for validation
+ORDER_TARGET = 2 # an order requiring a target is selected for validation
+
 def direction_to_msgpart(o):
     o = round(o / 45.0) * 45.0
     while o >= 360:
@@ -167,7 +170,7 @@ class GameInterface(object):
 
     def _priority(self, o):
         p = 10
-        if self.mode == "parametre_ordre":
+        if self.an_order_requiring_a_target_is_selected:
             if self.order.startswith("build") and o.is_a_building_land:
                 p = 0
         else:
@@ -214,7 +217,7 @@ class GameInterface(object):
         return choices
 
     def say_target(self):
-        if self.mode == "parametre_ordre":
+        if self.an_order_requiring_a_target_is_selected:
             d, vg, vd = self.get_description_of(self.target)
             voice.item(d + order_title(self.order), vg, vd)
         else:
@@ -506,7 +509,7 @@ class GameInterface(object):
                                 self.target = target
                                 self.say_target()
                                 self.display()
-                                if self.mode == "parametre_ordre":
+                                if self.an_order_requiring_a_target_is_selected:
                                     if self.order.find("build") == 0:
                                         set_cursor("square")
                                     else:
@@ -517,7 +520,7 @@ class GameInterface(object):
                             if square != self.place or self.target is not None:
                                 self._select_and_say_square(square)
                                 self.target = target
-                                if self.mode == "parametre_ordre":
+                                if self.an_order_requiring_a_target_is_selected:
                                     if self.order.find("build") == 0:
                                         set_cursor("square")
                                     else:
@@ -526,7 +529,7 @@ class GameInterface(object):
                                     set_cursor("tri_left")
                     elif e.type == MOUSEBUTTONDOWN:
                         if e.button == 1: # left mouse button
-                            if self.mode == "parametre_ordre":
+                            if self.an_order_requiring_a_target_is_selected:
                                 mods = pygame.key.get_mods()
                                 args = []
                                 if mods & KMOD_SHIFT:
@@ -997,13 +1000,13 @@ class GameInterface(object):
             voice.item([4205]) # no unit controled
         elif self.mode is None: # nothing to validate
             self.cmd_command_unit()
-        elif self.mode == "ordre": # validate an order
+        elif self.mode == ORDER: # validate an order
             if self.order and \
                order_args(self.order, self.dobjets[self.group[0]].model) == 0:
                 self.send_order(self.order, None, args)
                 voice.item(order_title(self.order)) # confirmation
                 self._previous_order = self.order
-        elif self.mode == "parametre_ordre": # validate a parameter
+        elif self.an_order_requiring_a_target_is_selected: # validate a parameter
             if self.order not in self.orders():
                 # the order is not in the menu anymore
                 sounds.play(1029) # hostile sound
@@ -1088,7 +1091,7 @@ class GameInterface(object):
     def _follow_if_needed(self):
         self.update_group()
         if self.follow_mode and self.group and \
-           self.mode != "parametre_ordre" and \
+           not self.an_order_requiring_a_target_is_selected and \
            self.dobjets[self.group[0]].place is not self.place:
             self.move_to_square(self.dobjets[self.group[0]].place)
             if not voice.channel.get_busy(): # low priority: don't interrupt
@@ -1230,6 +1233,10 @@ class GameInterface(object):
         menu.sort(key=order_index)
         return menu
 
+    @property
+    def an_order_requiring_a_target_is_selected(self):
+        return self.mode == ORDER_TARGET
+
     def _select_order(self, order):
         self.order = order
         # say the new current order
@@ -1239,10 +1246,10 @@ class GameInterface(object):
                     # one but it is only used to retrieve the world object
         if order_args(self.order, self.dobjets[self.group[0]].model) == 0:
             msg += [9998, 4064]
-            self.mode = "ordre" # the order must be validated
+            self.mode = ORDER # the order must be validated
         else:
             msg += [9998, 4067]
-            self.mode = "parametre_ordre" # the order will be validated when
+            self.mode = ORDER_TARGET # the order will be validated when
                                             # the parameter is validated
         voice.item(msg)
 
