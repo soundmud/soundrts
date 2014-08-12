@@ -1402,6 +1402,10 @@ class GameInterface(object):
 
     def _select_square_from_list(self, increment, squares):
         if squares:
+            if self.immersion:
+                self.toggle_immersion()
+            if self.zoom_mode:
+                self.cmd_toggle_zoom()
             _squares = list(squares) # make a copy
             if self.place not in _squares:
                 _squares.append(self.place)
@@ -1412,8 +1416,6 @@ class GameInterface(object):
             elif index == len(_squares):
                 index = 0
             self._select_and_say_square(_squares[index])
-            if self.immersion:
-                self.toggle_immersion()
         else:
             voice.item([0]) # "nothing!"
 
