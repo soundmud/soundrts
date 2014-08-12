@@ -1,3 +1,4 @@
+from clientmediascreen import draw_rect
 from clientmediavoice import voice
 
 
@@ -21,14 +22,16 @@ class Zoom(object):
 
     def __init__(self, parent):
         self.parent = parent
+        sq = self.parent.place
+        self.xstep = (sq.xmax - sq.xmin) / 3.0
+        self.ystep = (sq.ymax - sq.ymin) / 3.0
+        self.update_coords()
 
     @property
     def id(self):
         sq = self.parent.place
-        xstep = (sq.xmax - sq.xmin) / 3.0
-        ystep = (sq.ymax - sq.ymin) / 3.0
-        x = sq.x + self.x * xstep
-        y = sq.y + self.y * ystep
+        x = sq.x + self.x * self.xstep
+        y = sq.y + self.y * self.ystep
         return "zoom-%s-%s-%s" % (sq.id, int(x), int(y))
 
     @property
@@ -50,6 +53,7 @@ class Zoom(object):
         elif self.y == -2:
             self.y = 1
             self.parent.place = self.parent._compute_move(0, -1)
+        self.update_coords()
 
     def select(self):
         self.parent.target = None
@@ -60,12 +64,21 @@ class Zoom(object):
         summary = self.parent.place_summary(self.parent.place, zoom=self)
         voice.item(self.title + postfix + summary)
 
-    def contains(self, obj):
+    def update_coords(self):
         sq = self.parent.place
-        xstep = (sq.xmax - sq.xmin) / 3.0
-        ystep = (sq.ymax - sq.ymin) / 3.0
-        xmin = sq.xmin + (self.x + 1) * xstep
-        xmax = xmin + xstep
-        ymin = sq.ymin + (self.y + 1) * ystep
-        ymax = ymin + ystep
-        return  xmin <= obj.model.x < xmax and ymin <= obj.model.y < ymax
+        self.xmin = sq.xmin + (self.x + 1) * self.xstep
+        self.xmax = self.xmin + self.xstep
+        self.ymin = sq.ymin + (self.y + 1) * self.ystep
+        self.ymax = self.ymin + self.ystep
+
+    def contains(self, obj):
+        return  self.xmin <= obj.model.x < self.xmax and self.ymin <= obj.model.y < self.ymax
+    
+    def display(self, grid):
+        xmin, ymin = grid.xy_coords(self.xmin, self.ymin)
+        xmax, ymax = grid.xy_coords(self.xmax, self.ymax)
+        if self.parent.target is None:
+            color = (255, 255, 255)
+        else:
+            color = (150, 150, 150)
+        draw_rect(color, xmin, ymin, xmax - xmin, ymax - ymin, 1)

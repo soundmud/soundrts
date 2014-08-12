@@ -54,6 +54,13 @@ class GridView(object):
         y = int(self.ymax - o.y / self.interface.square_width * self.square_view_height)
         return (x, y)
 
+    def xy_coords(self, ox, oy):
+        ox /= 1000.0
+        oy /= 1000.0
+        x = int(ox / self.interface.square_width * self.square_view_width)
+        y = int(self.ymax - oy / self.interface.square_width * self.square_view_height)
+        return x, y
+
     def display_object(self, o):
         if getattr(o, "is_inside", False):
             return
@@ -114,17 +121,16 @@ class GridView(object):
     def _collision_display(self):
         for t, c in (("ground", (0, 0, 255)), ("air", (255, 0, 0))):
             for ox, oy in self.interface.collision_debug[t].xy_set():
-                ox /= 1000.0
-                oy /= 1000.0
-                x = int(ox / self.interface.square_width * self.square_view_width)
-                y = int(self.ymax - oy / self.interface.square_width * self.square_view_height)
-                pygame.draw.circle(get_screen(), c, (x, y), 0, 0)
+                pygame.draw.circle(get_screen(), c, self.xy_coords(ox, oy), 0, 0)
 
     def display(self):
         self._update_coefs()
         self._display()
         self.display_objects()
-        self.active_square_view_display()
+        if self.interface.zoom_mode:
+            self.interface.zoom.display(self)
+        else:
+            self.active_square_view_display()
         if self.interface.collision_debug:
             self._collision_display()
 
