@@ -233,6 +233,8 @@ class GameInterface(object):
     def cmd_examine(self):
         if self.target is not None:
             self.say_target()
+        elif self.zoom_mode:
+            self.zoom.say()
         else:
             self.say_square(self.place)
 
@@ -712,6 +714,8 @@ class GameInterface(object):
             self.mode = None
         elif self.immersion:
             self.toggle_immersion()
+        elif self.zoom_mode:
+            self.cmd_toggle_zoom()
 
     def _delete_object(self, _id):
         self.dobjets[_id].stop()
@@ -1453,6 +1457,8 @@ class GameInterface(object):
             self.x = self.dobjets[self.group[0]].x
             self.y = self.dobjets[self.group[0]].y
             self.o = self.dobjets[self.group[0]].o
+        elif self.zoom_mode:
+            self.x, self.y = self.zoom.obs_pos() 
         else:
             xc, yc = self.coords_in_map(self.place)
             self.x = self.square_width * (xc + .5)
@@ -1463,8 +1469,11 @@ class GameInterface(object):
 ##            self.y = self.square_width / 8.0 # self.y = 0 ?
             if self.place not in self.scouted_squares:
                 self.y -= self.square_width # lower sounds if fog of war
+        psounds.update()
 
     def cmd_toggle_zoom(self):
+        if not self.place:
+            return
         self.zoom_mode = not self.zoom_mode
         if self.zoom_mode:
             self.zoom = Zoom(self)

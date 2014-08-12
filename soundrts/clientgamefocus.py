@@ -1,5 +1,6 @@
 from clientmediascreen import draw_rect
 from clientmediavoice import voice
+from nofloat import PRECISION
 
 
 _subzone_name = {
@@ -54,6 +55,7 @@ class Zoom(object):
             self.y = 1
             self.parent.place = self.parent._compute_move(0, -1)
         self.update_coords()
+        self.parent.set_obs_pos()
 
     def select(self):
         self.parent.target = None
@@ -82,3 +84,10 @@ class Zoom(object):
         else:
             color = (150, 150, 150)
         draw_rect(color, xmin, ymin, xmax - xmin, ymax - ymin, 1)
+
+    def obs_pos(self):
+        x = (self.xmin + self.xmax) / 2.0
+        y = self.ymin + (self.ymax - self.ymin) / 8.0
+        if self.parent.place not in self.parent.scouted_squares:
+            y -= self.ymax - self.ymin # lower sounds if fog of war
+        return x / PRECISION, y / PRECISION
