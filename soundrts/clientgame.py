@@ -712,9 +712,9 @@ class GameInterface(object):
         self.follow_mode = self.immersion
 
     def cmd_escape(self):
-        if self.mode is not None:
+        if self.order:
             voice.item([4048])
-            self.mode = None
+            self.order = None
         elif self.immersion:
             self.toggle_immersion()
         elif self.zoom_mode:
@@ -997,16 +997,14 @@ class GameInterface(object):
 
     def cmd_validate(self, *args):
         if not self.group:
-            voice.item([4205]) # no unit controled
-        elif self.mode is None: # nothing to validate
+            voice.item([4205]) # no unit controlled
+        elif self.order is None: # nothing to validate
             self.cmd_command_unit()
-        elif self.mode == ORDER: # validate an order
-            if self.order and \
-               order_args(self.order, self.dobjets[self.group[0]].model) == 0:
-                self.send_order(self.order, None, args)
-                voice.item(order_title(self.order)) # confirmation
-                self._previous_order = self.order
-        elif self.an_order_requiring_a_target_is_selected: # validate a parameter
+        elif self.an_order_not_requiring_a_target_is_selected:
+            self.send_order(self.order, None, args)
+            voice.item(order_title(self.order)) # confirmation
+            self._previous_order = self.order
+        elif self.an_order_requiring_a_target_is_selected:
             if self.order not in self.orders():
                 # the order is not in the menu anymore
                 sounds.play(1029) # hostile sound
@@ -1015,7 +1013,7 @@ class GameInterface(object):
                 # confirmation
                 voice.item(order_title(self.order) + self.ui_target.title)
                 self._previous_order = self.order
-        self.mode = None
+        self.order = None
 
     def _say_default_confirmation(self):
         # If the group contains different units with different default orders,
@@ -1045,7 +1043,7 @@ class GameInterface(object):
         elif self.ui_target.id is not None: # XXX useful?
             self.send_order("default", self.ui_target.id, args)
             self._say_default_confirmation()
-        self.mode = None
+        self.order = None
 
     def cmd_unit_status(self):
         self.update_group()
@@ -1198,7 +1196,7 @@ class GameInterface(object):
         if sel >= len(units):
             sel = 0
         self.command_unit(units[sel], silent=silent)
-        self.mode = None
+        self.order = None
 
     def _arrange(self, args):
         local = "local" in args
@@ -1234,8 +1232,12 @@ class GameInterface(object):
         return menu
 
     @property
+    def an_order_not_requiring_a_target_is_selected(self):
+        return self.order and order_args(self.order, self.dobjets[self.group[0]].model) == 0
+
+    @property
     def an_order_requiring_a_target_is_selected(self):
-        return self.mode == ORDER_TARGET
+        return self.order and order_args(self.order, self.dobjets[self.group[0]].model)
 
     def _select_order(self, order):
         self.order = order
@@ -1245,12 +1247,9 @@ class GameInterface(object):
                     # XXX actually group[0] is not necessary the right
                     # one but it is only used to retrieve the world object
         if order_args(self.order, self.dobjets[self.group[0]].model) == 0:
-            msg += [9998, 4064]
-            self.mode = ORDER # the order must be validated
+            msg += [9998, 4064] # the order must be validated
         else:
-            msg += [9998, 4067]
-            self.mode = ORDER_TARGET # the order will be validated when
-                                            # the parameter is validated
+            msg += [9998, 4067] # the order will be validated when the parameter is validated
         voice.item(msg)
 
     def cmd_select_order(self, decalage):
@@ -1259,10 +1258,10 @@ class GameInterface(object):
         # if no menu then do nothing
         if not orders:
             voice.item([0]) # "nothing!"
-            self.mode = None
+            self.order = None
             return
         # select the next/previous order
-        if self.mode is None:
+        if self.order is None:
             index = -1
         else:
             try:
@@ -1491,7 +1490,6 @@ class GameInterface(object):
     # display
 
     def display(self):
-#        print getattr(self.target, "id", None), getattr(self.place, "id", None), self.mode
         if get_screen() is None:
             return # this might allow some machines to work without any display
         get_screen().fill((0, 0, 0))
