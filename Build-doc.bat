@@ -11,9 +11,13 @@ if errorlevel 1 pause
 rename *.html *.htm
 if errorlevel 1 pause
 
-move *.htm ..\en
+rd /S /Q %TEMP%\soundrts\build\doc
+mkdir %TEMP%\soundrts\build\doc
+move *.htm %TEMP%\soundrts\build\doc
 if errorlevel 1 pause
 
-start ..\en\help-index.htm
+copy ..\es\*.* %TEMP%\soundrts\build\doc
+
+start %TEMP%\soundrts\build\doc\help-index.htm
 
 cd ..\..

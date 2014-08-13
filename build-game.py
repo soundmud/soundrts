@@ -34,7 +34,7 @@ def my_copy(src, ext, dest):
     if src == "": src = "."
     my_mkdir(dest)
     for n in listdir(src):
-        if n[-len(ext):] == ext:
+        if n.endswith(ext):
             copy(join(src, n), dest)
 
 def my_copytree(src, dest, no_duplicate=False):
@@ -146,7 +146,7 @@ try:
         open(dest + "cfg/language.txt", "w").write("")
         my_copytree("mods", dest + "mods")
 
-        my_copy("doc/en", ".htm", dest + "doc") # English doc by default
+        my_copy(_d("doc"), "", dest + "doc")
 
         for e in [".php", ".txt"]:
             my_copy("metaserver", e, dest + "metaserver")
