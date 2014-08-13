@@ -456,3 +456,5 @@
 4316 Press Control Shift F4 to observe another player.
 
 4317 Enter a command.
+
+4318 zoom

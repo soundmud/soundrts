@@ -1,5 +1,3 @@
-# -*- coding: cp1252 -*-
-
 import math
 import Queue
 import re
@@ -9,10 +7,15 @@ import time
 import pygame
 from pygame.locals import KEYDOWN, QUIT, USEREVENT, K_TAB, KMOD_ALT, MOUSEBUTTONDOWN, KMOD_SHIFT, KMOD_CTRL, MOUSEBUTTONUP, MOUSEMOTION
 
+from clientgamegridview import GridView 
+from clientgamefocus import Zoom
 from clienthelp import help_msg
 from clientmedia import voice, sounds, psounds, sound_stop, angle, stereo, vision_stereo, modify_volume, set_game_mode, screen_render, distance, get_fullscreen, get_screen, toggle_fullscreen, screen_render_subtitle
+from clientmediamouse import set_cursor
 import clientmenu
-from clientworld import GridView, Objet, order_title, order_shortcut, order_args, order_comment, order_index, must_be_said
+from clientgameentity import EntityView
+from clientgamenews import must_be_said
+from clientgameorder import order_title, order_shortcut, order_args, order_comment, order_index
 import config
 from constants import ALERT_LIMIT, EVENT_LIMIT, VIRTUAL_TIME_INTERVAL
 from definitions import style
@@ -23,63 +26,28 @@ from nofloat import PRECISION
 from version import VERSION
 
 
-my_cursors = {}
-
-def record_cursor(name, center, strings):
-    data, mask = pygame.cursors.compile(strings)
-    my_cursors[name] = ((len(strings), ) * 2, center, data, mask)
-    
-record_cursor("square", (4, 4), (
-      "XXXXXXXX",
-      "X      X",
-      "X      X",
-      "X      X",
-      "X      X",
-      "X      X",
-      "X      X",
-      "XXXXXXXX",
-))
-
-record_cursor("target", (4, 4), (
-      "  XXXX  ",
-      " X    X ",
-      "X      X",
-      "X  XX  X",
-      "X  XX  X",
-      "X      X",
-      " X    X ",
-      "  XXXX  ",
-))
-
-def set_cursor(name):
-    if name in my_cursors:
-        cursor = my_cursors[name]
-    else:
-        cursor = getattr(pygame.cursors, name)
-    pygame.mouse.set_cursor(*cursor)
-
-def direction_a_dire(o):
-    o = round(o / 45.0) * 45.0 # arrondir
-    while o >= 360: # normaliser o !*! formule plus simple ? (moins bourrin)
-        o = o - 360
+def direction_to_msgpart(o):
+    o = round(o / 45.0) * 45.0
+    while o >= 360:
+        o -= 360
     while o < 0:
-        o = o + 360
+        o += 360
     if o == 0:
-        s = 69 # est
+        s = 69 # E
     elif o == 45:
-        s = 71 # n-e
+        s = 71 # NE
     elif o == 90:
-        s = 67 # n
+        s = 67 # N
     elif o == 135:
-        s = 72 # n-o
+        s = 72 # NW
     elif o == 180:
-        s = 70 # ouest
+        s = 70 # W
     elif o == 225:
-        s = 74 # s-o
+        s = 74 # SW
     elif o == 270:
-        s = 68 # sud
+        s = 68 # S
     elif o == 315:
-        s = 73 # s-e
+        s = 73 # SE
     return s
 
 
@@ -91,6 +59,8 @@ class GameInterface(object):
     mouse_select_origin = None
     collision_debug = None
     shortcut_mode = False
+    zoom_mode = False
+    zoom = None
 
     def __init__(self, server, speed=config.speed):
         self.server = server
@@ -106,7 +76,6 @@ class GameInterface(object):
         self.grid_view = GridView(self)
         self.set_self_as_listener()
         voice.silent_flush()
-#        set_screen()
         self._srv_queue = Queue.Queue()
         self.scouted_squares = ()
         self.scouted_before_squares = ()
@@ -116,8 +85,8 @@ class GameInterface(object):
         del odict["_srv_queue"]
         return odict
 
-    def __setstate__(self, dict):
-        self.__dict__.update(dict)
+    def __setstate__(self, dictionary):
+        self.__dict__.update(dictionary)
         self._srv_queue = Queue.Queue()
 
     def set_self_as_listener(self):
@@ -150,7 +119,7 @@ class GameInterface(object):
             if hasattr(self, "next_update") and \
                time.time() > self.next_update + EVENT_LIMIT:
                 return
-            Objet(self, o).notify(e)
+            EntityView(self, o).notify(e)
         except:
             exception("problem during srv_event")
 
@@ -198,7 +167,7 @@ class GameInterface(object):
 
     def _priority(self, o):
         p = 10
-        if self.mode == "parametre_ordre":
+        if self.an_order_requiring_a_target_is_selected:
             if self.order.startswith("build") and o.is_a_building_land:
                 p = 0
         else:
@@ -213,6 +182,8 @@ class GameInterface(object):
         return [p, len(o.title), self.distance(o)]
 
     def is_visible(self, o):
+        if self.zoom_mode and not self.zoom.contains(o):
+            return False
         if self.place is not o.place or not o.title:
             return False
         if self.immersion:
@@ -243,7 +214,7 @@ class GameInterface(object):
         return choices
 
     def say_target(self):
-        if self.mode == "parametre_ordre":
+        if self.an_order_requiring_a_target_is_selected:
             d, vg, vd = self.get_description_of(self.target)
             voice.item(d + order_title(self.order), vg, vd)
         else:
@@ -253,15 +224,17 @@ class GameInterface(object):
         if self.immersion:
             vg, vd = vision_stereo(self.x, self.y, o.x, o.y, self.o)
             return o.title + [54] + nb2msg(self.distance(o)) + [55] \
-                   + self.direction(o) + o.description, vg, vd
+                   + self.direction_to_msg(o) + o.description, vg, vd
         else:
             self.o = 90
             vg, vd = vision_stereo(self.x, self.y, o.x, o.y, self.o)
-            return o.title + self.direction(o) + o.description, vg, vd
+            return o.title + self.direction_to_msg(o) + o.description, vg, vd
 
     def cmd_examine(self):
         if self.target is not None:
             self.say_target()
+        elif self.zoom_mode:
+            self.zoom.say()
         else:
             self.say_square(self.place)
 
@@ -533,7 +506,7 @@ class GameInterface(object):
                                 self.target = target
                                 self.say_target()
                                 self.display()
-                                if self.mode == "parametre_ordre":
+                                if self.an_order_requiring_a_target_is_selected:
                                     if self.order.find("build") == 0:
                                         set_cursor("square")
                                     else:
@@ -544,7 +517,7 @@ class GameInterface(object):
                             if square != self.place or self.target is not None:
                                 self._select_and_say_square(square)
                                 self.target = target
-                                if self.mode == "parametre_ordre":
+                                if self.an_order_requiring_a_target_is_selected:
                                     if self.order.find("build") == 0:
                                         set_cursor("square")
                                     else:
@@ -553,7 +526,7 @@ class GameInterface(object):
                                     set_cursor("tri_left")
                     elif e.type == MOUSEBUTTONDOWN:
                         if e.button == 1: # left mouse button
-                            if self.mode == "parametre_ordre":
+                            if self.an_order_requiring_a_target_is_selected:
                                 mods = pygame.key.get_mods()
                                 args = []
                                 if mods & KMOD_SHIFT:
@@ -736,11 +709,13 @@ class GameInterface(object):
         self.follow_mode = self.immersion
 
     def cmd_escape(self):
-        if self.mode is not None:
+        if self.order:
             voice.item([4048])
-            self.mode = None
+            self.order = None
         elif self.immersion:
             self.toggle_immersion()
+        elif self.zoom_mode:
+            self.cmd_toggle_zoom()
 
     def _delete_object(self, _id):
         self.dobjets[_id].stop()
@@ -756,7 +731,7 @@ class GameInterface(object):
             if m.id in self.dobjets and not self.dobjets[m.id].is_memory:
                 self._delete_object(m.id) # memory will replace perception
             if m.id not in self.dobjets:
-                self.dobjets[m.id] = Objet(self, m)
+                self.dobjets[m.id] = EntityView(self, m)
                 if self.target and m.id == self.target.id: # keep target
                     self.target = self.dobjets[m.id]
             else:
@@ -769,7 +744,7 @@ class GameInterface(object):
             elif self.dobjets[m.id].is_memory:
                 self._delete_object(m.id) # perception will replace memory
             if m.id not in self.dobjets:
-                self.dobjets[m.id] = Objet(self, m)
+                self.dobjets[m.id] = EntityView(self, m)
                 if self.target and m.id == self.target.id: # keep target
                     self.target = self.dobjets[m.id]
             else:
@@ -790,24 +765,24 @@ class GameInterface(object):
                     warning("%s.model is in memory or perception "
                             "and yet its place is None", m.type_name)
 
-    def direction(self, o):
+    def direction_to_msg(self, o):
         x, y = self.place_xy
         d = distance(x, y, o.x, o.y)
         if d < self.square_width / 3 / 2:
-            return [156] # "au centre"
-        s = direction_a_dire(math.degrees(angle(x, y, o.x, o.y, 0)))
+            return [156] # "at the center"
+        s = direction_to_msgpart(math.degrees(angle(x, y, o.x, o.y, 0)))
         if s == 69:
-            return [116] # à l'est
+            return [116] # to the east (special case, in French)
         if s == 70:
-            return [117] # à l'ouest
-        return [108, s] # "au" + direction
+            return [117] # to the west (special case, in French)
+        return [108, s] # "to the" + direction
 
     # immersive mode
 
     previous_compass = None
 
     def say_compass(self):
-        s = direction_a_dire(self.o)
+        s = direction_to_msgpart(self.o)
         if s != self.previous_compass:
             voice.item([s])
             self.previous_compass = s
@@ -862,7 +837,7 @@ class GameInterface(object):
     def send_menu_alerts_if_needed(self):
         done = []
         for u in self.player.units:
-            u = Objet(self, u)
+            u = EntityView(self, u)
             if u.type_name not in done:
                 self._send_menu_alert_if_needed(u.type_name, u.strict_menu, u.short_title)
                 done.append(u.type_name)
@@ -884,13 +859,15 @@ class GameInterface(object):
             result += nb2msg(group.count(t)) + t
         return result
 
-    def place_summary(self, place, me=True):
+    def place_summary(self, place, me=True, zoom=None):
         enemies = []
         allies = []
         units = []
         resources = []
         for obj in self.dobjets.values():
             if obj.place is not place:
+                continue
+            if zoom and not zoom.contains(obj):
                 continue
             if self.player.is_an_enemy(obj.model):
                 enemies.append(obj.short_title)
@@ -1008,22 +985,23 @@ class GameInterface(object):
         if self.target is not None:
             return self.target
         else:
-            return self.place
+            if self.zoom_mode:
+                return self.zoom
+            else:
+                return self.place
 
     _previous_order = None
 
     def cmd_validate(self, *args):
         if not self.group:
-            voice.item([4205]) # no unit controled
-        elif self.mode is None: # nothing to validate
+            voice.item([4205]) # no unit controlled
+        elif self.order is None: # nothing to validate
             self.cmd_command_unit()
-        elif self.mode == "ordre": # validate an order
-            if self.order and \
-               order_args(self.order, self.dobjets[self.group[0]].model) == 0:
-                self.send_order(self.order, None, args)
-                voice.item(order_title(self.order)) # confirmation
-                self._previous_order = self.order
-        elif self.mode == "parametre_ordre": # validate a parameter
+        elif self.an_order_not_requiring_a_target_is_selected:
+            self.send_order(self.order, None, args)
+            voice.item(order_title(self.order)) # confirmation
+            self._previous_order = self.order
+        elif self.an_order_requiring_a_target_is_selected:
             if self.order not in self.orders():
                 # the order is not in the menu anymore
                 sounds.play(1029) # hostile sound
@@ -1032,7 +1010,7 @@ class GameInterface(object):
                 # confirmation
                 voice.item(order_title(self.order) + self.ui_target.title)
                 self._previous_order = self.order
-        self.mode = None
+        self.order = None
 
     def _say_default_confirmation(self):
         # If the group contains different units with different default orders,
@@ -1051,25 +1029,27 @@ class GameInterface(object):
         confirmation = []
         for msg in msgs:
             confirmation += msg + [9998]
-        voice.item(confirmation)
+        if confirmation:
+            voice.item(confirmation)
+        else:
+            voice.item([1029]) # hostile sound
 
     def cmd_default(self, *args):
         if not self.group:
-            voice.item([4205]) # no unit controled
+            voice.item([4205]) # no unit controlled
         elif self.ui_target.id is not None: # XXX useful?
             self.send_order("default", self.ui_target.id, args)
             self._say_default_confirmation()
-        self.mode = None
+        self.order = None
 
     def cmd_unit_status(self):
         self.update_group()
         if not self.group:
-            voice.item([4205]) # no unit controled
+            voice.item([4205]) # no unit controlled
         else:
-            if self.place is not self.dobjets[self.group[0]].place:
-                self.move_to_square(self.dobjets[self.group[0]].place)
-            self.say_group(self.place.title)
             self.follow_mode = True
+            self._follow_if_needed()
+            self.say_group(self.place.title)
 
     def cmd_help(self, incr):
         incr = int(incr)
@@ -1104,14 +1084,18 @@ class GameInterface(object):
 
     def _follow_if_needed(self):
         self.update_group()
-        if self.follow_mode and self.group and \
-           self.mode != "parametre_ordre" and \
-           self.dobjets[self.group[0]].place is not self.place:
-            self.move_to_square(self.dobjets[self.group[0]].place)
-            if not voice.channel.get_busy(): # low priority: don't interrupt
-                voice.item(self.place.title)
-            if self.immersion:
-                self.target = None # unselect current object
+        if self.follow_mode and self.group and not self.an_order_requiring_a_target_is_selected:
+            if self.zoom_mode:
+                if not self.zoom.contains(self.dobjets[self.group[0]]):
+                    self.zoom.move_to(self.dobjets[self.group[0]])
+                    if not voice.channel.get_busy(): # low priority: don't interrupt
+                        self.zoom.say()
+            elif self.dobjets[self.group[0]].place is not self.place:
+                self.move_to_square(self.dobjets[self.group[0]].place)
+                if not voice.channel.get_busy(): # low priority: don't interrupt
+                    voice.item(self.place.title)
+                if self.immersion:
+                    self.target = None # unselect current object
 
     def units(self, even_if_no_menu=True, sort=False):
         def short_title_and_number(o):
@@ -1158,7 +1142,8 @@ class GameInterface(object):
             units = self.units()
             for t in types:
                 m = [x.id for x in units if x.type_name == t and \
-                     (not local or x.place is initial_unit.place) and \
+                     (not local or self.zoom_mode and self.zoom.contains(x)
+                      or not self.zoom_mode and x.place is initial_unit.place) and \
                      (not idle or not x.orders)] # or == self.place
                 self.group += m[: len(m) / portion]
             if initial_unit.id not in self.group \
@@ -1179,7 +1164,7 @@ class GameInterface(object):
 
     def command_unit(self, unit, silent=False):
         if not silent:
-            voice.item(unit.ext_title + unit.orders_txt + [4202]) # "à vos ordres"
+            voice.item(unit.ext_title + unit.orders_txt + [4202]) # "awaiting your orders"
         self.group = [unit.id]
 
     def cmd_command_unit(self):
@@ -1191,7 +1176,10 @@ class GameInterface(object):
         if types:
             units = [x for x in units if x.type_name in types]
         if local:
-            units = [x for x in units if x.place is self.place]
+            if self.zoom_mode:
+                units = [x for x in units if self.zoom.contains(x)]
+            else:
+                units = [x for x in units if x.place is self.place]
         if idle:
             units = [x for x in units if not x.orders]
         if not units:
@@ -1208,7 +1196,7 @@ class GameInterface(object):
         if sel >= len(units):
             sel = 0
         self.command_unit(units[sel], silent=silent)
-        self.mode = None
+        self.order = None
 
     def _arrange(self, args):
         local = "local" in args
@@ -1243,6 +1231,14 @@ class GameInterface(object):
         menu.sort(key=order_index)
         return menu
 
+    @property
+    def an_order_not_requiring_a_target_is_selected(self):
+        return self.order and order_args(self.order, self.dobjets[self.group[0]].model) == 0
+
+    @property
+    def an_order_requiring_a_target_is_selected(self):
+        return self.order and order_args(self.order, self.dobjets[self.group[0]].model)
+
     def _select_order(self, order):
         self.order = order
         # say the new current order
@@ -1251,12 +1247,9 @@ class GameInterface(object):
                     # XXX actually group[0] is not necessary the right
                     # one but it is only used to retrieve the world object
         if order_args(self.order, self.dobjets[self.group[0]].model) == 0:
-            msg += [9998, 4064]
-            self.mode = "ordre" # the order must be validated
+            msg += [9998, 4064] # the order must be validated
         else:
-            msg += [9998, 4067]
-            self.mode = "parametre_ordre" # the order will be validated when
-                                            # the parameter is validated
+            msg += [9998, 4067] # the order will be validated when the parameter is validated
         voice.item(msg)
 
     def cmd_select_order(self, decalage):
@@ -1265,10 +1258,10 @@ class GameInterface(object):
         # if no menu then do nothing
         if not orders:
             voice.item([0]) # "nothing!"
-            self.mode = None
+            self.order = None
             return
         # select the next/previous order
-        if self.mode is None:
+        if self.order is None:
             index = -1
         else:
             try:
@@ -1332,12 +1325,9 @@ class GameInterface(object):
         for o in self.dobjets.values():
             if o.place is not self.place:
                 o.stop()
-        sound_stop(stop_voice_too=False) # cut the long nonlooping environment
-                                            # sounds
+        sound_stop(stop_voice_too=False) # cut the long nonlooping environment sounds
 
-    def say_square(self, place, prefix=[]):
-        if place is None:
-            return
+    def square_postfix(self, place):
         postfix = []
         if place in self.scouted_squares:
             if place.high_ground: postfix += [4314] # "plateau"
@@ -1346,6 +1336,12 @@ class GameInterface(object):
             postfix += [4209] # "in the fog"
         else:
             postfix += [4208] # "unknown"
+        return postfix
+        
+    def say_square(self, place, prefix=[]):
+        if place is None:
+            return
+        postfix = self.square_postfix(place)
         voice.item(prefix + place.title + postfix + self.place_summary(place))
 
     def _select_and_say_square(self, square, prefix=[]):
@@ -1402,6 +1398,10 @@ class GameInterface(object):
                 self.cmd_rotate_left()
             elif (dxc, dyc) == (1, 0):
                 self.cmd_rotate_right()
+        elif self.zoom_mode:
+            self.zoom.move(dxc, dyc)
+            self.zoom.select()
+            self.zoom.say()
         elif self.place is not None:
             new_square = self._compute_move(dxc, dyc)
             prefix, collision = self._get_prefix_and_collision(new_square, dxc,
@@ -1412,6 +1412,10 @@ class GameInterface(object):
 
     def _select_square_from_list(self, increment, squares):
         if squares:
+            if self.immersion:
+                self.toggle_immersion()
+            if self.zoom_mode:
+                self.cmd_toggle_zoom()
             _squares = list(squares) # make a copy
             if self.place not in _squares:
                 _squares.append(self.place)
@@ -1422,8 +1426,6 @@ class GameInterface(object):
             elif index == len(_squares):
                 index = 0
             self._select_and_say_square(_squares[index])
-            if self.immersion:
-                self.toggle_immersion()
         else:
             voice.item([0]) # "nothing!"
 
@@ -1461,6 +1463,8 @@ class GameInterface(object):
             self.x = self.dobjets[self.group[0]].x
             self.y = self.dobjets[self.group[0]].y
             self.o = self.dobjets[self.group[0]].o
+        elif self.zoom_mode:
+            self.x, self.y = self.zoom.obs_pos() 
         else:
             xc, yc = self.coords_in_map(self.place)
             self.x = self.square_width * (xc + .5)
@@ -1471,11 +1475,21 @@ class GameInterface(object):
 ##            self.y = self.square_width / 8.0 # self.y = 0 ?
             if self.place not in self.scouted_squares:
                 self.y -= self.square_width # lower sounds if fog of war
+        psounds.update()
+
+    def cmd_toggle_zoom(self):
+        if not self.place:
+            return
+        self.zoom_mode = not self.zoom_mode
+        if self.zoom_mode:
+            self.zoom = Zoom(self)
+            voice.item([4318, 4263]) # is now on
+        else:
+            voice.item([4318, 4264]) # is now off
 
     # display
 
     def display(self):
-#        print getattr(self.target, "id", None), getattr(self.place, "id", None), self.mode
         if get_screen() is None:
             return # this might allow some machines to work without any display
         get_screen().fill((0, 0, 0))

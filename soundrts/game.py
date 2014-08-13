@@ -9,8 +9,8 @@ from pygame.locals import KEYDOWN
 
 from clientmedia import sounds, voice
 import clientgame
+from clientgameorder import update_orders_list
 import definitions
-import clientworld
 import config
 from constants import METASERVER_URL
 from definitions import style, rules
@@ -70,7 +70,7 @@ class _Game(object):
                        self.map.campaign_style,
                        self.map.additional_style)
             sounds.enter_map(self.map.mapfile)
-            clientworld.update_orders_list() # when style has changed
+            update_orders_list() # when style has changed
             self.pre_run()
             self.interface = clientgame.GameInterface(self.me, speed=speed)
             self.interface.load_bindings(
@@ -209,7 +209,7 @@ class _Savable(object):
         rules.copy(self._rules)
         definitions._ai = self._ai
         style.copy(self._style)
-        clientworld.update_orders_list() # when style has changed
+        update_orders_list() # when style has changed
         self.interface.set_self_as_listener()
         t = threading.Thread(target=self.world.loop)
         t.daemon = True
