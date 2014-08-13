@@ -1,3 +1,7 @@
+.. raw:: html
+
+   <script type="text/javascript" src="langdir.js"></script> 
+
 Documentation
 =============
 
