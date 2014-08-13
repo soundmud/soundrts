@@ -158,7 +158,7 @@ class Player(object):
         return True
 
     def get_object_by_id(self, i):
-        if i and i.startswith("zoom"):
+        if isinstance(i, str) and i.startswith("zoom"):
             return ZoomTarget(i, self)
         if i in self.world.grid:
             return self.world.grid[i]

@@ -26,9 +26,6 @@ from nofloat import PRECISION
 from version import VERSION
 
 
-ORDER = 1 # an order is selected for validation
-ORDER_TARGET = 2 # an order requiring a target is selected for validation
-
 def direction_to_msgpart(o):
     o = round(o / 45.0) * 45.0
     while o >= 360:
