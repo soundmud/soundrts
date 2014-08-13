@@ -1,5 +1,6 @@
 from clientmediascreen import draw_rect
 from clientmediavoice import voice
+from lib.log import warning
 from nofloat import PRECISION
 
 
@@ -40,6 +41,7 @@ class Zoom(object):
         return self.parent.place.title + _subzone_name[(self.x, self.y)]
 
     def move(self, dx, dy):
+        self.parent.follow_mode = False # or set_obs_pos() will cause trouble
         self.x += dx
         self.y += dy
         if self.x == 2:
@@ -57,6 +59,16 @@ class Zoom(object):
         self.update_coords()
         self.parent.set_obs_pos()
 
+    def move_to(self, o):
+        self.parent.place = o.place
+        for self.x, self.y in _subzone_name.keys():
+            self.update_coords()
+            if self.contains(o):
+                self.parent.set_obs_pos()
+                break
+        if not self.contains(o):
+            warning("zoom: couldn't move to object")
+        
     def select(self):
         self.parent.target = None
         self.parent.follow_mode = False
@@ -74,7 +86,7 @@ class Zoom(object):
         self.ymax = self.ymin + self.ystep
 
     def contains(self, obj):
-        return  self.xmin <= obj.model.x < self.xmax and self.ymin <= obj.model.y < self.ymax
+        return self.xmin <= obj.model.x < self.xmax and self.ymin <= obj.model.y < self.ymax
     
     def display(self, grid):
         xmin, ymin = grid.xy_coords(self.xmin, self.ymin)

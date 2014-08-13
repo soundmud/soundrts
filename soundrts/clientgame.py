@@ -1039,7 +1039,7 @@ class GameInterface(object):
 
     def cmd_default(self, *args):
         if not self.group:
-            voice.item([4205]) # no unit controled
+            voice.item([4205]) # no unit controlled
         elif self.ui_target.id is not None: # XXX useful?
             self.send_order("default", self.ui_target.id, args)
             self._say_default_confirmation()
@@ -1048,12 +1048,11 @@ class GameInterface(object):
     def cmd_unit_status(self):
         self.update_group()
         if not self.group:
-            voice.item([4205]) # no unit controled
+            voice.item([4205]) # no unit controlled
         else:
-            if self.place is not self.dobjets[self.group[0]].place:
-                self.move_to_square(self.dobjets[self.group[0]].place)
-            self.say_group(self.place.title)
             self.follow_mode = True
+            self._follow_if_needed()
+            self.say_group(self.place.title)
 
     def cmd_help(self, incr):
         incr = int(incr)
@@ -1088,14 +1087,18 @@ class GameInterface(object):
 
     def _follow_if_needed(self):
         self.update_group()
-        if self.follow_mode and self.group and \
-           not self.an_order_requiring_a_target_is_selected and \
-           self.dobjets[self.group[0]].place is not self.place:
-            self.move_to_square(self.dobjets[self.group[0]].place)
-            if not voice.channel.get_busy(): # low priority: don't interrupt
-                voice.item(self.place.title)
-            if self.immersion:
-                self.target = None # unselect current object
+        if self.follow_mode and self.group and not self.an_order_requiring_a_target_is_selected:
+            if self.zoom_mode:
+                if not self.zoom.contains(self.dobjets[self.group[0]]):
+                    self.zoom.move_to(self.dobjets[self.group[0]])
+                    if not voice.channel.get_busy(): # low priority: don't interrupt
+                        self.zoom.say()
+            elif self.dobjets[self.group[0]].place is not self.place:
+                self.move_to_square(self.dobjets[self.group[0]].place)
+                if not voice.channel.get_busy(): # low priority: don't interrupt
+                    voice.item(self.place.title)
+                if self.immersion:
+                    self.target = None # unselect current object
 
     def units(self, even_if_no_menu=True, sort=False):
         def short_title_and_number(o):

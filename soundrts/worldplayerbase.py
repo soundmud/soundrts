@@ -23,6 +23,7 @@ class ZoomTarget(Entity):
         self.x = int(x)
         self.y = int(y)
         self.place = player.get_object_by_id(place_id)
+        self.title = self.place.title # TODO: full zoom title
 
 
 class Objective(object):
