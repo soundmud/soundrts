@@ -3,6 +3,7 @@ import worldrandom
 from constants import MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
 from lib.log import debug, warning, exception
 from nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
+from worldaction import Action, AttackAction, MoveAction, MoveXYAction
 from worldentity import Entity
 from worldorders import ORDERS_DICT, GoOrder, RallyingPointOrder, BuildPhaseTwoOrder, UpgradeToOrder
 from worldresource import Meadow, Corpse, Deposit
@@ -11,24 +12,20 @@ from worldresource import Meadow, Corpse, Deposit
 class Creature(Entity):
 
     type_name = None
-    
-    action_type = None
-    _action_target = None
 
     def get_action_target(self):
-        return self._action_target
+        if self.action:
+            return self.action.target
 
     def set_action_target(self, value):
         if isinstance(value, tuple):
-            self.action_type = "move"
-            self._reach_xy_timer = 15 # 5 seconds # XXXXXXXX not beautiful
+            self.action = MoveXYAction(self, value)
         elif self.is_an_enemy(value):
-            self.action_type = "attack"
+            self.action = AttackAction(self, value)
         elif value is not None:
-            self.action_type = "move" # "use" ?
+            self.action = MoveAction(self, value) # "use" ?
         else:
-            self.action_type = None
-        self._action_target = value
+            self.action = Action(self, value)
 
     action_target = property(get_action_target, set_action_target)
 
@@ -264,17 +261,6 @@ class Creature(Entity):
 
     # go center
 
-    def action_reach_xy(self):
-        x, y = self.action_target
-        d = int_distance(self.x, self.y, x, y)
-        if self._reach_xy_timer > 0 and d > self.radius:
-            # execute action
-            self.o = int_angle(self.x, self.y, x, y) # turn toward the goal
-            self._reach(d)
-            self._reach_xy_timer -= 1
-        else:
-            self.action_complete()
-
     def _go_center(self):
         self.action_target = (self.place.x, self.place.y)
 
@@ -337,31 +323,8 @@ class Creature(Entity):
         else:
             queue[0].update()
 
-    def action_complete(self):
-        self.walked = []
-        self.action_target = None
-        self._flee_or_fight_if_enemy()
-
-    def act_move(self):
-        if isinstance(self._action_target, tuple):
-            self.action_reach_xy()
-        elif getattr(self.action_target, "place", None) is self.place:
-            self.action_reach_and_use()
-        elif self.airground_type == "air":
-            self.action_fly_to_remote_target()
-        else:
-            self.action_complete()
-
-    def act_attack(self): # without moving to another square
-        if self.range and self.action_target in self.place.objects:
-            self.action_reach_and_use()
-        elif self.is_ballistic and self.place.is_near(getattr(self.action_target, "place", None)) \
-             and self.height > self.action_target.height:
-            self.aim(self.action_target)
-        elif self.special_range and self.place.is_near(getattr(self.action_target, "place", None)):
-            self.aim(self.action_target)
-        else:
-            self.action_complete()
+    def _is_attacking(self):
+        return isinstance(self.action, AttackAction)
 
     def update(self):
         assert isinstance(self.hp, int)
@@ -381,19 +344,19 @@ class Creature(Entity):
         if self.harm_level:
             self.harm_nearby_units()
         # action level
-        if self.action_type:
-            getattr(self, "act_" + self.action_type)()
+        if self.action:
+            self.action.update()
         # order level (warning: completing UpgradeToOrder deletes the object)
         if self.has_imperative_orders():
             self._execute_orders()
         else:
             # catapult try to find enemy # XXXXX later: do this in triggers
-            if self.special_range and self.action_type != "attack": # XXXX if self.special_range or self.range?
+            if self.special_range and not self._is_attacking(): # XXXX if self.special_range or self.range?
                 self.choose_enemy()
-            if self.is_ballistic and self.height == 1 and self.action_type != "attack":
+            if self.is_ballistic and self.height == 1 and not self._is_attacking():
                 self.choose_enemy()
-            # execute orders if the unit is not fighting (targetting an enemy)
-            if self.orders and self.action_type != "attack":
+            # execute orders if the unit is not fighting (targeting an enemy)
+            if self.orders and not self._is_attacking():
 #            # experimental: execute orders if no current action
 #            if self.orders and not self.action_type:
                 self._execute_orders()
