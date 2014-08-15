@@ -75,8 +75,8 @@ class Server(asyncore.dispatcher):
         return client.address[0] == "127.0.0.1" and client.login == self.login
 
     def remove_client(self, client):
-	info("disconnect: %s" % client.login)
-	client.is_disconnected = True
+        info("disconnect: %s" % client.login)
+        client.is_disconnected = True
         if client in self.clients: # not anonymous
             self.clients.remove(client)
             for c in self.players_not_playing():

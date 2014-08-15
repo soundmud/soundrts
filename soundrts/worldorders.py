@@ -474,19 +474,19 @@ class PatrolOrder(BasicOrder):
                 return
         self.unit.notify("order_ok")
         self.target2 = self.unit.place
-        self.mode = "aller"
+        self.mode = "go"
 
     def execute(self):
         self.update_target()
-        if self.mode == "aller":
+        if self.mode == "go":
             if self.unit.place == self.target:
-                self.mode = "retour"
+                self.mode = "go_back"
                 self.unit._go_center()
             elif self.unit.cible is None:
                 self.move_to_or_fail(self.target)
-        elif self.mode == "retour":
+        elif self.mode == "go_back":
             if self.unit.place == self.target2:
-                self.mode = "aller"
+                self.mode = "go"
                 self.unit._go_center()
             elif self.unit.cible is None:
                 self.move_to_or_fail(self.target2)
@@ -519,11 +519,11 @@ class GatherOrder(BasicOrder):
     def execute(self):
         if self.mode is None: # decide now
             if self.unit.cargo is not None: # cargo from previous orders
-                self.mode = "ramener_recolte"
+                self.mode = "bring_back"
             else:
-                self.mode = "aller_gather"
+                self.mode = "go_gather"
         self.update_target()
-        if self.mode == "ramener_recolte":
+        if self.mode == "bring_back":
             if self.storage is None:
                 self.storage = self.player.nearest_warehouse(self.unit.place,
                                                              self.unit.cargo[0])
@@ -532,7 +532,7 @@ class GatherOrder(BasicOrder):
                 else:
                     self.unit.cible = self.unit.next_stage(self.storage)
             elif self.unit._near_enough_to_use(self.storage):
-                self.mode = "stocker_recolte"
+                self.mode = "store"
                 self.unit.notify("store,%s" % self.unit.cargo[0])
                 self.delai = self.unit.place.world.time + 1000 # 1 second
                 self.unit.cible = None
@@ -540,12 +540,12 @@ class GatherOrder(BasicOrder):
                 self.unit.cible = self.unit.next_stage(self.storage)
                 if self.unit.cible is None:
                     self.storage = None # find a new storage
-        elif self.mode == "stocker_recolte":
+        elif self.mode == "store":
 #            self.cible = None # cancel possible attack
             if self.unit.place.world.time > self.delai:
                 self._store_cargo()
-                self.mode = "aller_gather"
-        elif self.mode == "aller_gather":
+                self.mode = "go_gather"
+        elif self.mode == "go_gather":
             if self.target is None or self.target.place is None: # resource exhausted
                 self.player.on_resource_exhausted()
                 self.mark_as_impossible()
@@ -565,7 +565,7 @@ class GatherOrder(BasicOrder):
                 self.mark_as_impossible()
             elif self.unit.place.world.time > self.delai:
                 self._extract_cargo()
-                self.mode = "ramener_recolte"
+                self.mode = "bring_back"
                 self.storage = None
 
 
@@ -620,7 +620,7 @@ class RepairOrder(BasicOrder):
             self.mark_as_impossible()
             return
         self.unit.notify("order_ok")
-        self.mode = "aller_construire"
+        self.mode = "go_build"
 
     def execute(self):
         self.update_target()
@@ -628,13 +628,13 @@ class RepairOrder(BasicOrder):
             # if the building has been destroyed or cancelled or completely repaired then the work is complete
             self.mark_as_complete()
             self.unit.cible = None
-        elif self.mode == "aller_construire":
+        elif self.mode == "go_build":
             if self.unit._near_enough_to_use(self.target):
-                self.mode = "construire"
+                self.mode = "build"
                 self.unit.cible = None
             elif self.unit.cible is None:
                 self.move_to_or_fail(self.target)
-        elif self.mode == "construire":
+        elif self.mode == "build":
             self.target.be_built()
 
 

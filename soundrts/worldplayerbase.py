@@ -93,7 +93,7 @@ class Player(object):
     def is_playing(self):
         return not (self.has_victory or self.has_been_defeated)
 
-    def react_arrives(self, someone, door=None):
+    def react_arrival(self, someone, door=None):
         if door is not None:
             self.enemy_doors.add(door)
 

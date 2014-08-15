@@ -190,7 +190,7 @@ class Creature(Entity):
         if not self.orders:
             return
         o = self.orders[0]
-        if hasattr(o, "mode") and o.mode == "construire":
+        if hasattr(o, "mode") and o.mode == "build":
             return "building"
         if hasattr(o, "mode") and o.mode == "gather" and hasattr(o.target, "type_name"):
             return "exploiting_%s" % o.target.type_name
@@ -589,7 +589,7 @@ class Creature(Entity):
         elif self.place == creature.place:
             self._flee_or_fight()
 
-    def react_go_through(self, someone, unused_door):
+    def react_departure(self, someone, unused_door):
         if someone == self.cible:
             self.cible = None
             self.choose_enemy() # choose another enemy
@@ -611,7 +611,7 @@ class Creature(Entity):
         elif self.ai_mode == "offensive":
             self.choose_enemy(someone)
 
-    def react_arrives(self, someone, door=None):
+    def react_arrival(self, someone, door=None):
         if self.place is someone.place and not self.is_fleeing:
             self._flee_or_fight(someone)
 

@@ -59,7 +59,7 @@ class ConnectionToClient(asynchat.async_chat):
             debug("ConnectionToClient.handle_close")
         except:
             pass
-	try:
+        try:
             self.server.remove_client(self)
         except SystemExit:
             raise

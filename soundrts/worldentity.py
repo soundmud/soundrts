@@ -105,13 +105,13 @@ class Entity(object):
             if new_place is not None:
                 if current_place is not None:
                     for o in current_place.objects:
-                        o.react_go_through(self, exit1)
+                        o.react_departure(self, exit1)
                 if self.is_vulnerable: # don't react to effects (?)
                     for p in self.world.players:
                         if p.is_an_enemy(self) and self in p.perception:
-                            p.react_arrives(self, exit2)
+                            p.react_arrival(self, exit2)
                             for u in p.units:
-                                u.react_arrives(self, exit2)
+                                u.react_arrival(self, exit2)
                 self.cible = None
                 self.react_self_arrival()
         if self.place is not None and not self.is_inside and self.collision:
@@ -147,7 +147,7 @@ class Entity(object):
     def choose_enemy(self, someone=None):
         pass
 
-    def react_go_through(self, other, door):
+    def react_departure(self, other, door):
         pass
     def react_self_arrival(self):
         pass
