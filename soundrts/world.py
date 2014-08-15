@@ -139,7 +139,7 @@ class World(object):
         self.__dict__ = {}
 
     def _get_objects_values(self):
-        names_to_check = ["x", "y", "hp", "cible"]
+        names_to_check = ["x", "y", "hp", "action_target"]
         if self.time == 0:
             names_to_check += ["id", "player"]
             objects_to_check = []
@@ -151,7 +151,7 @@ class World(object):
             for name in names_to_check:
                 if hasattr(o, name):
                     value = getattr(o, name)
-                    if name in ["cible", "player"]:
+                    if name in ["action_target", "player"]:
                         if hasattr(value, "id"):
                             value = value.id
                         else:

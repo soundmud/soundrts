@@ -13,12 +13,12 @@ class Creature(Entity):
     type_name = None
     
     action_type = None
-    action_target = None
+    _action_target = None
 
-    def getcible(self):
-        return self.action_target
+    def get_action_target(self):
+        return self._action_target
 
-    def setcible(self, value):
+    def set_action_target(self, value):
         if isinstance(value, tuple):
             self.action_type = "move"
             self._reach_xy_timer = 15 # 5 seconds # XXXXXXXX not beautiful
@@ -28,9 +28,9 @@ class Creature(Entity):
             self.action_type = "move" # "use" ?
         else:
             self.action_type = None
-        self.action_target = value
+        self._action_target = value
 
-    cible = property(getcible, setcible)
+    action_target = property(get_action_target, set_action_target)
 
     hp_max = 0
     mana_max = 0
@@ -105,7 +105,7 @@ class Creature(Entity):
 
     def set_player(self, player):
         # stop current action
-        self.cible = None
+        self.action_target = None
         self.cancel_all_orders(unpay=False)
         # remove from previous player
         if self.player is not None:
@@ -124,8 +124,8 @@ class Creature(Entity):
             self.upgrade_to_player_level()
             # player units must stop attacking the "not hostile anymore" unit
             for u in player.units:
-                if u.cible is self:
-                    u.cible = None
+                if u.action_target is self:
+                    u.action_target = None
         # update perception of object by the players
         if self.place is not None:
             self.update_perception()
@@ -265,7 +265,7 @@ class Creature(Entity):
     # go center
 
     def action_reach_xy(self):
-        x, y = self.cible
+        x, y = self.action_target
         d = int_distance(self.x, self.y, x, y)
         if self._reach_xy_timer > 0 and d > self.radius:
             # execute action
@@ -276,7 +276,7 @@ class Creature(Entity):
             self.action_complete()
 
     def _go_center(self):
-        self.cible = (self.place.x, self.place.y)
+        self.action_target = (self.place.x, self.place.y)
 
     def _near_enough_to_use(self, target):
         if self.is_an_enemy(target):
@@ -296,7 +296,7 @@ class Creature(Entity):
     # reach and use
 
     def action_reach_and_use(self):
-        target = self.cible
+        target = self.action_target
         if not self._near_enough_to_use(target):
             d = int_distance(self.x, self.y, target.x, target.y)
             self.o = int_angle(self.x, self.y, target.x, target.y) # turn toward the goal
@@ -312,8 +312,8 @@ class Creature(Entity):
             for z in self.place.world.squares:
                 if z.contains_xy(x, y):
                     return z
-        dmax = int_distance(self.x, self.y, self.cible.x, self.cible.y)
-        self.o = int_angle(self.x, self.y, self.cible.x, self.cible.y) # turn toward the goal
+        dmax = int_distance(self.x, self.y, self.action_target.x, self.action_target.y)
+        self.o = int_angle(self.x, self.y, self.action_target.x, self.action_target.y) # turn toward the goal
         self._d = self.speed * VIRTUAL_TIME_INTERVAL / 1000 # used by _future_coords and _heuristic_value
         x, y = self._future_coords(0, dmax)
         if self.place.dans_le_mur(x, y):
@@ -339,13 +339,13 @@ class Creature(Entity):
 
     def action_complete(self):
         self.walked = []
-        self.cible = None
+        self.action_target = None
         self._flee_or_fight_if_enemy()
 
     def act_move(self):
-        if isinstance(self.action_target, tuple):
+        if isinstance(self._action_target, tuple):
             self.action_reach_xy()
-        elif getattr(self.cible, "place", None) is self.place:
+        elif getattr(self.action_target, "place", None) is self.place:
             self.action_reach_and_use()
         elif self.airground_type == "air":
             self.action_fly_to_remote_target()
@@ -353,13 +353,13 @@ class Creature(Entity):
             self.action_complete()
 
     def act_attack(self): # without moving to another square
-        if self.range and self.cible in self.place.objects:
+        if self.range and self.action_target in self.place.objects:
             self.action_reach_and_use()
-        elif self.is_ballistic and self.place.is_near(getattr(self.cible, "place", None)) \
-             and self.height > self.cible.height:
-            self.aim(self.cible)
-        elif self.special_range and self.place.is_near(getattr(self.cible, "place", None)):
-            self.aim(self.cible)
+        elif self.is_ballistic and self.place.is_near(getattr(self.action_target, "place", None)) \
+             and self.height > self.action_target.height:
+            self.aim(self.action_target)
+        elif self.special_range and self.place.is_near(getattr(self.action_target, "place", None)):
+            self.aim(self.action_target)
         else:
             self.action_complete()
 
@@ -521,8 +521,8 @@ class Creature(Entity):
         reachable_enemies = [x for x in known if self.can_attack(x)]
         if reachable_enemies:
             reachable_enemies.sort(key=lambda x: (- x.value, square_of_distance(self.x, self.y, x.x, x.y), x.id))
-            self.cible = reachable_enemies[0] # attack nearest
-            self.notify("attack") # XXX move this into set_cible()?
+            self.action_target = reachable_enemies[0] # attack nearest
+            self.notify("attack") # XXX move this into set_action_target()?
             return True
 ##        else:
 ##            for u in enemy_units:
@@ -535,11 +535,11 @@ class Creature(Entity):
             return
         if not self.damage:
             return
-        if getattr(self.cible, "menace", 0):
+        if getattr(self.action_target, "menace", 0):
             return
         if someone is not None and self.can_attack(someone):
-            self.cible = someone
-            self.notify("attack") # XXX move this into set_cible()?
+            self.action_target = someone
+            self.notify("attack") # XXX move this into set_action_target()?
             return
         if self.range and self._choose_enemy(self.place):
             return
@@ -576,22 +576,22 @@ class Creature(Entity):
         if self.has_imperative_orders():
             return
         if not self.is_fleeing and \
-           (getattr(self.cible, "menace", 0) < attacker.menace) and \
+           (getattr(self.action_target, "menace", 0) < attacker.menace) and \
              self.can_attack(attacker) and \
              self.place == attacker.place:
-            self.cible = attacker
+            self.action_target = attacker
 
     def react_death(self, creature):
-        if self.cible == creature:
-            self.cible = None
+        if self.action_target == creature:
+            self.action_target = None
             self.choose_enemy()
             self.player.update_attack_squares(self) # XXXXXXX ?
         elif self.place == creature.place:
             self._flee_or_fight()
 
     def react_departure(self, someone, unused_door):
-        if someone == self.cible:
-            self.cible = None
+        if someone == self.action_target:
+            self.action_target = None
             self.choose_enemy() # choose another enemy
 
     def _flee_or_fight_if_enemy(self):
@@ -631,7 +631,7 @@ class Creature(Entity):
             exits = [[(self.door_menace(e), - square_of_distance(e.x, e.y, someone.x, someone.y), e.id), e] for e in self.place.exits]
         exits.sort()
         if len(exits) > 0:
-            self.cible = exits[0][1]
+            self.action_target = exits[0][1]
         self.is_fleeing = True
 
     def react_self_arrival(self):
@@ -858,7 +858,7 @@ class Unit(Creature):
         return self.next_stage(self.player.attack_squares[0])
 
     def auto_explore(self):
-        if not self.cible:
+        if not self.action_target:
             if self.place in self.player.places_to_explore:
                 self.player.places_to_explore.remove(self.place)
             # level 1
@@ -880,7 +880,7 @@ class Unit(Creature):
                     if place in self.player.observed_before_squares:
                         self.player.places_to_explore.remove(place)
                     else:
-                        self.cible = self.next_stage(place)
+                        self.action_target = self.next_stage(place)
                         break
             else:
                 self.player.places_to_explore = [p

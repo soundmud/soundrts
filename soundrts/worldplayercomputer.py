@@ -596,7 +596,7 @@ class Computer(Player):
             self.attack_squares.append(place)
 
     def update_attack_squares(self, unit):
-        if unit.is_an_enemy(unit.cible):
+        if unit.is_an_enemy(unit.action_target):
             if unit.place not in self.attack_squares:
                 self.attack_squares.append(unit.place)
         else:

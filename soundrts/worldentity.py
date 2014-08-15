@@ -94,7 +94,7 @@ class Entity(object):
                 self.update_all_dicts(1)
             else:
                 # quit the world
-                self.cible = None # probably unnecessary
+                self.action_target = None # probably unnecessary
                 # (probably done by self.set_player(None))
                 # (same remark for self.cancel_all_orders(), not done here)
                 if self in current_place.world.active_objects:
@@ -112,7 +112,7 @@ class Entity(object):
                             p.react_arrival(self, exit2)
                             for u in p.units:
                                 u.react_arrival(self, exit2)
-                self.cible = None
+                self.action_target = None
                 self.react_self_arrival()
         if self.place is not None and not self.is_inside and self.collision:
             self.world.collision[self.airground_type].add(self.x, self.y)
@@ -187,7 +187,7 @@ class Entity(object):
         return result
 
     def be_used_by(self, a):
-        a.cible = None
+        a.action_target = None
         a._flee_or_fight_if_enemy()
 
     def dans_le_mur(self, x, y):

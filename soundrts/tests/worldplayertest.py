@@ -239,7 +239,7 @@ class ComputerTestCase(unittest.TestCase):
         self.assertTrue(p2.is_an_enemy(p))
         p.move_to(p2.place)
         self.assertTrue(p2.can_attack(p)) # (a bit too late to test this)
-        self.assertEqual(p2.cible, p) # "peasant should attack peasant"
+        self.assertEqual(p2.action_target, p) # "peasant should attack peasant"
 
     def testUpgradeTo(self):
         w, cl, cp = self.set_up()
@@ -375,7 +375,7 @@ class ComputerTestCase(unittest.TestCase):
         # do this a second time => same result
         p.move_to(w.grid["a2"], x, y)
         assert (x, y) == (p.x, p.y)
-        p.cible = None
+        p.action_target = None
         p.take_order(["go", w.grid["a1"].id])
         assert (x, y) == (p.x, p.y)
         w.update() # for the order
@@ -389,7 +389,7 @@ class ComputerTestCase(unittest.TestCase):
         p.collision = 0
         p.move_to(w.grid["a2"], x, y)
         assert (x, y) == (p.x, p.y)
-        p.cible = None
+        p.action_target = None
         p.take_order(["go", w.grid["a1"].id])
         assert (x, y) == (p.x, p.y)
         w.update() # for the order
