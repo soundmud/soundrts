@@ -190,8 +190,8 @@ class Entity(object):
         a.action_target = None
         a._flee_or_fight_if_enemy()
 
-    def dans_le_mur(self, x, y):
-        return False
+    def contains(self, x, y):
+        return True
 
     def find_free_space(self, airground_type, x, y, *args, **kargs):
         if self.transport_capacity: # the entity is a transport

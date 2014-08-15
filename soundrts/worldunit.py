@@ -205,59 +205,59 @@ class Creature(Entity):
                 n += weight
         return n
 
-    def _future_coords(self, steer, dmax):
+    def _future_coords(self, rotation, dmax):
         # XXX: assertion: self.o points to the target
-        if steer == 0:
+        if rotation == 0:
             d = min(self._d, dmax) # stop before colliding target
         else:
             d = self._d
-        a = self.o + steer
+        a = self.o + rotation
         x = self.x + d * int_cos_1000(a) / 1000
         y = self.y + d * int_sin_1000(a) / 1000
         return x, y
 
-    def _heuristic_value(self, steer, dmax):
-        x, y = self._future_coords(steer, dmax)
-        return abs(steer) + self._already_walked(x, y) * 200
+    def _heuristic_value(self, rotation, dmax):
+        x, y = self._future_coords(rotation, dmax)
+        return abs(rotation) + self._already_walked(x, y) * 200
 
-    def _try(self, steer, dmax):
-        x, y = self._future_coords(steer, dmax)
-        if not self.place.dans_le_mur(x, y) and not self.would_collide_if(x, y):
-            if abs(steer) >= 90:
+    def _try(self, rotation, dmax):
+        x, y = self._future_coords(rotation, dmax)
+        if self.place.contains(x, y) and not self.would_collide_if(x, y):
+            if abs(rotation) >= 90:
                 self.walked.append([self.place, self.x, self.y, 5]) # mark the dead end
-            self.move_to(self.place, x, y, self.o + steer)
+            self.move_to(self.place, x, y, self.o + rotation)
             return True
         return False
 
-    _steers = None
-    _smooth_steers = None
+    _rotations = None
+    _smooth_rotations = None
 
     def _reach(self, dmax):
         self._d = self.speed * VIRTUAL_TIME_INTERVAL / 1000 # used by _future_coords and _heuristic_value
-        if self._smooth_steers:
-            # "smooth steering" mode
-            steer = self._smooth_steers.pop(0)
-            if self._try(steer, dmax) or self._try(-steer, dmax):
-                self._smooth_steers = []
+        if self._smooth_rotations:
+            # "smooth rotation" mode
+            rotation = self._smooth_rotations.pop(0)
+            if self._try(rotation, dmax) or self._try(-rotation, dmax):
+                self._smooth_rotations = []
         else:
-            if not self._steers:
+            if not self._rotations:
                 # update memory
                 self.walked = [x[0:3] + [x[3] - 1] for x in self.walked if x[3] > 1]
                 # "go straight" mode
                 if not self.walked and self._try(0, dmax): return
-                # enter "steering mode"
-                self._steers = [(self._heuristic_value(x, dmax), x) for x in
+                # enter "rotation mode"
+                self._rotations = [(self._heuristic_value(x, dmax), x) for x in
                           (0, 45, -45, 90, -90, 135, -135, 180)]
-                self._steers.sort()
-            # "steering" mode
-            for _ in range(min(4, len(self._steers))):
-                _, steer = self._steers.pop(0)
-                if self._try(steer, dmax):
-                    self._steers = []
+                self._rotations.sort()
+            # "rotation" mode
+            for _ in range(min(4, len(self._rotations))):
+                _, rotation = self._rotations.pop(0)
+                if self._try(rotation, dmax):
+                    self._rotations = []
                     return
-            if not self._steers:
-                # enter "smooth steering mode"
-                self._smooth_steers = range(1, 180, 1)
+            if not self._rotations:
+                # enter "smooth rotation mode"
+                self._smooth_rotations = range(1, 180, 1)
                 self.walked = []
                 self.walked.append([self.place, self.x, self.y, 5]) # mark the dead end
                 self.notify("collision")
@@ -310,13 +310,13 @@ class Creature(Entity):
     def action_fly_to_remote_target(self):
         def get_place_from_xy(x, y):
             for z in self.place.world.squares:
-                if z.contains_xy(x, y):
+                if z.contains(x, y):
                     return z
         dmax = int_distance(self.x, self.y, self.action_target.x, self.action_target.y)
         self.o = int_angle(self.x, self.y, self.action_target.x, self.action_target.y) # turn toward the goal
         self._d = self.speed * VIRTUAL_TIME_INTERVAL / 1000 # used by _future_coords and _heuristic_value
         x, y = self._future_coords(0, dmax)
-        if self.place.dans_le_mur(x, y):
+        if not self.place.contains(x, y):
             try:
                 new_place = get_place_from_xy(x, y)
                 self.move_to(new_place, x, y, self.o)

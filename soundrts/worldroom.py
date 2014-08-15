@@ -84,7 +84,7 @@ class Square(object):
             o.clean()
         self.__dict__ = {}
 
-    def contains_xy(self, x, y):
+    def contains(self, x, y):
         return self.xmin <= x <= self.xmax and \
                self.ymin <= y <= self.ymax
 
@@ -148,9 +148,6 @@ class Square(object):
 		end = P[end]
 	Path.reverse()
       	return Path[1], D[dest]
-
-    def dans_le_mur(self, x, y):
-        return x < self.xmin or x > self.xmax or y < self.ymin or y > self.ymax
 
     combat = False
     lcombattants = []
@@ -246,7 +243,7 @@ class Square(object):
         # assertion: object has collision
 ##        if not same_place and not self.can_receive(airground_type, player):
 ##            return None, None
-        if not self.dans_le_mur(x, y) and \
+        if self.contains(x, y) and \
            not self.world.collision[airground_type].would_collide(x, y):
             return x, y
         if self.world.time == 0 and (x, y) == (self.x, self.y):
@@ -258,7 +255,7 @@ class Square(object):
         else:
             spiral = square_spiral(x, y)
         for x, y in spiral:
-            if not self.dans_le_mur(x, y) and \
+            if self.contains(x, y) and \
                not self.world.collision[airground_type].would_collide(x, y):
                 return x, y
         return None, None
