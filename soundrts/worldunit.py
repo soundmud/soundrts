@@ -203,7 +203,6 @@ class Creature(Entity):
         return n
 
     def _future_coords(self, rotation, target_d):
-        # XXX: assertion: self.o points to the target
         d = self.speed * VIRTUAL_TIME_INTERVAL / 1000
         if rotation == 0:
             d = min(d, target_d) # stop before colliding target
@@ -216,6 +215,16 @@ class Creature(Entity):
         x, y = self._future_coords(rotation, target_d)
         return abs(rotation) + self._already_walked(x, y) * 200
 
+    def _can_go(self, x, y):
+        if self.airground_type != "ground":
+            return True
+        new_place = self.world.get_place_from_xy(x, y)
+        if new_place is self.place:
+            return True
+        for e in self.place.exits:
+            if e.other_side.place is new_place:
+                return True
+
     def _try(self, rotation, target_d):
         x, y = self._future_coords(rotation, target_d)
         if self.place.contains(x, y) and not self.would_collide_if(x, y):
@@ -223,7 +232,7 @@ class Creature(Entity):
                 self.walked.append([self.place, self.x, self.y, 5]) # mark the dead end
             self.move_to(self.place, x, y, self.o + rotation)
             return True
-        elif not self.place.contains(x, y) and self.place.allows(x, y) and not self.would_collide_if(x, y):
+        elif not self.place.contains(x, y) and self._can_go(x, y) and not self.would_collide_if(x, y):
             if abs(rotation) >= 90:
                 self.walked.append([self.place, self.x, self.y, 5]) # mark the dead end
             new_place = self.world.get_place_from_xy(x, y)
@@ -295,9 +304,7 @@ class Creature(Entity):
             self.walked = []
             target.be_used_by(self)
 
-    # walk/fly to
-
-    def walk_to_xy(self, x, y):
+    def go_to_xy(self, x, y):
         d = int_distance(self.x, self.y, x, y)
         if d > self.radius:
             # execute action
@@ -305,19 +312,6 @@ class Creature(Entity):
             self._reach(d)
         else:
             return True
-
-    def action_fly_to_remote_target(self):
-        target_d = int_distance(self.x, self.y, self.action_target.x, self.action_target.y)
-        self.o = int_angle(self.x, self.y, self.action_target.x, self.action_target.y) # turn toward the goal
-        x, y = self._future_coords(0, target_d)
-        if not self.place.contains(x, y):
-            try:
-                new_place = self.world.get_place_from_xy(x, y)
-                self.move_to(new_place, x, y, self.o)
-            except:
-                exception("problem when flying to a new square")
-        else:
-            self.move_to(self.place, x, y)
 
     # update
 

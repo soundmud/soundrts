@@ -18,11 +18,11 @@ class MoveAction(Action):
     def update(self):
         if hasattr(self.target, "other_side"):
             # move towards the center of the next square
-            self.unit.walk_to_xy(self.target.other_side.place.x, self.target.other_side.place.y) 
+            self.unit.go_to_xy(self.target.other_side.place.x, self.target.other_side.place.y) 
         elif getattr(self.target, "place", None) is self.unit.place:
             self.unit.action_reach_and_use()
         elif self.unit.airground_type == "air":
-            self.unit.action_fly_to_remote_target()
+            self.unit.go_to_xy(self.target.x, self.target.y)
         else:
             self.complete()
 
@@ -35,7 +35,7 @@ class MoveXYAction(Action):
         if self.timer > 0:
             self.timer -= 1
             x, y = self.target
-            if self.unit.walk_to_xy(x, y):
+            if self.unit.go_to_xy(x, y):
                 self.complete()
         else:
             self.complete()
