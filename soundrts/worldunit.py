@@ -202,23 +202,22 @@ class Creature(Entity):
                 n += weight
         return n
 
-    def _future_coords(self, rotation, dmax):
+    def _future_coords(self, rotation, target_d):
         # XXX: assertion: self.o points to the target
+        d = self.speed * VIRTUAL_TIME_INTERVAL / 1000
         if rotation == 0:
-            d = min(self._d, dmax) # stop before colliding target
-        else:
-            d = self._d
+            d = min(d, target_d) # stop before colliding target
         a = self.o + rotation
         x = self.x + d * int_cos_1000(a) / 1000
         y = self.y + d * int_sin_1000(a) / 1000
         return x, y
 
-    def _heuristic_value(self, rotation, dmax):
-        x, y = self._future_coords(rotation, dmax)
+    def _heuristic_value(self, rotation, target_d):
+        x, y = self._future_coords(rotation, target_d)
         return abs(rotation) + self._already_walked(x, y) * 200
 
-    def _try(self, rotation, dmax):
-        x, y = self._future_coords(rotation, dmax)
+    def _try(self, rotation, target_d):
+        x, y = self._future_coords(rotation, target_d)
         if self.place.contains(x, y) and not self.would_collide_if(x, y):
             if abs(rotation) >= 90:
                 self.walked.append([self.place, self.x, self.y, 5]) # mark the dead end
@@ -235,27 +234,26 @@ class Creature(Entity):
     _rotations = None
     _smooth_rotations = None
 
-    def _reach(self, dmax):
-        self._d = self.speed * VIRTUAL_TIME_INTERVAL / 1000 # used by _future_coords and _heuristic_value
+    def _reach(self, target_d):
         if self._smooth_rotations:
             # "smooth rotation" mode
             rotation = self._smooth_rotations.pop(0)
-            if self._try(rotation, dmax) or self._try(-rotation, dmax):
+            if self._try(rotation, target_d) or self._try(-rotation, target_d):
                 self._smooth_rotations = []
         else:
             if not self._rotations:
                 # update memory
                 self.walked = [x[0:3] + [x[3] - 1] for x in self.walked if x[3] > 1]
                 # "go straight" mode
-                if not self.walked and self._try(0, dmax): return
+                if not self.walked and self._try(0, target_d): return
                 # enter "rotation mode"
-                self._rotations = [(self._heuristic_value(x, dmax), x) for x in
+                self._rotations = [(self._heuristic_value(x, target_d), x) for x in
                           (0, 45, -45, 90, -90, 135, -135, 180)]
                 self._rotations.sort()
             # "rotation" mode
             for _ in range(min(4, len(self._rotations))):
                 _, rotation = self._rotations.pop(0)
-                if self._try(rotation, dmax):
+                if self._try(rotation, target_d):
                     self._rotations = []
                     return
             if not self._rotations:
@@ -309,10 +307,9 @@ class Creature(Entity):
             return True
 
     def action_fly_to_remote_target(self):
-        dmax = int_distance(self.x, self.y, self.action_target.x, self.action_target.y)
+        target_d = int_distance(self.x, self.y, self.action_target.x, self.action_target.y)
         self.o = int_angle(self.x, self.y, self.action_target.x, self.action_target.y) # turn toward the goal
-        self._d = self.speed * VIRTUAL_TIME_INTERVAL / 1000 # used by _future_coords and _heuristic_value
-        x, y = self._future_coords(0, dmax)
+        x, y = self._future_coords(0, target_d)
         if not self.place.contains(x, y):
             try:
                 new_place = self.world.get_place_from_xy(x, y)
