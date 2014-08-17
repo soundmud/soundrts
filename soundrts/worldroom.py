@@ -88,6 +88,14 @@ class Square(object):
         return self.xmin <= x <= self.xmax and \
                self.ymin <= y <= self.ymax
 
+    def allows(self, x, y):
+        new_place = self.world.get_place_from_xy(x, y)
+        if new_place is self:
+            return True
+        for e in self.exits:
+            if e.other_side.place is new_place:
+                return True
+
     def shortest_path_to(self, dest):
 ##        if len(self.exits) == 1: # small optimization
 ##            return self.exits[0]

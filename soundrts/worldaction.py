@@ -1,6 +1,3 @@
-from nofloat import int_angle, int_distance
-
-
 class Action:
     
     def __init__(self, unit, target):
@@ -19,7 +16,10 @@ class Action:
 class MoveAction(Action):
     
     def update(self):
-        if getattr(self.target, "place", None) is self.unit.place:
+        if hasattr(self.target, "other_side"):
+            # move towards the center of the next square
+            self.unit.walk_to_xy(self.target.other_side.place.x, self.target.other_side.place.y) 
+        elif getattr(self.target, "place", None) is self.unit.place:
             self.unit.action_reach_and_use()
         elif self.unit.airground_type == "air":
             self.unit.action_fly_to_remote_target()
@@ -32,13 +32,11 @@ class MoveXYAction(Action):
     timer = 15 # 5 seconds # XXXXXXXX not beautiful
 
     def update(self):
-        x, y = self.target
-        d = int_distance(self.unit.x, self.unit.y, x, y)
-        if self.timer > 0 and d > self.unit.radius:
-            # execute action
-            self.unit.o = int_angle(self.unit.x, self.unit.y, x, y) # turn toward the goal
-            self.unit._reach(d)
+        if self.timer > 0:
             self.timer -= 1
+            x, y = self.target
+            if self.unit.walk_to_xy(x, y):
+                self.complete()
         else:
             self.complete()
 

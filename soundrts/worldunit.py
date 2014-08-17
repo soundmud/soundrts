@@ -224,6 +224,12 @@ class Creature(Entity):
                 self.walked.append([self.place, self.x, self.y, 5]) # mark the dead end
             self.move_to(self.place, x, y, self.o + rotation)
             return True
+        elif not self.place.contains(x, y) and self.place.allows(x, y) and not self.would_collide_if(x, y):
+            if abs(rotation) >= 90:
+                self.walked.append([self.place, self.x, self.y, 5]) # mark the dead end
+            new_place = self.world.get_place_from_xy(x, y)
+            self.move_to(new_place, x, y, self.o + rotation)
+            return True
         return False
 
     _rotations = None
@@ -291,20 +297,25 @@ class Creature(Entity):
             self.walked = []
             target.be_used_by(self)
 
-    # fly to
+    # walk/fly to
+
+    def walk_to_xy(self, x, y):
+        d = int_distance(self.x, self.y, x, y)
+        if d > self.radius:
+            # execute action
+            self.o = int_angle(self.x, self.y, x, y) # turn towards the goal
+            self._reach(d)
+        else:
+            return True
 
     def action_fly_to_remote_target(self):
-        def get_place_from_xy(x, y):
-            for z in self.place.world.squares:
-                if z.contains(x, y):
-                    return z
         dmax = int_distance(self.x, self.y, self.action_target.x, self.action_target.y)
         self.o = int_angle(self.x, self.y, self.action_target.x, self.action_target.y) # turn toward the goal
         self._d = self.speed * VIRTUAL_TIME_INTERVAL / 1000 # used by _future_coords and _heuristic_value
         x, y = self._future_coords(0, dmax)
         if not self.place.contains(x, y):
             try:
-                new_place = get_place_from_xy(x, y)
+                new_place = self.world.get_place_from_xy(x, y)
                 self.move_to(new_place, x, y, self.o)
             except:
                 exception("problem when flying to a new square")
