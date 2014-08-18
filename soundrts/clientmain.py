@@ -13,7 +13,7 @@ except:
     from lib.log import warning
     warning("couldn't set locale")
 
-import os.path
+import os
 import pickle
 import sys
 import time
@@ -30,7 +30,7 @@ from game import TrainingGame, ReplayGame
 from lib.log import exception
 from multimaps import worlds_multi
 from msgs import nb2msg
-from paths import REPLAYS_PATH, SAVE_PATH
+from paths import MAPS_PATHS, REPLAYS_PATH, SAVE_PATH
 import res
 from singlemaps import campaigns
 import stats
@@ -188,14 +188,35 @@ class Application(object):
         else:
             voice.alert([4239, login]) # new login:
             config.login = login
+            config.save()
 
-    def save_config_changes(self):
-        config.save()
-        return END_LOOP
-
-    def cancel_config_changes(self):
-        config.load()
-        return END_LOOP
+    def modify_default_mods(self):
+        def available_mods():
+            result = []
+            for path in MAPS_PATHS:
+                mods_path = os.path.join(path, "mods")
+                for mod in os.listdir(mods_path):
+                    if os.path.isdir(os.path.join(mods_path, mod)) and mod not in result:
+                        result.append(mod)
+            return result
+        def add_mod(mod):
+            if mod not in mods:
+                mods.append(mod)
+            if mods:
+                voice.alert(mods)
+        def save():
+            config._mods = ",".join(mods)
+            config.save()
+            if mods:
+                voice.alert(mods)
+            return END_LOOP
+        mods = []
+        menu = Menu([4320])
+        for mod in available_mods():
+            menu.append([mod], (add_mod, mod))
+        menu.append([4096], save)
+        menu.append([4098], END_LOOP)
+        menu.loop()
 
     def main(self):
         single_player_menu = Menu([4030],
@@ -214,8 +235,8 @@ class Application(object):
             ])
         options_menu = Menu([4086], [
             ([4087], self.modify_login),
-            ([4096, 4097], self.save_config_changes),
-            ([4098, 4099], self.cancel_config_changes),
+            ([4319], self.modify_default_mods),
+            ([4118], END_LOOP),
             ])
         main_menu = Menu([4029, 4030], [
             [[4031, 4032], single_player_menu.loop],
