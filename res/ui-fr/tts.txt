@@ -449,5 +449,6 @@
 
 4317 Entrez une commande.
 
-4319 modifier l'ordre de chargement des mods,
-4320 sélectionnez le mod suivant ou sauvegardez la liste
+4319 modifier l'ordre de chargement des mods
+4320 ajouter un mod à la liste
+4321 la liste est vide

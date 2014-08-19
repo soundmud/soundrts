@@ -191,29 +191,42 @@ class Application(object):
             config.save()
 
     def modify_default_mods(self):
+
         def available_mods():
             result = []
             for path in MAPS_PATHS:
                 mods_path = os.path.join(path, "mods")
                 for mod in os.listdir(mods_path):
-                    if os.path.isdir(os.path.join(mods_path, mod)) and mod not in result:
+                    if os.path.isdir(os.path.join(mods_path, mod)) \
+                       and mod not in result and mod not in mods:
                         result.append(mod)
             return result
-        def add_mod(mod):
-            if mod not in mods:
-                mods.append(mod)
-            if mods:
-                voice.alert(mods)
+
+        def select_next_mod():
+
+            def add_mod(mod):
+                if mod not in mods:
+                    mods.append(mod)
+                if mods:
+                    voice.alert(mods)
+
+            menu = Menu([4320])
+            for mod in available_mods():
+                menu.append([mod], (add_mod, mod))
+            menu.append([4118], None)
+            menu.run()
+
         def save():
             config._mods = ",".join(mods)
             config.save()
             if mods:
                 voice.alert(mods)
             return END_LOOP
+
         mods = []
-        menu = Menu([4320])
-        for mod in available_mods():
-            menu.append([mod], (add_mod, mod))
+        voice.alert([4321]) # the list is empty
+        menu = Menu([])
+        menu.append([4320], select_next_mod)
         menu.append([4096], save)
         menu.append([4098], END_LOOP)
         menu.loop()
