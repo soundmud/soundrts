@@ -7,6 +7,7 @@ import os.path
 import re
 import shutil
 
+import config
 from lib.log import debug, exception
 from lib import zipdir
 from paths import TMP_PATH
@@ -178,11 +179,13 @@ class Map(object):
         return result
 
     _races = None
+    _mods = None
     
     @property
     def races(self):
-        if self._races is None:
+        if self._races is None and self._mods != config.mods:
             w = world.World([], 0)
             w.load_and_build_map(self)
             self._races = w.get_races()
+            self._mods = config.mods
         return self._races

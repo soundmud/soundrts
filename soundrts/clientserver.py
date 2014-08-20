@@ -10,7 +10,7 @@ from clientversion import revision_checker
 import config
 from lib.log import info, exception
 import servermain
-from version import COMPATIBILITY_VERSION
+from version import compatibility_version
 
 
 class _Error(Exception): pass
@@ -55,11 +55,11 @@ def connect_and_play(host="127.0.0.1", port=config.port):
         voice.alert([4081])
     except WrongServerError:
         # "failure: unexpected reply from the server. The server is not a SoundRTS server" (version)
-        voice.alert([4082, COMPATIBILITY_VERSION])
+        voice.alert([4082, compatibility_version()])
     except CompatibilityOrLoginError:
         # "failure: connexion rejected the server. The server is not a SoundRTS server" (version)
         # "or your login has been rejected"
-        voice.alert([4083, COMPATIBILITY_VERSION, 4084])
+        voice.alert([4083, compatibility_version(), 4084])
     except ConnectionAbortedError:
         voice.alert([4102]) # connection aborted
     except SystemExit:
@@ -88,7 +88,7 @@ class ConnectionToServer(object):
         try:
             if self.tn.read_until(":", 3) != ":":
                 raise WrongServerError
-            self.tn.write("login " + COMPATIBILITY_VERSION + " %s\n" % config.login)
+            self.tn.write("login " + compatibility_version() + " %s\n" % config.login)
         except (EOFError, socket.error):
             raise WrongServerError
         try:

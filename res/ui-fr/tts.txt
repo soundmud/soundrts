@@ -452,3 +452,4 @@
 4319 modifier l'ordre de chargement des mods
 4320 ajouter un mod à la liste
 4321 la liste est vide
+4322 Chargement...

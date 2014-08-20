@@ -422,6 +422,7 @@ class SoundCache(object):
                                 warning("couldn't load %s" % p)
 
     def load_default(self):
+        self.default_sounds = {}
         self.default_txt = _read_txt()
         for path in res.get_sound_paths("ui"):
             self._load(path, self.default_sounds)

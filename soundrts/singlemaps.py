@@ -1,6 +1,7 @@
 import os
 
 from campaign import Campaign
+import config
 from paths import MAPS_PATHS
 
 
@@ -18,9 +19,10 @@ def _get_campaigns():
     return w
 
 _campaigns = None
+_mods = None
 
 def campaigns():
-    global _campaigns
-    if not _campaigns:
+    global _campaigns, _mods
+    if _campaigns is None or _mods != config.mods:
         _campaigns = _get_campaigns()
     return _campaigns

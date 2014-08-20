@@ -77,6 +77,19 @@ class ResourceLoader(object):
     def __init__(self):
         self.packages = []
         self.language = ""
+        self.update_packages_list()
+
+    def update_packages_list(self):
+        self.packages = []
+        self.packages.append("res")
+        for p in config.mods.split(","):
+            p = p.strip()
+            if p:
+                for root in reversed(paths.MAPS_PATHS):
+                    path = os.path.join(root, "mods", p)
+                    if os.path.exists(path):
+                        self.packages.append(path)
+                        break
 
     def exists(self, name):
         pass
@@ -118,21 +131,11 @@ class ResourceLoader(object):
 
 
 _r = ResourceLoader()
-
-_r.packages.append("res")
-for _p in config.mods.split(","):
-    _p = _p.strip()
-    if _p:
-        for _root in reversed(paths.MAPS_PATHS):
-            _path = os.path.join(_root, "mods", _p)
-            if os.path.exists(_path):
-                _r.packages.append(_path)
-                break
-
 _r.language = _get_language()
 get_text = _r.get_text
 get_texts = _r.get_texts
 get_sound_paths = _r.get_sound_paths
+update_packages_list = _r.update_packages_list
 
 ##assert _best_language_match("en") == "en"
 ##assert _best_language_match("fr_ca") == "fr"

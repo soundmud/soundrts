@@ -15,14 +15,14 @@ num_channels = 16
 speed = 1
 srapi = 1
 srapi_wait = .1
-_mods = ""
+config_mods = ""
 mods = ""
 
 def save():
     c = ConfigParser.SafeConfigParser()
     c.add_section("general")
     c.set("general", "login", login)
-    c.set("general", "mods", _mods)
+    c.set("general", "mods", config_mods)
     c.set("general", "num_channels", repr(num_channels))
     c.set("general", "speed", repr(speed))
     c.add_section("tts")
@@ -32,7 +32,7 @@ def save():
     c.write(open(CONFIG_FILE_PATH, "w"))
 
 def load():
-    global login, num_channels, speed, _mods
+    global login, num_channels, speed, config_mods
     global srapi, srapi_wait
     error = False
     new_file = False
@@ -60,7 +60,7 @@ def load():
     except:
         error = True
     try:
-        _mods = c.get("general", "mods")
+        config_mods = c.get("general", "mods")
     except:
         error = True
     if platform.system() == "Windows":
@@ -110,4 +110,4 @@ load()
 if options.mods is not None:
     mods = options.mods
 else:
-    mods = _mods
+    mods = config_mods

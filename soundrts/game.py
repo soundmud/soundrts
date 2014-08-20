@@ -1,19 +1,18 @@
 import os.path
 import pickle
-import sys
 import threading
 import time
 
 import pygame
 from pygame.locals import KEYDOWN
 
-from clientmedia import sounds, voice
+from clientmedia import sounds, voice, update_display_caption
 import clientgame
 from clientgameorder import update_orders_list
 import definitions
 import config
 from constants import METASERVER_URL
-from definitions import style, rules
+from definitions import style, rules, load_ai
 from lib.log import warning, exception
 from mapfile import Map
 from msgs import nb2msg
@@ -21,9 +20,19 @@ from paths import REPLAYS_PATH, SAVE_PATH, STATS_PATH
 import random
 import res
 import stats
-from version import VERSION, compatibility_version, COMPATIBILITY_VERSION
+from version import VERSION, compatibility_version
 from world import World
 from worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, HalfDummyClient, send_platform_version_to_metaserver 
+
+
+def reload_all():
+    voice.item([4322, config.mods, "."]) # "loading"
+    update_display_caption()
+    res.update_packages_list()
+    sounds.load_default()
+    rules.load(res.get_text("rules", append=True))
+    load_ai(res.get_text("ai", append=True)) # just in case
+    style.load(res.get_text("ui/style", append=True, locale=True))
 
 
 class _Game(object):
@@ -143,10 +152,6 @@ class MultiplayerGame(_MultiplayerGame):
     def pre_run(self):
         nb_human_players = len([p for p in self.players if p.login != "ai"])
         if nb_human_players > 1:
-            if compatibility_version() != COMPATIBILITY_VERSION:
-                warning("rules.txt or ai.txt has been modified"
-                        " after the program started: exit...")
-                sys.exit()
             send_platform_version_to_metaserver(self.map.get_name(), nb_human_players)
             self._countdown()
 
@@ -274,8 +279,12 @@ class ReplayGame(_Game):
         if game_type_name in ("multiplayer", "training"):
             self.default_triggers = _MultiplayerGame.default_triggers
         game_name = self.replay_read()
+        voice.alert([game_name])
         version = self.replay_read()
         mods = self.replay_read()
+        if mods != config.mods:
+            config.mods = mods
+            reload_all()
         _compatibility_version = self.replay_read()
         if _compatibility_version != compatibility_version():
             voice.alert([1029, 4012]) # hostile sound  "version error"

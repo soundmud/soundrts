@@ -9,7 +9,7 @@ from lib.log import debug, info, warning, exception
 from serverclient import ConnectionToClient
 from serverroom import InTheLobby, OrganizingAGame, Playing
 from ticker import Ticker
-from version import COMPATIBILITY_VERSION
+from version import compatibility_version
 
 import config
 
@@ -144,7 +144,7 @@ class Server(asyncore.dispatcher):
     def _register(self):
         try:
             s = urllib.urlopen(REGISTER_URL + "?version=%s&login=%s&ip=%s&port=%s" %
-                               (COMPATIBILITY_VERSION, self.login, self.ip,
+                               (compatibility_version(), self.login, self.ip,
                                 config.port)).read()
         except:
             s = "couldn't access to the metaserver"

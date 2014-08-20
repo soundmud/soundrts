@@ -8,7 +8,7 @@ from lib.log import debug, info, warning, exception
 from msgs import insert_silences, encode_msg
 from multimaps import worlds_multi
 from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
-from version import COMPATIBILITY_VERSION
+from version import compatibility_version
 
 
 class ConnectionToClient(asynchat.async_chat):
@@ -115,7 +115,7 @@ class ConnectionToClient(asynchat.async_chat):
         except:
             warning("can't extract version and login: %s" % data)
             return
-        if version != COMPATIBILITY_VERSION:
+        if version != compatibility_version():
             warning("bad client version: %s" % version)
             return
         if re.match("^[a-zA-Z0-9]{1,20}$", login) == None:

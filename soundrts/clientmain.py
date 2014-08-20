@@ -19,14 +19,15 @@ import sys
 import time
 import urllib
 
-from clientmedia import voice, init_media, close_media
+from clientmedia import voice, init_media, close_media, update_display_caption
+from clientmediasound import sounds
 from clientmenu import Menu, input_string, END_LOOP
 from clientserver import connect_and_play, start_server_and_connect
 from clientversion import revision_checker
 import config
 from constants import MAIN_METASERVER_URL
-from definitions import style
-from game import TrainingGame, ReplayGame
+from definitions import style, rules, load_ai
+from game import TrainingGame, ReplayGame, reload_all
 from lib.log import exception
 from multimaps import worlds_multi
 from msgs import nb2msg
@@ -34,12 +35,12 @@ from paths import MAPS_PATHS, REPLAYS_PATH, SAVE_PATH
 import res
 from singlemaps import campaigns
 import stats
-from version import COMPATIBILITY_VERSION
+from version import compatibility_version
 
 
 _ds = open("cfg/default_servers.txt").readlines()
 _ds = [_x.split() for _x in _ds]
-DEFAULT_SERVERS = [" ".join(["0"] + _x[:1] + [COMPATIBILITY_VERSION] + _x[1:]) for _x in _ds]
+DEFAULT_SERVERS = [" ".join(["0"] + _x[:1] + [compatibility_version()] + _x[1:]) for _x in _ds]
 SERVERS_LIST_HEADER = "SERVERS_LIST"
 SERVERS_LIST_URL = MAIN_METASERVER_URL + "servers.php?header=%s&include_ports=1" % SERVERS_LIST_HEADER
 
@@ -69,7 +70,7 @@ class Application(object):
                 warning("line not recognized from the metaserver: %s", s)
                 continue
             nb += 1
-            if version == COMPATIBILITY_VERSION:
+            if version == compatibility_version():
                 menu.append([login, 4073, login], (connect_and_play, ip, port))
         menu.title = nb2msg(len(menu.choices)) + [4078] + nb2msg(nb) + [4079]
         menu.append([4075, 4076], None)
@@ -202,31 +203,31 @@ class Application(object):
                         result.append(mod)
             return result
 
-        def select_next_mod():
+        def select_next_mod(parent):
 
             def add_mod(mod):
                 if mod not in mods:
                     mods.append(mod)
-                if mods:
-                    voice.alert(mods)
+                    parent.title = mods
 
-            menu = Menu([4320])
+            menu = Menu([4320] + mods)
             for mod in available_mods():
                 menu.append([mod], (add_mod, mod))
             menu.append([4118], None)
             menu.run()
 
         def save():
-            config._mods = ",".join(mods)
+            previous_mods = config.mods
+            config.config_mods = ",".join(mods)
+            config.mods = config.config_mods
             config.save()
-            if mods:
-                voice.alert(mods)
+            if config.mods != previous_mods:
+                reload_all()
             return END_LOOP
 
         mods = []
-        voice.alert([4321]) # the list is empty
-        menu = Menu([])
-        menu.append([4320], select_next_mod)
+        menu = Menu([4321]) # the list is empty
+        menu.append([4320], (select_next_mod, menu))
         menu.append([4096], save)
         menu.append([4098], END_LOOP)
         menu.loop()
