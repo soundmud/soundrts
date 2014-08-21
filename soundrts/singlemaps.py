@@ -2,20 +2,21 @@ import os
 
 from campaign import Campaign
 import config
-from paths import MAPS_PATHS
+from package import get_all_packages_paths
 
 
 def _get_campaigns():
     w = []
-    for mp in MAPS_PATHS:
+    for mp in get_all_packages_paths():
         d = os.path.join(mp, "single")
-        for n in os.listdir(d):
-            p = os.path.join(d, n)
-            if os.path.isdir(p):
-                if n == "campaign":
-                    w.append(Campaign(p, [4267]))
-                else:
-                    w.append(Campaign(p))
+        if os.path.isdir(d):
+            for n in os.listdir(d):
+                p = os.path.join(d, n)
+                if os.path.isdir(p):
+                    if n == "campaign":
+                        w.append(Campaign(p, [4267]))
+                    else:
+                        w.append(Campaign(p))
     return w
 
 _campaigns = None

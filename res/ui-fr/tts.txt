@@ -453,3 +453,12 @@
 4320 ajouter un mod à la liste
 4321 la liste est vide
 4322 Chargement...
+
+4323 paquets
+4324 menu des paquets
+4325 ajouter un paquet
+4326 désactiver un paquet
+4327 mettre à jour un paquet
+4328 Téléchargement...
+4329 Extraction...
+4330 Mod introuvable:

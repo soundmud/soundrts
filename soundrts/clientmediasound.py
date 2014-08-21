@@ -306,7 +306,7 @@ class VoiceChannel(object):
             return False
 
     def stop(self):
-        self.c.stop() # interrompre
+        self.c.stop() # interrupt
         tts.stop()
         self._queue = []
 
@@ -422,10 +422,15 @@ class SoundCache(object):
                                 warning("couldn't load %s" % p)
 
     def load_default(self):
+        from clientmediavoice import voice
+        import config
         self.default_sounds = {}
         self.default_txt = _read_txt()
+        voice.item([4322, config.mods, "."]) # "loading"
         for path in res.get_sound_paths("ui"):
             self._load(path, self.default_sounds)
+        while(res.alerts):
+            voice.alert(res.alerts.pop(0))
 
     def enter_campaign(self, path):
         if self.campaign_path != path:

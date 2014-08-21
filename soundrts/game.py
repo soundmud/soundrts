@@ -26,13 +26,14 @@ from worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, Ha
 
 
 def reload_all():
-    voice.item([4322, config.mods, "."]) # "loading"
     update_display_caption()
-    res.update_packages_list()
+    res.update_mods_list()
     sounds.load_default()
     rules.load(res.get_text("rules", append=True))
     load_ai(res.get_text("ai", append=True)) # just in case
     style.load(res.get_text("ui/style", append=True, locale=True))
+    while(res.alerts):
+        voice.alert(res.alerts.pop(0))
 
 
 class _Game(object):

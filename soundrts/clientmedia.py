@@ -27,7 +27,6 @@ def init_media():
     update_display_caption()
     pygame.key.set_repeat()
     sounds.load_default()
-    time.sleep(.25) # the first sound is truncated
 
 def modify_volume(incr):
     set_volume(min(1, max(0, get_volume() + .1 * incr)))

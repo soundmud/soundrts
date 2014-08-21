@@ -19,19 +19,19 @@ import sys
 import time
 import urllib
 
-from clientmedia import voice, init_media, close_media, update_display_caption
-from clientmediasound import sounds
+from clientmedia import voice, init_media, close_media
 from clientmenu import Menu, input_string, END_LOOP
 from clientserver import connect_and_play, start_server_and_connect
 from clientversion import revision_checker
 import config
 from constants import MAIN_METASERVER_URL
-from definitions import style, rules, load_ai
+from definitions import style
 from game import TrainingGame, ReplayGame, reload_all
 from lib.log import exception
 from multimaps import worlds_multi
 from msgs import nb2msg
-from paths import MAPS_PATHS, REPLAYS_PATH, SAVE_PATH
+from package import get_packages, get_all_packages_paths
+from paths import REPLAYS_PATH, SAVE_PATH
 import res
 from singlemaps import campaigns
 import stats
@@ -179,6 +179,41 @@ class Application(object):
         menu.append([4041], None)
         menu.run()
 
+    def manage_packages(self):
+
+        def add():
+            menu = Menu([4325])
+            for p in get_packages():
+                if not p.is_active:
+                    menu.append([p.name], (p.add, voice))
+            menu.append([4118], None)
+            menu.run()
+
+        def deactivate():
+            menu = Menu([4326])
+            for p in get_packages():
+                if p.is_active:
+                    menu.append([p.name], p.deactivate)
+            menu.append([4118], None)
+            menu.run()
+
+        def update():
+            menu = Menu([4327])
+            for p in get_packages():
+                if p.is_active:
+                    menu.append([p.name], (p.update, voice))
+            menu.append([4118], None)
+            menu.run()
+
+        menu = Menu([4324], [
+            ([4325], add),
+            ([4326], deactivate),
+            ([4327], update),
+            ([4076], END_LOOP),
+            ])
+        menu.loop()
+        reload_all()
+
     def modify_login(self):
         login = input_string([4235, 4236], "^[a-zA-Z0-9]$") # type your new
                                         # login ; use alphanumeric characters
@@ -195,7 +230,7 @@ class Application(object):
 
         def available_mods():
             result = []
-            for path in MAPS_PATHS:
+            for path in get_all_packages_paths():
                 mods_path = os.path.join(path, "mods")
                 for mod in os.listdir(mods_path):
                     if os.path.isdir(os.path.join(mods_path, mod)) \
@@ -250,6 +285,7 @@ class Application(object):
         options_menu = Menu([4086], [
             ([4087], self.modify_login),
             ([4319], self.modify_default_mods),
+            [[4323], self.manage_packages],
             ([4118], END_LOOP),
             ])
         main_menu = Menu([4029, 4030], [

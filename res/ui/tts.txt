@@ -463,3 +463,12 @@
 4320 add a mod to the list
 4321 the list is empty
 4322 Loading
+
+4323 packages
+4324 packages menu
+4325 add a package
+4326 deactivate a package
+4327 update a package
+4328 Downloading...
+4329 Extracting...
+4330 Couldn't find mod:
