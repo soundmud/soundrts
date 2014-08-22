@@ -2,8 +2,9 @@ import os
 import urllib
 
 from constants import PACKAGES_METASERVER_URL
-from lib.zipdir import unzipdir
+from lib.log import warning
 from paths import MAPS_PATHS, PACKAGES_PATH, TMP_PATH
+import zipfile
 
 
 class Package(object):
@@ -31,7 +32,15 @@ class Package(object):
     
     def deactivate(self):
         os.rename(self.pathname, self.deactivated_pathname)
-    
+
+    def _unzip(self, zip_name):
+        z = zipfile.ZipFile(zip_name)
+        for name in z.namelist():
+            if name.startswith(self.name) and ".." not in name:
+                z.extract(name, PACKAGES_PATH)
+            else:
+                warning("didn't extract %s", name)
+
     def update(self, voice):
         f = urllib.urlopen(self.url)
         remote_size = f.info()['Content-Length']
@@ -45,7 +54,7 @@ class Package(object):
             zip_name = os.path.join(TMP_PATH, self.name + ".zip") 
             urllib.urlretrieve(self.url, zip_name)
             voice.item([4329])
-            unzipdir(zip_name, PACKAGES_PATH, overwrite=True)
+            self._unzip(zip_name)
             open(os.path.join(PACKAGES_PATH, self.name + ".txt"), "w").write(remote_size)
 
 
