@@ -4,7 +4,8 @@ import re
 
 from clientmedia import voice, sounds
 import clientmenu
-from game import MissionGame
+import config
+from game import MissionGame, reload_all
 from mapfile import Map
 from msgs import nb2msg
 from paths import CAMPAIGNS_CONFIG_PATH
@@ -107,6 +108,11 @@ class Campaign(object):
                 c = MissionChapter(cp, campaign=self, id=i)
             self.chapters.append(c)
             i += 1
+        p = os.path.join(self.path, "mods.txt")
+        if os.path.isfile(p):
+            self.mods = open(p).read()
+        else:
+            self.mods = None
 
     def _get(self, id):
         if id < len(self.chapters):
@@ -148,6 +154,9 @@ class Campaign(object):
                 self._set_bookmark(next_chapter.id)
 
     def run(self):
+        if self.mods is not None and self.mods != config.mods:
+            config.mods = self.mods
+            reload_all()
         sounds.enter_campaign(self.path)
         menu = clientmenu.Menu(self.title, [],
                 default_choice_index=len(self._available_chapters()) - 1)

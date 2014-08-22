@@ -272,6 +272,19 @@ Structure of the campaign folder
 The name of the campaign folder will be used by the single player menu. Official campaigns will have their own title in the "ui" folder.
 The folder contains chapter files. It also contains files and folders imitating the structure of the "res" folder: rules.txt, ai.txt, ui...
 
+Required mods file
+''''''''''''''''''
+
+New in SoundRTS 1.2 alpha 10.
+
+A campaign can define which mods it requires. The required mods will be automatically loaded.
+
+The required mods are defined in a file called "mods.txt", in the campaign folder:
+
+- the file is a comma-separated list of mod names;
+- if the file doesn't exist, the current mods will be kept;
+- if the file is empty, the "vanilla" game will be loaded.
+
 Chapter files
 '''''''''''''
 
