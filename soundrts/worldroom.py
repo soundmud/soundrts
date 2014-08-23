@@ -64,6 +64,12 @@ class Square(object):
                 result.append(s)
         return result
 
+    @property
+    def building_land(self):
+        for o in self.objects:
+            if o.is_a_building_land:
+                return o
+
     def __getstate__(self):
         odict = self.__dict__.copy() # copy the dict since we change it
         if odict.has_key('spiral'):
@@ -115,22 +121,22 @@ class Square(object):
         end = dest
 
         # apply Dijkstra's algorithm (with priority list)
-	D = {}	# dictionary of final distances
-	P = {}	# dictionary of predecessors
-	Q = priorityDictionary()   # est.dist. of non-final vert.
-	Q[start] = (0, )
+        D = {}        # dictionary of final distances
+        P = {}        # dictionary of predecessors
+        Q = priorityDictionary()   # est.dist. of non-final vert.
+        Q[start] = (0, )
 
-	for v in Q:
-		D[v] = Q[v][0]
-		if v == end: break
-		
-		for w in G[v]:
-			vwLength = D[v] + G[v][w]
-			if w in D:
-                                pass
-			elif w not in Q or vwLength < Q[w][0]:
-				Q[w] = (vwLength, int(w.id),) # the additional value makes the result "cross-machine deterministic"
-				P[w] = v
+        for v in Q:
+            D[v] = Q[v][0]
+            if v == end: break
+            
+            for w in G[v]:
+                vwLength = D[v] + G[v][w]
+                if w in D:
+                    pass
+                elif w not in Q or vwLength < Q[w][0]:
+                    Q[w] = (vwLength, int(w.id),) # the additional value makes the result "cross-machine deterministic"
+                    P[w] = v
 
         # restore the graph
         for v in (start, end):
@@ -141,13 +147,13 @@ class Square(object):
         # exploit the results
         if end not in P:
             return None, None # no path exists
-	Path = []
-	while 1:
-		Path.append(end)
-		if end == start: break
-		end = P[end]
-	Path.reverse()
-      	return Path[1], D[dest]
+        Path = []
+        while 1:
+            Path.append(end)
+            if end == start: break
+            end = P[end]
+        Path.reverse()
+        return Path[1], D[dest]
 
     combat = False
     lcombattants = []

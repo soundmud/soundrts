@@ -25,6 +25,13 @@ class ZoomTarget(Entity):
         self.place = player.get_object_by_id(place_id)
         self.title = self.place.title # TODO: full zoom title
 
+    @property
+    def building_land(self):
+        # TODO: improve this when ZoomTarget is replaced
+        # with Subsquare and there is 1 building land or resource
+        # in each subsquare. 
+        return self.place.building_land # XXX imprecise
+
 
 class Objective(object):
 
