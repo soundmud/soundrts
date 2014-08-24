@@ -132,9 +132,8 @@ class World(object):
         return self.current_player_number
 
     def get_place_from_xy(self, x, y):
-        for z in self.squares:
-            if z.contains(x, y):
-                return z
+        return self.grid.get((x / self.square_width,
+                              y / self.square_width))
 
     def clean(self):
         for p in self.players + self.ex_players:
