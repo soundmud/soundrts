@@ -31,7 +31,7 @@ until the heap is rebuilt.'''
                 heap[insertionPoint] = heap[smallChild]
                 insertionPoint = smallChild
         return heap[0][1]
-	
+
     def __iter__(self):
         '''Create destructive sorted iterator of priorityDictionary.'''
         def iterfn():
@@ -40,7 +40,7 @@ until the heap is rebuilt.'''
                 yield x
                 del self[x]
         return iterfn()
-	
+
     def __setitem__(self,key,val):
         '''Change value stored in dictionary and add corresponding
 pair to heap.  Rebuilds the heap if the number of deleted items grows
@@ -59,7 +59,7 @@ too large, to avoid memory leakage.'''
                 heap[insertionPoint] = heap[(insertionPoint-1)//2]
                 insertionPoint = (insertionPoint-1)//2
             heap[insertionPoint] = newPair
-	
+
     def setdefault(self,key,val):
         '''Reimplement setdefault to call our customized __setitem__.'''
         if key not in self:

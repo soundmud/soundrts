@@ -19,8 +19,8 @@ _subzone_name = {
 
 class Zoom(object):
 
-    x = 0
-    y = 0
+    sub_x = 0
+    sub_y = 0
 
     def __init__(self, parent):
         self.parent = parent
@@ -32,36 +32,36 @@ class Zoom(object):
     @property
     def id(self):
         sq = self.parent.place
-        x = sq.x + self.x * self.xstep
-        y = sq.y + self.y * self.ystep
+        x = sq.x + self.sub_x * self.xstep
+        y = sq.y + self.sub_y * self.ystep
         return "zoom-%s-%s-%s" % (sq.id, int(x), int(y))
 
     @property
     def title(self):
-        return self.parent.place.title + _subzone_name[(self.x, self.y)]
+        return self.parent.place.title + _subzone_name[(self.sub_x, self.sub_y)]
 
     def move(self, dx, dy):
         self.parent.follow_mode = False # or set_obs_pos() will cause trouble
-        self.x += dx
-        self.y += dy
-        if self.x == 2:
-            self.x = -1
+        self.sub_x += dx
+        self.sub_y += dy
+        if self.sub_x == 2:
+            self.sub_x = -1
             self.parent.place = self.parent._compute_move(1, 0)
-        elif self.x == -2:
-            self.x = 1
+        elif self.sub_x == -2:
+            self.sub_x = 1
             self.parent.place = self.parent._compute_move(-1, 0)
-        elif self.y == 2:
-            self.y = -1
+        elif self.sub_y == 2:
+            self.sub_y = -1
             self.parent.place = self.parent._compute_move(0, 1)
-        elif self.y == -2:
-            self.y = 1
+        elif self.sub_y == -2:
+            self.sub_y = 1
             self.parent.place = self.parent._compute_move(0, -1)
         self.update_coords()
         self.parent.set_obs_pos()
 
     def move_to(self, o):
         self.parent.place = o.place
-        for self.x, self.y in _subzone_name.keys():
+        for self.sub_x, self.sub_y in _subzone_name.keys():
             self.update_coords()
             if self.contains(o):
                 self.parent.set_obs_pos()
@@ -80,9 +80,9 @@ class Zoom(object):
 
     def update_coords(self):
         sq = self.parent.place
-        self.xmin = sq.xmin + (self.x + 1) * self.xstep
+        self.xmin = sq.xmin + (self.sub_x + 1) * self.xstep
         self.xmax = self.xmin + self.xstep
-        self.ymin = sq.ymin + (self.y + 1) * self.ystep
+        self.ymin = sq.ymin + (self.sub_y + 1) * self.ystep
         self.ymax = self.ymin + self.ystep
 
     def contains(self, obj):

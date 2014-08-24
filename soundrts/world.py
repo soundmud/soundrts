@@ -13,7 +13,7 @@ import collision
 from constants import COLLISION_RADIUS, VIRTUAL_TIME_INTERVAL
 from definitions import rules, get_ai_names, load_ai
 from lib.log import warning, exception
-from nofloat import to_int, int_distance
+from nofloat import to_int, int_distance, PRECISION
 from paths import MAPERROR_PATH
 import res
 from worldability import Ability
@@ -599,7 +599,7 @@ class World(object):
             load_ai(res.get_text("ai", append=True), map.campaign_ai, map.additional_ai)
             self._load_map(map)
             self.map = map
-            self.square_width = int(self.square_width * 1000) # XXX 1000=PRECISION?
+            self.square_width = int(self.square_width * PRECISION)
             self._build_map()
             if self.objective:
                 self.introduction = [4020] + self.objective
