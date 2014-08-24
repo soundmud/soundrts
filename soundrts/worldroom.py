@@ -47,7 +47,6 @@ class Square(object):
         self.x = (self.xmax + self.xmin) / 2
         self.y = (self.ymax + self.ymin) / 2
 
-
     @property
     def height(self):
         if self.high_ground:
@@ -55,14 +54,13 @@ class Square(object):
         else:
             return 0
 
-    @property
-    def neighbours(self):
+    def set_neighbours(self):
         result = []
         for dc, dr in ((0, 1), (0, -1), (1, 0), (-1, 0)):
             s = self.world.grid.get((self.col + dc, self.row + dr))
             if s is not None:
                 result.append(s)
-        return result
+        self.neighbours = result
 
     @property
     def building_land(self):
