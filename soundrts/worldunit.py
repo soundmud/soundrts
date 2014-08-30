@@ -533,10 +533,14 @@ class Creature(Entity):
         if self.has_imperative_orders():
             return
         if not self.is_fleeing and \
-           (getattr(self.action_target, "menace", 0) < attacker.menace) and \
-             self.can_attack(attacker) and \
-             self.place == attacker.place:
-            self.action_target = attacker
+           (getattr(self.action_target, "menace", 0) < attacker.menace):
+            if self.can_attack(attacker):
+                self.action_target = attacker
+            elif not self.orders and self.place.is_near(attacker.place):
+                self.take_default_order(attacker.id)
+                self.take_order(("go", "zoom-%s-%s-%s" %
+                     (self.place.name, self.x, self.y)),
+                     forget_previous=False)
 
     def react_death(self, creature):
         if self.action_target == creature:
