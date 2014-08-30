@@ -105,6 +105,7 @@ class World(object):
         for z in self.squares:
             for e in z.exits:
                 e.place = z
+        self.set_neighbours()
         
     _next_id = 0 # reset ID for each world to avoid big numbers
 
@@ -306,6 +307,12 @@ class World(object):
         return self._get_classnames(lambda uc: issubclass(uc.cls, Deposit) and uc.resource_type == resource_index)
 
     # map creation
+
+    def set_neighbours(self):
+        for square in set(self.grid.values()):
+            square.set_neighbours()
+        for subsquare in set(self.subgrid.values()):
+            subsquare.set_neighbours()
     
     def _create_squares_and_grid(self):
         self.grid = {}
@@ -322,10 +329,7 @@ class World(object):
                         self.subgrid[subsquare.name] = subsquare
                         self.subgrid[subsquare.col,
                                      subsquare.row] = subsquare
-        for square in set(self.grid.values()):
-            square.set_neighbours()
-        for subsquare in set(self.subgrid.values()):
-            subsquare.set_neighbours()
+        self.set_neighbours()
         xmax = self.nb_columns * self.square_width
         res = COLLISION_RADIUS * 2 / 3
         self.collision = {"ground": collision.CollisionMatrix(xmax, res),

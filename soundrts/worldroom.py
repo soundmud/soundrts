@@ -69,13 +69,15 @@ class Square(object):
                 return o
 
     def __getstate__(self):
-        odict = self.__dict__.copy() # copy the dict since we change it
-        if odict.has_key('spiral'):
-            del odict['spiral'] # remove "spiral" entry (cf find_free_space())
-        return odict
+        d = self.__dict__.copy()
+        if d.has_key('spiral'):
+            del d['spiral']
+        if d.has_key('neighbours'):
+            del d['neighbours']
+        return d
 
-    def __setstate__(self, dict):
-        self.__dict__.update(dict)   # update attributes
+    def __setstate__(self, d):
+        self.__dict__.update(d)
 
     def is_near(self, square):
         try:
@@ -287,6 +289,15 @@ class Subsquare(object):
         assert ((self.ymin - 1) / width) * width != self.ymin - 1
         assert self.xmin / width  == self.col
         assert self.ymin / width  == self.row
+
+    def __getstate__(self):
+        d = self.__dict__.copy()
+        if d.has_key('neighbours'):
+            del d['neighbours']
+        return d
+
+    def __setstate__(self, d):
+        self.__dict__.update(d)
 
     def contains(self, obj):
         return self.xmin <= obj.x < self.xmax and self.ymin <= obj.y < self.ymax
