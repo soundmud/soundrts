@@ -93,16 +93,10 @@ class Player(object):
         self._known_enemies_time = {}
         self._enemy_menace = {}
         self._enemy_menace_time = {}
-        self.enemy_doors = set()
-        self._affected_squares = []
 
     @property
     def is_playing(self):
         return not (self.has_victory or self.has_been_defeated)
-
-    def react_arrival(self, someone, door=None):
-        if door is not None:
-            self.enemy_doors.add(door)
 
     def known_enemies(self, place):
         # assert: "memory is not included"
@@ -198,15 +192,17 @@ class Player(object):
         if not self.is_perceiving(o):
             self._remember(o)
 
-    def _update_dict(self, dct, squares, inc):
+    def _update_dict(self, dct, squares, inc, affected_squares):
         for square in squares:
             if square not in dct:
                 dct[square] = 0
-                self._affected_squares.append(square)
+                if square not in affected_squares:
+                    affected_squares.append(square)
             dct[square] += inc
             if dct[square] == 0:
                 del dct[square]
-                self._affected_squares.append(square)
+                if square not in affected_squares:
+                    affected_squares.append(square)
             else:
                 assert dct[square] > 0
 
@@ -225,25 +221,28 @@ class Player(object):
             if o.player is not self and o.place is not None:
                 self._remember(o)
 
-    def _update_all_dicts(self, unit, inc):
-        self._affected_squares = []
-        self._update_dict(self.observed_squares, unit.get_observed_squares(), inc)
+    def _update_all_dicts(self, unit, inc, affected_squares):
+        self._update_dict(self.observed_squares, unit.get_observed_squares(), inc, affected_squares)
         if inc > 0:
             for square in unit.get_observed_squares():
                 if square not in self.observed_before_squares:
                     self.observed_before_squares.append(square)
         if unit.is_a_detector:
-            self._update_dict(self.detected_squares, [unit.place], inc)
-        if unit.is_a_cloaker: # XXX allied vision != allied cloaking
-            self._update_dict(self.cloaked_squares, [unit.place], inc)
+            self._update_dict(self.detected_squares, [unit.place], inc, affected_squares)
+        # assertion: self.allied_vision == self.allied_cloaking
+        if unit.is_a_cloaker:
+            self._update_dict(self.cloaked_squares, [unit.place], inc, affected_squares)
 
     def update_all_dicts(self, unit, inc):
         if unit.place is None: return
+        # TODO MAYBE: make the difference between affected squares
+        # for allies (sight and detectors) and affected squares for
+        # non allies (cloakers). 
+        affected_squares = []
         for p in self.allied_vision:
-            p._update_all_dicts(unit, inc)
-#        for p in self.allied_vision: # XXX (optimized but incorrect for cloaker)
-        for p in self.world.players: # necessary for cloaker (XXX not optimized though)
-            for square in self._affected_squares:
+            p._update_all_dicts(unit, inc, affected_squares)
+        for p in self.world.players: # necessary for cloakers
+            for square in affected_squares:
                 for o in square.objects:
                     p.update_perception_of_object(o)
                 if square in p.observed_squares:
@@ -689,9 +688,10 @@ class Player(object):
     def cmd_toggle_cheatmode(self, unused_args=None):
         if self.cheatmode:
             self.cheatmode = False
-            self._update_dict(self.observed_squares, self.world.squares, -1)
-            self._update_dict(self.detected_squares, self.world.squares, -1)
-            for sq in self.world.squares:
+            affected = []
+            self._update_dict(self.observed_squares, self.world.squares, -1, affected)
+            self._update_dict(self.detected_squares, self.world.squares, -1, affected)
+            for sq in affected:
                 for o in sq.objects:
                     o.update_perception()
             # assertion:
@@ -702,9 +702,10 @@ class Player(object):
                     self.memory.remove(o)
         else:
             self.cheatmode = True
-            self._update_dict(self.observed_squares, self.world.squares, 1)
-            self._update_dict(self.detected_squares, self.world.squares, 1)
-            for sq in self.world.squares:
+            affected = []
+            self._update_dict(self.observed_squares, self.world.squares, 1, affected)
+            self._update_dict(self.detected_squares, self.world.squares, 1, affected)
+            for sq in affected:
                 for o in sq.objects:
                     o.update_perception()
 

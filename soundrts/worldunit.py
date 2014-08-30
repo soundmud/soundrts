@@ -576,27 +576,22 @@ class Creature(Entity):
         elif self.ai_mode == "offensive":
             self.choose_enemy(someone)
 
-    def react_arrival(self, someone, door=None):
+    def react_arrival(self, someone):
         if self.place is someone.place and not self.is_fleeing:
             self._flee_or_fight(someone)
-
-    def door_menace(self, door):
-        if door in self.player.enemy_doors:
-            return 1
-        else:
-            return 0
 
     def flee(self, someone=None):
         self.notify("flee")
         self.player.on_unit_flee(self)
         self.orders = []
-        if someone is None:
-            exits = [[(square_of_distance(e.x, e.y, self.x, self.y), e.id), e] for e in self.place.exits]
-        else:
-            exits = [[(self.door_menace(e), - square_of_distance(e.x, e.y, someone.x, someone.y), e.id), e] for e in self.place.exits]
-        exits.sort()
-        if len(exits) > 0:
-            self.action_target = exits[0][1]
+        if self.place.exits:
+            if someone is None:
+                def menace(e):
+                    return (square_of_distance(e.x, e.y, self.x, self.y), e.id)
+            else:
+                def menace(e):
+                    return (square_of_distance(e.x, e.y, self.x, self.y) - square_of_distance(e.x, e.y, someone.x, someone.y), e.id)
+            self.action_target = sorted(self.place.exits, key=menace)[0]
         self.is_fleeing = True
 
     def react_self_arrival(self):
