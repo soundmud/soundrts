@@ -209,6 +209,14 @@ class _Savable(object):
         clientworld.update_orders_list() # when style has changed
         self.interface.set_self_as_listener()
         threading.Thread(target=self.world.loop).start()
+        # Because the simulation is in a different thread,
+        # sometimes the interface "forgets" to ask for an
+        # update. Maybe a better communication protocol
+        # between interface and simulation would solve
+        # this problem ("update" and "no_end_of_update_yet"
+        # should contain the simulation time, maybe). Maybe
+        # some data in a queue has been lost.
+        self.interface.asked_to_update = False
         self.interface.loop()
         self._record_stats(self.world)
         self.post_run()
