@@ -46,10 +46,7 @@ class AttackAction(Action):
     def update(self): # without moving to another square
         if self.unit.range and self.target in self.unit.place.objects:
             self.unit.action_reach_and_use()
-        elif self.unit.is_ballistic and self.unit.place.is_near(getattr(self.target, "place", None)) \
-             and self.unit.height > self.target.height:
-            self.unit.aim(self.target)
-        elif self.unit.special_range and self.unit.place.is_near(getattr(self.target, "place", None)):
+        elif self.unit.can_attack(self.target):
             self.unit.aim(self.target)
         else:
             self.complete()

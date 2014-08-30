@@ -74,6 +74,7 @@ class Creature(Entity):
     range = None
     is_ballistic = 0
     special_range = 0
+    minimal_range = 0
     cooldown = None
     next_attack_time = 0
     splash = False
@@ -137,6 +138,10 @@ class Creature(Entity):
         # transport data
         self.objects = []
         self.world = place.world # XXXXXXXXXX required by transport
+
+        if self.special_range and not self.range:
+            self.range = self.world.square_width
+            self.minimal_range = 4
 
         # set a player
         self.set_player(player)
@@ -279,11 +284,8 @@ class Creature(Entity):
 
     def _near_enough_to_use(self, target):
         if self.is_an_enemy(target):
-            if self.range and target.place is self.place:
-                d = target.use_range(self)
-                return square_of_distance(self.x, self.y, target.x, target.y) < d * d
-            elif self.is_ballistic or self.special_range:
-                return self.can_attack(target)
+            d = target.use_range(self)
+            return square_of_distance(self.x, self.y, target.x, target.y) < d * d
         elif target.place is self.place:
             d = target.use_range(self)
             return square_of_distance(self.x, self.y, target.x, target.y) < d * d
@@ -352,10 +354,8 @@ class Creature(Entity):
         if self.has_imperative_orders():
             self._execute_orders()
         else:
-            # catapult try to find enemy # XXXXX later: do this in triggers
-            if self.special_range and not self._is_attacking(): # XXXX if self.special_range or self.range?
-                self.choose_enemy()
-            if self.is_ballistic and self.height == 1 and not self._is_attacking():
+            # TODO: use triggers (to optimize)
+            if not self._is_attacking():
                 self.choose_enemy()
             # execute orders if the unit is not fighting (targeting an enemy)
             if self.orders and not self._is_attacking():
@@ -470,10 +470,7 @@ class Creature(Entity):
         if self.range and other.place is self.place:
             return True
         if self.place.is_near(other.place):
-            if self.special_range:
-                return True
-            if self.is_ballistic and self.height > other.height:
-                return True
+            return self._near_enough_to_use(other)
 
 ##    def _can_be_reached_by(self, player):
 ##        for u in player.units:
@@ -506,16 +503,11 @@ class Creature(Entity):
             self.action_target = someone
             self.notify("attack") # XXX move this into set_action_target()?
             return
-        if self.range and self._choose_enemy(self.place):
+        if self._choose_enemy(self.place):
             return
-        if self.is_ballistic:
-            for p in self.place.neighbours:
-                if self.height > p.height and self._choose_enemy(p):
-                    break
-        if self.special_range:
-            for p in self.place.neighbours:
-                if self._choose_enemy(p):
-                    break
+        for p in self.place.neighbours:
+            if self._choose_enemy(p):
+                break
 
     #
 
@@ -884,6 +876,7 @@ class Effect(Unit):
     food_cost = 0
     is_vulnerable = 0
     presence = 0
+    sight_range = 1
     _basic_abilities = []
 
 

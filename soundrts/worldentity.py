@@ -165,7 +165,10 @@ class Entity(object):
 
     def use_range(self, a): # use_distance? XXXXXXXXXXX
         if a.is_an_enemy(self) and a.range is not None:
-            return max(a.radius + USE_RANGE_MARGIN, a.range) + self.radius
+            range = a.range
+            if a.is_ballistic and a.height > self.height:
+                range += a.is_ballistic
+            return max(a.radius + USE_RANGE_MARGIN, range) + self.radius
         else:
             return a.radius + self.radius + USE_RANGE_MARGIN
 
