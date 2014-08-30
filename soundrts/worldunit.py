@@ -67,7 +67,7 @@ class Creature(Entity):
     is_healable = True
     provides_survival = False
 
-    sight_range = 0
+    sight_range = 1
 
     damage_radius = 0
     target_types = ["ground"]
