@@ -215,6 +215,9 @@ class Player(object):
                     if m.initial_model is o:
                         # forget it because you are perceiving it again
                         self._forget(m)
+                if self.is_an_enemy(o):
+                    for u in self.units:
+                        u.react_arrival(o)
         elif o in self.perception:
             # remove from perception
             self.perception.remove(o)
