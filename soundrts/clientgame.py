@@ -286,6 +286,8 @@ class GameInterface(object):
             if cmd:
                 # This direct way of executing the command might be a bit buggy,
                 # but at the moment this feature is just for cheating or testing anyway.
+                cmd = re.sub("^a ", "add_units %s " % getattr(self.place, "name", ""), cmd)
+                cmd = re.sub("^v$", "victory", cmd)
                 self.player.my_eval(cmd.split())
         else:
             voice.item([1029]) # hostile sound
