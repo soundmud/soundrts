@@ -538,9 +538,8 @@ class Creature(Entity):
                 self.action_target = attacker
             elif not self.orders and self.place.is_near(attacker.place):
                 self.take_default_order(attacker.id)
-                self.take_order(("go", "zoom-%s-%s-%s" %
-                     (self.place.name, self.x, self.y)),
-                     forget_previous=False)
+                self.take_order(("go", self.place.name),
+                                forget_previous=False)
 
     def react_death(self, creature):
         if self.action_target == creature:
