@@ -13,6 +13,7 @@ class Entity(object):
     menace = 0
     airground_type = "ground"
     activity = None
+    blocked_exit = None
 
     qty = 0
     is_vulnerable = False
@@ -119,6 +120,7 @@ class Entity(object):
             self.is_moving = True
 
     def delete(self):
+        self.unblock()
         self.move_to(None, 0, 0)
 
     def __init__(self, place, x=None, y=None, o=90):
@@ -200,3 +202,12 @@ class Entity(object):
             return x, y
         else:
             return None, None
+
+    def block(self, e):
+        self.blocked_exit = e
+        e.add_blocker(self)
+
+    def unblock(self):
+        if self.blocked_exit:
+            self.blocked_exit.remove_blocker(self)
+            self.blocked_exit = None

@@ -661,7 +661,11 @@ class BuildOrder(ComplexOrder):
     def on_queued(self):
         self.target = self.player.get_object_by_id(self.args[0])
         # first check
-        if not self.type.is_buildable_anywhere:
+        if self.type.is_buildable_on_exits_only:
+            if not getattr(self.target, "is_an_exit", False):
+                self.mark_as_impossible("cannot_build_here")
+                return
+        elif not self.type.is_buildable_anywhere:
             if not getattr(self.target, "is_a_building_land", False):
                 self.target = getattr(self.target, "building_land", None)
                 if self.target is None:

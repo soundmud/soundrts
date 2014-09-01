@@ -6,12 +6,18 @@ class Exit(Entity):
 
     other_side = None
     collision = 0
+    is_an_exit = True
 
     def __init__(self, place, type_name):
         self.type_name = type_name
         place, x, y, o = place
         Entity.__init__(self, place, x, y, o)
         place.exits.append(self)
+        self.blockers = []
+
+    @property
+    def is_blocked(self):
+        return self.blockers or getattr(self.other_side, "blockers", False)
 
     def use_range(self, a):
         return a.radius + 1000 # + 10
@@ -22,6 +28,12 @@ class Exit(Entity):
                       self.other_side.y + 250 * int_sin_1000(self.other_side.o) / 1000, # 25 cm
                       self.other_side.o,
                       self, self.other_side)
+
+    def add_blocker(self, o):
+        self.blockers.append(o)
+
+    def remove_blocker(self, o):
+        self.blockers.remove(o)
 
 
 def passage(places, exit_type):

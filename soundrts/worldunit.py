@@ -227,7 +227,7 @@ class Creature(Entity):
         if new_place is self.place:
             return True
         for e in self.place.exits:
-            if e.other_side.place is new_place:
+            if e.other_side.place is new_place and not e.is_blocked:
                 return True
 
     def _try(self, rotation, target_d):
@@ -695,9 +695,11 @@ class Creature(Entity):
         place, x, y, _id = target.place, target.x, target.y, target.id # remember before deletion
         if not hasattr(place, "place"): # target is a square
             place = target
-        if not type.is_buildable_anywhere:
+        if not (type.is_buildable_on_exits_only or type.is_buildable_anywhere):
             target.delete() # remove the meadow replaced by the building
         site = BuildingSite(self.player, place, x, y, type)
+        if getattr(target, "is_an_exit", False):
+            site.block(target)
 
         # update the orders of the workers
         order = self.orders[0]
@@ -908,7 +910,7 @@ class _Building(Creature):
             attacker.player.nb_buildings_killed += 1
         place, x, y = self.place, self.x, self.y
         Creature.die(self, attacker)
-        if not self.is_buildable_anywhere:
+        if not (self.is_buildable_anywhere or self.is_buildable_on_exits_only):
             Meadow(place, x, y)
 
     def flee(self, someone=None):
@@ -939,6 +941,10 @@ class BuildingSite(_Building):
         return self.type.is_buildable_anywhere
 
     @property
+    def is_buildable_on_exits_only(self):
+        return self.type.is_buildable_on_exits_only
+
+    @property
     def time_cost(self):
         return self.type.time_cost
 
@@ -951,8 +957,11 @@ class BuildingSite(_Building):
         self.timer -= 1
         if self.timer == 0:
             player, place, x, y, hp = self.player, self.place, self.x, self.y, self.hp
+            blocked_exit = self.blocked_exit
             self.delete()
             building = self.type(player, place, x, y)
+            if blocked_exit:
+                building.block(blocked_exit)
             building.hp = self.type.hp_max - self.damage_during_construction
             building.notify("complete")
 
@@ -964,8 +973,14 @@ class BuildingSite(_Building):
 class Building(_Building):
 
     is_buildable_anywhere = False
+    is_buildable_on_exits_only = False
     provides_survival = True
 
     def __init__(self, prototype, player, place, x, y):
         _Building.__init__(self, prototype, player, place, x, y)
         self.player.nb_buildings_produced += 1
+
+
+class Wall(Building):
+    
+    is_buildable_on_exits_only = True

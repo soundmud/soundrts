@@ -472,3 +472,6 @@
 4328 Downloading...
 4329 Extracting...
 4330 Couldn't find mod:
+
+4331 wall
+4332 gate

@@ -392,6 +392,14 @@ noise repeat 6 6113
 launch_attack 1084
 attack_hit 1085
 
+def wall
+is_a building
+title 4331
+
+def gate
+is_a building
+title 4332
+
 ; units
 
 def peasant
