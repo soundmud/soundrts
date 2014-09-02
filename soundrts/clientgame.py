@@ -283,7 +283,11 @@ class GameInterface(object):
     def cmd_console(self):
         if self.server.allow_cheatmode:
             cmd = clientmenu.input_string(msg=[4317], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
-            if cmd:
+            if cmd.startswith("s "):
+                self.speed = float(cmd.split(" ")[1])
+            elif cmd == "r":
+                self.player.resources = [n + 1000 * PRECISION for n in self.player.resources]
+            elif cmd:
                 # This direct way of executing the command might be a bit buggy,
                 # but at the moment this feature is just for cheating or testing anyway.
                 cmd = re.sub("^a ", "add_units %s " % getattr(self.place, "name", ""), cmd)
