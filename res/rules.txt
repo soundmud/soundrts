@@ -618,6 +618,13 @@ food_provided 0
 hp_max 266.7;  800/3
 time_cost 90
 
+def gate
+class wall
+cost 10 10
+food_provided 0
+hp_max 200
+time_cost 90
+is_a_gate 1
 
 ; other units
 

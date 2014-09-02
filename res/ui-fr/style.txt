@@ -27,3 +27,9 @@ shortcut v
 
 def flyingmachine
 shortcut v
+
+def wall
+shortcut u
+
+def gate
+shortcut p

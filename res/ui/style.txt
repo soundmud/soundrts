@@ -395,10 +395,12 @@ attack_hit 1085
 def wall
 is_a building
 title 4331
+shortcut a
 
 def gate
 is_a building
 title 4332
+shortcut g
 
 ; units
 
