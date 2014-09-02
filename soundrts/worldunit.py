@@ -228,7 +228,7 @@ class Creature(Entity):
             return True
         for e in self.place.exits:
             if e.other_side.place is new_place:
-                if e.is_blocked:
+                if e.is_blocked(self):
                     for o in e.blockers:
                         self.player.observe(o)
                 else:
@@ -995,3 +995,4 @@ class Wall(Building):
     
     is_buildable_on_exits_only = True
     provides_survival = False
+    is_a_gate = False

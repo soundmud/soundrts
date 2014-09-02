@@ -162,6 +162,7 @@ class Rules(_Definitions):
                     "provides_survival",
                     "is_ballistic",
                     "is_teleportable",
+                    "is_a_gate",
                     )
     precision_properties = _precision_properties_extended
     int_list_properties = ("storable_resource_types",)

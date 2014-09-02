@@ -217,7 +217,7 @@ food_cost 1
 time_cost 10
 hp_max 4
 speed 1.5
-can_build farm barracks lumbermill blacksmith wall scouttower townhall stables workshop dragonslair magestower temple necropolis
+can_build farm barracks lumbermill blacksmith wall gate scouttower townhall stables workshop dragonslair magestower temple necropolis
 ;can_use a_improved_wood_gathering
 range 0.8
 cooldown 1

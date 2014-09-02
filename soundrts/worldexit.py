@@ -15,9 +15,10 @@ class Exit(Entity):
         place.exits.append(self)
         self._blockers = []
 
-    @property
-    def is_blocked(self):
-        return self._blockers or getattr(self.other_side, "_blockers", False)
+    def is_blocked(self, o):
+        for b in self._blockers + getattr(self.other_side, "_blockers", []):
+            if not b.is_a_gate or o.is_an_enemy(b):
+                return True
 
     @property
     def blockers(self):
