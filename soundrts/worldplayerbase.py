@@ -86,6 +86,7 @@ class Player(object):
         self.places_to_explore = []
         self.observed_before_squares = []
         self.observed_squares = {}
+        self.observed_objects = {}
         self.detected_squares = {}
         self.cloaked_squares = {}
         self.allied_control = (self, )
@@ -136,9 +137,16 @@ class Player(object):
                 while self.level(upgrade_name) < p.level(upgrade_name):
                     self.world.unit_class(upgrade_name).upgrade_player(self)
 
+    def _update_observed_objects(self):
+        for o in self.observed_objects.keys():
+            if self.observed_objects[o] < self.world.time:
+                del self.observed_objects[o]
+                self.update_perception_of_object(o)
+
     def update(self):
         self._update_storage_bonus()
         self._update_allied_upgrades()
+        self._update_observed_objects()
         self.play()
 
     def level(self, type_name):
@@ -179,7 +187,9 @@ class Player(object):
             return False
         for p in self.allied_vision:
             if o.player is p or (
-            o.place in p.observed_squares and (
+            (o.place in p.observed_squares or
+             o in p.observed_objects)
+             and (
                 not o.is_invisible_or_cloaked() or
                 o.place in p.detected_squares)):
                 return True
@@ -190,7 +200,8 @@ class Player(object):
         # doesn't work for invisible units (hints are given in Starcraft though)
         if o.is_invisible_or_cloaked(): return # don't observe dark archers
         if not self.is_perceiving(o):
-            self._remember(o)
+            self.observed_objects[o] = self.world.time + 3000
+            self.update_perception_of_object(o)
 
     def _update_dict(self, dct, squares, inc, affected_squares):
         for square in squares:

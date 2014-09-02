@@ -13,11 +13,15 @@ class Exit(Entity):
         place, x, y, o = place
         Entity.__init__(self, place, x, y, o)
         place.exits.append(self)
-        self.blockers = []
+        self._blockers = []
 
     @property
     def is_blocked(self):
-        return self.blockers or getattr(self.other_side, "blockers", False)
+        return self._blockers or getattr(self.other_side, "_blockers", False)
+
+    @property
+    def blockers(self):
+        return self._blockers + getattr(self.other_side, "_blockers", [])
 
     def use_range(self, a):
         return a.radius + 1000 # + 10
@@ -30,10 +34,10 @@ class Exit(Entity):
                       self, self.other_side)
 
     def add_blocker(self, o):
-        self.blockers.append(o)
+        self._blockers.append(o)
 
     def remove_blocker(self, o):
-        self.blockers.remove(o)
+        self._blockers.remove(o)
 
 
 def passage(places, exit_type):

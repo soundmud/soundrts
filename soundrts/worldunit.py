@@ -227,8 +227,12 @@ class Creature(Entity):
         if new_place is self.place:
             return True
         for e in self.place.exits:
-            if e.other_side.place is new_place and not e.is_blocked:
-                return True
+            if e.other_side.place is new_place:
+                if e.is_blocked:
+                    for o in e.blockers:
+                        self.player.observe(o)
+                else:
+                    return True
 
     def _try(self, rotation, target_d):
         x, y = self._future_coords(rotation, target_d)
@@ -284,6 +288,12 @@ class Creature(Entity):
 
     def _near_enough_to_use(self, target):
         if self.is_an_enemy(target):
+            # Melee units (range <= 2) shouldn't attack units
+            # on the other side of a wall.
+            if not self._can_go(target.x, target.y) \
+                and self.range <= 2 * PRECISION \
+                and not target.blocked_exit:
+                    return False
             d = target.use_range(self)
             return square_of_distance(self.x, self.y, target.x, target.y) < d * d
         elif target.place is self.place:
@@ -984,3 +994,4 @@ class Building(_Building):
 class Wall(Building):
     
     is_buildable_on_exits_only = True
+    provides_survival = False
