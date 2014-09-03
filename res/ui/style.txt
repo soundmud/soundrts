@@ -253,6 +253,7 @@ exit 1331
 
 def unit
 is_a thing
+shape circle
 complete
 complete_msg $1 124
 launch_attack
@@ -269,6 +270,7 @@ noise_if_very_damaged if_me repeat 12 1173 else repeat 12 1073
 
 def building
 is_a unit
+shape square
 complete if_me 1200 else 1100
 complete_msg $1 126
 death 1047
@@ -302,6 +304,7 @@ ground gravel
 def farm
 is_a building
 title 83
+color hotpink
 noise repeat 15 1050
 shortcut f
 
@@ -314,11 +317,13 @@ shortcut l
 def barracks
 is_a building
 title 99
+color violetred
 shortcut b
 
 def townhall
 is_a building
 title 82
+color white
 noise repeat 6 1064
 shortcut h
 
@@ -407,6 +412,7 @@ shortcut g
 def peasant
 is_a walking_unit
 title 85
+color brown
 noise_when_exploiting_goldmine repeat 1.6 1038 ; 1081
 noise_when_exploiting_wood repeat 1.5 1034 1035 1036 1037
 noise_when_building repeat 4 1046 1048 1049
@@ -419,6 +425,7 @@ shortcut p
 def footman
 is_a walking_unit
 title 86
+color red
 attack_hit 1039 1040 1041
 attack_hit_level_1 1302
 keyboard soldier1
@@ -433,6 +440,7 @@ attack 1031
 def archer
 is_a walking_unit
 title 87
+color darkorange
 launch_attack 1042
 attack_hit 1043
 attack_hit_level_1 1301
@@ -533,18 +541,21 @@ noise ambient repeat .5 1339
 def goldmine
 is_a resource_deposit
 title 81
+color gold
 exhausted 1047
 ground gravel
 
 def wood
 is_a resource_deposit
 title 80
+color forestgreen
 noise repeat 6 1055 1056 1057 1058 9999 9999
 ground leaves
 
 def meadow
 is_a thing
 title 122
+color yellowgreen
 noise repeat 1.5 1059 1060 1061 1062 1063 9999 9999 9999 9999 9999 9999 9999 9999 9999 9999
 ground grass
 
@@ -557,12 +568,14 @@ noise repeat 6 1332 1333 1334 9999 9999 9999 9999 9999 9999 9999 9999 9999 9999
 
 def path
 title 84
+color dimgray
 noise repeat 15 1000
 ground grass
 when_moving_through 1091
 
 def bridge
 title 153
+color blue
 noise loop 1065
 ground wood .5 ; smaller area of effect
 when_moving_through 1092

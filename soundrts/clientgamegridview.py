@@ -3,7 +3,6 @@ import pygame
 from clientmediascreen import get_screen, draw_line, draw_rect
 from lib.log import warning
 from nofloat import square_of_distance
-from worldunit import Building, BuildingSite
 
 
 R = int(0.5 * 10)
@@ -69,7 +68,7 @@ class GridView(object):
         else:
             width = 1
         x, y = self.object_coords(o)
-        if isinstance(o.model, (Building, BuildingSite)):
+        if o.shape() == "square":
             draw_rect(o.corrected_color(), x-R, y-R, R*2, R*2, width)
         else:
             pygame.draw.circle(get_screen(), o.corrected_color(), (x, y), R, width)

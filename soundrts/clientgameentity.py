@@ -1,6 +1,8 @@
 import random
 import time
 
+import pygame
+
 from clientgamenews import must_be_said
 from clientmedia import voice, distance, psounds, get_fullscreen
 from constants import FOOTSTEP_LIMIT  
@@ -10,16 +12,6 @@ from msgs import nb2msg
 from nofloat import PRECISION
 from worldunit import BuildingSite
 
-
-##color_table = {81: "gold", 80: "forestgreen", 82: "white", 83: "hotpink",
-##                  84: "dimgray", 99: "violetred", 122: "yellowgreen", 153: "blue",
-##                  85: "brown", 86: "red", 87:"darkorange"}
-##warning("uh")
-##for k, v in color_table.items():
-##    color_table[k] = pygame.Color(v)
-##warning("uh oh")
-# precalculated dictionary (crashes with pygame 1.8.1)
-color_table = {99: (208, 32, 144, 255), 80: (34, 139, 34, 255), 81: (255, 215, 0, 255), 82: (255, 255, 255, 255), 83: (255, 105, 180, 255), 84: (105, 105, 105, 255), 85: (165, 42, 42, 255), 86: (255, 0, 0, 255), 87: (255, 140, 0, 255), 153: (0, 0, 255, 255), 122: (154, 205, 50, 255)}
 
 def compute_title(type_name):
     t = style.get(type_name, "title")
@@ -194,13 +186,16 @@ class EntityView(object):
                self.is_a_building_land or \
                self.is_repairable and self.hp < self.hp_max
 
+    def shape(self):
+        shape = style.get(self.type_name, "shape")
+        if shape:
+            return shape[0]
+
     def color(self):
-        if self.short_title and self.short_title[0] in color_table.keys():
-            return color_table[self.short_title[0]]
-#            return (255, 255, 255)
-#            return pygame.color.Color("red")
-#            return pygame.color.Color(self.color_table[self.short_title[0]])
-        else:
+        color = style.get(self.type_name, "color")
+        try:
+            return pygame.Color(color[0])
+        except:
             try:
                 return (255, (int(self.short_title[0]) * int(self.short_title[0])) % 256, int(self.short_title[0]) % 256)
             except:
