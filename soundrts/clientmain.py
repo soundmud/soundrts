@@ -86,7 +86,6 @@ class Application(object):
         if config.login == "player":
             voice.alert([4235]) # type your new login
             self.modify_login()
-            self.save_config_changes()
         menu = Menu([4030], [
             ([4119], self.choose_server_ip_in_a_list),
             ([4120], self.enter_server_ip),
