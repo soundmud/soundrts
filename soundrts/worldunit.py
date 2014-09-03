@@ -65,6 +65,7 @@ class Creature(Entity):
 
     is_vulnerable = True
     is_healable = True
+    is_a_gate = False
     provides_survival = False
 
     sight_range = 1
@@ -787,6 +788,7 @@ class Unit(Creature):
     value = 1
 
     is_cloakable = True
+    is_a_gate = True
 
     def __init__(self, player, place, x, y, o=90):
         Creature.__init__(self, player, place, x, y, o)
@@ -955,6 +957,10 @@ class BuildingSite(_Building):
         return self.type.is_buildable_on_exits_only
 
     @property
+    def is_a_gate(self):
+        return self.type.is_a_gate
+
+    @property
     def time_cost(self):
         return self.type.time_cost
 
@@ -995,4 +1001,3 @@ class Wall(Building):
     
     is_buildable_on_exits_only = True
     provides_survival = False
-    is_a_gate = False
