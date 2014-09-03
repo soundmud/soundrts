@@ -20,10 +20,10 @@ class Exit(Entity):
             for o in p.objects:
                 if o.is_an_enemy(b):
                     return True
-        
-    def is_blocked(self, o):
+
+    def is_blocked(self, o=None):
         for b in self._blockers + getattr(self.other_side, "_blockers", []):
-            if not b.is_a_gate or o.is_an_enemy(b) or self._there_are_enemies(b):
+            if not b.is_a_gate or (o is None or o.is_an_enemy(b)) or self._there_are_enemies(b):
                 return True
 
     @property

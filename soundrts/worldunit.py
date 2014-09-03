@@ -241,12 +241,14 @@ class Creature(Entity):
             if abs(rotation) >= 90:
                 self.walked.append([self.place, self.x, self.y, 5]) # mark the dead end
             self.move_to(self.place, x, y, self.o + rotation)
+            self.unblock()
             return True
         elif not self.place.contains(x, y) and self._can_go(x, y) and not self.would_collide_if(x, y):
             if abs(rotation) >= 90:
                 self.walked.append([self.place, self.x, self.y, 5]) # mark the dead end
             new_place = self.world.get_place_from_xy(x, y)
             self.move_to(new_place, x, y, self.o + rotation)
+            self.unblock()
             return True
         return False
 
@@ -661,6 +663,8 @@ class Creature(Entity):
         target = self.player.get_object_by_id(target_id)
         if not target:
             return
+        elif getattr(target, "is_an_exit", False):
+            return "block"
         elif getattr(target, "player", None) is self.player and self.have_enough_space(target):
             return "load"
         elif getattr(target, "player", None) is self.player and target.have_enough_space(self):
@@ -869,13 +873,21 @@ class Unit(Creature):
                 return []
         return self._basic_abilities
 
+    def move_on_border(self, e):
+        self.move_to(e.place, e.x, e.y)
+
+    def block(self, e):
+        if not self.blocked_exit:
+            self.blocked_exit = e
+            e.add_blocker(self)
+
 
 class Worker(Unit):
 
     value = 0 # not 0.1 to avoid "combat 1 against 10" (misleading) XXX
     ai_mode = "defensive"
     can_switch_ai_mode = True
-    _basic_abilities = ["go", "gather", "repair"]
+    _basic_abilities = ["go", "gather", "repair", "block"]
     is_teleportable = True
 
 
@@ -883,7 +895,7 @@ class Soldier(Unit):
 
     ai_mode = "offensive"
     can_switch_ai_mode = True
-    _basic_abilities = ["go", "patrol"]
+    _basic_abilities = ["go", "patrol", "block"]
     is_teleportable = True
 
 

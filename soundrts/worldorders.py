@@ -608,6 +608,34 @@ class AutoExploreOrder(ComputerOnlyOrder):
             self.mark_as_complete()
 
 
+class BlockOrder(BasicOrder):
+
+    keyword = "block"
+    nb_args = 1
+    is_imperative = True
+
+    def on_queued(self):
+        self.target = self.player.get_object_by_id(self.args[0])
+        # first check
+        if not getattr(self.target, "is_an_exit", False):
+            self.mark_as_impossible()
+            return
+        self.unit.notify("order_ok")
+        self.mode = "go_block"
+
+    def execute(self):
+        self.update_target()
+        if self.mode == "go_block":
+            if self.unit._near_enough_to_use(self.target):
+                self.mode = "block"
+                self.unit.action_target = None
+                self.unit.move_on_border(self.target)
+            elif self.unit.action_target is None:
+                self.move_to_or_fail(self.target)
+        elif self.mode == "block":
+            self.unit.block(self.target)
+
+
 class RepairOrder(BasicOrder):
 
     keyword = "repair"
