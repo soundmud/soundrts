@@ -169,13 +169,13 @@ class Square(object):
         
     def find_and_remove_meadow(self, item_type):
         if item_type.is_buildable_anywhere:
-            return self.x, self.y
+            return self.x, self.y, None
         for o in self.objects:
             if isinstance(o, Meadow):
                 x, y = o.x, o.y
                 o.delete()
-                return x, y
-        return self.x, self.y
+                return x, y, o
+        return self.x, self.y, None
 
     def update_menace(self):
         self.menace = {}

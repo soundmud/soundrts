@@ -46,6 +46,10 @@ class Exit(Entity):
     def remove_blocker(self, o):
         self._blockers.remove(o)
 
+    @property
+    def is_a_building_land(self):
+        return not self.is_blocked(None)
+
 
 def passage(places, exit_type):
     place1, place2 = places

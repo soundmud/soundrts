@@ -6,7 +6,7 @@ from nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, i
 from worldaction import Action, AttackAction, MoveAction, MoveXYAction
 from worldentity import Entity
 from worldorders import ORDERS_DICT, GoOrder, RallyingPointOrder, BuildPhaseTwoOrder, UpgradeToOrder
-from worldresource import Meadow, Corpse, Deposit
+from worldresource import Corpse, Deposit
 
 
 class Creature(Entity):
@@ -594,9 +594,11 @@ class Creature(Entity):
         self.orders = []
         if self.place.exits:
             if someone is None:
+                print "fleeing"
                 def menace(e):
                     return (square_of_distance(e.x, e.y, self.x, self.y), e.id)
             else:
+                print "fleeing someone"
                 def menace(e):
                     return (square_of_distance(e.x, e.y, self.x, self.y) - square_of_distance(e.x, e.y, someone.x, someone.y), e.id)
             self.action_target = sorted(self.place.exits, key=menace)[0]
@@ -710,9 +712,15 @@ class Creature(Entity):
         place, x, y, _id = target.place, target.x, target.y, target.id # remember before deletion
         if not hasattr(place, "place"): # target is a square
             place = target
-        if not (type.is_buildable_on_exits_only or type.is_buildable_anywhere):
+        if not (getattr(target, "is_an_exit", False)
+                or type.is_buildable_anywhere):
             target.delete() # remove the meadow replaced by the building
+            remember_land = True
+        else:
+            remember_land = False
         site = BuildingSite(self.player, place, x, y, type)
+        if remember_land:
+            site.building_land = target
         if getattr(target, "is_an_exit", False):
             site.block(target)
 
@@ -934,8 +942,8 @@ class _Building(Creature):
             attacker.player.nb_buildings_killed += 1
         place, x, y = self.place, self.x, self.y
         Creature.die(self, attacker)
-        if not (self.is_buildable_anywhere or self.is_buildable_on_exits_only):
-            Meadow(place, x, y)
+        if self.building_land:
+            self.building_land.move_to(place, x, y)
 
     def flee(self, someone=None):
         pass
@@ -988,6 +996,7 @@ class BuildingSite(_Building):
             blocked_exit = self.blocked_exit
             self.delete()
             building = self.type(player, place, x, y)
+            building.building_land = self.building_land
             if blocked_exit:
                 building.block(blocked_exit)
             building.hp = self.type.hp_max - self.damage_during_construction

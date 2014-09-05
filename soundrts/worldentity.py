@@ -14,6 +14,7 @@ class Entity(object):
     airground_type = "ground"
     activity = None
     blocked_exit = None
+    building_land = None
 
     qty = 0
     is_vulnerable = False

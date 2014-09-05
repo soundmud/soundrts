@@ -28,7 +28,8 @@ class Deposit(Entity):
         place, x, y = self.place, self.x, self.y
         self.notify("exhausted")
         self.delete()
-        Meadow(place, x, y)
+        if self.building_land:
+            self.building_land.move_to(place, x, y)
 
     def update(self): pass # necessary to allow slow update
 

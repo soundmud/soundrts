@@ -350,7 +350,9 @@ class World(object):
         for z, cls, n in self.map_objects:
             C = self.unit_class(cls)
             if self.grid[z].can_receive("ground"): # avoids using the spiral
-                C(self.grid[z], n)
+                resource = C(self.grid[z], n)
+                resource.building_land = Meadow(self.grid[z])
+                resource.building_land.delete()
         for z in self._meadows():
             Meadow(self.grid[z])
 

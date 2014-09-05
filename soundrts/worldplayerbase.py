@@ -397,10 +397,12 @@ class Player(object):
                 self.upgrades.append(type_.type_name) # XXX type_.upgrade_player(self)?
             else:
                 place = self.world.grid[place]
-                x, y = place.find_and_remove_meadow(type_)
+                x, y, land = place.find_and_remove_meadow(type_)
                 x, y = place.find_free_space(type_.airground_type, x, y)
                 if x is not None:
-                    type_(self, place, x, y)
+                    unit = type_(self, place, x, y)
+                    unit.building_land = land
+                        
         self.triggers = self.start[2]
 
         if rules.get(self.race, getattr(self, "AI_type", "")):
@@ -491,6 +493,7 @@ class Player(object):
             else:
                 cls = self.world.unit_class(x)
                 for _ in range(multiplicator):
+                    land = None
                     if from_corpse:
                         corpse = None
                         for o in sq.objects:
@@ -503,9 +506,10 @@ class Player(object):
                         else:
                             return
                     else:
-                        x, y = sq.find_and_remove_meadow(cls)
+                        x, y, land = sq.find_and_remove_meadow(cls)
                     try:
                         u = cls(self, sq, x, y)
+                        u.building_land = land
                     except NotEnoughSpaceError:
                         break
                     if decay:
