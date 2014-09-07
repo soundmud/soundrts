@@ -1016,9 +1016,3 @@ class Building(_Building):
     def __init__(self, prototype, player, place, x, y):
         _Building.__init__(self, prototype, player, place, x, y)
         self.player.nb_buildings_produced += 1
-
-
-class Wall(Building):
-    
-    is_buildable_on_exits_only = True
-    provides_survival = False

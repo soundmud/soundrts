@@ -26,7 +26,7 @@ from worldplayerhuman import Human
 import worldrandom
 from worldresource import Deposit, Meadow
 from worldroom import Square
-from worldunit import Unit, Worker, Soldier, Building, Wall, Effect
+from worldunit import Unit, Worker, Soldier, Building, Effect
 from worldupgrade import Upgrade
 
 
@@ -245,7 +245,7 @@ class World(object):
     # move the following methods to Map
 
     unit_base_classes = {"worker": Worker, "soldier": Soldier,
-                         "building": Building, "wall": Wall,
+                         "building": Building,
                          "effect": Effect,
                          "deposit": Deposit,
                          "upgrade": Upgrade, "ability": Ability}

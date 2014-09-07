@@ -612,19 +612,23 @@ is_buildable_anywhere 1
 provides_survival 0
 
 def wall
-class wall
+class building
 cost 7 9
 food_provided 0
 hp_max 266.7;  800/3
 time_cost 90
+is_buildable_on_exits_only 1
+provides_survival 0
 
 def gate
-class wall
+class building
 cost 10 10
 food_provided 0
 hp_max 200
 time_cost 90
+is_buildable_on_exits_only 1
 is_a_gate 1
+provides_survival 0
 
 ; other units
 
