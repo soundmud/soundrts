@@ -506,7 +506,7 @@ class Creature(Entity):
 ##                    return
 
     def choose_enemy(self, someone=None):
-        if self.has_imperative_orders():
+        if self.has_imperative_orders() or self.is_fleeing:
             return
         if not self.damage:
             return
@@ -543,10 +543,9 @@ class Creature(Entity):
                     u.on_friend_unit_attacked(attacker)
 
     def on_friend_unit_attacked(self, attacker):
-        if self.has_imperative_orders():
+        if self.has_imperative_orders() or self.is_fleeing:
             return
-        if not self.is_fleeing and \
-           (getattr(self.action_target, "menace", 0) < attacker.menace):
+        if getattr(self.action_target, "menace", 0) < attacker.menace:
             if self.can_attack(attacker):
                 self.action_target = attacker
             elif not self.orders and self.place.is_near(attacker.place):
@@ -572,9 +571,7 @@ class Creature(Entity):
             self._flee_or_fight()
 
     def _flee_or_fight(self, someone=None):
-        if self.has_imperative_orders():
-            return
-        if self.is_fleeing:
+        if self.has_imperative_orders() or self.is_fleeing:
             return
         if self.ai_mode == "defensive":
             if self.place.balance(self.player) >= 0:
@@ -585,7 +582,7 @@ class Creature(Entity):
             self.choose_enemy(someone)
 
     def react_arrival(self, someone):
-        if self.place is someone.place and not self.is_fleeing:
+        if self.place is someone.place:
             self._flee_or_fight(someone)
 
     def flee(self, someone=None):
@@ -593,14 +590,8 @@ class Creature(Entity):
         self.player.on_unit_flee(self)
         self.orders = []
         if self.place.exits:
-            if someone is None:
-                print "fleeing"
-                def menace(e):
-                    return (square_of_distance(e.x, e.y, self.x, self.y), e.id)
-            else:
-                print "fleeing someone"
-                def menace(e):
-                    return (square_of_distance(e.x, e.y, self.x, self.y) - square_of_distance(e.x, e.y, someone.x, someone.y), e.id)
+            def menace(e):
+                return (- e.other_side.place.balance(self.player), e.id)
             self.action_target = sorted(self.place.exits, key=menace)[0]
         self.is_fleeing = True
 
