@@ -443,4 +443,3 @@
 
 4308 stein
 4309 steinbruch
-4310 zufällige Rasse

@@ -58,7 +58,7 @@ class Player(object):
     observer_if_defeated = False
     has_victory = False
     has_been_defeated = False
-    race = "human_race"
+    faction = "human_faction"
 
     group = ()
     group_had_enough_mana = False # used to warn if not enough mana
@@ -374,16 +374,16 @@ class Player(object):
     nb_buildings_killed = 0
 
     def equivalent(self, tn):
-        if rules.get(self.race, tn):
-            return rules.get(self.race, tn)[0]
+        if rules.get(self.faction, tn):
+            return rules.get(self.faction, tn)[0]
         return tn
         
     def init_position(self):
 
         def equivalent_type(t):
             tn = getattr(t, "type_name", "")
-            if rules.get(self.race, tn):
-                return self.world.unit_class(rules.get(self.race, tn)[0])
+            if rules.get(self.faction, tn):
+                return self.world.unit_class(rules.get(self.faction, tn)[0])
             return t
 
         self.resources = self.start[0][:]
@@ -405,8 +405,8 @@ class Player(object):
                         
         self.triggers = self.start[2]
 
-        if rules.get(self.race, getattr(self, "AI_type", "")):
-            self.set_ai(rules.get(self.race, self.AI_type)[0])
+        if rules.get(self.faction, getattr(self, "AI_type", "")):
+            self.set_ai(rules.get(self.faction, self.AI_type)[0])
 
     def store(self, _type, qty):
         qty += self.storage_bonus[_type]
@@ -639,11 +639,11 @@ class Player(object):
     def lang_ai(self, args):
         self.set_ai(args[0])
 
-    def lang_race(self, args):
-        if args and args[0] in self.world.get_races():
-            self.race = args[0]
+    def lang_faction(self, args):
+        if args and args[0] in self.world.get_factions():
+            self.faction = args[0]
         else:
-            warning("unknown race: %s", " ".join(args))
+            warning("unknown faction: %s", " ".join(args))
 
     @property
     def available_food(self):

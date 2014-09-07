@@ -172,7 +172,7 @@ class Rules(_Definitions):
     def load(self, *strings):
         self._dict = {}
         for s in strings:
-            s = re.sub(r"^[ \t]*class +faction\b", "class race", s, flags=re.M)
+            s = re.sub(r"^[ \t]*class +race\b", "class faction", s, flags=re.M)
             self.read(s)
         self.apply_inheritance(expanded_is_a=True)
 

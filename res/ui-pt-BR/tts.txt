@@ -447,8 +447,6 @@
 4308 de pedra
 4309 rocha
 
-4310 raça aleatória
-
 4311 foi derrotado
 4312 Você foi derrotado.
 4313 Você está agora no modo de observação.

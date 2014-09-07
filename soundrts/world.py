@@ -261,7 +261,7 @@ class World(object):
             try:
                 base = self.unit_base_classes[rules.get(s, "class")[0]]
             except:
-                if rules.get(s, "class") != ["race"]:
+                if rules.get(s, "class") != ["faction"]:
                     warning("no class defined for %s", s)
                 self.unit_classes[s] = None
                 return
@@ -619,9 +619,9 @@ class World(object):
             return False
         return True
 
-    def get_races(self):
+    def get_factions(self):
         return [c for c in rules.classnames()
-                if rules.get(c, "class") == ["race"]]
+                if rules.get(c, "class") == ["faction"]]
 
     # move this to Game?
 
@@ -648,7 +648,7 @@ class World(object):
         self.players.append(client.player)
         client.player.start = start
 
-    def populate_map(self, players, alliances, races=()):
+    def populate_map(self, players, alliances, factions=()):
         # add "true" (non neutral) players
         worldrandom.shuffle(self.players_starts)
         for client in players:
@@ -669,13 +669,13 @@ class World(object):
                     for other in self.players:
                         if other is not p and isinstance(other, Computer):
                             p.allied.append(other)
-        # set the races for players
-        if races:
-            for p, pr in zip(self.players, races):
-                if pr == "random_race":
-                    p.race = worldrandom.choice(self.get_races())
+        # set the factions for players
+        if factions:
+            for p, pr in zip(self.players, factions):
+                if pr == "random_faction":
+                    p.faction = worldrandom.choice(self.get_factions())
                 else:
-                    p.race = pr
+                    p.faction = pr
         # add "neutral" (independent) computers
         for start in self.computers_starts:
             self._add_player(Computer, worldclient.DummyClient(), start, True)

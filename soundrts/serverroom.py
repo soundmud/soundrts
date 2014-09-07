@@ -38,28 +38,28 @@ class OrganizingAGame(_State):
     allowed_commands = ("invite", "invite_easy", "invite_aggressive",
                         "move_to_alliance",
                         "start", "cancel_game", "say",
-                        "race")
+                        "faction")
 
     def send_menu(self, client):
         client.push("map_title %s\n" % " ".join(map(str, client.game.scenario.title)))
-        client.push("map_races %s\n" % " ".join(client.game.scenario.races))
+        client.push("map_factions %s\n" % " ".join(client.game.scenario.factions))
         client.push("map_nb_players %s %s\n" % (client.game.scenario.nb_players_min,
                                                 client.game.scenario.nb_players_max))
         client.push("available_players %s\n" % " ".join(
             [p.login for p in client.server.available_players()
              if p not in client.game.guests]))
-        client.push("registered_players %s\n" % " ".join(["%s,%s,%s" % (p.login, p.alliance, p.race) for p in client.game.players]))
+        client.push("registered_players %s\n" % " ".join(["%s,%s,%s" % (p.login, p.alliance, p.faction) for p in client.game.players]))
         client.push("update_menu\n")
 
 
 class WaitingForTheGameToStart(_State):
 
-    allowed_commands = ("unregister", "say", "race")
+    allowed_commands = ("unregister", "say", "faction")
 
     def send_menu(self, client):
         client.push("map_title %s\n" % " ".join(map(str, client.game.scenario.title)))
-        client.push("map_races %s\n" % " ".join(client.game.scenario.races))
-        client.push("registered_players %s\n" % " ".join(["%s,%s,%s" % (p.login, p.alliance, p.race) for p in client.game.players]))
+        client.push("map_factions %s\n" % " ".join(client.game.scenario.factions))
+        client.push("registered_players %s\n" % " ".join(["%s,%s,%s" % (p.login, p.alliance, p.faction) for p in client.game.players]))
         client.push("update_menu\n")
 
 
@@ -137,7 +137,7 @@ class Game(object):
         for client in self.human_players:
             client.push("start_game %s %s %s %s %s\n" %
                         (";".join(["%s,%s,%s" % (p.login_to_send(), p.alliance,
-                                                 p.race)
+                                                 p.faction)
                                    for p in self.players]),
                          client.login,
                          seed,
@@ -283,13 +283,13 @@ class Game(object):
         player.alliance = int(alliance)
         self.broadcast([4284, player.login, 4285] + nb2msg(player.alliance))
 
-    def set_race(self, player_index, race):
+    def set_faction(self, player_index, faction):
         player = self.players[int(player_index)]
-        player.race = race
+        player.faction = faction
         style = Style()
         style.load(res.get_text("ui/style", append=True, locale=True))
-        race_name = style.get(player.race, 'title')
-        self.broadcast([player.login, ] + race_name)
+        faction_name = style.get(player.faction, 'title')
+        self.broadcast([player.login, ] + faction_name)
 
     def broadcast(self, msg):
         for client in self.players:
@@ -307,7 +307,7 @@ class Game(object):
             self.players.append(client)
             client.game = self
             client.alliance = n
-            client.race = "random_race"
+            client.faction = "random_faction"
             self.broadcast([client.login, 4241] + self.status())
 
     def status(self):

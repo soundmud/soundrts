@@ -220,8 +220,8 @@ class ConnectionToClient(asynchat.async_chat):
         self.game.start() # create chosen world
         self.server.update_menus()
 
-    def cmd_race(self, args):
-        self.game.set_race(args[0], args[1])
+    def cmd_faction(self, args):
+        self.game.set_faction(args[0], args[1])
         self.server.update_menus()
 
     # "waiting for the game to start" commands

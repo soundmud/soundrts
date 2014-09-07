@@ -132,24 +132,24 @@ class _BeforeGameMenu(_ServerMenu):
     def srv_map_title(self, args):
         self.map_title = args
 
-    def srv_map_races(self, args):
-        self.map_races = args
-        style.load(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with races defined in the map
+    def srv_map_factions(self, args):
+        self.map_factions = args
+        style.load(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with factions defined in the map
 #       TODO: use self.map.additional_style (and self.map.campaign_style ?)
 
     def srv_registered_players(self, args):
         self.registered_players = [p.split(",") for p in args]
 
-    def _add_race_menu(self, menu, pn, p, pr):
-        if len(self.map_races) > 1:
-            for r in ["random_race"] + self.map_races:
+    def _add_faction_menu(self, menu, pn, p, pr):
+        if len(self.map_factions) > 1:
+            for r in ["random_faction"] + self.map_factions:
                 if r != pr:
                     menu.append([p,] + style.get(r, "title"),
                                 (self.server.write_line,
-                                 "race %s %s" % (pn, r)))
+                                 "faction %s %s" % (pn, r)))
 
     def srv_start_game(self, args):
-        players, alliances, races = zip(*[p.split(",") for p in args[0].split(";")])
+        players, alliances, factions = zip(*[p.split(",") for p in args[0].split(";")])
         alliances = map(int, alliances)
         me = args[1]
         seed = int(args[2])
@@ -158,7 +158,7 @@ class _BeforeGameMenu(_ServerMenu):
         server_map.unpack(" ".join(args[4:])) # warning: args is splitted from a stripped string
         game = MultiplayerGame(server_map, players, me, self.server, seed, speed)
         game.alliances = alliances
-        game.races = races
+        game.factions = factions
         game.run()
         self.end_loop = True
 
@@ -187,7 +187,7 @@ class GameAdminMenu(_BeforeGameMenu):
                                 (self.server.write_line,
                                  "move_to_alliance %s %s" % (pn, a)))
             if p in (self.server.login, "ai"):
-                self._add_race_menu(menu, pn, p, pr)
+                self._add_faction_menu(menu, pn, p, pr)
         menu.append([4048, 4060], (self.server.write_line, "cancel_game"))
         return menu
 
@@ -207,6 +207,6 @@ class GameGuestMenu(_BeforeGameMenu):
 
     def make_menu(self):
         menu = Menu(self.map_title)
-        self._add_race_menu(menu, *self._get_player())
+        self._add_faction_menu(menu, *self._get_player())
         menu.append([4041, 4061], (self.server.write_line, "unregister"))
         return menu

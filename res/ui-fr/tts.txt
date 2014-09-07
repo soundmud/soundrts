@@ -438,8 +438,6 @@
 4308 pierre
 4309 carrière
 
-4310 race aléatoire
-
 4311 a été vaincu
 4312 Vous avez perdu.
 4313 Vous êtes à présent en mode observateur.
@@ -466,3 +464,5 @@
 4331 mur
 4332 porte
 4333 bloquer
+
+4334 faction aléatoire

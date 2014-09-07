@@ -5,13 +5,13 @@
 ; requirements: objects (units, upgrades) required by the object to be acquired (unit or building) or used (ability)
 
 
-; races (this part is not ready yet)
+; factions (this part is not ready yet)
 
-def human_race
-class race
+def human_faction
+class faction
 
-;def orc_race
-;class race
+;def orc_faction
+;class faction
 ;townhall great_hall
 ;farm pig_farm
 ;peasant peon

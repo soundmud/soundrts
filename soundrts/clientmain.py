@@ -119,33 +119,33 @@ class Application(object):
 
     def training_menu_invite(self, ai_type):
         self.players.append(ai_type)
-        self.races.append("random_race")
+        self.factions.append("random_faction")
         self.menu.update_menu(self.build_training_menu_after_map())
 
     def training_menu_after_map(self, m):
-        style.load(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with races defined in the map
+        style.load(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with factions defined in the map
         self.players = [config.login]
-        self.races = ["random_race"]
+        self.factions = ["random_faction"]
         self.map = m
         self.menu = self.build_training_menu_after_map()
         self.menu.loop()
 
     def start_training_game(self):
         game = TrainingGame(self.map, self.players)
-        game.races = self.races
+        game.factions = self.factions
         game.run()
         return END_LOOP
 
-    def set_race(self, pn, r):
-        self.races[pn] = r
+    def set_faction(self, pn, r):
+        self.factions[pn] = r
         self.menu.update_menu(self.build_training_menu_after_map())
 
-    def _add_race_menu(self, menu, pn, p, pr):
-        if len(self.map.races) > 1:
-            for r in ["random_race"] + self.map.races:
+    def _add_faction_menu(self, menu, pn, p, pr):
+        if len(self.map.factions) > 1:
+            for r in ["random_faction"] + self.map.factions:
                 if r != pr:
                     menu.append([p,] + style.get(r, "title"),
-                                (self.set_race, pn, r))
+                                (self.set_faction, pn, r))
 
     def build_training_menu_after_map(self):
         menu = Menu()
@@ -155,8 +155,8 @@ class Application(object):
                                        "aggressive"))
         if len(self.players) >= self.map.nb_players_min:
             menu.append([4059], self.start_training_game)
-        for pn, (p, pr) in enumerate(zip(self.players, self.races)):
-            self._add_race_menu(menu, pn, p, pr)
+        for pn, (p, pr) in enumerate(zip(self.players, self.factions)):
+            self._add_faction_menu(menu, pn, p, pr)
         menu.append([4048, 4060], END_LOOP)
         return menu
 

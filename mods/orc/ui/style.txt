@@ -26,7 +26,7 @@ is_a footman
 title 7004
 
 
-; races
+; factions
 
-def orc_race
+def orc_faction
 title 4302

@@ -1,10 +1,10 @@
 ; note: I have copy-pasted human classes because "is_a" has side effects concerning requirements (ex: a keep "is a" townhall)
 ; Using "is_a" might be possible though.
 
-; races
+; factions
 
-def orc_race
-class race
+def orc_faction
+class faction
 townhall great_hall
 farm pig_farm
 peasant peon

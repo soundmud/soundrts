@@ -41,7 +41,7 @@ class _Game(object):
     default_triggers = () # empty tuple; a tuple is immutable
     game_type_name = None
     alliances = ()
-    races = ()
+    factions = ()
     record_replay = True
     allow_cheatmode = True
 
@@ -56,7 +56,7 @@ class _Game(object):
         self.replay_write(self.map.pack())
         self.replay_write(players)
         self.replay_write(" ".join(map(str, self.alliances)))
-        self.replay_write(" ".join(self.races))
+        self.replay_write(" ".join(self.factions))
         self.replay_write(str(self.seed))
 
     def replay_write(self, s):
@@ -87,7 +87,7 @@ class _Game(object):
                 res.get_text("ui/bindings", append=True, locale=True) + "\n" +
                 self.map.get_campaign("ui/bindings.txt") + "\n" +
                 self.map.get_additional("ui/bindings.txt"))
-            self.world.populate_map(self.players, self.alliances, self.races)
+            self.world.populate_map(self.players, self.alliances, self.factions)
             self.nb_human_players = self.world.current_nb_human_players()
             t = threading.Thread(target=self.world.loop)
             t.daemon = True
@@ -303,7 +303,7 @@ class ReplayGame(_Game):
         self.map.unpack(self.replay_read())
         players = self.replay_read().split()
         self.alliances = map(int, self.replay_read().split())
-        self.races = self.replay_read().split()
+        self.factions = self.replay_read().split()
         self.seed = int(self.replay_read())
         self.me = ReplayClient(players[0], self)
         self.players = [self.me]

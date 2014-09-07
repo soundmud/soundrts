@@ -585,10 +585,10 @@ ground wood .5 ; smaller area of effect
 when_moving_through 1092
 
 
-; races
+; factions
 
-def random_race
-title 4310
+def random_faction
+title 4334
 
-def human_race
+def human_faction
 title 4301

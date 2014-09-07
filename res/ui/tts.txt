@@ -444,8 +444,6 @@
 4308 stone
 4309 quarry
 
-4310 random race
-
 4311 has been defeated
 4312 You have been defeated.
 4313 You are now in observer mode.
@@ -476,3 +474,5 @@
 4331 wall
 4332 gate
 4333 block
+
+4334 random faction

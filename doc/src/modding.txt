@@ -34,15 +34,10 @@ the rules
 
 Since SoundRTS 1.1, the rules of the game are stored in a file called rules.txt.
 
-races
->>>>>
+factions
+>>>>>>>>
 
-Each race is defined in rules.txt . For example::
-
-	def orc_race
-	class race
-
-It is possible to use the word "faction" instead of "race". For example::
+Each faction is defined in rules.txt . For example::
 
 	def orc_faction
 	class faction

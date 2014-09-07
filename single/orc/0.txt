@@ -49,7 +49,7 @@ computer_only 20 20 c3 3 peon pig_farm grunt
 timer_coefficient 1
 
 trigger computer1 (timer 0) (ai easy)
-trigger computer1 (timer 0) (race orc_race) ; useful for the AI to build a "farm" or a "townhall" (and more, if the AI is not race specific)
+trigger computer1 (timer 0) (faction orc_faction) ; useful for the AI to build a "farm" or a "townhall" (and more, if the AI is not faction specific)
 
 trigger player1 (timer 0) (add_objective 1 145 88)
 

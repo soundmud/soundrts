@@ -178,14 +178,14 @@ class Map(object):
             result += len(st[1])
         return result
 
-    _races = None
+    _factions = None
     _mods = None
     
     @property
-    def races(self):
-        if self._races is None and self._mods != config.mods:
+    def factions(self):
+        if self._factions is None and self._mods != config.mods:
             w = world.World([], 0)
             w.load_and_build_map(self)
-            self._races = w.get_races()
+            self._factions = w.get_factions()
             self._mods = config.mods
-        return self._races
+        return self._factions
