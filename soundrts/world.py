@@ -25,7 +25,7 @@ from worldplayercomputer import Computer
 from worldplayerhuman import Human
 import worldrandom
 from worldresource import Deposit, Meadow
-from worldroom import Square, Subsquare
+from worldroom import Square
 from worldunit import Unit, Worker, Soldier, Building, Wall, Effect
 from worldupgrade import Upgrade
 
@@ -135,10 +135,6 @@ class World(object):
     def get_place_from_xy(self, x, y):
         return self.grid.get((x / self.square_width,
                               y / self.square_width))
-
-    def get_subplace_from_xy(self, x, y):
-        return self.subgrid.get((x / self.subsquare_width,
-                                 y / self.subsquare_width))
 
     def clean(self):
         for p in self.players + self.ex_players:
@@ -312,24 +308,15 @@ class World(object):
     def set_neighbours(self):
         for square in set(self.grid.values()):
             square.set_neighbours()
-        for subsquare in set(self.subgrid.values()):
-            subsquare.set_neighbours()
-    
+
     def _create_squares_and_grid(self):
         self.grid = {}
-        self.subgrid = {}
         for col in range(self.nb_columns):
             for row in range(self.nb_lines):
                 square = Square(self, col, row, self.square_width)
                 self.grid[square.name] = square
                 self.grid[(col, row)] = square
                 square.high_ground = square.name in self.high_grounds
-                for a in (-1, 0, 1):
-                    for b in (-1, 0, 1):
-                        subsquare = Subsquare(square, a, b)
-                        self.subgrid[subsquare.name] = subsquare
-                        self.subgrid[subsquare.col,
-                                     subsquare.row] = subsquare
         self.set_neighbours()
         xmax = self.nb_columns * self.square_width
         res = COLLISION_RADIUS * 2 / 3
@@ -621,7 +608,6 @@ class World(object):
             self._load_map(map)
             self.map = map
             self.square_width = int(self.square_width * PRECISION)
-            self.subsquare_width = self.square_width / 3
             self._build_map()
             if self.objective:
                 self.introduction = [4020] + self.objective
