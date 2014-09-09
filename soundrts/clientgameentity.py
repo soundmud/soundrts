@@ -187,12 +187,12 @@ class EntityView(object):
                self.is_repairable and self.hp < self.hp_max
 
     def shape(self):
-        shape = style.get(self.type_name, "shape")
+        shape = style.get(self.type_name, "shape", warn_if_not_found=False)
         if shape:
             return shape[0]
 
     def color(self):
-        color = style.get(self.type_name, "color")
+        color = style.get(self.type_name, "color", warn_if_not_found=False)
         try:
             return pygame.Color(color[0])
         except:
