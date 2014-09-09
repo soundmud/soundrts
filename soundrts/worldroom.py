@@ -56,7 +56,8 @@ class Square(object):
 
     def set_neighbours(self):
         result = []
-        for dc, dr in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+        for dc, dr in ((0, 1), (0, -1), (1, 0), (-1, 0),
+                       (1, 1), (1, -1), (-1, 1), (-1, -1)):
             s = self.world.grid.get((self.col + dc, self.row + dr))
             if s is not None:
                 result.append(s)
