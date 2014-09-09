@@ -466,10 +466,7 @@ class Creature(Entity):
 
     # choose enemy
 
-    def can_attack(self, other): # without moving to another square
-        # assert other in self.player.perception # XXX false
-        # assert not self.is_inside # XXX not sure
-
+    def can_attack_if_in_range(self, other):
         if self.is_inside:
             return False
         if other not in self.player.perception:
@@ -479,6 +476,14 @@ class Creature(Entity):
            or getattr(other, "airground_type", None) not in self.target_types:
             return False
         if not other.is_vulnerable:
+            return False
+        return True
+
+    def can_attack(self, other): # without moving to another square
+        # assert other in self.player.perception # XXX false
+        # assert not self.is_inside # XXX not sure
+
+        if not self.can_attack_if_in_range(other):
             return False
         if self.range and other.place is self.place:
             return True
@@ -616,7 +621,7 @@ class Creature(Entity):
                 pass  # no friendly fire
             elif isinstance(o, Creature) \
                and square_of_distance(o.x, o.y, target.x, target.y) <= damage_radius_2 \
-               and self.can_attack(o):
+               and self.can_attack_if_in_range(o):
                 self.hit(o)
 
     def aim(self, target):
