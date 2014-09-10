@@ -166,3 +166,9 @@ def holy_vision
 class not_in_the_manual
 
 def zombie
+
+def wall
+desc A wall must be built on an exit (path, bridge).
+
+def gate
+desc A gate must be built on an exit (path, bridge). It lets allies move through it only if no enemy is nearby.
