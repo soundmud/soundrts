@@ -291,6 +291,8 @@ class Creature(Entity):
                 and self.range <= 2 * PRECISION \
                 and not target.blocked_exit:
                     return False
+            if self.minimal_range and square_of_distance(self.x, self.y, target.x, target.y) < self.minimal_range * self.minimal_range:
+                return False
             d = target.use_range(self)
             return square_of_distance(self.x, self.y, target.x, target.y) < d * d
         elif target.place is self.place:
