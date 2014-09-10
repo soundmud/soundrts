@@ -12,6 +12,7 @@ class Entity(object):
     player = None
     menace = 0
     airground_type = "ground"
+    bonus_height = 0
     activity = None
     blocked_exit = None
     building_land = None

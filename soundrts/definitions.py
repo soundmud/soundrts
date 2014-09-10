@@ -117,7 +117,7 @@ class _Definitions:
 _precision_properties = (
                 "armor",
                 "damage",
-                "damage_radius", "range",
+                "damage_radius", "range", "minimal_range",
                 "decay",
                 "qty", "extraction_qty",
                 "hp_max",
@@ -149,8 +149,7 @@ class Rules(_Definitions):
                     "is_undead",
                     "is_a_building_land",
                     "is_buildable_anywhere",
-                    "special_range",
-                    "sight_range",
+                    "bonus_height",
                     "transport_capacity",
                     "transport_volume",
                     "is_invisible",

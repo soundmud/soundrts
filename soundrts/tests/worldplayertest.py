@@ -29,18 +29,10 @@ class DummyClient(worldclient.DummyClient):
 
 class ComputerTestCase(unittest.TestCase):
 
-    def set_up(self, alliance=(1, 2), cloak=False):
+    def set_up(self, alliance=(1, 2), cloak=False, map_name="jl1_extended"):
         w = World([])
         w.introduction = []
-        w.load_and_build_map(Map("soundrts/tests/jl1.txt"))
-        w.players_starts[0][1].append(("b1", w.unit_class("new_flyingmachine")))
-        w.players_starts[0][1].append(("b1", w.unit_class("flyingmachine")))
-        w.players_starts[0][1].append(("b1", w.unit_class("dragon")))
-        w.players_starts[0][1].append(("b1", w.unit_class("castle")))
-        w.players_starts[1][1].append(("b4", w.unit_class("new_flyingmachine")))
-        w.players_starts[1][1].append(("b4", w.unit_class("flyingmachine")))
-        w.players_starts[1][1].append(("b4", w.unit_class("dragon")))
-        w.players_starts[1][1].append(("b4", w.unit_class("castle")))
+        w.load_and_build_map(Map("soundrts/tests/%s.txt" % map_name))
         if cloak:
             w.unit_class("new_flyingmachine").dct["is_a_cloaker"] = True
         cl = DummyClient()
@@ -176,7 +168,8 @@ class ComputerTestCase(unittest.TestCase):
         assert p in [_.initial_model for _ in cp.memory]
 
     def testMemoryOfResourceWhenAlliance(self):
-        w, cl, cp = self.set_up((1, 1))
+        # Note: no unit with diagonal sight (air or tower)
+        w, cl, cp = self.set_up((1, 1), map_name="jl1")
         cp2 = self.cp2
         p = self.find_player_unit(cp, "peasant")
         assert p.player.is_perceiving(p)

@@ -157,8 +157,6 @@ for cat in (("1. Units", ("worker", "soldier")),
         pr(_int("- damage radius (area of effect): ", "damage_radius", "meters"))        
         pr(_int("- attack upgrade bonus: ", "damage_bonus", "hit points"))
         pr(_int("- attack range: ", "range", "meters"))
-        if rules.get(c, "special_range") == 1:
-            pr("- can attack units located in an adjacent square")
         if rules.get(c, "is_ballistic") == 1:
             pr("- can attack units located in an adjacent square if their altitude is lower (new in SoundRTS 1.2 alpha 9).")
         pr(_int("- speed: ", "speed", ("meter per second", "meters per second")))
@@ -170,8 +168,8 @@ for cat in (("1. Units", ("worker", "soldier")),
         pr(_list("- can research:", "can_research"))
         pr(_list("- can upgrade to:", "can_upgrade_to"))
         pr(_list("- special abilities: ", None, can_use(c, "ability")))
-        if rules.get(c, "sight_range") == 1:
-            pr("- can see the adjacent squares")
+        if rules.get(c, "bonus_height") == 1:
+            pr("- have a height bonus (useful for sight and eventually attack range)")
         if rules.get(c, "is_a_detector") == 1:
             pr("- detects invisible units")
         if rules.get(c, "is_invisible") == 1:

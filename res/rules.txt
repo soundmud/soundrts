@@ -328,7 +328,6 @@ food_cost 2
 time_cost 30
 hp_max 30
 speed 0.75
-sight_range 1 ; can see the adjacent squares
 range 12
 minimal_range 4
 is_ballistic 1
@@ -349,7 +348,6 @@ time_cost 15
 airground_type air
 hp_max 30
 speed 1.75
-sight_range 1 ; can see the adjacent squares
 range 3
 cooldown 4
 damage 4
@@ -412,7 +410,6 @@ time_cost 10
 airground_type air
 hp_max 30
 speed 1.5
-sight_range 1 ; can see the adjacent squares
 is_repairable 1
 is_healable 0
 transport_capacity 8
@@ -429,7 +426,6 @@ airground_type air
 hp_max 30
 speed 1.5
 requirements magestower
-sight_range 1 ; can see the adjacent squares
 range 4.5
 cooldown 1.5
 damage 8
@@ -571,7 +567,7 @@ class building
 cost 6 2
 hp_max 33;  100/3
 time_cost 60
-sight_range 1 ; can see the adjacent squares
+bonus_height 1
 can_upgrade_to guardtower cannontower
 is_buildable_anywhere 1
 provides_survival 0
@@ -582,7 +578,7 @@ cost 11 4
 requirements lumbermill
 hp_max 43;  130/3
 time_cost 140
-sight_range 1 ; can see the adjacent squares
+bonus_height 1
 range 6
 is_ballistic 1
 cooldown 1.5
@@ -599,7 +595,7 @@ cost 16 5
 requirements blacksmith
 hp_max 53;  160/3
 time_cost 190
-sight_range 1 ; can see the adjacent squares
+bonus_height 1
 range 8
 is_ballistic 1
 cooldown 4

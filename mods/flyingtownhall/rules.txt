@@ -11,7 +11,6 @@ can_upgrade_to townhall
 food_cost 0
 airground_type air
 speed 1.5
-sight_range 1 ; can see the adjacent squares
 damage 0
 is_repairable 1
 is_healable 0

@@ -68,13 +68,10 @@ class Creature(Entity):
     is_a_gate = False
     provides_survival = False
 
-    sight_range = 1
-
     damage_radius = 0
     target_types = ["ground"]
     range = None
     is_ballistic = 0
-    special_range = 0
     minimal_range = 0
     cooldown = None
     next_attack_time = 0
@@ -140,10 +137,6 @@ class Creature(Entity):
         self.objects = []
         self.world = place.world # XXXXXXXXXX required by transport
 
-        if self.special_range and not self.range:
-            self.range = self.world.square_width
-            self.minimal_range = 4
-
         # set a player
         self.set_player(player)
         # stats "with a max"
@@ -173,14 +166,15 @@ class Creature(Entity):
         if self.airground_type == "air":
             return 2
         else:
-            return self.place.height
+            return self.place.height + self.bonus_height
 
     def get_observed_squares(self):
         if self.is_inside or self.place is None:
             return []
         result = [self.place]
         for sq in self.place.neighbours:
-            if self.height > sq.height or self.sight_range == 1 and self.height >= sq.height:
+            if self.height > sq.height \
+            or self.height == sq.height and self._can_go(sq.x, sq.y):
                 result.append(sq)
         return result
 
@@ -910,7 +904,6 @@ class Effect(Unit):
     food_cost = 0
     is_vulnerable = 0
     presence = 0
-    sight_range = 1
     _basic_abilities = []
 
 
