@@ -163,6 +163,7 @@ class Rules(_Definitions):
                     "is_teleportable",
                     "is_a_gate",
                     "is_buildable_on_exits_only",
+                    "build_limit",
                     )
     precision_properties = _precision_properties_extended
     int_list_properties = ("storable_resource_types",)
