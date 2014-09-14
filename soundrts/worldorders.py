@@ -5,7 +5,6 @@ import worldrandom
 from worldresource import Meadow, Deposit, Corpse
 from worldroom import Square
 
-
 class Order(object):
 
     target = None
@@ -262,6 +261,11 @@ class ProductionOrder(ComplexOrder):
         if result is not None:
             self.mark_as_impossible(result)
             return
+        result = self.check_build_limit()
+        if result is not None:
+            self.mark_as_impossible(result)
+            return
+            
         self.player.pay(self.cost)
         self.time = self.time_cost
 
@@ -317,6 +321,14 @@ class ProductionOrder(ComplexOrder):
         if self._has_started:
             self.player.used_food -= self.food_cost # end food reservation
         self.unit.notify("order_ok")
+
+    def check_build_limit(self):
+        if self.type.build_limit == 0:
+            return
+        unitName = self.type.type_name
+        playerUnitsOfType = [u for u in self.player.units if u.type_name == unitName]
+        if len(playerUnitsOfType) >= self.type.build_limit:
+            return "build_limit_exceeded"
 
 
 class TrainOrder(ProductionOrder):

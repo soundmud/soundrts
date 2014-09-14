@@ -370,3 +370,5 @@
 
 4308	kamene
 4309	kamenolom
+
+4335 vytvořit limitu dosáhl

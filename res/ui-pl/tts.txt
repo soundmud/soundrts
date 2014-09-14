@@ -399,3 +399,4 @@
 
 5026	kropka
 
+4335 Budowanie ograniczenie osiagnal
