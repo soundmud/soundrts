@@ -116,7 +116,7 @@ class _Definitions:
 
 _precision_properties = (
                 "armor",
-                "damage",
+                "damage", "minimal_damage",
                 "damage_radius", "range", "minimal_range",
                 "decay",
                 "qty", "extraction_qty",

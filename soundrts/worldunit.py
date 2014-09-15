@@ -1,6 +1,7 @@
 import worldrandom
 
-from constants import MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
+from constants import MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL, DEFAULT_MINIMAL_DAMAGE
+from definitions import rules
 from lib.log import debug, warning, exception
 from nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
 from worldaction import Action, AttackAction, MoveAction, MoveXYAction
@@ -142,6 +143,10 @@ class Creature(Entity):
         # stats "with a max"
         self.hp = self.hp_max
         self.mana = self.mana_max
+        # stat defined for the whole game
+        self.minimal_damage = rules.get("parameters", "minimal_damage")
+        if self.minimal_damage is None:
+            self.minimal_damage = DEFAULT_MINIMAL_DAMAGE
 
         # move to initial place
         Entity.__init__(self, place, x, y, o)
@@ -608,7 +613,7 @@ class Creature(Entity):
     # attack
 
     def hit(self, target):
-        damage = max(0, self.damage - target.armor)
+        damage = max(self.minimal_damage, self.damage - target.armor)
         target.receive_hit(damage, self)
 
     def splash_aim(self, target):

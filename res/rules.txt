@@ -23,6 +23,7 @@ class faction
 
 def parameters
 nb_of_resource_types 2 ; gold and wood
+minimal_damage 0.17
 
 
 ; resource deposits
