@@ -332,6 +332,19 @@ Trigger example:
 
 "trigger player1 (has barracks) (objective_complete 2)" means: "add the following trigger for player1: if he has at least 1 barracks then the objective 2 is completed"
 
+Timer coefficiency
+..................
+
+A timer coefficient can be used to measure time for triggers in a given block. 
+
+For example, if you know that you want all of your triggers to happen in given half a minute blocks, you could set your timer coefficient to 30 like so.
+
+"timer_coefficient 30"
+
+Whenever this amount of time elapses, the timer counter will increment (increase by 1). You can then bind triggers to the timer reaching a given number. For example, if you wanted to make reinforcements appear on the map after 90 seconds (3 increments of 30 seconds), you would do the following. 
+
+"trigger player1 (timer 3) (add_units a1 10 footman)" ; after three timer ticks, give the player 10 footman at a1
+
 Cut_scene (action in a trigger)
 ...............................
 
@@ -346,11 +359,45 @@ A cut scene can be triggered in the middle of a game: when something is discover
 Trigger example:
 
 "trigger player1 (has_entered d5) (cut_scene 7500)" means: "add the following trigger for player1: if he has entered the square d5, then play the cut scene made up of the sound 7500.ogg"
+
 Timer and timer_coefficient (condition in a trigger)
 
 "timer_coefficient 60"
 
 'trigger player1 (timer 2) (cut_scene 7500)" means: "after 2 minutes (2 x 60 seconds) play the 7500.ogg sound file."
+
+AI orders
+..........
+
+It is possible to control the computer's actions in a mission, to add some challenge. You will have to do this by directly making their units take orders at given triggers. 
+
+For example, we can make the AI forces at A1 move to the known player location at A3, who will engage player forces as they encounter them. Here, we will launch an attack with 10 footman on the player.
+
+"timer_coefficient 60"
+
+"trigger computer1 (timer 1) (order (a3 10 footman) ((go a1)))"
+
+The placement of brackets is important here, to encapsulate the right commands in the right parts of this trigger. If for some reason your trigger isn't seeming to work, try double checking your brackets.
+
+It is also possible to queue up orders for the given units to follow. In this next scenario, lets imagine the player has their base spread over a1 and b1. We would then need to tell the footmen to go to b1 once they've finished with a1. We would do that like so. 
+
+"trigger computer1 (timer 1) (order (a3 10 footman) ((go a1) (go b1)))"
+
+Finally, if you want the AI units to go into "auto_attack" mode, where they will hunt down any surviving player units after mopping up their base, you can do this as well. 
+
+"trigger computer1 (timer 1) (order (a3 10 footman) ((go a1) (go b1) (auto_attack)))"
+
+You can use orders to make the computer train up its own units, too, which you can then make the subject of later orders. Here, we will tell the computer barracks to immediately train up another 10 footmen to replace the ones we're about to send to attack the player. 
+
+trigger computer1 (timer 0) (order (a1 barracks) ((train footman) (train footman) (train footman))) ; and so on and so on until you have 10 train footman orders
+
+Note that each training order has to be separate, you cannot do the following: (train 10 footman)
+
+This is not the only way to increase the amount of units the computer player has at its disposal, you could also use the add_units order as shown here.
+
+trigger computer1 (timer 0) (add_units a1 10 footman)
+
+However, this is immediate and doesn't offer the player any way to influence this event. In the other scenario, the player can stop the computer having its next batch of footmen by destroying the barracks used to train them. This way, these footmen will appear regardless.
 
 Syntax of a cut scene chapter file
 ''''''''''''''''''''''''''''''''''
