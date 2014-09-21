@@ -370,3 +370,5 @@
 
 4308	kameòa
 4309	kameòolom
+
+4335 Build limitu dosiahol

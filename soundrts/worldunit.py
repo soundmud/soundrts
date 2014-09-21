@@ -93,6 +93,8 @@ class Creature(Entity):
 
     is_an_explorer = False
 
+    build_limit = 0
+
     def next_free_number(self):
         numbers = [u.number for u in self.player.units if u.type_name == self.type_name and u is not self]
         n = 1

@@ -5,7 +5,6 @@ import worldrandom
 from worldresource import Meadow, Deposit, Corpse
 from worldroom import Square
 
-
 class Order(object):
 
     target = None
@@ -250,6 +249,23 @@ class ComplexOrder(Order):
     def missing_requirements(self):
         return [r for r in self.type.requirements if not self.unit.player.has(r)]
 
+    def check_build_limit(self):
+        if self.type.build_limit == 0:
+            return
+        unitName = self.type.type_name
+        unitCount = 0
+        # check for living instances of the type of unit or anything ordered to build or train one
+        for u in self.player.units:
+            if u.type_name == unitName:
+                unitCount += 1
+            for o in u.orders:
+                if o is self:
+                    continue
+                if (o.keyword == "train" or o.keyword == "build") and o.type.type_name == unitName:
+                    unitCount += 1
+
+        if unitCount >= self.type.build_limit:
+            return "build_limit_exceeded"
 
 class ProductionOrder(ComplexOrder):
 
@@ -262,6 +278,11 @@ class ProductionOrder(ComplexOrder):
         if result is not None:
             self.mark_as_impossible(result)
             return
+        result = self.check_build_limit()
+        if result is not None:
+            self.mark_as_impossible(result)
+            return
+            
         self.player.pay(self.cost)
         self.time = self.time_cost
 
@@ -317,6 +338,7 @@ class ProductionOrder(ComplexOrder):
         if self._has_started:
             self.player.used_food -= self.food_cost # end food reservation
         self.unit.notify("order_ok")
+
 
 
 class TrainOrder(ProductionOrder):
@@ -701,6 +723,12 @@ class BuildOrder(ComplexOrder):
                     return
         if not self.player.resources_are_reserved(self):
             result = self.unit.check_if_enough_resources(self.cost, self.food_cost)
+            if result is not None:
+                self.mark_as_impossible(result)
+                return
+            # check the build limit only if we haven't already reserved the resources
+            # so it only gets checked once per build project
+            result = self.check_build_limit()
             if result is not None:
                 self.mark_as_impossible(result)
                 return
