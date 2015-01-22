@@ -8,6 +8,7 @@ import time
 import pygame
 
 from clientmedia import screen_subtitle_set
+import config
 import encoding
 from lib.log import warning
 import res
@@ -502,5 +503,6 @@ def init_sound():
     pygame.mixer.pre_init(44100, -16, 2, 1024)
     pygame.init()
     pygame.mixer.set_reserved(1)
+    pygame.mixer.set_num_channels(config.num_channels)
 
 sounds = SoundCache()
