@@ -40,7 +40,7 @@
 99	caserma
 100	va
 101	costruire
-102	extrarre
+102	estrarre
 103	pattugliare
 104	modo
 105	ok!
@@ -48,7 +48,7 @@
 107	verso
 108	in
 110	offensivo
-111	defensivo
+111	difensivo
 112	mantiene la posizione
 113	invisibile
 114	attacca
@@ -88,7 +88,7 @@
 149	Vittoria!
 150	sconfitta
 151	1
-152	alerta
+152	allerta
 153	un ponte
 154	aperto
 155	hai raggiunto il livello
@@ -116,7 +116,7 @@
 2026	backspace
 2027	impartire l'ordine piu' comune
 2028	F5 ed F6
-2029	history dei messaggi
+2029	storico dei messaggi
 2030	Alt
 2031	interrompe la frase corrente
 2032	escape
@@ -134,12 +134,14 @@
 2044	Porta al settore ove si trova l'unita' attualmente controllata e la segue
 controlla la prossima unita' nella locazione
 2046	seleziona il prossimo obiettivo
-2047	scegle l'ordine successivo
-2048	controlla tutte le unita' dello stesso tipo, presenti nella medesima locazione dell'unita' corrente2049	conferma l'ordine corrente
+2047	sceglie l'ordine successivo
+2048	controlla tutte le unita' dello stesso tipo, presenti nella medesima locazione dell'unita' corrente
+2049	conferma l'ordine corrente
 2050	impartisce l'ordine più logico da dare alla destinazione scelta
 2051	sapere quanto oro, quanto legname e quanto cibo possiedi
 2052	sapere lo stato di salute dell'unita' corrente
-2053	controlla meta' delle unita' dello stesso tipo e presenti nella locazione dell'unita' corrente2054	controllo di una singola unita'
+2053	controlla meta' delle unita' dello stesso tipo e presenti nella locazione dell'unita' corrente
+2054	controllo di una singola unita'
 2055	q
 2056	controlla tutti i soldati nella stessa locazione
 2057	controlla tutti i contadini nella locazione corrente
@@ -231,8 +233,8 @@ controlla la prossima unita' nella locazione
 4049	Probabilmente il server non riesce a registrarsi nel metaserver verifica di essere connesso ad internet
 4051	arrivederci
 4052	premi Tab per selezionare. premi invio per confermare.
-4053	s'inscrire pour la partie de
-4054	rejoindre en cours de route la partie de
+4053	Accetta l'invito da parte di
+4054	Si ricongiunge al gioco
 4055	lancia
 4056	benvenuto
 4057	errore: troppi giochi aperti
@@ -353,7 +355,7 @@ controlla la prossima unita' nella locazione
 4262	suoni opzionali aggiuntivi
 4263	e' ora attivato
 4264	e' ora disattivato
-4265	cheat mode
+4265	modalita' gioco truccato
 4266	riavviare
 4267	campagna
 4268	nuovo obiettivo
@@ -405,24 +407,24 @@ controlla la prossima unita' nella locazione
 4281 scaricare tutti
 4282 entrare in
 4283 arciere scuro
-4284 move
-4285 to alliance
-4286 allied
+4284 sposta
+4285 di alleanza
+4286 alleato
 
 4287 dice
 
-4288 enter your message
+4288 scrivi il tuo messaggio
 
-4289 invisible
+4289 invisibile
 4290 detector
 4291 cloaker
 
-4292 summon
-4293 raise dead
-4294 resurrection
+4292 convocazione
+4293 recuperare i cadaveri
+4294 risurrezione
 
 4295 zombie
-4296 skeleton
+4296 scheletro
 
 4297 sacerdote
 4298 tempio
@@ -433,3 +435,26 @@ controlla la prossima unita' nella locazione
 4301 umano
 4302 orco
 
+4303 negromante
+4304 necropoli
+
+4305 nebbia mortale
+4306 meteore
+
+4307 richiamo
+
+4308 pietra
+4309 cava
+
+4310 gioco casuale
+
+4311 e' stato sconfitto
+4312 Sei stato sconfitto!
+4313 Ora sei in modalita' osservatore.
+
+4314 altopiano
+
+4315 Rivedi una partita registrata.
+4316 Premi Control Shift F4 per studiare un altro giocatore.
+
+4317 Scrivi un comando.
