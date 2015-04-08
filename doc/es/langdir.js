@@ -1,4 +1,4 @@
-var langcodes=["es"];
+var langcodes=["es", "it"];
 
 // Browser Language Redirect script
 // copyright 3rd January 2006, Stephen Chapman

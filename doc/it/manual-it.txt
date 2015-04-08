@@ -1,0 +1,306 @@
+Title
+Manuale del gioco
+
+head
+Manuale del gioco
+
+Indice (contents)
+- 1. Introduzione
+- 2. Tutorial
+* 2.1 Tutorial Capitolo 1
+* 2.2 Tutorial Capitolo 2
+* 2.3 Consigli e suggerimenti
+- 3. Lista dei comandi
+* Muoversi sulla mappa
+* Scelta dell'unità da controllare
+* Impartire un ordine: metodo principale
+*I mpartire un ordine: alternativo, metodo rapido
+* Impartire un ordine: uso dei tasti rapidi
+* Analisi della situazione
+* Impartire un ordine senza annullare uno (o una serie) di comandi impartiti in precedenza
+* Impartire un ordine imperativo
+* Attaccare un'unità amica
+* Altri comandi
+- 4. Giocare con altri giocatori
+* 4.1 Iniziare un gioco in modalità più giocatori
+* 4.2 Chattare
+* 4.3 Giocare a squadre
+* 4.4 Come rendere il proprio server accessibile agli altri giocatori
+* 4.5 Come scaricare una mappa da un server
+- 5. Elementi del gioco
+*  Cibo
+* Sviluppi tecnologici
+* Unità volanti
+* Unità invisibili e controllori
+- 6. Maggiori dettagli sulla personalizzazione
+* soundRTS.ini
+* Opzioni della riga di comando
+* Pacchetto di suoni
+* Sapi 5 Windows
+* Parametro srapi in Windows
+* parametro srapi_wait in Windows
+* Cartella temporanea
+* Cartella dell'utente
+* Come creare una versione portable di SoundRTS
+* Come cambiare la velocità predefinita in modalità singolo giocatore
+* Cambiare alcune combinazioni di tasti
+* Creare una app per MAC
+* Utilizzo di Windows Installer con un account limitato in Windows Xp
+* Quali caratteristiche deve avere una mappa per un gioco a più giocatori ufficiale?
+* Come si fa a selezionare una lingua diversa?
+- 7. Collaboratori
+end contents
+
+1. Introduzione
+
+Benvenuti in SoundRTS!
+SoundRTS è un gioco di strategia ispirato a Warcraft e Startcraft ma in versione audiogioco, quindi adatto ad essere giocato da persone non vedenti. In questo gioco sorveglierete la vostra città, estrarrete da miniere e boschi, costruirete, recluterete contadini e soldati, e lotterete contro i nemici!
+Normalmente il gioco è in modalità mappa: vi trovate su di essa e potete selezionare tutti gli oggetti senza girare intorno. Potete giocare anche in modalità in prima persona, utile nel caso si debba sorvegliare o per un attacco.
+Windows utilizza lo screen reader o la Sapi 5. Linux utilizza Speech Dispatcher. MAC OS X utilizza NS Speech. In SoundRTS 1.2 Alpha 9 sono stati rimossi i file audio registrati col sintetizzatore.
+
+2. Tutorial
+
+Questo tutorial vi aiuterà nell'apprendimento per il controllo del gioco.
+
+2.1 Tutorial Capitolo 1
+
+Se si usa Jaws od un altro assistente visivo, lo si può disattivare per avere un accesso completo ai comandi da tastiera.
+Quando inizia il gioco sentirete l'indicazione della casella dove vi trovate in quel momento: "A1". Vi verrà annunciato che in A1 c'è una miniera d'oro. Per esaminare la casella premete tab più volte. Si noterà che le direzioni proposte sono le uniche in cui si può andare (una miniera d'oro, un bosco, Municipio 1 (La vostra base), e il contadino 1. 
+A questo punto premete PaginaGiu per verificare se c'è un'altra casella da poter analizzare. Sentirete "C1" che contiene (premete Tab per sapere cosa c'è), un fattorino, un sentiero, un bosco e Fattorino 1.
+Se si ripreme PaginaGiu si torna in "A1". Quindi in questo modo si  potrà passare solo tra 2 caselle,  ossia quelle esaminate finora.
+Un altro modo per muoversi sulla mappa è quello di utilizzare le frecce direzionali. In questo modo  si naviga linearmente e si possono trovare caselle sconosciute sulle quali non possono esser impartiti ordini.
+Su questa mappa l'obiettivo è costruire 1 fattoria e 1 caserma. Un contadino soltanto può costruirle. Ma occorre che disponga sia di oro e di legna, sia di uno spazio libero in un prato. Per sapere quanto oro, legna e cibo avete, premete Z, X e C.
+Ordinate al contadino di estrarre l'oro. Per prima cosa bisogna controllarlo, premete Q fino a quando non sentite dire Contadino 1 aspetta i tuoi ordini! Dopo di che premere la A fino a quando non viene selezionato Estrarre, quindi premere Tab fino a quando non viene detto Miniera d'oro; ora premere Invio per confermare. Il contadino inizierà a raccogliere l'oro.
+Per far prima è necessario avere più contadini. Premete Q fino a quando non assumete il controllo del municipio e a sto punto premete la A fino a selezionare Recluta un contadino, ora premete Invio. Dopo qualche secondo apparirà un altro contadino, Contadino 2.
+Per chiedere al contadino di estrarre il legno, la procedura è la stessa vista per il primo, oppure, per non perder tempo, premete la A fino a che non controllate Contadino 2, quindi con Tab si seleziona Miniera, e ora si preme "Backspace". Questo tasto avvia l'azione predefinita per questo obiettivo. In questo caso, l'azione predefinita è Estrarre l'oro dalla miniera.
+Prima di reclutare un terzo contadino, si dovrà  dire a Municipio 1 che i nuovi reclutati debbano andare direttamente in miniera ad estrarre l'oro. Per far ciò si preme la Q fino a controllare Municipio 1. Ora premere Tab fino a selezionare la miniera. Infine, premere "Backspace" per impartire l'ordine predefinito al Municipio: "aggregarre la recluta alla miniera d'oro". Ora, premere A per selezionare "recluta un contadino", quindi premere Invio per confermare.
+Quando avrete avuto oro a sufficienza o non c'è più oro in miniera, premete D per controllare tutti i contadini quindi Tab fino a selezionare il bosco. Ora premere Backspace per andare a estrarre la legna.
+Il resto lo si fa senza problemi.
+
+2.2 Tutorial Capitolo 2
+
+Suggerimento: raggruppare le unità di combattimento. Per far ciò, le si deve controllare (premere il tasto S) e le si mette a pattugliare le caselle che volete siano sorvegliate.
+
+2.3. Consigli e suggerimenti
+
+-  tenete le vostre truppe concentrate
+- Fate sì che i soldati stiano a guardia. Il pattugliamento vi permetterà una maggiore protezione del territorio fin quando manterrete le truppe concentrate.
+- Utilizzate i punti di raccolta per gli edifici. Gli edifici che permettono il reclutamento delle unità si possono definire come un punto di raccolta. Le nuove unità  serviranno a tali punti. Ad esempio, un contadino sarà impiegato per l'estrazione di una miniera d'oro.
+- Per l'esplorazione utilizzate la modalità difensiva. Un'unità che si trovi in modalità difensiva fuggirà nel caso in cui incontri nemici più forti. In questo modo potrete sapere quanti nemici ci sono in quella zona senza sacrificare unità di esplorazione. I contadini sono impostati di default in questa modalità ma anche ai soldati può essere assegnata.
+- Una unità in fuga si dimentica dell'ordine impartitogli. Ad esempio, un contadino che sta estraendo l'oro non vorrà tornare al suo lavoro nel caso in cui sia in fuga,  almeno fino a quando non sia sopravvissuto ad un combattimento ed allora tornerà a estrarre l'oro.
+
+3. Lista dei comandi
+
+Il gioco consiste nell'impartire degli ordini alle vostre unità ed edifici. Per impartire un ordine all'unità, per prima cosa bisogna controllarla. Se premete F10 durante il gioco, vi si aprirà il relativo menu. Se si utilizza Jaws od un altro assistente visivo bisognerà disattivarlo per avere accesso alla tastiera.
+
+Muoversi sulla mappa
+
+I tasti direzionali permettono di spostarsi da una casella all'altra della mappa. Se c'è un percorso diretto tra la casella attuale ed una nuova, si sentirà un rumore che dipende dal tipo di percorso (sentiero o ponte). Se non c'è un percorso diretto tra le due caselle si sentirà un suono di collisione e non ci si sposta dalla casella in cui ci si trova (premete Control+le frecce direzionali per saltare l'ostacolo). Se non si conosce ancora il percorso di una casella (Casella sconosciuta) non si avrà alcun rumore.
+Un altro modo per spostarsi sulla mappa consiste nel premere PaginaSu, tale tasto permette di spostarsi direttamente ad un altro punto di interesse della mappa senza dover passare  sulle  caselle vuote. Fin dalla versione 1.1 Alpha 3 di SoundRTS sono disponibili alcune varianti:
+- premere Alt+PagSu/PagGiu per portarsi sulla casella sconosciuta precedente/successiva
+- premere PagSu/PagGiu per portarsi su una casella della mappa che contiene le risorse.
+Quando controllate una unità e premete spazio, potete seguirla mentre si sposta da una casella all'altra.
+   
+   Scegliere l'unità da controllare
+
+Per controllare l'unità  successiva in una casella, premete Q.
+Per controllare l'edificio successivo, premete W. Per controllare il contadino successivo, premete E. Per controllare tutti i contadini in una casella, premete D. Per controllare il contadino inattivo successivo, premete Alt+E. Per controllare tutti i contadini inattivi in una casella, premete Alt+D. Per controllare il fattorino successivo, premete R. Per controllare tutti i fattorini in una casella, premete F. Per controllare l'arciere successivo, premete T. Per controllare tutti gli arcieri in una casella, premete G. Per controllare il cavaliere successivo, premete Y. Per controllare tutti i cavalieri in una casella, premete H. Per controllare la catapulta successiva, premete U. Per controllare tutte le catapulte in una casella, premete J. Per controllare il dragone successivo, premete I. Per controllare tutti i dragoni in una casella, premete K. Per controllare il mago successivo, premete O. Per controllare tutti i maghi in una casella, premete L.
+I tasti utilizzati per controllare le unità in successione,  in combinazione col tasto Shift permettono il controllo dell'unità precedente. Ad esempio, per controllare il contadino precedente si preme Shift+E.
+Per controllare tutte le unità dello stesso tipo e all'interno della stessa casella che non siano controllate in quel momento, premete 1. Per controllarne solo  metà od un terzo, premete 2 o 3. Per fermare il controllo del gruppo, premete 0.
+Per controllare tutti i soldati in una casella, premete S. Per controllare sia tutti i soldati sia tutti i contadini, premete Alt+S.
+ I tasti che vengono usati per controllare  gruppi di unità in una casella, combinati col tasto control permettono di controllare gruppi di unità su tutta la mappa. Ad esempio, se si vogliono controllare tutti i fattorini della mappa, si preme Control+L o Control+F.
+ 
+ Impartire un ordine: metodo principale
+
+ Per impartire un ordine all'unità controllata,  il metodo principale  prevede la scelta dell'ordine da una lista e la scelta di una destinazione se l'azione lo prevede.
+Per scegliere un ordine da una lista, premete A (e Shift+A) per selezionare l'ordine.
+Se dovete scegliere una destinazione, premete Tab (e Shift+Tab) per compiere tale azione. Se invece la destinazione è una casella lontana, usate le frecce direzionali.
+Per confermare la scelta, premete Invio.
+
+Impartire un ordine: alternativo, metodo rapido
+
+Il secondo metodo per impartire un ordine consiste nel premere Tab per scegliere la destinazione (o con le frecce direzionali) dopo di che si preme Backspace. Verrà impartito l'ordine predefinito.  Ad esempio, se al contadino gli si indica come destinazione la miniera e si preme Backspace, egli andrà li e comincerà ad estrarla.
+
+Impartire un ordine: uso dei tasti rapidi
+
+Per impartire un ordine tramite un tasto rapido, premete Alt+A. Un messaggio vi annuncerà la lista dei tasti rapidi che potete utilizzare per l'unità controllata in quel momento. Premete il tasto corrispondente e verrà  eseguito l'ordine immediatamente, a meno che non sia necessario indicare la destinazione.
+
+Analisi della situazione
+
+Per tenere d'occhio l'unità (o il gruppo) che si sta controllando, premete Spazio. Oltre ciò potete tornare alla casella occupata dall'unità (o il gruppo leader).
+Per sapere quanto oro avete, premete Z. Premete X per la legna, premete C per il cibo.
+Per sapere lo stato di salute di una unità, premete V.
+Per esaminare nuovamente un oggetto selezionato con Tab, premete Control.
+
+Impartire un ordine senza annullare uno (o una serie) di comandi impartiti in precedenza
+
+Si tiene premuto Shift prima di confermare l'ordine con Invio.
+Funziona anche per gli ordini prestabiliti: si tiene premuto Shift prima di premere Backspace.
+Premete Spazio per controllare se le unità hanno eseguito  i vari ordini.
+Ecco una situazione in cui l'utilizzo di comandi multipli potrebbe essere utile:
+- Esempio 1: volete che un contadino vada in giro   in ogni casella della mappa (per sapere dove sono i nemici). Controllate il contadino, muovete il cursore in una casella di riferimento, quindi premete Shift+Backspace. Ripetete per ogni casella di riferimento.
+- Esempio 2: volete che il contadino estragga diverse materie. Gli si indica la destinazione di un giacimento, quindi si preme Shift+Backspace. Ripetete. Una volta che il giacimento si è esaurito, il contadino andrà a estrarre nel successivo.
+
+Impartire un ordine imperativo
+
+Se tenete premuto Control prima di premere Invio o Backspace, l'ordine sarà imperativo!
+
+L'unità con un ordine imperativo tenderà ad ignorare qualsiasi ordine non direttamente relazionale. Se debbono andare da qualche parte e si trovano ad incrociare le unità nemiche, semplicemente le ignorano. Questo è il più delle volte pericoloso ma in qualche caso può essere utile, ad esempio, per concentrarsi su un obiettivo importante.
+
+Ecco qualche situazione dove un comando imperativo potrebbe essere utile:
+- Esempio 1: Volete che le vostre unità attacchino specifici edifici o unità nemiche ignorando il resto. Selezionare la destinazione e quindi premere Control+Backspace.
+- Esempio 2: volete che le vostre unità arretrino in un luogo e ignorino le unità nemiche. Selezionare un'altra casella e premere Ctrl+Backspace.
+Potete anche impartire una sequenza di ordini imperativi. Invece di premere solo Shift premete contemporaneamente Control e Shift.
+
+Attaccare una unità amica
+
+Direzionare le unità e premere Shift Backspace: le unità attaccheranno il bersaglio.
+Eccezione: se il bersaglio è un edificio danneggiato (o una unità riparabile come una catapulta) e si stanno controllando le unità lavoratrici, esse ripareranno il bersaglio.
+
+Altri comandi
+
+F5 ed F6: Messaggio precedente/successivo nello storico. Alt: interrompe la frase corrente.
+Per uscire dal gioco o per visualizzare il menu del gioco, premete F10. La stessa cosa  la si ottiene con Alt+F4 o Control C.
+Control+spazio: fa si che si giochi in modalità prima persona. Escape: ritorna alla modalità mappa.
+Home/Fine, +/- del tastierino numerico: aumenta/diminuisce il volume  generale dei suoni del gioco. Control Home/fine, Control +/- del tastierino numerico: aumenta/diminuisce il volume relativo al sintetizzatore.
+Nei menu, vengono utilizzati i tasti freccia: Su e giu per selezionare, destra per confermare, sinistra per annullare.
+F3: Dice da quanto tempo si gioca Control F3: attiva/disattiva la campana minutaggio (normalmente è disattivata)
+Control+Tab seleziona un bosco, una miniera, un prato, e bersagli riparabili o costruibili (un edifici danneggiati, cantieri, catapulte danneggiate...).
+Alt+R Riseleziona un ordine impartito in precedenza. Utile per addestrare una unità o o per costruire un certo tipo di edifici più volte. Alt+G Riseleziona un ordine impartito in precedenza e lo  esegue nel caso in cui non siano richiesti parametri aggiuntivi. Ad esempio, per addestrare 5 arcieri supplementari, premete Alt+G 5 volte. Dalla versione 1.1 Alpha 3 di SoundRTS il comando Alt+A fa la stessa cosa di Alt+G.
+Apice all'indietro )sulla tastiera americana si trova sotto il tasto Esc, in quella italiana non c'è): Console dei comandi (solo in modalità singolo giocatore). I    soli comandi utilizzabili al momento sono add_units (per inserire unità od edifici istantaneamente) e victory (per la vittoria, ad esempio, per saltare al capitolo successivo). Esempio di comando "add_units": "add_units a1 100 archer". Nuovo in SoundRTS 1.2 Alpha 9.
+
+4. Giocare con altri giocatori
+
+4.1. Iniziare un gioco in modalità più giocatori
+
+Selezionare "gioca con altri giocatori", quindi "scegli un server dalla lista"
+In un server pubblico, sarete  nelle condizioni di organizzare un gioco.
+Consiglio: mentre aspettate che si connettano gli altri giocatori, potete avviare SoundRTS una seconda volta per giocare localmente in modalità singolo giocatore. Una volta che un giocatore si è connesso, premete F10 per mettere in pausa il gioco locale e giocare online.
+ 
+ 4.2. Chattare
+
+Potete chattare nella stanza del server, nella stanza pre-gioco, e durante il gioco stesso. L'organizzatore sarà temporaneamente non disponibile durante la scelta della mappa e della velocità del gioco.
+Per comunicare qualcosa  a tutti coloro che sono nella stanza o nel gioco, premere F7(anche la S funziona, tranne quando si sta giocando), Digitate il vostro messaggio e premete Invio.
+Un'altra soluzione è quella di utilizzare software come Skype (o simili) nel caso in cui si conoscono gli altri giocatori.
+
+4.3 Giocare a squadre
+
+Le squadre devono essere create prima di iniziare il gioco. Non possono essere cambiate durante il gioco. I giocatori alleati condividono le informazioni riguardanti la mappa, la vittoria, i progressi (nuovo in SoundRTS 1.2 Alpha 9), e le loro unità si aiutano reciprocamente. Un lavoratore può utilizzare un magazino alleato per depositare una materia (la risorsa sarà tuttavia aggiunta all'armamentario del lavoratore).
+In un gioco via server, i computer inizialmente non sono alleati.
+Nota: in un gioco a un solo giocatore dal menu "giocatore singolo", i computer sono alleati.
+Consiglio: per giocare a un solo giocatore avendo un computer come alleato, lanciare un server privato.
+
+4.4 Come rendere il proprio server accessibile agli altri giocatori
+
+Per controllare se il vostro server sia accessibile dall'esterno, attendere che si colleghi un giocatore, oppure chiedere ad un amico di connettersi dall'esterno. Come ultima spiaggia, potete anche usare un sito per il test delle porte in ingresso (google "test porte router" per esempio). Siate cauti: non garantisco che questo tipo di siti non siano malevoli! Il sito potrebbe installare dei tool senza che l'utente intervenga, ad esempio.
+In molti casi si avrà bisogno di configurare il proprio router per le connessioni in ingresso TCP tramite la porta 2500 all'indirizzo ip locale del proprio server.
+Talvolta potrebbe essere necessario configurare il DHCP nel router per essere sicuri che al server sia sempre assegnato  un indirizzo ip locale.
+Se si utilizza un firewall, bisognerà assicurarsi che le connessioni in ingresso tramite la porta 2500 siano consentite.
+Riguardo i server autonomi: anche se il vostro server autonomo fosse accessibile dall'esterno, potreste non essere in grado di accedervi dalla rete locale scegliendo "scegli un server dalla lista". "inserisci l'indirizzo IP del server" in molti casi funziona, tuttavia non significa che il server sia accessibile dall'esterno.
+
+4.5 Come scaricare una mappa da un server
+
+Giocare una partita con la mappa che si desidera scaricare. Prima di iniziare a giocare, la mappa sarà collocata nella cartella temporanea e rimarrà li fino a quando non verrà sovrascritta da un'altra mappa. A seconda del formato della mappa, sarà costituita da un file di testo chiamato recent_map.txt o una cartella chiamata recent_map.
+
+5. Elementi del gioco
+
+Cibo
+
+La formazione di una nuova unità la si può ottenere solo se il giocatore ha razioni di cibo sufficienti. Se qualche fattoria viene distrutta o una nuova unità viene ottenuta senza cibo, e le scorte di cibo divengono insufficienti, l'unità corrente sarà mantenuta senza problemi. Tuttavia però non ne possono esser formate altre.
+
+Aggiornamenti tecnologici
+
+Gli aggiornamenti verranno applicati a tutte le unità dei giocatori, correnti e future.
+
+Unità volanti
+
+Fin da SoundRTS 1.1, le unità volanti, virano dritte all'obiettivo ignorando il percorso terreno.
+ 
+ Unità invisibili e controllori
+
+Per difendersi contro una unità invisibile, ci sono almeno 3 modi:
+- portare una unità controllore (o usare un rilevatore di incantesimi) ed attaccare l'unità
+- Utilizzare un incantesimo con effetto distruttivo sulla casella dove c'è l'unità
+- Ignorare l'unità invisibile e distruggere   gli edifici nemici in fretta
+
+6. Ulteriori dettagli sulla personalizzazione
+
+SoundRTS.ini
+
+Questo file si trova nella cartella User. Esso contiene i vari parametri riguardanti il funzionamento del gioco. Quando si esegue SoundRTS, se nel file SoundRTS.ini  ci sono errori, sarà ricreato un nuovo file SoundRTS.ini e verranno recuperati i parametri dal file corrotto per quanto possibile.
+
+Opzioni da riga di comando
+
+Dalla linea di comando, l'opzione -h fornisce l'elenco delle opzioni disponibili.
+L'opzione --mods sostituisce la riga "mods =" da SoundRTS.ini. Ad esempio, per avviare SoundRTS con il mod soundpack ed il mod Orc: soundrts.exe --mods=soundpack,orc
+
+Pacchetto di suoni
+
+SoundRTS viene fornito con una mod chiamato "soundpack" che contiene suoni alternativi. Per attivare questa mod, sostituire in SoundRTS.ini la riga "mods =" con "mods = soundpack". Quindi riavviare il gioco.
+
+SAPI 5 (Windows)
+
+In Soundrts.ini, se "srapi = 0", sarà utilizzata direttamente la voce predefinita di Sapi 5.
+
+Parametro srapi in Windows
+
+In Soundrts.ini, utilizzare "srapi = 1" per utilizzare un lettore di schermo (tramite ScreenReaderAPI).
+
+Parametro srapi_wait in Windows
+
+Siccome non son riuscito a trovare un modo per sapere quando un lettore di schermo finisce di parlare in Windows, ho dovuto valutare la durata di un messaggio. Un parametro aggiuntivo chiamato "srapi_wait" determina  per quanto tempo   SoundRTS dovrà attendere prima di inviare il messaggio successivo. Con "srapi_wait = .1" e un messaggio di 10 caratteri, SoundRTS attenderà per .1 * 10 = 1 secondo.
+Aumentare il valore di srapi_wait se qualche messaggio viene interrotto dall'invio del messaggio successivo. Diminuire il valore di srapi_wait se il silenzio tra due messaggi è troppo lungo.
+
+Cartella temporanea
+
+La cartella temporanea contiene i log e la mappa sulla quale si è giocato precedentemente. 
+La cartella temporanea si trova nella cartella User ed è chiamata Tmp.
+
+Cartella utente
+
+La cartella utente contiene le impostazioni del gioco, le mappe personalizzate e le mods, e la cartella temporanea.
+Se la cartella principale contiene una sottocartella di nome User, quest'ultima sarà la cartella utente. Se la cartella "User" non esiste, sarà  collocata, a seconda del sistema operativo in:
+- Windows XP: "C:\Documents and settings\tuo_nome\Application data\SoundRTS unstable"
+- Linux: "home/tuo_nome/.SoundRTS unstable"
+
+Come creare una versione portable di SoundRTS
+
+Fin da SoundRTS 1.0 Beta 10 p, è possibile avere tutti i file del gioco (log, configurazione, mappe personalizzate...) conservati nella cartella del gioco. Ecco come procedere:
+- installare SoundRTS
+- Windows: copiare la cartella da "Programmi" ad una cartella diversa (desktop, drive USB, ecc.)
+- nella nuova cartella ove risiede SoundRTS creare una sottocartella chiamata "user". "user" può essere la copia di una cartella utente esistente (la versione deve essere comunque la stessa) 
+- Windows: per lanciare il programma eseguire "soundrts.exe".
+
+Come cambiare  la velocità predefinita in modalità singolo giocatore
+
+Trovare SoundRTS.ini e nella cartella utente e modificare la linea "speed...". Utilizzare un numero intero.
+
+Cambiare alcune combinazioni di tasti
+
+A partire da SoundRTS 1.1, lo schema della tastiera è definito in un file chiamato bindings.txt collocato nella cartella del gioco.
+
+Creare una app per Mac
+
+Se siete riusciti ad installare la versione multipiattaforma per il Mac, probabilmente si potrà creare una app che faciliterà l'installazione da parte di altri giocatori. Ecco qualche suggerimento. Utilizzare py2app. Non avete bisogno dei sorgenti. Ad esempio, create un file chiamato soundrts_launcher.py che contiene quest'unica riga: "import soundrts". Potete anche creare un file chiamato server_launcher.py contenente la linea: "import server". Assicurarsi che eseguendo "python "python soundrts_launcher.py" funzioni correttamente.
+
+Utilizzare Windows Installer con account limitato (Windows XP)
+
+Si può utilizzare  un account limitato per installare SoundRTS in Windows XP. Basta cambiare il percorso di installazione scegliendo un'altra cartella invece della cartella "Programmi".
+Pure se si installa SoundRTS con un account amministratore, potete giocare comunque con un account limitato.
+
+Quali caratteristiche deve avere una mappa per un gioco a più giocatori ufficiale?
+
+Le mappe multigiocatore ufficiali non hanno nessun suono prima del loro titolo. Le mappe multigiocatore ufficiali sono elencate in cfg/official_maps.txt con i checksum corrispondenti per essere sicuri che non siano state modificate.
+ 
+ Come si seleziona una lingua diversa?
+
+ Se cfg/languages.txt è vuoto, il programma imposterà in automatico la lingua del sistema. Per selezionare una lingua specifica scrivere il codice della lingua in cfg/language.txt, ad esempio "en", "it", "fr-ca", "pt" o "pt-BR". Controllare la cartella res per sapere che codici lingua sono previsti.
+
+ 7. Collaboratori
+ 
+ Nota: la lista seguente non è esaustiva. Grazie a tutti coloro che hanno collaborato!
+ Questo gioco è stato scritto da SoundMUD (soundmud@gmail.com).
+La scoperta della comunità francese che si occupa di giochi audio accessibili, e le idee per iniziare: Sabine Gorecki. I numerosi test e incoraggiamenti durante i primi periodi di SoundMUD: Alex. Primo test per SoundMUD con Linux: Miguel. Il rilancio del progetto SoundMUD, gli incoraggiamenti durante il secondo periodo di SoundMUD per portare a termine il gioco di strategia, e i numerosi test: Louis-Rock Lampron et Martin Morin.
+Traduzione inglese: SoundMUD. Traduzione tedesca: Alexander Westphal di Gameport. Traduzione italiana: Gabriel Battaglia e Luigi Russo. Traduzione spagnola: Alan.
+Perfezionamento della lingua inglese e dei suoni: Bryan Smart.
+Mappe multigiocatore - 101 - frontier: Bryan Smart.

@@ -1,0 +1,32 @@
+Title:
+Tutorial per la creazione di AI
+
+head:
+Tutorial per la creazione di AI
+
+contents = Indice
+
+1. Introduzione
+2. Costanti
+3. Il comando "get"
+
+1. Introduzione
+
+Questo tutorial tratterà le basi per la costruzione delle IA. Sarà necessario modificare il file AI.txt. Questo file si trova nella cartella "res" presente nel file zip di SoundRTS.
+
+2. Costanti
+
+Prima del "def" che controlla la IA, si potrà constatare che c'è una riga di testo del tipo: research 1, teleportation 1... ecc. 
+Queste costanti controllano il comportamento della IA e possono avere valore 0 o 1. Ecco l'elenco delle costanti:
+- constant_attacks - la IA attaccherà costantemente ed esplorerà la mappa.
+- search - la IA andrà alla ricerca di armi ed armature.
+- teleportation - la IA userà il teletrasporto.
+- send_soldiers_to_base - la IA continuerà  a reclutare soldati alla propria base.
+- raise_dead - la IA aumenterà gli omicidi.
+- retaliate - la IA  contrattaccherà all'incursione nemica.
+
+3. Il comando "get"
+
+Il comando "get" prende come argomenti il numero di unità e il loro nome per la loro recluta. Si possono definire più di una unità ed il tipo.
+Ad esempio: "get 10 footman 20 archer 10 knight"
+Per l'esatta denominazione delle unità consultare il file rules.txt.

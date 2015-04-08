@@ -17,6 +17,7 @@ move *.htm %TEMP%\soundrts\build\doc
 if errorlevel 1 pause
 
 copy ..\es\*.* %TEMP%\soundrts\build\doc
+copy ..\it\*.* %TEMP%\soundrts\build\doc
 
 start %TEMP%\soundrts\build\doc\help-index.htm
 

@@ -1,0 +1,279 @@
+Title
+Guida per la  creazione delle mappe
+
+Head
+Guida per la creazione delle mappe
+
+Indice (contents)
+- Introduzione
+- Mappe multigiocatore
+* dove  collocare una mappa multigiocatore
+* Come modificare una mappa
+* Come testare una mappa
+* Come trovare e rimuovere un errore
+* Commenti
+* Proprietà di base
+** Titolo
+**  Obiettivo
+** Nb_players_min e nb_players_max
+** Global_food_limit
+* Definire il terreno
+** Square_width
+** Nb_lines e nb_columns
+** West_east_paths e south_north_paths
+** West_east_bridges e south_north_bridges
+** Caso generale: west_east e south_north
+** Miniere, boschi, e altri giacimenti di risorse
+** Nb_meadows_by_square
+** Additional_meadows
+** Remove_meadows
+** High_grounds
+* Definire le risorse iniziali dei giocatori
+** Caso 1: stesse risorse per tutti
+*** starting_resources
+*** starting_units
+*** starting_squares
+** Caso 2: risorse differenti a seconda del giocatore
+*** player
+*** computer_only
+** Lista dei tipi
+* #random_choice, #end_choice e #end_random_choice
+- Mappe multigiocatore avanzate: cambiare le regole e l'aspetto del gioco
+* Struttura della mappa
+- Campagne  singolo giocatore
+* Dove collocare una mappa campagna per singolo giocatore
+* Struttura della cartella campagna
+** File dei capitoli
+* Sintassi di un file capitolo
+** Sintassi per la missione di un file capitolo
+*** Intro
+*** Objective_complete (azione in un trigger)
+*** Cut_scene (azione in un trigger)
+** Sintassi per un capitolo con scenario ridotto
+End contents
+
+Introduzione
+
+Il miglior modo per iniziare è creare una mappa multigiocatore e testarla contro il computer.
+
+Mappe multigiocatore
+
+Dove collocare una mappa multigiocatore
+
+Se si hanno i permessi di scrittura nella cartella dove è installato SoundRTS  (o SoundRTS test), si può collocare la propria prima mappa multigiocatore nella cartella "multi".
+Se non si hanno i permessi in scrittura nella cartella Programmi perché si lavora in modalità non amministratore, si può collocare il file della mappa su cui si sta lavorando nella cartella "multi" che si trova in C:\Documents and Settings\TuoNome\Application data\SoundRTS. Questa cartella viene creata la prima volta che si esegue SoundRTS. Un'altra soluzione è quella di installare SoundRTS in una cartella dove si hanno i diritti di scrittura, e lavorare sulla cartella menzionata nel paragrafo precedente.
+
+Come modificare una mappa
+
+Aprire il file con un editor di testo. Scrivere in minuscolo, anche se maiuscolo ma in ogni caso verrà ignorato.
+
+Come testare una mappa
+
+Per testare una mappa, avviare SoundRTS ed andare nel menu giocatore singolo. Si può giocare contro il computer sulle mappe multigiocatore. La mappa verrà ricaricata ogni volta che si inizia una partita, così non si dovrà riavviare SoundRTS per testare le modifiche. La combinazione da utilizzare è Control Shift F2: se si è il solo umano sulla mappa, si sarà autorizzati a esaminare completamente la mappa (non c'è la nebbia di guerra).
+   
+   Come trovare e rimuovere un errore
+
+Se, quando si avvia la mappa, si riceve il messaggio: "Errore del server" tornando così al menu del server, viene generato un file chiamato "maperror.txt" dove vengono scritti i dettagli dell'errore. Questo file si trova nella propria cartella temporanea predefinita (ad esempio "C:\Documents and Settings\tuonome\Impostazioni locali\Temp\soundrts") o nella cartella SoundRTS.
+Nella stessa cartella si possono trovare ulteriori (ma criptiche) informazioni in "server.log" o in "client.log". 
+Se ancora non si è capito dove sta l'errore, sentitevi liberi di contattarmi, direttamente o tramite la lista di SoundRTS.
+
+Commenti
+
+Le linee che iniziano con un punto e virgola sono commenti. I commenti durante l'esecuzione vengono ignorati. Qualsiasi cosa scritta dopo il punto e virgola fino a quando non si passa alla riga successiva è un commento.
+
+Proprietà di base
+
+title
+
+"title 4018 5000" significa: "Il titolo della mappa è il suono 4800 seguito dal suono 5000"
+
+objective
+
+"objective 145 88" significa: "L'obiettivo della mappa è il suono 145 seguito dal suono 88"
+
+Nb_players_min e nb_players_max
+
+"nb_players_min 2" significa: "è richiesto un minimo di due giocatori per iniziare la partita. "nb_players_max 4" significa: "4 giocatori è il numero massimo per questa mappa"
+
+Global_food_limit
+
+Nuovo nella versione beta 9e
+Aggiornamento nella versione beta 10 o. Questo limite globale di cibo non è comunque diviso tra i giocatori 
+"global_food_limit 200" significa: "ciascun giocatore non può avere più di 200 alimenti se costruisce più fattorie"
+
+Definire il terreno
+
+Square_width
+
+"square_width 12" significa: "la larghezza del terreno è di 12 metri. Non si dovrebbe modificare questo parametro poiché gli oggetti potrebbero essere inascoltabili se si è troppo lontano"
+ 
+ Nb_lines e nb_columns
+
+"nb_lines 7" significa: "la griglia ha 7 righe". "nb_columns 7" significa: "la griglia ha 7 colonne". Il limite per le colonne è di 26 e non c'è un limite per le righe, anche se ad oggi non è  probabilmente lontano da 26, a causa delle performance. Avviso: nb_rows è obsoleto e ha lo stesso significato di nb_columns
+
+West_east_paths e south_north_paths
+
+"west_east_paths a1 c1 d1 f1" significa: "aggiungi un percorso da a1 fino a b1, da c1 a d1, da d1 a e1, e da f1 a g1". Si avrà soltanto bisogno di indicare la casella più a sinistra del percorso. "south_north_paths a1 a3 a4 a6" significa: "aggiungi un percorso da a1 a a2, da a3 a a4, da a4 a a5, e da a6 a a7". Si avrà soltanto bisogno di indicare la casella più a sud del percorso.
+
+West_east_bridges e south_north_bridges
+
+Per i ponti vale lo stesso procedimento visto per i percorsi.
+
+Caso generale: west_east e south_north
+
+"west_east road a1 c1 d1" significa: "aggiungi un'uscita in stile "road" da a1 a b1, da c1 a d1, da d1 a e1"
+'road" deve essere definito in style.txt
+Nota: "west_east_paths" è uguale a "west_east path"
+Nota: "south_north_bridges" è uguale a "south_north bridge"
+
+Miniere, boschi e altri giacimenti di risorse
+
+"goldmine 150 a2 b7 g6 f1" significa: "aggiungi miniere con 150 oro in a2, b7, g6 e f1".
+"wood 150 a2 b7 g6 f1" significa: "aggiungi boschi con 150 legno in a2, b7, g6 e f1".
+"goldmine" e "wood" sono definiti in rules.txt come giacimenti di risorse ("class deposit").
+Le vecchie parole chiave plurali ("goldmines" e "woods") funzionano ancora.
+  
+Nb_meadows_by_square
+
+"nb_meadows_by_square 2" significa: "riempire in automatico ogni casella della mappa con 2 prati"
+
+Additional_meadows
+
+"additional_meadows a2 b7 g6 f1" significa: "aggiungi 1  prato nelle caselle a2, b7, g6 e f1". "additional_meadows a2 a2 g6" significa: "aggiungi 2 prati in a2 e 1 prato in g6".
+
+Remove_meadows
+
+remove_meadows fa l'opposto di additional_meadows.
+
+High_grounds
+
+Nuovo in SoundRTS 1.2 alpha 9.
+"high_grounds a2 b7" significa: "a2 e b7 avranno un'altezza superiore".
+
+Caso 1: stesse risorse per tutti
+
+Utilizzare i seguenti comandi in combinazione:
+
+starting_resources
+
+"starting_resources 10 10" significa: "ogni giocatore parte con 10 oro e 10 legno"
+
+starting_units
+
+"starting_units townhall farm peasant" significa: "ogni giocatore parte con 1 municipio, 1 fattoria e 1 contadino"
+"starting_units townhall 2 farm peasant" significa: "ogni giocatore parte con 1 municipio, 2 fattorie e 1 contadino"
+Da SoundRTS 1.1, starting_units può contenere anche:
+- avanzamenti e ricerche: "starting_units u_teleportation" significa: "ogni giocatore ha già ricercato il teletrasporto"
+- unità, edifici, abilità, avanzamenti/ricerche proibite (non saranno visibili sul menu):
+* "starting_units -u_teleportation" significa: "ogni giocatore non può ricercare il teletrasporto"
+* "starting_units -a_teleportation" significa: "ogni giocatore non può usare il teletrasporto"
+
+starting_squares
+
+"starting_squares a2 b7 g6 f1" significa: "le caselle di partenza dei giocatori sono rispettivamente a2, b7, g6 e f1."
+Le unità e gli edifici iniziali verranno creati in queste caselle.
+
+Caso 3: risorse differenti a seconda del giocatore
+
+player
+
+Il comando "player" definisce un punto di partenza che potrebbe essere utilizzato sia da un giocatore umano sia dalla IA del computer (in partite multigiocatore).
+Questo comando può essere ripetuto   molte volte in una mappa multigiocatore.
+"player 5 10 -townhall a1 townhall peasant c1 footman" significa: "un giocatore inizierà con 5 oro, 10 legno, non gli sarà consentito di costruire un municipio, avrà un municipio e un contadino in a1, e un fattorino in c1.
+
+computer_only
+
+Il comando "computer_only" definisce un punto di partenza sul quale la IA del computer ha sempre la possibilità di giocare. Questa IA sarà ostile  a qualsiasi altro giocatore o IA.
+Questo comando può essere ripetuto molte volte ma bisogna utilizzarlo con prudenza. Troppe IA possono rallentare il gioco. Usare quindi una sola IA se si suppone che queste unità non combattano contro altre (alcuni dragoni su tutta la mappa, per esempio).
+computer_only 0 0 a3 dragon b1 dragon significa: "Aggiungi una IA del computer con 0 oro, 0 legno, un dragone in a3 e un dragone in b1"
+
+Lista dei tipi
+
+Ecco di seguito alcuni nomi corretti per i tipi utilizzati in starting_units, player e computer_only. Per la lista completa, consultare il file rules.txt: il nome si trova dopo l'istruzione "def".
+- unità: peasant footman archer knight catapult dragon mage priest necromancer
+- edifici: farm barracks lumbermill blacksmith townhall stables workshop dragonslair magestower
+- abilità: a_teleportation
+- avanzamenti/ricerche: u_teleportation melee_weapon
+
+#random_choice, #end_choice e #end_random_choice
+
+(nuovo in beta 9g) 
+Questa direttiva del   preprocessore sceglie casualmente tra 2 o più scelte delimitate da #random_choice, #end_choice e da #end_random_choice per l'ultima scelta. Ogni scelta si compone di 0 o più righe. Più  direttive #random_choice possono essere utilizzate nel file mappa, ma non possono essere annidate.
+Può essere utilizzato, ad esempio, per piazzare  le risorse a caso. Ad esempio: #random_choice goldmines 500 e2 c6 b3 f5 #end_choice goldmines 500 d2 d6 b4 f4 #end_choice goldmines 500 c2 e6 b5 f3 #end_random_choice Le linee precedenti significano: "aggiungi una miniera in e2, c6, b3 and f5, o in d2, d6, b4 e f4, o in c2, e6, b5 e f3". 
+In questo modo, le risorse sono bilanciate (se non ho fatto errori per la fretta). Questo è solo un esempio.
+Il titolo della mappa e il numero dei giocatori non possono essere cambiati in questo modo perché quando la mappa viene caricata il preprocessore è in fase di lavoro (vale a dire: il menu del singolo giocatore impiega molto tempo per caricarsi).
+
+Mappe multigiocatore avanzate: come cambiare le regole e l'aspetto del gioco
+
+Struttura della mappa
+
+La mappa avanzata è una cartella che contiene un file chiamato "map.txt" col contenuto di una mappa tradizionale, e molte cartelle e file che si possono trovare nella cartella "res": rules.txt, ai.txt, le cartelle ui  e il loro contenuto.
+Nota: al momento, nella cartella campain o di una mappa, la versione localizzata di style.txt (ad esempio: ui-fr/style.txt) non viene caricato. I suoni localizzati vengono comunque caricati.
+
+campagne giocatore singolo
+
+Dove  collocare una  campagna giocatore singolo
+
+Se si hanno i permessi in scrittura nella cartella ove è installato SoundRTS (o SoundRTS test), si può collocare la prima propria campagna nella cartella "single".
+Se non si hanno i permessi in scrittura sulla cartella Programmi a causa dell'uso di un account limitato, si può copiare il proprio file mappa di lavoro in C:\Documents And Settings\TuoNome\Dati applicazioni\SoundRTS. Tale cartella viene generata la prima volta che si avvia SoundRTS.
+Un'altra soluzione è quella di installare SoundRTS in una cartella dove si hanno i permessi in scrittura, e lavorare sulla cartella menzionata nel paragrafo precedente.
+
+Struttura della cartella campagna
+
+Il nome della cartella campagna sarà utilizzato dal menu singolo giocatore. Le campagne ufficiali avranno il loro proprio titolo nella rispettiva cartella "u"i.
+La cartella contiene i file dei capitoli. Essa contiene anche file e cartelle che imitano la struttura della cartella "res": rules.txt, ai.txt, ui...
+
+File dei capitoli
+
+I file dei capitoli sono file di testo chiamati "0.txt", "1.txt", "2.txt", ecc.
+Quando viene iniziata una campagna per la prima volta, è disponibile soltanto il capitolo 0. Quando viene terminato un capitolo, può essere eseguito il capitolo successivo. Il numero del capitolo massimo disponibile viene allocato automaticamente nel file di configurazione dell'utente chiamato campaigns.ini.
+Un file capitolo descrive la missione o il taglio di scena del capitolo.
+Deve esserci almeno un file capitolo, chiamato "0.txt".
+
+Sintassi di un file capitolo
+
+Il capitolo può essere  una missione o un taglio di scena.
+
+Sintassi di un file capitolo di missione
+
+Un file missione non è molto diverso da una mappa multigiocatore. È permesso anche l'uso della struttura avanzata della mappa: in quel caso, la cartella è   il numero del capitolo.
+I seguenti comandi non sono utilizzati in una missione a singolo giocatore: nb_players_min, nb_players_max, starting_squares, starting_units, starting_resources.
+
+Intro
+
+Nota: un numero può rappresentare un messaggio di testo definito in tts.txt (nuovo in SoundRTS 1.2 Alpha 9)
+Esempio: "intro 7500 7501 7502" significa: "prima di iniziare la partita, suona 7500.ogg, 7501.ogg and 7502.ogg (o il testo se definito in tts.txt)". Il comando intro definisce una sequenza di suoni o di testi che saranno eseguiti prima di iniziare la partita. Quando il giocatore preme un tasto, verrà eseguito il messaggio successivo della sequenza. Una intro può essere ad esempio un titolo accompagnato da una musica, poi una scena con una discussione tra i personaggi, poi un briefing. Dopo l'intro, il gioco enuncierà gli obiettivi della missione.
+
+Add_objective
+
+"add_objective player1 1 7000" significa: "aggiungi obiettivo numero 1 associandolo al suono 7000.ogg"
+Per vincere una missione bisogna completare tutti gli obiettivi. Se l'obiettivo primario fallisce, ad esempio muore un personaggio importante, la missione è annullata.
+
+Objective_complete (azione in un trigger)
+
+Questa azione può essere inclusa soltanto in un'azione parte di un trigger.
+"objective_complete 1" significa: "ora l'obiettivo 1 è completato"
+Esempio di trigger:
+"trigger player1 (has barracks) (objective_complete 2)" significa: "aggiungi il seguente trigger per il giocatore 1. Se egli possiede almeno una caserma l'obiettivo 2 è completato"
+
+Cut_scene (azione in un trigger)
+
+Nota: la distinzione tra suoni in tempo reale e precaricati è stata rimossa in SoundRTS 1.2. Tutti i suoni sono caricati in anticipo.
+Nota: un numero può rappresentare un messaggio definito in tts.txt (nuovo in SoundRTS 1.2 Alpha 9). 
+Un taglio di scena può essere innescato nel mezzo di una partita: quando viene scoperto qualcosa, quando arrivano rinforzi ecc.
+"cut_scene 7500 7501" significa: riproduci il taglio di scena formato dai suoni 7500 e 7501.
+Esempio di trigger:
+"trigger player1 (has_entered d5) (cut_scene 7500)" significa: "aggiungi i seguenti trigger per il giocatore 1: se egli è varcato la casella d5, riproduci il taglio di scena costituito dal suono 7500.ogg"
+
+Timer e timer_coefficient (condizione in un trigger)
+
+"timer_coefficient 60"
+'trigger player1 (timer 2) (cut_scene 7500)" significa: "dopo 2 minuti (2 x 60 secondi) riproduci il file sonoro 7500.ogg.
+
+Sintassi di un file di capitolo taglio di scena
+
+Nota: la distinzione tra suoni in tempo reale e precaricati è stata rimossa in SoundRTS 1.2. Tutti i suoni sono caricati in anticipo.
+Nota: un numero può rappresentare un messaggio definito in tts.txt (nuovo in SoundRTS 1.2 Alpha 9). 
+Un capitolo con taglio di scena è costituito da una sequenza continua di suoni. Quando viene  completato un capitolo con taglio di scena, viene sbloccato il capitolo successivo. Non vanno confuse con i tagli  di scena brevi che vengono eseguiti da un trigger mentre si è in missione qualora sia soddisfatta una condizione (la scoperta di una nuova casella ad esempio), o con l'introduzione della missione (o briefing).
+I capitoli con taglio di scena hanno solo tre righe. Ad esempio: cut_scene_chapter title 7000 sequence 7500 7501 7502
+La prima riga è una parola chiave usata per dire al gioco che questo capitolo è un taglio di scena e non una missione. La riga del titolo è usata nel menu della campagna. Il resto della riga significa: "riproduci il suono 7500.ogg seguito da 7501 e 7502; se il giocatore preme un tasto salta il suono corrente e riproduce quello successivo"
