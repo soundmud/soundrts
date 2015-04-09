@@ -447,6 +447,8 @@
 4308 de pedra
 4309 rocha
 
+4310 raça aleatória
+
 4311 foi derrotado
 4312 Você foi derrotado.
 4313 Você está agora no modo de observação.
@@ -457,3 +459,22 @@
 4316 Pressione Control Shift F4 para observar outro jogador.
 
 4317 Digite um comando.
+
+4318 câmera
+
+4319 modificar a ordem de carregamento de mods
+4320 incluir um pacote na lista
+4321 a lista está vazia
+4322 Carregando
+
+4323 pacotes
+4324 menu de pacotes
+4325 adicionar um pacote
+4326 desativar um pacote
+4327 atualizar um pacote
+4328 Baixando...
+4329 Extraindo...
+4330 Não foi possível achar mod:
+
+4331 muralha
+4332 portão
