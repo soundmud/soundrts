@@ -39,7 +39,6 @@ class Creature(Entity):
     time_cost = 0
     food_cost = 0
     food_provided = 0
-    need = None
     is_fleeing = False
     ai_mode = None
     can_switch_ai_mode = False
