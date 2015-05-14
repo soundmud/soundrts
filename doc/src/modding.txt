@@ -49,6 +49,18 @@ unit properties
 
 Note: a unit can also be a building.
 
+count_limit
+===========
+
+New in SoundRTS 1.2 alpha 10.
+
+`count_limit <value>`
+
+The default value is 0 (no limit).
+When the limit is active, a unit type which reaches the limit cannot be trained,
+built, summoned, raised, resurrected, or added by a trigger (add_unit).
+Conversion is unaffected though.
+
 is_ballistic
 ============
 

@@ -10,7 +10,7 @@ production_deferred 142
 cannot_build_here 4204
 not_enough_mana 4252
 not_enough_space 1027
-build_limit_exceeded 4335
+count_limit_reached 4335
 
 ; miscellaneous parameters
 

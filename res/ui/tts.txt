@@ -477,4 +477,4 @@
 
 4334 random faction
 
-4335 Build limit reached
+4335 Count limit reached

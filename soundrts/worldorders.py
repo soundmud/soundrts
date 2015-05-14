@@ -239,7 +239,8 @@ class ComplexOrder(Order):
         return type_name in cls.allowed_types(unit) \
                and type_name not in unit.player.forbidden_techs \
                and (not unit.orders or unit.orders[-1].can_be_followed) \
-               and cls.additional_condition(unit, type_name)
+               and cls.additional_condition(unit, type_name) \
+               and unit.player.check_count_limit(type_name)
 
     @classmethod
     def is_allowed(cls, unit, type_name, *args):
@@ -250,23 +251,6 @@ class ComplexOrder(Order):
     def missing_requirements(self):
         return [r for r in self.type.requirements if not self.unit.player.has(r)]
 
-    def check_build_limit(self):
-        if self.type.build_limit == 0:
-            return
-        unitName = self.type.type_name
-        unitCount = 0
-        # check for living instances of the type of unit or anything ordered to build or train one
-        for u in self.player.units:
-            if u.type_name == unitName:
-                unitCount += 1
-            for o in u.orders:
-                if o is self:
-                    continue
-                if (o.keyword == "train" or o.keyword == "build") and o.type.type_name == unitName:
-                    unitCount += 1
-
-        if unitCount >= self.type.build_limit:
-            return "build_limit_exceeded"
 
 class ProductionOrder(ComplexOrder):
 
@@ -279,11 +263,6 @@ class ProductionOrder(ComplexOrder):
         if result is not None:
             self.mark_as_impossible(result)
             return
-        result = self.check_build_limit()
-        if result is not None:
-            self.mark_as_impossible(result)
-            return
-            
         self.player.pay(self.cost)
         self.time = self.time_cost
 
@@ -339,7 +318,6 @@ class ProductionOrder(ComplexOrder):
         if self._has_started:
             self.player.used_food -= self.food_cost # end food reservation
         self.unit.notify("order_ok")
-
 
 
 class TrainOrder(ProductionOrder):
@@ -727,12 +705,6 @@ class BuildOrder(ComplexOrder):
             if result is not None:
                 self.mark_as_impossible(result)
                 return
-            # check the build limit only if we haven't already reserved the resources
-            # so it only gets checked once per build project
-            result = self.check_build_limit()
-            if result is not None:
-                self.mark_as_impossible(result)
-                return
         if self.unit.next_stage(self.target) is None and self.target is not self.unit.place: # target must be reachable
             self.mark_as_impossible()
             return
@@ -750,14 +722,18 @@ class BuildOrder(ComplexOrder):
         if self.target is self.unit.place or \
            self.target.place is self.unit.place:
             self.player.free_resources(self)
-            x, y = self.unit.place.find_free_space(self.type.airground_type,
+            x, _ = self.unit.place.find_free_space(self.type.airground_type,
                                                    self.target.x, self.target.y,
                                                    player=self.player)
             if x is None:
                 self.cancel()
                 self.mark_as_impossible("not_enough_space")
                 return
-            self.unit._put_building_site(self.type, self.target)
+            if self.player.check_count_limit(self.type.type_name):
+                self.unit._put_building_site(self.type, self.target)
+            else:
+                self.cancel()
+                self.mark_as_impossible("count_limit_reached")
         elif self.unit.action_target is None:
             self.move_to_or_fail(self.target)
 
@@ -936,6 +912,8 @@ class UseOrder(ComplexOrder):
             if corpses:
                 c = corpses.pop()
                 u = c.unit
+                if not self.player.check_count_limit(u.type_name):
+                    continue
                 u.player = None
                 u.place = None
                 u.id = None # so the unit will be added to world.active_objects
