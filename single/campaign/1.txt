@@ -52,8 +52,9 @@ timer_coefficient 1
 trigger player1 (timer 0) (add_objective 1 101 151 83)
 trigger player1 (timer 0) (add_objective 2 101 151 99)
 
-trigger player1 (has 2 farm) (add_objective 2 101 151 99)
-trigger player1 (has 2 farm) (objective_complete 1)
-
+; This trigger must be defined before the "objective_complete" triggers
+; or the cut scene will never be played (the game will quit before).
 trigger player1 (has 2 farm barracks) (cut_scene 7502)
+
+trigger player1 (has 2 farm) (objective_complete 1)
 trigger player1 (has barracks) (objective_complete 2)
