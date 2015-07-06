@@ -37,37 +37,10 @@ def my_copy(src, ext, dest):
         if n.endswith(ext):
             copy(join(src, n), dest)
 
-def my_copytree(src, dest, no_duplicate=False):
+def my_copytree(src, dest, *args, **kwargs):
     if exists(dest):
         rmtree(dest)
-    _copytree(src, dest, no_duplicate=no_duplicate)
-
-def _copytree(src, dst, symlinks=False, no_duplicate=False):
-    names = os.listdir(src)
-    my_mkdir(dst)
-    errors = []
-    for name in names:
-        if name == ".svn":
-            continue
-        srcname = os.path.join(src, name)
-        dstname = os.path.join(dst, name)
-        try:
-            if symlinks and os.path.islink(srcname):
-                linkto = os.readlink(srcname)
-                os.symlink(linkto, dstname)
-            elif os.path.isdir(srcname):
-                _copytree(srcname, dstname, symlinks, no_duplicate)
-            elif not no_duplicate or not_a_duplicate(dstname):
-                copy2(srcname, dstname)
-            # XXX What about devices, sockets etc.?
-        except (IOError, os.error), why:
-            errors.append((srcname, dstname, why))
-        # catch the Error from the recursive copytree so that we can
-        # continue with other files
-        except Error, err:
-            errors.extend(err.args[0])
-    if errors:
-        raise Error, errors
+    copytree(src, dest, *args, **kwargs)
 
 def my_execute(cmd):
     stdin, stdout, stderr = popen3(cmd)
@@ -88,8 +61,8 @@ print "updating list of maps..."
 import buildmultimapslist
 assert open("cfg/official_maps.txt").read()
 
-my_copy("soundrts", ".py", _d("bin/soundrts"))
-my_copy("soundrts/lib", ".py", _d("bin/soundrts/lib"))
+my_copytree("soundrts", _d("bin/soundrts"),
+            ignore=ignore_patterns("tests", "*.pyc"))
 copy("install/setup.py", _d("bin"))
 copy("soundrts.py", _d("bin"))
 copy("server.py", _d("bin"))
@@ -107,12 +80,12 @@ my_copytree("soundrts", "multi/soundrts")
 chdir("multi")
 pythonver = 7
 print "compiling all using 2.%s..." % pythonver
-my_execute("c:\\python2%s\\python.exe -m compileall -ql soundrts soundrts/lib" % pythonver)
+my_execute("c:\\python2%s\\python.exe -m compileall -q soundrts" % pythonver)
 # remove the *.py source files
-for base in ("soundrts", "soundrts/lib"):
-    for nf in os.listdir(base):
-        if nf[-3:] == ".py": # and nf not in ("soundrts.py", "server.py"):
-            os.remove(os.path.join(base, nf))
+for dirpath, dirnames, filenames in os.walk("soundrts"):
+    for name in filenames:
+        if name.endswith(".py"):
+            os.remove(os.path.join(dirpath, name))
 
 chdir(SRC_DIR)
 
