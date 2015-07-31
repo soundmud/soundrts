@@ -5,6 +5,7 @@ from lib.log import warning
 class Upgrade(object): # or Tech
 
     cost = (0,) * MAX_NB_OF_RESOURCE_TYPES
+    count_limit = 0
     time_cost = 0
     requirements = ()
     food_cost = 0
