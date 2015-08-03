@@ -32,6 +32,7 @@ class Creature(Entity):
 
     hp_max = 0
     mana_max = 0
+    mana_start = 0
     mana_regen = 0
     walked = []
 
@@ -143,7 +144,13 @@ class Creature(Entity):
         self.set_player(player)
         # stats "with a max"
         self.hp = self.hp_max
-        self.mana = self.mana_max
+        # Start with mana_start
+        if self.mana_start > 0:
+            self.mana = self.mana_start
+        else:
+        # start with mana_max
+            self.mana = self.mana_max
+
         # stat defined for the whole game
         self.minimal_damage = rules.get("parameters", "minimal_damage")
         if self.minimal_damage is None:
