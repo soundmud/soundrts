@@ -79,6 +79,15 @@ New in SoundRTS 1.2 alpha 9.
 
 The unit (or building) is affected by the teleportation effect or the recall effect.
 
+mana_start
+==========
+
+New in SoundRTS 1.2 alpha 10.
+
+`mana_start 50`
+
+In the example, the unit will start with 50 mana instead of mana_max. The default value for mana_start is 0. If mana_start is 0 or negative, mana_max is used instead.
+
 provides_survival
 =================
 

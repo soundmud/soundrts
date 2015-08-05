@@ -365,7 +365,6 @@ food_cost 3
 time_cost 30
 hp_max 30
 mana_max 200
-mana_start 50 ; start whit the given mana value
 mana_regen 1 ; mana / second
 speed 1
 can_use a_recall a_summon_dragon a_meteors

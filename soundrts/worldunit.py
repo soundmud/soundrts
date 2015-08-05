@@ -142,13 +142,12 @@ class Creature(Entity):
 
         # set a player
         self.set_player(player)
+
         # stats "with a max"
         self.hp = self.hp_max
-        # Start with mana_start
         if self.mana_start > 0:
             self.mana = self.mana_start
         else:
-        # start with mana_max
             self.mana = self.mana_max
 
         # stat defined for the whole game
