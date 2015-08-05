@@ -121,7 +121,7 @@ _precision_properties = (
                 "decay",
                 "qty", "extraction_qty",
                 "hp_max",
-                "mana_cost", "mana_max",
+                "mana_cost", "mana_max", "mana_start",
                 "extraction_time",
                 "time_cost",
                 "cooldown",
