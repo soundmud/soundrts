@@ -1326,6 +1326,10 @@ class GameInterface(object):
             self.place = square
             self._silence_square()
             self.display()
+            if get_fullscreen():
+                pygame.mouse.set_pos(self.grid_view.active_square_center_xy_coords())
+                # ignore the mouse motion event (it's not directly from the player)
+                pygame.event.clear(pygame.MOUSEMOTION)
 
     def _silence_square(self):
         for o in self.dobjets.values():

@@ -39,6 +39,10 @@ class GridView(object):
         for y in range(0, self.interface.ycmax + 2):
             draw_line(color, (0, y * self.square_view_height), ((self.interface.xcmax + 1) * self.square_view_width, y * self.square_view_height))
 
+    def active_square_center_xy_coords(self):
+        xc, yc = self.interface.coords_in_map(self.interface.place)
+        return (xc + .5) * self.square_view_width, self.ymax - (yc + .5) * self.square_view_height
+
     def active_square_view_display(self):
         xc, yc = self.interface.coords_in_map(self.interface.place)
         x, y = xc * self.square_view_width, self.ymax - yc * self.square_view_height
