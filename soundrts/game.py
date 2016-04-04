@@ -53,7 +53,11 @@ class _Game(object):
         self.replay_write(VERSION)
         self.replay_write(config.mods)
         self.replay_write(compatibility_version())
-        self.replay_write(self.map.pack())
+        if self.game_type_name == "mission":
+            self.replay_write(self.map.campaign.path)
+            self.replay_write(str(self.map.id))
+        else:
+            self.replay_write(self.map.pack())
         self.replay_write(players)
         self.replay_write(" ".join(map(str, self.alliances)))
         self.replay_write(" ".join(self.factions))
@@ -255,9 +259,6 @@ class MissionGame(_Game, _Savable):
         self.seed = random.randint(0, 10000)
         self.me = DirectClient(config.login, self)
         self.players = [self.me]
-        if self.map.campaign_rules:
-            # missions with custom rules can't be replayed yet
-            self.record_replay = False
 
     def pre_run(self):
         if self.world.intro:
@@ -299,8 +300,13 @@ class ReplayGame(_Game):
             voice.alert([1029, 4012]) # hostile sound  "version error"
             warning("Version mismatch. Version should be: %s. Mods should be: %s.",
                     version, mods)
-        self.map = Map()
-        self.map.unpack(self.replay_read())
+        campaign_path_or_packed_map = self.replay_read()
+        if game_type_name == "mission" and "***" not in campaign_path_or_packed_map:
+            from soundrts.campaign import Campaign
+            self.map = Campaign(campaign_path_or_packed_map)._get(int(self.replay_read()))
+        else:
+            self.map = Map()
+            self.map.unpack(campaign_path_or_packed_map)
         players = self.replay_read().split()
         self.alliances = map(int, self.replay_read().split())
         self.factions = self.replay_read().split()
@@ -323,3 +329,12 @@ class ReplayGame(_Game):
     def pre_run(self):
         voice.info([4316])
         voice.flush()
+
+    def run(self):
+        if getattr(self.map, "campaign", None):
+            self.map.campaign.load_resources()
+        try:
+            _Game.run(self)
+        finally:
+            if getattr(self.map, "campaign", None):
+                self.map.campaign.unload_resources()
