@@ -18,6 +18,7 @@ import pickle
 import sys
 import time
 import urllib
+import webbrowser
 
 from clientmedia import voice, init_media, close_media
 from clientmenu import Menu, input_string, END_LOOP
@@ -31,7 +32,7 @@ from lib.log import exception
 from multimaps import worlds_multi
 from msgs import nb2msg
 from package import get_packages, get_all_packages_paths
-from paths import REPLAYS_PATH, SAVE_PATH
+from paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
 import res
 from singlemaps import campaigns
 import stats
@@ -267,6 +268,8 @@ class Application(object):
         menu.loop()
 
     def main(self):
+        def open_user_folder():
+            webbrowser.open(CONFIG_DIR_PATH)
         single_player_menu = Menu([4030],
             [(c.title, c) for c in campaigns()] +
             [
@@ -285,6 +288,7 @@ class Application(object):
             ([4087], self.modify_login),
             ([4319], self.modify_default_mods),
             [[4323], self.manage_packages],
+            ([4336], open_user_folder),
             ([4118], END_LOOP),
             ])
         main_menu = Menu([4029, 4030], [

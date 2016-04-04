@@ -351,6 +351,7 @@ User folder
 ^^^^^^^^^^^
 
 The user folder contains the game settings, the custom maps and mods, and the temporary folder.
+An easy way to find the user folder is to open it from the options menu.
 
 If the main folder contains a folder called "user", this folder will be the user folder.
 If the "user" folder doesn't exist, the user folder will be located depending on the operating system:

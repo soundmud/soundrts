@@ -478,3 +478,5 @@
 4334 random faction
 
 4335 Count limit reached
+
+4336 open user folder
