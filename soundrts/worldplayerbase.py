@@ -588,8 +588,15 @@ class Player(object):
                 else:
                     p.defeat()
 
+    def _quit_alliance(self):
+        for ally in self.allied:
+            if ally is not self:
+                ally.allied.remove(self)
+        self.allied =[self]
+
     def defeat(self, force_quit=False):
         self.has_been_defeated = True
+        self._quit_alliance()
         self.store_score()
         if self in self.world.true_players():
             self.broadcast_to_others_only([self.name, 4311]) # "defeated"
