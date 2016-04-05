@@ -38,7 +38,7 @@ Source: soundrts-{#MyAppVer}-windows\*; Excludes: \user; DestDir: {app}; Flags: 
 Name: {userappdata}\SoundRTS {#MyAppStage}
 
 [Icons]
-Name: {group}\SoundRTS; Filename: {app}\soundrts.exe; WorkingDir: {app}
+Name: {group}\SoundRTS {#MyAppStageName}; Filename: {app}\soundrts.exe; WorkingDir: {app}
 Name: {group}\SoundRTS with soundpack; Filename: {app}\soundrts.exe; Parameters: --mods=soundpack; WorkingDir: {app}
 Name: {group}\CrazyMod\CrazyMod 8.2a; Filename: {app}\soundrts.exe; Parameters: --mods=soundpack,CrazyMod8.2; WorkingDir: {app}
 Name: {group}\CrazyMod\Website; Filename: http://pragmapragma.free.fr/soundrts-crazymod/
