@@ -38,9 +38,7 @@ class _PlayerBaseTestCase(unittest.TestCase):
         self.w.load_and_build_map(Map("soundrts/tests/%s.txt" % map_name))
         if cloak:
             self.w.unit_class("new_flyingmachine").dct["is_a_cloaker"] = True
-        self.cl = DummyClient()
-        cl2 = DummyClient()
-        self.w.populate_map([self.cl, cl2], alliance)
+        self.w.populate_map([DummyClient(), DummyClient()], alliance)
         self.cp, self.cp2 = self.w.players
 
     def find_player_unit(self, p, cls_name, index=0):
@@ -514,6 +512,27 @@ class ComputerTestCase(_PlayerBaseTestCase):
         self.assertFalse(p2.is_invisible_or_cloaked())
         # allied_victory
         self.assertFalse(self.cp.lang_no_enemy_left(None))
+
+    def testAlliedObserverAfterDefeat(self):
+        # test bug #63: a defeated player shouldn't share the observer view with the team
+        self.set_up((1, 1), map_name="jl1")
+        self.cp2.observer_if_defeated = True
+        # We won't check the observed squares because (at the moment)
+        # it seems that the observed squares are not shared by allies,
+        # only the objects in the squares.
+        # Instead, we check the first object of the square.
+        first_object_of_A2 = self.w.grid["a2"].objects[0]
+        self.assertFalse(self.cp.is_perceiving(first_object_of_A2))
+        self.assertFalse(self.cp2.is_perceiving(first_object_of_A2))
+        # to avoid an error, disable temporarily store_score
+        # (maybe remove this when store_score() won't rely on style anymore) 
+        def do_nothing(): pass
+        _backup = self.cp2.store_score
+        self.cp2.store_score = do_nothing
+        self.cp2.defeat()
+        self.cp2.store_score = _backup
+        self.assertFalse(self.cp.is_perceiving(first_object_of_A2)) # bug #63
+        self.assertTrue(self.cp2.is_perceiving(first_object_of_A2)) # observer mode after defeat
 
     def testAI(self):
         self.set_up()
