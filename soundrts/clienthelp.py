@@ -2,7 +2,7 @@ import res
 
 
 def _read_table_from_file(name):
-    return [x.split() for x in res.get_text(name).split("\n") if x.strip()]
+    return [x.split() for x in res.get_text_file(name).split("\n") if x.strip()]
 
 _game_table = _read_table_from_file("ui/game_help")
 _menu_table = _read_table_from_file("ui/menu_help")

@@ -1,6 +1,6 @@
 import re
 
-from nofloat import to_int
+from lib.nofloat import to_int
 from lib.log import debug, warning
 from lib.defs import preprocess
 

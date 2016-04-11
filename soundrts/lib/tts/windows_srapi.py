@@ -7,8 +7,8 @@ The only behavior provided is the behavior that tts.py needs.
 import ctypes
 import time
 
-import config
 
+srapi_wait = .1
 
 # not used; provided for compatibility
 tts_async = 0
@@ -32,7 +32,7 @@ class TTS(object):
 
     def Speak(self, text, *args):
         _srapi.sayStringW(text, 1)
-        self._end_time = time.time() + len(text) * config.srapi_wait
+        self._end_time = time.time() + len(text) * srapi_wait
 
     def Stop(self):
         _srapi.stopSpeech()

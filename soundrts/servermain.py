@@ -8,10 +8,11 @@ from constants import MAIN_METASERVER_URL
 from lib.log import debug, info, warning, exception
 from serverclient import ConnectionToClient
 from serverroom import InTheLobby, OrganizingAGame, Playing
-from ticker import Ticker
+from lib.ticker import Ticker
 from version import compatibility_version
 
 import config
+import options
 
 
 REGISTER_INTERVAL = 10 * 60 # register server every 10 minutes
@@ -28,7 +29,7 @@ class Server(asyncore.dispatcher):
         asyncore.dispatcher.__init__(self)
         self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
         self.set_reuse_addr()
-        self.bind(("", config.port))
+        self.bind(("", options.port))
         self.listen(5)
         self.login = config.login
         self.clients = []
@@ -145,7 +146,7 @@ class Server(asyncore.dispatcher):
         try:
             s = urllib.urlopen(REGISTER_URL + "?version=%s&login=%s&ip=%s&port=%s" %
                                (compatibility_version(), self.login, self.ip,
-                                config.port)).read()
+                                options.port)).read()
         except:
             s = "couldn't access to the metaserver"
         if s:

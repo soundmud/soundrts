@@ -2,35 +2,13 @@ import platform
 import threading
 import time
 
-import config
-from version import VERSION
+from ..log import warning, exception
+
+from soundrts import version
+DEBUG_MODE = version.IS_DEV_VERSION
 
 
-if platform.system() == "Windows":
-    if config.srapi == 0:
-        try:
-            import win32compytts as pyTTS
-        except:
-            print "Couldn't use SAPI."
-    else:
-        try:
-            import srapipytts as pyTTS
-        except:
-            print "Couldn't use ScreenReaderAPI."
-elif platform.system() == "Linux":
-    try:
-        import linuxpytts as pyTTS
-    except:
-        print "Couldn't use Speech Dispatcher."
-elif platform.system() == "Darwin":
-    try:
-        import nssspytts as pyTTS
-    except:
-        print "Couldn't use Appkit.NSSpeechSynthesizer."
-
-from lib.log import warning, exception
-
-
+pyTTS = None
 MINIMAL_PLAYING_TIME = 1 # in seconds
 TTS_TIMEOUT = .1 # in seconds
 
@@ -38,15 +16,12 @@ _tts = None
 _tts_previous_start_time = 0
 
 def warn_if_slow(f):
-    if VERSION.endswith("-dev"):
-        def new_f(*args, **keywords):
-            t = time.time()
-            r = f(*args, **keywords)
-            if time.time() - t  >= .1:
-                warning("%s took %s seconds!", f.__name__, time.time() - t)
-            return r
-    else:
-        new_f = f
+    def new_f(*args, **keywords):
+        t = time.time()
+        r = f(*args, **keywords)
+        if DEBUG_MODE and time.time() - t >= .1:
+            warning("%s took %s seconds!", f.__name__, time.time() - t)
+        return r
     return new_f
 
 @warn_if_slow
@@ -82,8 +57,30 @@ def stop():
                 pass # speak() will have a similar error and fall back to sounds
         _tts_previous_start_time = 0
 
-def init():
-    global _tts, is_available, _lock
+def init(srapi=1, srapi_wait=.1):
+    global _tts, is_available, _lock, pyTTS
+    if platform.system() == "Windows":
+        if srapi == 0:
+            try:
+                from . import windows_sapi5 as pyTTS
+            except:
+                print "Couldn't use SAPI."
+        else:
+            try:
+                from . import windows_srapi as pyTTS
+                pyTTS.srapi_wait = srapi_wait
+            except:
+                print "Couldn't use ScreenReaderAPI."
+    elif platform.system() == "Linux":
+        try:
+            from . import linux as pyTTS
+        except:
+            print "Couldn't use Speech Dispatcher."
+    elif platform.system() == "Darwin":
+        try:
+            from . import darwin as pyTTS
+        except:
+            print "Couldn't use Appkit.NSSpeechSynthesizer."
     _lock = threading.Lock()
     try:
         _tts = pyTTS.Create()
@@ -97,5 +94,3 @@ def close():
     # speech dispatcher must be closed or the program won't close
     if hasattr(_tts, "_client"):
         _tts._client.close()
-
-init()

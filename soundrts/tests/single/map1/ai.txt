@@ -1,0 +1,3 @@
+def easy
+get 6 peasant
+goto -1

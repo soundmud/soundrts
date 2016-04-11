@@ -1,4 +1,4 @@
-import group
+from lib import group
 from lib.log import exception
 from worldplayerbase import Player
 

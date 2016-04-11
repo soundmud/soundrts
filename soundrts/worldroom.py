@@ -1,9 +1,9 @@
 import string
 
 from constants import COLLISION_RADIUS
-from msgs import nb2msg
-from nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
-from priodict import priorityDictionary
+from lib.msgs import nb2msg
+from lib.nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
+from lib.priodict import priorityDictionary
 from worldresource import Meadow
 
 
@@ -155,10 +155,6 @@ class Square(object):
             end = P[end]
         Path.reverse()
         return Path[1], D[dest]
-
-    combat = False
-    lcombattants = []
-    last_information = 0
 
     def find_nearest_meadow(self, unit):
         def _d(o):

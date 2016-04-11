@@ -8,6 +8,7 @@ from clientmedia import voice
 from clientservermenu import ServerMenu
 from clientversion import revision_checker
 import config
+import options
 from lib.log import info, exception
 import servermain
 from version import compatibility_version
@@ -45,7 +46,7 @@ def start_server_and_connect(parameters):
     info("active threads: %s", threading.enumerate())
     sys.exit()
 
-def connect_and_play(host="127.0.0.1", port=config.port):
+def connect_and_play(host="127.0.0.1", port=options.port):
     try:
         server = ConnectionToServer(host, port)
         ServerMenu(server).loop()

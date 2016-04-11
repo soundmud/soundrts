@@ -1,6 +1,6 @@
 @echo off
 
-python.exe soundrts/rules2doc.py
+python.exe rules2doc.py
 if errorlevel 1 pause
 
 cd doc\src

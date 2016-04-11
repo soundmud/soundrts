@@ -464,8 +464,8 @@
 
 4323 packages
 4324 packages menu
-4325 add a package
-4326 deactivate a package
+4325 install a package
+4326 uninstall a package
 4327 update a package
 4328 Downloading...
 4329 Extracting...

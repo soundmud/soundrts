@@ -5,8 +5,8 @@ import sys
 import time
 
 from lib.log import debug, info, warning, exception
-from msgs import insert_silences, encode_msg
-from multimaps import worlds_multi
+from lib.msgs import insert_silences, encode_msg
+import res
 from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
 from version import compatibility_version
 
@@ -90,7 +90,7 @@ class ConnectionToClient(asynchat.async_chat):
         if self.server.can_create(self):
             self.push("maps %s\n" %
                       " ".join([",".join([str(y) for y in x.title])
-                                for x in worlds_multi()]))
+                                for x in res.worlds_multi()]))
         else:
             self.push("maps \n")
 
@@ -163,7 +163,7 @@ class ConnectionToClient(asynchat.async_chat):
         if self.server.can_create(self):
             self.state = OrganizingAGame()
             self.push("game_admin_menu\n")
-            scs = worlds_multi()
+            scs = res.worlds_multi()
             scenario = scs[int(args[0])]
             speed = float(args[1])
             self.server.games.append(Game(scenario, speed, self.server, self))

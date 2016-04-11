@@ -1,4 +1,6 @@
-debug_mode = False
+from soundrts import version
+DEBUG_MODE = version.IS_DEV_VERSION
+
 
 SHAPE = (
             (0, 0),
@@ -22,7 +24,7 @@ SHAPE = (
 class CollisionMatrix(object):
 
     def __init__(self, xmax, res):
-        if debug_mode:
+        if DEBUG_MODE:
             assert isinstance(xmax, int)
             assert isinstance(res, int)
         self._set = set()
@@ -52,7 +54,7 @@ class CollisionMatrix(object):
 ##        return set(((ka + a, kb + b) for (a, b) in SHAPE))
 
     def _shape(self, x, y):
-        if debug_mode:
+        if DEBUG_MODE:
             assert isinstance(x, int)
             assert isinstance(y, int)
             assert x >= 0
@@ -64,12 +66,12 @@ class CollisionMatrix(object):
         return self._set.intersection(self._shape(*args))
 
     def add(self, *args):
-        if debug_mode:
+        if DEBUG_MODE:
             assert not self.would_collide(*args)
         self._set.update(self._shape(*args))
         
     def remove(self, *args):
-        if debug_mode:
+        if DEBUG_MODE:
             assert self._shape(*args).issubset(self._set)
         self._set.difference_update(self._shape(*args))
 

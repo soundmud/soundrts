@@ -1,0 +1,2 @@
+def peasant
+cost 5 0

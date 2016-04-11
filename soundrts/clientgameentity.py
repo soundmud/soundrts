@@ -4,13 +4,14 @@ import time
 import pygame
 
 from clientgamenews import must_be_said
-from clientmedia import voice, distance, psounds, get_fullscreen
+from clientmedia import voice, sounds, get_fullscreen
 from constants import FOOTSTEP_LIMIT  
 from definitions import style
 from lib.log import warning, exception
-from msgs import nb2msg
-from nofloat import PRECISION
+from lib.msgs import nb2msg
+from lib.nofloat import PRECISION
 from worldunit import BuildingSite
+from lib.sound import psounds, distance
 
 
 def compute_title(type_name):
@@ -327,7 +328,7 @@ class EntityView(object):
         if self.loop_noise is not None:
             if self.loop_source is None:
                 # same priority level as "footstep", to avoid unpleasant interruptions
-                self.loop_source = psounds.play_loop(self.loop_noise, self.loop_volume, self.x, self.y, -10)
+                self.loop_source = psounds.play_loop(sounds.get_sound(self.loop_noise), self.loop_volume, self.x, self.y, -10)
             else :
                 self.loop_source.move(self.x, self.y)
         else:
@@ -423,7 +424,7 @@ class EntityView(object):
 
     def launch_event(self, sound, volume=1, priority=0, limit=0, ambient=False):
         if self.place is self.interface.place:
-            return psounds.play(sound, volume, self.x, self.y, priority, limit, ambient)
+            return psounds.play(sounds.get_sound(sound), volume, self.x, self.y, priority, limit, ambient)
 
     def launch_alert(self, sound):
         self.interface.launch_alert(self.place, sound)

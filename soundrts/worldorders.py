@@ -1,6 +1,6 @@
 from constants import MAX_NB_OF_RESOURCE_TYPES, ORDERS_QUEUE_LIMIT, VIRTUAL_TIME_INTERVAL
 from definitions import rules
-from nofloat import to_int
+from lib.nofloat import to_int
 import worldrandom
 from worldresource import Meadow, Deposit, Corpse
 from worldroom import Square
@@ -782,7 +782,7 @@ class UseOrder(ComplexOrder):
                     else:
                         self.mark_as_impossible()
                         return
-        elif self.type.effect_target == ["random"]:
+        elif self.type.effect_target == ["worldrandom"]:
             self.target = worldrandom.choice(self.player.world.squares)
         else:
             self.target = self.unit.place

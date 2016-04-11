@@ -1,7 +1,7 @@
-from clientmediascreen import draw_rect
-from clientmediavoice import voice
+from lib.screen import draw_rect
+from lib.voice import voice
 from lib.log import warning
-from nofloat import PRECISION
+from lib.nofloat import PRECISION
 
 
 _subzone_name = {

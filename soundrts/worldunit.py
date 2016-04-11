@@ -3,7 +3,7 @@ import worldrandom
 from constants import MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL, DEFAULT_MINIMAL_DAMAGE
 from definitions import rules
 from lib.log import debug, warning, exception
-from nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
+from lib.nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
 from worldaction import Action, AttackAction, MoveAction, MoveXYAction
 from worldentity import Entity
 from worldorders import ORDERS_DICT, GoOrder, RallyingPointOrder, BuildPhaseTwoOrder, UpgradeToOrder

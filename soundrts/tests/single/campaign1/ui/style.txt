@@ -1,0 +1,2 @@
+def peasant
+noise 5

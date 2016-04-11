@@ -1,13 +1,13 @@
 import re
 import time
 
-from clientmedia import voice, sounds
+from clientmedia import voice, sounds, play_sequence
 from clientmenu import Menu
 from definitions import style
 from game import MultiplayerGame
 from lib.log import debug, warning
 import mapfile
-from msgs import nb2msg, eval_msg_and_volume
+from lib.msgs import nb2msg, eval_msg_and_volume
 import res
 
 
@@ -63,7 +63,7 @@ class _ServerMenu(Menu):
         self.end_loop = True
 
     def srv_sequence(self, args):
-        sounds.play_sequence(args)
+        play_sequence(args)
 
     def srv_e(self, args):
         assert args[0].split(",")[0] == 'new_player'
@@ -134,7 +134,7 @@ class _BeforeGameMenu(_ServerMenu):
 
     def srv_map_factions(self, args):
         self.map_factions = args
-        style.load(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with factions defined in the map
+        style.load(res.get_text_file("ui/style", append=True, localize=True)) # XXX: won't work with factions defined in the map
 #       TODO: use self.map.additional_style (and self.map.campaign_style ?)
 
     def srv_registered_players(self, args):

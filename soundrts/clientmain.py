@@ -27,14 +27,11 @@ from clientversion import revision_checker
 import config
 from constants import MAIN_METASERVER_URL
 from definitions import style
-from game import TrainingGame, ReplayGame, reload_all
+from game import TrainingGame, ReplayGame
 from lib.log import exception
-from multimaps import worlds_multi
-from msgs import nb2msg
-from package import get_packages, get_all_packages_paths
+from lib.msgs import nb2msg
 from paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
 import res
-from singlemaps import campaigns
 import stats
 from version import compatibility_version
 
@@ -124,7 +121,7 @@ class Application(object):
         self.menu.update_menu(self.build_training_menu_after_map())
 
     def training_menu_after_map(self, m):
-        style.load(res.get_text("ui/style", append=True, locale=True)) # XXX: won't work with factions defined in the map
+        style.load(res.get_text_file("ui/style", append=True, localize=True)) # XXX: won't work with factions defined in the map
         self.players = [config.login]
         self.factions = ["random_faction"]
         self.map = m
@@ -163,7 +160,7 @@ class Application(object):
 
     def training_menu(self):
         menu = Menu([4055], remember="mapmenu")
-        for m in worlds_multi():
+        for m in res.worlds_multi():
             menu.append(m.title, (self.training_menu_after_map, m))
         menu.append([4041], None)
         menu.run()
@@ -181,38 +178,35 @@ class Application(object):
 
     def manage_packages(self):
 
-        def add():
+        def install():
             menu = Menu([4325])
-            for p in get_packages():
-                if not p.is_active:
-                    menu.append([p.name], (p.add, voice))
+            for p in res.package_manager.uninstalled_packages:
+                menu.append([p.name], p.install)
             menu.append([4118], None)
             menu.run()
 
-        def deactivate():
+        def uninstall():
             menu = Menu([4326])
-            for p in get_packages():
-                if p.is_active:
-                    menu.append([p.name], p.deactivate)
+            for p in res.package_manager.installed_packages:
+                menu.append([p.name], p.uninstall)
             menu.append([4118], None)
             menu.run()
 
         def update():
             menu = Menu([4327])
-            for p in get_packages():
-                if p.is_active:
-                    menu.append([p.name], (p.update, voice))
+            for p in res.package_manager.installed_packages:
+                menu.append([p.name], p.update)
             menu.append([4118], None)
             menu.run()
 
         menu = Menu([4324], [
-            ([4325], add),
-            ([4326], deactivate),
+            ([4325], install),
+            ([4326], uninstall),
             ([4327], update),
             ([4076], END_LOOP),
             ])
         menu.loop()
-        reload_all()
+        res.reload_all()
 
     def modify_login(self):
         login = input_string([4235, 4236], "^[a-zA-Z0-9]$") # type your new
@@ -228,16 +222,6 @@ class Application(object):
 
     def modify_default_mods(self):
 
-        def available_mods():
-            result = []
-            for path in get_all_packages_paths():
-                mods_path = os.path.join(path, "mods")
-                for mod in os.listdir(mods_path):
-                    if os.path.isdir(os.path.join(mods_path, mod)) \
-                       and mod not in result and mod not in mods:
-                        result.append(mod)
-            return result
-
         def select_next_mod(parent):
 
             def add_mod(mod):
@@ -246,18 +230,16 @@ class Application(object):
                     parent.title = mods
 
             menu = Menu([4320] + mods)
-            for mod in available_mods():
-                menu.append([mod], (add_mod, mod))
+            for mod in res.available_mods():
+                if mod not in mods:
+                    menu.append([mod], (add_mod, mod))
             menu.append([4118], None)
             menu.run()
 
         def save():
-            previous_mods = config.mods
-            config.config_mods = ",".join(mods)
-            config.mods = config.config_mods
+            config.mods = ",".join(mods)
             config.save()
-            if config.mods != previous_mods:
-                reload_all()
+            res.set_mods(config.mods)
             return END_LOOP
 
         mods = []
@@ -271,7 +253,7 @@ class Application(object):
         def open_user_folder():
             webbrowser.open(CONFIG_DIR_PATH)
         single_player_menu = Menu([4030],
-            [(c.title, c) for c in campaigns()] +
+            [(c.title, c) for c in res.campaigns()] +
             [
             ([4055], self.training_menu),
             ([4113], self.restore_game),

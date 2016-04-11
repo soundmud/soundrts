@@ -4,17 +4,17 @@ log.add_console_handler()
 import os
 import os.path
 
-from soundrts import mapfile
+from soundrts.mapfile import Map
 
 
 DIR = "multi"
 
 def size(m):
-    return mapfile.Map(os.path.join(DIR, m)).size()
+    return Map(os.path.join(DIR, m)).size()
 
 def add_digest(m):
     p = os.path.join(DIR, m)
-    return "%s %s" % (m, mapfile.Map(p).get_digest())
+    return "%s %s" % (m, Map(p).get_digest())
 
 
 f = open("cfg/official_maps.txt", "w")

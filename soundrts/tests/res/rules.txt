@@ -1,0 +1,5 @@
+def test
+cost 0 0
+
+def peasant
+cost 0 0

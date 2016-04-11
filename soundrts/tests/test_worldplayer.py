@@ -1,7 +1,7 @@
 import unittest
 
 from soundrts.mapfile import Map
-from soundrts.nofloat import PRECISION
+from soundrts.lib.nofloat import PRECISION
 from soundrts.world import World
 from soundrts import worldclient
 from soundrts.worldorders import BuildOrder, TrainOrder

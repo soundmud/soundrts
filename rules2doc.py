@@ -1,7 +1,7 @@
-from lib import log
+from soundrts.lib import log
 log.add_console_handler()
 
-from definitions import Rules
+from soundrts.definitions import Rules
 
 
 class RulesForDoc(Rules):

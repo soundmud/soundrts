@@ -1,10 +1,13 @@
 from soundrts.lib import log
 log.add_console_handler()
 
-import unittest
+from soundrts import config
+config.mods = ""
 
-from soundrts.tests.worldplayertest import *
-from soundrts.tests.worldtest import *
-from soundrts.tests.maptest import *
+from soundrts import version
+version.IS_DEV_VERSION = True
 
-unittest.main()
+import pytest
+
+
+pytest.main("soundrts/tests")

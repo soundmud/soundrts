@@ -1,6 +1,6 @@
 import time
 
-from soundrts import tts
+from soundrts.lib import tts
 
 
 def say(txt):
@@ -8,6 +8,7 @@ def say(txt):
     while tts.is_speaking():
         time.sleep(.01)
 
+tts.init(debug=True)
 for i in range(10):
     i += 1
     say("%s " % i)

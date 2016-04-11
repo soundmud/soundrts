@@ -2,12 +2,12 @@ import ConfigParser
 import os
 import re
 
-from clientmedia import voice, sounds
-import clientmenu
+from clientmedia import voice, sounds, play_sequence, res
+from clientmenu import Menu
 import config
-from game import MissionGame, reload_all
+from game import MissionGame
 from mapfile import Map
-from msgs import nb2msg
+from lib.msgs import nb2msg
 from paths import CAMPAIGNS_CONFIG_PATH
 
 
@@ -22,13 +22,13 @@ class MissionChapter(Map):
         return self.campaign.get_next(self)
 
     def _victory(self):
-        menu = clientmenu.Menu([], [])
+        menu = Menu([], [])
         menu.append([4011], self._get_next()) # continue
         menu.append([4009], None) # cancel
         menu.run()
         
     def _defeat(self):
-        menu = clientmenu.Menu([], [])
+        menu = Menu([], [])
         menu.append([4266], self) # restart
         menu.append([4009], None) # cancel
         menu.run()
@@ -79,7 +79,7 @@ class CutSceneChapter:
 
     def run(self):
         voice.important(self.title)
-        sounds.play_sequence(self.sequence)
+        play_sequence(self.sequence)
         self.campaign.unlock_next(self)
         if self._get_next():
             self._get_next().run()
@@ -153,16 +153,23 @@ class Campaign(object):
             if next_chapter:
                 self._set_bookmark(next_chapter.id)
 
-    def run(self):
-        if self.mods is not None and self.mods != config.mods:
-            config.mods = self.mods
-            reload_all()
-        sounds.enter_campaign(self.path)
-        menu = clientmenu.Menu(self.title, [],
-                default_choice_index=len(self._available_chapters()) - 1)
-        for ch in self._available_chapters():
-            menu.append(ch.title, ch)
-#        menu.append([4113], "restore")
-        menu.append([4118], None) # "cancel"
-        menu.run()
+    def load_resources(self):
+        sounds.enter_campaign(res, self.path)
+
+    def unload_resources(self):
         sounds.exit_campaign()
+
+    def run(self):
+        if self.mods is not None:
+            res.set_mods(self.mods)
+        try:
+            self.load_resources()
+            menu = Menu(self.title, [],
+                    default_choice_index=len(self._available_chapters()) - 1)
+            for ch in self._available_chapters():
+                menu.append(ch.title, ch)
+    #        menu.append([4113], "restore")
+            menu.append([4118], None) # "cancel"
+            menu.run()
+        finally:
+            self.unload_resources()

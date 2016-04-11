@@ -1,5 +1,5 @@
 from soundrts.clientmedia import init_media
-from soundrts.clientmediavoice import voice
+from soundrts.lib.voice import voice
 
 
 def say(txt):

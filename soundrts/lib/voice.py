@@ -4,24 +4,9 @@ import time
 import pygame
 from pygame.locals import KEYDOWN
 
-from clientmediasound import DEFAULT_VOLUME, VoiceChannel
-
-
-class Message(object):
-
-    def __init__(self, lns, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME, said=False, expiration_delay=45, update_type=None):
-        self.lns = lns
-        self.lv = lv
-        self.rv = rv
-        self.said = said
-        self.expiration_time = time.time() + expiration_delay
-        self.update_type = update_type
-
-    def unpack(self):
-        return (self.lns, self.lv, self.rv)
-
-    def has_expired(self):
-        return self.expiration_time < time.time()
+from soundrts.lib.message import Message
+from soundrts.lib.sound import DEFAULT_VOLUME
+from soundrts.lib.voicechannel import VoiceChannel
 
 
 class _Voice(object):
@@ -40,9 +25,9 @@ class _Voice(object):
 
     unsaid = property(get_unsaid)
 
-    def init(self):
+    def init(self, *args, **kwargs):
         self.lock = threading.Lock()
-        self.channel = VoiceChannel()
+        self.channel = VoiceChannel(*args, **kwargs)
 
     def _start_current(self):
         self.channel.stop()
@@ -88,18 +73,18 @@ class _Voice(object):
     def menu(self, *args, **keywords):
         self._say_now(keep_key=True, *args, **keywords)
 
-    def info(self, lns, *args, **keywords):
+    def info(self, list_of_sound_numbers, *args, **keywords):
         """Say sooner or later."""
-        if lns:
-            self.msgs.append(Message(lns, *args, **keywords))
+        if list_of_sound_numbers:
+            self.msgs.append(Message(list_of_sound_numbers, *args, **keywords))
             self.update()
         
-    def _say_now(self, lns, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME, interruptible=True, keep_key=False):
+    def _say_now(self, list_of_sound_numbers, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME, interruptible=True, keep_key=False):
         """Say now (give up saying sentences not said yet) until the end or a keypress."""
-        if lns:
+        if list_of_sound_numbers:
             with self.lock:
                 self._give_up_current_if_partially_said()
-                self.channel.play(lns, lv, rv)
+                self.channel.play(Message(list_of_sound_numbers, lv, rv))
                 while self.channel.get_busy():
                     if interruptible and self._key_hit(keep_key=keep_key):
                         break
@@ -107,7 +92,7 @@ class _Voice(object):
                     self.channel.update()
                 if not interruptible:
                     pygame.event.get([KEYDOWN])
-                self.msgs.append(Message(lns, lv, rv, said=True))
+                self.msgs.append(Message(list_of_sound_numbers, lv, rv, said=True))
                 self._go_to_next_unsaid() # or next_current?
                 self.active = False
 #                self.update()
@@ -125,13 +110,13 @@ class _Voice(object):
         if self._current_message_is_unsaid() and self.channel.is_almost_done():
             self._mark_current_as_said()
 
-    def item(self, lns, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME):
+    def item(self, list_of_sound_numbers, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME):
         """Say now without recording."""
-        if lns:
+        if list_of_sound_numbers:
             with self.lock:
                 self._give_up_current_if_partially_said()
                 self._go_to_next_unsaid()
-                self.channel.play(lns, lv, rv)
+                self.channel.play(Message(list_of_sound_numbers, lv, rv))
                 self.active = False
                 self.history = False
 
@@ -146,7 +131,7 @@ class _Voice(object):
                     return True
         # look for a more recent, identical message
         for m in self.msgs[index + 1:]:
-            if msg.lns == m.lns:
+            if msg.list_of_sound_numbers == m.list_of_sound_numbers:
                 return True
         return False
 
@@ -166,7 +151,7 @@ class _Voice(object):
             if not self.history:
                 self._go_to_next_unsaid()
             if self._exists(self.current):
-                self.channel.play(*self.msgs[self.current].unpack())
+                self.channel.play(self.msgs[self.current])
                 self.active = True
             else:
                 self.active = False

@@ -3,7 +3,7 @@ import ctypes
 import pygame
 from pygame.locals import FULLSCREEN
 
-from lib.log import warning
+from .log import warning
 
 
 pygame.font.init()

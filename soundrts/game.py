@@ -6,16 +6,16 @@ import time
 import pygame
 from pygame.locals import KEYDOWN
 
-from clientmedia import sounds, voice, update_display_caption
+from clientmedia import voice, play_sequence
 import clientgame
 from clientgameorder import update_orders_list
 import definitions
 import config
 from constants import METASERVER_URL
-from definitions import style, rules, load_ai
+from definitions import style, rules
 from lib.log import warning, exception
 from mapfile import Map
-from msgs import nb2msg
+from lib.msgs import nb2msg
 from paths import REPLAYS_PATH, SAVE_PATH, STATS_PATH
 import random
 import res
@@ -23,17 +23,6 @@ import stats
 from version import VERSION, compatibility_version
 from world import World
 from worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, HalfDummyClient, send_platform_version_to_metaserver 
-
-
-def reload_all():
-    update_display_caption()
-    res.update_mods_list()
-    sounds.load_default()
-    rules.load(res.get_text("rules", append=True))
-    load_ai(res.get_text("ai", append=True)) # just in case
-    style.load(res.get_text("ui/style", append=True, locale=True))
-    while(res.alerts):
-        voice.alert(res.alerts.pop(0))
 
 
 class _Game(object):
@@ -51,7 +40,7 @@ class _Game(object):
         players = " ".join([p.login for p in self.players])
         self.replay_write(self.map.get_name() + " " + players)
         self.replay_write(VERSION)
-        self.replay_write(config.mods)
+        self.replay_write(res.mods)
         self.replay_write(compatibility_version())
         if self.game_type_name == "mission":
             self.replay_write(self.map.campaign.path)
@@ -80,26 +69,26 @@ class _Game(object):
             self.create_replay()
         self.world = World(self.default_triggers, self.seed)
         if self.world.load_and_build_map(self.map):
-            style.load(res.get_text("ui/style", append=True, locale=True),
-                       self.map.campaign_style,
-                       self.map.additional_style)
-            sounds.enter_map(self.map.mapfile)
-            update_orders_list() # when style has changed
-            self.pre_run()
-            self.interface = clientgame.GameInterface(self.me, speed=speed)
-            self.interface.load_bindings(
-                res.get_text("ui/bindings", append=True, locale=True) + "\n" +
-                self.map.get_campaign("ui/bindings.txt") + "\n" +
-                self.map.get_additional("ui/bindings.txt"))
-            self.world.populate_map(self.players, self.alliances, self.factions)
-            self.nb_human_players = self.world.current_nb_human_players()
-            t = threading.Thread(target=self.world.loop)
-            t.daemon = True
-            t.start()
-            self.interface.loop()
-            self._record_stats(self.world)
-            self.post_run()
-            sounds.exit_map()
+            self.map.load_style(res)
+            try:
+                self.map.load_resources()
+                update_orders_list() # when style has changed
+                self.pre_run()
+                self.interface = clientgame.GameInterface(self.me, speed=speed)
+                self.interface.load_bindings(
+                    res.get_text_file("ui/bindings", append=True, localize=True) + "\n" +
+                    self.map.get_campaign("ui/bindings.txt") + "\n" +
+                    self.map.get_additional("ui/bindings.txt"))
+                self.world.populate_map(self.players, self.alliances, self.factions)
+                self.nb_human_players = self.world.current_nb_human_players()
+                t = threading.Thread(target=self.world.loop)
+                t.daemon = True
+                t.start()
+                self.interface.loop()
+                self._record_stats(self.world)
+                self.post_run()
+            finally:
+                self.map.unload_resources()
             self.world.clean()
         else:
             voice.alert([1029]) # hostile sound
@@ -214,28 +203,31 @@ class _Savable(object):
         if self.record_replay:
             self._replay_file = open(os.path.join(REPLAYS_PATH, "%s.txt" % int(time.time())), "w")
             self._replay_file.write(self._replay_file_content)
-        sounds.enter_map(self.map.mapfile)
-        self.world.restore_links_for_savegame()
-        rules.copy(self._rules)
-        definitions._ai = self._ai
-        style.copy(self._style)
-        update_orders_list() # when style has changed
-        self.interface.set_self_as_listener()
-        t = threading.Thread(target=self.world.loop)
-        t.daemon = True
-        t.start()
-        # Because the simulation is in a different thread,
-        # sometimes the interface "forgets" to ask for an
-        # update. Maybe a better communication protocol
-        # between interface and simulation would solve
-        # this problem ("update" and "no_end_of_update_yet"
-        # should contain the simulation time, maybe). Maybe
-        # some data in a queue has been lost.
-        self.interface.asked_to_update = False
-        self.interface.loop()
-        self._record_stats(self.world)
-        self.post_run()
-        self.world.clean()
+        try:
+            self.map.load_resources()
+            self.world.restore_links_for_savegame()
+            rules.copy(self._rules)
+            definitions._ai = self._ai
+            style.copy(self._style)
+            update_orders_list() # when style has changed
+            self.interface.set_self_as_listener()
+            t = threading.Thread(target=self.world.loop)
+            t.daemon = True
+            t.start()
+            # Because the simulation is in a different thread,
+            # sometimes the interface "forgets" to ask for an
+            # update. Maybe a better communication protocol
+            # between interface and simulation would solve
+            # this problem ("update" and "no_end_of_update_yet"
+            # should contain the simulation time, maybe). Maybe
+            # some data in a queue has been lost.
+            self.interface.asked_to_update = False
+            self.interface.loop()
+            self._record_stats(self.world)
+            self.post_run()
+            self.world.clean()
+        finally:
+            self.map.unload_resources()
 
 
 class TrainingGame(_MultiplayerGame, _Savable):
@@ -262,7 +254,7 @@ class MissionGame(_Game, _Savable):
 
     def pre_run(self):
         if self.world.intro:
-            sounds.play_sequence(self.world.intro)
+            play_sequence(self.world.intro)
 
     def post_run(self):
         _Game.post_run(self)
@@ -272,10 +264,12 @@ class MissionGame(_Game, _Savable):
         return self._has_victory
 
     def run_on(self):
-        sounds.enter_campaign(self.map.campaign.path)
-        _Savable.run_on(self)
-        self.map.run_next_step(self)
-        sounds.exit_campaign()
+        try:
+            self.map.campaign.load_resources()
+            _Savable.run_on(self)
+            self.map.run_next_step(self)
+        finally:
+            self.map.campaign.unload_resources()
 
 
 class ReplayGame(_Game):
@@ -292,9 +286,7 @@ class ReplayGame(_Game):
         voice.alert([game_name])
         version = self.replay_read()
         mods = self.replay_read()
-        if mods != config.mods:
-            config.mods = mods
-            reload_all()
+        res.set_mods(mods)
         _compatibility_version = self.replay_read()
         if _compatibility_version != compatibility_version():
             voice.alert([1029, 4012]) # hostile sound  "version error"
@@ -302,7 +294,7 @@ class ReplayGame(_Game):
                     version, mods)
         campaign_path_or_packed_map = self.replay_read()
         if game_type_name == "mission" and "***" not in campaign_path_or_packed_map:
-            from soundrts.campaign import Campaign
+            from campaign import Campaign
             self.map = Campaign(campaign_path_or_packed_map)._get(int(self.replay_read()))
         else:
             self.map = Map()

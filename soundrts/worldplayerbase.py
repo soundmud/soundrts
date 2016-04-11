@@ -6,8 +6,8 @@ import string
 from constants import MAX_NB_OF_RESOURCE_TYPES
 from definitions import rules, style
 from lib.log import debug, warning
-from msgs import encode_msg, nb2msg
-from nofloat import PRECISION
+from lib.msgs import encode_msg, nb2msg
+from lib.nofloat import PRECISION
 from worldentity import NotEnoughSpaceError, Entity
 from worldresource import Corpse
 from worldupgrade import Upgrade

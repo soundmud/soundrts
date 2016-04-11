@@ -1,7 +1,7 @@
 from definitions import style
 from lib.log import warning
-from msgs import nb2msg
-from nofloat import PRECISION
+from lib.msgs import nb2msg
+from lib.nofloat import PRECISION
 from worldorders import ORDERS_DICT
 
 
@@ -38,7 +38,7 @@ class OrderView(object):
                     msg += nb2msg(c / PRECISION) + style.get("parameters", "resource_%s_title" % i)
             if self.food_cost:
                 and_index = len(msg)
-                msg += nb2msg(self.food_cost, genre="f") + style.get("parameters", "food_title")
+                msg += nb2msg(self.food_cost, gender="f") + style.get("parameters", "food_title")
         # add "and" if there are at least 2 requirements
         if and_index > 0:
             msg[and_index:and_index] = style.get("parameters", "and")

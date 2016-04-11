@@ -1,8 +1,8 @@
 import pygame
 
-from clientmediascreen import get_screen, draw_line, draw_rect
+from lib.screen import get_screen, draw_line, draw_rect
 from lib.log import warning
-from nofloat import square_of_distance
+from lib.nofloat import square_of_distance
 
 
 R = int(0.5 * 10)

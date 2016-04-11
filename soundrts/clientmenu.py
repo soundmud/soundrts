@@ -9,7 +9,7 @@ from pygame.locals import QUIT, KEYDOWN, K_LSHIFT, K_RSHIFT, K_KP_ENTER, K_RETUR
 from clienthelp import help_msg
 from clientmedia import voice, modify_volume, toggle_fullscreen
 from lib.log import debug, warning
-from msgs import nb2msg
+from lib.msgs import nb2msg
 from paths import TMP_PATH
 
 

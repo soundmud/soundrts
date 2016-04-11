@@ -9,15 +9,15 @@ import re
 import string
 import time
 
-import collision
+from lib import collision
 from constants import COLLISION_RADIUS, VIRTUAL_TIME_INTERVAL
 from definitions import rules, get_ai_names, load_ai
 from lib.log import warning, exception
-from nofloat import to_int, int_distance, PRECISION
+from lib.nofloat import to_int, int_distance, PRECISION
 from paths import MAPERROR_PATH
 import res
 from worldability import Ability
-import worldclient
+from worldclient import DummyClient
 from worldexit import passage
 from worldorders import ORDERS_DICT
 from worldplayerbase import Player, normalize_cost_or_resources
@@ -603,8 +603,8 @@ class World(object):
             except:
                 warning("cannot remove map error file")
         try:
-            rules.load(res.get_text("rules", append=True), map.campaign_rules, map.additional_rules)
-            load_ai(res.get_text("ai", append=True), map.campaign_ai, map.additional_ai)
+            rules.load(res.get_text_file("rules", append=True), map.campaign_rules, map.additional_rules)
+            load_ai(res.get_text_file("ai", append=True), map.campaign_ai, map.additional_ai)
             self._load_map(map)
             self.map = map
             self.square_width = int(self.square_width * PRECISION)
@@ -678,7 +678,7 @@ class World(object):
                     p.faction = pr
         # add "neutral" (independent) computers
         for start in self.computers_starts:
-            self._add_player(Computer, worldclient.DummyClient(), start, True)
+            self._add_player(Computer, DummyClient(), start, True)
         # init all players positions
         for player in self.players:
             player.init_position()

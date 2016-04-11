@@ -1,6 +1,6 @@
 import copy
 
-from nofloat import to_int, PRECISION
+from lib.nofloat import to_int, PRECISION
 from worldentity import Entity
 
 

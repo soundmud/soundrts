@@ -10,20 +10,26 @@ from pygame.locals import KEYDOWN, QUIT, USEREVENT, K_TAB, KMOD_ALT, MOUSEBUTTON
 from clientgamegridview import GridView 
 from clientgamefocus import Zoom
 from clienthelp import help_msg
-from clientmedia import voice, sounds, psounds, sound_stop, angle, stereo, vision_stereo, modify_volume, set_game_mode, screen_render, distance, get_fullscreen, get_screen, toggle_fullscreen, screen_render_subtitle
-from clientmediamouse import set_cursor
-import clientmenu
+from clientmedia import voice, sounds, sound_stop, modify_volume, get_fullscreen, toggle_fullscreen, play_sequence
+from lib.mouse import set_cursor
+from clientmenu import Menu, input_string
 from clientgameentity import EntityView
 from clientgamenews import must_be_said
 from clientgameorder import order_title, order_shortcut, order_args, order_comment, order_index
 import config
 from constants import ALERT_LIMIT, EVENT_LIMIT, VIRTUAL_TIME_INTERVAL
 from definitions import style
-import group
+from lib import group
 from lib.log import debug, warning, exception
-from msgs import nb2msg, eval_msg_and_volume
-from nofloat import PRECISION
+from lib.msgs import nb2msg, eval_msg_and_volume
+from lib.nofloat import PRECISION
 from version import VERSION
+from lib.sound import psounds, distance, angle, vision_stereo, stereo
+from lib.screen import set_game_mode, screen_render, get_screen,\
+    screen_render_subtitle
+
+
+POSITIONAL_SOUND = ["1003"]  # TODO: include this in style.txt
 
 
 def direction_to_msgpart(o):
@@ -125,7 +131,7 @@ class GameInterface(object):
 
 
     def cmd_say(self):
-        msg = clientmenu.input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
+        msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
         if not msg:
             return
         voice.confirmation([self.player.client.login, 4287, msg])
@@ -151,7 +157,7 @@ class GameInterface(object):
         self.speed = float(s)
 
     def srv_sequence(self, parts):
-        sounds.play_sequence(parts)
+        play_sequence(parts)
 
     def srv_quit(self):
         voice.silent_flush()
@@ -223,12 +229,12 @@ class GameInterface(object):
     def get_description_of(self, o):
         if self.immersion:
             vg, vd = vision_stereo(self.x, self.y, o.x, o.y, self.o)
-            return o.title + [54] + nb2msg(self.distance(o)) + [55] \
+            return POSITIONAL_SOUND + o.title + [54] + nb2msg(self.distance(o)) + [55] \
                    + self.direction_to_msg(o) + o.description, vg, vd
         else:
             self.o = 90
             vg, vd = vision_stereo(self.x, self.y, o.x, o.y, self.o)
-            return o.title + self.direction_to_msg(o) + o.description, vg, vd
+            return POSITIONAL_SOUND + o.title + self.direction_to_msg(o) + o.description, vg, vd
 
     def cmd_examine(self):
         if self.target is not None:
@@ -282,7 +288,7 @@ class GameInterface(object):
 
     def cmd_console(self):
         if self.server.allow_cheatmode:
-            cmd = clientmenu.input_string(msg=[4317], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
+            cmd = input_string(msg=[4317], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
             if cmd.startswith("s "):
                 self.speed = float(cmd.split(" ")[1])
             elif cmd == "r":
@@ -318,7 +324,7 @@ class GameInterface(object):
     def cmd_gamemenu(self):
         voice.silent_flush()
         sound_stop()
-        menu = clientmenu.Menu([4010], [
+        menu = Menu([4010], [
             ([4070], self.gm_quit),
             ([4103], self.gm_slow_speed),
             ([4104], self.gm_normal_speed),
@@ -399,7 +405,7 @@ class GameInterface(object):
 
     def _play_tick(self):
         if self._must_play_tick:
-            sounds.play(1003, vol=.1)
+            psounds.play_stereo(sounds.get_sound(1003), vol=.1)
         # record game turn time
 #        nb_samples = 3.0
         interval = VIRTUAL_TIME_INTERVAL / 1000.0 / self.speed
@@ -1010,7 +1016,7 @@ class GameInterface(object):
         elif self.an_order_requiring_a_target_is_selected:
             if self.order not in self.orders():
                 # the order is not in the menu anymore
-                sounds.play(1029) # hostile sound
+                psounds.play_stereo(sounds.get_sound(1029)) # hostile sound
             elif self.ui_target.id is not None:
                 self.send_order(self.order, self.ui_target.id, args)
                 # confirmation
@@ -1074,7 +1080,7 @@ class GameInterface(object):
         return stereo(0, 0, dx, dy, 90)
 
     def launch_alert(self, place, sound):
-        sounds.play(sound, vol=self._minimap_stereo(place), limit=ALERT_LIMIT)
+        psounds.play_stereo(sounds.get_sound(sound), vol=self._minimap_stereo(place), limit=ALERT_LIMIT)
 
     def srv_alert(self, s):
         id_place, sound = s.split(",")
@@ -1538,7 +1544,7 @@ class GameInterface(object):
             "parameters", "resource_%s_title" % resource_type))
 
     def cmd_food_status(self):
-        voice.item(nb2msg(self.available_food, genre="f") + [137, 2011] +
+        voice.item(nb2msg(self.available_food, gender="f") + [137, 2011] +
                    nb2msg(self.used_food))
         # other possibility: available_food + [137,133,2011] + food
 
@@ -1568,7 +1574,7 @@ class GameInterface(object):
             self._previous_used_food == self.available_food):
             if 0 <= self.available_food - self.used_food <= \
                self.available_food * .20:
-                self.send_msg_if_playing(nb2msg(self.available_food, genre="f")
+                self.send_msg_if_playing(nb2msg(self.available_food, gender="f")
                                          + [137, 2011]
                                          + nb2msg(self.used_food),
                                          update_type="food")
