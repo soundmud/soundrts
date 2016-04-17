@@ -36,7 +36,9 @@ class Upgrade(object): # or Tech
 
     def effect_bonus(self, unit, start_level, stat, base, incr=0):
         setattr(unit, stat, getattr(unit, stat) + int(base) + int(incr) * start_level)
+        if stat == "damage": unit.damage_level += 1
 #        warning("next level for '%s' now %s", stat, getattr(unit, stat))
 
     def effect_apply_bonus(self, unit, start_level, stat):
         self.effect_bonus(unit, start_level, stat, getattr(unit, stat + "_bonus", 0))
+        if stat == "damage": unit.damage_level += 1

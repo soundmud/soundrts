@@ -61,6 +61,7 @@ class Creature(Entity):
 
     armor = 0
     damage = 0
+    damage_level = 0
 
     basic_abilities = []
 
@@ -540,12 +541,8 @@ class Creature(Entity):
     def on_wounded(self, attacker, notify):
         if self.player is not None:
             self.player.observe(attacker)
-        # Why level 0 only for "wounded,type,0":
-        # maybe a single sound would be better: simpler,
-        # allowing more levels of upgrade, and examining
-        # unit upgrades in the stats is better?
         if notify:
-            self.notify("wounded,%s,%s,%s" % (attacker.type_name, attacker.id, 0))
+            self.notify("wounded,%s,%s,%s" % (attacker.type_name, attacker.id, attacker.damage_level))
         # react only if this is an external attack
         if self.player is not attacker.player and \
            attacker.is_vulnerable and \
