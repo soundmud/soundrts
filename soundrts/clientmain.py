@@ -176,38 +176,6 @@ class Application(object):
         menu.append([4041], None)
         menu.run()
 
-    def manage_packages(self):
-
-        def install():
-            menu = Menu([4325])
-            for p in res.package_manager.uninstalled_packages:
-                menu.append([p.name], p.install)
-            menu.append([4118], None)
-            menu.run()
-
-        def uninstall():
-            menu = Menu([4326])
-            for p in res.package_manager.installed_packages:
-                menu.append([p.name], p.uninstall)
-            menu.append([4118], None)
-            menu.run()
-
-        def update():
-            menu = Menu([4327])
-            for p in res.package_manager.installed_packages:
-                menu.append([p.name], p.update)
-            menu.append([4118], None)
-            menu.run()
-
-        menu = Menu([4324], [
-            ([4325], install),
-            ([4326], uninstall),
-            ([4327], update),
-            ([4076], END_LOOP),
-            ])
-        menu.loop()
-        res.reload_all()
-
     def modify_login(self):
         login = input_string([4235, 4236], "^[a-zA-Z0-9]$") # type your new
                                         # login ; use alphanumeric characters
@@ -219,35 +187,6 @@ class Application(object):
             voice.alert([4239, login]) # new login:
             config.login = login
             config.save()
-
-    def modify_default_mods(self):
-
-        def select_next_mod(parent):
-
-            def add_mod(mod):
-                if mod not in mods:
-                    mods.append(mod)
-                    parent.title = mods
-
-            menu = Menu([4320] + mods)
-            for mod in res.available_mods():
-                if mod not in mods:
-                    menu.append([mod], (add_mod, mod))
-            menu.append([4118], None)
-            menu.run()
-
-        def save():
-            config.mods = ",".join(mods)
-            config.save()
-            res.set_mods(config.mods)
-            return END_LOOP
-
-        mods = []
-        menu = Menu([4321]) # the list is empty
-        menu.append([4320], (select_next_mod, menu))
-        menu.append([4096], save)
-        menu.append([4098], END_LOOP)
-        menu.loop()
 
     def main(self):
         def open_user_folder():
@@ -266,25 +205,46 @@ class Application(object):
                             "admin_only no_metaserver")),
             ([4048], None),
             ])
+        def set_and_launch_mod(mods):
+            config.mods = mods
+            config.save()
+            res.set_mods(config.mods)
+            main_menu().loop() # update the menu title
+            raise SystemExit
+        def mods_menu():
+            mods_menu = Menu(["Mods"])
+            mods_menu.append([4340], (set_and_launch_mod, ""))
+            mods_menu.append(["soundpack"], (set_and_launch_mod, "soundpack"))
+            for mod in res.available_mods():
+                if mod != "soundpack":
+                    for mods in ((mod, ), (mod, "soundpack")):
+                        mods_menu.append([" + ".join(mods)], (set_and_launch_mod, ",".join(reversed(mods))))
+            mods_menu.append([4118], END_LOOP)
+            mods_menu.run()
+            return END_LOOP
         options_menu = Menu([4086], [
             ([4087], self.modify_login),
-            ([4319], self.modify_default_mods),
-            [[4323], self.manage_packages],
+            (("Mods", ), mods_menu),
             ([4336], open_user_folder),
             ([4118], END_LOOP),
             ])
-        main_menu = Menu([4029, 4030], [
+        def main_menu():
+            import version
+            return Menu(["SoundRTS %s %s," % (version.VERSION, res.mods), 4030], [
             [[4031, 4032], single_player_menu.loop],
             [[4033, 4034], self.multiplayer_menu],
             [[4035, 4036], server_menu],
             [[4315], self.replay_menu],
             [[4037, 4038], options_menu.loop],
+            [[4337], launch_manual],
             [[4041, 4042], END_LOOP],
             ])
+        def launch_manual():
+            webbrowser.open(os.path.realpath("doc/help-index.htm"))
         if "connect_localhost" in sys.argv:
             connect_and_play()
         else:
-            main_menu.loop()
+            main_menu().loop()
 
 
 def main():

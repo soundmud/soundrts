@@ -468,3 +468,7 @@
 4334 faction aléatoire
 
 4336 ouvrir le dossier utilisateur
+4337 documentation
+4338 campagne
+4339 entraînement
+4340 SoundRTS de base (pas de mod)

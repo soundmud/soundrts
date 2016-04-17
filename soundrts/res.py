@@ -2,30 +2,16 @@
 
 import os
 
-from lib.package import PackageManager
 from lib.resource import ResourceLoader
 import config
-from constants import PACKAGES_METASERVER_URL
 import options
-from paths import MAPS_PATHS, PACKAGES_PATH, TMP_PATH
+from paths import MAPS_PATHS
 
 
 def get_all_packages_paths():
     """return the default "maps and mods" paths followed by the paths of the active packages"""
-    return MAPS_PATHS + package_manager.get_packages_paths()
+    return MAPS_PATHS # + package_manager.get_packages_paths()
 
-
-def say_downloading():
-    from lib.voice import voice
-    voice.item([4328])
-
-
-def say_extracting():
-    from lib.voice import voice
-    voice.item([4329])
-
-
-package_manager = PackageManager(PACKAGES_METASERVER_URL, TMP_PATH, PACKAGES_PATH, say_downloading, say_extracting)
 if options.mods is not None:
     mods = options.mods
 else:

@@ -5,7 +5,6 @@ from lib.nofloat import PRECISION
 
 
 MAIN_METASERVER_URL = open("cfg/metaserver.txt").read().strip()
-PACKAGES_METASERVER_URL = "http://jlpo.free.fr/soundrts/metaserver/packages.txt"
 
 # old value used by some features (stats, ...)
 METASERVER_URL = "http://jlpo.free.fr/soundrts/metaserver/"
