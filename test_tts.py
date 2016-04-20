@@ -8,7 +8,7 @@ def say(txt):
     while tts.is_speaking():
         time.sleep(.01)
 
-tts.init(debug=True)
+tts.init()
 for i in range(10):
     i += 1
     say("%s " % i)

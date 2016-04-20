@@ -1,61 +1,86 @@
 import platform
+import Queue
 import threading
 import time
 
 from ..log import warning, exception
 
-from soundrts import version
-DEBUG_MODE = version.IS_DEV_VERSION
-
 
 pyTTS = None
-MINIMAL_PLAYING_TIME = 1 # in seconds
 TTS_TIMEOUT = .1 # in seconds
 
 _tts = None
-_tts_previous_start_time = 0
+_is_speaking = False
 
-def warn_if_slow(f):
-    def new_f(*args, **keywords):
-        t = time.time()
-        r = f(*args, **keywords)
-        if DEBUG_MODE and time.time() - t >= .1:
-            warning("%s took %s seconds!", f.__name__, time.time() - t)
-        return r
-    return new_f
+_queue = Queue.Queue()
 
-@warn_if_slow
+
 def is_speaking():
     if not is_available: return False
     # The TTS doesn't always start speaking at once, but we don't want to wait.
     # So we consider that the TTS is speaking during the first milliseconds,
     # even if _tts.IsSpeaking() returns False.
-    with _lock:
-        return _tts.IsSpeaking() or time.time() < _tts_previous_start_time + TTS_TIMEOUT
+    return _is_speaking
+#    with _lock:
+#        return _tts.IsSpeaking() or time.time() < _tts_previous_start_time + TTS_TIMEOUT
 
-@warn_if_slow
-def speak(text):
-    assert isinstance(text, unicode)
-    global _tts_previous_start_time
-    if not is_available: return
+
+def _speak(text):
     with _lock:
         try:
             _tts.Speak(text, pyTTS.tts_async, pyTTS.tts_purge_before_speak)
         except:
             exception("error during tts_speak('%s'): back to recorded speech", text)
-        _tts_previous_start_time = time.time()
 
-@warn_if_slow
-def stop():
+
+def speak(text):
+    global _is_speaking
+    assert isinstance(text, unicode)
     if not is_available: return
-    global _tts_previous_start_time
+    _queue.put((_speak, text))
+    _is_speaking = True
+
+
+def _stop():
     with _lock:
-        if _tts_previous_start_time:
+        if _is_speaking:
             try:
                 _tts.Stop()
             except:
                 pass # speak() will have a similar error and fall back to sounds
-        _tts_previous_start_time = 0
+#         else:
+#             print "no stop"
+    
+    
+def stop():
+    global _is_speaking
+    if not is_available: return
+    _queue.put((_stop, ))
+    _is_speaking = False
+
+
+def loop():
+    while(True):
+        cmd = _queue.get()
+        if not _queue.empty():
+            #print "skipped!", cmd
+            continue
+        try:
+            cmd[0](*cmd[1:])
+        except:
+            exception("")
+
+
+def loop2():
+    global _is_speaking
+    while(True):
+        if _is_speaking:
+            time.sleep(TTS_TIMEOUT)
+            with _lock:
+                if not _tts.IsSpeaking():
+                    _is_speaking = False
+        time.sleep(.1)
+
 
 def init(srapi=1, srapi_wait=.1):
     global _tts, is_available, _lock, pyTTS
@@ -88,6 +113,13 @@ def init(srapi=1, srapi_wait=.1):
         is_available = False
     else:
         is_available = True
+        t = threading.Thread(target=loop)
+        t.daemon = True
+        t.start()
+        t = threading.Thread(target=loop2)
+        t.daemon = True
+        t.start()
+
 
 def close():
     if not is_available: return
