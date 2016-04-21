@@ -34,7 +34,7 @@ def minimal_init():
     voice.init(config)
     set_screen(fullscreen)
     update_display_caption()
-    pygame.key.set_repeat()
+    pygame.key.set_repeat(500, 100)
 
     
 def init_media():
