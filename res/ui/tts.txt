@@ -483,4 +483,3 @@
 4337 documentation
 4338 campaign
 4339 training
-4340 basic SoundRTS (no mod)

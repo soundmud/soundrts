@@ -471,4 +471,3 @@
 4337 documentation
 4338 campagne
 4339 entraînement
-4340 SoundRTS de base (pas de mod)

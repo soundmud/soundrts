@@ -52,6 +52,13 @@ def set_mods(new_mods):
         reload_all()
 
 
+def set_soundpacks(new_soundpacks):
+    global soundpacks
+    if new_soundpacks != soundpacks:
+        soundpacks = new_soundpacks
+        reload_all()
+
+
 # campaigns
 
 
