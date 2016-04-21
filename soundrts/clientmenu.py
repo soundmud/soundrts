@@ -86,6 +86,9 @@ class Menu(object):
                 self._remembered_choice = ""
 
     def _say_choice(self):
+        from lib.sound import psounds
+        from clientmedia import sounds
+        psounds.play_stereo(sounds.get_sound(6115))
         voice.item(self.choices[self.choice_index][0])
 
     def _choice_exists(self):
@@ -114,6 +117,9 @@ class Menu(object):
             debug("select_next_choice did nothing because choices=%s", self.choices)
 
     def _confirm_choice(self):
+        from lib.sound import psounds
+        from clientmedia import sounds
+        psounds.play_stereo(sounds.get_sound(6116))
         if self._choice_exists() and self.choices[self.choice_index]:
             voice.confirmation(self.choices[self.choice_index][0][:1]) # repeat only the first part of the choice (not the help)
             self.choice_done = True
