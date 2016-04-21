@@ -25,7 +25,7 @@ fullscreen = False
 
 def update_display_caption():
     """set the window title"""
-    pygame.display.set_caption("SoundRTS %s %s" % (VERSION, res.mods))
+    pygame.display.set_caption("SoundRTS %s %s %s" % (VERSION, res.mods, res.soundpacks))
 
 
 def minimal_init():

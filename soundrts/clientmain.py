@@ -214,11 +214,8 @@ class Application(object):
         def mods_menu():
             mods_menu = Menu(["Mods"])
             mods_menu.append([4340], (set_and_launch_mod, ""))
-            mods_menu.append(["soundpack"], (set_and_launch_mod, "soundpack"))
             for mod in res.available_mods():
-                if mod != "soundpack":
-                    for mods in ((mod, ), (mod, "soundpack")):
-                        mods_menu.append([" + ".join(mods)], (set_and_launch_mod, ",".join(reversed(mods))))
+                mods_menu.append([mod], (set_and_launch_mod, mod))
             mods_menu.append([4118], END_LOOP)
             mods_menu.run()
             return END_LOOP
@@ -230,7 +227,7 @@ class Application(object):
             ])
         def main_menu():
             import version
-            return Menu(["SoundRTS %s %s," % (version.VERSION, res.mods), 4030], [
+            return Menu(["SoundRTS %s %s %s," % (version.VERSION, res.mods, res.soundpacks), 4030], [
             [[4031, 4032], single_player_menu.loop],
             [[4033, 4034], self.multiplayer_menu],
             [[4035, 4036], server_menu],

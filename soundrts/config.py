@@ -15,6 +15,7 @@ speed = 1
 srapi = 1
 srapi_wait = .1
 mods = ""
+soundpacks = ""
 
 
 def save():
@@ -22,6 +23,7 @@ def save():
     c.add_section("general")
     c.set("general", "login", login)
     c.set("general", "mods", mods)
+    c.set("general", "soundpacks", soundpacks)
     c.set("general", "num_channels", repr(num_channels))
     c.set("general", "speed", repr(speed))
     c.add_section("tts")
@@ -32,7 +34,7 @@ def save():
 
 
 def load():
-    global login, num_channels, speed, mods
+    global login, num_channels, speed, mods, soundpacks
     global srapi, srapi_wait
     error = False
     new_file = False
@@ -61,6 +63,10 @@ def load():
         error = True
     try:
         mods = c.get("general", "mods")
+    except:
+        error = True
+    try:
+        soundpacks = c.get("general", "soundpacks")
     except:
         error = True
     if platform.system() == "Windows":

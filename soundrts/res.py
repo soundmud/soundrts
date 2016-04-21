@@ -16,8 +16,9 @@ if options.mods is not None:
     mods = options.mods
 else:
     mods = config.mods
-_r = ResourceLoader(mods, get_all_packages_paths())
+_r = ResourceLoader(mods, config.soundpacks, get_all_packages_paths())
 mods = _r.mods
+soundpacks = _r.soundpacks
 get_text_file = _r.get_text_file
 load_texts = _r.load_texts
 load_sounds = _r.load_sounds
@@ -35,10 +36,11 @@ def on_complete():
 
 
 def reload_all():
-    global mods
+    global mods, soundpacks
     from clientmedia import sounds, update_display_caption
-    _r.update_mods_list(mods, get_all_packages_paths())
+    _r.update_mods_list(mods, soundpacks, get_all_packages_paths())
     mods = _r.mods
+    soundpacks = _r.soundpacks
     update_display_caption()
     sounds.load_default(_r, on_loading, on_complete)
 
@@ -137,12 +139,29 @@ def worlds_multi():
 # mods
 
 
-def available_mods():
+def is_a_soundpack(path):
+    for name in ("rules.txt", "ai.txt"):
+        if os.path.isfile(os.path.join(path, name)):
+            return False
+    return True
+
+
+def is_a_mod(path):
+    return not is_a_soundpack(path)
+
+
+def available_mods(check_mod_type=is_a_mod):
     result = []
     for path in get_all_packages_paths():
         mods_path = os.path.join(path, "mods")
         for mod in os.listdir(mods_path):
-            if os.path.isdir(os.path.join(mods_path, mod)) \
+            path = os.path.join(mods_path, mod)
+            if os.path.isdir(path) \
+               and check_mod_type(path) \
                and mod not in result:
                 result.append(mod)
     return result
+
+
+def available_soundpacks():
+    return available_mods(is_a_soundpack)

@@ -8,14 +8,14 @@ from soundrts import clientmedia
 @pytest.fixture()
 def default():
     clientmedia.minimal_init()
-    res = ResourceLoader("", [])
+    res = ResourceLoader("", "", [])
     return res
 
 
 @pytest.fixture()
 def test():
     clientmedia.minimal_init()
-    res = ResourceLoader("", [], base_path="soundrts/tests/res")
+    res = ResourceLoader("", "", [], base_path="soundrts/tests/res")
     return res
 
 

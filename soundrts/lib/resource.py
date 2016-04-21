@@ -63,10 +63,10 @@ class ResourceLoader(object):
     Depends on language, active packages, loading order of the mods.
     Ideally, it should only care about folders and files.
     """
-    def __init__(self, mods, all_packages_paths, base_path="res"):
+    def __init__(self, mods, soundpacks, all_packages_paths, base_path="res"):
         self._paths = []
         self.base_path = base_path
-        self.update_mods_list(mods, all_packages_paths)
+        self.update_mods_list(mods, soundpacks, all_packages_paths)
         self.language = self._get_language()
 
     def _available_languages(self):
@@ -95,16 +95,9 @@ class ResourceLoader(object):
                         "and write 'pl' for example.")
         return best_language_match(lang, self._available_languages())
 
-    def update_mods_list(self, mods, all_packages_paths):
-        """Update the paths list, ignoring unavailable mods.
-        
-        mods: load order of the mods
-        all_packages_paths: load order of the packages 
-        """
-        self._paths = []
+    def _update_paths(self, all_packages_paths, mods):
         actual_mods = []
-        self._paths.append(self.base_path)  # vanilla path
-        self.unavailable_mods = []
+        unavailable_mods = []
         for mod_name in mods.split(","):
             mod_name = mod_name.strip()
             if mod_name:
@@ -118,10 +111,21 @@ class ResourceLoader(object):
                         mod_found = True
                         break
                 if not mod_found:
-                    self.unavailable_mods.append(mod_name)
+                    unavailable_mods.append(mod_name)
                 else:
                     actual_mods.append(mod_name)
-        self.mods = ",".join(actual_mods)
+        return ",".join(actual_mods), unavailable_mods
+
+    def update_mods_list(self, mods, soundpacks, all_packages_paths):
+        """Update the paths list, ignoring unavailable mods.
+        
+        mods: load order of the mods
+        all_packages_paths: load order of the packages 
+        """
+        self._paths = []
+        self._paths.append(self.base_path)  # vanilla path
+        self.mods, self.unavailable_mods = self._update_paths(all_packages_paths, mods)
+        self.soundpacks, self.unavailable_soundpacks = self._update_paths(all_packages_paths, soundpacks)
 
     def _localized_paths(self, path, localize):
         """Return the paths according to the preferred language.
