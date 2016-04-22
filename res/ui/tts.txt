@@ -481,5 +481,3 @@
 
 4336 open user folder
 4337 documentation
-4338 campaign
-4339 training

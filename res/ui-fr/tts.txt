@@ -469,5 +469,3 @@
 
 4336 ouvrir le dossier utilisateur
 4337 documentation
-4338 campagne
-4339 entraînement
