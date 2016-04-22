@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.9: http://docutils.sourceforge.net/" />
+<title>Guida per la creazione delle mappe</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 7056 2011-06-17 10:50:48Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="map-making-guide">
+<h1 class="title">Guida per la creazione delle mappe</h1>
+
+<div class="contents topic" id="contents">
+<p class="topic-title first">Indice</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduzione</a></li>
+<li><a class="reference internal" href="#multiplayer-maps" id="id2">Mappe multigiocatore</a><ul>
+<li><a class="reference internal" href="#where-to-store-a-new-multiplayer-map" id="id3">dove  collocare una mappa multigiocatore</a></li>
+<li><a class="reference internal" href="#how-to-edit-a-map" id="id4">Come modificare una mappa</a></li>
+<li><a class="reference internal" href="#how-to-test-a-map" id="id5">Come testare una mappa</a></li>
+<li><a class="reference internal" href="#how-to-find-and-remove-an-error" id="id6">Come trovare e rimuovere un errore</a></li>
+<li><a class="reference internal" href="#comments" id="id7">Commenti</a></li>
+<li><a class="reference internal" href="#basic-properties" id="id8">Proprietà di base</a><ul>
+<li><a class="reference internal" href="#title" id="id9">Title</a></li>
+<li><a class="reference internal" href="#objective" id="id10">Objective</a></li>
+<li><a class="reference internal" href="#nb-players-min-and-nb-players-max" id="id11">Nb_players_min e nb_players_max</a></li>
+<li><a class="reference internal" href="#global-food-limit" id="id12">Global_food_limit</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#defining-the-terrain" id="id13">Definire il terreno</a><ul>
+<li><a class="reference internal" href="#square-width" id="id14">Square_width</a></li>
+<li><a class="reference internal" href="#nb-lines-and-nb-columns" id="id15">Nb_lines e nb_columns</a></li>
+<li><a class="reference internal" href="#west-east-paths-and-south-north-paths" id="id16">West_east_paths e south_north_paths</a></li>
+<li><a class="reference internal" href="#west-east-bridges-and-south-north-bridges" id="id17">West_east_bridges e south_north_bridges</a></li>
+<li><a class="reference internal" href="#general-case-west-east-and-south-north" id="id18">Caso generale: west_east e south_north</a></li>
+<li><a class="reference internal" href="#goldmines-woods-and-other-resource-deposits" id="id19">Miniere, boschi, e altri giacimenti di risorse</a></li>
+<li><a class="reference internal" href="#nb-meadows-by-square" id="id20">Nb_meadows_by_square</a></li>
+<li><a class="reference internal" href="#additional-meadows" id="id21">Additional_meadows</a></li>
+<li><a class="reference internal" href="#remove-meadows" id="id22">Remove_meadows</a></li>
+<li><a class="reference internal" href="#high-grounds" id="id23">High_grounds</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#defining-the-starting-resources-of-the-players" id="id24">Definire le risorse iniziali dei giocatori</a><ul>
+<li><a class="reference internal" href="#case-1-same-resources-for-everybody" id="id25">Caso 1: stesse risorse per tutti</a><ul>
+<li><a class="reference internal" href="#starting-resources" id="id26">starting_resources</a></li>
+<li><a class="reference internal" href="#starting-units" id="id27">starting_units</a></li>
+<li><a class="reference internal" href="#starting-squares" id="id28">starting_squares</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#case-2-different-resources-depending-on-the-player" id="id29">Caso 2: risorse differenti a seconda del giocatore</a><ul>
+<li><a class="reference internal" href="#player" id="id30">player</a></li>
+<li><a class="reference internal" href="#computer-only" id="id31">computer_only</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#types-list" id="id32">Lista dei tipi</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#random-choice-end-choice-and-end-random-choice" id="id33">#random_choice, #end_choice e #end_random_choice</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#advanced-multiplayer-maps-how-to-change-the-rules-and-the-aspect-of-the-game" id="id34">Mappe multigiocatore avanzate: cambiare le regole e l'aspetto del gioco</a><ul>
+<li><a class="reference internal" href="#map-structure" id="id35">Struttura della mappa</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#single-player-campaigns" id="id36">Campagne singolo giocatore</a><ul>
+<li><a class="reference internal" href="#where-to-store-a-new-single-player-campaign" id="id37">Dove collocare una mappa campagna per singolo giocatore</a></li>
+<li><a class="reference internal" href="#structure-of-the-campaign-folder" id="id38">Struttura della cartella campagna</a><ul>
+<li><a class="reference internal" href="#chapter-files" id="id39">File dei capitoli</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#syntax-of-a-chapter-file" id="id40">Sintassi di un file capitolo</a><ul>
+<li><a class="reference internal" href="#syntax-of-a-mission-chapter-file" id="id41">Sintassi per la missione di un file capitolo</a><ul>
+<li><a class="reference internal" href="#intro" id="id42">Intro</a></li>
+<li><a class="reference internal" href="#add-objective" id="id43">Add_objective</a></li>
+<li><a class="reference internal" href="#objective-complete-action-in-a-trigger" id="id44">Objective_complete (azione in un trigger)</a></li>
+<li><a class="reference internal" href="#cut-scene-action-in-a-trigger" id="id45">Cut_scene (azione in un trigger)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#syntax-of-a-cut-scene-chapter-file" id="id46">Sintassi per un capitolo con scenario ridotto</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id1">Introduzione</a></h1>
+<p>Il miglior modo per iniziare è creare una mappa multigiocatore e testarla contro il computer.</p>
+</div>
+<div class="section" id="multiplayer-maps">
+<h1><a class="toc-backref" href="#id2">Mappe multigiocatore</a></h1>
+<div class="section" id="where-to-store-a-new-multiplayer-map">
+<h2><a class="toc-backref" href="#id3">Dove collocare una mappa multigiocatore</a></h2>
+<p>Se si hanno i permessi di scrittura nella cartella dove è installato SoundRTS  (o SoundRTS test), 
+si può collocare la propria prima mappa multigiocatore nella cartella &quot;multi&quot;.</p>
+<p>Se non si hanno i permessi in scrittura nella cartella Programmi perché si lavora in modalità non amministratore, si può collocare il file della mappa su cui si sta lavorando nella 
+cartella &quot;multi&quot; che si trova in C:\Documents and Settings\TuoNome\Application data\SoundRTS. Questa cartella viene creata la prima volta che si esegue SoundRTS. 
+Un'altra soluzione è quella di installare SoundRTS in una cartella dove si hanno i diritti di scrittura, e lavorare sulla cartella menzionata nel paragrafo precedente.</p>
+</div>
+<div class="section" id="how-to-edit-a-map">
+<h2><a class="toc-backref" href="#id4">Come modificare una mappa</a></h2>
+<p>Aprire il file con un editor di testo. 
+Scrivere in minuscolo, anche se maiuscolo ma in ogni caso verrà ignorato.</p>
+</div>
+<div class="section" id="how-to-test-a-map">
+<h2><a class="toc-backref" href="#id5">Come testare una mappa</a></h2>
+<p>Per testare una mappa, avviare SoundRTS ed andare nel menu giocatore singolo. Si può giocare contro il computer sulle mappe multigiocatore. 
+La mappa verrà ricaricata ogni volta che si inizia una partita, così non si dovrà riavviare SoundRTS per testare le modifiche. 
+La combinazione da utilizzare è Control Shift F2: se si è il solo umano sulla mappa, si sarà autorizzati a esaminare completamente la mappa (non c'è la nebbia di guerra).</p>
+</div>
+<div class="section" id="how-to-find-and-remove-an-error">
+<h2><a class="toc-backref" href="#id6">Come trovare e rimuovere un errore</a></h2>
+<p>Se, quando si avvia la mappa, si riceve il messaggio: &quot;Errore del server&quot; tornando così al menu del server, viene generato un file chiamato &quot;maperror.txt&quot; dove vengono scritti i dettagli dell'errore. Questo file si trova nella propria cartella temporanea predefinita (ad esempio &quot;C:\Documents and Settings\tuonome\Impostazioni locali\Temp\soundrts&quot;) o nella cartella SoundRTS.</p>
+<p>Nella stessa cartella si possono trovare ulteriori (ma criptiche) informazioni in &quot;server.log&quot; o in &quot;client.log&quot;.</p>
+<p>Se ancora non si è capito dove sta l'errore, sentitevi liberi di contattarmi, direttamente o tramite la lista di SoundRTS.</p>
+</div>
+<div class="section" id="comments">
+<h2><a class="toc-backref" href="#id7">Commenti</a></h2>
+<p>Le linee che iniziano con un punto e virgola sono commenti. I commenti durante l'esecuzione vengono ignorati. 
+Qualsiasi cosa scritta dopo il punto e virgola fino a quando non si passa alla riga successiva è un commento.</p>
+</div>
+<div class="section" id="basic-properties">
+<h2><a class="toc-backref" href="#id8">Proprietà di base</a></h2>
+<div class="section" id="title">
+<h3><a class="toc-backref" href="#id9">Title</a></h3>
+<p>&quot;title 4018 5000&quot; significa: &quot;Il titolo della mappa è il suono 4800 seguito dal suono 5000&quot;</p>
+</div>
+<div class="section" id="objective">
+<h3><a class="toc-backref" href="#id10">Objective</a></h3>
+<p>&quot;objective 145 88&quot; significa: &quot;L'obiettivo della mappa è il suono 145 seguito dal suono 88&quot;</p>
+</div>
+<div class="section" id="nb-players-min-and-nb-players-max">
+<h3><a class="toc-backref" href="#id11">Nb_players_min e nb_players_max</a></h3>
+<p>&quot;nb_players_min 2&quot; significa: &quot;è richiesto un minimo di due giocatori per iniziare la partita. 
+&quot;nb_players_max 4&quot; significa: &quot;4 giocatori è il numero massimo per questa mappa&quot;</p>
+</div>
+<div class="section" id="global-food-limit">
+<h3><a class="toc-backref" href="#id12">Global_food_limit</a></h3>
+<p>Nuovo nella versione beta 9e</p>
+<p>Aggiornamento nella versione beta 10 o. Questo limite globale di cibo non è comunque diviso tra i giocatori.</p>
+<p>&quot;global_food_limit 200&quot; significa: &quot;ciascun giocatore non può avere più di 200 alimenti se costruisce più fattorie&quot;</p>
+</div>
+</div>
+<div class="section" id="defining-the-terrain">
+<h2><a class="toc-backref" href="#id13">Definire il terreno</a></h2>
+<div class="section" id="square-width">
+<h3><a class="toc-backref" href="#id14">Square_width</a></h3>
+<p>&quot;square_width 12&quot; significa: &quot;la larghezza del terreno è di 12 metri. 
+Non si dovrebbe modificare questo parametro poiché gli oggetti potrebbero essere inascoltabili se si è troppo lontano&quot;</p>
+</div>
+<div class="section" id="nb-lines-and-nb-columns">
+<h3><a class="toc-backref" href="#id15">Nb_lines e nb_columns</a></h3>
+<p>&quot;nb_lines 7&quot; significa: &quot;la griglia ha 7 righe&quot;. 
+&quot;nb_columns 7&quot; significa: &quot;la griglia ha 7 colonne&quot;. 
+Il limite per le colonne è di 26 e non c'è un limite per le righe, anche se ad oggi non è  probabilmente lontano da 26, a causa delle performance. 
+Attenzione: nb_rows è obsoleto e ha lo stesso significato di nb_columns.</p>
+</div>
+<div class="section" id="west-east-paths-and-south-north-paths">
+<h3><a class="toc-backref" href="#id16">West_east_paths e south_north_paths</a></h3>
+<p>&quot;west_east_paths a1 c1 d1 f1&quot; significa: &quot;aggiungi un percorso da a1 fino a b1, da c1 a d1, da d1 a e1, e da f1 a g1&quot;. 
+Si avrà soltanto bisogno di indicare la casella più a sinistra del percorso. 
+&quot;south_north_paths a1 a3 a4 a6&quot; significa: &quot;aggiungi un percorso da a1 a a2, da a3 a a4, da a4 a a5, e da a6 a a7&quot;. 
+Si avrà soltanto bisogno di indicare la casella più a sud del percorso.</p>
+</div>
+<div class="section" id="west-east-bridges-and-south-north-bridges">
+<h3><a class="toc-backref" href="#id17">West_east_bridges e south_north_bridges</a></h3>
+<p>Per i ponti vale lo stesso procedimento visto per i percorsi.</p>
+</div>
+<div class="section" id="general-case-west-east-and-south-north">
+<h3><a class="toc-backref" href="#id18">Caso generale: west_east e south_north</a></h3>
+<p>&quot;west_east road a1 c1 d1&quot; significa: &quot;aggiungi un'uscita in stile &quot;road&quot; da a1 a b1, da c1 a d1, da d1 a e1&quot;</p>
+<p>'road&quot; deve essere definito in style.txt</p>
+<p>Nota: &quot;west_east_paths&quot; è uguale a &quot;west_east path&quot;</p>
+<p>Nota: &quot;south_north_bridges&quot; è uguale a &quot;south_north bridge&quot;</p>
+</div>
+<div class="section" id="goldmines-woods-and-other-resource-deposits">
+<h3><a class="toc-backref" href="#id19">Miniere, boschi e altri giacimenti di risorse</a></h3>
+<p>&quot;goldmine 150 a2 b7 g6 f1&quot; significa: &quot;aggiungi miniere con 150 oro in a2, b7, g6 e f1&quot;.</p>
+<p>&quot;wood 150 a2 b7 g6 f1&quot; significa: &quot;aggiungi boschi con 150 legno in a2, b7, g6 e f1&quot;.</p>
+<p>&quot;goldmine&quot; e &quot;wood&quot; sono definiti in rules.txt come giacimenti di risorse (&quot;class deposit&quot;).</p>
+<p>Le vecchie parole chiave plurali (&quot;goldmines&quot; e &quot;woods&quot;) funzionano ancora.</p>
+</div>
+<div class="section" id="nb-meadows-by-square">
+<h3><a class="toc-backref" href="#id20">Nb_meadows_by_square</a></h3>
+<p>&quot;nb_meadows_by_square 2&quot; significa: &quot;riempire in automatico ogni casella della mappa con 2 prati&quot;</p>
+</div>
+<div class="section" id="additional-meadows">
+<h3><a class="toc-backref" href="#id21">Additional_meadows</a></h3>
+<p>&quot;additional_meadows a2 b7 g6 f1&quot; significa: &quot;aggiungi 1  prato nelle caselle a2, b7, g6 e f1&quot;. 
+&quot;additional_meadows a2 a2 g6&quot; significa: &quot;aggiungi 2 prati in a2 e 1 prato in g6&quot;.</p>
+</div>
+<div class="section" id="remove-meadows">
+<h3><a class="toc-backref" href="#id22">Remove_meadows</a></h3>
+<p>remove_meadows fa l'opposto di additional_meadows.</p>
+</div>
+<div class="section" id="high-grounds">
+<h3><a class="toc-backref" href="#id23">High_grounds</a></h3>
+<p>Nuovo in SoundRTS 1.2 alpha 9.</p>
+<p>&quot;high_grounds a2 b7&quot; significa: &quot;a2 e b7 avranno un'altezza superiore&quot;.</p>
+</div>
+</div>
+<div class="section" id="defining-the-starting-resources-of-the-players">
+<h2><a class="toc-backref" href="#id24">Definire le risorse iniziali dei giocatori</a></h2>
+<div class="section" id="case-1-same-resources-for-everybody">
+<h3><a class="toc-backref" href="#id25">Caso 1: stesse risorse per tutti</a></h3>
+<p>Utilizzare i seguenti comandi in combinazione:</p>
+<div class="section" id="starting-resources">
+<h4><a class="toc-backref" href="#id26">starting_resources</a></h4>
+<p>&quot;starting_resources 10 10&quot; significa: &quot;ogni giocatore parte con 10 oro e 10 legno&quot;</p>
+</div>
+<div class="section" id="starting-units">
+<h4><a class="toc-backref" href="#id27">starting_units</a></h4>
+<p>&quot;starting_units townhall farm peasant&quot; significa: &quot;ogni giocatore parte con 1 municipio, 1 fattoria e 1 contadino&quot;</p>
+<p>&quot;starting_units townhall 2 farm peasant&quot; significa: &quot;ogni giocatore parte con 1 municipio, 2 fattorie e 1 contadino&quot;</p>
+<p>Da SoundRTS 1.1, starting_units può contenere anche:</p>
+<ul class="simple">
+<li>avanzamenti e ricerche: &quot;starting_units u_teleportation&quot; significa: &quot;ogni giocatore ha già ricercato il teletrasporto&quot;</li>
+<li>unità, edifici, abilità, avanzamenti/ricerche proibite (non saranno visibili sul menu):<ul>
+<li>&quot;starting_units -u_teleportation&quot; significa: &quot;ogni giocatore non può ricercare il teletrasporto&quot;</li>
+<li>&quot;starting_units -a_teleportation&quot; significa: &quot;ogni giocatore non può usare il teletrasporto&quot;</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="starting-squares">
+<h4><a class="toc-backref" href="#id28">starting_squares</a></h4>
+<p>&quot;starting_squares a2 b7 g6 f1&quot; significa: &quot;le caselle di partenza dei giocatori sono rispettivamente a2, b7, g6 e f1.&quot;</p>
+<p>Le unità e gli edifici iniziali verranno creati in queste caselle.</p>
+</div>
+</div>
+<div class="section" id="case-2-different-resources-depending-on-the-player">
+<h3><a class="toc-backref" href="#id29">Caso 2: risorse differenti a seconda del giocatore</a></h3>
+<div class="section" id="player">
+<h4><a class="toc-backref" href="#id30">player</a></h4>
+<p>Il comando &quot;player&quot; definisce un punto di partenza che potrebbe essere utilizzato sia da un giocatore umano sia dalla IA del computer (in partite multigiocatore).</p>
+<p>Questo comando può essere ripetuto   molte volte in una mappa multigiocatore.</p>
+<p>&quot;player 5 10 -townhall a1 townhall peasant c1 footman&quot; 
+significa: &quot;un giocatore inizierà con 5 oro, 10 legno, non gli sarà consentito di costruire un municipio, avrà un municipio e un contadino in a1, e un fattorino in c1.</p>
+</div>
+<div class="section" id="computer-only">
+<h4><a class="toc-backref" href="#id31">computer_only</a></h4>
+<p>Il comando &quot;computer_only&quot; definisce un punto di partenza sul quale la IA del computer ha sempre la possibilità di giocare. Questa IA sarà ostile  a qualsiasi altro giocatore o IA.</p>
+<p>Questo comando può essere ripetuto molte volte ma bisogna utilizzarlo con prudenza. Troppe IA possono rallentare il gioco. 
+Usare quindi una sola IA se si suppone che queste unità non combattano contro altre (alcuni dragoni su tutta la mappa, per esempio).</p>
+<p>computer_only 0 0 a3 dragon b1 dragon 
+significa: &quot;Aggiungi una IA del computer con 0 oro, 0 legno, un dragone in a3 e un dragone in b1&quot;</p>
+</div>
+</div>
+<div class="section" id="types-list">
+<h3><a class="toc-backref" href="#id32">Lista dei tipi</a></h3>
+<p>Ecco di seguito alcuni nomi corretti per i tipi utilizzati in starting_units, player e computer_only. 
+Per la lista completa, consultare il file rules.txt: il nome si trova dopo l'istruzione &quot;def&quot;.</p>
+<ul class="simple">
+<li>unità: peasant footman archer knight catapult dragon mage priest necromancer</li>
+<li>edifici: farm barracks lumbermill blacksmith townhall stables workshop dragonslair magestower</li>
+<li>abilità: a_teleportation</li>
+<li>avanzamenti/ricerche: u_teleportation melee_weapon</li>
+</ul>
+</div>
+</div>
+<div class="section" id="random-choice-end-choice-and-end-random-choice">
+<h2><a class="toc-backref" href="#id33">#random_choice,  #end_choice e #end_random_choice</a></h2>
+<p>(nuovo in beta 9g) 
+Questa direttiva del   preprocessore sceglie casualmente tra 2 o più scelte delimitate da #random_choice, #end_choice e da #end_random_choice per l'ultima scelta. 
+Ogni scelta si compone di 0 o più righe. 
+Più  direttive #random_choice possono essere utilizzate nel file mappa, ma non possono essere annidate.</p>
+<p>Può essere utilizzato, ad esempio, per piazzare  le risorse a caso. Ad esempio: 
+#random_choice 
+goldmines 500 e2 c6 b3 f5 
+#end_choice goldmines 500 d2 d6 b4 f4 
+#end_choice goldmines 500 c2 e6 b5 f3 
+#end_random_choice 
+Le linee precedenti significano: &quot;aggiungi una miniera in e2, c6, b3 and f5, o in d2, d6, b4 e f4, o in c2, e6, b5 e f3&quot;.</p>
+<p>In questo modo, le risorse sono bilanciate (se non ho fatto errori per la fretta). Questo è solo un esempio.</p>
+<p>Il titolo della mappa e il numero dei giocatori non possono essere cambiati in questo modo perché quando la mappa viene caricata il preprocessore è in fase di lavoro (vale a dire: il menu del singolo giocatore impiega molto tempo per caricarsi).</p>
+</div>
+</div>
+<div class="section" id="advanced-multiplayer-maps-how-to-change-the-rules-and-the-aspect-of-the-game">
+<h1><a class="toc-backref" href="#id34">Mappe multigiocatore avanzate: come cambiare le regole e l'aspetto del gioco</a></h1>
+<div class="section" id="map-structure">
+<h2><a class="toc-backref" href="#id35">Struttura della mappa</a></h2>
+<p>La mappa avanzata è una cartella che contiene un file chiamato &quot;map.txt&quot; col contenuto di una mappa tradizionale, e molte cartelle e file che si possono trovare nella cartella &quot;res&quot;: 
+rules.txt, ai.txt, le cartelle ui  e il loro contenuto.</p>
+<p>Nota: al momento, nella cartella campain o di una mappa, la versione localizzata di style.txt (ad esempio: ui-fr/style.txt) non viene caricato. 
+I suoni localizzati vengono comunque caricati.</p>
+</div>
+</div>
+<div class="section" id="single-player-campaigns">
+<h1><a class="toc-backref" href="#id36">Campagne giocatore singolo</a></h1>
+<div class="section" id="where-to-store-a-new-single-player-campaign">
+<h2><a class="toc-backref" href="#id37">Dove  collocare una  campagna giocatore singolo</a></h2>
+<p>Se si hanno i permessi in scrittura nella cartella ove è installato SoundRTS (o SoundRTS test), si può collocare la prima propria campagna nella cartella &quot;single&quot;.</p>
+<p>Se non si hanno i permessi in scrittura sulla cartella Programmi a causa dell'uso di un account limitato, si può copiare il proprio file mappa di lavoro 
+in &quot;C:\Documents And Settings\TuoNome\Dati applicazioni\SoundRTS&quot;. Tale cartella viene generata la prima volta che si avvia SoundRTS.
+Un'altra soluzione è quella di installare SoundRTS in una cartella dove si hanno i permessi in scrittura, e lavorare sulla cartella menzionata nel paragrafo precedente.</p>
+</div>
+<div class="section" id="structure-of-the-campaign-folder">
+<h2><a class="toc-backref" href="#id38">Struttura della cartella campagna</a></h2>
+<p>Il nome della cartella campagna sarà utilizzato dal menu singolo giocatore. Le campagne ufficiali avranno il loro proprio titolo nella rispettiva cartella &quot;u&quot;i.
+La cartella contiene i file dei capitoli. Essa contiene anche file e cartelle che imitano la struttura della cartella &quot;res&quot;: rules.txt, ai.txt, ui...</p>
+<div class="section" id="chapter-files">
+<h3><a class="toc-backref" href="#id39">File dei capitoli</a></h3>
+<p>I file dei capitoli sono file di testo chiamati &quot;0.txt&quot;, &quot;1.txt&quot;, &quot;2.txt&quot;, ecc. Quando viene iniziata una campagna per la prima volta, è disponibile soltanto il capitolo 0. Quando viene terminato un capitolo, può essere eseguito il capitolo successivo. Il numero del capitolo massimo disponibile viene allocato automaticamente nel file di configurazione dell'utente chiamato campaigns.ini.</p>
+<p>Un file capitolo descrive la missione o il taglio di scena del capitolo.</p>
+<p>Deve esserci almeno un file capitolo, chiamato &quot;0.txt&quot;.</p>
+</div>
+</div>
+<div class="section" id="syntax-of-a-chapter-file">
+<h2><a class="toc-backref" href="#id40">Sintassi di un file capitolo</a></h2>
+<p>Il capitolo può essere  una missione o un taglio di scena.</p>
+<div class="section" id="syntax-of-a-mission-chapter-file">
+<h3><a class="toc-backref" href="#id41">Sintassi di un file capitolo di missione</a></h3>
+<p>Un file missione non è molto diverso da una mappa multigiocatore. 
+È permesso anche l'uso della struttura avanzata della mappa: in quel caso, la cartella è   il numero del capitolo.</p>
+<p>I seguenti comandi non sono utilizzati in una missione a singolo giocatore: nb_players_min, nb_players_max, starting_squares, starting_units, starting_resources.</p>
+<div class="section" id="intro">
+<h4><a class="toc-backref" href="#id42">Intro</a></h4>
+<p>Note: a number can represent a text message defined in tts.txt (new in SoundRTS 1.2 alpha 9).</p>
+<p>Example: &quot;intro 7500 7501 7502&quot; means: &quot;before the game starts, play 7500.ogg, 7501.ogg and 7502.ogg (or text if defined in tts.txt)&quot;.
+The intro command defines a sequence of sounds and texts that will be played before the game starts. When the player presses a key, the next element in the sequence is played. An intro can be for example a title with music, then a scene with a discussion between characters, then a briefing. After the intro, the game will tell the objectives of the mission.</p>
+</div>
+<div class="section" id="add-objective">
+<h4><a class="toc-backref" href="#id43">Add_objective</a></h4>
+<p>&quot;add_objective player1 1 7000&quot; significa: &quot;aggiungi obiettivo numero 1 associandolo al suono 7000.ogg&quot;</p>
+<p>Per vincere una missione bisogna completare tutti gli obiettivi. Se l'obiettivo primario fallisce, ad esempio muore un personaggio importante, la missione è annullata.</p>
+</div>
+<div class="section" id="objective-complete-action-in-a-trigger">
+<h4><a class="toc-backref" href="#id44">Objective_complete (azione in un trigger)</a></h4>
+<p>Questa azione può essere inclusa soltanto in un'azione parte di un trigger.</p>
+<p>&quot;objective_complete 1&quot; significa: &quot;ora l'obiettivo 1 è completato&quot;</p>
+<p>Esempio di trigger:</p>
+<p>&quot;trigger player1 (has barracks) (objective_complete 2)&quot; significa: &quot;aggiungi il seguente trigger per il giocatore 1. Se egli possiede almeno una caserma l'obiettivo 2 è completato&quot;</p>
+</div>
+<div class="section" id="cut-scene-action-in-a-trigger">
+<h4><a class="toc-backref" href="#id45">Cut_scene (azione in un trigger)</a></h4>
+<p>Nota: la distinzione tra suoni in tempo reale e precaricati è stata rimossa in SoundRTS 1.2. Tutti i suoni sono caricati in anticipo.</p>
+<p>Nota: un numero può rappresentare un messaggio definito in tts.txt (nuovo in SoundRTS 1.2 Alpha 9).</p> 
+<p>Un taglio di scena può essere innescato nel mezzo di una partita: quando viene scoperto qualcosa, quando arrivano rinforzi ecc.</p>
+<p>&quot;cut_scene 7500 7501&quot; significa: riproduci il taglio di scena formato dai suoni 7500 e 7501.</p>
+<p>Esempio di trigger:</p>
+<p>&quot;trigger player1 (has_entered d5) (cut_scene 7500)&quot; significa: &quot;aggiungi i seguenti trigger per il giocatore 1: se egli è varcato la casella d5, riproduci il taglio di scena costituito dal suono 7500.ogg&quot;
+Timer e timer_coefficient (condizione in un trigger)</p>
+<p>&quot;timer_coefficient 60&quot;</p>
+<p>'trigger player1 (timer 2) (cut_scene 7500)&quot; significa: &quot;dopo 2 minuti (2 x 60 secondi) riproduci il file sonoro 7500.ogg.</p>
+</div>
+</div>
+<div class="section" id="syntax-of-a-cut-scene-chapter-file">
+<h3><a class="toc-backref" href="#id46">Sintassi di un file capitolo taglio di scena</a></h3>
+<p>Nota: la distinzione tra suoni in tempo reale e precaricati è stata rimossa in SoundRTS 1.2. Tutti i suoni sono caricati in anticipo.</p>
+<p>Nota: un numero può rappresentare un messaggio definito in tts.txt (nuovo in SoundRTS 1.2 Alpha 9).</p>
+<p>Un capitolo con taglio di scena è costituito da una sequenza continua di suoni. Quando viene  completato un capitolo con taglio di scena, viene sbloccato il capitolo successivo. 
+Non vanno confuse con i tagli  di scena brevi che vengono eseguiti da un trigger mentre si è in missione qualora sia soddisfatta una condizione (la scoperta di una nuova casella ad esempio), o con l'introduzione della missione (o briefing).</p>
+<p>I capitoli con taglio di scena hanno solo tre righe. Ad esempio: 
+cut_scene_chapter 
+title 7000 
+sequence 7500 7501 7502</p>
+<p>La prima riga è una parola chiave usata per dire al gioco che questo capitolo è un taglio di scena e non una missione. 
+La riga del titolo è usata nel menu della campagna. 
+Il resto della riga significa: &quot;riproduci il suono 7500.ogg seguito da 7501 e 7502; se il giocatore preme un tasto salta il suono corrente e riproduce quello successivo&quot;</p></div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.9: http://docutils.sourceforge.net/" />
+<title>Guida al modding</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 7056 2011-06-17 10:50:48Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="modding-guide">
+<h1 class="title">Guida al modding</h1>
+
+<div class="contents topic" id="contents">
+<p class="topic-title first">Indice</p>
+<ul class="simple">
+<li><a class="reference internal" href="#mods" id="id1">mods</a><ul>
+<li><a class="reference internal" href="#clear" id="id2">clear</a></li>
+<li><a class="reference internal" href="#is-a" id="id3">is_a</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-rules" id="id4">le regole</a><ul>
+<li><a class="reference internal" href="#races" id="id5">gare</a></li>
+<li><a class="reference internal" href="#unit-properties" id="id6">proprietà delle unità</a><ul>
+<li><a class="reference internal" href="#is-ballistic" id="id7">is_ballistic</a></li>
+<li><a class="reference internal" href="#is-teleportable" id="id8">is_teleportable</a></li>
+<li><a class="reference internal" href="#provides-survival" id="id9">provides_survival</a></li>
+<li><a class="reference internal" href="#storage-bonus" id="id10">storage_bonus</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ability-properties" id="id11">proprietà di abilità</a><ul>
+<li><a class="reference internal" href="#effect" id="id12">effect</a><ul>
+<li><a class="reference internal" href="#apply-bonus" id="id13">apply_bonus</a></li>
+<li><a class="reference internal" href="#bonus" id="id14">bonus</a></li>
+<li><a class="reference internal" href="#conversion" id="id15">conversion</a></li>
+<li><a class="reference internal" href="#raise-dead" id="id16">raise_dead</a></li>
+<li><a class="reference internal" href="#recall" id="id17">recall</a></li>
+<li><a class="reference internal" href="#resurrection" id="id18">resurrection</a></li>
+<li><a class="reference internal" href="#summon" id="id19">summon</a></li>
+<li><a class="reference internal" href="#teleportation" id="id20">teleportation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#effect-target" id="id21">effect_target</a></li>
+<li><a class="reference internal" href="#effect-range" id="id22">effect_range</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#style" id="id23">style</a><ul>
+<li><a class="reference internal" href="#shortcut" id="id24">shortcut</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="mods">
+<h1><a class="toc-backref" href="#id1">mods</a></h1>
+<p>Le regole e l'aspetto del gioco possono essere cambiati grazie ai mods.</p>
+<p>Una mod è una cartella che contiene potenzialmente un rules.txt, ai.txt, ui (e la corrispondente versione localizzata). La struttura di cartelle è uguale a quella della cartella &quot;res&quot;.</p>
+<p>Le mod sono collocate nella cartella &quot;mods&quot; principale oppure  in &quot;mods&quot; presente nella cartella dell'utente. Per essere attivata, una mod deve essere richiamata nel parametro &quot;mods =&quot; in SoundRTS.ini. 
+Ad esempio: mods = soundpack,mia_mod,mia_altra_mod</p>
+<p>Il file rules.txt  farà da patch al file predefinito. Ad esempio, un file rules.txt che contenga le seguenti 2 linee:&quot;def peasant&quot; e &quot;decay 20&quot; causerà la scomparsa di un contadino dopo 20 secondi.</p>
+<div class="section" id="clear">
+<h2><a class="toc-backref" href="#id2">clear</a></h2>
+<p>Per sostituire rules.txt o style.txt anzicché patcharlo, utilizzare il comando &quot;clear&quot; all'inizio del file. Questo non funziona con ai.txt, 
+e non è tuttavia necessario, perché in ai.txt il comando def riscrive le definizioni della IA.</p>
+</div>
+<div class="section" id="is-a">
+<h2><a class="toc-backref" href="#id3">is_a</a></h2>
+<p>Fin quando in style.txt &quot;is_a&quot; è il modo per ereditare tutte le proprietà di un'altra definizione, 
+ in rules.txt, &quot;is_a&quot; è anche usato per assicurarsi che una fortezza od un castello  consentirà quel che consentirebbe un municipio.</p>
+<p>Nota: gli alberi di ereditarietà in style.txt e in rules.txt non sono necessari per il match.</p>
+</div>
+</div>
+<div class="section" id="the-rules">
+<h1><a class="toc-backref" href="#id4">le regole</a></h1>
+<p>Da SoundRTS 1.1, le regole del gioco si trovano in un file chiamato rules.txt.</p>
+<div class="section" id="races">
+<h2><a class="toc-backref" href="#id5">gare</a></h2>
+<p>Each race is defined in rules.txt . For example:</p>
+<pre class="literal-block">
+def orc_race
+class race
+</pre>
+<p>È possibile utilizzare la parola &quot;faction&quot; invece di &quot;race&quot;. Ad esempio:</p>
+<pre class="literal-block">
+def orc_faction
+class faction
+</pre>
+<p>Nota: il nome &quot;orc_faction&quot; termina con &quot;faction&quot; per evitare conflitti tra i nomi. Questo suffisso &quot;faction&quot; non è obbligatorio fin tanto che il nome è unico.</p>
+</div>
+<div class="section" id="unit-properties">
+<h2><a class="toc-backref" href="#id6">proprietà delle unità</a></h2>
+<p>Nota: una unità può essere anche un edificio.</p>
+<div class="section" id="is-ballistic">
+<h3><a class="toc-backref" href="#id7">is_ballistic</a></h3>
+<p>Nuovo in SoundRTS 1.2 alpha 9.</p>
+<p><cite>is_ballistic 1</cite></p>
+<p>Le unità possono attaccare unità che si trovano nelle caselle adiacenti se si trovano a bassa quota. Le unità hanno armi  speciali (come le catapulte) al punto che non è necessario servirsi di proprietà perché possono attaccare le unità collocate nelle caselle adiacenti, anche se l'obiettivo si trova ad alta quota.</p>
+</div>
+<div class="section" id="is-teleportable">
+<h3><a class="toc-backref" href="#id8">is_teleportable</a></h3>
+<p>Nuovo in SoundRTS 1.2 alpha 9.</p>
+<p><cite>is_teleportable 1</cite></p>
+<p>L'unità (o l'edificio) è predisposto per l'effetto di teletrasporto o per richiamarlo.</p>
+</div>
+<div class="section" id="provides-survival">
+<h3><a class="toc-backref" href="#id9">provides_survival</a></h3>
+<p>Nuovo in SoundRTS 1.2 alpha 9.</p>
+<p><cite>provides_survival 1</cite></p>
+<p>Avendo almeno una unità (o un edificio) con &quot;provides_survival&quot; uguale a 1 previene  un giocatore da perdite in una partita multigiocatore (non vale per la campagna singolo giocatore). Il trigger interessato è &quot;no_building_left&quot;. Solo gli edifici hanno impostata questa  proprietà su 1 di default. I cantieri hanno impostata questa proprietà su 0 e non può essere cambiata.</p>
+</div>
+<div class="section" id="storage-bonus">
+<h3><a class="toc-backref" href="#id10">storage_bonus</a></h3>
+<p><cite>storage_bonus &lt;bonus per risorsa 0&gt; &lt;bonus per risorsa 1&gt; ...</cite></p>
+<p>Ad esempio, &quot;storage_bonus 0 1&quot; causerà un bonus +1 per la legna (il secondo tipo di risorsa).</p> 
+<p>Il bonus va al gestore della unità. 
+I bonus non possono essere accumulati: È consentito solo un bonus  per ciascun tipo di risorsa.</p>
+</div>
+</div>
+<div class="section" id="ability-properties">
+<h2><a class="toc-backref" href="#id11">proprietà di abilità</a></h2>
+<div class="section" id="effect">
+<h3><a class="toc-backref" href="#id12">effect</a></h3>
+<p><cite>effect &lt;tipo effetto&gt; [parametri]</cite></p>
+<p>Valore predefinito: (none)</p>
+<p>Un effetto è la proprietà di un'abilità. Quando un'abilità viene usata da una unità, l'effetto funzionerà fino a quando non verrà richiamato nessun tipo di effetto.</p>
+<p>Le proprietà addizionali possono modificare un effetto: effect_target e effect_range.</p>
+<div class="section" id="apply-bonus">
+<h4><a class="toc-backref" href="#id13">apply_bonus</a></h4>
+<p><cite>effect apply_bonus &lt;nome proprietà&gt</cite>;</p>
+<p>Aumenta il numero delle unità influenzate. Il valore viene definito nella proprietà dell'unità chiamata &quot;<nome proprietà>_bonus&quot;.
+Ad esempio, &quot;effect apply_bonus damage&quot; andrà alla ricerca di  una proprietà chiamata &quot;damage_bonus&quot; nella definizione di ciascuna unità influenzata.
+In questo modo, le unità beneficiando dello stesso  avanzamento possono avere valori bonus differenti.</p>
+</div>
+<div class="section" id="bonus">
+<h4><a class="toc-backref" href="#id14">bonus</a></h4>
+<p><cite>effect bonus &lt;nome proprietà&gt; &lt;valore&gt;</cite></p>
+<p>Incrementa dal valore indicato  la proprietà delle unità influenzate.</p>
+<p>Le seguenti proprietà probabilmente funzionano: damage, armor, range, heal_level, speed, hp_max (le vecchie unità non possono comunque avere il loro hp aggiornato a hp_max). 
+food_cost e food_provided probabilmente non funzioneranno correttamente.</p>
+</div>
+<div class="section" id="conversion">
+<h4><a class="toc-backref" href="#id15">conversion</a></h4>
+<p><cite>effect conversion (nessun parametro)</cite></p>
+<p>Sposta l'obiettivo sull'esercito del caster.</p>
+<p>Se l'obiettivo non è un nemico del caster, non accadrà nulla.</p>
+<p>I valori consentiti per la relativa proprietà:</p>
+<ul class="simple">
+<li>effect_target: ask</li>
+<li>effect_range: square, nearby, anywhere</li>
+</ul>
+<p><strong>TODO: aggiungere un &lt;limit&gt; di modo che le unità  facenti parte di una casella mirata vengono scelti (anzicché mirare una singola unità).</strong></p>
+</div>
+<div class="section" id="raise-dead">
+<h4><a class="toc-backref" href="#id16">raise_dead</a></h4>
+<p><cite>effect raise_dead &lt;durata (in secondi)&gt; &lt;tipo e numero unità&gt;</cite></p>
+<p>Crea le unità richieste in una casella selezionata dai cadaveri presenti all'interno di essa, nell'ordine dell'elenco unità. Se non ci sono cadaveri a sufficienza, la fine dell'elenco non potrà essere creata. Le unità spariranno dopo &lt;durata&gt; secondi a meno che &lt;durata&gt;  non abbia impostato il valore 0.</p>
+<p>Se non vi è alcun cadavere nella casella indicata, l'ordine non può essere eseguito.</p>
+<p>Valori consentiti per le relative proprietà:</p>
+<ul class="simple">
+<li>effect_target: self, ask, random</li>
+<li>effect_range: square, nearby, anywhere</li>
+</ul>
+</div>
+<div class="section" id="recall">
+<h4><a class="toc-backref" href="#id17">recall</a></h4>
+<p><cite>effect recall (nessun parametro)</cite></p>
+<p>Simile a teleportation. Trasporta le unità di un giocatore da una casella scelta  e le riporta indietro alla casella del caster. Non sono influenzati gli edifici. Stessa cosa per le unità alleate.</p>
+<p>Se non ci sono unità nella casella indicata, l'ordine non può essere eseguito.</p>
+<p>Valori consentiti per le relative proprietà:</p>
+<ul class="simple">
+<li>effect_target: ask, random</li>
+<li>effect_range: nearby, anywhere</li>
+</ul>
+</div>
+<div class="section" id="resurrection">
+<h4><a class="toc-backref" href="#id18">resurrection</a></h4>
+<p><cite>effect resurrection &lt;limite&gt;</cite></p>
+<p>Resuscita i cadaveri dell'esercito di caster facendoli volare sulla casella scelta, con un massimo di &lt;limite&gt; unità resuscitate. I cadaveri vecchi vengono resuscitati per primi. Le ferite vengono rimarginate per un terzo massimo di esse.</p>
+<p>Se non c'è alcun cadavere dell'esercito nella casella scelta, l'ordine non può essere eseguito.</p>
+<p>Valori permessi per le relative proprietà:</p>
+<ul class="simple">
+<li>effect_target: self, ask, random</li>
+<li>effect_range: square, nearby, anywhere</li>
+</ul>
+</div>
+<div class="section" id="summon">
+<h4><a class="toc-backref" href="#id19">summon</a></h4>
+<p><cite>effect summon &lt;durata (in secondi)&gt; &lt;tipo e numero di unità&gt;</cite></p>
+<p>Crea le unità richieste nella casella selezionata e le aggiunge all'esercito di caster. Le unità convocate scompariranno dopo &lt;durata&gt; secondi, a meno che &lt;durata&gt; non sia uguale a 0.</p>
+<p>Valori permessi per le relative proprietà.</p>
+<ul class="simple">
+<li>effect_target: self, ask, random</li>
+<li>effect_range: square, nearby, anywhere</li>
+</ul>
+</div>
+<div class="section" id="teleportation">
+<h4><a class="toc-backref" href="#id20">teleportation</a></h4>
+<p><cite>effect teleportation (nessun parametro)</cite></p>
+<p>Sposta le unità del giocatore dalla casella di caster alla casella selezionata. Non sono influenzati gli edifici. Stessa cosa dicasi per le unità alleate.</p>
+<p>Se la destinazione è la stessa della casella di caster, non verrà fatto nulla.</p>
+<p>Valori consentiti per le relative proprietà:</p>
+<ul class="simple">
+<li>effect_target: ask, random</li>
+<li>effect_range: nearby, anywhere</li>
+</ul>
+</div>
+</div>
+<div class="section" id="effect-target">
+<h3><a class="toc-backref" href="#id21">effect_target</a></h3>
+<p><cite>effect_target &lt;metodo di selezione&gt;</cite></p>
+<p>Determina come verrà selezionato il bersaglio.</p>
+<p>Valore predefinito: self</p>
+<p>Valori possibili:</p>
+<ul class="simple">
+<li>self: il bersaglio sarà il caster (o la locazione del caster se  deve essere indicato un luogo)</li>
+<li>ask: l'interfaccia utente chiederà per un bersaglio</li>
+<li>random: il gioco sceglierà come bersaglio una casella a caso</li>
+</ul>
+</div>
+<div class="section" id="effect-range">
+<h3><a class="toc-backref" href="#id22">effect_range</a></h3>
+<p><cite>effect_range &lt;distanza&gt;</cite></p>
+<p>Determina la distanza tra il caster e il bersaglio.</p>
+<p>Valore predefinito: square</p>
+<p>Valori possibili:</p>
+<ul class="simple">
+<li>square: devono essere nella stessa casella</li>
+<li>nearby: devono essere in una casella adiacente o nella stessa</li>
+<li>anywhere: qualsiasi distanza è ammessa</li>
+</ul>
+<p>Se la distanza corrente è maggiore di quella richiesta, il caster proverà a muoversi in un luogo vicino e userà l'abilità da li.</p>
+</div>
+</div>
+</div>
+<div class="section" id="style">
+<h1><a class="toc-backref" href="#id23">style</a></h1>
+<p>Lo stile è definito in &quot;ui/style.txt&quot; e nella versione localizzata di &quot;style.txt&quot;.</p>
+<div class="section" id="shortcut">
+<h2><a class="toc-backref" href="#id24">shortcut</a></h2>
+<p>Ordini semplici, ordini di costruzione, ordini di addestramento, la possibilità di impartire gli ordini   viene data utilizzando una combinazione di tasti, se questa viene definita.</p>
+<p>Per definire una combinazione di tasti, definire una proprietà &quot;shortcut&quot; seguita dalla lettera corrispondente. La lettera deve essere minuscola.</p>
+<p>Se si tratta di un ordine semplice, il tasto rapido dovrà essere definito a seconda dell'ordine (es.: patrol). 
+Se si tratta di un ordine complesso (addestramento, costruzione, uso di un'abilità), il tasto rapido deve essere definito dalla seconda parte dell'ordine. 
+Ad esempio, definire il tasto &quot;m&quot; per l'abilità meteora così al mago viene assegnato il tasto &quot;m&quot; per lanciare le meteore.</p></div>
+</div>
+</div>
+</body>
+</html>

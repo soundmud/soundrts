@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it" lang="it">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Docutils 0.9: http://docutils.sourceforge.net/" />
-<title>Documentazione</title>
+<title>Tutorial per la creazione di IA</title>
 <style type="text/css">
 
 /*
@@ -314,25 +314,47 @@ ul.auto-toc {
 </style>
 </head>
 <body>
-<div class="document" id="documentation">
-<h1 class="title">Documentazione</h1>
+<div class="document" id="making-ais-tutorial">
+<h1 class="title">Tutorial per la creazione di IA</h1>
 
+<div class="contents topic" id="contents">
+<p class="topic-title first">Indice</p>
 <ul class="simple">
-<li><a class="reference external" href="manual-it.htm">Manuale del gioco</a></li>
-<li><a class="reference external" href="units.htm">Guida sulle unità</a></li>
-<li><a class="reference external" href="mapmaking-it.htm">Guida per la creazione delle mappe</a></li>
-<li><a class="reference external" href="modding-it.htm">Guida al modding</a> (lavori in corso)</li>
-<li><a class="reference external" href="aimaking-it.htm">Guida per la creazione di IA</a></li>
+<li><a class="reference internal" href="#introduction" id="id1">1. Introduzione</a></li>
+<li><a class="reference internal" href="#constants" id="id2">2. Costanti</a></li>
+<li><a class="reference internal" href="#the-get-command" id="id3">3. Il comando &quot;get&quot;</a></li>
 </ul>
-
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id1">1. Introduzione</a></h1>
+<p>Questo tutorial tratterà le basi per la costruzione delle IA. 
+Sarà necessario modificare il file AI.txt. 
+Questo file si trova nella cartella &quot;res&quot; presente nel file zip di SoundRTS.</p>
+</div>
+<div class="section" id="constants">
+<h1><a class="toc-backref" href="#id2">2. Costanti</a></h1>
+<p>Prima del &quot;def&quot; che controlla la IA, si potrà constatare che c'è 
+una riga di testo del tipo: research 1, teleportation 1... ecc. 
+Queste costanti controllano il comportamento della IA e possono avere valore 0 o 1. 
+Ecco l'elenco delle costanti:</p>
 <ul class="simple">
-<li><a class="reference external" href="manual.htm">Game manual</a></li>
-<li><a class="reference external" href="units.htm">Units guide</a></li>
-<li><a class="reference external" href="mapmaking.htm">Map making guide</a></li>
-<li><a class="reference external" href="modding.htm">Modding guide</a> (work in progress)</li>
-<li><a class="reference external" href="aimaking.htm">Making AIs Tutorial</a></li>
+<li>constant_attacks - la IA attaccherà costantemente ed esplorerà la mappa.</li>
+<li>search - la IA andrà alla ricerca di armi ed armature.</li>
+<li>teleportation - la IA userà il teletrasporto.</li>
+<li>send_soldiers_to_base - la IA continuerà  a reclutare soldati alla propria base.</li>
+<li>raise_dead - la IA raccoglierà i cadaveri.</li>
+<li>retaliate - la IA  contrattaccherà all'incursione nemica.</li>
 </ul>
-
+</div>
+<div class="section" id="the-get-command">
+<h1><a class="toc-backref" href="#id3">3. Il comando &quot;get&quot;</a></h1>
+<p>Il comando "get" prende come argomenti il 
+numero di unità e il loro nome per la loro recluta. 
+Si possono definire più di una unità ed il tipo.</p>
+<p>Esempio:
+&quot;get 10 footman 20 archer 10 knight&quot;</p>
+<p>Per l'esatta denominazione delle unità consultare il file rules.txt.</p>
+</div>
 </div>
 </body>
 </html>

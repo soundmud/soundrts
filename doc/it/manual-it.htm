@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.9: http://docutils.sourceforge.net/" />
+<title>Manuale del gioco</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 7056 2011-06-17 10:50:48Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="game-manual">
+<h1 class="title">Manuale del gioco</h1>
+
+<div class="contents topic" id="contents">
+<p class="topic-title first">Indice</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">1. Introduzione</a></li>
+<li><a class="reference internal" href="#tutorial" id="id2">2. Tutorial</a><ul>
+<li><a class="reference internal" href="#chapter-1-tutorial" id="id3">2.1 Tutorial Capitolo 1</a></li>
+<li><a class="reference internal" href="#chapter-2-tutorial" id="id4">2.2 Tutorial Capitolo 2</a></li>
+<li><a class="reference internal" href="#hints-and-tips" id="id5">2.3 Consigli e suggerimenti</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#commands-list" id="id6">3. Lista dei comandi</a><ul>
+<li><a class="reference internal" href="#moving-on-the-map" id="id7">Muoversi sulla mappa</a></li>
+<li><a class="reference internal" href="#choosing-a-unit-to-control" id="id8">Scelta dell'unità da controllare</a></li>
+<li><a class="reference internal" href="#giving-an-order-main-method" id="id9">Impartire un ordine: metodo principale</a></li>
+<li><a class="reference internal" href="#giving-an-order-alternate-faster-method" id="id10">Impartire un ordine: alternativo, metodo rapido</a></li>
+<li><a class="reference internal" href="#giving-an-order-using-shortcuts" id="id11">Impartire un ordine: uso dei tasti rapidi</a></li>
+<li><a class="reference internal" href="#examining-the-situation" id="id12">Analisi della situazione</a></li>
+<li><a class="reference internal" href="#giving-an-order-without-cancelling-the-previous-ones-queuing-commands" id="id13">Impartire un ordine senza annullare uno (o una serie) di comandi impartiti in precedenza</a></li>
+<li><a class="reference internal" href="#giving-an-imperative-order" id="id14">Impartire un ordine imperativo</a></li>
+<li><a class="reference internal" href="#attacking-a-friendly-unit" id="id15">Attaccare una unità amica</a></li>
+<li><a class="reference internal" href="#other-commands" id="id16">Altri comandi</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#multiplayer-games" id="id17">4. Partite multigiocatore</a><ul>
+<li><a class="reference internal" href="#starting-a-multiplayer-game" id="id18">4.1 Iniziare una partita in modalità più giocatori</a></li>
+<li><a class="reference internal" href="#chatting" id="id19">4.2 Chattare</a></li>
+<li><a class="reference internal" href="#team-play" id="id20">4.3 Giocare a squadre</a></li>
+<li><a class="reference internal" href="#how-to-make-your-server-accessible-to-other-players" id="id21">4.4 Come rendere il proprio server accessibile agli altri giocatori</a></li>
+<li><a class="reference internal" href="#how-to-download-a-map-from-a-server" id="id22">4.5 Come scaricare una mappa da un server</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#game-elements" id="id23">5. Elementi del gioco</a><ul>
+<li><a class="reference internal" href="#food" id="id24">Cibo</a></li>
+<li><a class="reference internal" href="#tech-upgrades" id="id25">Aggiornamenti tecnologici</a></li>
+<li><a class="reference internal" href="#flying-units" id="id26">Unità volanti</a></li>
+<li><a class="reference internal" href="#invisible-units-and-detectors" id="id27">Unità invisibili e controllori</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#more-details-for-customization" id="id28">6. Maggiori dettagli sulla personalizzazione</a><ul>
+<li><a class="reference internal" href="#soundrts-ini" id="id29">SoundRTS.ini</a></li>
+<li><a class="reference internal" href="#command-line-options" id="id30">Opzioni della riga di comando</a></li>
+<li><a class="reference internal" href="#sound-pack" id="id31">Pacchetto di suoni</a></li>
+<li><a class="reference internal" href="#sapi-5-windows" id="id32">SAPI 5 (Windows)</a></li>
+<li><a class="reference internal" href="#windows-srapi-parameter" id="id33">Parametro srapi in Windows</a></li>
+<li><a class="reference internal" href="#windows-srapi-wait-parameter" id="id34">Il parametro srapi_wait in Windows</a></li>
+<li><a class="reference internal" href="#temporary-folder" id="id35">Cartella temporanea</a></li>
+<li><a class="reference internal" href="#user-folder" id="id36">Cartella dell'utente</a></li>
+<li><a class="reference internal" href="#how-to-create-a-portable-version-of-soundrts" id="id37">Come creare una versione portable di SoundRTS</a></li>
+<li><a class="reference internal" href="#how-to-change-the-default-speed-in-single-player-games" id="id38">Come cambiare la velocità predefinita in modalità singolo giocatore</a></li>
+<li><a class="reference internal" href="#changing-some-key-bindings" id="id39">Cambiare alcune combinazioni di tasti</a></li>
+<li><a class="reference internal" href="#creating-an-app-for-mac" id="id40">Creare una app per MAC</a></li>
+<li><a class="reference internal" href="#using-the-windows-installer-with-a-limited-account-windows-xp" id="id41">Utilizzo di Windows Installer con un account limitato in Windows Xp)</a></li>
+<li><a class="reference internal" href="#what-makes-a-map-an-official-multiplayer-map" id="id42">Quali caratteristiche deve avere una mappa per un gioco a più giocatori ufficiale?</a></li>
+<li><a class="reference internal" href="#how-to-select-a-different-language" id="id43">Come si fa a selezionare una lingua diversa?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#credits" id="id44">7. Collaboratori</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id1">1. Introduzione</a></h1>
+<p>Benvenuti in SoundRTS!</p>
+<p>SoundRTS è un gioco di strategia ispirato a Warcraft e Startcraft ma in versione audiogioco, quindi adatto ad essere giocato da persone non vedenti.
+In questo gioco sorveglierete la vostra città, estrarrete da miniere e boschi, costruirete, recluterete contadini e soldati, e lotterete contro i nemici!</p>
+<p>Normalmente il gioco è in modalità mappa: vi trovate su di essa e potete selezionare tutti gli oggetti senza girare intorno.
+Potete giocare anche in modalità in prima persona, utile nel caso si debba sorvegliare o per un attacco.</p>
+<p>Windows utilizza lo screen reader o la Sapi 5.
+Linux utilizza Speech Dispatcher.
+MAC OS X utilizza NS Speech.
+In SoundRTS 1.2 Alpha 9 sono stati rimossi i file audio registrati col sintetizzatore.</p>
+</div>
+<div class="section" id="tutorial">
+<h1><a class="toc-backref" href="#id2">2. Tutorial</a></h1>
+<p>Questo tutorial vi aiuterà nell'apprendimento per il controllo del gioco.</p>
+<div class="section" id="chapter-1-tutorial">
+<h2><a class="toc-backref" href="#id3">2.1 Tutorial Capitolo 1</a></h2>
+<p>Se si usa Jaws od un altro assistente visivo, lo si può disattivare per avere un accesso completo ai comandi da tastiera.</p>
+<p>Quando inizia il gioco sentirete l'indicazione della casella dove vi trovate in quel momento: &quot;A1&quot;. Vi verrà annunciato che in A1 c'è una miniera d'oro. Per esaminare la casella premete tab più volte. Si noterà che le direzioni proposte sono le uniche in cui si può andare (una miniera d'oro, un bosco, Municipio 1 (La vostra base), e il contadino 1.</p> 
+<p>A questo punto premete &quot;PaginaGiu&quot; per verificare se c'è un'altra casella da poter analizzare. Sentirete &quot;C1&quot; che contiene (premete Tab per sapere cosa c'è), un fattorino, un sentiero, un bosco e Fattorino 1.</p>
+<p>Se si ripreme &quot;PaginaGiu&quot; si torna in &quot;A1&quot;. Quindi in questo modo si  potrà passare solo tra 2 caselle,  ossia quelle esaminate finora.</p>
+<p>Un altro modo per muoversi sulla mappa è quello di utilizzare le frecce direzionali. In questo modo  si naviga linearmente e si possono trovare caselle sconosciute sulle quali non possono esser impartiti ordini.</p>
+<p>Su questa mappa l'obiettivo è costruire 1 fattoria e 1 caserma. Un contadino soltanto può costruirle. Ma occorre che disponga sia di oro e di legna, sia di uno spazio libero in un prato. Per sapere quanto oro, legna e cibo avete, premete Z, X e C.</p>
+<p>Ordinate al contadino di estrarre l'oro. Per prima cosa bisogna controllarlo, premete Q fino a quando non sentite dire Contadino 1 aspetta i tuoi ordini! Dopo di che premere la A fino a quando non viene selezionato Estrarre, quindi premere Tab fino a quando non viene detto Miniera d'oro; ora premere Invio per confermare. Il contadino inizierà a raccogliere l'oro.</p>
+<p>Per far prima è necessario avere più contadini. Premete Q fino a quando non assumete il controllo del municipio e a sto punto premete la A fino a selezionare &quot;Recluta un contadino&quot;, ora premete Invio. Dopo qualche secondo apparirà un altro contadino, Contadino 2.</p>
+<p>Per chiedere al contadino di estrarre il legno, la procedura è la stessa vista per il primo, oppure, per non perder tempo, premete la A fino a che non controllate Contadino 2, quindi con Tab si seleziona Miniera, e ora si preme &quot;Backspace&quot;. Questo tasto avvia l'azione predefinita per questo obiettivo. In questo caso, l'azione predefinita è Estrarre l'oro dalla miniera.</p>
+<p>Prima di reclutare un terzo contadino, si dovrà  dire a Municipio 1 che i nuovi reclutati debbano andare direttamente in miniera ad estrarre l'oro. Per far ciò si preme la Q fino a controllare Municipio 1. Ora premere Tab fino a selezionare la miniera. Infine, premere &quot;Backspace&quot; per impartire l'ordine predefinito al Municipio: &quot;aggregarre la recluta alla miniera d'oro&quot;. Ora, premere A per selezionare &quot;recluta un contadino&quot;, quindi premere Invio per confermare.</p>
+<p>Quando avrete avuto oro a sufficienza o non c'è più oro in miniera, premete D per controllare tutti i contadini quindi Tab fino a selezionare il bosco. Ora premere Backspace per andare a estrarre la legna.</p>
+<p>Il resto lo si fa senza problemi.</p>
+</div>
+<div class="section" id="chapter-2-tutorial">
+<h2><a class="toc-backref" href="#id4">2.2 Tutorial Capitolo 2</a></h2>
+<p>Suggerimento: raggruppare le unità di combattimento. Per far ciò, le si deve controllare (premere il tasto S) e le si mette a pattugliare le caselle che volete siano sorvegliate.</p>
+</div>
+<div class="section" id="hints-and-tips">
+<h2><a class="toc-backref" href="#id5">2.3 Consigli e suggerimenti</a></h2>
+<ul class="simple">
+<li>tenete le vostre truppe concentrate</li>
+<li>Fate sì che i soldati stiano a guardia. Il pattugliamento vi permetterà una maggiore protezione del territorio fin quando manterrete le truppe concentrate.</li>
+<li>Utilizzate i punti di raccolta per gli edifici. Gli edifici che permettono il reclutamento delle unità si possono definire come un punto di raccolta. Le nuove unità  serviranno a tali punti. Ad esempio, un contadino sarà impiegato per l'estrazione di una miniera d'oro.</li>
+<li>Per l'esplorazione utilizzate la modalità difensiva. Un'unità che si trovi in modalità difensiva fuggirà nel caso in cui incontri nemici più forti. In questo modo potrete sapere quanti nemici ci sono in quella zona senza sacrificare unità di esplorazione. I contadini sono impostati di default in questa modalità ma anche ai soldati può essere assegnata.</li>
+<li>Una unità in fuga si dimentica dell'ordine impartitogli. Ad esempio, un contadino che sta estraendo l'oro non vorrà tornare al suo lavoro nel caso in cui sia in fuga,  almeno fino a quando non sia sopravvissuto ad un combattimento ed allora tornerà a estrarre l'oro.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="commands-list">
+<h1><a class="toc-backref" href="#id6">3. Lista dei comandi</a></h1>
+<p>Il gioco consiste nell'impartire degli ordini alle vostre unità ed edifici. 
+Per impartire un ordine all'unità, per prima cosa bisogna controllarla. 
+Se premete F10 durante il gioco, vi si aprirà il relativo menu. 
+Se si utilizza Jaws od un altro assistente visivo bisognerà disattivarlo per avere accesso alla tastiera.</p>
+<div class="section" id="moving-on-the-map">
+<h2><a class="toc-backref" href="#id7">Muoversi sulla mappa</a></h2>
+<p>I tasti direzionali permettono di spostarsi da una casella all'altra della mappa. Se c'è un percorso diretto tra la casella attuale ed una nuova, si sentirà un rumore che dipende dal tipo di percorso (sentiero o ponte). Se non c'è un percorso diretto tra le due caselle si sentirà un suono di collisione e non ci si sposta dalla casella in cui ci si trova (premete Control+le frecce direzionali per saltare l'ostacolo). Se non si conosce ancora il percorso di una casella (Casella sconosciuta) non si avrà alcun rumore.</p>
+<p>Un altro modo per spostarsi sulla mappa consiste nel premere PaginaSu, tale tasto permette di spostarsi direttamente ad un altro punto di interesse della mappa senza dover passare  sulle  caselle vuote. Fin dalla versione 1.1 Alpha 3 di SoundRTS sono disponibili alcune varianti:</p>
+<ul class="simple">
+<li>premere Alt+PagSu/PagGiu per portarsi sulla casella sconosciuta precedente/successiva</li>
+<li>premere PagSu/PagGiu per portarsi su una casella della mappa che contiene le risorse.</li>
+</ul>
+<p>Quando controllate una unità e premete spazio, potete seguirla mentre si sposta da una casella all'altra.</p>
+</div>
+<div class="section" id="choosing-a-unit-to-control">
+<h2><a class="toc-backref" href="#id8">Scegliere l'unità da controllare</a></h2>
+<p>Per controllare l'unità  successiva in una casella, premete Q.</p>
+<p>Per controllare l'edificio successivo, premete W. 
+Per controllare il contadino successivo, premete E. Per controllare tutti i contadini in una casella, premete D. 
+Per controllare il contadino inattivo successivo, premete Alt+E. Per controllare tutti i contadini inattivi in una casella, premete Alt+D. 
+Per controllare il fattorino successivo, premete R. Per controllare tutti i fattorini in una casella, premete F. 
+Per controllare l'arciere successivo, premete T. Per controllare tutti gli arcieri in una casella, premete G. 
+Per controllare il cavaliere successivo, premete Y. Per controllare tutti i cavalieri in una casella, premete H. 
+Per controllare la catapulta successiva, premete U. Per controllare tutte le catapulte in una casella, premete J. 
+Per controllare il dragone successivo, premete I. Per controllare tutti i dragoni in una casella, premete K. 
+Per controllare il mago successivo, premete O. Per controllare tutti i maghi in una casella, premete L.</p>
+<p>I tasti utilizzati per controllare le unità in successione,  in combinazione col tasto Shift permettono il controllo dell'unità precedente. Ad esempio, per controllare il contadino precedente si preme Shift+E.</p>
+<p>Per controllare tutte le unità dello stesso tipo e all'interno della stessa casella che non siano controllate in quel momento, premete 1. 
+Per controllarne solo  metà od un terzo, premete 2 o 3. 
+Per fermare il controllo del gruppo, premete 0.</p>
+<p>Per controllare tutti i soldati in una casella, premete S. 
+Per controllare sia tutti i soldati sia tutti i contadini, premete Alt+S.</p>
+ <p>I tasti che vengono usati per controllare  gruppi di unità in una casella, combinati col tasto control permettono di controllare gruppi di unità su tutta la mappa. Ad esempio, se si vogliono controllare tutti i fattorini della mappa, si preme Control+L o Control+F.</p>
+</div>
+<div class="section" id="giving-an-order-main-method">
+<h2><a class="toc-backref" href="#id9">Impartire un ordine: metodo principale</a></h2>
+<p>Per impartire un ordine all'unità controllata,  il metodo principale  prevede la scelta dell'ordine da una lista e la scelta di una destinazione se l'azione lo prevede.</p>
+<p>Per scegliere un ordine da una lista, premete A (e Shift+A) per selezionare l'ordine.</p>
+<p>Se dovete scegliere una destinazione, premete Tab (e Shift+Tab) per compiere tale azione. Se invece la destinazione è una casella lontana, usate le frecce direzionali.</p>
+<p>Per confermare la scelta, premete Invio.</p>
+</div>
+<div class="section" id="giving-an-order-alternate-faster-method">
+<h2><a class="toc-backref" href="#id10">Impartire un ordine: alternativo, metodo rapido</a></h2>
+<p>Il secondo metodo per impartire un ordine consiste nel premere Tab per scegliere la destinazione (o con le frecce direzionali) dopo di che si preme Backspace. Verrà impartito l'ordine predefinito.  Ad esempio, se al contadino gli si indica come destinazione la miniera e si preme Backspace, egli andrà li e comincerà ad estrarla.</p>
+</div>
+<div class="section" id="giving-an-order-using-shortcuts">
+<h2><a class="toc-backref" href="#id11">Impartire un ordine: uso dei tasti rapidi</a></h2>
+<p>Per impartire un ordine tramite un tasto rapido, premete Alt+A. Un messaggio vi annuncerà la lista dei tasti rapidi che potete utilizzare per l'unità controllata in quel momento. 
+Premete il tasto corrispondente e verrà  eseguito l'ordine immediatamente, a meno che non sia necessario indicare la destinazione.</p>
+</div>
+<div class="section" id="examining-the-situation">
+<h2><a class="toc-backref" href="#id12">Analizzare la situazione</a></h2>
+<p>Per tenere d'occhio l'unità (o il gruppo) che si sta controllando, premete Spazio. Oltre ciò potete tornare alla casella occupata dall'unità (o il gruppo leader).</p>
+<p>Per sapere quanto oro avete, premete Z. Premete X per la legna, premete C per il cibo.</p>
+<p>Per sapere lo stato di salute di una unità, premete V.</p>
+<p>Per esaminare nuovamente un oggetto selezionato con Tab, premete Control.</p>
+</div>
+<div class="section" id="giving-an-order-without-cancelling-the-previous-ones-queuing-commands">
+<h2><a class="toc-backref" href="#id13">Impartire un ordine senza annullare uno (o una serie) di comandi impartiti in precedenza</a></h2>
+<p>Si tiene premuto Shift prima di confermare l'ordine con Invio.</p>
+<p>Funziona anche per gli ordini prestabiliti: si tiene premuto Shift prima di premere Backspace.</p>
+<p>Premete Spazio per controllare se le unità hanno eseguito  i vari ordini.</p>
+<p>Ecco una situazione in cui l'utilizzo di comandi multipli potrebbe essere utile:</p>
+<ul class="simple">
+<li>Esempio 1: volete che un contadino vada in giro   in ogni casella della mappa (per sapere dove sono i nemici). Controllate il contadino, muovete il cursore in una casella di riferimento, quindi premete Shift+Backspace. Ripetete per ogni casella di riferimento.</li>
+<li>Esempio 2: volete che il contadino estragga diverse materie. Gli si indica la destinazione di un giacimento, quindi si preme Shift+Backspace. Ripetete. Una volta che il giacimento si è esaurito, il contadino andrà a estrarre nel successivo.</li>
+</ul>
+</div>
+<div class="section" id="giving-an-imperative-order">
+<h2><a class="toc-backref" href="#id14">Impartire un ordine imperativo</a></h2>
+<p>Se tenete premuto Control prima di premere Invio o Backspace, l'ordine sarà imperativo!</p>
+<p>L'unità con un ordine imperativo tenderà ad ignorare qualsiasi ordine non direttamente relazionale. Se debbono andare da qualche parte e si trovano ad incrociare le unità nemiche, semplicemente le ignorano. Questo è il più delle volte pericoloso ma in qualche caso può essere utile, ad esempio, per concentrarsi su un obiettivo importante.</p>
+<p>Ecco qualche situazione dove un comando imperativo potrebbe essere utile:</p>
+<ul class="simple">
+<li>Esempio 1: Volete che le vostre unità attacchino specifici edifici o unità nemiche ignorando il resto. Selezionare la destinazione e quindi premere Control+Backspace.</li>
+<li>Esempio 2: volete che le vostre unità arretrino in un luogo e ignorino le unità nemiche. Selezionare un'altra casella e premere Ctrl+Backspace.</li>
+</ul>
+<p>Potete anche impartire una sequenza di ordini imperativi. Invece di premere solo Shift premete contemporaneamente Control e Shift.</p>
+</div>
+<div class="section" id="attacking-a-friendly-unit">
+<h2><a class="toc-backref" href="#id15">Attaccare una unità amica</a></h2>
+<p>Direzionare le unità e premere Shift Backspace: le unità attaccheranno il bersaglio.</p>
+<p>Eccezione: se il bersaglio è un edificio danneggiato (o una unità riparabile come una catapulta) e si stanno controllando le unità lavoratrici, esse ripareranno il bersaglio.</p>
+</div>
+<div class="section" id="other-commands">
+<h2><a class="toc-backref" href="#id16">Altri comandi</a></h2>
+<p>F5 ed F6: Messaggio precedente/successivo nello storico. 
+Alt: interrompe la frase corrente.</p>
+<p>Per uscire dal gioco o per visualizzare il menu del gioco, premete F10. La stessa cosa  la si ottiene con Alt+F4 o Control C.</p>
+<p>Control+spazio: fa si che si giochi in modalità prima persona. Escape: ritorna alla modalità mappa.</p>
+<p>Home/Fine, +/- del tastierino numerico: aumenta/diminuisce il volume  generale dei suoni del gioco. 
+Control Home/fine, Control +/- del tastierino numerico: aumenta/diminuisce il volume relativo al sintetizzatore.</p>
+<p>Nei menu, vengono utilizzati i tasti freccia: Su e giu per selezionare, destra per confermare, sinistra per annullare.</p>
+<p>F3: Dice da quanto tempo si gioca 
+Control F3: attiva/disattiva la campana minutaggio (normalmente è disattivata)</p>
+<p>Control+Tab seleziona un bosco, una miniera, un prato, e bersagli riparabili o costruibili (un edifici danneggiati, cantieri, catapulte danneggiate...).</p>
+<p>Alt+R Riseleziona un ordine impartito in precedenza. Utile per addestrare una unità o o per costruire un certo tipo di edifici più volte. 
+Alt+G Riseleziona un ordine impartito in precedenza e lo  esegue nel caso in cui non siano richiesti parametri aggiuntivi. Ad esempio, per addestrare 5 arcieri supplementari, premete Alt+G 5 volte. 
+Dalla versione 1.1 Alpha 3 di SoundRTS il comando Alt+A fa la stessa cosa di Alt+G.</p>
+<p>Apice all'indietro )sulla tastiera americana si trova sotto il tasto Esc, in quella italiana non c'è): Console dei comandi (solo in modalità singolo giocatore). I    soli comandi utilizzabili al momento sono add_units (per inserire unità od edifici istantaneamente) e victory (per la vittoria, ad esempio, per saltare al capitolo successivo). Esempio di comando &quot;add_units&quot;: &quot;add_units a1 100 archer&quot;. Nuovo in SoundRTS 1.2 Alpha 9.</p>
+</div>
+</div>
+<div class="section" id="multiplayer-games">
+<h1><a class="toc-backref" href="#id17">4. Giocare con altri giocatori</a></h1>
+<div class="section" id="starting-a-multiplayer-game">
+<h2><a class="toc-backref" href="#id18">4.1 Iniziare una partita in modalità più giocatori</a></h2>
+<p>Selezionare &quot;gioca con altri giocatori&quot;, quindi &quot;scegli un server dalla lista&quot;</p>
+<p>In un server pubblico, sarete  nelle condizioni di organizzare un gioco.</p>
+<p>Consiglio: mentre aspettate che si connettano gli altri giocatori, potete avviare SoundRTS una seconda volta per giocare localmente in modalità singolo giocatore. Una volta che un giocatore si è connesso, premete F10 per mettere in pausa il gioco locale e giocare online.</p>
+</div>
+<div class="section" id="chatting">
+<h2><a class="toc-backref" href="#id19">4.2 Chattare</a></h2>
+<p>Potete chattare nella stanza del server, nella stanza pre-gioco, e durante il gioco stesso. L'organizzatore sarà temporaneamente non disponibile durante la scelta della mappa e della velocità del gioco.</p>
+<p>Per comunicare qualcosa  a tutti coloro che sono nella stanza o nel gioco, premere F7(anche la S funziona, tranne quando si sta giocando), Digitate il vostro messaggio e premete Invio.</p>
+<p>Un'altra soluzione è quella di utilizzare software come Skype (o simili) nel caso in cui si conoscono gli altri giocatori.</p>
+</div>
+<div class="section" id="team-play">
+<h2><a class="toc-backref" href="#id20">4.3 Giocare a squadre</a></h2>
+<p>Le squadre devono essere create prima di iniziare il gioco. Non possono essere cambiate durante il gioco. I giocatori alleati condividono le informazioni riguardanti la mappa, la vittoria, i progressi (nuovo in SoundRTS 1.2 Alpha 9), e le loro unità si aiutano reciprocamente. Un lavoratore può utilizzare un magazino alleato per depositare una materia (la risorsa sarà tuttavia aggiunta all'armamentario del lavoratore).</p>
+<p>In un gioco via server, i computer inizialmente non sono alleati.</p>
+<p>Nota: in un gioco a un solo giocatore dal menu &quot;giocatore singolo&quot;, i computer sono alleati.</p>
+<p>Consiglio: per giocare a un solo giocatore avendo un computer come alleato, lanciare un server privato.</p>
+</div>
+<div class="section" id="how-to-make-your-server-accessible-to-other-players">
+<h2><a class="toc-backref" href="#id21">4.4 Come rendere il proprio server accessibile agli altri giocatori</a></h2>
+<p>Per controllare se il vostro server sia accessibile dall'esterno, attendere che si colleghi un giocatore, oppure chiedere ad un amico di connettersi dall'esterno. Come ultima spiaggia, potete anche usare un sito per il test delle porte in ingresso (google &quot;test porte router&quot; per esempio). Siate cauti: non garantisco che questo tipo di siti non siano malevoli! Il sito potrebbe installare dei tool senza che l'utente intervenga, ad esempio.</p>
+<p>In molti casi si avrà bisogno di configurare il proprio router per le connessioni in ingresso TCP tramite la porta 2500 all'indirizzo ip locale del proprio server.</p>
+<p>Talvolta potrebbe essere necessario configurare il DHCP nel router per essere sicuri che al server sia sempre assegnato  un indirizzo ip locale.</p>
+<p>Se si utilizza un firewall, bisognerà assicurarsi che le connessioni in ingresso tramite la porta 2500 siano consentite.</p>
+<p>Riguardo i server autonomi: anche se il vostro server autonomo fosse accessibile dall'esterno, potreste non essere in grado di accedervi dalla rete locale scegliendo &quot;scegli un server dalla lista&quot;. &quot;inserisci l'indirizzo IP del server&quot; in molti casi funziona, tuttavia non significa che il server sia accessibile dall'esterno.</p>
+</div>
+<div class="section" id="how-to-download-a-map-from-a-server">
+<h2><a class="toc-backref" href="#id22">4.5 Come scaricare una mappa da un server</a></h2>
+<p>Giocare una partita con la mappa che si desidera scaricare. Prima di iniziare a giocare, la mappa sarà collocata nella cartella temporanea e rimarrà li fino a quando non verrà sovrascritta da un'altra mappa. A seconda del formato della mappa, sarà costituita da un file di testo chiamato recent_map.txt o una cartella chiamata recent_map.</p>
+</div>
+</div>
+<div class="section" id="game-elements">
+<h1><a class="toc-backref" href="#id23">5. Elementi del gioco</a></h1>
+<div class="section" id="food">
+<h2><a class="toc-backref" href="#id24">Cibo</a></h2>
+<p>La formazione di una nuova unità la si può ottenere solo se il giocatore ha razioni di cibo sufficienti. Se qualche fattoria viene distrutta o una nuova unità viene ottenuta senza cibo, e le scorte di cibo divengono insufficienti, l'unità corrente sarà mantenuta senza problemi. Tuttavia però non ne possono esser formate altre.</p>
+</div>
+<div class="section" id="tech-upgrades">
+<h2><a class="toc-backref" href="#id25">Aggiornamenti tecnologici</a></h2>
+<p>Gli aggiornamenti verranno applicati a tutte le unità dei giocatori, correnti e future.</p>
+</div>
+<div class="section" id="flying-units">
+<h2><a class="toc-backref" href="#id26">Unità volanti</a></h2>
+<p>Fin da SoundRTS 1.1, le unità volanti, virano dritte all'obiettivo ignorando il percorso terreno.</p>
+</div>
+<div class="section" id="invisible-units-and-detectors">
+<h2><a class="toc-backref" href="#id27">Unità invisibili e controllori</a></h2>
+<p>Per difendersi contro una unità invisibile, ci sono almeno 3 modi:</p>
+<ul class="simple">
+<li>portare una unità controllore (o usare un rilevatore di incantesimi) ed attaccare l'unità</li>
+<li>Utilizzare un incantesimo con effetto distruttivo sulla casella dove c'è l'unità</li>
+<li>Ignorare l'unità invisibile e distruggere   gli edifici nemici in fretta</li>
+</ul>
+</div>
+</div>
+<div class="section" id="more-details-for-customization">
+<h1><a class="toc-backref" href="#id28">6. Ulteriori dettagli sulla personalizzazione</a></h1>
+<div class="section" id="soundrts-ini">
+<h2><a class="toc-backref" href="#id29">SoundRTS.ini</a></h2>
+<p>Questo file si trova nella cartella User. Esso contiene i vari parametri riguardanti il funzionamento del gioco. Quando si esegue SoundRTS, se nel file SoundRTS.ini  ci sono errori, sarà ricreato un nuovo file SoundRTS.ini e verranno recuperati i parametri dal file corrotto per quanto possibile.</p>
+</div>
+<div class="section" id="command-line-options">
+<h2><a class="toc-backref" href="#id30">Opzioni da riga di comando</a></h2>
+<p>Dalla linea di comando, l'opzione -h fornisce l'elenco delle opzioni disponibili.</p>
+<p>L'opzione --mods sostituisce la riga &quot;mods =&quot; da SoundRTS.ini. Ad esempio, per avviare SoundRTS con il mod soundpack ed il mod Orc: soundrts.exe --mods=soundpack,orc</p>
+</div>
+<div class="section" id="sound-pack">
+<h2><a class="toc-backref" href="#id31">Pacchetto di suoni</a></h2>
+<p>SoundRTS viene fornito con una mod chiamato &quot;soundpack&quot; che contiene suoni alternativi. Per attivare questa mod, sostituire in SoundRTS.ini la riga &quot;mods =&quot; con &quot;mods = soundpack&quot;. Quindi riavviare il gioco.</p>
+</div>
+<div class="section" id="sapi-5-windows">
+<h2><a class="toc-backref" href="#id32">SAPI 5 (Windows)</a></h2>
+<p>In Soundrts.ini, se &quot;srapi = 0&quot;, sarà utilizzata direttamente la voce predefinita di Sapi 5.</p>
+</div>
+<div class="section" id="windows-srapi-parameter">
+<h2><a class="toc-backref" href="#id33">Parametro srapi in Windows</a></h2>
+<p>In Soundrts.ini, utilizzare &quot;srapi = 1&quot; per utilizzare un lettore di schermo (tramite ScreenReaderAPI).</p>
+</div>
+<div class="section" id="windows-srapi-wait-parameter">
+<h2><a class="toc-backref" href="#id34">Parametro srapi_wait in Windows</a></h2>
+<p>Siccome non son riuscito a trovare un modo per sapere quando un lettore di schermo finisce di parlare in Windows, ho dovuto valutare la durata di un messaggio. 
+Un parametro aggiuntivo chiamato &quot;srapi_wait&quot; determina  per quanto tempo   SoundRTS dovrà attendere prima di inviare il messaggio successivo. 
+Con &quot;srapi_wait = .1&quot; e un messaggio di 10 caratteri, SoundRTS attenderà per .1 * 10 = 1 secondo.</p>
+<p>Aumentare il valore di srapi_wait se qualche messaggio viene interrotto dall'invio del messaggio successivo. 
+Diminuire il valore di srapi_wait se il silenzio tra due messaggi è troppo lungo.</p>
+</div>
+<div class="section" id="temporary-folder">
+<h2><a class="toc-backref" href="#id35">Cartella temporanea</a></h2>
+<p>La cartella temporanea contiene i log e la mappa sulla quale si è giocato precedentemente. </p>
+<p>La cartella temporanea si trova nella cartella User ed è chiamata Tmp.</p>
+</div>
+<div class="section" id="user-folder">
+<h2><a class="toc-backref" href="#id36">Cartella dell'utente</a></h2>
+<p>La cartella utente contiene le impostazioni del gioco, le mappe personalizzate e le mods, e la cartella temporanea.</p>
+<p>Se la cartella principale contiene una sottocartella di nome User, quest'ultima sarà la cartella utente. 
+Se la cartella &quot;User&quot; non esiste, sarà  collocata, a seconda del sistema operativo in:</p>
+<ul class="simple">
+<li>Windows XP: &quot;C:\Documents and settings\tuo_nome\Application data\SoundRTS unstable&quot;</li>
+<li>Linux: &quot;home/tuo_nome/.SoundRTS unstable&quot;</li>
+</ul>
+</div>
+<div class="section" id="how-to-create-a-portable-version-of-soundrts">
+<h2><a class="toc-backref" href="#id37">Come creare una versione portable di SoundRTS</a></h2>
+<p>Fin da SoundRTS 1.0 Beta 10 p, è possibile avere tutti i file del gioco (log, configurazione, mappe personalizzate...) conservati nella cartella del gioco. Ecco come procedere:</p>
+<ul class="simple">
+<li>installare SoundRTS</li>
+<li>Windows: copiare la cartella da &quot;Programmi&quot; ad una cartella diversa (desktop, drive USB, ecc.)</li>
+<li>nella nuova cartella ove risiede SoundRTS creare una sottocartella chiamata &quot;user&quot;. &quot;user&quot; può essere la copia di una cartella utente esistente (la versione deve essere comunque la stessa) </li>
+<li>Windows: per lanciare il programma eseguire &quot;soundrts.exe&quot;.</li>
+</ul>
+</div>
+<div class="section" id="how-to-change-the-default-speed-in-single-player-games">
+<h2><a class="toc-backref" href="#id38">Come cambiare  la velocità predefinita in modalità singolo giocatore</a></h2>
+<p>Trovare SoundRTS.ini e nella cartella utente e modificare la linea &quot;speed...&quot;. Utilizzare un numero intero.</p>
+</div>
+<div class="section" id="changing-some-key-bindings">
+<h2><a class="toc-backref" href="#id39">Cambiare alcune combinazioni di tasti</a></h2>
+<p>A partire da SoundRTS 1.1, lo schema della tastiera è definito in un file chiamato bindings.txt collocato nella cartella del gioco.</p>
+</div>
+<div class="section" id="creating-an-app-for-mac">
+<h2><a class="toc-backref" href="#id40">Creare una app per MAC</a></h2>
+<p>Se siete riusciti ad installare la versione multipiattaforma per il Mac, probabilmente si potrà creare una app che faciliterà l'installazione da parte di altri giocatori. 
+Ecco qualche suggerimento. Utilizzare py2app. 
+Non avete bisogno dei sorgenti. Ad esempio, create un file chiamato soundrts_launcher.py che contiene quest'unica riga: &quot;import soundrts&quot;. 
+Potete anche creare un file chiamato server_launcher.py contenente la linea: &quot;import server&quot;. 
+Assicurarsi che eseguendo &quot;python &quot;python soundrts_launcher.py&quot; funzioni correttamente.</p>
+</div>
+<div class="section" id="using-the-windows-installer-with-a-limited-account-windows-xp">
+<h2><a class="toc-backref" href="#id41">Utilizzare Windows Installer con account limitato (Windows XP)</a></h2>
+<p>Si può utilizzare  un account limitato per installare SoundRTS in Windows XP. Basta cambiare il percorso di installazione scegliendo un'altra cartella invece della cartella &quot;Programmi&quot;.</p>
+<p>Pure se si installa SoundRTS con un account amministratore, potete giocare comunque con un account limitato.</p>
+</div>
+<div class="section" id="what-makes-a-map-an-official-multiplayer-map">
+<h2><a class="toc-backref" href="#id42">Quali caratteristiche deve avere una mappa per un gioco a più giocatori ufficiale?</a></h2>
+<p>Le mappe multigiocatore ufficiali non hanno nessun suono prima del loro titolo. Le mappe multigiocatore ufficiali sono elencate in cfg/official_maps.txt 
+con i checksum corrispondenti per essere sicuri che non siano state modificate.</p>
+</div>
+<div class="section" id="how-to-select-a-different-language">
+<h2><a class="toc-backref" href="#id43">Come si seleziona una lingua diversa?</a></h2>
+<p>Se cfg/languages.txt è vuoto, il programma imposterà in automatico la lingua del sistema. 
+ Per selezionare una lingua specifica scrivere il codice della lingua in cfg/language.txt, ad esempio &quot;en&quot;, &quot;it&quot;, &quot;fr-ca&quot;, &quot;pt&quot; o &quot;pt-BR&quot;. 
+ Controllare la cartella res per sapere che codici lingua sono previsti.</p>
+</div>
+</div>
+<div class="section" id="credits">
+<h1><a class="toc-backref" href="#id44">7. Collaboratori</a></h1>
+<p>Nota: la lista seguente non è esaustiva. Grazie a tutti coloro che hanno collaborato!</p>
+ <p>Questo gioco è stato scritto da SoundMUD (soundmud@gmail.com).</p>
+<p>La scoperta della comunità francese che si occupa di giochi audio accessibili, e le idee per iniziare: Sabine Gorecki. 
+I numerosi test e incoraggiamenti durante i primi periodi di SoundMUD: Alex. 
+Primo test per SoundMUD con Linux: Miguel. 
+Il rilancio del progetto SoundMUD, gli incoraggiamenti durante il secondo periodo di SoundMUD per portare a termine il gioco di strategia, e i numerosi test: Louis-Rock Lampron et Martin Morin.</p>
+<p>Traduzione inglese: SoundMUD. 
+Traduzione tedesca: Alexander Westphal di Gameport. 
+Traduzione italiana: Gabriel Battaglia e Luigi Russo. 
+Traduzione spagnola: Alan.</p>
+<p>Perfezionamento della lingua inglese e dei suoni: Bryan Smart.</p>
+<p>Mappe multigiocatore - 101 - frontier: Bryan Smart.</p></div>
+</div>
+</body>
+</html>
