@@ -1,5 +1,6 @@
 from constants import COLLISION_RADIUS, USE_RANGE_MARGIN
-from lib.log import exception
+from lib.log import exception, info
+from lib.nofloat import PRECISION
 
 
 class NotEnoughSpaceError(Exception): pass
@@ -171,7 +172,9 @@ class Entity(object):
         if a.is_an_enemy(self) and a.range is not None:
             range = a.range
             if a.is_ballistic and a.height > self.height:
-                range += a.is_ballistic
+                # each height difference has a bonus of 1
+                bonus = (a.height - self.height) * PRECISION * 1
+                range += bonus
             return max(a.radius + USE_RANGE_MARGIN, range) + self.radius
         else:
             return a.radius + self.radius + USE_RANGE_MARGIN
