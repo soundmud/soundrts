@@ -12,7 +12,7 @@ import time
 from lib import collision
 from constants import COLLISION_RADIUS, VIRTUAL_TIME_INTERVAL
 from definitions import rules, get_ai_names, load_ai
-from lib.log import warning, exception
+from lib.log import warning, exception, info
 from lib.nofloat import to_int, int_distance, PRECISION
 from paths import MAPERROR_PATH
 import res
@@ -53,6 +53,16 @@ class Type(object):
         self.__name__ = name
         self.type_name = name
         self.cls = bases[0]
+        if "sight_range" in dct:
+            del dct["sight_range"]
+            dct["bonus_height"] = 1
+            info("in %s: replacing sight_range 1 with bonus_height 1", name)
+        if "special_range" in dct:
+            del dct["special_range"]
+            dct["range"] = 12 * PRECISION
+            dct["minimal_range"] = 4 * PRECISION 
+            dct["is_ballistic"] = 1
+            info("in %s: replacing special_range 1 with range 12, minimal_range 4 and is_ballistic 1", name)
         self.dct = dct
         self.init_dict(self)
 
