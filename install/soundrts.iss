@@ -39,16 +39,8 @@ Name: {userappdata}\SoundRTS {#MyAppStage}
 
 [Icons]
 Name: {group}\SoundRTS {#MyAppStageName}; Filename: {app}\soundrts.exe; WorkingDir: {app}
-Name: {group}\SoundRTS with soundpack; Filename: {app}\soundrts.exe; Parameters: --mods=soundpack; WorkingDir: {app}
-Name: {group}\CrazyMod\CrazyMod 8.2a; Filename: {app}\soundrts.exe; Parameters: --mods=soundpack,CrazyMod8.2; WorkingDir: {app}
-Name: {group}\CrazyMod\Website; Filename: http://pragmapragma.free.fr/soundrts-crazymod/
-Name: {group}\Mini mods\Orcs; Filename: {app}\soundrts.exe; Parameters: --mods=orc; WorkingDir: {app}
-Name: {group}\Mini mods\Teleportation; Filename: {app}\soundrts.exe; Parameters: --mods=teleportation; WorkingDir: {app}
-Name: {group}\Mini mods\Vanilla (no mod); Filename: {app}\soundrts.exe; Parameters: --mods=; WorkingDir: {app}
-Name: {group}\Manual; Filename: {app}\doc\help-index.htm
 Name: {group}\Website; Filename: http://jlpo.free.fr/soundrts
 Name: {group}\{cm:UninstallProgram, SoundRTS}; Filename: {uninstallexe}
-Name: {group}\user; Filename: {userappdata}\SoundRTS {#MyAppStage}
 
 [Languages]
 Name: English; MessagesFile: compiler:Default.isl
