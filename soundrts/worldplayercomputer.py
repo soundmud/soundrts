@@ -138,7 +138,7 @@ class Computer(Player):
                     wh = self.nearest_warehouse(deposit.place,
                                                 deposit.resource_type)
                     if wh is None or \
-                       deposit.place.shortest_path_distance_to(wh.place) > self.world.square_width:
+                       deposit.place.shortest_path_distance_to(wh.place, self) > self.world.square_width:
                         meadow = self.choose(Meadow, starting_place=deposit.place)
                         if meadow:
                             for v in self.units:
@@ -340,8 +340,8 @@ class Computer(Player):
         if len(candidates) > 10:
             candidates = self._remove_far_candidates(candidates, starting_place, 1)
         else:
-            candidates.sort(key=lambda x: starting_place.shortest_path_distance_to(x.place))
-            while candidates and starting_place.shortest_path_distance_to(candidates[0].place) is None: # None < 0
+            candidates.sort(key=lambda x: starting_place.shortest_path_distance_to(x.place, self))
+            while candidates and starting_place.shortest_path_distance_to(candidates[0].place, self) is None: # None < 0
                 del candidates[0] # no path
         if random:
             candidates = [o for o in candidates if self.no_enemy_in(o.place)]

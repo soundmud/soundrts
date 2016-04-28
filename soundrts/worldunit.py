@@ -816,11 +816,11 @@ class Unit(Creature):
         elif target.place is not self.place.world: # target is not a square
             if self.place == target.place:
                 return target
-            return self.place.shortest_path_to(target.place)
+            return self.place.shortest_path_to(target.place, self)
         else: # target is a square
             if self.place == target:
                 return None
-            return self.place.shortest_path_to(target)
+            return self.place.shortest_path_to(target, self)
 
     def die(self, attacker=None):
         self.player.nb_units_lost += 1

@@ -721,7 +721,7 @@ class Player(object):
         for p in self.allied:
             for u in p.units:
                 if resource_type in u.storable_resource_types:
-                    d = place.shortest_path_distance_to(u.place)
+                    d = place.shortest_path_distance_to(u.place, self)
                     if d == 0:
                         return u
                     if d is not None:
