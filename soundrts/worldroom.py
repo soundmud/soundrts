@@ -95,12 +95,12 @@ class Square(object):
         return self.xmin <= x <= self.xmax and \
                self.ymin <= y <= self.ymax
 
-    def shortest_path_to(self, dest, player):
+    def shortest_path_to(self, dest, player=None):
 ##        if len(self.exits) == 1: # small optimization
 ##            return self.exits[0]
         return self._shortest_path_to(dest, player)[0]
 
-    def shortest_path_distance_to(self, dest, player):
+    def shortest_path_distance_to(self, dest, player=None):
         return self._shortest_path_to(dest, player)[1]
 
     def _shortest_path_to(self, dest, player):
