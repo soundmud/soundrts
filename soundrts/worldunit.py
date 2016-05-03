@@ -186,8 +186,10 @@ class Creature(Entity):
             return []
         result = [self.place]
         for sq in self.place.neighbours:
+            # Blockers (walls, etc) are ignored for now because if a blocker disappears
+            # it would be necessary to update the player's perception.
             if self.height > sq.height \
-            or self.height == sq.height and self._can_go(sq.x, sq.y):
+            or self.height == sq.height and self._can_go(sq.x, sq.y, ignore_blockers=True):
                 result.append(sq)
         return result
 
@@ -228,7 +230,7 @@ class Creature(Entity):
         x, y = self._future_coords(rotation, target_d)
         return abs(rotation) + self._already_walked(x, y) * 200
 
-    def _can_go(self, x, y):
+    def _can_go(self, x, y, ignore_blockers=False):
         if self.airground_type != "ground":
             return True
         new_place = self.world.get_place_from_xy(x, y)
@@ -236,6 +238,8 @@ class Creature(Entity):
             return True
         for e in self.place.exits:
             if e.other_side.place is new_place:
+                if ignore_blockers:
+                    return True
                 if e.is_blocked(self):
                     for o in e.blockers:
                         self.player.observe(o)
