@@ -21,8 +21,10 @@ class Exit(Entity):
                 if o.is_an_enemy(b):
                     return True
 
-    def is_blocked(self, o=None):
+    def is_blocked(self, o=None, ignore_enemy_walls=False):
         for b in self._blockers + getattr(self.other_side, "_blockers", []):
+            if ignore_enemy_walls and (o is None or o.is_an_enemy(b)):
+                continue
             if not b.is_a_gate or (o is None or o.is_an_enemy(b)) or self._there_are_enemies(b):
                 return True
 

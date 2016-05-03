@@ -92,8 +92,8 @@ class Square(object):
         self.__dict__ = {}
 
     def contains(self, x, y):
-        return self.xmin <= x <= self.xmax and \
-               self.ymin <= y <= self.ymax
+        return self.xmin <= x < self.xmax and \
+               self.ymin <= y < self.ymax
 
     def shortest_path_to(self, dest, player=None):
 ##        if len(self.exits) == 1: # small optimization
@@ -128,13 +128,13 @@ class Square(object):
         Q[start] = (0, )
 
         for v in Q:
-            if hasattr(v, "is_blocked") and v.is_blocked(player):
+            if hasattr(v, "is_blocked") and v.is_blocked(player, ignore_enemy_walls=True):
                 continue
             D[v] = Q[v][0]
             if v == end: break
             
             for w in G[v]:
-                if hasattr(w, "is_blocked") and w.is_blocked(player):
+                if hasattr(w, "is_blocked") and w.is_blocked(player, ignore_enemy_walls=True):
                     continue
                 vwLength = D[v] + G[v][w]
                 if w in D:
@@ -206,13 +206,13 @@ class Square(object):
         return balance
 
     def north_side(self):
-        return self, self.x, self.ymax, -90
+        return self, self.x, self.ymax - 1, -90
 
     def south_side(self):
         return self, self.x, self.ymin, 90
 
     def east_side(self):
-        return self, self.xmax, self.y, 180
+        return self, self.xmax - 1, self.y, 180
 
     def west_side(self):
         return self, self.xmin, self.y, 0
