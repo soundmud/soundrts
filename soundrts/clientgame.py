@@ -1383,7 +1383,8 @@ class GameInterface(object):
     def _get_prefix_and_collision(self, new_square, dxc, dyc):
         objects = [o for o in self.dobjets.values() if o.place is self.place
                  and self.is_selectable(o)
-                 and style.has(o.type_name, "when_moving_through")]
+                 and style.has(o.type_name, "when_moving_through")
+                 and not o.is_blocked(self.player)]
         if new_square is self.place:
             prefix = style.get("parameters", "no_path_in_this_direction")
             collision = True
