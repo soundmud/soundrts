@@ -48,7 +48,7 @@ class OrganizingAGame(_State):
         client.push("map_nb_players %s %s\n" % (client.game.scenario.nb_players_min,
                                                 client.game.scenario.nb_players_max))
         client.push("available_players %s\n" % " ".join(
-            [p.login for p in client.server.available_players()
+            [p.login for p in client.server.available_players(client)
              if p not in client.game.guests]))
         client.push("registered_players %s\n" % " ".join(["%s,%s,%s" % (p.login, p.alliance, p.faction) for p in client.game.players]))
         client.push("update_menu\n")
@@ -90,6 +90,8 @@ class _Computer(object):
     def send_menu(self):
         pass
 
+    def is_compatible(self, client):
+        return True
 
 class Game(object):
 
@@ -262,7 +264,8 @@ class Game(object):
                 else:
                     debug("don't send all_orders to %s", p.login)
             if log_this and options.record_games:
-                self.f.write("%s: all_orders %s\n" % (self.time, all_orders.replace(NEWLINE_REPLACEMENT, ";").replace(SPACE_REPLACEMENT, ",").replace("update;", "")))
+                self.f.write("%s: all_orders %s\n" % (self.time, all_orders.replace(NEWLINE_REPLACEMENT, ";").replace(SPACE_REPLACEMENT, ",").replace("update;", 
+"")))
             self.time += 1
             self._timeout_reference = None
 

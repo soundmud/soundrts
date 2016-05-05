@@ -8,13 +8,13 @@ from lib.log import debug, info, warning, exception
 from lib.msgs import insert_silences, encode_msg
 import res
 from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
-from version import compatibility_version
 
 
 class ConnectionToClient(asynchat.async_chat):
 
     is_disconnected = False
     login = None
+    version = None
     game = None
 
     def __init__(self, server, (connection, address)):
@@ -85,7 +85,7 @@ class ConnectionToClient(asynchat.async_chat):
             " ".join([
             ",".join([str(x) for x in [g.id, g.admin.login] + g.scenario.title])
             for g in self.server.games if self in g.guests]))
-        
+
     def send_maps(self):
         if self.server.can_create(self):
             self.push("maps %s\n" %
@@ -96,6 +96,9 @@ class ConnectionToClient(asynchat.async_chat):
 
     def send_e(self, event):
         self.push("e %s\n" % event)
+
+    def is_compatible(self, client):
+        return self.version == client.version
 
     # "anonymous" commands
 
@@ -109,33 +112,34 @@ class ConnectionToClient(asynchat.async_chat):
             n += 1
         return login
 
-    def _get_login_from_data(self, data):
+    def _get_version_and_login_from_data(self, data):
         try:
             version, login = data.split(" ", 1)
         except:
             warning("can't extract version and login: %s" % data)
-            return
-        if version != compatibility_version():
-            warning("bad client version: %s" % version)
-            return
+            return (None, None)
         if re.match("^[a-zA-Z0-9]{1,20}$", login) == None:
             warning("bad login: %s" % login)
-            return
+            return (version, None)
         if len(self.server.clients) >= self.server.nb_clients_max:
             warning("refused client %s: too many clients." % login)
-            return
-        return self._unique_login(login)
+            return (version, None)
+        return (version, self._unique_login(login))
 
     def _send_server_status_msg(self):
-        self.send_msg(insert_silences([c.login for c in self.server.clients]))
+        msg = []
+        for c in self.server.clients:
+            if c.is_compatible(self):
+                msg.append(c.login)
+        self.send_msg(insert_silences(msg))
         for g in self.server.games:
             if g.started:
                 self.send_msg(g.get_status_msg())
 
     def _accept_client_after_login(self):
         self.delay = time.time() - self.t1
-        info("new player: IP=%s login=%s delay=%s" %
-             (self.address[0], self.login, self.delay))
+        info("new player: IP=%s login=%s version=%s delay=%s" %
+             (self.address[0], self.login, self.version, self.delay))
         # welcome client to server
         self.push("ok!\n")
         self.push("welcome %s %s\n" % (self.login, self.server.login))
@@ -144,12 +148,13 @@ class ConnectionToClient(asynchat.async_chat):
         self.state = InTheLobby()
         # alert lobby and game admins
         for c in self.server.available_players() + self.server.game_admins():
-            c.send_e("new_player,%s" % self.login)
+            if c.is_compatible(self):
+                c.send_e("new_player,%s" % self.login)
         self._send_server_status_msg()
         self.server.log_status()
 
     def cmd_login(self, args):
-        self.login = self._get_login_from_data(" ".join(args))
+        self.version, self.login = self._get_version_and_login_from_data(" ".join(args))
         if self.login is not None:
             self._accept_client_after_login()
             self.server.update_menus()
@@ -189,7 +194,7 @@ class ConnectionToClient(asynchat.async_chat):
         # and then, and only then, the server forgets the client.
         self.push("quit\n")
         # self.is_quitting = True
-        
+
     # "organizing a game" commands
 
     def cmd_cancel_game(self, unused_args):
@@ -198,7 +203,7 @@ class ConnectionToClient(asynchat.async_chat):
 
     def cmd_invite(self, args):
         guest = self.server.get_client_by_login(args[0])
-        if guest and guest in self.server.available_players():
+        if guest and guest in self.server.available_players() and guest.is_compatible(self):
             self.game.invite(guest)
             self.server.update_menus()
         else:

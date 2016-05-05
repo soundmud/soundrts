@@ -33,12 +33,12 @@ from lib.msgs import nb2msg
 from paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
 import res
 import stats
-from version import compatibility_version
+from version import VERSION
 
 
 _ds = open("cfg/default_servers.txt").readlines()
 _ds = [_x.split() for _x in _ds]
-DEFAULT_SERVERS = [" ".join(["0"] + _x[:1] + [compatibility_version()] + _x[1:]) for _x in _ds]
+DEFAULT_SERVERS = [" ".join(["0"] + _x[:1] + [VERSION] + _x[1:]) for _x in _ds]
 SERVERS_LIST_HEADER = "SERVERS_LIST"
 SERVERS_LIST_URL = MAIN_METASERVER_URL + "servers.php?header=%s&include_ports=1" % SERVERS_LIST_HEADER
 
@@ -68,7 +68,7 @@ class Application(object):
                 warning("line not recognized from the metaserver: %s", s)
                 continue
             nb += 1
-            if version == compatibility_version():
+            if version == VERSION:
                 menu.append([login, 4073, login], (connect_and_play, ip, port))
         menu.title = nb2msg(len(menu.choices)) + [4078] + nb2msg(nb) + [4079]
         menu.append([4075, 4076], None)
