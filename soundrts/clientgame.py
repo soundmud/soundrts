@@ -1245,11 +1245,11 @@ class GameInterface(object):
 
     @property
     def an_order_not_requiring_a_target_is_selected(self):
-        return self.order and order_args(self.order, self.dobjets[self.group[0]].model) == 0
+        return self.order and self.group and order_args(self.order, self.dobjets[self.group[0]].model) == 0
 
     @property
     def an_order_requiring_a_target_is_selected(self):
-        return self.order and order_args(self.order, self.dobjets[self.group[0]].model)
+        return self.order and self.group and order_args(self.order, self.dobjets[self.group[0]].model)
 
     def _select_order(self, order):
         self.order = order
