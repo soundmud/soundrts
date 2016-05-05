@@ -49,7 +49,11 @@ class EntityView(object):
         self.footstep_interval = .5 + random.random() * .2 # to avoid strange synchronicity of footsteps when several units are walking
 
     def __getattr__(self, name):
-        v = getattr(self.model, name)
+        if name in ("type_name", "id") and hasattr(self.model, "is_blocked") and self.model.is_blocked():
+            model = self.model.blockers[0]
+        else:
+            model = self.model
+        v = getattr(model, name)
         if name in ["x", "y"]:
             v /= 1000.0
         elif name in ("qty", "hp", "hp_max", "mana", "mana_max"):
