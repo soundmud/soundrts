@@ -170,6 +170,7 @@ class ConnectionToClient(asynchat.async_chat):
             self.push("game_admin_menu\n")
             scs = res.worlds_multi()
             scenario = scs[int(args[0])]
+            self.push("map %s\n" % scenario.pack())
             speed = float(args[1])
             self.server.games.append(Game(scenario, speed, self.server, self))
             self.server.update_menus()
@@ -182,6 +183,7 @@ class ConnectionToClient(asynchat.async_chat):
         if game is not None and game.can_register():
             self.state = WaitingForTheGameToStart()
             self.push("game_guest_menu\n")
+            self.push("map %s\n" % game.scenario.pack())
             game.register(self)
             self.server.update_menus()
         else:

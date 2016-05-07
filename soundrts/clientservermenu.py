@@ -126,23 +126,19 @@ class ServerMenu(_ServerMenu):
 
 class _BeforeGameMenu(_ServerMenu):
 
-    map_title = ()
     registered_players = ()
 
-    def srv_map_title(self, args):
-        self.map_title = args
-
-    def srv_map_factions(self, args):
-        self.map_factions = args
-        style.load(res.get_text_file("ui/style", append=True, localize=True)) # XXX: won't work with factions defined in the map
-#       TODO: use self.map.additional_style (and self.map.campaign_style ?)
+    def srv_map(self, args):
+        self.map = mapfile.Map()
+        self.map.unpack(" ".join(args)) # warning: args is split from a stripped string
+        self.map.load_style(res)
 
     def srv_registered_players(self, args):
         self.registered_players = [p.split(",") for p in args]
 
     def _add_faction_menu(self, menu, pn, p, pr):
-        if len(self.map_factions) > 1:
-            for r in ["random_faction"] + self.map_factions:
+        if len(self.map.factions) > 1:
+            for r in ["random_faction"] + self.map.factions:
                 if r != pr:
                     menu.append([p,] + style.get(r, "title"),
                                 (self.server.write_line,
@@ -154,9 +150,7 @@ class _BeforeGameMenu(_ServerMenu):
         me = args[1]
         seed = int(args[2])
         speed = float(args[3])
-        server_map = mapfile.Map()
-        server_map.unpack(" ".join(args[4:])) # warning: args is splitted from a stripped string
-        game = MultiplayerGame(server_map, players, me, self.server, seed, speed)
+        game = MultiplayerGame(self.map, players, me, self.server, seed, speed)
         game.alliances = alliances
         game.factions = factions
         game.run()
@@ -166,18 +160,17 @@ class _BeforeGameMenu(_ServerMenu):
 class GameAdminMenu(_BeforeGameMenu):
 
     available_players = ()
-    nb_players_min = nb_players_max = 0
 
     def make_menu(self):
-        menu = Menu(self.map_title)
-        if len(self.registered_players) < self.nb_players_max:
+        menu = Menu(self.map.title)
+        if len(self.registered_players) < self.map.nb_players_max:
             for p in self.available_players:
                 menu.append([4058, p],
                             (self.server.write_line, "invite %s" % p))
             menu.append([4058, 4258], (self.server.write_line, "invite_easy"))
             menu.append([4058, 4257],
                         (self.server.write_line, "invite_aggressive"))
-        if len(self.registered_players) >= self.nb_players_min:
+        if len(self.registered_players) >= self.map.nb_players_min:
             menu.append([4059], (self.server.write_line, "start"))
         for pn, (p, pa, pr) in enumerate(self.registered_players):
             pa = int(pa)
@@ -191,9 +184,6 @@ class GameAdminMenu(_BeforeGameMenu):
         menu.append([4048, 4060], (self.server.write_line, "cancel_game"))
         return menu
 
-    def srv_map_nb_players(self, args):
-        self.nb_players_min, self.nb_players_max = map(int, args)
-
     def srv_available_players(self, args):
         self.available_players = args
 
@@ -206,7 +196,7 @@ class GameGuestMenu(_BeforeGameMenu):
                 return pn, p, pr
 
     def make_menu(self):
-        menu = Menu(self.map_title)
+        menu = Menu(self.map.title)
         self._add_faction_menu(menu, *self._get_player())
         menu.append([4041, 4061], (self.server.write_line, "unregister"))
         return menu

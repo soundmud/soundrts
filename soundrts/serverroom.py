@@ -43,10 +43,6 @@ class OrganizingAGame(_State):
                         "faction")
 
     def send_menu(self, client):
-        client.push("map_title %s\n" % " ".join(map(str, client.game.scenario.title)))
-        client.push("map_factions %s\n" % " ".join(client.game.scenario.factions))
-        client.push("map_nb_players %s %s\n" % (client.game.scenario.nb_players_min,
-                                                client.game.scenario.nb_players_max))
         client.push("available_players %s\n" % " ".join(
             [p.login for p in client.server.available_players(client)
              if p not in client.game.guests]))
@@ -59,8 +55,6 @@ class WaitingForTheGameToStart(_State):
     allowed_commands = ("unregister", "say", "faction")
 
     def send_menu(self, client):
-        client.push("map_title %s\n" % " ".join(map(str, client.game.scenario.title)))
-        client.push("map_factions %s\n" % " ".join(client.game.scenario.factions))
         client.push("registered_players %s\n" % " ".join(["%s,%s,%s" % (p.login, p.alliance, p.faction) for p in client.game.players]))
         client.push("update_menu\n")
 
@@ -139,14 +133,13 @@ class Game(object):
         # send first orders (if menu, the advance in the delay isn't lost)
         delay = self._delay()
         for client in self.human_players:
-            client.push("start_game %s %s %s %s %s\n" %
+            client.push("start_game %s %s %s %s\n" %
                         (";".join(["%s,%s,%s" % (p.login_to_send(), p.alliance,
                                                  p.faction)
                                    for p in self.players]),
                          client.login,
                          seed,
                          self.speed,
-                         self.scenario.pack(),
                          )
                         )
             for _ in range(delay):
