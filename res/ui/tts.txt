@@ -350,7 +350,7 @@
 4254	horses speed
 4255	define the rally point for the new units
 4256	gathered
-4257	agressive computer
+4257	aggressive computer
 4258	quiet computer
 4259	has just logged out
 4260	on the server of
