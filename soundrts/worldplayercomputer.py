@@ -43,9 +43,6 @@ class Computer(Player):
         self.send_soldiers_to_base = 0
         self.raise_dead = 0
 
-    def send_update(self, l, type="maj"):
-        pass
-
     _previous_linechange = 0
     __line_nb = 0
 ##    _prev_line_nb = None
