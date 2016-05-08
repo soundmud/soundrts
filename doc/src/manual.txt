@@ -189,7 +189,7 @@ To block an exit (path, bridge), you can either:
 - build a wall on it;
 - build any building on it.
 
-A unit or a gate will let your units pass unless there are enemies nearby.
+A unit or a gate will let friendly units pass.
 
 Other commands
 ^^^^^^^^^^^^^^
