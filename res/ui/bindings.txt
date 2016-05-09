@@ -163,11 +163,29 @@ CTRL ALT s: select_units worker SOLDIER
 2: group 2 local
 3: group 3 local
 4: group 4 local
+5: group 5 local
 CTRL 1: group 1
 CTRL 2: group 2
 CTRL 3: group 3
 CTRL 4: group 4
+CTRL 5: group 5
 0: ungroup
+
+
+; recallable groups
+
+6: recall_group 6
+7: recall_group 7
+8: recall_group 8
+9: recall_group 9
+CTRL 6: set_group 6
+CTRL 7: set_group 7
+CTRL 8: set_group 8
+CTRL 9: set_group 9
+SHIFT 6: append_group 6
+SHIFT 7: append_group 7
+SHIFT 8: append_group 8
+SHIFT 9: append_group 9
 
 
 ; miscellaneous

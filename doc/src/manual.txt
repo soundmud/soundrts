@@ -191,6 +191,26 @@ To block an exit (path, bridge), you can either:
 
 A unit or a gate will let friendly units pass.
 
+Zoom mode (experimental)
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+New in 1.2 alpha 10.
+
+F8: enter or exit zoom mode. Escape exits zoom mode too.
+
+The square in divided in 3 x 3 smaller squares. A zoomed square can be used as a target for an order (go to, essentially).
+
+Recallable control groups
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+New in 1.2 alpha 10.
+
+Control + 6, 7, 8 or 9: sets group 6, 7, 8 or 9 with the currently controlled units
+
+Shift + 6, 7, 8 or 9: extends group 6, 7, 8 or 9 with the currently controlled units
+
+6, 7, 8 or 9: recalls group 6, 7, 8 or 9 
+
 Other commands
 ^^^^^^^^^^^^^^
 
@@ -216,9 +236,6 @@ Alt + G reselects the previously given order and validate it if no additional pa
 Since SoundRTS 1.1 alpha 3, Alt + A is the same than Alt + G.
 
 Backquote (the key below Escape): console command (only in single player mode). The only useful commands at the moment are add_units (to get units or buildings instantly) and victory (to win, for example to skip a chapter). Example of a "add_units" command: "add_units a1 100 archer". New in SoundRTS 1.2 alpha 9.
-
-F8 (experimental): enter or exit zoom mode. Escape exits zoom mode too. New in SoundRTS 1.2 alpha 10. The square in divided in 3 x 3 smaller squares. A zoomed square can be used as a target for an order (go to, essentially).
-
 
 4. Multiplayer games
 --------------------
