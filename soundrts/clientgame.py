@@ -74,6 +74,7 @@ class GameInterface(object):
         self.alert_squares = {}
         self.dobjets = {}
         self.group = []
+        self.groups = {}
         self.lost_units = []
         self.neutralized_units = []
         self.previous_menus = {}
@@ -911,6 +912,8 @@ class GameInterface(object):
             group = [self.dobjets[x].short_title for x in self.group
                      if x in self.dobjets]
             voice.item(prefix + [138] + self.summary(group) + u.orders_txt)
+        else:
+            voice.item(prefix + [4205]) # no unit controlled
 
     def tell_enemies_in_square(self, place):
         enemies = [x.short_title for x in self.dobjets.values()
@@ -1055,13 +1058,10 @@ class GameInterface(object):
         self.order = None
 
     def cmd_unit_status(self):
-        self.update_group()
-        if not self.group:
-            voice.item([4205]) # no unit controlled
-        else:
+        self.say_group(self.place.title)
+        if self.group:
             self.follow_mode = True
             self._follow_if_needed()
-            self.say_group(self.place.title)
 
     def cmd_help(self, incr):
         incr = int(incr)
@@ -1227,6 +1227,24 @@ class GameInterface(object):
     def cmd_select_units(self, *args):
         self.selectionner_unite(1, *(list(self._arrange(args)) + [True]))
         self.grouper(1, *self._arrange(args))
+
+    # recallable groups
+
+    def cmd_set_group(self, name, *args):
+        self.groups[name] = set(self.group)
+        voice.item(["ok"])
+
+    def cmd_append_group(self, name, *args):
+        if name not in self.groups:
+            self.groups[name] = set()
+        self.groups[name].update(self.group)
+        voice.item(["ok"])
+
+    def cmd_recall_group(self, name, *args):
+        if name not in self.groups:
+            self.groups[name] = set()
+        self.group = self.groups[name]
+        self.say_group()
 
     # select order
 
