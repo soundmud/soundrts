@@ -1,0 +1,333 @@
+; ; CrazyMod v9
+
+77000 dirigibile bombardiere
+77001 magazino di esplosivi
+77002 esplosivi di alta qualita'
+77003 per esplodere
+77004 perfezionamento del dragone
+77005 tana
+77006 selvaggio
+77007 coltivazione di frutta
+77008 scorta
+77009 bosco dei briganti
+77010 filibustieri di legno
+77011 hospedale
+77012 salute pubblica
+77013 campo di addestramento
+77014 moschettiere
+77015 estrattore di magnesite
+77016 trappola elettrica
+77017 gabbia con belve feroci
+77018 tempesta magnetica
+77019 onda ipnotizzante
+77020 torre magnetica
+77021 cappello degli incantesimi
+77022 cacciatrice
+77023 lupo
+77024 albero della sentinella
+77025 seminare un albero della sentinella
+77026 sortilegio
+77027 ectoplasma
+77028 sprigionare ectoplasma
+77029 nebbia malvagia
+77030 torre spettrale
+77031 demone
+77032 cimitero
+77033 domare i lupi
+77034 paladino
+77035 seminare l'albero delle tenebre
+77036 seminare l'albero della serenità
+77037 albero delle tenebre
+77038 albero della serenita'
+77039 recuperare i cadaveri nelle piante carnivore
+77040 recuperare i cadaveri dalle piante medicinali
+77041 pianta carnivora
+77042 pianta medicinale
+77043 magnesite di alta qualita'
+77044 magnesite di altissima qualita'
+77045 esplosione
+77046 fulmine
+77047 trasporto di dirigibili
+77048 leone
+77049 domare i leoni
+77050 balestriere
+77051 gas lacrimogeno
+77052 lanciatore di granate
+77053 punto di partenza
+77054 visione
+77055 fortilizio
+77056 servo
+77057 grondone maledetto
+77058 pianta spinosa
+77059 municipio
+77060 quartier generale del governatore
+77061 palazzo del cancelliere
+77062 batteria antiaerea
+77063 campo militare
+77064 sfera di energia
+77065 per generare una sfera di energia
+77066 lavoratore
+77067 erudito
+77068 tempesta di nuvole
+77069 attacco dei dragoni
+77070 cantiere aereonavale
+77071 per clonare
+77072 rogo
+77073 arciere agile clonato
+77074 spionaggio con il dirigibile
+77075 armatura super
+77076 attacco super
+77077 vita super
+77078 rapidita' super
+77079 esorcismo super
+77080 cannone al plasma surriscaldato
+77081 fattoria
+77082 dirigibile a caccia
+77083 porcile
+77084 garage
+77085 minicomputer
+77086 computer mainframe
+77087 supercomputer
+77088 impresa idroponica
+77089 fabbrica robottizzata
+77090 laboratorio ottico
+77091 fattoria di idrofili
+77092 modulatore di segnale
+77093 acceleratore di particelle
+77094 torre laser
+77095 torre radar
+77096 geek
+77097 allevamento intensivo
+77098 tiratore laser
+77099 terreno per la caccia
+77100 cannone magnetico
+77101 cannone al plasma
+77102 rimessa dei dragoni
+77103 sensore mobile
+77104 armeria dei dragoni
+77105 drone
+77106 nave laser
+77107 velocità dei dragoni
+77108 laser potente
+77109 plasma potente
+77110 immagine del radar
+77111 libreria solare
+77112 golem carnoso
+77113 mausoleo
+77114 volta
+77115 dragone scheletrico
+77116 fiato della morte
+77117 cripta
+77118 labirinto
+77119 bara
+77120 becchino
+77122 fantasma
+77123 spettro in armatura
+77124 cavallo alato
+77125 cavallo alato mansueto
+77126 thestral
+77127 torre di controllo
+77128 cadavere
+77129 trappola di frecce
+77130 saltare sul muro
+77131 spettro di fuoco
+77132 per chiamare gli spettri di fuoco
+77133 tunnel per gli alimenti
+77134 tunnel per gli alimenti scavato
+77135 fuoco
+77136 portale instabile
+77137 portale
+77138 lanciafiamme
+77139 canti di guerra
+77140 torre di difesa
+77141 radura
+77142 citta' arborea
+77143 dominio
+77144 arena boscosa
+77145 giardino frondoso
+77146 torre dei balestrieri
+77147 campanile
+77148 bosco incantato
+77149 radice trappola
+77150 hmietitore
+77151 cella campanaria
+77152 arciere agile
+77153 arciere della foresta
+77154 centauro
+77155 resistenza in combattimento
+77156 ardore in combattimento
+77157 posto di osservazione
+77158 batteria di missili anti-aerei
+77159 druido
+77160 strega
+77161 fata
+77162 torre del buio
+77163 torre della nebbia
+77164 torre del tormento
+77165 sciame
+77166 torre del terrore
+77167 tempesta verde
+77168 trasformazione dei cadaveri in fantasmi
+77169 radici penetranti
+77170 trasformazione dei corpi in zombie
+77171 trasformazione dei corpi in carne di golem
+77172 campo magnetico
+77173 campo magnetico incontrollato
+77174 torre di controllo
+77175 accampamento
+77176 accampamento fortificato
+77177 fortezza
+77178 fossa
+77179 recinzione
+77180 torre dell'alta guardia
+77181 nido
+77182 tipi
+77183 trappola di chiodi
+77184 fattorino
+77185 pugile
+77186 troll
+77187 torre delle foglie
+77188 torre con foglie aguzze
+77189 orco lanciatore di pietre
+77190 serpente
+77191 torre degli specchi
+77192 serpente alato
+77193 ippogrifo
+77194 sacerdote wodoo
+77195 torre solare
+77196 kamikaze
+77197 trasporto di sfere
+77198 esplosivi di altissima qualita'
+77199 possesso
+77200 tradizionale
+77201 tecnico
+77202 robotico
+77203 tenebre
+77204 fiume
+77205 orco
+77206 raggio di sole
+77207 promontorio
+77208 illusione boschiva
+77209 torre delle munizioni
+77210 torre dei bombardieri
+77211 ghiaione
+77212 torre massiccia
+77213 domare i serpenti
+77214 aggressivita'
+77215 torretta di controllo
+77216 bomba nascosta
+77217 struttura rinforzata
+77218 cerchio di elementi
+77219 torre di fuoco
+77220 torre d'acqua
+77221 torre degli aerei
+77222 torre della terra
+77223 elementi di fuoco
+77224 elementi d'acqua
+77225 elementi degli aerei
+77226 elementi della terra
+77227 elementi
+77228 lanciatore magnetico
+77229 parassita
+77230 ceppo
+77231 incubatrice
+77232 nido
+77233 laboratorio di larve
+77234 riproduttore transgenico
+77235 incubatrice per la moltiplicazione
+77236 frutteto
+77237 nido di termiti
+77238 albero di miele
+77239 stanza fangosa
+77240 galleria del fungo
+77241 albero luccicante
+77242 albero Devourer
+77243 termiti guardiane
+77244 termite conquistatrice
+77245 ape regina
+77246 termite armata
+77247 vespa affamata
+77248 puntura di vespa cacciatrice
+77249 mille punture di vespa
+77250 zanzara insaziabile
+77251 zanzara terribile
+77252 zanzara assetata
+77253 granchio pungente
+77254 granchio cacciatore
+77255 granchio assalitore
+77256 fungo espansivo
+77257 fungo tossico
+77258 fungo devastante
+77259 lucciola perlustratrice
+77260 lucciola accecante
+77261 lucciola incandescente
+77262 genera ceppi
+77263 genera larve
+77264 larva
+77265 ferromone della sopravvivenza
+77266 batteri tossici
+77267 batteri allucinogeni
+77268 batteri protettori
+77269 operaio in cammino
+77270 operaio malato
+77271 elfo oscuro
+77272 capanna
+77273 villa
+77274 feudo
+77275 coltelleria
+77276 teatro
+77277 Cenacolo
+77278 torre del vento
+77279 ladro
+77280 predatore
+77281 sicario
+77282 sicario professionista
+77283 illusionista
+77284 fantoccio
+77285 dottoressa
+77286 dardi volanti
+77287 vortice
+77288 wvortice di vento
+77289 tecniche di lancio
+77290 velocità delle animazioni
+77291 Coltellata fatale
+77292 fumo
+77293 chiama le ombre
+77294 casa del conduttore di elefanti
+77295 volatile
+77296 piccione
+77297 pioggia di frecce
+77298 torretta d'assalto
+77299 torre alta d'assalto
+77300 torre del pesce
+77301 albero carnivoro
+77302 albero vorace
+77303 sistema radice
+77304 furioso
+77305 canto rabbioso
+77306 foglia d'acciaio
+77307 piccioni ammaestrati
+77308 fantoccio animato
+77309 elefante
+77310 elefante ammaestrato
+77311 vite pacifica
+77312 vite invasiva
+77313 seminare una vite pacifica
+77314 imposta la trappola di frecce
+77315 terremoto
+77316 vortice di fuoco
+77317 recupero
+77318 soffio di vento
+77319 eruzione vulcanica
+77320 golem fangoso
+77321 tempesta di sabbia
+77322 nuvola di vapore
+77323 cielo nuvoloso
+77324 conduttore di elefanti
+77325 elefante con torretta
+77326 assorbimento dell'anima
+77327 campo della necromanzia
+77328 esplosione cadaverica
+77329 carogna
+77330 trasmssione l'infezione ai corpi
+77331 ombra

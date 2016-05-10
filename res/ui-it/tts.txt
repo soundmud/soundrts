@@ -458,3 +458,29 @@ controlla la prossima unita' nella locazione
 4316 Premi Control Shift F4 per studiare un altro giocatore.
 
 4317 Scrivi un comando.
+
+4318 zoom
+
+4319 modifica l'ordine di caricamento delle mods
+4320 aggiungi una mod all'elenco
+4321 l'elenco è vuoto
+4322 Caricamento
+4323 pacchetti
+4324 menu dei pacchetti
+4325 installa un pacchetto
+4326 disinstalla un pacchetto
+4327 aggiorna un pacchetto
+4328 In scaricamento...
+4329 In decompressione...
+4330 Impossibile trovare la mod:
+
+4331 muro
+4332 cancello
+4333 blocco
+
+4334 fazione casuale
+
+4335 Raggiunto il limite per il conteggio
+
+4336 apri la cartella utente
+4337 documentazione
