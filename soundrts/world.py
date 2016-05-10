@@ -10,7 +10,7 @@ import string
 import time
 
 from lib import collision
-from constants import COLLISION_RADIUS, VIRTUAL_TIME_INTERVAL
+from constants import COLLISION_RADIUS, VIRTUAL_TIME_INTERVAL, PROFILE
 from definitions import rules, get_ai_names, load_ai
 from lib.log import warning, exception, info
 from lib.nofloat import to_int, int_distance, PRECISION
@@ -695,15 +695,29 @@ class World(object):
         self.admin = players[0] # define get_admin()?
 
     def loop(self):
-        while(self.__dict__): # cf clean()
-            if not self._command_queue.empty():
-                player, order = self._command_queue.get()
-                try:
-                    player.execute_command(order)
-                except:
-                    exception("")
-            else:
-                time.sleep(.01)
+        def _loop():
+            while(self.__dict__): # cf clean()
+                if not self._command_queue.empty():
+                    player, order = self._command_queue.get()
+                    try:
+                        player.execute_command(order)
+                    except:
+                        exception("")
+                else:
+                    time.sleep(.01)
+        if PROFILE:
+            import cProfile
+            cProfile.runctx("_loop()", globals(), locals(), "world_profile.tmp")
+            import pstats
+            for n in ("interface_profile.tmp", "world_profile.tmp"):
+                p = pstats.Stats(n)
+                p.strip_dirs()
+                p.sort_stats('time', 'cumulative').print_stats(30)
+                p.print_callers(30)
+                p.print_callees(20)
+                p.sort_stats('cumulative').print_stats(50)
+        else:
+            _loop()
 
     def queue_command(self, player, order):
         self._command_queue.put((player, order))

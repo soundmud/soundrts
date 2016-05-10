@@ -27,3 +27,6 @@ FOOTSTEP_LIMIT = .1
 
 # don't play events after this limit (in seconds)
 EVENT_LIMIT = 3
+
+# use the profiler (warning: will slow down the game)
+PROFILE = False

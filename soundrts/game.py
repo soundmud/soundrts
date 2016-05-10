@@ -11,7 +11,7 @@ import clientgame
 from clientgameorder import update_orders_list
 import definitions
 import config
-from constants import METASERVER_URL
+from constants import METASERVER_URL, PROFILE
 from definitions import style, rules
 from lib.log import warning, exception
 from mapfile import Map
@@ -84,7 +84,11 @@ class _Game(object):
                 t = threading.Thread(target=self.world.loop)
                 t.daemon = True
                 t.start()
-                self.interface.loop()
+                if PROFILE:
+                    import cProfile
+                    cProfile.runctx("self.interface.loop()", globals(), locals(), "interface_profile.tmp")
+                else:
+                    self.interface.loop()
                 self._record_stats(self.world)
                 self.post_run()
             finally:
