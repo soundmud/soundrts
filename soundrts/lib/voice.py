@@ -141,10 +141,10 @@ class _Voice(object):
                 m.said = True
 
     def update(self):
-        self._mark_expired_messages_as_said()
         if self.channel.get_busy():
             self.channel.update()
         else:
+            self._mark_expired_messages_as_said()
             if self.active: # one message from the queue has just finished
                 self._mark_current_as_said()
                 self.current += 1
