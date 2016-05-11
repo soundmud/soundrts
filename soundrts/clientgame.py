@@ -290,6 +290,8 @@ class GameInterface(object):
     def cmd_console(self):
         if self.server.allow_cheatmode:
             cmd = input_string(msg=[4317], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
+            if cmd is None:
+                return
             if cmd.startswith("s "):
                 self.speed = float(cmd.split(" ")[1])
             elif cmd == "r":
