@@ -1312,11 +1312,12 @@ class GameInterface(object):
             msg = []
             first_unit = self.dobjets[self.group[0]].model
             for o in self.orders():
-                if order_shortcut(o, first_unit):
-                    msg += [order_shortcut(o, first_unit)] + order_title(o) + [9998]
+                shortcut = order_shortcut(o, first_unit)
+                if shortcut:
+                    msg += [str(shortcut)] + order_title(o) + [9998]
             if msg:
-                voice.item(msg)
                 self.shortcut_mode = True
+                voice.item(msg)
                 return
         voice.item([1029]) # hostile sound
 
