@@ -1,4 +1,5 @@
 from lib import log
+from lib.log import exception, warning
 from version import VERSION_FOR_BUG_REPORTS
 from paths import CLIENT_LOG_PATH
 log.set_version(VERSION_FOR_BUG_REPORTS)
@@ -10,7 +11,6 @@ import locale
 try:
     locale.setlocale(locale.LC_ALL, '')
 except:
-    from lib.log import warning
     warning("couldn't set locale")
 
 import os
@@ -28,7 +28,6 @@ import config
 from constants import MAIN_METASERVER_URL
 from definitions import style
 from game import TrainingGame, ReplayGame
-from lib.log import exception
 from lib.msgs import nb2msg
 from paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
 import res
