@@ -301,7 +301,10 @@ class GameInterface(object):
                 # but at the moment this feature is just for cheating or testing anyway.
                 cmd = re.sub("^a ", "add_units %s " % getattr(self.place, "name", ""), cmd)
                 cmd = re.sub("^v$", "victory", cmd)
-                self.player.my_eval(cmd.split())
+                try:
+                    self.player.my_eval(cmd.split())
+                except:
+                    voice.item([1029]) # hostile sound
         else:
             voice.item([1029]) # hostile sound
 
