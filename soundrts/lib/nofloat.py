@@ -1,6 +1,7 @@
 """"use integers to make sure that any computer will give the same results"""
 
 import math
+import sys
 
 from .log import warning
 
@@ -29,7 +30,10 @@ def make_tables():
 def to_int(s):
     """convert a string to an integer with PRECISION"""
     assert isinstance(s, str)  # don't convert twice!
-    return int(float(s) * PRECISION)
+    result = int(float(s) * PRECISION)
+    if isinstance(result, long):
+        warning("%s is a long integer (greater than %s).", result, sys.maxint)
+    return result
 
 
 def int_cos_1000(angle):

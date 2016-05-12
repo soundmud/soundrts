@@ -357,8 +357,8 @@ class Creature(Entity):
         return isinstance(self.action, AttackAction)
 
     def update(self):
-        assert isinstance(self.hp, int)
-        assert isinstance(self.mana, int)
+        assert isinstance(self.hp, (int, long))
+        assert isinstance(self.mana, (int, long))
         assert isinstance(self.x, int)
         assert isinstance(self.y, int)
         assert isinstance(self.o, int)
