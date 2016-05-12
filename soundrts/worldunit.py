@@ -75,7 +75,7 @@ class Creature(Entity):
     range = None
     is_ballistic = 0
     minimal_range = 0
-    cooldown = None
+    cooldown = 0
     next_attack_time = 0
     splash = False
 
