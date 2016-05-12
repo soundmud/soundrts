@@ -116,7 +116,11 @@ class SoundCache(object):
             return self.get_sound(key)
         if re.match("^[0-9]+$", key) is not None:
             warning("this sound may be missing: %s", sound_number)
-        return unicode(key)
+        try:
+            return unicode(key)
+        except:
+            warning("Unicode error in %s", repr(key))
+            return unicode(key, errors="ignore")
 
 
 sounds = SoundCache()
