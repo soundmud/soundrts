@@ -534,6 +534,10 @@ class Creature(Entity):
             self.action_target = someone
             self.notify("attack") # XXX move this into set_action_target()?
             return
+        # _choose_enemy requires that self.player is not None
+        if self.player is None:
+            warning("in choose_enemy: %s.player is None", self)
+            return
         if self._choose_enemy(self.place):
             return
         for p in self.place.neighbours:
