@@ -48,6 +48,21 @@ class EntityView(object):
         self.model = model
         self.footstep_interval = .5 + random.random() * .2 # to avoid strange synchronicity of footsteps when several units are walking
 
+    @property
+    def when_moving_through(self):
+        # The blocker gets the "when_moving_through" sound from the blocked exit
+        if getattr(self.model, "blocked_exit", None):
+            model = self.model.blocked_exit
+        else:
+            model = self.model
+        return style.get(model.type_name, "when_moving_through")
+
+    @property
+    def is_an_exit(self):
+        # The blocker is also considered as an exit by the interface.
+        return style.has(self.model.type_name, "when_moving_through") or \
+            getattr(self.model, "blocked_exit", None)
+
     def __getattr__(self, name):
         if name in ("type_name", "id") and hasattr(self.model, "is_blocked") and self.model.is_blocked():
             model = self.model.blockers[0]
@@ -124,6 +139,9 @@ class EntityView(object):
 
     @property
     def title(self):
+        # Blockers are invisible (and give their appearance to the blocked exit).
+        if getattr(self.model, "blocked_exit", None):
+            return []
         if isinstance(self.model, BuildingSite):
             title = compute_title(self.type.type_name) + compute_title(BuildingSite.type_name)
         else:
