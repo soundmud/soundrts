@@ -164,8 +164,10 @@ class Campaign(object):
             res.set_mods(self.mods)
         try:
             self.load_resources()
-            menu = Menu(self.title, [],
-                    default_choice_index=len(self._available_chapters()) - 1)
+            menu = Menu(self.title, [])
+            if len(self._available_chapters()) > 1:
+                ch = self._available_chapters()[-1]
+                menu.append([4011] + ch.title, ch) # "continue"
             for ch in self._available_chapters():
                 menu.append(ch.title, ch)
     #        menu.append([4113], "restore")
