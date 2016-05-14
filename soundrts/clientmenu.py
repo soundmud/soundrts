@@ -177,7 +177,7 @@ class Menu(object):
     def append(self, label, action):
         self.choices.append((label, action))
         if self.remember is not None and self._remembered_choice == repr(label):
-            self.default_choice_index = len(self.choices) - 1
+            self.choices.insert(0, (label, action))
 
     def update_menu(self, menu):
         old_title = self.title
