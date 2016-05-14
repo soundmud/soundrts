@@ -169,7 +169,8 @@ class Campaign(object):
                 ch = self._available_chapters()[-1]
                 menu.append([4011] + ch.title, ch) # "continue"
             for ch in self._available_chapters():
-                menu.append(ch.title, ch)
+                prefix = nb2msg(ch.id) if ch.id > 0 else []  
+                menu.append(prefix + ch.title, ch)
     #        menu.append([4113], "restore")
             menu.append([4118], None) # "cancel"
             menu.run()
