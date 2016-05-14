@@ -1405,29 +1405,26 @@ class GameInterface(object):
         return self.server.player.world.grid[(xc, yc)]
 
     def _get_prefix_and_collision(self, new_square, dxc, dyc):
-        objects = [o for o in self.dobjets.values() if o.place is self.place
+        if new_square is self.place:
+            return style.get("parameters", "no_path_in_this_direction"), True
+        if self.place not in self.scouted_before_squares:
+            return [], False
+        exits = [o for o in self.dobjets.values() if o.place is self.place
                  and self.is_selectable(o)
                  and o.is_an_exit
                  and not o.is_blocked(self.player)]
-        if new_square is self.place:
-            prefix = style.get("parameters", "no_path_in_this_direction")
-            collision = True
-        elif self.place not in self.scouted_before_squares:
-            prefix = []
-            collision = False
-        else:
-            prefix = style.get("parameters", "no_path_in_this_direction")
-            collision = True
-            xc, yc = self.coords_in_map(self.place)
-            x, y = (xc + .5) * self.square_width, (yc + .5) * self.square_width
-            for o in objects:
-                if dxc == 1 and o.x > x or \
-                   dxc == -1 and o.x < x or \
-                   dyc == 1 and o.y > y or \
-                   dyc == -1 and o.y < y:
-                    prefix = o.when_moving_through
-                    collision = False
-                    break
+        prefix = style.get("parameters", "no_path_in_this_direction")
+        collision = True
+        xc, yc = self.coords_in_map(self.place)
+        x, y = (xc + .5) * self.square_width, (yc + .5) * self.square_width
+        for o in exits:
+            if dxc == 1 and o.x > x or \
+               dxc == -1 and o.x < x or \
+               dyc == 1 and o.y > y or \
+               dyc == -1 and o.y < y:
+                prefix = o.when_moving_through
+                collision = False
+                break
         return prefix, collision
 
     def cmd_select_square(self, dxc, dyc, *args):
