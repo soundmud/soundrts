@@ -211,6 +211,14 @@ Shift + 6, 7, 8 or 9: extends group 6, 7, 8 or 9 with the currently controlled u
 
 6, 7, 8 or 9: recalls group 6, 7, 8 or 9 
 
+In the menus
+^^^^^^^^^^^^
+
+The arrow keys work too : Up and Down to select, Right to confirm, Left to cancel.
+
+Press any letter to select the next item starting with this letter.
+Press shift + any letter to select the previous item starting with this letter.
+
 Other commands
 ^^^^^^^^^^^^^^
 
@@ -223,8 +231,6 @@ Control + Space: make the game go in first person mode. Escape: go back to map m
 
 Home/End, +/- of the numeric keyboard: increase/decrease the general sound volume.
 Control Home/End, control +/- of the numeric keyboard: increase/decrease the voice relative volume.
-
-In the menus, the arrow keys work too : Up and Down to select, Right to confirm, Left to cancel.
 
 F3: say time
 Control F3: minute bell on/off (off by default)
@@ -254,7 +260,7 @@ Tip: when you are waiting for players online, you can launch SoundRTS a second t
 
 You can chat in the server lobby, in the pre-game room, and during the game. The organizer of the game is temporarily unavailable during the selection of the map and of the game speed though.
 
-To say something to everybody in the same room or game, press F7 (pressing S also works except during a game), type your message, and press enter.
+To say something to everybody in the same room or game, press F7, type your message, and press enter.
 
 Another option is to use Skype (or any similar software) if you know the other players.
 

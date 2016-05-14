@@ -7,9 +7,10 @@ import pygame
 from pygame.locals import QUIT, KEYDOWN, K_LSHIFT, K_RSHIFT, K_KP_ENTER, K_RETURN, K_ESCAPE, K_BACKSPACE, USEREVENT, K_TAB, KMOD_ALT, K_LEFT, K_UP, KMOD_SHIFT, K_DOWN, K_RIGHT, K_F2, KMOD_CTRL, K_F1, K_F5, K_LALT, K_RALT, K_F6, K_HOME, K_KP_PLUS, K_END, K_KP_MINUS, K_F7
 
 from clienthelp import help_msg
-from clientmedia import voice, modify_volume, toggle_fullscreen
-from lib.log import debug, warning
+from clientmedia import voice, modify_volume, toggle_fullscreen, sounds
+from lib.log import warning
 from lib.msgs import nb2msg
+from lib.sound import psounds
 from paths import TMP_PATH
 
 
@@ -65,6 +66,15 @@ def _remember_path(menu_name):
 END_LOOP = 1
 
 
+def _first_letter(choice):
+    if choice:
+        for sound_number in choice[0]:
+            try:
+                return sounds.translate_sound_number(sound_number)[0].lower()
+            except:
+                pass
+
+
 class Menu(object):
 
     server = None
@@ -86,46 +96,41 @@ class Menu(object):
                 self._remembered_choice = ""
 
     def _say_choice(self):
-        from lib.sound import psounds
-        from clientmedia import sounds
         psounds.play_stereo(sounds.get_sound(6115))
         voice.item(self.choices[self.choice_index][0])
 
     def _choice_exists(self):
         return self.choice_index is not None and 0 <= self.choice_index < len(self.choices)
 
-    def _select_previous_choice(self):
+    def _select_next_choice(self, first_letter=None, inc=1):
         if self.choices:
             if self.choice_index is None:
                 self.choice_index = self.default_choice_index
-            self.choice_index -= 1
-            if not self._choice_exists():
-                self.choice_index = len(self.choices) - 1
-            self._say_choice()
-
-    def _select_next_choice(self):
-        if self.choices:
-            if self.choice_index == None:
-                self.choice_index = self.default_choice_index
+                if inc == -1:
+                    self.choice_index -= 1
             else:
-                self.choice_index += 1
-                if not self._choice_exists():
-                    self.choice_index = 0
+                self.choice_index += inc
+                self.choice_index %= len(self.choices)
+            if first_letter:
+                found = False
+                for _ in range(len(self.choices)):
+                    choice = self.choices[self.choice_index]
+                    if _first_letter(choice) == first_letter.lower():
+                        found = True
+                        break
+                    self.choice_index += inc
+                    self.choice_index %= len(self.choices)
+                if not found:
+                    self.choice_index -= inc
+                    self.choice_index %= len(self.choices)
+                    return 
             self._say_choice()
-            debug("select_next_choice %s", self.choice_index)
-        else:
-            debug("select_next_choice did nothing because choices=%s", self.choices)
 
     def _confirm_choice(self):
-        from lib.sound import psounds
-        from clientmedia import sounds
         psounds.play_stereo(sounds.get_sound(6116))
         if self._choice_exists() and self.choices[self.choice_index]:
             voice.confirmation(self.choices[self.choice_index][0][:1]) # repeat only the first part of the choice (not the help)
             self.choice_done = True
-        else:
-            debug("couldn't confirm choice (choices=%s, choice_index=%s)",
-                  self.choices, self.choice_index)
 
     def _process_keydown(self, e):
         if e.key == K_TAB and e.mod & KMOD_ALT:
@@ -134,7 +139,7 @@ class Menu(object):
             self.choice_index = len(self.choices) - 1
             return self._confirm_choice()
         elif e.key == K_TAB and e.mod & KMOD_SHIFT or e.key == K_UP:
-            self._select_previous_choice()
+            self._select_next_choice(inc=-1)
         elif e.key in [K_TAB, K_DOWN]:
             self._select_next_choice()
         elif e.key in (K_RETURN, K_KP_ENTER, K_RIGHT):
@@ -155,13 +160,17 @@ class Menu(object):
             modify_volume(1)
         elif e.key in [K_END, K_KP_MINUS]:
             modify_volume(-1)
-        elif e.unicode.lower() == "s" or e.key == K_F7:
+        elif e.key == K_F7:
             if self.server is None:
                 voice.item([1029]) # hostile sound
             else:
                 msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
                 if msg:
                     self.server.write_line("say %s" % msg)
+        elif e.unicode and e.mod & KMOD_SHIFT:
+            self._select_next_choice(e.unicode, -1)
+        elif e.unicode:
+            self._select_next_choice(e.unicode)
         elif e.key not in [K_LSHIFT,K_RSHIFT]:
             voice.item([4052])
 
@@ -171,7 +180,6 @@ class Menu(object):
             self.default_choice_index = len(self.choices) - 1
 
     def update_menu(self, menu):
-        debug("update_menu...")
         old_title = self.title
         old_choices = self.choices
         try:
@@ -180,10 +188,8 @@ class Menu(object):
             old_choice = None
         self.title, self.choices = menu.title, menu.choices
         if self.title and self.title != old_title:
-            debug("...new title")
             voice.menu(self.title)
         if self.choices != old_choices:
-            debug("...new choices")
             self.choice_index = None
             if old_choice in self.choices:
                 self.choice_index = self.choices.index(old_choice)
