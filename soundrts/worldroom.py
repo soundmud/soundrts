@@ -82,7 +82,7 @@ class Square(object):
 
     def is_near(self, square):
         try:
-            return (abs(self.col - square.col), abs(self.row - square.row)) in ((0, 1), (1, 0))
+            return (abs(self.col - square.col), abs(self.row - square.row)) in ((0, 1), (1, 0), (1, 1))
         except AttributeError: # not a square
             return False
 

@@ -168,14 +168,17 @@ class Entity(object):
                 if self in player.perception or universal:
                     player.send_event(self, event)
 
+    def aim_range(self, a):
+        range = a.range
+        if a.is_ballistic and a.height > self.height:
+            # each height difference has a bonus of 1
+            bonus = (a.height - self.height) * PRECISION * 1
+            range += bonus
+        return max(a.radius + USE_RANGE_MARGIN, range) + self.radius
+        
     def use_range(self, a): # use_distance? XXXXXXXXXXX
         if a.is_an_enemy(self) and a.range is not None:
-            range = a.range
-            if a.is_ballistic and a.height > self.height:
-                # each height difference has a bonus of 1
-                bonus = (a.height - self.height) * PRECISION * 1
-                range += bonus
-            return max(a.radius + USE_RANGE_MARGIN, range) + self.radius
+            return self.aim_range(a)
         else:
             return a.radius + self.radius + USE_RANGE_MARGIN
 

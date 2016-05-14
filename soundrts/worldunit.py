@@ -301,18 +301,21 @@ class Creature(Entity):
     def _go_center(self):
         self.action_target = (self.place.x, self.place.y)
 
+    def _near_enough_to_aim(self, target):
+        # Melee units (range <= 2) shouldn't attack units
+        # on the other side of a wall.
+        if not self._can_go(target.x, target.y) \
+            and self.range <= 2 * PRECISION \
+            and not target.blocked_exit:
+                return False
+        if self.minimal_range and square_of_distance(self.x, self.y, target.x, target.y) < self.minimal_range * self.minimal_range:
+            return False
+        d = target.aim_range(self)
+        return square_of_distance(self.x, self.y, target.x, target.y) < d * d
+
     def _near_enough_to_use(self, target):
         if self.is_an_enemy(target):
-            # Melee units (range <= 2) shouldn't attack units
-            # on the other side of a wall.
-            if not self._can_go(target.x, target.y) \
-                and self.range <= 2 * PRECISION \
-                and not target.blocked_exit:
-                    return False
-            if self.minimal_range and square_of_distance(self.x, self.y, target.x, target.y) < self.minimal_range * self.minimal_range:
-                return False
-            d = target.use_range(self)
-            return square_of_distance(self.x, self.y, target.x, target.y) < d * d
+            return self._near_enough_to_aim(target)
         elif target.place is self.place:
             d = target.use_range(self)
             return square_of_distance(self.x, self.y, target.x, target.y) < d * d
@@ -504,8 +507,7 @@ class Creature(Entity):
             return False
         if self.range and other.place is self.place:
             return True
-        if self.place.is_near(other.place):
-            return self._near_enough_to_use(other)
+        return self._near_enough_to_aim(other)
 
 ##    def _can_be_reached_by(self, player):
 ##        for u in player.units:
