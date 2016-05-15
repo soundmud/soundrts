@@ -31,6 +31,7 @@ class Creature(Entity):
     action_target = property(get_action_target, set_action_target)
 
     hp_max = 0
+    hp_regen = 0
     mana_max = 0
     mana_start = 0
     mana_regen = 0
@@ -392,6 +393,8 @@ class Creature(Entity):
     # slow update
 
     def regenerate(self):
+        if self.hp_regen and self.hp < self.hp_max:
+            self.hp = min(self.hp_max, self.hp + self.hp_regen)
         if self.mana_regen and self.mana < self.mana_max:
             self.mana = min(self.mana_max, self.mana + self.mana_regen)
 

@@ -149,6 +149,7 @@ for cat in (("1. Units", ("worker", "soldier")),
             elif rules.get(c, "effect")[0] == "apply_bonus":
                 pr("- effect: applies the %s upgrade bonus of the unit" % rules.get(c, "effect")[1])
         pr(_int("- health: ", "hp_max", "hit points"))
+        pr(_int("- health regeneration: ", "hp_regen", "hit points per second"))
         pr(_int("- armor: ", "armor", "hit points"))
         pr(_int("- armor upgrade bonus: ", "armor_bonus", "hit points"))
         if rules.get(c, "damage"):

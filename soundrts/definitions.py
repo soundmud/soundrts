@@ -125,6 +125,7 @@ _precision_properties = (
                 "extraction_time",
                 "time_cost",
                 "cooldown",
+                "hp_regen",
                 "mana_regen",
                 "speed", 
                 )

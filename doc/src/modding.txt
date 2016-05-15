@@ -80,6 +80,15 @@ New in SoundRTS 1.2 alpha 9.
 
 The unit (or building) is affected by the teleportation effect or the recall effect.
 
+hp_regen
+========
+
+New in SoundRTS 1.2 alpha 11
+
+`hp_regen <hit points regeneration rate>`
+
+For example, with "hp_regen 0.15", the unit regains 0.15 hit points per second.
+
 mana_start
 ==========
 
