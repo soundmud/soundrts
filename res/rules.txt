@@ -348,6 +348,7 @@ food_cost 3
 time_cost 15
 airground_type air
 hp_max 30
+hp_regen 0.15
 speed 1.75
 range 3
 cooldown 4
