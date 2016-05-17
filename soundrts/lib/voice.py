@@ -139,6 +139,12 @@ class _Voice(object):
         for i, m in enumerate(self.msgs):
             if not m.said and self._expired(i):
                 m.said = True
+        # limit the size of history
+        if len(self.msgs) > 200:
+            # truncate the list in place
+            del self.msgs[:100]
+            self.current -= 100
+            self.current = max(0, self.current)
 
     def update(self):
         if self.channel.get_busy():
