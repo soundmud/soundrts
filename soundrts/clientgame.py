@@ -294,8 +294,22 @@ class GameInterface(object):
                 return
             if cmd.startswith("s "):
                 self.speed = float(cmd.split(" ")[1])
+                self.next_update = time.time()
+            elif cmd == "p":
+                if self.speed >= 1:
+                    self.speed /= 10000.0
+                else:
+                    self.speed *= 10000.0
+                    self.next_update = time.time()
+            elif cmd == "m":
+                for u in self.player.units:
+                    u.mana_regen *= 1000
+            elif cmd == "h":
+                voice.item(["p: pause/unpause, s: set speed, r: get 1000 resources, t: get all techs, m: infinite mana, a: add units, v: instant victory"])
             elif cmd == "r":
                 self.player.resources = [n + 1000 * PRECISION for n in self.player.resources]
+            elif cmd == "t":
+                self.player.has = lambda x: True
             elif cmd:
                 # This direct way of executing the command might be a bit buggy,
                 # but at the moment this feature is just for cheating or testing anyway.
