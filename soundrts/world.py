@@ -1,4 +1,6 @@
 import copy
+from soundrts.lib.sound import distance
+from soundrts.lib.nofloat import square_of_distance
 try:
     from hashlib import md5
 except ImportError:
@@ -141,6 +143,11 @@ class World(object):
     def get_next_player_number(self):
         self.current_player_number += 1
         return self.current_player_number
+
+    def get_objects(self, x, y, radius, filter=lambda x: True):
+        radius_2 = radius * radius
+        return [o for z in self.squares for o in z.objects
+                if filter(o) and square_of_distance(x, y, o.x, o.y) <= radius_2]
 
     def get_place_from_xy(self, x, y):
         return self.grid.get((x / self.square_width,

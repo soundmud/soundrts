@@ -483,7 +483,8 @@ class Player(object):
                 n += 1
         return n
 
-    def lang_add_units(self, items, decay=0, from_corpse=False, notify=True):
+    def lang_add_units(self, items, target=None, decay=0, from_corpse=False, corpses=[], notify=True):
+        multiplicator = 1
         for i in items:
             if self.world.grid.has_key(i):
                 sq = self.world.grid[i]
@@ -497,16 +498,16 @@ class Player(object):
                         break
                     land = None
                     if from_corpse:
-                        corpse = None
-                        for o in sq.objects:
-                            if isinstance(o, Corpse):
-                                corpse = o
-                                break
-                        if corpse is not None:
+                        if corpses:
+                            corpse = corpses.pop(0)
                             x, y = corpse.x, corpse.y
+                            sq = corpse.place
                             corpse.delete()
                         else:
                             return
+                    elif target:
+                        x, y = target.x, target.y 
+                        sq = target if target in self.world.squares else target.place
                     else:
                         x, y, land = sq.find_and_remove_meadow(cls)
                     try:

@@ -1,9 +1,10 @@
 from constants import MAX_NB_OF_RESOURCE_TYPES, ORDERS_QUEUE_LIMIT, VIRTUAL_TIME_INTERVAL
 from definitions import rules
-from lib.nofloat import to_int
+from lib.nofloat import to_int, PRECISION
 import worldrandom
 from worldresource import Meadow, Deposit, Corpse
 from worldroom import Square
+from soundrts.lib.nofloat import square_of_distance
 
 
 class Order(object):
@@ -776,16 +777,13 @@ class UseOrder(ComplexOrder):
                 return
             if self._target_type == "square":
                 # make sure that the target is a square
-                if not isinstance(self.target, Square):
-                    if  hasattr(self.target, "place") and isinstance(self.target.place, Square):
-                        self.target = self.target.place
-                    else:
-                        self.mark_as_impossible()
-                        return
+                if not hasattr(self.target, "x"):
+                    self.mark_as_impossible()
+                    return
         elif self.type.effect_target == ["worldrandom"]:
             self.target = worldrandom.choice(self.player.world.squares)
-        else:
-            self.target = self.unit.place
+        elif self.type.effect_target == ["self"]:
+            self.target = self.unit
         # check cost
         if self.unit.mana < self.type.mana_cost:
             if self._group_has_enough_mana(self.type.mana_cost):
@@ -794,11 +792,6 @@ class UseOrder(ComplexOrder):
                 self.mark_as_impossible("not_enough_mana")
             return
         self.unit.notify("order_ok")
-
-    def _target_square(self):
-        if self._target_type == "square":
-            return self.target
-        return self.target.place
 
     def execute(self):
         # check if the target has disappeared
@@ -812,12 +805,11 @@ class UseOrder(ComplexOrder):
             return
         # move closer eventually
         if self.type.effect_range == ["square"]:
-            if self._target_square() != self.unit.place:
+            if square_of_distance(self.target.x, self.target.y, self.unit.x, self.unit.y) > 6 * PRECISION * 6 * PRECISION:
                 self.move_to_or_fail(self.target)
                 return
         elif self.type.effect_range == ["nearby"]:
-            if self._target_square() not in self.unit.place.neighbours \
-                         and self._target_square() is not self.unit.place:
+            if square_of_distance(self.target.x, self.target.y, self.unit.x, self.unit.y) > 12 * PRECISION * 12 * PRECISION:
                 self.move_to_or_fail(self.target)
                 return
         # the target is close enough, but is the target real?
@@ -889,28 +881,41 @@ class UseOrder(ComplexOrder):
 
     def execute_summon(self):
         self.unit.player.lang_add_units(
-            [self.target.name] + self.type.effect[2:],
+            self.type.effect[2:],
+            target=self.target,
             decay=to_int(self.type.effect[1]),
             notify=False)
+
+    def _get_corpses(self):
+        return self.unit.world.get_objects(self.target.x, self.target.y, 6 * PRECISION,
+                                           filter=lambda x: isinstance(x, Corpse))
 
     def raise_dead_is_not_necessary(self):
-        return not [o for o in self.target.objects if isinstance(o, Corpse)]
+        return not self._get_corpses()
 
     def execute_raise_dead(self):
+        corpses = sorted(self._get_corpses(),
+                         key=lambda o: square_of_distance(self.target.x, self.target.y, o.x, o.y))
         self.unit.player.lang_add_units(
-            [self.target.name] + self.type.effect[2:],
+            self.type.effect[2:],
             decay=to_int(self.type.effect[1]),
             from_corpse=True,
+            corpses=corpses,
             notify=False)
 
+    def _get_corpses_for_resurrection(self):
+        return self.unit.world.get_objects(self.target.x, self.target.y, 6 * PRECISION,
+                    filter=lambda x: isinstance(x, Corpse) and x.unit.player is self.unit.player)
+
     def resurrection_is_not_necessary(self):
-        return not [o for o in self.target.objects if isinstance(o, Corpse) and o.unit.player is self.unit.player]
+        return not self._get_corpses_for_resurrection()
 
     def execute_resurrection(self):
-        corpses = [o for o in self.target.objects if isinstance(o, Corpse) and o.unit.player is self.unit.player]
+        corpses = sorted(self._get_corpses_for_resurrection(),
+                         key=lambda o: square_of_distance(self.target.x, self.target.y, o.x, o.y))
         for _ in range(int(self.type.effect[1])):
             if corpses:
-                c = corpses.pop()
+                c = corpses.pop(0)
                 u = c.unit
                 if not self.player.check_count_limit(u.type_name):
                     continue
