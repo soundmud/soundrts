@@ -49,7 +49,7 @@ requirements u_teleportation
 mana_cost 150
 effect teleportation
 effect_target ask
-effect_range anywhere
+effect_range inf
 universal_notification 1
 
 def a_recall
@@ -58,7 +58,7 @@ requirements u_recall
 mana_cost 150
 effect recall
 effect_target ask
-effect_range anywhere
+effect_range inf
 universal_notification 1
 
 def a_conversion
@@ -79,7 +79,7 @@ class ability
 mana_cost 30
 effect summon 10 holy_vision
 effect_target ask
-effect_range anywhere
+effect_range inf
 
 def a_exorcism
 class ability
@@ -87,7 +87,7 @@ requirements u_exorcism
 mana_cost 150
 effect summon 15 exorcism
 effect_target ask
-effect_range nearby
+effect_range 12
 
 def a_deadly_fog
 class ability
@@ -95,7 +95,7 @@ requirements u_deadly_fog
 mana_cost 150
 effect summon 15 deadly_fog
 effect_target ask
-effect_range nearby
+effect_range 12
 
 def a_meteors
 class ability
@@ -103,7 +103,7 @@ requirements u_meteors
 mana_cost 150
 effect summon 15 meteors
 effect_target ask
-effect_range nearby
+effect_range 12
 
 def a_resurrection
 class ability

@@ -256,15 +256,22 @@ effect_range
 
 Determines the distance between the caster and the target.
 
-Default value: square
+Default value: 6
 
-Possible values:
-
-* square: they must be in the same square
-* nearby: they must be in an adjacent square or in the same square
-* anywhere: any distance is allowed
+Special value: inf (infinite)
 
 If the current distance is greater than the required distance, the caster will try to move to a closer place and use the ability from there.
+
+effect_radius
+=============
+
+`effect_radius <distance>`
+
+Determines the radius of the area of effect. The center of the area is the target.
+
+Default value: 6
+
+Special value: inf (infinite)
 
 style
 -----

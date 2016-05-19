@@ -825,9 +825,12 @@ class UseOrder(ComplexOrder):
     # NOTE: replaced can_receive(t, self.player) with can_receive(t)
     # because teleportation would always win.
 
+    def teleportation_targets(self):
+        return self.unit.world.get_objects(self.unit.x, self.unit.y, self.type.effect_radius,
+                    filter=lambda x: x.player is self.player and x.is_teleportable)
+
     def teleportation_is_not_necessary(self):
-        units = [u for u in self.player.units
-                 if u.place == self.unit.place and u.is_teleportable]
+        units = self.teleportation_targets()
         types = set([u.airground_type for u in units])
         if self.target is self.unit.place:
             return True
@@ -836,16 +839,18 @@ class UseOrder(ComplexOrder):
             return True
 
     def execute_teleportation(self):
-        units = [u for u in self.player.units
-                 if u.place == self.unit.place and u.is_teleportable]
+        units = self.teleportation_targets()
         # teleport weak units after the strong ones so peasants in defensive mode don't systematically flee
         for u in sorted(units, key=lambda x: x.menace, reverse=True):
             if self.target.can_receive(u.airground_type):
                 u.move_to(self.target, None, None)
 
+    def recall_targets(self):
+        return self.unit.world.get_objects(self.target.x, self.target.y, self.type.effect_radius,
+                    filter=lambda x: x.player is self.player and x.is_teleportable)
+
     def recall_is_not_necessary(self):
-        units = [u for u in self.player.units
-                 if u.place == self.target and u.is_teleportable]
+        units = self.recall_targets()
         if not units:
             return True
         types = set([u.airground_type for u in units])
@@ -856,8 +861,7 @@ class UseOrder(ComplexOrder):
             return True
 
     def execute_recall(self):
-        units = [u for u in self.player.units
-                 if u.place == self.target and u.is_teleportable]
+        units = self.recall_targets()
         # teleport weak units after the strong ones so peasants in defensive mode don't systematically flee
         for u in sorted(units, key=lambda x: x.menace, reverse=True):
             if self.unit.place.can_receive(u.airground_type):
@@ -881,15 +885,15 @@ class UseOrder(ComplexOrder):
             decay=to_int(self.type.effect[1]),
             notify=False)
 
-    def _get_corpses(self):
-        return self.unit.world.get_objects(self.target.x, self.target.y, 6 * PRECISION,
+    def raise_dead_targets(self):
+        return self.unit.world.get_objects(self.target.x, self.target.y, self.type.effect_radius,
                                            filter=lambda x: isinstance(x, Corpse))
 
     def raise_dead_is_not_necessary(self):
-        return not self._get_corpses()
+        return not self.raise_dead_targets()
 
     def execute_raise_dead(self):
-        corpses = sorted(self._get_corpses(),
+        corpses = sorted(self.raise_dead_targets(),
                          key=lambda o: square_of_distance(self.target.x, self.target.y, o.x, o.y))
         self.unit.player.lang_add_units(
             self.type.effect[2:],
@@ -898,15 +902,15 @@ class UseOrder(ComplexOrder):
             corpses=corpses,
             notify=False)
 
-    def _get_corpses_for_resurrection(self):
-        return self.unit.world.get_objects(self.target.x, self.target.y, 6 * PRECISION,
+    def resurrection_targets(self):
+        return self.unit.world.get_objects(self.target.x, self.target.y, self.type.effect_radius,
                     filter=lambda x: isinstance(x, Corpse) and x.unit.player is self.unit.player)
 
     def resurrection_is_not_necessary(self):
-        return not self._get_corpses_for_resurrection()
+        return not self.resurrection_targets()
 
     def execute_resurrection(self):
-        corpses = sorted(self._get_corpses_for_resurrection(),
+        corpses = sorted(self.resurrection_targets(),
                          key=lambda o: square_of_distance(self.target.x, self.target.y, o.x, o.y))
         for _ in range(int(self.type.effect[1])):
             if corpses:
