@@ -804,14 +804,9 @@ class UseOrder(ComplexOrder):
             self.mark_as_complete() # ignore silently (to save mana when giving the same order to many casters)
             return
         # move closer eventually
-        if self.type.effect_range == ["square"]:
-            if square_of_distance(self.target.x, self.target.y, self.unit.x, self.unit.y) > 6 * PRECISION * 6 * PRECISION:
-                self.move_to_or_fail(self.target)
-                return
-        elif self.type.effect_range == ["nearby"]:
-            if square_of_distance(self.target.x, self.target.y, self.unit.x, self.unit.y) > 12 * PRECISION * 12 * PRECISION:
-                self.move_to_or_fail(self.target)
-                return
+        if square_of_distance(self.target.x, self.target.y, self.unit.x, self.unit.y) > self.type.effect_range * self.type.effect_range:
+            self.move_to_or_fail(self.target)
+            return
         # the target is close enough, but is the target real?
         if self.type.effect[0] == "conversion" and self.target.is_memory:
             self.mark_as_impossible()

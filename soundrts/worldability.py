@@ -1,4 +1,5 @@
 from constants import MAX_NB_OF_RESOURCE_TYPES
+from soundrts.lib.nofloat import PRECISION
 
 
 class Ability(object): # or UnitOption or UnitMenuItem or ActiveAbility or SpecialAbility
@@ -11,7 +12,8 @@ class Ability(object): # or UnitOption or UnitMenuItem or ActiveAbility or Speci
     mana_cost = 0
     effect = None
     effect_target = ["self"]
-    effect_range = ["square"]
+    effect_range = 6 * PRECISION # "square"
+    effect_radius = 6 * PRECISION
     universal_notification = False
 
     cls = object # XXX
