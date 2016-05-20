@@ -8,8 +8,6 @@ some are merged (some text files).
 import locale
 import os
 
-import pygame
-
 from soundrts.lib import encoding
 from soundrts.lib.log import warning
 
@@ -215,10 +213,7 @@ class ResourceLoader(object):
                 return
             if key not in dest:
                 full_path = os.path.join(root, filename)
-                try:
-                    dest[key] = pygame.mixer.Sound(full_path)
-                except:
-                    warning("couldn't load %s" % full_path)
+                dest[key] = full_path # load it later
 
     def load_sounds(self, root, dest, sound_is_not_needed):
         """load the sounds to the dictionary

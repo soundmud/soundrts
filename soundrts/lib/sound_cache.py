@@ -4,6 +4,8 @@ packages, mods, campaign, map)."""
 
 import re
 
+import pygame
+
 from soundrts.lib.log import warning
 from soundrts.lib.msgs import NB_ENCODE_SHIFT
 
@@ -38,7 +40,18 @@ class SoundCache(object):
         key = "%s" % name
         for layer in self.layers:
             if key in layer.sounds:
-                return layer.sounds[key]
+                s = layer.sounds[key]
+                if isinstance(s, basestring): # full path of the sound
+                    # load the sound now
+                    try:
+                        layer.sounds[key] = pygame.mixer.Sound(s)
+                        return layer.sounds[key]
+                    except:
+                        warning("couldn't load %s" % s)
+                        del layer.sounds[key]
+                        continue # try next layer
+                else: # sound
+                    return s
         if warn:
             warning("this sound may be missing: %s", name)
         return None
