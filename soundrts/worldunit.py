@@ -437,19 +437,19 @@ class Creature(Entity):
     def heal_nearby_units(self):
         # level 1 of healing: 1 hp every 7.5 seconds
         hp = self.heal_level * PRECISION / 25
-        for p in self.player.allied:
-            for u in p.units:
-                if u.is_healable and u.place is self.place:
-                    if u.hp < u.hp_max:
-                        u.hp = min(u.hp_max, u.hp + hp)
+        allies = self.player.allied
+        units = self.world.get_objects(self.x, self.y, 6 * PRECISION,
+                filter=lambda x: x.player in allies and x.is_healable and x.hp < x.hp_max)
+        for u in units:
+            u.hp = min(u.hp_max, u.hp + hp)
 
     harm_level = 0
     harm_target_type = ()
 
     def can_harm(self, other):
-        d = self.world.harm_target_types
-        k = (self.type_name, other.type_name)
-        if k not in d:
+        try:
+            return self.world.harm_target_types[(self.type_name, other.type_name)]
+        except:
             result = True
             for t in self.harm_target_type:
                 if t == "healable" and not other.is_healable or \
@@ -459,15 +459,16 @@ class Creature(Entity):
                    t == "undead" and not other.is_undead:
                     result = False
                     break
-            d[k] = result
-        return d[k]
+            self.world.harm_target_types[(self.type_name, other.type_name)] = result
+            return result
 
     def harm_nearby_units(self):
         # level 1: 1 hp every 7.5 seconds
         hp = self.harm_level * PRECISION / 25
-        for u in self.place.objects:
-            if u.is_vulnerable and self.can_harm(u):
-                u.receive_hit(hp, self, notify=False)
+        units = self.world.get_objects(self.x, self.y, 6 * PRECISION,
+                filter=lambda x: x.is_vulnerable and self.can_harm(x))
+        for u in units:
+            u.receive_hit(hp, self, notify=False)
 
     def is_an_enemy(self, c):
         if isinstance(c, Creature):
