@@ -267,7 +267,7 @@ can_use archer_weapon archer_armor archer_range
 armor 0
 cooldown 1.5
 target_types ground air
-range 6
+range 4
 is_ballistic 1
 damage 2.5
 can_upgrade_to darkarcher
@@ -284,7 +284,7 @@ can_use archer_weapon archer_armor archer_range
 armor 0
 cooldown 3
 target_types ground air
-range 8
+range 5
 is_ballistic 1
 damage 10
 is_invisible 1
@@ -298,7 +298,7 @@ can_use archer_weapon archer_armor archer_range
 armor 0
 cooldown 1.5
 target_types ground air
-range 3
+range 4
 is_ballistic 1
 damage 2.5
 corpse 0
@@ -350,7 +350,7 @@ airground_type air
 hp_max 30
 hp_regen 0.15
 speed 1.75
-range 3
+range 4
 cooldown 4
 damage 4
 target_types ground air
@@ -369,7 +369,7 @@ mana_max 200
 mana_regen 1 ; mana / second
 speed 1
 can_use a_recall a_summon_dragon a_meteors
-range 4.5
+range 6
 cooldown 1.5
 damage 8
 target_types ground air
@@ -385,7 +385,7 @@ mana_max 200
 mana_regen 1 ; mana / second
 speed 1
 can_use a_raise_dead a_deadly_fog
-range 4.5
+range 6
 cooldown 1.5
 damage 8
 target_types ground air
@@ -428,7 +428,7 @@ airground_type air
 hp_max 30
 speed 1.5
 requirements magestower
-range 4.5
+range 5
 cooldown 1.5
 damage 8
 target_types ground air
@@ -598,7 +598,7 @@ requirements blacksmith
 hp_max 53;  160/3
 time_cost 190
 bonus_height 1
-range 8
+range 7
 is_ballistic 1
 cooldown 4
 damage 8 ; 10-50
