@@ -387,6 +387,7 @@ class UpgradeToOrder(ProductionOrder):
         player, place, x, y, hp, hp_max = self.player, self.unit.place, self.unit.x, self.unit.y, self.unit.hp, self.unit.hp_max
         leave_meadow = not self.unit.is_buildable_anywhere and self.type.is_buildable_anywhere
         consume_meadow = self.unit.is_buildable_anywhere and not self.type.is_buildable_anywhere
+        blocked_exit = self.unit.blocked_exit
         if consume_meadow:
             meadow = place.find_nearest_meadow(self.unit)
             if meadow: # should check this earlier too (OK for instant upgrades though)
@@ -397,6 +398,8 @@ class UpgradeToOrder(ProductionOrder):
                 return
         self.unit.delete()
         unit = self.type(player, place, x, y)
+        if blocked_exit:
+            unit.block(blocked_exit)
         if hp != hp_max:
             unit.hp = hp # TODO: adjust HP to prorata
         unit.notify("complete")
