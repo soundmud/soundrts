@@ -50,25 +50,19 @@ class EntityView(object):
 
     @property
     def when_moving_through(self):
-        # The blocker gets the "when_moving_through" sound from the blocked exit
-        if getattr(self.model, "blocked_exit", None):
-            model = self.model.blocked_exit
-        else:
-            model = self.model
-        return style.get(model.type_name, "when_moving_through")
+        return style.get(self.model.type_name, "when_moving_through")
 
     @property
     def is_an_exit(self):
-        # The blocker is also considered as an exit by the interface.
-        return style.has(self.model.type_name, "when_moving_through") or \
-            getattr(self.model, "blocked_exit", None)
+        return style.has(self.model.type_name, "when_moving_through")
+
+    def is_in(self, place):
+        # For the interface, a blocker is also on the other side of the exit.
+        return self.place is place or \
+            getattr(self, "blocked_exit", None) and self.blocked_exit.other_side.place is place 
 
     def __getattr__(self, name):
-        if name in ("type_name", "id") and hasattr(self.model, "is_blocked") and self.model.is_blocked():
-            model = self.model.blockers[0]
-        else:
-            model = self.model
-        v = getattr(model, name)
+        v = getattr(self.model, name)
         if name in ["x", "y"]:
             v /= 1000.0
         elif name in ("qty", "hp", "hp_max", "mana", "mana_max"):
@@ -139,9 +133,6 @@ class EntityView(object):
 
     @property
     def title(self):
-        # Blockers are invisible (and give their appearance to the blocked exit).
-        if getattr(self.model, "blocked_exit", None):
-            return []
         if isinstance(self.model, BuildingSite):
             title = compute_title(self.type.type_name) + compute_title(BuildingSite.type_name)
         else:

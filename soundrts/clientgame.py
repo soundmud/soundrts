@@ -191,7 +191,7 @@ class GameInterface(object):
     def is_visible(self, o):
         if self.zoom_mode and not self.zoom.contains(o):
             return False
-        if self.place is not o.place or not o.title:
+        if not o.is_in(self.place) or not o.title:
             return False
         if self.immersion:
             if o.id in self.group:
@@ -897,7 +897,7 @@ class GameInterface(object):
         units = []
         resources = []
         for obj in self.dobjets.values():
-            if obj.place is not place:
+            if not obj.is_in(place):
                 continue
             if zoom and not zoom.contains(obj):
                 continue
@@ -936,7 +936,7 @@ class GameInterface(object):
 
     def tell_enemies_in_square(self, place):
         enemies = [x.short_title for x in self.dobjets.values()
-                   if x.place is place and self.player.is_an_enemy(x.model)]
+                   if x.is_in(place) and self.player.is_an_enemy(x.model)]
         if enemies:
             voice.info(self.summary(enemies) + [88, 107] + place.title) # ... "ennemi" "en" ...
 
@@ -1121,7 +1121,7 @@ class GameInterface(object):
                     self.zoom.move_to(self.dobjets[self.group[0]])
                     if not voice.channel.get_busy(): # low priority: don't interrupt
                         self.zoom.say()
-            elif self.dobjets[self.group[0]].place is not self.place:
+            elif not self.dobjets[self.group[0]].is_in(self.place):
                 self.move_to_square(self.dobjets[self.group[0]].place)
                 if not voice.channel.get_busy(): # low priority: don't interrupt
                     voice.item(self.place.title)
@@ -1174,7 +1174,7 @@ class GameInterface(object):
             for t in types:
                 m = [x.id for x in units if x.type_name == t and \
                      (not local or self.zoom_mode and self.zoom.contains(x)
-                      or not self.zoom_mode and x.place is initial_unit.place) and \
+                      or not self.zoom_mode and x.is_in(initial_unit.place)) and \
                      (not idle or not x.orders)] # or == self.place
                 self.group += m[: len(m) / portion]
             if initial_unit.id not in self.group \
@@ -1210,7 +1210,7 @@ class GameInterface(object):
             if self.zoom_mode:
                 units = [x for x in units if self.zoom.contains(x)]
             else:
-                units = [x for x in units if x.place is self.place]
+                units = [x for x in units if x.is_in(self.place)]
         if idle:
             units = [x for x in units if not x.orders]
         if not units:
@@ -1377,7 +1377,7 @@ class GameInterface(object):
 
     def _silence_square(self):
         for o in self.dobjets.values():
-            if o.place is not self.place:
+            if not o.is_in(self.place):
                 o.stop()
         sound_stop(stop_voice_too=False) # cut the long nonlooping environment sounds
 
@@ -1423,7 +1423,7 @@ class GameInterface(object):
             return style.get("parameters", "no_path_in_this_direction"), True
         if self.place not in self.scouted_before_squares:
             return [], False
-        exits = [o for o in self.dobjets.values() if o.place is self.place
+        exits = [o for o in self.dobjets.values() if o.is_in(self.place)
                  and self.is_selectable(o)
                  and o.is_an_exit
                  and not o.is_blocked(self.player)]
