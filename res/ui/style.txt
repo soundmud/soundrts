@@ -407,10 +407,18 @@ is_a building
 title 4331
 shortcut a
 
+def massive_wall
+is_a building
+title 4338
+
 def gate
 is_a building
 title 4332
 shortcut g
+
+def massive_gate
+is_a building
+title 4339
 
 ; units
 
