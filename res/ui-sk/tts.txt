@@ -1,3 +1,5 @@
+; coding: utf_8
+
 0 nič!
 1 ste
 
