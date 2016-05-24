@@ -1160,10 +1160,14 @@ class GameInterface(object):
                       and (self.dobjets[u].player is self.player
                            or self.dobjets[u].player in self.player.allied_control)]
 
-    def grouper(self, portion, types, local, idle, unused__even_if_no_menu):
+    def _regroup(self, portion, types, local, idle, unused__even_if_no_menu):
         self.update_group()
         if self.group:
             initial_unit = self.dobjets[self.group[0]]
+            if initial_unit.is_in(self.place):
+                local_place = self.place
+            else:
+                local_place = initial_unit.place
             if not types:
                 types = []
                 for _id in self.group:
@@ -1174,8 +1178,8 @@ class GameInterface(object):
             for t in types:
                 m = [x.id for x in units if x.type_name == t and \
                      (not local or self.zoom_mode and self.zoom.contains(x)
-                      or not self.zoom_mode and x.is_in(initial_unit.place)) and \
-                     (not idle or not x.orders)] # or == self.place
+                      or not self.zoom_mode and x.is_in(local_place)) and \
+                     (not idle or not x.orders)]
                 self.group += m[: len(m) / portion]
             if initial_unit.id not in self.group \
                and initial_unit.type_name in types:
@@ -1186,7 +1190,7 @@ class GameInterface(object):
 
     def cmd_group(self, portion, *args):
         portion = int(portion)
-        self.grouper(portion, *self._arrange(args))
+        self._regroup(portion, *self._arrange(args))
 
     def cmd_ungroup(self):
         if len(self.group) > 1:
@@ -1202,7 +1206,7 @@ class GameInterface(object):
         if self.target in self.units():
             self.command_unit(self.target)
 
-    def selectionner_unite(self, decalage, types, local, idle, even_if_no_menu, silent=False):
+    def _select_unit(self, inc, types, local, idle, even_if_no_menu, silent=False):
         units = self.units(even_if_no_menu=even_if_no_menu, sort=True)
         if types:
             units = [x for x in units if x.type_name in types]
@@ -1221,7 +1225,7 @@ class GameInterface(object):
             if u.id in self.group:
                 sel = i
                 break
-        sel += decalage
+        sel += inc
         if sel < 0:
             sel = len(units) - 1
         if sel >= len(units):
@@ -1239,13 +1243,13 @@ class GameInterface(object):
                  and style.get(x, "keyboard")[0] in keyboard_types]
         return types, local, idle, even_if_no_menu
 
-    def cmd_select_unit(self, decalage, *args):
-        decalage = int(decalage)
-        self.selectionner_unite(decalage, *self._arrange(args))
+    def cmd_select_unit(self, inc, *args):
+        inc = int(inc)
+        self._select_unit(inc, *self._arrange(args))
 
     def cmd_select_units(self, *args):
-        self.selectionner_unite(1, *(list(self._arrange(args)) + [True]))
-        self.grouper(1, *self._arrange(args))
+        self._select_unit(1, *(list(self._arrange(args)) + [True]))
+        self._regroup(1, *self._arrange(args))
 
     # recallable groups
 
@@ -1301,8 +1305,8 @@ class GameInterface(object):
             msg += [9998, 4067] # the order will be validated when the parameter is validated
         voice.item(msg)
 
-    def cmd_select_order(self, decalage):
-        decalage = int(decalage)
+    def cmd_select_order(self, inc):
+        inc = int(inc)
         orders = self.orders() # do this once (can take a long time)
         # if no menu then do nothing
         if not orders:
@@ -1317,7 +1321,7 @@ class GameInterface(object):
                 index = orders.index(self.order)
             except ValueError: # order not found
                 index = -1
-        index += decalage
+        index += inc
         if index < 0:
             index = len(orders) - 1
         elif index >= len(orders):
