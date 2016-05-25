@@ -1,3 +1,5 @@
+; coding: utf_8
+
 0 nič!
 1 ste
 
@@ -407,7 +409,7 @@
 4329 Rozbaľujem...
 4330 Nie je možné nájsť mod:
 
-4331 múr
+4331 hradby
 4332 brána
 4333 zatarasiť
 
@@ -417,3 +419,6 @@
 
 4336 otvoriť užívateľský priečinok
 4337 dokumentácia
+
+4338 masívne hradby
+4339 masívna brána
