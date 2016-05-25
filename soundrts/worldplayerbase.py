@@ -9,7 +9,8 @@ from lib.log import debug, warning
 from lib.msgs import encode_msg, nb2msg
 from lib.nofloat import PRECISION
 from worldentity import NotEnoughSpaceError, Entity
-from worldresource import Corpse
+from worldresource import Corpse, Meadow
+from worldunit import Building
 from worldupgrade import Upgrade
 
 
@@ -508,11 +509,27 @@ class Player(object):
                     elif target:
                         x, y = target.x, target.y 
                         sq = target if target in self.world.squares else target.place
+                        if cls.cls is Building:
+                            build_on_exits_only=bool(getattr(cls, 'is_buildable_on_exits_only', False))
+                            if getattr(target, 'is_a_building_land', False):
+                                if build_on_exits_only and not getattr(target, 'is_an_exit', False): break
+                                land=target
+                            elif target is sq:
+                                x, y, land = sq.find_and_remove_meadow(cls)
+                            else:
+                                land = sq.find_nearest_meadow(target, find_exits_instead=build_on_exits_only)
+                                if land is None: break #No land available!
+                                x, y = land.x, land.y
                     else:
                         x, y, land = sq.find_and_remove_meadow(cls)
+                        if land is None and cls.cls is Building: break
                     try:
                         u = cls(self, sq, x, y)
                         u.building_land = land
+                        if isinstance(u, Building):
+                            if getattr(land, 'is_an_exit', False): u.block(land)
+                        elif isinstance(land, Meadow): land.delete()
+                        if target: target=u
                     except NotEnoughSpaceError:
                         break
                     if decay:

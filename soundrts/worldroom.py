@@ -4,6 +4,7 @@ from constants import COLLISION_RADIUS
 from lib.msgs import nb2msg
 from lib.nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
 from lib.priodict import priorityDictionary
+from worldexit import Exit
 from worldresource import Meadow
 
 
@@ -160,21 +161,28 @@ class Square(object):
         Path.reverse()
         return Path[1], D[dest]
 
-    def find_nearest_meadow(self, unit):
+    def find_nearest_meadow(self, unit, find_exits_instead=False):
+        if find_exits_instead: land_type = Exit
+        else: land_type = Meadow
         def _d(o):
             # o.id to make sure that the result is the same on any computer
             return (int_distance(o.x, o.y, unit.x, unit.y), o.id)
-        meadows = sorted([o for o in self.objects if isinstance(o, Meadow)], key=_d)
+        meadows = sorted([o for o in self.objects if isinstance(o, land_type)], key=_d)
         if meadows:
-            return meadows[0]
+            if land_type is Meadow: return meadows[0]
+            for o in meadows:
+                if o.is_blocked(): continue
+                return o
         
     def find_and_remove_meadow(self, item_type):
         if item_type.is_buildable_anywhere:
             return self.x, self.y, None
+        if item_type.is_buildable_on_exits_only: land_type = Exit
+        else: land_type = Meadow
         for o in self.objects:
-            if isinstance(o, Meadow):
+            if isinstance(o, land_type):
                 x, y = o.x, o.y
-                o.delete()
+                if isinstance(o, Meadow): o.delete()
                 return x, y, o
         return self.x, self.y, None
 
