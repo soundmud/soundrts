@@ -195,10 +195,11 @@ class EntityView(object):
 
     def is_a_useful_target(self):
         # (useful for a worker)
-        # resource deposits, building lands, damaged repairable units or buildings
+        # resource deposits, building lands, damaged repairable units or buildings, blockable exits
         return self.qty > 0 or \
                self.is_a_building_land or \
-               self.is_repairable and self.hp < self.hp_max
+               self.is_repairable and self.hp < self.hp_max or \
+               self.is_an_exit
 
     def shape(self):
         shape = style.get(self.type_name, "shape", warn_if_not_found=False)
