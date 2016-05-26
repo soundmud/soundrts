@@ -79,7 +79,7 @@
 135        insuficiente
 136        o mesmo!
 137        unidades de comida
-138        estão as suas ordens:
+138        estão às suas ordens:
 139        para grupos
 
 142        produção pausada
@@ -484,3 +484,7 @@
 4335 Limite de contagem alcançado
 
 4336 abrir pasta do usuário
+4337 documentação
+
+4338 grande muralha
+4339 grande portão
