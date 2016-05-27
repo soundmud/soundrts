@@ -320,13 +320,14 @@ class Game(object):
 
     def unregister(self, client):
         self.players.remove(client)
-        client.push("quit\n")
+        if not client.is_disconnected:
+            client.push("quit\n")
         client.state = InTheLobby()
 
     def cancel(self):
-        for c in self.players:
+        for c in self.players[:]:
             self.unregister(c)
-        for c in self.guests:
+        for c in self.guests[:]:
             self.uninvite(c)
         self.server.games.remove(self)
 
