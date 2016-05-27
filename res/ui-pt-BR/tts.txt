@@ -488,3 +488,4 @@
 
 4338 grande muralha
 4339 grande portão
+4340 iniciar uma partida pública em

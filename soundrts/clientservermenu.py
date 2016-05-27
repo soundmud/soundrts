@@ -82,20 +82,28 @@ class ServerMenu(_ServerMenu):
     invitations = ()
 
     def _create_game(self, args):
-        n, title = args
-        Menu([4055] + title,
-             [([4103], (self.server.write_line, "create %s 0.5" % n)),
-              ([4104], (self.server.write_line, "create %s 1.0" % n)),
-              ([4105] + nb2msg(2), (self.server.write_line, "create %s 2.0" % n)),
-              ([4105] + nb2msg(4), (self.server.write_line, "create %s 4.0" % n)),
+        n, title, is_public = args
+        Menu(title,
+             [([4103], (self.server.write_line, "create %s 0.5 %s" %
+             (n, is_public))),
+              ([4104], (self.server.write_line, "create %s 1.0 %s" %
+              (n, is_public))),
+              ([4105] + nb2msg(2), (self.server.write_line, "create %s 2.0 %s" %
+              (n, is_public))),
+              ([4105] + nb2msg(4), (self.server.write_line, "create %s 4.0 %s" %
+              (n, is_public))),
               ([4048], None),
               ],
              default_choice_index=1).run() # XXX not a ServerMenu
-        
-    def _get_creation_submenu(self):
-        menu = Menu([4055], remember="mapmenu")
+
+    def _get_creation_submenu(self, is_public=""):
+        if is_public == "public":
+            title = [4340]
+        else:
+            title = [4055]
+        menu = Menu(title, remember="mapmenu")
         for n, m in enumerate(self.maps):
-            menu.append(m, (self._create_game, (n, m)))
+            menu.append(m, (self._create_game, (n, title + m, is_public)))
         menu.append([4048], None)
         return menu
 
@@ -104,6 +112,7 @@ class ServerMenu(_ServerMenu):
         for g in self.invitations:
             menu.append([4053] + g[1:], (self.server.write_line, "register %s" % g[0]))
         menu.append([4055], self._get_creation_submenu())
+        menu.append([4340], self._get_creation_submenu("public"))
         menu.append([4041], (self.server.write_line, "quit"))
         return menu
 
