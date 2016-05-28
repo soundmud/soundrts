@@ -181,6 +181,7 @@ class Square(object):
         else: land_type = Meadow
         for o in self.objects:
             if isinstance(o, land_type):
+                if land_type is Exit and o.is_blocked(): continue
                 x, y = o.x, o.y
                 if isinstance(o, Meadow): o.delete()
                 return x, y, o

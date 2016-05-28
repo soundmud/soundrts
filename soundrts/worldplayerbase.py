@@ -509,7 +509,6 @@ class Player(object):
                     elif target:
                         x, y = target.x, target.y 
                         sq = target if target in self.world.squares else target.place
-                        warning('%s: %s', target, land)
                         if cls.cls is Building:
                             build_on_exits_only=bool(getattr(cls, 'is_buildable_on_exits_only', False))
                             if getattr(cls, 'is_buildable_anywhere', False): pass
@@ -518,6 +517,8 @@ class Player(object):
                                 land=target
                             elif target is sq:
                                 x, y, land = sq.find_and_remove_meadow(cls)
+                                if land is None: break
+                                if getattr(land, 'is_an_exit', False) and land.is_blocked(): break
                             else:
                                 land = sq.find_nearest_meadow(target, find_exits_instead=build_on_exits_only)
                                 if land is None: break #No land available!
@@ -525,10 +526,8 @@ class Player(object):
                     else:
                         x, y, land = sq.find_and_remove_meadow(cls)
                         if land is None and cls.cls is Building: break
-                    warning('%s', land)
                     try:
                         u = cls(self, sq, x, y)
-                        warning('%s', u)
                         u.building_land = land
                         if isinstance(u, Building):
                             if getattr(land, 'is_an_exit', False): u.block(land)
