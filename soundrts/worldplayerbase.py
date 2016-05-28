@@ -509,9 +509,11 @@ class Player(object):
                     elif target:
                         x, y = target.x, target.y 
                         sq = target if target in self.world.squares else target.place
+                        warning('%s: %s', target, land)
                         if cls.cls is Building:
                             build_on_exits_only=bool(getattr(cls, 'is_buildable_on_exits_only', False))
-                            if getattr(target, 'is_a_building_land', False):
+                            if getattr(cls, 'is_buildable_anywhere', False): pass
+                            elif getattr(target, 'is_a_building_land', False):
                                 if build_on_exits_only and not getattr(target, 'is_an_exit', False): break
                                 land=target
                             elif target is sq:
@@ -523,13 +525,15 @@ class Player(object):
                     else:
                         x, y, land = sq.find_and_remove_meadow(cls)
                         if land is None and cls.cls is Building: break
+                    warning('%s', land)
                     try:
                         u = cls(self, sq, x, y)
+                        warning('%s', u)
                         u.building_land = land
                         if isinstance(u, Building):
                             if getattr(land, 'is_an_exit', False): u.block(land)
-                        elif isinstance(land, Meadow): land.delete()
-                        if target: target=u
+                            elif not getattr(u, 'is_buildable_anywhere', False) and isinstance(land, Meadow): land.delete()
+                            if target: target=u
                     except NotEnoughSpaceError:
                         break
                     if decay:
