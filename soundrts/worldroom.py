@@ -64,11 +64,24 @@ class Square(object):
                 result.append(s)
         self.neighbours = result
 
-    @property
-    def building_land(self):
+    def _building_land(self, land_type=None):
         for o in self.objects:
             if o.is_a_building_land:
-                return o
+                if land_type is None: return o
+                elif land_type == 'meadow' and o.type_name == land_type: return o
+                elif land_type == 'exit' and getattr(o, 'is_an_exit', False): return o
+
+    @property
+    def building_land(self):
+        return self._building_land()
+
+    @property
+    def free_meadow(self):
+        return self._building_land(land_type='meadow')
+
+    @property
+    def unblocked_exit(self):
+        return self._building_land(land_type='exit')
 
     def __getstate__(self):
         d = self.__dict__.copy()

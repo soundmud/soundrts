@@ -814,6 +814,26 @@ class UseOrder(ComplexOrder):
         if self.type.effect[0] == "conversion" and self.target.is_memory:
             self.mark_as_impossible()
             return
+        if self.type.effect[0] == "summon":
+            needed_meadows=0
+            needed_exits=0
+            multiplicator=1
+            for i in self.type.effect[2:]:
+                if not i.isdigit():
+                    cls=self.unit.world.unit_class(i)
+                    if hasattr(cls, 'is_buildable_anywhere') and not cls.is_buildable_anywhere and not cls.is_buildable_on_exits_only: needed_meadows+=multiplicator
+                    if getattr(cls, 'is_buildable_on_exits_only', False): needed_exits+=multiplicator
+                    multiplicator=1
+                else:
+                    multiplicator=int(i)
+            if (needed_meadows or needed_exits) and not getattr(self.target, 'is_a_building_land', False): #if target is a building_land we don't need to check, we're only concerned with other targets.
+                sq = self.target if self.target in self.unit.world.squares else self.target.place
+                if needed_meadows and sq.free_meadow is None:
+                    self.mark_as_impossible('no_free_meadows')
+                    return
+                if needed_exits and sq.unblocked_exit is None:
+                    self.mark_as_impossible("no_unblocked_exits")
+                    return
         # check cost
         if self.unit.mana < self.type.mana_cost:
             self.mark_as_impossible("not_enough_mana")
