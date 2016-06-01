@@ -169,7 +169,7 @@ class Entity(object):
                     player.send_event(self, event)
 
     def aim_range(self, a):
-        range = a.range
+        range = a.range or 0
         if a.is_ballistic and a.height > self.height:
             # each height difference has a bonus of 1
             bonus = (a.height - self.height) * PRECISION * 1
