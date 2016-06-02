@@ -132,6 +132,11 @@ class Server(asyncore.dispatcher):
     ip = ""
 
     def _get_ip_address(self):
+        for p in self.parameters:
+            if p.lower().startswith('ip='): self.ip=p.split('=')[1]
+        if self.ip and re.match("^[0-9.]{7,40}$", self.ip):
+            info('Using provided ip: %s', self.ip)
+            return
         try:
             self.ip = urllib.urlopen(WHATISMYIP_URL).read().strip()
             if not re.match("^[0-9.]{7,40}$", self.ip):
