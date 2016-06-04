@@ -11,6 +11,8 @@ cannot_build_here 4204
 not_enough_mana 4252
 not_enough_space 1027
 count_limit_reached 4335
+no_free_meadows 4340
+no_unblocked_exits 4341
 
 ; miscellaneous parameters
 
