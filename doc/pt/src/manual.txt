@@ -1,10 +1,11 @@
 Manual do jogo
-===========
+===========^^^
 
-.. conteúdo::
+.. language: pt_BR
+.. contents::
 
 1. Introdução
----------------
+-------------
 
 Bem-vindo ao SoundRTS!
 
@@ -28,7 +29,7 @@ A fala gravada foi totalmente removida no SoundRTS 1.2-alpha9.
 Esse tutorial irá ajudá-lo a aprender os principais controles do jogo.
 
 2.1 Tutorial do capítulo 1
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Se você usa o Jaws ou alguma revisão de tela, talvez você precise
 desativá-la para ter acesso completo ao teclado.
@@ -83,39 +84,37 @@ bosque e "Backspace" para confirmar.
 O resto não é difícil.
 
 2.2 Tutorial do capítulo 2
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Dica: agrupe suas unidades de combate. Para fazer isso, controle-as
 (com a letra S) e faça-as patrulhar entre os quadrados que você quer
 proteger.
 
 2.3 Dicas e truques
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 
 - Mantenha suas forças focadas.
-- Faça seus soldados patrulharem. Soldados que patrulham podem proteger
-uma zona maior enquanto mantém as forças focadas.
-- Use pontos de encontro nas construções. As construções que tem a
-possibilidade de recrutar unidades podem definir um ponto de encontro. As novas unidades vão ter esse ponto de encontro como alvo.
-Por exemplo um novo operário explorará a mina de ouro.
-- Use o modo defensivo para espiar. Uma unidade no modo defensivo vai
-fugir se ela encontrar inimigos mais fortes. Com isso você pode saber
-quantos inimigos tem num quadrado sem sacrificar a espia. Os operários
-ficam no modo defensivo por padrão mas os soldados podem ser configurados
-para ficarem nesse modo também.
-- Uma unidade que fugir esquece suas ordens. Um operário que fugir não
-vai voltar a recolher ouro, enquanto que se ele lutasse e sobrevivesse, ele
-iria voltar e exploraria novamente a mina.
+- Faça seus soldados patrulharem. Soldados que patrulham podem proteger uma zona maior enquanto mantém as forças focadas.
+- Use pontos de encontro nas construções. As construções que tem a possibilidade de recrutar unidades podem definir um ponto de encontro. As novas unidades vão ter
+  esse ponto de encontro como alvo. Por exemplo um novo operário explorará a mina de ouro.
+
+- Use o modo defensivo para espiar. Uma unidade no modo defensivo vai fugir se ela encontrar inimigos mais fortes. Com isso você pode saber quantos inimigos tem
+  num quadrado sem sacrificar a espia. Os operários
+  ficam no modo defensivo por padrão mas os soldados podem ser configurados para ficarem nesse modo também.
+
+- Uma unidade que fugir esquece suas ordens. Um operário que fugir não vai voltar a recolher ouro, enquanto que se ele lutasse e sobrevivesse, ele iria voltar e
+  exploraria novamente a mina.
+
 
 3. Lista de comandos
-----------------
+--------------------
 
 O jogo consiste em dar ordens às suas unidades e construções. Para dar
 uma ordem à uma unidade, você deve controlá-la primeiro.
 Se você pressionar F10 durante o jogo, você irá para o menu da partida.
 
 Movendo-se pelo mapa
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
 
 As setas fazem você se mover de um quadrado a outro pelo mapa. Se um
 caminho direto existir entre o quadrado que você estiver e o novo, você
@@ -130,15 +129,14 @@ Outra forma de se mover pelo mapa é pressionar Page Up, que levará você ao
 próximo quadrado interessante sem passar por quadrados vazios. Desde o SoundRTS 1.1 alpha
 3, algumas variantes estão disponíveis:
 
-- pressione Alt + PageUp/PageDown para selecionar o quadrado
-desconhecido anterior / seguinte.
+- pressione Alt + PageUp/PageDown para selecionar o quadrado desconhecido anterior / seguinte.
 - pressione Shift + PageUp/PageDown para selecionar o quadrado anterior / seguinte que contenha recursos.
 
 Quando você controlar uma unidade e pressionar a Barra de espaço, você a
 seguirá quando ela mover de um quadrado a outro.
 
 Escolhendo uma unidade para controlar
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Para controlar a próxima unidade local, pressione Q.
 
@@ -168,7 +166,7 @@ mesma tecla combinada com o Control faz você controlar um grupo de todo
 o mapa. Por exemplo, para controlar todos os soldados, pressione Control R ou Control F.
 
 Dando uma ordem (método principal)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Para dar uma ordem à unidade controlada, o método principal consiste em
 escolher a ordem numa lista e selecionar o alvo se a ordem pedir.
@@ -197,7 +195,7 @@ Pressione o atalho e a ordem será executada imediatamente, a menos que
 um alvo necessite ser selecionado.
 
 Examinando a situação
-^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Para saber que unidade (ou grupo) você controla, pressione Espaço.
 Ademais, você se moverá ao quadrado ocupado pela unidade (ou pelo líder do grupo).
@@ -220,15 +218,13 @@ Pressione Espaço para verificar se a unidade tem várias ordens para executar.
 
 Aqui está uma lista de situações que enfileirar ordens pode ajudar:
 
-- Exemplo 1: você quer mandar um operári ir em todos os quadrados iniciais
-(para saber onde o inimigo está). Mova o cursor para um dos quadrados
-iniciais e pressione Shift Backspace. Repita para cada quadrado inicial
-e o operário irá se mover para um quadrado e em seguida irá para outro.
+- Exemplo 1: você quer mandar um operári ir em todos os quadrados iniciais (para saber onde o inimigo está). Mova o cursor para um dos quadrados iniciais e pressione
+  Shift Backspace. Repita para cada quadrado inicial
+  e o operário irá se mover para um quadrado e em seguida irá para outro.
 
-- Exemplo 2: você quer que um operário explore vários recursos.
-Selecione um recurso como alvo, pressione Shift + Backspace. Repita
-para cada recurso. Quando um recurso se esgotar, o operário irá explorar
-os próximos de sua lista de ordens.
+- Exemplo 2: você quer que um operário explore vários recursos. Selecione um recurso como alvo, pressione Shift + Backspace. Repita para cada recurso. Quando um
+  recurso se esgotar, o operário irá explorar os próximos de sua lista de ordens.
+
 
 Dando uma ordem imperativa
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -244,15 +240,14 @@ por exemplo para focar-se num alvo muito importante.
 
 Aqui estão algumas situações em que um comando imperativo pode ser útil:
 
-- Exemplo 1: você quer que suas unidades ataquem uma construção ou
-unidade inimiga específica e ignorarem o resto. Selecione o alvo e aperte Control Backspace.
+- Exemplo 1: você quer que suas unidades ataquem uma construção ou unidade inimiga específica e ignorarem o resto. Selecione o alvo e aperte Control Backspace.
 - Exemplo 2: você quer que suas unidades saiam de um quadrado e ignorem o inimigo. Selecione outro quadrado e pressione Control Backspace.
 
 Você pode enfileirar ordens imperativas também. Segure Control + Shift
 ao invés de Shift.
 
 Atacando uma unidade amiga
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Selecione a unidade e pressione Shift Backspace: as unidades vão atacar
 o alvo.
@@ -261,14 +256,12 @@ Exceção: se o alvo for uma construção danificada (ou uma unidade
 reparável como a catapulta) e você controlar operários, eles vão reparar o alvo.
 
 Bloqueando uma saída
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
 
 Introduzido na versão 1.2 alpha 10.
 
 Para bloquear uma saída (caminho, ponte), você pode fazer qualquer uma dessas alternativas:
-
-- ordenar uma unidade (ou várias) a bloquear a saída (dando a ordem
-"bloquear" ou usando back space com a saída como alvo);
+- ordenar uma unidade (ou várias) a bloquear a saída (dando a ordem "bloquear" ou usando back space com a saída como alvo);
 - construir uma muralha nela;
 - construir qualquer outra construção nela.
 
@@ -305,7 +298,7 @@ Pressione qualquer letra para selecionar o próximo item começando com essa letra
 Pressione Shift + qualquer letra para selecionar o item anterior começando com essa letra.
 
 Outros comandos
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 F5 e F6: mensagem anterior / próxima no histórico.
 Alt: interrompe a frase atual.
@@ -336,10 +329,10 @@ e victory (para ganhar, por exemplo para passar um capítulo). Exemplo
 do comando "add_units": "add_units a1 100 archer". Novo no SoundRTS 1.2 alpha 9.
 
 4. Jogos multijogador
---------------------
+---------------------
 
 4.1 Iniciando um jogo multijogador
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Selecione multijogador e depois escolher o servidor numa lista.
 
@@ -350,7 +343,7 @@ SoundRTS uma segunda vez para jogar offline. Quando alguém aparecer,
 pressione F10 para pausar seu jogo e poder começar a jogar online.
 
 4.2 Conversando
-^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 Você pode conversar na entrada do servidor, na sala de pré-jogo e
 durante a partida. Todavia, o organizador está temporariamente indisponível
@@ -362,7 +355,7 @@ e pressione Enter.
 Outra opção seria usar o Skype (ou algum programa similar) se você conhece os outros jogadores.
 
 4.3 Jogo em equipe
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 
 As equipes devem ser criadas antes que o jogo inicie. Elas não podem ser mudadas durante o jogo.
 
@@ -378,7 +371,7 @@ Nota: num jogo offline, os computadores são aliados.
 Dica: para jogar com um computador como aliado, crie um servidor privado.
 
 4.4 Como fazer com que seu servidor fique acessível a outros jogadores
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Para verificar se seu servidor pode ser acessado fora de sua rede
 local, espere alguém conectar, ou idealmente pergunte a um amigo se ele
@@ -404,7 +397,7 @@ servidores. A opção "Digite o endereço IP do servidor" funciona em
 muitos casos, mas ela não significa que o servidor é acessível de fora.
 
 4.5 Como baixar um mapa de um servidor
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Jogue uma partida com o mapa que você quer baixar. Antes que o jogo
 inicie, o mapa aparecerá na `pasta temporária`_ e ficará lá até que
@@ -412,10 +405,10 @@ outro mapa o sobrescreva. Dependendo do formato do mapa, pode ser um
 arquivo de texto chamado recent_map.txt ou uma pasta chamada recent_map.
 
 5. Elementos do jogo
-----------------
+--------------------
 
 Comida
-^^^^
+^^^^^^
 
 O recrutamento de uma nova unidade só pode acontecer se o jogador tiver
 comida suficiente. Se algumas fazendas forem destruídas ou novas
@@ -425,18 +418,18 @@ nenhum problema. Entretanto, nenhum recrutamento vai ser permitido até
 que o jogador consiga mais comida.
 
 Investimento de tecnologia
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Os investimentos se aplicam à todas as unidades do jogador (atuais e futuras).
 
 Unidades voadoras
-^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 Desde o SoundRTS 1.1, as unidades aéreas voam em linha reta até o
 objetivo, ignorando o caminho terrestre.
 
 Unidades invisíveis e detectoras
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Para se defender de unidades invisíveis, existem pelo menos 3 maneiras.
 
@@ -445,7 +438,7 @@ Para se defender de unidades invisíveis, existem pelo menos 3 maneiras.
 - ignore a unidade invisível e destrua as construções rapidamente o suficiente.
 
 6. Mais detalhes para personalização
----------------------------------
+------------------------------------
 
 SoundRTS.ini
 ^^^^^^^^^^^^
@@ -456,7 +449,7 @@ arquivo contiver um erro, um novo será gerado tentando se recuperar a maior
 quantidade de parâmetros do arquivo original.
 
 Opções da linha de comando
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Pela linha de comando, a opção -h dá a lista de opções disponíveis.
 
@@ -464,7 +457,7 @@ A opção --mods sobrescreve a linha "mods =" do SoundRTS.ini_ . Por
 exemplo, para iniciar SoundRTS com o soundpack e o mod orc: soundrts.exe --mods=soundpack,orc
 
 Pacote de sons
-^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 SoundRTS vem com um mod chamado "soundpack" contendo sons alternativos.
 Para ativar esse mod, no SoundRTS.ini_ substitua a linha "mods =" com "mods = soundpack".
@@ -476,12 +469,12 @@ SAPI 5 (Windows)
 No `Soundrts.ini`_, se "srapi = 0", a voz padrão SAPI 5 será usada diretamente.
 
 Parâmetro srapi para Windows
-^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 No `Soundrts.ini`_, coloque "srapi = 1" para usar um leitor de tela (através de ScreenReaderAPI).
 
 Parâmetro srapi_wait para Windows
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Como eu não consegui achar uma maneira de saber quando um leitor de
 tela para de falar no Windows, eu tive que calcular a duração de cada mensagem.
@@ -491,7 +484,6 @@ Com "srapi_wait = .1" e uma mensagem de 10 caracteres, SoundRTS vai esperar por 
 Aumente o valor de "srapi_wait" se algumas mensagens estão sendo interrompidas pela próxima.
 Diminua o valor de "srapi_wait" se o jogo está silenciando muito entre uma mensagem e outra.
 
-
 Pasta temporária
 ^^^^^^^^^^^^^^^^
 
@@ -500,7 +492,7 @@ A pasta temporária contém os logs e o mapa jogado pela última vez.
 A pasta temporária está localizada na `pasta do usuário`_ com o nome de "tmp".
 
 Pasta do usuário
-^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 A pasta do usuário contém as configurações do jogo, os mapas
 personalizados e mods, e a pasta temporária.
@@ -513,8 +505,8 @@ Se a pasta "user" não existir, a pasta do usuário vai ser localizada dependendo 
 - Windows XP: "C:\\Documents and settings\\seu_nome_de_usuario\\Dados de aplicativos\\SoundRTS unstable"
 - Linux: "home/seu_nome_de_usuario/.SoundRTS unstable"
 
-Como criar uma versão portável do SoundRTS
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Como criar uma versão portátil do SoundRTS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Desde o SoundRTS 1.0 beta 10 p, é possível ter todos os arquivos do jogo (log,
 configuração, mapas personalizados...) dentro da pasta do jogo. Seguem
@@ -522,18 +514,21 @@ as instruções de como proceder para fazer isso:
 
 - installe o SoundRTS
 - Windows: copie a `pasta do jogo` de "Arquivos de programas" para
-uma pasta que você pode escrever (a área de trabalho, um drive USB, etc)
+  uma pasta que você pode escrever (a área de trabalho, um drive USB, etc)
+
 - na nova pasta do SoundRTS, crie uma pasta chamada "user". "user" pode
-ser uma cópia de uma `pasta do usuário`_ existente (porém a versão tem que ser a mesma).
+  ser uma cópia de uma `pasta do usuário`_ existente (porém a versão tem que ser a mesma).
+
 - Windows: para jogar, execute "soundrts.exe".
 
+
 Como mudar a velocidade padrão de jogos offline
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Encontre SoundRTS.ini_ na `pasta do usuário`_ e modifique a linha "speed = ...". Use um número inteiro.
 
 Mudando algumas teclas do jogo
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Desde o SoundRTS 1.1, o layout de teclado está definido num arquivo
 chamado "bindings.txt" na `pasta do jogo`.
@@ -550,7 +545,7 @@ Você também pode criar um arquivo chamado server_launcher.py com a linha: "impor
 Verifique se executar "soundrts_launcher.py" funciona.
 
 Usando o instalador do Windows com uma conta limitada (Windows XP)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Você pode usar uma conta limitada para instalar SoundRTS. Escolha uma
 pasta diferente da "Arquivos de programas".
@@ -558,14 +553,14 @@ pasta diferente da "Arquivos de programas".
 Ainda que você instale SoundRTS com uma conta administradora, você pode jogar usando uma conta limitada.
 
 O que faz um mapa multijogador ser oficial?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Mapas oficiais não tocam nenhum som antes de seu título. Os mapas
 multijogador oficiais são listados em cfg/official_maps.txt com
 checksums para ter a certeza de que eles não foram modificados.
 
-Como selecionar um idioma diferente
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Como selecionar um idioma diferente?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Se cfg/language.txt estar vazio, o programa selecionará automaticamente o idioma do sistema.
 Para selecionar um idioma específico, digite o código do idioma em cfg/language.txt,
@@ -573,7 +568,7 @@ por exemplo "en", "fr-ca", "pt" ou "pt-BR".
 Verifique a pasta res para saber que códigos de idioma estão incluídos.
 
 7. Créditos
-----------
+-----------
 
 Nota: essa lista não é exaustiva. Obrigado a todos que ajudaram!
 
@@ -596,6 +591,8 @@ Melhoras da voz em inglês e sons: Bryan Smart.
 Mapa multijogador 101 - fronteira: Bryan Smart.
 
 Notas finais do tradutor
+
 Gostaria de agradecer a todo o pessoal da BGB Blind Games Brasil, que
 traduziu o jogo até 2013, que foi quando eu comecei a traduzir. Vocês
-merecem. Sem vocês eu nunca teria conhecido esse jogo. Obrigado!
+merecem. Sem vocês eu nunca teria conhecido esse jogo, nem o teria
+traduzido como fiz agora. Obrigado!
