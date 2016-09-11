@@ -1,5 +1,5 @@
 Manual do jogo
-===========^^^
+==============
 
 .. language: pt_BR
 .. contents::
