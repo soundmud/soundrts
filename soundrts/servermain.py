@@ -3,6 +3,7 @@ import re
 import sys
 import socket
 import urllib
+import urllib2
 
 from constants import MAIN_METASERVER_URL
 from lib.log import debug, info, warning, exception
@@ -136,7 +137,7 @@ class Server(asyncore.dispatcher):
             self.ip = options.ip
             return
         try:
-            self.ip = urllib.urlopen(WHATISMYIP_URL).read().strip()
+            self.ip = urllib2.urlopen(WHATISMYIP_URL, timeout=3).read().strip()
             if not re.match("^[0-9.]{7,40}$", self.ip):
                 self.ip = ""
         except:
