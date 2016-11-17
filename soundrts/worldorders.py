@@ -783,7 +783,7 @@ class UseOrder(ComplexOrder):
                 if not hasattr(self.target, "x"):
                     self.mark_as_impossible()
                     return
-        elif self.type.effect_target == ["worldrandom"]:
+        elif self.type.effect_target == ["random"]:
             self.target = worldrandom.choice(self.player.world.squares)
         elif self.type.effect_target == ["self"]:
             self.target = self.unit
