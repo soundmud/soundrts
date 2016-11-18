@@ -1,0 +1,86 @@
+def peasant
+shortcut o
+
+def footman
+shortcut s
+
+def archer
+shortcut a
+
+def knight
+shortcut  c
+
+def catapult
+shortcut c
+
+def dragon
+shortcut d
+
+def mage
+shortcut m
+
+def priest
+shortcut b
+
+def necromancer
+shortcut n
+
+def new_flyingmachine
+shortcut v
+
+def flyingmachine
+shortcut o
+
+def townhall
+shortcut p
+
+def keep
+shortcut f
+
+def castle
+shortcut c
+
+def wall
+shortcut r
+
+def gate
+shortcut s
+
+def farm
+shortcut f
+
+def barracks
+shortcut q
+
+def lumbermill
+shortcut m
+
+def blacksmith
+shortcut f
+
+def stables
+shortcut e
+
+def workshop
+shortcut o
+
+def dragonslair
+shortcut d
+
+def magestower
+shortcut m
+
+def temple
+shortcut t
+
+def necropolis
+shortcut c
+
+def scouttower
+shortcut n
+
+def a_deadly_fog
+shortcut m
+
+def a_raise_dead
+shortcut r

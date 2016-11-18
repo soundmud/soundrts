@@ -211,7 +211,7 @@ class Application(object):
             main_menu().loop() # update the menu title
             raise SystemExit
         def mods_menu():
-            mods_menu = Menu(["Mods"])
+            mods_menu = Menu([4341])
             mods_menu.append([0], (set_and_launch_mod, ""))
             for mod in res.available_mods():
                 mods_menu.append([mod], (set_and_launch_mod, mod))
@@ -225,7 +225,7 @@ class Application(object):
             main_menu().loop() # update the menu title
             raise SystemExit
         def soundpacks_menu():
-            soundpacks_menu = Menu(["Soundpacks"])
+            soundpacks_menu = Menu([4342])
             soundpacks_menu.append([0], (set_and_launch_soundpack, ""))
             for soundpack in res.available_soundpacks():
                 soundpacks_menu.append([soundpack], (set_and_launch_soundpack, soundpack))
@@ -234,8 +234,8 @@ class Application(object):
             return END_LOOP
         options_menu = Menu([4086], [
             ([4087], self.modify_login),
-            (("Mods", ), mods_menu),
-            (("Soundpacks", ), soundpacks_menu),
+            ((4341, ), mods_menu),
+            ((4342, ), soundpacks_menu),
             ([4336], open_user_folder),
             ([4118], END_LOOP),
             ])

@@ -151,6 +151,8 @@ class ConnectionToClient(asynchat.async_chat):
             if c.is_compatible(self):
                 c.send_e("new_player,%s" % self.login)
         self._send_server_status_msg()
+        for g in self.server.games:
+            g.notify_connection_of(self)
         self.server.log_status()
 
     def cmd_login(self, args):
@@ -172,7 +174,9 @@ class ConnectionToClient(asynchat.async_chat):
             scenario = scs[int(args[0])]
             self.push("map %s\n" % scenario.pack())
             speed = float(args[1])
-            self.server.games.append(Game(scenario, speed, self.server, self))
+            is_public = len(args) >= 3 and args[2] == "public"
+            self.server.games.append(Game(scenario, speed, self.server,
+                    self, is_public))
             self.server.update_menus()
         else:
             warning("game not created (max number reached)")

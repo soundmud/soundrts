@@ -8,7 +8,7 @@ import urllib2
 from constants import MAIN_METASERVER_URL
 from lib.log import debug, info, warning, exception
 from serverclient import ConnectionToClient
-from serverroom import InTheLobby, OrganizingAGame, Playing
+from serverroom import InTheLobby, OrganizingAGame, Playing, WaitingForTheGameToStart
 from lib.ticker import Ticker
 from version import VERSION
 
@@ -87,6 +87,10 @@ class Server(asyncore.dispatcher):
             self.update_menus()
         if isinstance(client.state, Playing):
             client.cmd_abort_game([])
+        elif isinstance(client.state, WaitingForTheGameToStart):
+            client.cmd_unregister([])
+        elif isinstance(client.state, OrganizingAGame):
+            client.cmd_cancel_game([])
         if self._is_admin(client) and not self.is_standalone:
             info("the admin has disconnected => close the server")
             sys.exit()

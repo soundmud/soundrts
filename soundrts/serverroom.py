@@ -92,15 +92,27 @@ class Game(object):
     started = False
     speed = 1
 
-    def __init__(self, scenario, speed, server, admin):
+    def __init__(self, scenario, speed, server, admin, is_public=False):
         self.id = server.get_next_id()
         self.scenario = scenario
         self.speed = speed
         self.server = server
         self.admin = admin
+        self.is_public = is_public
         self.players = []
         self.guests = []
         self.register(admin)
+        if self.is_public:
+            self._process_public_game()
+
+    def _process_public_game(self):
+        for player in self.server.available_players():
+            if player.is_compatible(self.admin):
+                self.invite(player)
+
+    def notify_connection_of(self, client):
+        if self.is_public and self.can_register() and client.is_compatible(self.admin):
+            self.invite(client)
 
     def _delay(self):
         max_delay = max([p.delay for p in self.human_players])
@@ -320,13 +332,14 @@ class Game(object):
 
     def unregister(self, client):
         self.players.remove(client)
-        client.push("quit\n")
+        if not client.is_disconnected:
+            client.push("quit\n")
         client.state = InTheLobby()
 
     def cancel(self):
-        for c in self.players:
+        for c in self.players[:]:
             self.unregister(c)
-        for c in self.guests:
+        for c in self.guests[:]:
             self.uninvite(c)
         self.server.games.remove(self)
 
