@@ -86,6 +86,8 @@ class ConnectionToServer(object):
             self.tn = telnetlib.Telnet(self.host, self.port)
         except socket.error:
             raise UnreachableServerError
+        # Activate TCP Keepalive to prevent connections from silently dropping
+        self.tn.get_socket().ioctl(socket.SIO_KEEPALIVE_VALS, (1, 60000, 2000))
         try:
             if self.tn.read_until(":", 3) != ":":
                 raise WrongServerError
