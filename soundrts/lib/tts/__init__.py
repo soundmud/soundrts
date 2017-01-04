@@ -85,17 +85,12 @@ def loop2():
 def init(srapi=1, srapi_wait=.1):
     global _tts, is_available, _lock, pyTTS
     if platform.system() == "Windows":
-        if srapi == 0:
-            try:
-                from . import windows_sapi5 as pyTTS
-            except:
-                print "Couldn't use SAPI."
-        else:
-            try:
-                from . import windows_srapi as pyTTS
-                pyTTS.srapi_wait = srapi_wait
-            except:
-                print "Couldn't use ScreenReaderAPI."
+        try:
+            from . import windows as pyTTS
+            pyTTS.srapi_wait = srapi_wait
+            pyTTS.srapi = srapi
+        except:
+            print "Couldn't use speech on Windows."
     elif platform.system() == "Linux":
         try:
             from . import linux as pyTTS
