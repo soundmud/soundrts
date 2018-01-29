@@ -12,9 +12,8 @@ _font = pygame.font.Font("freesansbold.ttf", 12)
 def draw_line(color, xy1, xy2):
     pygame.draw.line(_screen, color, xy1, xy2)
 
-def draw_rect(color, left, top, width, height, width2):
-    pygame.draw.rect(_screen, color, pygame.Rect(left, top, width, height),
-                     width2)
+def draw_rect(color, rect, width2=0):
+    pygame.draw.rect(_screen, color, pygame.Rect(*rect), width2)
 
 def _get_desktop_screen_mode():
     try:

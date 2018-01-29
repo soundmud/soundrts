@@ -1,4 +1,3 @@
-from lib.screen import draw_rect
 from lib.voice import voice
 from lib.log import warning
 from lib.nofloat import PRECISION
@@ -87,15 +86,6 @@ class Zoom(object):
 
     def contains(self, obj):
         return self.xmin <= obj.model.x < self.xmax and self.ymin <= obj.model.y < self.ymax
-    
-    def display(self, grid):
-        xmin, ymin = grid.xy_coords(self.xmin, self.ymin)
-        xmax, ymax = grid.xy_coords(self.xmax, self.ymax)
-        if self.parent.target is None:
-            color = (255, 255, 255)
-        else:
-            color = (150, 150, 150)
-        draw_rect(color, xmin, ymin, xmax - xmin, ymax - ymin, 1)
 
     def obs_pos(self):
         x = (self.xmin + self.xmax) / 2.0
