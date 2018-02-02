@@ -66,11 +66,11 @@ def _remember_path(menu_name):
 END_LOOP = 1
 
 
-def _first_letter(choice):
+def _get_text_for_choice(choice):
     if choice:
         for sound_number in choice[0]:
             try:
-                return sounds.translate_sound_number(sound_number)[0].lower()
+                return sounds.translate_sound_number(sound_number)
             except:
                 pass
 
@@ -94,6 +94,10 @@ class Menu(object):
                 self._remembered_choice = open(_remember_path(remember)).read()
             except:
                 self._remembered_choice = ""
+        self._clear_choice_characters()
+
+    def _clear_choice_characters(self):
+        self.choice_characters = ""
 
     def _say_choice(self):
         psounds.play_stereo(sounds.get_sound(6115))
@@ -102,7 +106,7 @@ class Menu(object):
     def _choice_exists(self):
         return self.choice_index is not None and 0 <= self.choice_index < len(self.choices)
 
-    def _select_next_choice(self, first_letter=None, inc=1):
+    def _select_next_choice(self, first_letters=None, inc=1):
         if self.choices:
             if self.choice_index is None:
                 self.choice_index = self.default_choice_index
@@ -111,19 +115,20 @@ class Menu(object):
             else:
                 self.choice_index += inc
                 self.choice_index %= len(self.choices)
-            if first_letter:
+            if first_letters:
                 found = False
                 for _ in range(len(self.choices)):
                     choice = self.choices[self.choice_index]
-                    if _first_letter(choice) == first_letter.lower():
+                    if _get_text_for_choice(choice).startswith(first_letters.lower()):
                         found = True
                         break
                     self.choice_index += inc
                     self.choice_index %= len(self.choices)
                 if not found:
+                    self._clear_choice_characters()
                     self.choice_index -= inc
                     self.choice_index %= len(self.choices)
-                    return 
+                    return
             self._say_choice()
 
     def _confirm_choice(self):
@@ -139,8 +144,10 @@ class Menu(object):
             self.choice_index = len(self.choices) - 1
             return self._confirm_choice()
         elif e.key == K_TAB and e.mod & KMOD_SHIFT or e.key == K_UP:
+            self._clear_choice_characters()
             self._select_next_choice(inc=-1)
         elif e.key in [K_TAB, K_DOWN]:
+            self._clear_choice_characters()
             self._select_next_choice()
         elif e.key in (K_RETURN, K_KP_ENTER, K_RIGHT):
             return self._confirm_choice()
@@ -167,10 +174,15 @@ class Menu(object):
                 msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
                 if msg:
                     self.server.write_line("say %s" % msg)
+        elif e.key == K_BACKSPACE:
+            self.choice_characters = self.choice_characters[:-1]
+            self._select_next_choice(self.choice_characters)
         elif e.unicode and e.mod & KMOD_SHIFT:
-            self._select_next_choice(e.unicode, -1)
+            self.choice_characters = e.unicode.lower()
+            self._select_next_choice(self.choice_characters, -1)
         elif e.unicode:
-            self._select_next_choice(e.unicode)
+            self.choice_characters += e.unicode
+            self._select_next_choice(self.choice_characters)
         elif e.key not in [K_LSHIFT,K_RSHIFT]:
             voice.item([4052])
 
