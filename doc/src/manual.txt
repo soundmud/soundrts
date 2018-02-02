@@ -77,6 +77,8 @@ Moving on the map
 
 The arrow keys make you move from a square to another square in the map. If a direct path exists between the current square and the new square, you will hear a noise depending on the type of the path (path or bridge). If no direct path exists, you will hear a collision noise and you will stay at the same square (press control + arrow keys to fly above an obstacle). If you don't know yet if a path exists (unknown square) then no noise will be heard.
 
+Press shift + arrow keys to move several squares at a time.
+
 Another way to move on the map is to press Page Up, which will lead you to the next interesting square without passing by empty squares. Since SoundRTS 1.1 alpha 3, some variants are available:
 
 - press Alt + PageUp/PageDown to select the previous/next unknown square

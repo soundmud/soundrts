@@ -1404,18 +1404,18 @@ class GameInterface(object):
         self.say_square(square, prefix)
         self.follow_mode = False
 
-    def _compute_move(self, dxc, dyc):
+    def _compute_move(self, dxc, dyc, cycle):
         xc, yc = self.coords_in_map(self.place)
         xc += dxc
         if xc < 0:
-            xc = self.xcmax
+            xc = self.xcmax if cycle else 0
         if xc > self.xcmax:
-            xc = 0
+            xc = 0 if cycle else self.xcmax
         yc += dyc
         if yc < 0:
-            yc = self.ycmax
+            yc = self.ycmax if cycle else 0
         if yc > self.ycmax:
-            yc = 0
+            yc = 0 if cycle else self.ycmax
         return self.server.player.world.grid[(xc, yc)]
 
     def _get_prefix_and_collision(self, new_square, dxc, dyc):
@@ -1444,7 +1444,8 @@ class GameInterface(object):
     def cmd_select_square(self, dxc, dyc, *args):
         dxc = int(dxc)
         dyc = int(dyc)
-        fly = "no_collision" in args
+        no_collision = "no_collision" in args
+        cycle = "cycle" in args
         if self.immersion:
             if (dxc, dyc) == (-1, 0):
                 self.cmd_rotate_left()
@@ -1455,12 +1456,15 @@ class GameInterface(object):
             self.zoom.select()
             self.zoom.say()
         elif self.place is not None:
-            new_square = self._compute_move(dxc, dyc)
-            prefix, collision = self._get_prefix_and_collision(new_square, dxc,
-                                                               dyc)
-            if fly or not collision:
+            new_square = self._compute_move(dxc, dyc, cycle)
+            if no_collision:
                 self.move_to_square(new_square)
-            self._select_and_say_square(self.place, prefix)
+                self._select_and_say_square(self.place)
+            else:
+                prefix, collision = self._get_prefix_and_collision(new_square, dxc, dyc)
+                if not collision:
+                    self.move_to_square(new_square)
+                self._select_and_say_square(self.place, prefix)
 
     def _select_square_from_list(self, increment, squares):
         if squares:
