@@ -2,6 +2,7 @@ import os.path
 import random
 import time
 
+import config
 import options
 from constants import NEWLINE_REPLACEMENT, SPACE_REPLACEMENT, VIRTUAL_TIME_INTERVAL
 from definitions import Style
@@ -348,7 +349,7 @@ class Game(object):
     def check_timeout(self):
         if self._timeout_reference is None:
             self._timeout_reference = time.time()
-        elif time.time() > self._timeout_reference + 20.0:
+        elif time.time() > self._timeout_reference + config.timeout:
             for player, queue in self.all_orders.items():
                 if not queue:
                     player.handle_close() # disconnect player

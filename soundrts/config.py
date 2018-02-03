@@ -16,6 +16,7 @@ srapi = 1
 srapi_wait = .1
 mods = ""
 soundpacks = ""
+timeout = 20.0
 
 
 def save():
@@ -26,6 +27,8 @@ def save():
     c.set("general", "soundpacks", soundpacks)
     c.set("general", "num_channels", repr(num_channels))
     c.set("general", "speed", repr(speed))
+    c.add_section("server")
+    c.set("server", "timeout", repr(timeout))
     c.add_section("tts")
     if platform.system() == "Windows":
         c.set("tts", "srapi", repr(srapi))
@@ -35,6 +38,7 @@ def save():
 
 def load():
     global login, num_channels, speed, mods, soundpacks
+    global timeout
     global srapi, srapi_wait
     error = False
     new_file = False
@@ -67,6 +71,10 @@ def load():
         error = True
     try:
         soundpacks = c.get("general", "soundpacks")
+    except:
+        error = True
+    try:
+        timeout = c.getfloat("server", "timeout")
     except:
         error = True
     if platform.system() == "Windows":
