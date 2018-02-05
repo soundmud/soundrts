@@ -1,4 +1,4 @@
-try: 
+try:
     from hashlib import md5
 except ImportError:
     from md5 import md5
@@ -149,7 +149,6 @@ class Coordinator(_Client): # client coordinator for multiplayer games
         self.orders = ""
         self.orders_digest = md5()
         self._all_orders = ""
-        self._previous_update = time.time()
         self.game_session = game_session
 
     def get_client_by_login(self, login):
@@ -202,7 +201,6 @@ class Coordinator(_Client): # client coordinator for multiplayer games
             debug("main server data for %s: %s", self.login, s)
             args = s.split()
             if args[0] == "all_orders":
-                self._previous_update = time.time()
                 self.orders_digest.update(s) # used by the synchronization debugger
                 players_orders = args[1:]
                 for player_orders in players_orders:
@@ -224,7 +222,3 @@ class Coordinator(_Client): # client coordinator for multiplayer games
                     exception("error sending sync debug data")
             else:
                 warning("ignored data from server: %s", s)
-        # check for timeout and alert server
-        if time.time() > self._previous_update + 5.0:
-            self.main_server.write_line("timeout")
-            self._previous_update += 5.0

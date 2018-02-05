@@ -254,9 +254,6 @@ class ConnectionToClient(asynchat.async_chat):
         self.game.abort_game(self)
         self.server.update_menus()
 
-    def cmd_timeout(self, unused_args):
-        self.game.check_timeout()
-
     # wrapper
 
     def send_menu(self):
