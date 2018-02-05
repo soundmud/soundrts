@@ -7,12 +7,12 @@ import time
 import pygame
 from pygame.locals import KEYDOWN, QUIT, USEREVENT, K_TAB, KMOD_ALT, MOUSEBUTTONDOWN, KMOD_SHIFT, KMOD_CTRL, MOUSEBUTTONUP, MOUSEMOTION
 
-from clientgamegridview import GridView 
+from clientgamegridview import GridView
 from clientgamefocus import Zoom
 from clienthelp import help_msg
 from clientmedia import voice, sounds, sound_stop, modify_volume, get_fullscreen, toggle_fullscreen, play_sequence
 from lib.mouse import set_cursor
-from clientmenu import Menu, input_string
+from clientmenu import Menu, string_to_msg
 from clientgameentity import EntityView
 from clientgamenews import must_be_said
 from clientgameorder import order_title, order_shortcut, order_args, order_comment, order_index
@@ -82,6 +82,7 @@ class GameInterface(object):
         server.interface = self
         self.grid_view = GridView(self)
         self.set_self_as_listener()
+        self._reset_typing()
         voice.silent_flush()
         self._srv_queue = Queue.Queue()
         self.scouted_squares = ()
@@ -130,9 +131,19 @@ class GameInterface(object):
         except:
             exception("problem during srv_event")
 
+    def _type(self, kind, msg=[], pattern="^[a-zA-Z0-9]$", spell=True):
+        voice.item(msg)
+        self.typing_mode = True
+        self.typing_buffer = ""
+        self.typing_kind = kind
+        self.typing_pattern = pattern
+        self.typing_spell = spell
 
     def cmd_say(self):
-        msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
+        self._type("chat", msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
+
+    def _finished_typing_chat(self, msg):
+        self._reset_typing()
         if not msg:
             return
         voice.confirmation([self.player.client.login, 4287, msg])
@@ -289,38 +300,41 @@ class GameInterface(object):
 
     def cmd_console(self):
         if self.server.allow_cheatmode:
-            cmd = input_string(msg=[4317], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
-            if cmd is None:
-                return
-            if cmd.startswith("s "):
-                self.speed = float(cmd.split(" ")[1])
-                self.next_update = time.time()
-            elif cmd == "p":
-                if self.speed >= 1:
-                    self.speed /= 10000.0
-                else:
-                    self.speed *= 10000.0
-                    self.next_update = time.time()
-            elif cmd == "m":
-                for u in self.player.units:
-                    u.mana_regen *= 1000
-            elif cmd == "h":
-                voice.item(["p: pause/unpause, s: set speed, r: get 1000 resources, t: get all techs, m: infinite mana, a: add units, v: instant victory"])
-            elif cmd == "r":
-                self.player.resources = [n + 1000 * PRECISION for n in self.player.resources]
-            elif cmd == "t":
-                self.player.has = lambda x: True
-            elif cmd:
-                # This direct way of executing the command might be a bit buggy,
-                # but at the moment this feature is just for cheating or testing anyway.
-                cmd = re.sub("^a ", "add_units %s " % getattr(self.place, "name", ""), cmd)
-                cmd = re.sub("^v$", "victory", cmd)
-                try:
-                    self.player.my_eval(cmd.split())
-                except:
-                    voice.item([1029]) # hostile sound
+            self._type("cmd", msg=[4317], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
         else:
             voice.item([1029]) # hostile sound
+
+    def _finished_typing_cmd(self, cmd):
+        self._reset_typing()
+        if cmd is None:
+            return
+        if cmd.startswith("s "):
+            self.speed = float(cmd.split(" ")[1])
+            self.next_update = time.time()
+        elif cmd == "p":
+            if self.speed >= 1:
+                self.speed /= 10000.0
+            else:
+                self.speed *= 10000.0
+                self.next_update = time.time()
+        elif cmd == "m":
+            for u in self.player.units:
+                u.mana_regen *= 1000
+        elif cmd == "h":
+            voice.item(["p: pause/unpause, s: set speed, r: get 1000 resources, t: get all techs, m: infinite mana, a: add units, v: instant victory"])
+        elif cmd == "r":
+            self.player.resources = [n + 1000 * PRECISION for n in self.player.resources]
+        elif cmd == "t":
+            self.player.has = lambda x: True
+        elif cmd:
+            # This direct way of executing the command might be a bit buggy,
+            # but at the moment this feature is just for cheating or testing anyway.
+            cmd = re.sub("^a ", "add_units %s " % getattr(self.place, "name", ""), cmd)
+            cmd = re.sub("^v$", "victory", cmd)
+            try:
+                self.player.my_eval(cmd.split())
+            except:
+                voice.item([1029]) # hostile sound
 
     def cmd_change_player(self):
         if self.server.allow_cheatmode:
@@ -524,6 +538,9 @@ class GameInterface(object):
                     if self.shortcut_mode:
                         self._execute_order_shortcut(e)
                         continue
+                    elif self.typing_mode:
+                        self._execute_typing(e)
+                        continue
                     for binding in self.bindings:
                         if self._launch_binding_if_event(e, *binding):
                             break
@@ -687,6 +704,38 @@ class GameInterface(object):
                 if order_args(o, first_unit) == 0:
                     self.cmd_validate()
         self.shortcut_mode = False
+
+    def _execute_typing(self, event):
+        if event.key in [pygame.K_LSHIFT, pygame.K_RSHIFT]:
+            return
+        if event.key in (pygame.K_RETURN, pygame.K_KP_ENTER):
+            voice.item([self.typing_buffer])
+            return getattr(self, "_finished_typing_%s" %
+                self.typing_kind)(self.typing_buffer)
+        elif event.key == pygame.K_ESCAPE:
+            self._reset_typing()
+        elif event.key == pygame.K_BACKSPACE:
+            self.typing_buffer = self.typing_buffer[:-1]
+            voice.item(string_to_msg(self.typing_buffer, self.typing_spell))
+        elif re.match(self.typing_pattern, event.unicode) != None:
+            try:
+                c = event.unicode.encode("ascii") # telnetlib doesn't like unicode
+                self.typing_buffer += c
+                voice.item(string_to_msg(c) + [9999] +
+                string_to_msg(self.typing_buffer, self.typing_spell))
+            except:
+                warning("error reading character from keyboard")
+                voice.item([1003, 9999] + string_to_msg(s, spell))
+        else:
+            voice.item([1003, 9999] + string_to_msg(self.typing_buffer,
+                self.typing_spell))
+
+    def _reset_typing(self):
+        self.typing_mode = False
+        self.typing_buffer = ""
+        self.typing_kind = ""
+        self.typing_pattern = ""
+        self.typing_spell = False
 
     def _launch_binding_if_event(self, e, mods, key, cmd, args=()):
         if e.key == key:

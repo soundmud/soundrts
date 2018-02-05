@@ -2,6 +2,7 @@ import os.path
 import random
 import time
 
+import config
 import options
 from constants import NEWLINE_REPLACEMENT, SPACE_REPLACEMENT, VIRTUAL_TIME_INTERVAL
 from definitions import Style
@@ -61,7 +62,7 @@ class WaitingForTheGameToStart(_State):
 
 class Playing(_State):
 
-    allowed_commands = ("orders", "quit_game", "abort_game", "timeout", "debug_info",
+    allowed_commands = ("orders", "quit_game", "abort_game", "debug_info",
                         "say")
 
 
@@ -269,10 +270,8 @@ class Game(object):
                 else:
                     debug("don't send all_orders to %s", p.login)
             if log_this and options.record_games:
-                self.f.write("%s: all_orders %s\n" % (self.time, all_orders.replace(NEWLINE_REPLACEMENT, ";").replace(SPACE_REPLACEMENT, ",").replace("update;", 
-"")))
+                self.f.write("%s: all_orders %s\n" % (self.time, all_orders.replace(NEWLINE_REPLACEMENT, ";").replace(SPACE_REPLACEMENT, ",").replace("update;", "")))
             self.time += 1
-            self._timeout_reference = None
 
     def invite(self, client):
         self.guests.append(client)
@@ -342,14 +341,3 @@ class Game(object):
         for c in self.guests[:]:
             self.uninvite(c)
         self.server.games.remove(self)
-
-    _timeout_reference = None
-
-    def check_timeout(self):
-        if self._timeout_reference is None:
-            self._timeout_reference = time.time()
-        elif time.time() > self._timeout_reference + 20.0:
-            for player, queue in self.all_orders.items():
-                if not queue:
-                    player.handle_close() # disconnect player
-                    break # don't continue! (might disconnect more players)
