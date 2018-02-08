@@ -87,12 +87,6 @@ class ConnectionToServer(object):
         except socket.error:
             raise UnreachableServerError
         try:
-            # Activate TCP Keepalive to prevent connections from silently dropping
-            self.tn.get_socket().ioctl(socket.SIO_KEEPALIVE_VALS, (1, 60000, 2000))
-        except:
-            # platform different than Windows
-            pass
-        try:
             if self.tn.read_until(":", 3) != ":":
                 raise WrongServerError
             self.tn.write("login " + compatibility_version() + " %s\n" % config.login)
