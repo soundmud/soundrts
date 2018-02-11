@@ -43,16 +43,16 @@ class Zoom(object):
         self.parent.follow_mode = False # or set_obs_pos() will cause trouble
         self.sub_x += dx
         self.sub_y += dy
-        if self.sub_x == 2:
+        if self.sub_x >= 2:
             self.sub_x = -1
             self.parent.place = self.parent._compute_move(1, 0)
-        elif self.sub_x == -2:
+        elif self.sub_x <= -2:
             self.sub_x = 1
             self.parent.place = self.parent._compute_move(-1, 0)
-        elif self.sub_y == 2:
+        elif self.sub_y >= 2:
             self.sub_y = -1
             self.parent.place = self.parent._compute_move(0, 1)
-        elif self.sub_y == -2:
+        elif self.sub_y <= -2:
             self.sub_y = 1
             self.parent.place = self.parent._compute_move(0, -1)
         self.update_coords()

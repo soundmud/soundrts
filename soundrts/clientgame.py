@@ -1404,7 +1404,7 @@ class GameInterface(object):
         self.say_square(square, prefix)
         self.follow_mode = False
 
-    def _compute_move(self, dxc, dyc, cycle):
+    def _compute_move(self, dxc, dyc, cycle=True):
         xc, yc = self.coords_in_map(self.place)
         xc += dxc
         if xc < 0:
