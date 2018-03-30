@@ -1,47 +1,70 @@
 import re
 
 from definitions import get_ai, rules
-from lib.log import debug, info, warning, exception
-from version import VERSION
+from lib.log import info, warning, exception
+from version import IS_DEV_VERSION
 from worldplayerbase import Player
 import worldrandom
 from worldresource import Meadow, Deposit, Corpse
 from worldunit import Worker, BuildingSite, Soldier
+from soundrts.lib.nofloat import PRECISION
+from soundrts.worldorders import UseOrder
+
+
+_timers = {}
+
+def execute_this_method_once_every_n_calls(total_nb):
+    def decorator(f):
+        def decorated_f(*args):
+            try:
+                _timers[(f, args[0])]
+            except:
+                _timers[(f, args[0])] = 0
+            if _timers[(f, args[0])] <= 0:
+#                print "do", (f, args[0])
+                f(*args)
+                _timers[(f, args[0])] = total_nb - 1
+            else:
+#                print "don't do", (f, args[0])
+                _timers[(f, args[0])] -= 1
+        return decorated_f
+    return decorator
 
 
 class Computer(Player):
 
     name = "ai"
     AI_type = None
-    mode = 0
-    AI_timer = 0
-    never_played = True
-    client = None
-    my_base = None
-    send_timer = 0
+    # the AI might need a longer memory than the player
+    memory_duration = 36000000 # 36000 seconds of world time
 
-    def __init__(self, world, client, neutral):
-        self.attack_squares = []
-        self.previous_choose = {}
-        self.already_researched = []
+    def __init__(self, world, client, neutral=False):
+        self._attacked_places = []
+        self._orders = {}
+        self._previous_choose = {}
         self.neutral = neutral
         if neutral:
             self.name = "npc_ai"
         Player.__init__(self, world, client)
         self.set_ai(client.AI_type)
 
+    def __repr__(self):
+        return "<Computer>"
+
+    @property
+    def smart_units(self):
+        return self.AI_type != "timers"
+
     def set_ai(self, ai):
         self.AI_type = ai
+        if self.AI_type == "timers": return
         self._plan = get_ai(ai)
         # set or reset default values
         self._line_nb = 0
-        self.retaliate = 1
         self.watchdog = 0
         self.constant_attacks = 0
         self.research = 0
-        self.teleportation = 0
-        self.send_soldiers_to_base = 0
-        self.raise_dead = 0
+        self._update_effect_users_and_workers() # required by some tests
 
     _previous_linechange = 0
     __line_nb = 0
@@ -56,7 +79,7 @@ class Computer(Player):
 
     _line_nb = property(get_line_nb, set_line_nb)
 
-    def _play(self):
+    def _follow_plan(self):
         if not self._plan: return
         if self.watchdog and self.world.time > \
            self._previous_linechange + self.watchdog * 1000:
@@ -86,10 +109,10 @@ class Computer(Player):
                     warning("goto_random: label not found: %s", dest)
                     self._line_nb += 1
             elif cmd[0] == "attack":
-                self.attack()
+                self.constant_attacks = 1
                 self._line_nb += 1
-            elif cmd[0] in ("retaliate", "watchdog", "constant_attacks",
-                            "research", "teleportation", "send_soldiers_to_base", "raise_dead"):
+            elif cmd[0] in ("watchdog", "constant_attacks",
+                            "research"):
                 setattr(self, cmd[0], int(cmd[1]))
                 self._line_nb += 1
             elif cmd[0] == "get":
@@ -112,119 +135,149 @@ class Computer(Player):
                 warning("unknown command: '%s' (in ai.txt)", cmd[0])
                 self._line_nb += 1
 
-    def build_a_warehouse_if_useful(self):
-        # TODO?: a worker (or nearest_warehouse()) suggests the
-        # building of a new warehouse as soon as he notices the need
-        # (or nearest_warehouse() distance is too big); then the computer
-        # player reads the suggestions.
-        # (avoids the self.units for loop)
-        # (but the current method is not so heavy after all because of the
-        # "done" list; and the suggestion list would have to be pruned if
-        # a deposit is not being exploited anymore)
-        if self.missing_resources(self.unit_class(self.equivalent("townhall")).cost):
+    def _best_warehouse(self, place=None):
+        return self.world.unit_class(self.equivalent("townhall"))
+
+    def _build_a_warehouse_for(self, deposit):
+        def nearby_workers():
+            return [v for v in self._workers if
+                    (v.place is deposit.place
+                     or v.orders and v.orders[0].keyword == "gather"
+                        and (v.orders[0].target is None
+                             or v.orders[0].target.place is deposit.place))]
+        nearby_workers = nearby_workers()
+        if not nearby_workers:
             return
-        done = []
-        for u in self.units:
-            if u.orders and u.orders[0].keyword == "gather":
-                deposit = u.orders[0].target
-                if deposit in done:
-                    continue
-                else:
-                    done.append(deposit)
-                if deposit is not None and deposit.place is not None: # XXX a townhall even for wood?
-                    wh = self.nearest_warehouse(deposit.place,
-                                                deposit.resource_type)
-                    if wh is None or \
-                       deposit.place.shortest_path_distance_to(wh.place, self) > self.world.square_width:
-                        meadow = self.choose(Meadow, starting_place=deposit.place)
-                        if meadow:
-                            for v in self.units:
-                                if v.orders and v.orders[0].keyword == "gather" \
-                                   and (v.orders[0].target == deposit
-                                        or v.place is deposit.place) or (
-                                            isinstance(v, Worker)
-                                            and not v.orders):
-                                    v.take_order(["build", self.equivalent("townhall"), meadow.id])
-                                    v.take_order(["gather", deposit.id], forget_previous=False)
-                                    self.my_base = deposit.place
-                            return True
+        wh = self.nearest_warehouse(deposit.place, deposit.resource_type, include_building_sites=True)
+        if isinstance(wh, BuildingSite):
+            for v in nearby_workers:
+                v.take_order(["repair", wh.id])
+        elif (wh is None
+            or deposit.place.shortest_path_distance_to(wh.place, self, avoid=True)
+               > self.world.square_width):
+            meadow = self.choose(Meadow, starting_place=deposit.place)
+            if meadow:
+                for v in nearby_workers:
+                    v.take_order(["build", self._best_warehouse(deposit.place).type_name, meadow.id])
 
-    @property
-    def is_building_or_repairing(self):
-        for u in self.units:
-            if u.orders and u.orders[0].keyword in ["build", "repair",
-                                                    "build_phase_two"]:
-                return True
-
-    idle_buildings_research_timer = 0
+    def _build_a_warehouse_if_useful(self):
+        if self.missing_resources(self._best_warehouse().cost):
+            return
+        for deposit in [o.target for u in self._workers for o in u.orders
+                    if o.keyword == "gather" and o.target is not None and o.target.place is not None]:
+            self._build_a_warehouse_for(deposit)
 
     def idle_buildings_research(self):
-        if self.idle_buildings_research_timer > 0:
-            self.idle_buildings_research_timer -= 1
-            return
-        else:
-            self.idle_buildings_research_timer = 10
         for u in self.units:
             if not u.orders:
                 for t in u.can_research:
-                    if t not in self.already_researched \
+                    if not self.future_nb([t]) \
                        and not self.missing_resources(self.unit_class(t).cost) \
                        and self.potential(self.unit_class(t).cost) > 3:
                         u.take_order(["research", t])
-                        self.already_researched.append(t)
 
+    def _is_powerful_enough(self, units, place):
+        # sometimes food limit prevents units with more than 1 food cost
+        ratio = 180 if self.used_food < self.world.food_limit - 5 else 100
+        return sum(u.menace for u in units if u.speed > 0 and isinstance(u, Soldier)) > self.enemy_menace(place) * ratio / 100
+
+    def _send_workers_to_forgotten_building_sites(self):
+        for site in self._building_sites:
+            if not [u for u in self._workers if u.orders and u.orders[0].target == site]:
+                self.order(4, Worker, ["repair", site.id], requisition=True, near=site)
+                break
+
+    def _idle_workers_gather(self):
+        idle = [u for u in self._workers if not u.orders]
+        if idle:
+            for u in idle:
+                deposit = self.choose(Deposit, starting_place=u.place, random=True)
+                if not deposit:
+                    return
+                u.take_order(["gather", deposit.id])
+                try:
+                    self._gathered_deposits[deposit] += 1
+                except:
+                    self._gathered_deposits[deposit] = 1
+
+    @execute_this_method_once_every_n_calls(10)
     def play(self):
-        if self.never_played:
-            self.attack_squares = [self.world.grid[name] for name in self.world.starting_squares]
-            if self.units[0].place in self.attack_squares: # may not happen if additional units in other squares
-                self.attack_squares.remove(self.units[0].place)
-                self.my_base = self.units[0].place
-            worldrandom.shuffle(self.attack_squares)
-            self.never_played = False
-        self.idle_peasants_gather()
-        if self.constant_attacks:
-            self.try_constant_attacks()
+        if self.AI_type == "timers": return
+        self._update_effect_users_and_workers()
+        self._update_time_has_come()
+        self._send_workers_to_forgotten_building_sites()
+        self._idle_workers_gather()
+        self._send_explorer()
+        if self._attacked_places:
+            self._eventually_attack(self._attacked_places)
+            self._attacked_places = []
+        elif self.constant_attacks:
+            self._eventually_attack(self._enemy_presence)
         if self.research:
             self.idle_buildings_research()
-        if self.raise_dead:
-            self.raise_dead_units()
-        if self.send_soldiers_to_base and self.my_base is not None:
-            if self.send_timer == 0:
-                self.send_soldiers_to_my_base()
-                self.send_timer = 40
-            else:
-                self.send_timer -= 1
-        if self.AI_timer == 0:
-            if not self.is_building_or_repairing: # XXX: not perfect (one building at a time; problems if peasants destroyed) but the AI must not be too good
-                try:
-                    if not self.build_a_warehouse_if_useful():
-                        self._play()
-                except RuntimeError: # XXX: maximum recursion (for example if no TownHall and no Peasant)
-                    warning("recursion error with %s; current ai.txt line is: %s",
-                            self.AI_type, self._plan[self._line_nb])
-                    if VERSION[-4:] == "-dev":
-                        exception("")
-                    self._line_nb += 1 # go to next step; useful?
-                    self.AI_timer = 100 # probably not, so make a big pause
-#            else:
-#                self.send_some_peasants_to_building_site() # Don't know if it will be needed,
-# But sometimes AI forget the building being constructed
-        else:
-            self.AI_timer -= 1
+        self._raise_dead()
+        self._build_a_warehouse_if_useful()
+        self.get(10, self.equivalent("peasant"))
+        try:
+            self._follow_plan()
+        except RuntimeError:
+            warning("recursion error with %s; current ai.txt line is: %s",
+                    self.AI_type, self._plan[self._line_nb])
+            if IS_DEV_VERSION:
+                exception("")
+            self._line_nb += 1 # go to next step
 
-    def raise_dead_units(self, forget=False, place=None):
+    def _deposit_priority(self, deposit):
+        if deposit is None:
+            return (-100, 0, 0)
+        try:
+            workers = self._gathered_deposits[deposit]
+        except:
+            workers = 0
+        return (-workers, -self.resources[deposit.resource_type], deposit.id) # deterministic (avoid sync errors)
+
+    def _update_effect_users_and_workers(self):
+        self._workers = []
+        self._gathered_deposits = {}
+        self._building_sites = []
+        self._raise_dead_users = []
+        self._teleportation_users = []
+        self._cataclysm_users = []
+        self._detector_users = []
+        self._summon_users = []
         for u in self.units:
-            if place == None:
-                place = u.place
-            if self.raise_dead and "a_raise_dead" in u.can_use:
-                if self.found_corpse(place) and u.place == place:
-                    u.take_order(["use", "a_raise_dead", u.place], forget_previous = forget)
+            if isinstance(u, Worker):
+                self._workers.append(u)
+                if u.orders and u.orders[0].keyword == "gather":
+                    try:
+                        self._gathered_deposits[u.orders[0].target] += 1
+                    except:
+                        self._gathered_deposits[u.orders[0].target] = 1
+            elif isinstance(u, BuildingSite):
+                self._building_sites.append(u)
+            for a in u.can_use:
+                if not UseOrder.is_allowed(u, a):
+                    continue
+                e = rules.get(a, "effect")
+                if not e:
+                    continue
+                elif e[0] == "raise_dead":
+                    self._raise_dead_users.append((u, a))
+                elif e[0] == "teleportation":
+                    self._teleportation_users.append((u, a))
+                elif e[0] == "summon":
+                    for item in e[1:]:
+                        if rules.get(item, "harm_level"):
+                            self._cataclysm_users.append((u, a))
+                        if rules.get(item, "is_a_detector"):
+                            self._detector_users.append((u, a))
+                        if rules.get(item, "damage"):
+                            self._summon_users.append((u, a))
 
-    def found_corpse(self, sq):
-        for o in sq.objects:
-            if isinstance(o, Corpse):
-                return True
-        return False
+    def _raise_dead(self):
+        for u, a in self._raise_dead_users:
+            if u.place in self._places_with_corpses:
+                u.take_order(["use", a, u.place.id]) # optional target will be eventually ignored
 
     def missing_resources(self, cost):
         result= []
@@ -236,46 +289,24 @@ class Computer(Player):
     def unit_class(self, name):
         return self.world.unit_class(name)
 
-    retry_timer_for_idle_peasant = 0
-
-    def idle_peasants_gather(self):
-        if self.retry_timer_for_idle_peasant > 0:
-            self.retry_timer_for_idle_peasant -= 1
-            return
-        idle_peasants = [u for u in self.units if
-                         isinstance(u, Worker) and not u.orders]
-        if not idle_peasants:
-            self.retry_timer_for_idle_peasant = 10
-            return
-        for u in idle_peasants:
-            deposit = self.choose(Deposit, starting_place=u.place, random=True)
-            if not deposit:
-                self.retry_timer_for_idle_peasant = 10
-                return
-            u.take_order(["gather", deposit.id])
-
-    def explore(self):
-        for u in self.units:
-            if u.orders and u.orders[0].keyword == "auto_explore":
-                return
-        maxspeed = 0
-        type_name = Worker
-        for u in self.units:
-            if u.airground_type == "air" and u.speed > 0:
-                maxspeed = u.speed
-                type_name = u.type_name
-                break
-            if not isinstance(u, Worker) and u.speed > maxspeed:
-                maxspeed = u.speed
-                type_name = u.type_name
-        self.order(1, type_name, ["auto_explore"], True)
-
-    def no_enemy_in(self, place):
-        for l in (self.perception, self.memory):
-            for o in l:
-                if o.place is place and self.is_an_enemy(o):
-                    return False
-        return True
+    def _send_explorer(self):
+        def value_as_an_explorer(u):
+            air = 1 if u.airground_type == "air" else 0
+            return ((air, u.speed, u.hp), u.id)
+        candidates = sorted([u for u in self.units if u.speed > 0], key=value_as_an_explorer)
+        if candidates:
+            best_explorer = candidates[-1]
+            if not (best_explorer.orders and best_explorer.orders[0].keyword == "auto_explore"):
+                explorer = None
+                for u in self.units:
+                    if u.orders and u.orders[0].keyword == "auto_explore":
+                        explorer = u
+                        break 
+                if explorer:
+                    if value_as_an_explorer(explorer)[0] == value_as_an_explorer(best_explorer)[0]:
+                        return
+                    explorer.take_order(["go", self.units[0].place.id])
+                best_explorer.take_order(["auto_explore"])
 
     def _remove_far_candidates(self, candidates, start, limit):
         ids = dict([(o.id, o) for o in candidates])
@@ -298,90 +329,113 @@ class Computer(Player):
             done.append(room)
         return c
 
-    def choose(self, c, resource_type=None, nearest_for_builders=False,
-               starting_place=None, random=False): # choose nearest object
-        if not self.units:
-            return
-        k = "%s %s %s" % (c, resource_type, starting_place)
-        if k in self.previous_choose and not nearest_for_builders and not random:
-            candidate = self.previous_choose[k]
-            if (candidate in self.perception or candidate in self.memory) \
-               and candidate.place is not None \
-               and (resource_type is None or
-                    self.is_ok_for_warehouse(candidate.place, resource_type)
-              and self.warehouse_not_already_there(candidate.place, resource_type)
-                    and self.no_enemy_in(candidate.place)):
-#                warning("useful cache %s %s", c, resource_type)
-                return candidate
-            else:
-                del self.previous_choose[k]
-        if starting_place is None:
-            if nearest_for_builders:
-                starts = {}
-                for u in self.units:
-                    if isinstance(u, Worker):
-                        if u.place not in starts: starts[u.place] = 1
-                        else: starts[u.place] += 1
-                if starts:
-                    starting_place = sorted(starts.items(), key=lambda x: x[1])[-1][0]
-                else:
-                    starting_place = self.units[0].place
-            else:
-                starting_place = self.units[0].place
-        candidates = [o for o in self.perception.union(self.memory) if self.check_type(o, c) and
-                      o.place is not None and
-                      (resource_type is None or
-                       self.is_ok_for_warehouse(o.place, resource_type)
-                       and self.warehouse_not_already_there(o.place, resource_type))]
-        candidates = sorted(candidates, key=lambda x: x.id) # avoid synchronization errors
-        if len(candidates) > 10:
-            candidates = self._remove_far_candidates(candidates, starting_place, 1)
-        else:
-            candidates.sort(key=lambda x: starting_place.shortest_path_distance_to(x.place, self))
-            while candidates and starting_place.shortest_path_distance_to(candidates[0].place, self) is None: # None < 0
-                del candidates[0] # no path
-        if random:
-            candidates = [o for o in candidates if self.no_enemy_in(o.place)]
-            if candidates:
-                p = candidates[0].place
-                candidates = [o for o in candidates if o.place == p]
-                worldrandom.shuffle(candidates)
-        for o in candidates:
-            if self.no_enemy_in(o.place):
-                if not nearest_for_builders and not random:
-                    self.previous_choose[k] = o
-                return o
-        self.explore()
-        self.AI_timer = 10 # don't insist for a while
-
     def is_ok_for_warehouse(self, z, resource_type):
         # a resource must be there
         for o in z.objects:
             if isinstance(o, Deposit) and o.resource_type == resource_type:
+                # a warehouse (allied or not) must not be already there
+                for o2 in z.objects: # XXX cheating? => no owned warehouse and no remembered enemy?
+                    if resource_type in getattr(o2, "storable_resource_types", ()):
+                        return False
                 return True
-        return False
 
-    def warehouse_not_already_there(self, z, resource_type):
-        # a warehouse (allied or not) must not be already there
-        for o in z.objects: # XXX cheating? => no owned warehouse and no remembered enemy?
-            if resource_type in getattr(o, "storable_resource_types", ()):
-                return False
-        return True
+    def choose(self, c, resource_type=None, starting_place=None, random=False):
+        if not self.units:
+            return
+        def is_ok(o):
+            return o.place is not None \
+               and (resource_type is None or self.is_ok_for_warehouse(o.place, resource_type)) \
+               and not self.is_dangerous(o.place)
+        def is_a_candidate(o):
+            return 
+        k = "%s %s %s" % (c, resource_type, starting_place)
+        if k in self._previous_choose and not random:
+            o = self._previous_choose[k]
+            if (o in self.perception or o in self.memory) and is_ok(o):
+#                warning("useful cache %s %s", c, resource_type)
+                return o
+            else:
+                del self._previous_choose[k]
+        if starting_place is None:
+            starting_place = self.units[0].place
+        candidates = [o for o in self.perception.union(self.memory)
+                      if self.check_type(o, c) and is_ok(o)]
+        candidates = sorted(candidates, key=lambda x: x.id) # avoid synchronization errors
+        if len(candidates) > 10:
+            candidates = self._remove_far_candidates(candidates, starting_place, 10)
+        else:
+            candidates.sort(key=lambda x: starting_place.shortest_path_distance_to(x.place, self, avoid=True))
+            while candidates and starting_place.shortest_path_distance_to(candidates[0].place, self, avoid=True) is None: # None < 0
+                del candidates[0] # no path
+        if random:
+            if candidates:
+                p = candidates[0].place
+                candidates = sorted([o for o in candidates if o.place is p],
+                                    key=self._deposit_priority, reverse=True)
+        for o in candidates:
+            if not random:
+                self._previous_choose[k] = o
+            return o
 
-    def order(self, nb, types, order, replace=False):
-        self.AI_timer = 10 # XXX: compute value # don't use ai too often # TODO: use events, not this timer
-        if nb == "all":
-            nb = 9999
+    def nb(self, types):
+        if types and isinstance(types, list) and isinstance(types[0], str) and types[0] in self.upgrades:
+            return 1
+        n = 0
         for u in self.units:
             if self.check_type(u, types):
-                if nb <= 0:
-                    return
-                # XXX: research and improvements not implemented
-                # no need to queue more than one order (XXX but AI_timer...)
-                if replace or not (u.orders and u.orders[-1].keyword == order[0]):
-                    u.take_order(order)
-                # order given or already given
-                nb -= 1
+                n += 1
+        return n
+
+    def _nb_in_production(self, types):
+        n = 0
+        for u in self.units:
+            if isinstance(u, BuildingSite) and self.check_type(u.type, types):
+                n += 1
+                continue
+            for o in u.orders:
+                if o.keyword in ("build", "train", "upgrade_to", "research") and self.check_type(o.type, types):
+                    # the result might be temporarily too high because of build orders
+                    # but that's not a big problem for order()
+                    n += 1
+        return n
+
+    def future_nb(self, types):
+        return self.nb(types) + self._nb_in_production(types)
+
+    def _worker_orders_priority(self, u):
+        if not u.orders:
+            return (0, )
+        if u.orders[0].keyword == "gather":
+            return (1, self._deposit_priority(u.orders[0].target))
+        return (2, )
+
+    def order(self, nb, types, order, near=None, requisition=False):
+        order_id = repr((types, order))
+        if order_id in self._orders:
+            for unit_order in list(self._orders[order_id]):
+                if unit_order.is_complete:
+                    self._orders[order_id].remove(unit_order)
+                elif unit_order.unit.place is None or unit_order not in unit_order.unit.orders:
+                    self._orders[order_id].remove(unit_order)
+        else:
+            self._orders[order_id] = []
+        if len(self._orders[order_id]) >= nb:
+            return
+        units = [u for u in self.units if self.check_type(u, types)]
+        while units:
+            if requisition:
+                units.sort(key=self._worker_orders_priority)
+            u = units.pop(0)
+            if requisition or not u.orders:
+                if u.orders and u.orders[0].keyword in ("build", "repair"):
+                    continue
+                if requisition and u.orders and u.orders[0].keyword == "gather":
+                    self._gathered_deposits[u.orders[0].target] -= 1
+                u.take_order(order)
+                if u.orders and u.orders[0].keyword == order[0]:
+                    self._orders[order_id].append(u.orders[0])
+                    if len(self._orders[order_id]) >= nb:
+                        return
 
     def potential(self, cost):
         result = 9999
@@ -390,69 +444,44 @@ class Computer(Player):
                 result = min(result, res / cost[i])
         return result
 
-    def get(self, nb, types):
+    def get(self, nb, type):
         self._safe_cnt = 0
-        return self._get(nb, types)
+        return self._get(nb, [type])
 
     def _get(self, nb, types):
-        self._safe_cnt += 1
-        if self._safe_cnt > 10:
-            info("AI has trouble getting: %s %s", nb, types)
-            self.AI_timer = 100
-            return False
         if isinstance(types, str):
             types = [types]
         if self.nb(types) >= nb:
             return True
+        if self.future_nb(types) >= nb:
+            return False
+        self._safe_cnt += 1
+        if self._safe_cnt > 10:
+            info("AI has trouble getting: %s %s", nb, types)
+            return False
         for type in types:
             if type.__class__ == str:
                 type = self.world.unit_class(type)
             if type is None:
                 continue
-            if self.nb(self.world.get_makers(type)) > 0:
-                self.build_or_train_or_upgradeto(type, nb - self.nb(types))
+            makers = self.world.get_makers(type)
+            if self.nb(makers) > 0:
+                self.build_or_train_or_upgradeto_or_summon(type, nb - self.future_nb(types))
                 break
-            elif self.world.get_makers(type):
-                self._get(1, self.world.get_makers(type)[0])
+            elif makers:
+                self._get(1, makers[0])
                 return False
         return False
 
-    gather_mode = None
-
-    def gather(self, cost, food): # XXX: too slow? called too often?
-        for i in self.missing_resources(cost):
-            if self.gather_mode != i:
-                r = self.choose(self.world.get_deposits(i))
-                if r:
-                    self.order(max(1, self.nb(Worker) * 8 / 10),
-                               Worker, ["gather", r.id], True)
-                    self.gather_mode = i
-                else:
-                    self.AI_timer = 10
+    def gather(self, cost, food):
+        if self.missing_resources(cost):
             return
         if food != 0 and food > self.food - self.used_food:
-            self.build_or_train_or_upgradeto(self.equivalent("farm"))
-            self.gather_mode = None
+            t = self.equivalent("farm")
+            if self.future_nb(t) == self.nb(t):
+                self.build_or_train_or_upgradeto_or_summon(t)
         else:
-            self.gather_mode = None
             return True
-
-    def on_resource_exhausted(self):
-        self.gather_mode = None
-
-    def on_unit_flee(self, unit):
-        self.gather_mode = None
-        if isinstance(unit, Worker): # XXX pb if no archers and enemy==dragons
-            self.on_unit_attacked(unit)
-
-    def send_some_peasants_to_building_site(self):
-        bs = None
-        for u in self.units:
-            if isinstance(u, BuildingSite):
-                bs = u
-                break
-        if bs is not None:
-            self.order(8, Worker, ["repair", bs.id], True)
 
     def _get_requirements(self, t):
         for r in t.requirements:
@@ -460,151 +489,195 @@ class Computer(Player):
                 return False
         return True
 
-    def build_or_train_or_upgradeto(self, t, nb=1):
+    def _builders_place(self):
+        starts = {}
+        for u in self._workers:
+            if u.place not in starts: starts[u.place] = 1
+            else: starts[u.place] += 1
+        if starts:
+            return sorted(starts.items(), key=lambda x: x[1])[-1][0]
+
+    def build_or_train_or_upgradeto_or_summon(self, t, nb=1):
         if t.__class__ == str:
             t = self.world.unit_class(t)
         type = t.__name__
-        if self.gather(t.cost, t.food_cost) and \
-           self._get(1, self.world.get_makers(type)) and \
-           self._get_requirements(t):
-            # XXX why choose the first maker type? (problem if several creation paths are possible (train and upgradeto for example))
-            if type in self.world.unit_class(self.world.get_makers(type)[0]).can_upgrade_to:
-                # upgrade to
-                if self.nb(self.world.get_makers(type)[0]) >= nb:
-                    # If we have the correct number of archers,
-                    # We upgrade then here.
-                    self.order(nb, self.world.get_makers(type)[0], ["upgrade_to", type])
-                    self.AI_timer = 100 # XXX: compute value # don't use ai too often # TODO: use events, not this timer
+        makers = self.world.get_makers(type)
+        if self._get(1, makers) and self._get_requirements(t):
+            for maker in makers:
+                # TODO: choose one without orders if possible
+                if self.nb(maker):
+                    break
+            if type in self.world.unit_class(maker).can_upgrade_to:
+                if self.nb(maker):
+                    if self.gather(t.cost, t.food_cost):
+                        self.order(nb, maker, ["upgrade_to", type])
                 else:
-                    # If not, we recruit then
-                    self._get(nb, self.world.get_makers(type)[0])
-            elif type in self.world.unit_class(self.world.get_makers(type)[0]).can_build:
-                # build
-                if self.nb(BuildingSite) > 0:
-                    self.send_some_peasants_to_building_site()
+                    self._get(nb, maker)
+            elif type in self.world.unit_class(maker).can_build:
+                if not self.gather(t.cost, t.food_cost):
                     return
                 if t.storable_resource_types:
                     meadow = self.choose(Meadow, resource_type=t.storable_resource_types[0])
-                    # if no place to build and already enough building, forget this
-                    if meadow is None:
-                        if self.nb(t) > 0:
-                            return True
+                    if meadow is None or meadow.place.shortest_path_distance_to(self._builders_place()) > self.world.square_width * 3:
+                        if self.nb(t):
+                            return
                         else:
-                            meadow = self.choose(Meadow)
+                            meadow = self.choose(Meadow, starting_place=self._builders_place())
                 else:
-                    meadow = self.choose(Meadow, nearest_for_builders=True)
+                    meadow = self.choose(Meadow, starting_place=self._builders_place())
                 if meadow:
-                    self.order(8, self.world.get_makers(type), ["build", type, meadow.id], True)
-                else:
-                    self.AI_timer = 10
-                    return
-            elif type in self.world.unit_class(self.world.get_makers(type)[0]).can_train:
-                # train
-                if self.nb(Worker) and \
-                   nb > self.nb(self.world.get_makers(type)[0]) * 3 and \
-                   self.potential(t.cost) > \
-                   self.nb(self.world.get_makers(type)[0]) * 100:
+                    self.order(4, maker, ["build", type, meadow.id], requisition=True, near=meadow)
+            elif type in self.world.unit_class(maker).can_train:
+                if (self.nb(Worker)
+                    and nb > self.nb(maker) * 3
+                    and self.potential(t.cost) > self.nb(maker) * 100):
                     # additional production sites
-                    self.build_or_train_or_upgradeto(self.world.get_makers(type)[0])
-                self.order(nb, self.world.get_makers(type), ["train", type])
-        else:
-            self.AI_timer = 100 # XXX: compute value # don't use ai too often # TODO: use events, not this timer
-            debug("not enough")
+                    self.build_or_train_or_upgradeto_or_summon(maker)
+                if self.gather(t.cost, t.food_cost):
+                    self.order(nb, maker, ["train", type])
+            elif type in self.world.unit_class(maker).can_research:
+                if self.gather(t.cost, t.food_cost):
+                    self.order(1, maker, ["research", type])
+            else:
+                for ability in self.world.unit_class(maker).can_use:
+                    effect = rules.get(ability, "effect")
+                    if effect and "summon" in effect[:1] and type in effect:
+                        print(maker, "use", ability)
+                        self.order(1, maker, ["use", ability])
+                        break
 
-    def attack(self, all=False):
-        if all:
-            types = self.world.get_units()
-        else:
-            types = self.world.get_soldiers()
-        for t in types:
-            self.order("all", t, ["auto_attack"])
+    def _cataclysm_is_efficient(self, a, units):
+        type_names = set(u.type_name for u in units)
+        e = rules.get(a, "effect")
+        if e[0] == "summon":
+            for item in e[1:]:
+                if rules.get(item, "harm_level"):
+                    for t in type_names:
+                        if self.world.can_harm(item, t):
+                            return True
 
-    def enemy_menace(self, place):
-        if self._enemy_menace_time.get(place) != self.world.time:
-            enemy_menace = 0
-            for l in (self.perception, self.memory):
-                for o in l:
-                    if o.place == place and self.is_an_enemy(o):
-                        enemy_menace += o.menace + .0001 # must be attacked anyway
-            self._enemy_menace[place] = enemy_menace
-            self._enemy_menace_time[place] = self.world.time
-        return self._enemy_menace[place]
+    def _eventually_attack(self, places):
+        units = self._idle_fighters
+        if not units:
+            return
+        places = sorted(places, key=self.enemy_menace)
+        for place in places:
+            if self._units_should_attack(units, place):
+                self._send_units(units, place)
+                return
+        if places:
+            place = places[0]
+            temp_units = [u for u in units if u.time_limit and u.speed]
+            if temp_units:
+                self._send_units(temp_units, place)
+            place = places[-1]
+            if not self._friendly_presence(place):
+                enemies = (u for l in (self.perception, self.memory)
+                                 for u in l if u.place is place and self.is_an_enemy(u))
+                for u, a in self._cataclysm_users:
+                    if u.orders or not self._cataclysm_is_efficient(a, enemies):
+                        continue
+                    path = u.place.shortest_path_to(place, places=True)
+                    if len(path) > 2:
+                        u.take_order(["go", path[-2].id], forget_previous=False)
+                    u.take_order(["use", a, place.id], forget_previous=False)
+                    if u.orders and not u.orders[0].is_impossible:
+                        u.take_order(["go", u.place.id], forget_previous=False)
 
-    def menace(self):
-        menace = 0
+    @property
+    def _idle_fighters(self):
+        return [u for u in self.units if isinstance(u, Soldier)
+                and (not u.orders
+                     or len(u.orders) == 1
+                        and u.orders[0].keyword == "go"
+                        and u.orders[0].target not in self._enemy_presence)]
+
+    def _update_time_has_come(self):
+        self._waiting_menace = {}
+        self._waiting_units = {}
         for u in self.units:
-            if u.speed > 0 and isinstance(u, Soldier):
-                menace += u.menace
-        return menace
+            for o in u.orders[:1]:
+                if o.keyword == "wait":
+                    try:
+                        self._waiting_menace[o.target] += u.menace
+                        self._waiting_units[o.target].append(u)
+                    except:
+                        self._waiting_menace[o.target] = u.menace
+                        self._waiting_units[o.target] = [u]
+        self._time_has_come = {}
+        for place in self._waiting_units:
+            self._time_has_come[place] = self._is_powerful_enough(self._waiting_units.get(place, ()), place)
+        cancel = set()
+        for place in self._waiting_menace:
+            if not self._is_powerful_enough(self.units, place):
+                for u in self.units:
+                    for o in u.orders:
+                        if o.keyword == "wait" and o.target is place:
+                            cancel.add(u)
+        for u in cancel:
+            u.cancel_all_orders()
 
-    def is_powerful_enough(self, place):
-        return self.menace() > self.enemy_menace(place) * 2
+    def time_has_come(self, place):
+        if place in self._cataclysmic_places:
+            return False
+        try:
+            return self._time_has_come[place]
+        except:
+            return False
 
-    def send_idle_fighters(self, place):
-        for u in self.units:
-            if isinstance(u, Soldier) and not u.orders:
-                if self.teleportation and "a_teleportation" in u.can_use:
-                    u.take_order(["use", "a_teleportation", place.id])
-                u.take_order(["go", place.id], forget_previous=False)
+    def _friendly_presence(self, place):
+        return place in self._places_with_friends
 
-    AI_constant_attacks_timer = 0
+    def _send_units(self, units, place):
+        for u in units:
+            u.cancel_all_orders()
+        used_teleportation = False
+        for u, a in self._teleportation_users:
+            u.take_order(["use", a, place.id])
+            if u.orders and not u.orders[0].is_impossible:
+                used_teleportation = True
+        enemies = (u for l in (self.perception, self.memory)
+                   for u in l if u.place is place and self.is_an_enemy(u))
+        for u in units:
+            path = u.place.shortest_path_to(place, places=True)
+            if not used_teleportation and len(path) > 2:
+                u.take_order(["go", path[-2].id], forget_previous=False)
+                if not self._friendly_presence(place):
+                    for u_, a in self._cataclysm_users:
+                        if u_ is u and self._cataclysm_is_efficient(a, enemies):
+                            u.take_order(["use", a, place.id], forget_previous=False)
+            u.take_order(["wait", place.id], forget_previous=False)
+            for u_, a in self._summon_users:
+                if u_ is u:
+                    u.take_order(["use", a, place.id], forget_previous=False)
+            for u_, a in self._detector_users:
+                if u_ is u:
+                    u.take_order(["use", a, place.id], forget_previous=False)
+            u.take_order(["go", place.id], forget_previous=False)
 
-    def can_attack(self):
-        for p in self.attack_squares:
-            if not self.is_powerful_enough(p):
-                return False
-        return True
-
-    def try_constant_attacks(self):
-        if self.AI_constant_attacks_timer:
-            self.AI_constant_attacks_timer -= 1
+    def _units_should_attack(self, units, place):
+        # assert units is not None
+        if not self._is_powerful_enough(units, place):
+            return False
+        start = units[0].place
+        path = start.shortest_path_to(place, places=True)
+        if not path:
+            return False
+        elif len(path) <= 2:
+            return True
         else:
-            if not self.attack_squares:
-                self.attack_squares = [p for p in self.world.squares
-                                       if self.enemy_menace(p)]
-            for p in self.attack_squares[:]:
-                if not self.enemy_menace(p):
-                    if p in self.observed_before_squares:
-                        self.attack_squares.remove(p)
-            if self.can_attack() and self.attack_squares:
-                self.send_idle_fighters(self.attack_squares[0])
-            if not self.attack_squares:
-                self.explore()
-            self.AI_constant_attacks_timer = 10
+            return start.shortest_path_to(path[-2], player=self, avoid=True)
 
-    def on_unit_attacked(self, unit, attacker=None):
-        if unit.is_an_explorer:
+    def on_unit_attacked(self, unit, attacker):
+        if attacker.player in self.allied or not attacker.is_vulnerable: return
+        if unit.orders and unit.orders[0].keyword == "auto_explore":
             # Don't react now. Constant attacks will do the job if active.
             # And the easy computer AI shouldn't be aggressive.
             return
-        if attacker is not None:
+        if attacker in self.perception:
             place = attacker.place
         else:
-            place = unit.place
-        if self.retaliate and self.is_powerful_enough(place) and self.can_attack():
-            self.send_idle_fighters(place)
-            self.my_base = place # For now, send the soldiers to this place,
-            # If we're being attacked here.
-        if self.raise_dead:
-            self.raise_dead_units(forget=True, place=place)
-            # This is for AI continuously make zombies, because it only
-            # makes while not in the fight, what we don't want
-        if place not in self.attack_squares:
-            self.attack_squares.append(place)
-
-    def update_attack_squares(self, unit):
-        if unit.is_an_enemy(unit.action_target):
-            if unit.place not in self.attack_squares:
-                self.attack_squares.append(unit.place)
-        else:
-            if unit.place in self.attack_squares:
-                self.attack_squares.remove(unit.place)
-
-    def send_soldiers_to_my_base(self):
-        # This function orders all soldiers to go to the base.
-        # send_idle_fighters() will take mana, so we
-        # order all go instead of teleport.
-        for u in self.units:
-            if isinstance(u, Soldier) and not u.orders:
-                if u.place != self.my_base:
-                    u.take_order(["go", self.my_base.id], forget_previous=False)
+            # undetected attacker
+            place = unit.place # neighbors?
+        if place not in self._attacked_places:
+            self._attacked_places.append(place)

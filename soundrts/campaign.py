@@ -2,13 +2,16 @@ import ConfigParser
 import os
 import re
 
-from clientmedia import voice, sounds, play_sequence, res
+from clientmedia import voice, sounds, play_sequence
 from clientmenu import Menu
 import config
 from game import MissionGame
 from mapfile import Map
 from lib.msgs import nb2msg
+import msgparts as mp
 from paths import CAMPAIGNS_CONFIG_PATH
+import res
+from res import get_all_packages_paths
 
 
 class MissionChapter(Map):
@@ -23,14 +26,14 @@ class MissionChapter(Map):
 
     def _victory(self):
         menu = Menu([], [])
-        menu.append([4011], self._get_next()) # continue
-        menu.append([4009], None) # cancel
+        menu.append(mp.CONTINUE, self._get_next())
+        menu.append(mp.QUIT, None)
         menu.run()
         
     def _defeat(self):
         menu = Menu([], [])
-        menu.append([4266], self) # restart
-        menu.append([4009], None) # cancel
+        menu.append(mp.RESTART, self)
+        menu.append(mp.QUIT, None)
         menu.run()
 
     def run(self):
@@ -167,12 +170,36 @@ class Campaign(object):
             menu = Menu(self.title, [])
             if len(self._available_chapters()) > 1:
                 ch = self._available_chapters()[-1]
-                menu.append([4011] + ch.title, ch) # "continue"
+                menu.append(mp.CONTINUE + ch.title, ch)
             for ch in self._available_chapters():
                 prefix = nb2msg(ch.id) if ch.id > 0 else []  
                 menu.append(prefix + ch.title, ch)
-    #        menu.append([4113], "restore")
-            menu.append([4118], None) # "cancel"
+            menu.append(mp.BACK, None)
             menu.run()
         finally:
             self.unload_resources()
+
+
+def _get_campaigns():
+    w = []
+    for pp in get_all_packages_paths():
+        d = os.path.join(pp, "single")
+        if os.path.isdir(d):
+            for n in os.listdir(d):
+                p = os.path.join(d, n)
+                if os.path.isdir(p):
+                    if n == "campaign":
+                        w.append(Campaign(p, mp.CAMPAIGN))
+                    else:
+                        w.append(Campaign(p))
+    return w
+
+_campaigns = None
+_mods_at_the_previous_campaigns_update = None
+
+def campaigns():
+    global _campaigns, _mods_at_the_previous_campaigns_update
+    if _campaigns is None or _mods_at_the_previous_campaigns_update != res.mods:
+        _campaigns = _get_campaigns()
+        _mods_at_the_previous_campaigns_update = res.mods
+    return _campaigns

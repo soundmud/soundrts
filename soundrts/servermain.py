@@ -7,6 +7,7 @@ import urllib2
 
 from constants import MAIN_METASERVER_URL
 from lib.log import debug, info, warning, exception
+import msgparts as mp
 from serverclient import ConnectionToClient
 from serverroom import InTheLobby, OrganizingAGame, Playing, WaitingForTheGameToStart
 from lib.ticker import Ticker
@@ -83,7 +84,7 @@ class Server(asyncore.dispatcher):
             self.clients.remove(client)
             for c in self.players_not_playing():
                 if client.is_compatible(c):
-                    c.send_msg([client.login, 4259]) # ... has just disconnected
+                    c.send_msg([client.login] + mp.HAS_JUST_LOGGED_OUT)
             self.update_menus()
         if isinstance(client.state, Playing):
             client.cmd_abort_game([])

@@ -7,6 +7,7 @@ import os.path
 import re
 import shutil
 
+from definitions import Style
 import res
 from lib.log import debug, exception
 from lib import zipdir
@@ -208,3 +209,45 @@ class Map(object):
             self._factions = w.get_factions()
             self._mods = res.mods
         return self._factions
+
+
+def _add_official_multi(w):
+    maps = [line.strip().split() for line in open("cfg/official_maps.txt")]
+    for n, digest in maps:
+        p = os.path.join("multi", n)
+        w.append(Map(p, digest, official=True))
+
+def _add_custom_multi(w):
+    for pp in res.get_all_packages_paths():
+        d = os.path.join(pp, "multi")
+        if os.path.isdir(d):
+            for n in os.listdir(d):
+                p = os.path.join(d, n)
+                if os.path.normpath(p) not in (os.path.normpath(x.path) for x in w):
+                    w.append(Map(p, None))
+
+def _move_recommended_maps(w):
+    style = Style()
+    style.load(res.get_text_file("ui/style", append=True, localize=True))
+    for n in reversed(style.get("parameters", "recommended_maps")):
+        for m in reversed(w[:]): # reversed so the custom map is after the official map
+            if m.get_name()[:-4] == n:
+                w.remove(m)
+                w.insert(0, m)
+
+def _get_worlds_multi():
+    w = []
+    _add_official_multi(w)
+    _add_custom_multi(w)
+    _move_recommended_maps(w)
+    return w
+
+_multi_maps = None
+_mods_at_the_previous_multi_maps_update = None
+
+def worlds_multi():
+    global _multi_maps, _mods_at_the_previous_multi_maps_update
+    if _multi_maps is None or _mods_at_the_previous_multi_maps_update != res.mods:
+        _multi_maps = _get_worlds_multi()
+        _mods_at_the_previous_multi_maps_update = res.mods
+    return _multi_maps

@@ -33,6 +33,10 @@ def go
 title 100 115
 index 1
 
+def attack ; imperative go
+title 114
+; no index (won't appear in the menu)
+
 def patrol
 title 103 115
 index 2

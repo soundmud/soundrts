@@ -12,6 +12,7 @@ from lib.sound import init_sound, sound_stop, get_volume, set_volume
 from lib.sound_cache import sounds
 from lib.voice import voice
 import config
+import msgparts as mp
 import res
 from version import VERSION
 
@@ -48,7 +49,7 @@ def modify_volume(incr):
     """increase or decrease the main volume, and say it"""
     set_volume(min(1, max(0, get_volume() + .1 * incr)))
     sound_stop()
-    voice.item(nb2msg(round(get_volume() * 100)) + [4253])
+    voice.item(nb2msg(round(get_volume() * 100)) + mp.PERCENT_VOLUME)
 
 
 def toggle_fullscreen():
@@ -57,9 +58,9 @@ def toggle_fullscreen():
     fullscreen = not fullscreen
     set_screen(fullscreen)
     if fullscreen:
-        voice.item([4206])
+        voice.item(mp.DISPLAY_ON)
     else:
-        voice.item([4207])
+        voice.item(mp.DISPLAY_OFF)
 
 
 def get_fullscreen():

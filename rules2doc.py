@@ -124,7 +124,7 @@ def can_use(c, t):
 
 rules = RulesForDoc()
 rules.load(open("res/rules.txt", "rU").read(),
-           open("doc/rules_doc.txt", "rU").read())
+           open("res/ui/rules_doc.txt", "rU").read())
 for cat in (("1. Units", ("worker", "soldier")),
             ("2. Buildings", ("building", )),
             ("3. Abilities", ("ability", )),
@@ -181,4 +181,4 @@ for cat in (("1. Units", ("worker", "soldier")),
                 pr("- combat efficiency ratio: %s (only takes into account: hit points, damage, cooldown, cost; formula: hit points * damage / cooldown / (gold cost + 3 * wood cost))" % (rules.get(c, "hp_max") * rules.get(c, "damage") / float(rules.get(c, "cooldown")) / (rules.get(c, "cost")[0] + rules.get(c, "cost")[1] * 3)))
             except:
                 pass
-open("doc/src/stats.inc", "w").write(_s)
+stats = _s

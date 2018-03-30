@@ -12,7 +12,6 @@ def aggressive
 watchdog 600 ; never stay on the same line for more than 10 minutes
 constant_attacks 1 ; constantly attack if powerful enough
 research 1 ; do the research if enough resources
-teleportation 1 ; use teleportation
 
 label phase1
 goto_random very_early_rush early_rush rush phase2
@@ -70,7 +69,3 @@ goto phase3
 
 label phase3
 goto_random phase1 phase2
-
-; a passive AI, useful for heavily scripted maps (using triggers with timers)
-def timers
-retaliate 0 ; don't retaliate if a unit is attacked or flees

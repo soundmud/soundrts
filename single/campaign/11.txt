@@ -1,0 +1,46 @@
+; how units slow down to the lowest speed in a group (except in combat)
+
+title 4271 3011
+trigger player1 (timer 0) (add_objective 1 7503)
+
+
+; map size
+
+square_width 12
+
+nb_columns 10
+nb_lines 3
+
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1
+west_east_bridges
+
+south_north_paths c1 c2
+south_north_bridges 
+
+
+; resources
+
+nb_meadows_by_square 1
+
+
+; players (human or computer)
+
+player 0 0 a1 10 knight 10 catapult
+
+; computer only
+
+computer_only 0 0 c3 10 knight j1 10 cannontower
+
+; triggers
+
+timer_coefficient 80
+
+;trigger computer1 (has_entered d1) (order (c3 10 knight) ((auto_attack)))
+trigger computer1 (has_entered d1) (order (c3 10 knight) ((go a1) (go j1)))
+
+
+trigger player1 (no_enemy_left) (objective_complete 1)
+trigger all (no_unit_left) (defeat)

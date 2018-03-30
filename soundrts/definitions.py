@@ -1,7 +1,7 @@
 import re
 
 from lib.nofloat import to_int
-from lib.log import debug, warning
+from lib.log import debug, info, warning
 from lib.defs import preprocess
 
 
@@ -36,10 +36,10 @@ class _Definitions:
                 if words[0] == "effect_range" and len(words) >= 2:
                     if words[1] == "square":
                         words[1] = "6"
-                        warning("effect_range of %s will be 6 (instead of 'square')", name)
+                        info("effect_range of %s will be 6 (instead of 'square')", name)
                     elif words[1] == "nearby":
                         words[1] = "12"
-                        warning("effect_range of %s will be 12 (instead of 'nearby')", name)
+                        info("effect_range of %s will be 12 (instead of 'nearby')", name)
                     elif words[1] == "anywhere":
                         words[1] = "2147483" # sys.maxint / 1000 (32 bits)
                 if len(words) >= 2 and words[1] == "inf":
@@ -140,6 +140,7 @@ _precision_properties = (
                 "mana_regen",
                 "speed", 
                 "effect_range", "effect_radius",
+                "sight_range", "cloaking_range", "detection_range",
                 )
 _precision_properties_extended = []
 for _ in _precision_properties:

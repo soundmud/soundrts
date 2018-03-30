@@ -3,9 +3,10 @@ import urllib
 
 from clientmedia import voice
 from constants import METASERVER_URL
+import msgparts as mp
 from paths import STATS_PATH, OLD_STATS_PATH
 import stats
-from version import VERSION
+from version import VERSION, IS_DEV_VERSION
 
 
 class RevisionChecker(threading.Thread):
@@ -14,14 +15,14 @@ class RevisionChecker(threading.Thread):
     never_started = True
 
     def run(self):
-        if VERSION[-4:] == "-dev":
+        if IS_DEV_VERSION:
             return
         try:
             stage = file("stage.txt").read().strip()
             url = "http://jlpo.free.fr/soundrts/%sversion.txt" % stage
             rev = urllib.urlopen(url).read().strip()
             if (rev != VERSION) and (rev.find("404") == -1):
-                voice.important([4234])
+                voice.important(mp.UPDATE_AVAILABLE)
             stats.Stats(OLD_STATS_PATH, METASERVER_URL).send()
             stats.Stats(STATS_PATH, METASERVER_URL).send()
         except:

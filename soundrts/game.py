@@ -14,9 +14,10 @@ import config
 from constants import METASERVER_URL, PROFILE
 from definitions import style, rules
 from lib.log import warning, exception
-from mapfile import Map
 from lib.msgs import nb2msg
-from paths import REPLAYS_PATH, SAVE_PATH, STATS_PATH
+from mapfile import Map
+import msgparts as mp
+from paths import CUSTOM_BINDINGS_PATH, REPLAYS_PATH, SAVE_PATH, STATS_PATH
 import random
 import res
 import stats
@@ -75,10 +76,14 @@ class _Game(object):
                 update_orders_list() # when style has changed
                 self.pre_run()
                 self.interface = clientgame.GameInterface(self.me, speed=speed)
-                self.interface.load_bindings(
-                    res.get_text_file("ui/bindings", append=True, localize=True) + "\n" +
-                    self.map.get_campaign("ui/bindings.txt") + "\n" +
-                    self.map.get_additional("ui/bindings.txt"))
+                b = res.get_text_file("ui/bindings", append=True, localize=True)
+                b += "\n" + self.map.get_campaign("ui/bindings.txt")
+                b += "\n" + self.map.get_additional("ui/bindings.txt")
+                try:
+                    b += "\n" + open(CUSTOM_BINDINGS_PATH, "U").read()
+                except IOError:
+                    pass
+                self.interface.load_bindings(b)
                 self.world.populate_map(self.players, self.alliances, self.factions)
                 self.nb_human_players = self.world.current_nb_human_players()
                 t = threading.Thread(target=self.world.loop)
@@ -95,8 +100,7 @@ class _Game(object):
                 self.map.unload_resources()
             self.world.clean()
         else:
-            voice.alert([1029]) # hostile sound
-            voice.alert([self.world.map_error])
+            voice.alert(mp.BEEP + [self.world.map_error])
         if self.record_replay:
             self._replay_file.close()
 
@@ -141,7 +145,7 @@ class MultiplayerGame(_MultiplayerGame):
         _MultiplayerGame.run(self, speed=self.speed)
 
     def _countdown(self):
-        voice.important([4062]) # "the game starts in 5 seconds"
+        voice.important(mp.THE_GAME_WILL_START)
         for n in [5, 4, 3, 2, 1, 0]:
             voice.item(nb2msg(n))
             time.sleep(1)
@@ -159,8 +163,10 @@ class MultiplayerGame(_MultiplayerGame):
             self.main_server.write_line("abort_game")
         else:
             self.main_server.write_line("quit_game")
-        self.say_score() # say score only after quit_game to avoid blocking the main server
-        voice.menu([4010, 4030]) # "menu" "please make a selection" (long enough to allow history navigation)
+        # say score only after quit_game to avoid blocking the main server
+        self.say_score()
+        voice.menu(mp.MENU + mp.MAKE_A_SELECTION)
+        # (long enough to allow history navigation)
 
     def _computers_and_humans(self, players, my_login):
         computers = []
@@ -197,10 +203,10 @@ class _Savable(object):
             self._replay_file_content = open(self._replay_file.name).read()
         try:
             pickle.dump(self, f)
-            voice.info([105])
+            voice.info(mp.OK)
         except:
             exception("save game failed")
-            voice.alert([1029]) # hostile sound
+            voice.alert(mp.BEEP)
         self.world.restore_links_for_savegame()
 
     def run_on(self):
@@ -293,7 +299,7 @@ class ReplayGame(_Game):
         res.set_mods(mods)
         _compatibility_version = self.replay_read()
         if _compatibility_version != compatibility_version():
-            voice.alert([1029, 4012]) # hostile sound  "version error"
+            voice.alert(mp.BEEP + mp.VERSION_ERROR)
             warning("Version mismatch. Version should be: %s. Mods should be: %s.",
                     version, mods)
         campaign_path_or_packed_map = self.replay_read()
@@ -323,7 +329,7 @@ class ReplayGame(_Game):
         return s
 
     def pre_run(self):
-        voice.info([4316])
+        voice.info(mp.OBSERVE_ANOTHER_PLAYER_EXPLANATION)
         voice.flush()
 
     def run(self):

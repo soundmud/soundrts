@@ -3,6 +3,7 @@
 ; The game adds "K_" to the beginning of the key names.
 ; The game adds "KMOD_" to the beginning of the key modifier names. The modifiers are optional.
 ; For example, "CTRL LEFT" are translated to the pygame constants "KMOD_CONTROL K_LEFT".
+; The allowed modifiers are: CONTROL, ALT and SHIFT.
 
 
 ; definitions used in this file
@@ -74,6 +75,11 @@ RETURN: validate
 SHIFT RETURN: validate queue_order
 CTRL RETURN: validate imperative
 CTRL SHIFT RETURN: validate imperative queue_order
+
+KP_ENTER: validate
+SHIFT KP_ENTER: validate queue_order
+CTRL KP_ENTER: validate imperative
+CTRL SHIFT KP_ENTER: validate imperative queue_order
 
 BACKSPACE: default
 SHIFT BACKSPACE: default queue_order

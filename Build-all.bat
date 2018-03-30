@@ -1,5 +1,5 @@
 call clean.bat
-call build-doc.bat
+build-doc.py
 build-game.py
 call build-installer.bat
 pause

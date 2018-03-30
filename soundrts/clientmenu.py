@@ -11,7 +11,12 @@ from clientmedia import voice, modify_volume, toggle_fullscreen, sounds
 from lib.log import warning
 from lib.msgs import nb2msg
 from lib.sound import psounds
+import msgparts as mp
 from paths import TMP_PATH
+
+
+CONFIRM_SOUND = 6116
+SELECT_SOUND = 6115
 
 
 def string_to_msg(s, spell=True):
@@ -20,7 +25,7 @@ def string_to_msg(s, spell=True):
     l = []
     for c in s:
         if c == ".":
-            l.extend([5026])
+            l.extend(mp.DOT)
         elif c in "0123456789":
             l.extend(nb2msg(c))
         else:
@@ -50,12 +55,14 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
                 try:
                     c = e.unicode.encode("ascii") # telnetlib doesn't like unicode
                     s += c
-                    voice.item(string_to_msg(c) + [9999] + string_to_msg(s, spell))
+                    voice.item(string_to_msg(c)
+                               + mp.PERIOD
+                               + string_to_msg(s, spell))
                 except:
                     warning("error reading character from keyboard")
-                    voice.item([1003, 9999] + string_to_msg(s, spell))
+                    voice.item(mp.BEEP + mp.PERIOD + string_to_msg(s, spell))
             else:
-                voice.item([1003, 9999] + string_to_msg(s, spell))
+                voice.item(mp.BEEP + mp.PERIOD + string_to_msg(s, spell))
         elif e.type == USEREVENT:
             voice.update()
         voice.update() # XXX useful for SAPI
@@ -63,7 +70,7 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
 def _remember_path(menu_name):
     return os.path.join(TMP_PATH, menu_name + ".txt")
 
-END_LOOP = 1
+CLOSE_MENU = 1
 
 
 def _first_letter(choice):
@@ -96,8 +103,12 @@ class Menu(object):
                 self._remembered_choice = ""
 
     def _say_choice(self):
-        psounds.play_stereo(sounds.get_sound(6115))
-        voice.item(self.choices[self.choice_index][0])
+        psounds.play_stereo(sounds.get_sound(SELECT_SOUND))
+        choice = self.choices[self.choice_index]
+        msg = list(choice[0])
+        if len(choice) > 2:
+            msg +=  mp.COMMA + choice[2]
+        voice.item(msg)
 
     def _choice_exists(self):
         return self.choice_index is not None and 0 <= self.choice_index < len(self.choices)
@@ -127,14 +138,12 @@ class Menu(object):
             self._say_choice()
 
     def _confirm_choice(self):
-        psounds.play_stereo(sounds.get_sound(6116))
+        psounds.play_stereo(sounds.get_sound(CONFIRM_SOUND))
         if self._choice_exists() and self.choices[self.choice_index]:
-            voice.confirmation(self.choices[self.choice_index][0][:1]) # repeat only the first part of the choice (not the help)
+            voice.confirmation(self.choices[self.choice_index][0])
             self.choice_done = True
 
     def _process_keydown(self, e):
-        if e.key == K_TAB and e.mod & KMOD_ALT:
-            return
         if e.key in [K_ESCAPE, K_LEFT]:
             self.choice_index = len(self.choices) - 1
             return self._confirm_choice()
@@ -162,9 +171,11 @@ class Menu(object):
             modify_volume(-1)
         elif e.key == K_F7:
             if self.server is None:
-                voice.item([1029]) # hostile sound
+                voice.item(mp.BEEP)
             else:
-                msg = input_string(msg=[4288], pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False)
+                msg = input_string(msg=mp.ENTER_MESSAGE,
+                                   pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$",
+                                   spell=False)
                 if msg:
                     self.server.write_line("say %s" % msg)
         elif e.unicode and e.mod & KMOD_SHIFT:
@@ -172,10 +183,12 @@ class Menu(object):
         elif e.unicode:
             self._select_next_choice(e.unicode)
         elif e.key not in [K_LSHIFT,K_RSHIFT]:
-            voice.item([4052])
+            voice.item(mp.SELECT_AND_CONFIRM_EXPLANATION)
 
-    def append(self, label, action):
-        self.choices.append((label, action))
+    def append(self, label, action, explanation=None):
+        if explanation is None:
+            explanation = []
+        self.choices.append((label, action, explanation))
         if self.remember is not None and self._remembered_choice == repr(label):
             self.choices.insert(0, (label, action))
 
@@ -195,17 +208,19 @@ class Menu(object):
                 self.choice_index = self.choices.index(old_choice)
 
     def _execute_choice(self):
-        label, action = self.choices[self.choice_index]
+        label, action = self.choices[self.choice_index][:2]
+        def cmd(): pass
+        args = ()
         if hasattr(action, "run"):
-            if action.run() == END_LOOP:
-                self.end_loop = True
+            cmd = action.run
         elif callable(action):
-            if action() == END_LOOP:
-                self.end_loop = True
-        elif isinstance(action, tuple) and len(action) > 1 and callable(action[0]):
-            if action[0](*action[1:]) == END_LOOP:
-                self.end_loop = True
-        elif action == END_LOOP:
+            cmd = action
+        elif isinstance(action, tuple):
+            cmd = action[0]
+            args = action[1:]
+        elif action == CLOSE_MENU:
+            def cmd(): return CLOSE_MENU
+        if cmd(*args) == CLOSE_MENU:
             self.end_loop = True
         if self.remember is not None and action is not None:
             open(_remember_path(self.remember), "w").write(repr(label))
@@ -241,7 +256,7 @@ class Menu(object):
         if self.title:
             voice.menu(self.title)
         else:
-            voice.menu([4007])
+            voice.menu(mp.MAKE_A_SELECTION2)
         self._get_choice_from_static_menu()
         self._execute_choice()
 

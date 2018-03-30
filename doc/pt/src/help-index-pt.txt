@@ -1,8 +1,0 @@
-Documentação
-============
-
-- `Manual do jogo <manual-pt.htm>`_
-- `Guia de unidades <units-pt.htm>`_
-- `Guia de criação de mapas <mapmaking-pt.htm>`_
-- `Guia para a criação de mods <modding-pt.htm>`_ (em progresso)
-- `Tutorial para a criação de AIs <aimaking-pt.htm>`_

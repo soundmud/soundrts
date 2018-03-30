@@ -7,6 +7,7 @@ some are merged (some text files).
 
 import locale
 import os
+import re
 
 from soundrts.lib import encoding
 from soundrts.lib.log import warning
@@ -19,15 +20,7 @@ def localize_path(path, lang):
     """Return the path modified for this language.
     For example, "ui" becomes "ui-fr".
     """
-    head, tail = os.path.split(path)
-    if tail == "ui":
-        return os.path.join(head, tail + "-" + lang)
-    else:
-        sub_head, sub_tail = os.path.split(head)
-        if sub_tail == "ui":
-            return os.path.join(sub_head, sub_tail + "-" + lang, tail)
-        else:
-            return path
+    return re.sub("(?<!\w)ui(?!\w)", "ui-" + lang, path)
 
 
 def best_language_match(lang, available_languages):
@@ -56,6 +49,19 @@ def best_language_match(lang, available_languages):
     return "en"
 
 
+_cfg = open("cfg/language.txt").read().strip()
+if _cfg:
+    preferred_language = _cfg
+else:
+    try:
+        preferred_language = locale.getdefaultlocale()[0]
+    except ValueError:
+        preferred_language = "en"
+        warning("Couldn't get the system language. "
+                "To use another language, edit 'cfg/language.txt' "
+                "and write 'pl' for example.")
+
+
 class ResourceLoader(object):
     """Load resources.
     Depends on language, active packages, loading order of the mods.
@@ -80,18 +86,8 @@ class ResourceLoader(object):
 
     def _get_language(self):
         """guess and return the best language for this situation"""
-        cfg = open("cfg/language.txt").read().strip()
-        if cfg:
-            lang = cfg
-        else:
-            try:
-                lang = locale.getdefaultlocale()[0]
-            except ValueError:
-                lang = "en"
-                warning("Couldn't get the system language. "
-                        "To use another language, edit 'cfg/language.txt' "
-                        "and write 'pl' for example.")
-        return best_language_match(lang, self._available_languages())
+        return best_language_match(preferred_language,
+                                   self._available_languages())
 
     def _update_paths(self, all_packages_paths, mods):
         actual_mods = []

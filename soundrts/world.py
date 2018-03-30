@@ -16,6 +16,7 @@ from constants import COLLISION_RADIUS, VIRTUAL_TIME_INTERVAL, PROFILE
 from definitions import rules, get_ai_names, load_ai
 from lib.log import warning, exception, info
 from lib.nofloat import to_int, int_distance, PRECISION
+import msgparts as mp
 from paths import MAPERROR_PATH
 import res
 from worldability import Ability
@@ -28,7 +29,7 @@ from worldplayerhuman import Human
 import worldrandom
 from worldresource import Deposit, Meadow
 from worldroom import Square
-from worldunit import Unit, Worker, Soldier, Building, Effect
+from worldunit import Unit, Worker, Soldier, Building, _Building, Effect
 from worldupgrade import Upgrade
 
 
@@ -55,10 +56,10 @@ class Type(object):
         self.__name__ = name
         self.type_name = name
         self.cls = bases[0]
-        if "sight_range" in dct:
-            del dct["sight_range"]
+        if "sight_range" in dct and dct["sight_range"] == 1 * PRECISION:
+            dct["sight_range"] = 12 * PRECISION
             dct["bonus_height"] = 1
-            info("in %s: replacing sight_range 1 with bonus_height 1", name)
+            info("in %s: replacing sight_range 1 with sight_range 12 and bonus_height 1", name)
         if "special_range" in dct:
             del dct["special_range"]
             dct["range"] = 12 * PRECISION
@@ -98,6 +99,36 @@ class World(object):
         self.objects = {}
         self.harm_target_types = {}
         self._command_queue = Queue.Queue()
+
+        # "map" properties
+
+        self.objective = []
+        self.intro = []
+        self.timer_coefficient = 1
+
+        self.map_objects = []
+
+        self.computers_starts = []
+        self.players_starts = []
+        self.starting_units = []
+
+        self.square_width = 12 # default value
+        self.nb_lines = 0
+        self.nb_columns = 0
+        self.nb_rows = 0 # deprecated (was incorrectly used for columns instead of lines)
+        self.nb_meadows_by_square = 0
+
+        self.west_east = []
+        self.south_north = []
+
+        # "squares words"
+        self.starting_squares = []
+        self.additional_meadows = []
+        self.remove_meadows = []
+        self.high_grounds = []
+
+        self.nb_players_min = 1
+        self.nb_players_max = 1
 
     def __getstate__(self):
         odict = self.__dict__.copy()
@@ -153,6 +184,30 @@ class World(object):
         return self.grid.get((x / self.square_width,
                               y / self.square_width))
 
+    def get_subsquare_id_from_xy(self, x, y):
+        return x * 3 / self.square_width, y * 3 / self.square_width
+
+    def can_harm(self, unit_type_name, other_type_name): 
+        try:
+            return self.harm_target_types[(unit_type_name, other_type_name)]
+        except:
+            unit = self.unit_class(unit_type_name)
+            other = self.unit_class(other_type_name)
+            if other is None:
+                result = False
+            else:
+                result = True
+                for t in unit.harm_target_type:
+                    if t == "healable" and not other.is_healable or \
+                       t == "building" and not isinstance(other, _Building) or \
+                       t in ("air", "ground") and other.airground_type != t or \
+                       t == "unit" and not isinstance(other, Unit) or \
+                       t == "undead" and not other.is_undead:
+                        result = False
+                        break
+            self.harm_target_types[(unit_type_name, other_type_name)] = result
+            return result
+
     def clean(self):
         for p in self.players + self.ex_players:
             p.clean()
@@ -193,10 +248,45 @@ class World(object):
             d.update(ov)
         return d.hexdigest()
 
+    def _update_cloaking(self):
+        for p in self.players:
+            for u in p.units:
+                if u.is_cloakable:
+                    u.is_cloaked = False
+        for p in self.players:
+            for u in p.units:
+                if u.is_a_cloaker:
+                    radius2 = u.cloaking_range * u.cloaking_range
+                    for vp in p.allied:
+                        for vu in vp.units:
+                            if not vu.is_cloakable: continue
+                            if square_of_distance(vu.x, vu.y, u.x, u.y) < radius2:
+                                vu.is_cloaked = True
+                                continue
+
+    def _update_detection(self):
+        for p in self.players:
+            p.detected_units = set()
+        for p in self.players:
+            for u in p.units:
+                if u.is_a_detector:
+                    radius2 = u.detection_range * u.detection_range
+                    for e in self.players:
+                        if e in p.allied: continue
+                        for iu in e.units:
+                            if not (iu.is_invisible or iu.is_cloaked): continue
+                            if iu in p.detected_units: continue
+                            if square_of_distance(iu.x, iu.y, u.x, u.y) < radius2:
+                                for a in p.allied_vision:
+                                    a.detected_units.add(iu)
+                                continue
+                    
     _previous_slow_update = 0
 
     def update(self):
         # normal updates
+        self._update_cloaking()
+        self._update_detection()
         for p in self.players[:]:
             if p in self.players:
                 try:
@@ -228,6 +318,12 @@ class World(object):
                         exception("")
             self._previous_slow_update += 1000
 
+        # remove from perception the objects deleted during this turn
+        for p in self.players:
+            for o in p.perception.copy():
+                if o.place is None:
+                    p.perception.remove(o)
+
         # signal the end of the updates for this time
         self.time += VIRTUAL_TIME_INTERVAL
         for p in self.players[:]:
@@ -245,7 +341,7 @@ class World(object):
                         observed_before_squares = p.observed_before_squares
                     p.push("voila", self.time,
                            _copy(p.memory), _copy(p.perception),
-                           p.observed_squares.keys(),
+                           p.observed_squares,
                            observed_before_squares,
                            collision_debug)
             except:
@@ -256,7 +352,6 @@ class World(object):
             for p in self.players:
                 p.quit_game()
 
-    ground = []
     global_food_limit = GLOBAL_FOOD_LIMIT
 
     # move the following methods to Map
@@ -304,8 +399,12 @@ class World(object):
         
     def get_makers(self, t):
         def can_make(uc, t):
-            for a in ("can_build", "can_train", "can_upgrade_to"):
+            for a in ("can_build", "can_train", "can_upgrade_to", "can_research"):
                 if t in getattr(uc, a, []):
+                    return True
+            for ability in getattr(uc, "can_use", []):
+                effect = rules.get(ability, "effect")
+                if effect and "summon" in effect[:1] and t in effect:
                     return True
         if t.__class__ != str:
             t = t.__name__
@@ -385,6 +484,25 @@ class World(object):
             map_error("", "The south-north passage starting from %s doesn't exist." % i)
         return self.grid[i].north_side(), self.grid[j].south_side()
 
+    def _ground_graph(self):
+        g = {}
+        for z in self.squares:
+            for e in z.exits:
+                g[e] = {}
+                for f in z.exits:
+                    if f is not e:
+                        g[e][f] = int_distance(e.x, e.y, f.x, f.y)
+                g[e][e.other_side] = 0
+        return g
+
+    def _air_graph(self):
+        g = {}
+        for z in self.squares:
+            g[z] = {}
+            for z2 in z.strict_neighbours:
+                g[z][z2] = int_distance(z.x, z.y, z2.x, z2.y)
+        return g  
+                
     def _create_passages(self):
         for t, squares in self.west_east:
             for i in squares:
@@ -393,13 +511,8 @@ class World(object):
             for i in squares:
                 passage(self._sn_places(i), t)
         self.g = {}
-        for z in self.squares:
-            for e in z.exits:
-                self.g[e] = {}
-                for f in z.exits:
-                    if f is not e:
-                        self.g[e][f] = int_distance(e.x, e.y, f.x, f.y)
-                self.g[e][e.other_side] = 0
+        self.g["ground"] = self._ground_graph()
+        self.g["air"] = self._air_graph()
 
     def _build_map(self):
         self._create_squares_and_grid()
@@ -494,39 +607,12 @@ class World(object):
                 if re.match("^[a-z]+[0-9]+$", sq) is None:
                     map_error(line, "%s is not a square" % sq)
 
-        self.objective = []
-        self.intro = []
-        self.timer_coefficient = 1
         triggers = []
-
-        self.map_objects = []
-
-        self.computers_starts = []
-        self.players_starts = []
-        self.starting_units = []
+        starting_resources = [0 for _ in range(self.nb_res)]
 
         squares_words = ["starting_squares",
                          "additional_meadows", "remove_meadows",
                          "high_grounds"]
-
-        self.square_width = 12 # default value
-        self.nb_lines = 0
-        self.nb_columns = 0
-        self.nb_rows = 0 # deprecated (was incorrectly used for columns instead of lines)
-        self.nb_meadows_by_square = 0
-
-        self.west_east = []
-        self.south_north = []
-
-        # "squares words"
-        self.starting_squares = []
-        self.additional_meadows = []
-        self.remove_meadows = []
-        self.high_grounds = []
-
-        self.starting_resources = [0 for _ in range(self.nb_res)]
-        self.nb_players_min = 1
-        self.nb_players_max = 1
 
         s = map.read() # "universal newlines"
         s = re.sub("(?m);.*$", "", s) # remove comments
@@ -581,10 +667,10 @@ class World(object):
                 check_squares(squares)
                 getattr(self, w).extend(squares)
             elif w in ["starting_resources"]:
-                self.starting_resources = []
+                starting_resources = []
                 for c in words[1:]:
                     try:
-                        self.starting_resources.append(to_int(c))
+                        starting_resources.append(to_int(c))
                     except:
                         map_error(line, "expected an integer but found %s" % c)
             elif rules.get(w, "class") == ["deposit"]:
@@ -601,7 +687,7 @@ class World(object):
         # build self.players_starts
         for sq in self.starting_squares:
             self._add_start_to(self.players_starts,
-                               self.starting_resources, self.starting_units, sq)
+                               starting_resources, self.starting_units, sq)
         if self.nb_players_min > self.nb_players_max:
             map_error("", "nb_players_min > nb_players_max")
         if len(self.players_starts) < self.nb_players_max:
@@ -627,7 +713,7 @@ class World(object):
             self.square_width = int(self.square_width * PRECISION)
             self._build_map()
             if self.objective:
-                self.introduction = [4020] + self.objective
+                self.introduction = mp.OBJECTIVE + self.objective
             else:
                 self.introduction = []
         except MapError, msg:
@@ -660,18 +746,19 @@ class World(object):
     def food_limit(self):
         return self.global_food_limit
 
-    def _add_player(self, player_class, client, start, *args):
-        client.player = player_class(self, client, *args)
+    def _add_player(self, player_class, client, start, *args, **kargs):
+        client.player = player_class(self, client, *args, **kargs)
         self.players.append(client.player)
         client.player.start = start
 
-    def populate_map(self, players, alliances, factions=()):
+    def populate_map(self, players, alliances, factions=(), random_starts=True):
         # add "true" (non neutral) players
-        worldrandom.shuffle(self.players_starts)
+        if random_starts:
+            worldrandom.shuffle(self.players_starts)
         for client in players:
-            start = self.players_starts.pop()
+            start = self.players_starts.pop(0)
             if client.__class__.__name__ == "DummyClient":
-                self._add_player(Computer, client, start, False)
+                self._add_player(Computer, client, start)
             else:
                 self._add_player(Human, client, start)
         # create the alliances
@@ -695,7 +782,7 @@ class World(object):
                     p.faction = pr
         # add "neutral" (independent) computers
         for start in self.computers_starts:
-            self._add_player(Computer, DummyClient(), start, True)
+            self._add_player(Computer, DummyClient(), start, neutral=True)
         # init all players positions
         for player in self.players:
             player.init_position()
@@ -711,7 +798,7 @@ class World(object):
                     except:
                         exception("")
                 else:
-                    time.sleep(.01)
+                    time.sleep(.001)
         if PROFILE:
             import cProfile
             cProfile.runctx("_loop()", globals(), locals(), "world_profile.tmp")

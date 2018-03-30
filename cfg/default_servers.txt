@@ -1,1 +1,8 @@
-andrelouis.com 4046
+; This file is used for the servers list if the metaserver is unavailable.
+; This file could be useful if the metaserver were down for a long period
+; and nobody would have a php server to replace it.
+; Each server is represented by a line always containing:
+; - the IP address (or the URL)
+; - the server name (sound number or login without space)
+; - the port (2500 is the default).
+; These fields must be separated by spaces.

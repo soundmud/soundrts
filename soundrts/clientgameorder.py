@@ -2,7 +2,16 @@ from definitions import style
 from lib.log import warning
 from lib.msgs import nb2msg
 from lib.nofloat import PRECISION
+import msgparts as mp
 from worldorders import ORDERS_DICT
+
+
+def nb2msg_f(n):
+    # the TTS cannot guess how to say "1 ration" ("une ration")
+    # (note: many other cases are not correctly done)
+    if n == 1:
+        return mp.ONE_F
+    return nb2msg(n)
 
 
 class OrderView(object):
@@ -38,7 +47,7 @@ class OrderView(object):
                     msg += nb2msg(c / PRECISION) + style.get("parameters", "resource_%s_title" % i)
             if self.food_cost:
                 and_index = len(msg)
-                msg += nb2msg(self.food_cost, gender="f") + style.get("parameters", "food_title")
+                msg += nb2msg_f(self.food_cost) + style.get("parameters", "food_title")
         # add "and" if there are at least 2 requirements
         if and_index > 0:
             msg[and_index:and_index] = style.get("parameters", "and")

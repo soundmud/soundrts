@@ -8,16 +8,19 @@ from definitions import rules, style
 from lib.log import debug, warning
 from lib.msgs import encode_msg, nb2msg
 from lib.nofloat import PRECISION
+import msgparts as mp
 from worldentity import NotEnoughSpaceError, Entity
 from worldresource import Corpse
+from worldunit import BuildingSite, Soldier
 from worldupgrade import Upgrade
 
 
-class ZoomTarget(Entity):
-    
+class ZoomTarget(object):
+
+    collision = 0
+    radius = 0
+
     def __init__(self, i, player):
-        # Entity.__init__() isn't called because ZoomTarget isn't
-        # a part of the world. Entity provides use_range().
         self.id = i
         _, place_id, x, y = i.split("-")
         self.x = int(x)
@@ -25,12 +28,22 @@ class ZoomTarget(Entity):
         self.place = player.get_object_by_id(place_id)
         self.title = self.place.title # TODO: full zoom title
 
+    def __eq__(self, other):
+        if isinstance(other, ZoomTarget):
+            return self.x, self.y == other.x, other.y
+
+    def __ne__(self, other): return not self.__eq__(other)
+
     @property
     def building_land(self):
         # TODO: improve this when ZoomTarget is replaced
         # with Subsquare and there is 1 building land or resource
         # in each subsquare. 
         return self.place.building_land # XXX imprecise
+
+    def contains(self, x, y):
+        subsquare = self.place.world.get_subsquare_id_from_xy
+        return subsquare(self.x, self.y) == subsquare(x, y)
 
 
 class Objective(object):
@@ -59,9 +72,14 @@ class Player(object):
     has_victory = False
     has_been_defeated = False
     faction = "human_faction"
+    memory_duration = 30000 # 30 seconds of world time
 
     group = ()
     group_had_enough_mana = False # used to warn if not enough mana
+
+    smart_units = False
+
+    groups = {}
 
     def __init__(self, world, client):
         self.allied = [self]
@@ -83,29 +101,48 @@ class Player(object):
         self.budget = []
         self.upgrades = []
         self.forbidden_techs = []
-        self.places_to_explore = []
-        self.observed_before_squares = []
-        self.observed_squares = {}
+        self.observed_before_squares = set()
+        self.observed_squares = set()
         self.observed_objects = {}
-        self.detected_squares = {}
-        self.cloaked_squares = {}
+        self.detected_units = set()
         self.allied_control = (self, )
         self._known_enemies = {}
         self._known_enemies_time = {}
         self._enemy_menace = {}
         self._enemy_menace_time = {}
+        self._subsquare_threat = {}
 
     @property
     def is_playing(self):
         return not (self.has_victory or self.has_been_defeated)
 
+    def raise_threat(self, subsquare, delta):
+        try:
+            self._subsquare_threat[subsquare] += delta
+        except:
+            self._subsquare_threat[subsquare] = delta
+
+    def _get_threat(self, subsquare):
+        try:
+            return self._subsquare_threat[subsquare]
+        except:
+            return 0
+
+    def get_safest_subsquare(self, place):
+        x = place.x * 3 / self.world.square_width
+        y = place.y * 3 / self.world.square_width
+        candidates = list((x + dx, y + dy) for dx in (0, 1, -1) for dy in (0, 1, -1))
+        sub = sorted(candidates, key=self._get_threat)[0]
+        return (sub[0] * self.world.square_width / 3 + self.world.square_width / 6,
+                sub[1] * self.world.square_width / 3 + self.world.square_width / 6)
+    
     def known_enemies(self, place):
         # assert: "memory is not included"
         # warning: memory objects are not in place.objects
         if self._known_enemies_time.get(place) != self.world.time:
             enemy_units = []
             for e in self.world.players:
-                if e.is_an_enemy(self):
+                if e.player_is_an_enemy(self):
                     enemy_units.extend(e.units)
             self._known_enemies[place] = [u for u in
                 set(self.perception).intersection(enemy_units).intersection(place.objects)
@@ -137,16 +174,176 @@ class Player(object):
                 while self.level(upgrade_name) < p.level(upgrade_name):
                     self.world.unit_class(upgrade_name).upgrade_player(self)
 
-    def _update_observed_objects(self):
-        for o in self.observed_objects.keys():
-            if self.observed_objects[o] < self.world.time:
-                del self.observed_objects[o]
-                self.update_perception_of_object(o)
+    def _update_perception(self): # XXX for each allied_vision?
+        if self.cheatmode:
+            self.observed_squares = set(self.world.squares)
+            self.perception = set()
+            for s in self.world.squares:
+                self.perception.update(s.objects)
+            return
+        # init
+        self.perception = set()
+        self.observed_squares = set()
+        partially_observed_squares = set()
+        # terrain, exits, resources
+        for p in self.allied_vision:
+            for u in p.units:
+                self.observed_squares.update(u.get_observed_squares(strict=True))
+                partially_observed_squares.update(u.get_observed_squares())
+        partially_observed_squares -= self.observed_squares
+        for s in self.observed_squares:
+            for o in s.objects:
+                if o.player is None:
+                    self.perception.add(o)
+        # partially observed squares show the terrain as memory with a fog of war warning
+        for s in partially_observed_squares:
+            for o in s.objects:
+                if o.player is None:
+                    self._memorize(o)
+        self.observed_before_squares.update(partially_observed_squares)
+        # objects revealed by their actions
+        for p in self.allied_vision:
+            # XXX cleaning should be done by each player
+            for o in p.observed_objects.keys():
+                # remove old observed objects and deleted objects
+                if (p.observed_objects[o] < self.world.time
+                    or o.place is None):
+                    del p.observed_objects[o]
+            # XXX this can be shared
+            p.perception.update(p.observed_objects.keys())
+        # sight
+        for p in self.world.players:
+            if p in self.allied_vision:
+                self.perception.update(p.units)
+            else:
+                for u in p.units:
+                    if (u.is_invisible or u.is_cloaked) and u not in self.detected_units:
+                        continue
+                    for avp in self.allied_vision:
+                        for avu in avp.units:
+                            from lib.nofloat import square_of_distance
+                            radius2 = avu.sight_range * avu.sight_range
+                            # XXX add wall condition (get_observed_squares only if radius<10*PRECISION)
+                            if (square_of_distance(avu.x, avu.y, u.x, u.y) < radius2
+                                and (avu.sight_range >= self.world.square_width
+                                     or u.place in avu.get_observed_squares())):
+                                self.perception.add(u)
+                                continue
+        # remove units inside buildings from perception
+        # XXX even friendly units?
+        # remove deleted units from perception
+        for o in self.perception.copy():
+##            if o.place is None:
+##                print "removed", o.id
+##                self.perception.remove(o)
+            if o.is_inside:
+                self.perception.remove(o)
+
+    def _update_memory(self, previous_perception):
+        # XXX forget deleted corpses, burning buildings, etc, only when an observer notices the absence
+        self.observed_before_squares.update(self.observed_squares)
+        for m in self.memory.copy():
+            # forget units reappearing elsewhere
+            # forget deleted units XXX should be done only if memory is in sight range
+            # forget old memories of mobile units
+            if (m.initial_model in self.perception
+                or m.initial_model.place is None
+                or m.initial_model.speed and m.time_stamp + self.memory_duration < self.world.time):
+                self._forget(m)
+        # memorize disappeared units
+        # don't memorize deleted units
+        # don't memorize invisible or cloaked units (confusing)
+        for o in previous_perception - self.perception:
+            if o.is_invisible or o.is_cloaked: continue
+            if o.place is not None:
+                self._memorize(o)
+
+    def _update_perception_and_memory(self):
+        previous_perception = self.perception.copy()
+        self._update_perception()
+        self._update_memory(previous_perception)
+
+    def _update_menace(self):
+        self._menace = sum(u.menace for u in self.units if u.speed > 0 and isinstance(u, Soldier))
+
+    def _update_enemy_menace_and_presence_and_corpses(self):
+        self._enemy_menace = {}
+        self._enemy_presence = []
+        self._places_with_corpses = set()
+        self._places_with_friends = set()
+        self._cataclysmic_places = set()
+        for l in (self.perception, self.memory):
+            for o in l:
+                if self.is_an_enemy(o):
+                    menace = o.menace
+                    try:
+                        self._enemy_menace[o.place] += menace
+                    except:
+                        self._enemy_menace[o.place] = menace
+                        self._enemy_presence.append(o.place)
+                    if o.range > PRECISION:
+                        for place in o.place.neighbours:
+                            try:
+                                self._enemy_menace[place] += menace / 10
+                            except:
+                                self._enemy_menace[place] = menace / 10
+                elif isinstance(o, Corpse):
+                    self._places_with_corpses.add(o.place)
+                elif o.player in self.allied and o.is_vulnerable:
+                    self._places_with_friends.add(o.place)
+                if o.time_limit and o.harm_level:
+                    self._cataclysmic_places.add(o.place)
+
+    def enemy_menace(self, place):
+        try:
+            return self._enemy_menace[place]
+        except:
+            return 0
+
+    def is_very_dangerous(self, place_or_exit):
+        if not self.is_dangerous(place_or_exit):
+            # presence without menace
+            return False
+        try:
+            return place_or_exit.other_side.place in self._enemy_presence
+        except:
+            return place_or_exit in self._enemy_presence
+
+    def is_dangerous(self, place_or_exit):
+        try:
+            return place_or_exit.other_side.place in self._enemy_menace
+        except:
+            return place_or_exit in self._enemy_menace
+
+    def balance(self, *squares):
+        # the first square is where the fight will be
+        # XXX versus air, ground
+        # XXX allies (in first square)
+        a = 0
+        for u in self.units:
+            if u.place in squares:
+                a += u.menace
+        try:
+            return a / self.enemy_menace(squares[0])
+        except ZeroDivisionError:
+            return 1000
+
+    def _update_actual_speed(self):
+        for u in self.units:
+            u.actual_speed = u.speed
+        for g in self.groups.values():
+            if g:
+                actual_speed = min(u.speed for u in g)
+                for u in g:
+                    u.actual_speed = actual_speed
 
     def update(self):
+        self._update_actual_speed()
         self._update_storage_bonus()
         self._update_allied_upgrades()
-        self._update_observed_objects()
+        self._update_perception_and_memory()
+        self._update_menace()
+        self._update_enemy_menace_and_presence_and_corpses()
         self.play()
 
     def level(self, type_name):
@@ -182,90 +379,13 @@ class Player(object):
     def is_local_human(self):
         return hasattr(self.client, "interface")
 
-    def is_perceiving(self, o):
-        if o is None or o.is_inside or o.place is None:
-            return False
-        for p in self.allied_vision:
-            if o.player is p or (
-            (o.place in p.observed_squares or
-             o in p.observed_objects)
-             and (
-                not o.is_invisible_or_cloaked() or
-                o.place in p.detected_squares)):
-                return True
-        return False
-
     def observe(self, o):
         # for example: a catapult firing from an unknown place
         # doesn't work for invisible units (hints are given in Starcraft though)
-        if o.is_invisible_or_cloaked(): return # don't observe dark archers
-        if not self.is_perceiving(o):
-            self.observed_objects[o] = self.world.time + 3000
-            self.update_perception_of_object(o)
+        if o.is_invisible or o.is_cloaked: return # don't observe dark archers
+        self.observed_objects[o] = self.world.time + 3000
 
-    def _update_dict(self, dct, squares, inc, affected_squares):
-        for square in squares:
-            if square not in dct:
-                dct[square] = 0
-                if square not in affected_squares:
-                    affected_squares.append(square)
-            dct[square] += inc
-            if dct[square] == 0:
-                del dct[square]
-                if square not in affected_squares:
-                    affected_squares.append(square)
-            else:
-                assert dct[square] > 0
-
-    def update_perception_of_object(self, o):
-        if self.is_perceiving(o):
-            if o not in self.perception:
-                # add to perception
-                self.perception.add(o)
-                for m in list(self.memory):
-                    if m.initial_model is o:
-                        # forget it because you are perceiving it again
-                        self._forget(m)
-                if self.is_an_enemy(o):
-                    for u in self.units:
-                        u.react_arrival(o)
-        elif o in self.perception:
-            # remove from perception
-            self.perception.remove(o)
-            if o.player is not self and o.place is not None:
-                self._remember(o)
-
-    def _update_all_dicts(self, unit, inc, affected_squares):
-        self._update_dict(self.observed_squares, unit.get_observed_squares(), inc, affected_squares)
-        if inc > 0:
-            for square in unit.get_observed_squares():
-                if square not in self.observed_before_squares:
-                    self.observed_before_squares.append(square)
-        if unit.is_a_detector:
-            self._update_dict(self.detected_squares, [unit.place], inc, affected_squares)
-        # assertion: self.allied_vision == self.allied_cloaking
-        if unit.is_a_cloaker:
-            self._update_dict(self.cloaked_squares, [unit.place], inc, affected_squares)
-
-    def update_all_dicts(self, unit, inc):
-        if unit.place is None: return
-        # TODO MAYBE: make the difference between affected squares
-        # for allies (sight and detectors) and affected squares for
-        # non allies (cloakers). 
-        affected_squares = []
-        for p in self.allied_vision:
-            p._update_all_dicts(unit, inc, affected_squares)
-        for p in self.world.players: # necessary for cloakers
-            for square in affected_squares:
-                for o in square.objects:
-                    p.update_perception_of_object(o)
-                if square in p.observed_squares:
-                    # forget what is remembered there
-                    for m in list(p.memory):
-                        if m.place is square:
-                            p._forget(m)
-
-    def _remember(self, o):
+    def _memorize(self, o):
         for m in self.memory:
             if m.initial_model is o:
                 self.memory.remove(m)
@@ -278,6 +398,11 @@ class Player(object):
     def _forget(self, o):
         self.memory.remove(o)
         o.place = None # make sure this object is not reused
+
+    def remembers(self, actual_object):
+        for remembrance in self.memory:
+            if remembrance.initial_model is actual_object:
+                return True
 
     def send_event(self, o, e):
         if self.is_local_human():
@@ -471,9 +596,10 @@ class Player(object):
         return True
 
     def lang_has_entered(self, args):
+        player = self.world.players[0]
         for x in args:
             for o in self.world.grid[x].objects:
-                if o in self.units and o.presence:
+                if o in player.units and o.presence:
                     return True
 
     def _nb_scouts(self, square):
@@ -522,11 +648,11 @@ class Player(object):
                 multiplicator = 1
             
     def lang_no_enemy_left(self, unused_args):
-        return not [p for p in self.world.players if self.is_an_enemy(p)
+        return not [p for p in self.world.players if self.player_is_an_enemy(p)
                     and p.is_playing]
 
     def lang_no_enemy_player_left(self, unused_args):
-        return not [p for p in self.world.true_players() if self.is_an_enemy(p)
+        return not [p for p in self.world.true_players() if self.player_is_an_enemy(p)
                     and p.is_playing]
 
     def lang_no_unit_left(self, unused_args):
@@ -549,30 +675,36 @@ class Player(object):
 
     def _get_score_msgs(self):
         if self.has_victory:
-            victory_or_defeat = [149]
+            victory_or_defeat = mp.VICTORY
         else:
-            victory_or_defeat = [150]
+            victory_or_defeat = mp.DEFEAT
         t = self.world.time / 1000
         m = int(t / 60)
         s = int(t - m * 60)
         msgs = []
-        msgs.append(victory_or_defeat + [107] + nb2msg(m) + [65]
-                    + nb2msg(s) + [66]) # in ... minutes and ... seconds
-        msgs.append(nb2msg(self.nb_units_produced) + [130, 4023, 9998]
-                    + nb2msg(self.nb_units_lost) + [146, 9998]
-                    + nb2msg(self.nb_units_killed) + [145])
-        msgs.append(nb2msg(self.nb_buildings_produced) + [4025, 4022, 9998]
-                    + nb2msg(self.nb_buildings_lost) + [146, 9998]
-                    + nb2msg(self.nb_buildings_killed) + [145])
+        msgs.append(victory_or_defeat + mp.AT
+                    + nb2msg(m) + mp.MINUTES
+                    + nb2msg(s) + mp.SECONDS)
+        msgs.append(nb2msg(self.nb_units_produced) + mp.UNITS + mp.PRODUCED_F
+                    + mp.COMMA
+                    + nb2msg(self.nb_units_lost) + mp.LOST
+                    + mp.COMMA
+                    + nb2msg(self.nb_units_killed) + mp.NEUTRALIZED)
+        msgs.append(nb2msg(self.nb_buildings_produced) + mp.BUILDINGS + mp.PRODUCED_M
+                    + mp.COMMA
+                    + nb2msg(self.nb_buildings_lost) + mp.LOST
+                    + mp.COMMA
+                    + nb2msg(self.nb_buildings_killed) + mp.NEUTRALIZED)
         res_msg = []
         for i, _ in enumerate(self.resources):
             res_msg += nb2msg(self.gathered_resources[i] / PRECISION) \
                        + style.get("parameters", "resource_%s_title" % i) \
-                       + [4256, 9998] \
+                       + mp.GATHERED + mp.COMMA \
                        + nb2msg(self.consumed_resources()[i] / PRECISION) \
-                       + [4024, 9999]
+                       + mp.CONSUMED + mp.PERIOD
         msgs.append(res_msg[:-1])
-        msgs.append([4026] + nb2msg(self._get_score()) + [2008])
+        msgs.append(mp.SCORE + nb2msg(self._get_score())
+                    + mp.HISTORY_EXPLANATION)
         return msgs
 
     score_msgs = ()
@@ -600,7 +732,7 @@ class Player(object):
         self._quit_alliance()
         self.store_score()
         if self in self.world.true_players():
-            self.broadcast_to_others_only([self.name, 4311]) # "defeated"
+            self.broadcast_to_others_only([self.name] + mp.HAS_BEEN_DEFEATED)
         for u in self.units[:]:
             u.delete()
         if force_quit:
@@ -613,9 +745,10 @@ class Player(object):
                     the_game_will_probably_continue = True
                     break
             if the_game_will_probably_continue:
-                self.send_voice_important([4312, 4313]) # "defeated" "observer mode"
+                self.send_voice_important(mp.YOU_HAVE_BEEN_DEFEATED
+                                          + mp.YOU_ARE_NOW_IN_OBSERVER_MODE)
             else:
-                self.send_voice_important([4312]) # "defeated"
+                self.send_voice_important(mp.YOU_HAVE_BEEN_DEFEATED)
             if not self.cheatmode:
                 self.cmd_toggle_cheatmode()
         else:
@@ -635,15 +768,16 @@ class Player(object):
         o = Objective(n, [int(x) for x in args[1:]])
         if not self.objectives.has_key(n):
             self.objectives[n] = o
-            self.send_voice_important([4268] + o.description) # "new objective"
+            self.send_voice_important(mp.NEW_OBJECTIVE + o.description)
 
     def lang_objective_complete(self, args):
         n = args[0]
         if self.objectives.has_key(n):
-            self.send_voice_important([4269] + self.objectives[n].description)
+            self.send_voice_important(mp.OBJECTIVE_COMPLETE
+                                      + self.objectives[n].description)
             del self.objectives[n]
             if self.objectives == {}:
-                self.send_voice_important([4270])
+                self.send_voice_important(mp.MISSION_COMPLETE)
                 self.victory()
 
     def lang_ai(self, args):
@@ -659,19 +793,14 @@ class Player(object):
     def available_food(self):
         return min(self.food, self.world.food_limit)
 
-    def on_resource_exhausted(self):
+    def on_unit_attacked(self, unit, attacker):
         pass
 
-    def on_unit_flee(self, unit):
-        pass
+    def player_is_an_enemy(self, p):
+        return p not in self.allied
 
     def is_an_enemy(self, o):
-        if isinstance(o, Player):
-            return o not in self.allied
-        elif hasattr(o, "player"):
-            return self.is_an_enemy(o.player)
-        else:
-            return False
+        return o.player is not None and o.player not in self.allied
 
     def broadcast_to_others_only(self, msg):
         for p in self.world.players:
@@ -686,16 +815,9 @@ class Player(object):
         elif inspect.isclass(t): # Deposit, BuildingSite, Worker, Meadow...
             return isinstance(o, t)
         elif hasattr(t, "type_name"):
-            return o.type_name == t.type_name
+            return o.type_name == t.type_name or t.type_name in getattr(o, "expanded_is_a", ())
         elif isinstance(t, str):
-            return o.type_name == t
-        
-    def nb(self, types):
-        n = 0
-        for u in self.units:
-            if self.check_type(u, types):
-                n += 1
-        return n
+            return o.type_name == t or t in getattr(o, "expanded_is_a", ())
 
     def future_count(self, type_name):
         result = 0
@@ -717,11 +839,14 @@ class Player(object):
             return False
         return True
 
-    def nearest_warehouse(self, place, resource_type):
+    def nearest_warehouse(self, place, resource_type, include_building_sites=False):
         warehouses = []
         for p in self.allied:
             for u in p.units:
-                if resource_type in u.storable_resource_types:
+                if (resource_type in u.storable_resource_types
+                    or include_building_sites
+                       and isinstance(u, BuildingSite)
+                       and resource_type in u.type.storable_resource_types):
                     d = place.shortest_path_distance_to(u.place, self)
                     if d == 0:
                         return u
@@ -736,26 +861,11 @@ class Player(object):
     def cmd_toggle_cheatmode(self, unused_args=None):
         if self.cheatmode:
             self.cheatmode = False
-            affected = []
-            self._update_dict(self.observed_squares, self.world.squares, -1, affected)
-            self._update_dict(self.detected_squares, self.world.squares, -1, affected)
-            for sq in affected:
-                for o in sq.objects:
-                    o.update_perception()
-            # assertion:
-            # observed_before_squares is not affected by _update_dict
-            # (only update_all_dicts() would do that)
-            for o in list(self.memory):
-                if o.place not in self.observed_before_squares:
-                    self.memory.remove(o)
         else:
             self.cheatmode = True
-            affected = []
-            self._update_dict(self.observed_squares, self.world.squares, 1, affected)
-            self._update_dict(self.detected_squares, self.world.squares, 1, affected)
-            for sq in affected:
-                for o in sq.objects:
-                    o.update_perception()
+
+    def cmd_cmd(self, args):
+        self.my_eval(args)
 
     def _is_admin(self):
         return self.client == self.world.admin

@@ -1,0 +1,12 @@
+square_width 12
+nb_columns 2
+nb_lines 1
+
+west_east_paths a1
+high_grounds a1
+
+nb_players_min 2
+nb_players_max 2
+starting_squares a1 b1
+starting_units peasant
+starting_resources 10 10

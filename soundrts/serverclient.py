@@ -5,9 +5,11 @@ import sys
 import time
 
 from lib.log import debug, info, warning, exception
-from lib.msgs import insert_silences, encode_msg
+from lib.msgs import encode_msg
+from mapfile import worlds_multi
+import msgparts as mp
 import res
-from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
+from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game, insert_silences
 
 
 class ConnectionToClient(asynchat.async_chat):
@@ -90,7 +92,7 @@ class ConnectionToClient(asynchat.async_chat):
         if self.server.can_create(self):
             self.push("maps %s\n" %
                       " ".join([",".join([str(y) for y in x.title])
-                                for x in res.worlds_multi()]))
+                                for x in worlds_multi()]))
         else:
             self.push("maps \n")
 
@@ -170,7 +172,7 @@ class ConnectionToClient(asynchat.async_chat):
         if self.server.can_create(self):
             self.state = OrganizingAGame()
             self.push("game_admin_menu\n")
-            scs = res.worlds_multi()
+            scs = worlds_multi()
             scenario = scs[int(args[0])]
             self.push("map %s\n" % scenario.pack())
             speed = float(args[1])
@@ -180,7 +182,7 @@ class ConnectionToClient(asynchat.async_chat):
             self.server.update_menus()
         else:
             warning("game not created (max number reached)")
-            self.send_msg([4057])
+            self.send_msg(mp.TOO_MANY_GAMES)
 
     def cmd_register(self, args):
         game = self.server.get_game_by_id(args[0])
@@ -191,7 +193,7 @@ class ConnectionToClient(asynchat.async_chat):
             game.register(self)
             self.server.update_menus()
         else:
-            self.send_msg([1029]) # hostile sound
+            self.send_msg(mp.BEEP)
 
     def cmd_quit(self, unused_args):
         # When the client wants to quit, he first sends "quit" to the server.
@@ -213,7 +215,7 @@ class ConnectionToClient(asynchat.async_chat):
             self.game.invite(guest)
             self.server.update_menus()
         else:
-            self.send_msg([1029]) # hostile sound
+            self.send_msg(mp.BEEP)
 
     def cmd_invite_easy(self, unused_args):
         self.game.invite_computer("easy")
@@ -274,7 +276,7 @@ class ConnectionToClient(asynchat.async_chat):
         info(" ".join(args))
 
     def cmd_say(self, args):
-        msg = [self.login] + [4287] + [" ".join(args)]
+        msg = [self.login] + mp.SAYS + [" ".join(args)]
         if self.game is not None:
             self.game.broadcast(msg)
         else:

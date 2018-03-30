@@ -26,16 +26,6 @@ class Exit(Entity):
     def blockers(self):
         return self._blockers + getattr(self.other_side, "_blockers", [])
 
-    def use_range(self, a):
-        return a.radius + 1000 # + 10
-
-    def be_used_by(self, actor):
-        actor.move_to(self.other_side.place,
-                      self.other_side.x + 250 * int_cos_1000(self.other_side.o) / 1000, # 25 cm
-                      self.other_side.y + 250 * int_sin_1000(self.other_side.o) / 1000, # 25 cm
-                      self.other_side.o,
-                      self, self.other_side)
-
     def add_blocker(self, o):
         self._blockers.append(o)
 

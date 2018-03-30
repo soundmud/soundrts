@@ -1,3 +1,10 @@
+; In order to test the compatibility with mods and maps from 1.2 beta 9:
+; - this campaign is using the exact rules.txt from 1.2 beta 9;
+; - the map files of the campaign are unchanged from 1.2 beta 9 (except a minor trigger fix).
+clear
+
+; rules.txt from 1.2 beta 9 starts here:
+
 ; can_build: buildings that the unit can build
 ; can_research: abilities that the unit can research
 ; can_train: units that the building can train
@@ -5,13 +12,13 @@
 ; requirements: objects (units, upgrades) required by the object to be acquired (unit or building) or used (ability)
 
 
-; factions (this part is not ready yet)
+; races (this part is not ready yet)
 
-def human_faction
-class faction
+def human_race
+class race
 
-;def orc_faction
-;class faction
+;def orc_race
+;class race
 ;townhall great_hall
 ;farm pig_farm
 ;peasant peon
@@ -23,7 +30,6 @@ class faction
 
 def parameters
 nb_of_resource_types 2 ; gold and wood
-minimal_damage 0.17
 
 
 ; resource deposits
@@ -49,7 +55,7 @@ requirements u_teleportation
 mana_cost 150
 effect teleportation
 effect_target ask
-effect_range inf
+effect_range anywhere
 universal_notification 1
 
 def a_recall
@@ -58,7 +64,7 @@ requirements u_recall
 mana_cost 150
 effect recall
 effect_target ask
-effect_range inf
+effect_range anywhere
 universal_notification 1
 
 def a_conversion
@@ -79,7 +85,7 @@ class ability
 mana_cost 30
 effect summon 10 holy_vision
 effect_target ask
-effect_range inf
+effect_range anywhere
 
 def a_exorcism
 class ability
@@ -87,7 +93,7 @@ requirements u_exorcism
 mana_cost 150
 effect summon 15 exorcism
 effect_target ask
-effect_range 12
+effect_range nearby
 
 def a_deadly_fog
 class ability
@@ -95,7 +101,7 @@ requirements u_deadly_fog
 mana_cost 150
 effect summon 15 deadly_fog
 effect_target ask
-effect_range 12
+effect_range nearby
 
 def a_meteors
 class ability
@@ -103,7 +109,7 @@ requirements u_meteors
 mana_cost 150
 effect summon 15 meteors
 effect_target ask
-effect_range 12
+effect_range nearby
 
 def a_resurrection
 class ability
@@ -218,7 +224,7 @@ food_cost 1
 time_cost 10
 hp_max 4
 speed 1.5
-can_build farm barracks lumbermill blacksmith wall gate scouttower townhall stables workshop dragonslair magestower temple necropolis
+can_build farm barracks lumbermill blacksmith scouttower townhall stables workshop dragonslair magestower temple necropolis
 ;can_use a_improved_wood_gathering
 range 0.8
 cooldown 1
@@ -267,7 +273,7 @@ can_use archer_weapon archer_armor archer_range
 armor 0
 cooldown 1.5
 target_types ground air
-range 4
+range 3
 is_ballistic 1
 damage 2.5
 can_upgrade_to darkarcher
@@ -298,7 +304,7 @@ can_use archer_weapon archer_armor archer_range
 armor 0
 cooldown 1.5
 target_types ground air
-range 4
+range 3
 is_ballistic 1
 damage 2.5
 corpse 0
@@ -329,9 +335,8 @@ food_cost 2
 time_cost 30
 hp_max 30
 speed 0.75
-range 12
-minimal_range 4
-is_ballistic 1
+sight_range 1 ; can see the adjacent squares
+special_range 1 ; can attack the adjacent squares
 cooldown 4
 damage 8
 damage_radius 0.25
@@ -348,9 +353,9 @@ food_cost 3
 time_cost 15
 airground_type air
 hp_max 30
-hp_regen 0.15
 speed 1.75
-range 4
+sight_range 1 ; can see the adjacent squares
+range 3
 cooldown 4
 damage 4
 target_types ground air
@@ -369,7 +374,7 @@ mana_max 200
 mana_regen 1 ; mana / second
 speed 1
 can_use a_recall a_summon_dragon a_meteors
-range 6
+range 4.5
 cooldown 1.5
 damage 8
 target_types ground air
@@ -385,7 +390,7 @@ mana_max 200
 mana_regen 1 ; mana / second
 speed 1
 can_use a_raise_dead a_deadly_fog
-range 6
+range 4.5
 cooldown 1.5
 damage 8
 target_types ground air
@@ -412,6 +417,7 @@ time_cost 10
 airground_type air
 hp_max 30
 speed 1.5
+sight_range 1 ; can see the adjacent squares
 is_repairable 1
 is_healable 0
 transport_capacity 8
@@ -428,7 +434,8 @@ airground_type air
 hp_max 30
 speed 1.5
 requirements magestower
-range 5
+sight_range 1 ; can see the adjacent squares
+range 4.5
 cooldown 1.5
 damage 8
 target_types ground air
@@ -569,7 +576,7 @@ class building
 cost 6 2
 hp_max 33;  100/3
 time_cost 60
-bonus_height 1
+sight_range 1 ; can see the adjacent squares
 can_upgrade_to guardtower cannontower
 is_buildable_anywhere 1
 provides_survival 0
@@ -580,8 +587,8 @@ cost 11 4
 requirements lumbermill
 hp_max 43;  130/3
 time_cost 140
-bonus_height 1
-range 6
+sight_range 1 ; can see the adjacent squares
+range 5
 is_ballistic 1
 cooldown 1.5
 damage 6 ; 6-16
@@ -597,8 +604,8 @@ cost 16 5
 requirements blacksmith
 hp_max 53;  160/3
 time_cost 190
-bonus_height 1
-range 7
+sight_range 1 ; can see the adjacent squares
+range 6
 is_ballistic 1
 cooldown 4
 damage 8 ; 10-50
@@ -608,48 +615,6 @@ splash 1
 armor 1 ; armor 20
 is_buildable_anywhere 1
 provides_survival 0
-
-def wall
-class building
-cost 7 9
-food_provided 0
-hp_max 500
-time_cost 90
-is_buildable_on_exits_only 1
-provides_survival 0
-can_upgrade_to massive_wall
-
-def massive_wall
-class building
-cost 21 27
-food_provided 0
-hp_max 2000
-time_cost 270
-is_buildable_on_exits_only 1
-provides_survival 0
-requirements keep
-
-def gate
-class building
-cost 10 10
-food_provided 0
-hp_max 450
-time_cost 90
-is_buildable_on_exits_only 1
-is_a_gate 1
-provides_survival 0
-can_upgrade_to massive_gate
-
-def massive_gate
-class building
-cost 30 30
-food_provided 0
-hp_max 1800
-time_cost 270
-is_buildable_on_exits_only 1
-is_a_gate 1
-provides_survival 0
-requirements keep
 
 ; other units
 
@@ -680,10 +645,13 @@ harm_level 1
 harm_target_type ground unit
 
 def holy_vision
-class effect
+class soldier
+presence 0 ; casting holy vision on a square doesn't trigger "player has entered the square"
+food_cost 0
+corpse 0
+is_vulnerable 0
 is_invisible 1
 is_a_detector 1
-airground_type air
 
 def exorcism
 class effect

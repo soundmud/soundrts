@@ -33,9 +33,7 @@ class GridView(object):
         for xc in range(0, self.interface.xcmax + 1):
             for yc in range(0, self.interface.ycmax + 1):
                 sq = self.interface.server.player.world.grid[(xc, yc)]
-                if sq in self.interface.server.player.detected_squares:
-                    color = (0, 25, 25)
-                elif sq in self.interface.server.player.observed_squares:
+                if sq in self.interface.server.player.observed_squares:
                     color = (0, 25, 0)
                 elif sq in self.interface.server.player.observed_before_squares:
                     color = (15, 15, 15)
@@ -90,7 +88,7 @@ class GridView(object):
                 color = (0,55,0)
             elif o.player in self.interface.player.allied:
                 color = (0,0,155)
-            elif o.player.is_an_enemy(self.interface.player):
+            elif o.player.player_is_an_enemy(self.interface.player):
                 color = (155,0,0)
             else:
                 color = (0, 0, 0)

@@ -1,3 +1,4 @@
+#! python2.7
 import compileall
 from logging import *
 import os
@@ -89,7 +90,7 @@ for dirpath, dirnames, filenames in os.walk("soundrts"):
 
 chdir(SRC_DIR)
 
-copy("doc/readme.txt", _d("bin/multi"))
+copy("doc/multiplatform/readme.txt", _d("bin/multi"))
 print "copying build_tts lib..."
 my_copy("", ".dll", _d("bin/dist"))
 
@@ -119,7 +120,7 @@ try:
         open(dest + "cfg/language.txt", "w").write("")
         my_copytree("mods", dest + "mods")
 
-        my_copy(_d("doc"), "", dest + "doc")
+        my_copytree(_d("doc"), dest + "doc")
 
         for e in [".php", ".txt"]:
             my_copy("metaserver", e, dest + "metaserver")

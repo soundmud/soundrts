@@ -20,10 +20,6 @@ Here are all of the constants.
 
 - constant_attacks - The AI will constantly attack and explore the map.
 - research - The AI will research the weapons and armors.
-- teleportation - The AI will use teleportation.
-- send_soldiers_to_base - The AI will keep sending soldiers to his base.
-- raise_dead - The AI will raise dead.
-- retaliate - The AI will retaliate to enemy attacks.
 
 3. The "get" command
 --------------------

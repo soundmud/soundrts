@@ -41,6 +41,7 @@ CAMPAIGNS_CONFIG_PATH = os.path.join(CONFIG_DIR_PATH, "campaigns.ini")
 OLD_STATS_PATH = os.path.join(CONFIG_DIR_PATH, "stats.txt")
 STATS_PATH = os.path.join(CONFIG_DIR_PATH, "stats.tmp")
 SAVE_PATH = os.path.join(CONFIG_DIR_PATH, "savegame")
+CUSTOM_BINDINGS_PATH = os.path.join(CONFIG_DIR_PATH, "bindings.txt")
 
 MAPS_PATHS = ["", CONFIG_DIR_PATH]
 if MAPS_PATHS[0] == MAPS_PATHS[1]:

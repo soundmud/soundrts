@@ -1,3 +1,4 @@
 7500 A horde of enemies has arrived from nowhere and destroys everything! Something needs to be done...
 7501 Your lord have sent you to build a base near the frontier. Don't wander too far, for a few enemies have been spotted nearby.
 7502 Nicely done!
+7503 Escort the catapults to I1.

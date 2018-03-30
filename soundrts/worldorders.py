@@ -1,7 +1,9 @@
 from constants import MAX_NB_OF_RESOURCE_TYPES, ORDERS_QUEUE_LIMIT, VIRTUAL_TIME_INTERVAL
 from definitions import rules
+from lib.log import info
 from lib.nofloat import to_int, PRECISION
 import worldrandom
+from worldaction import AttackAction, MoveXYAction
 from worldresource import Meadow, Deposit, Corpse
 from worldroom import Square
 from soundrts.lib.nofloat import square_of_distance
@@ -38,13 +40,17 @@ class Order(object):
 
     def update(self):
         if self.__first_update:
-            self.unit.action_target = None
+            self.unit.stop()
             self.__first_update = False
         self.execute()
 
     @property
     def player(self):
         return self.unit.player
+
+    @property
+    def world(self):
+        return self.unit.world
 
     def cancel(self, unpay=True): pass
 
@@ -62,19 +68,88 @@ class Order(object):
         t = self.target
         p = self.unit.player
         if t is not None and \
+           type(t).__name__ != "ZoomTarget" and \
            t not in p.world.squares and \
            t not in p.perception and \
            t not in p.memory:
             self.target = p.get_object_by_id(t.id)
 
+# unused function allowing units to move like a closing wave (somewhat)
+#    def _must_wait(self):
+#        d = self.unit.shortest_path_distance_to(self.target) + self.player.world.square_width
+#        for u in self.player.units:
+#            if u is not self.unit and u.orders and u.orders[0] == self and \
+#               u.shortest_path_distance_to(u.orders[0].target) > d:
+#                return True
+
+    def _group_is_ready(self):
+        for u in self.player.units:
+            if u is not self.unit and u.orders and u.orders[0] == self \
+               and u.place is not self.unit.place:
+                return False
+        return True
+
+    def _grouped_attack(self, target):
+        # or sometimes recently arrived units will deploy first
+        self.unit.notify("attack")
+        for u in self.player.units:
+            if u.orders and u.orders[0] == self \
+               and u.place is self.unit.place:
+                u.start_moving_to(target)
+
+    def _default_move_to_or_fail(self, target):
+        self.unit.start_moving_to(target)
+        if self.unit.is_idle: # target is unreachable
+            self.mark_as_impossible()
+            self.unit.deploy() # do not block the path
+
+    def _smart_move_to_or_fail(self, target):
+        self.unit.start_moving_to(target, avoid=self.player.smart_units)
+        if self.unit.is_idle and isinstance(self, (GoOrder, PatrolOrder)):    
+            # eventually attack the obstacle
+            next_square = self.unit.next_stage(target)
+            try:
+                next_square = next_square.other_side.place
+            except AttributeError:
+                pass # XXX target is None, Subsquare or Entity
+            if self.player.enemy_menace(next_square) == 0:
+                # no obstacle yet
+                self.unit.start_moving_to(next_square)
+            elif next_square is target:
+                # XXX only count group in self.unit.place?
+                if self.player.balance(next_square, self.unit.place) > 1.1 \
+                   or self._group_is_ready():
+                    info("attack goal")
+                    self._grouped_attack(next_square)
+                    return
+                else:
+                    info("wait for group before goal")
+                    self.unit.deploy()
+                    return
+            elif not self.player.smart_units \
+                 or self.player.balance(next_square, self.unit.place) > 1.1:
+                info("attack through")
+                self._grouped_attack(next_square)
+##            elif False and self._must_wait(): # XXX remove this if wait anyway
+##                print "wait"
+##                self.unit.deploy()
+##                return
+            else:
+                info("wait anyway")
+                self.unit.deploy()
+                return
+        if self.unit.is_idle: # target is unreachable
+            self.mark_as_impossible()
+            self.unit.deploy() # do not block the path
+
     def move_to_or_fail(self, target):
         if self.unit.speed == 0:
             self.mark_as_impossible()
             return
-        self.unit.action_target = self.unit.next_stage(target)
-        if self.unit.action_target is None: # target is unreachable
-            self.mark_as_impossible()
-            self.unit._go_center() # do not block the path
+        if self.player.smart_units:
+            self._default_move_to_or_fail(target)
+        else:
+            self._smart_move_to_or_fail(target)
 
     def immediate_action(self):
         if len(self.unit.orders) >= ORDERS_QUEUE_LIMIT:
@@ -116,7 +191,6 @@ class Order(object):
     def missing_requirements(self):
         return []
 
-
 class ImmediateOrder(Order):
 
     never_forget_previous = True
@@ -132,11 +206,11 @@ class StopOrder(ImmediateOrder):
 
     @classmethod
     def is_allowed(cls, unit, *unused_args):
-        return unit.action_target
+        return not unit.is_idle
 
     def immediate_action(self):
         self.unit.cancel_all_orders()
-        self.unit.action_target = None
+        self.unit.stop()
         self.unit.notify("order_ok")
 
 
@@ -169,32 +243,6 @@ class CancelBuildingOrder(ImmediateOrder):
         self.unit.die()
 
 
-class ModeOffensive(ImmediateOrder):
-
-    keyword = "mode_offensive"
-
-    @classmethod
-    def is_allowed(cls, unit, *unused_args):
-        return unit.can_switch_ai_mode and unit.ai_mode == "defensive"
-
-    def immediate_action(self):
-        self.unit.ai_mode = "offensive"
-        self.unit.notify("order_ok")
-
-
-class ModeDefensive(ImmediateOrder):
-
-    keyword = "mode_defensive"
-
-    @classmethod
-    def is_allowed(cls, unit, *unused_args):
-        return unit.can_switch_ai_mode and unit.ai_mode == "offensive"
-
-    def immediate_action(self):
-        self.unit.ai_mode = "defensive"
-        self.unit.notify("order_ok")
-
-
 class RallyingPointOrder(ImmediateOrder):
 
     keyword = "rallying_point"
@@ -206,6 +254,20 @@ class RallyingPointOrder(ImmediateOrder):
 
     def immediate_action(self):
         self.unit.rallying_point = self.args[0]
+        self.unit.notify("order_ok")
+
+
+class JoinGroupOrder(ImmediateOrder):
+
+    keyword = "join_group"
+    nb_args = 1
+
+    def immediate_action(self):
+        group_name = self.args[0]
+        if group_name not in self.player.groups:
+            self.player.groups[group_name] = []
+        self.unit.group = self.player.groups[group_name]
+        self.unit.group.append(self.unit)
         self.unit.notify("order_ok")
 
 
@@ -422,9 +484,14 @@ class GoOrder(BasicOrder):
     keyword = "go"
     nb_args = 1
 
-    _go_timer = 15 # 5 seconds
+    def __eq__(self, other):
+        # units with the same "go" order will behave as a group
+        return self.__class__ == other.__class__ and \
+            getattr(self.target, "id", None) == getattr(other.target, "id", None) and \
+            self._creation_time == other._creation_time
 
     def on_queued(self):
+        self._creation_time = self.world.time
         self.target = self.player.get_object_by_id(self.args[0])
         # first check
         if self.target is None:
@@ -432,34 +499,42 @@ class GoOrder(BasicOrder):
             return
         if hasattr(self.target, "other_side"): # go to center of arrival square if target is an exit
             self.target = self.target.other_side.place
-        self.mode = "go"
         self.unit.notify("order_ok")
-
-    def is_doing_an_imperative_attack(self):
-        return self.is_imperative and self.unit.is_an_enemy(self.target)
 
     def execute(self):
         self.update_target()
         if self.target is None:
             self.mark_as_impossible()
-        elif self.unit._near_enough_to_use(self.target) and \
-            not self.is_doing_an_imperative_attack():
+        elif self.unit.is_in_position(self.target): # square or subsquare
+            self.unit.hold(self.target)
             self.mark_as_complete()
-        elif self.unit._near_enough_to_use(self.target) and \
-            self.is_doing_an_imperative_attack():
-            # catapult with imperative attack on a specific target
-            self.unit.action_target = self.target
-        elif self.unit.place == self.target:
+        elif self.unit._near_enough(self.target):
             self.mark_as_complete()
-            self.unit._go_center()
-        elif self.unit.action_target == self.target and \
-            not self.is_doing_an_imperative_attack() and \
-            self.unit.airground_type != "air":
-            self._go_timer -= 1
-            if self._go_timer == 0:
-                self.mark_as_complete()
-                self.unit.action_target = None
-        elif self.unit.action_target is None:
+        elif self.unit.is_idle:
+            self.move_to_or_fail(self.target)
+
+
+class AttackOrder(BasicOrder):
+
+    keyword = "attack"
+    nb_args = 1
+
+    def on_queued(self):
+        self.target = self.player.get_object_by_id(self.args[0])
+        # first check
+        if self.target is None:
+            self.mark_as_impossible()
+            return
+        self.unit.notify("order_ok")
+
+    def execute(self):
+        self.update_target()
+        if self.target is None:
+            self.mark_as_impossible()
+            return
+        if self.unit._near_enough_to_aim(self.target):
+            self.unit.action = AttackAction(self.unit, self.target)
+        elif self.unit.is_idle:
             self.move_to_or_fail(self.target)
 
 
@@ -486,14 +561,14 @@ class PatrolOrder(BasicOrder):
         if self.mode == "go":
             if self.unit.place == self.target:
                 self.mode = "go_back"
-                self.unit._go_center()
-            elif self.unit.action_target is None:
+                self.unit.deploy()
+            elif self.unit.is_idle:
                 self.move_to_or_fail(self.target)
         elif self.mode == "go_back":
             if self.unit.place == self.target2:
                 self.mode = "go"
-                self.unit._go_center()
-            elif self.unit.action_target is None:
+                self.unit.deploy()
+            elif self.unit.is_idle:
                 self.move_to_or_fail(self.target2)
 
 
@@ -535,38 +610,32 @@ class GatherOrder(BasicOrder):
                 if self.storage is None:
                     self.mark_as_impossible()
                 else:
-                    self.unit.action_target = self.unit.next_stage(self.storage)
-            elif self.unit._near_enough_to_use(self.storage):
+                    self.unit.start_moving_to(self.storage)
+            elif self.unit._near_enough(self.storage):
                 self.mode = "store"
                 self.unit.notify("store,%s" % self.unit.cargo[0])
                 self.delai = self.unit.place.world.time + 1000 # 1 second
-                self.unit.action_target = None
-            elif self.unit.action_target is None:
-                self.unit.action_target = self.unit.next_stage(self.storage)
-                if self.unit.action_target is None:
+                self.unit.stop()
+            elif self.unit.is_idle:
+                self.unit.start_moving_to(self.storage)
+                if self.unit.is_idle:
                     self.storage = None # find a new storage
         elif self.mode == "store":
-#            self.action_target = None # cancel possible attack
             if self.unit.place.world.time > self.delai:
                 self._store_cargo()
                 self.mode = "go_gather"
         elif self.mode == "go_gather":
             if self.target is None or self.target.place is None: # resource exhausted
-                self.player.on_resource_exhausted()
                 self.mark_as_impossible()
-                self.unit._go_center()
-            elif self.unit._near_enough_to_use(self.target):
+                self.unit.deploy()
+            elif self.unit._near_enough(self.target):
                 self.mode = "gather"
                 self.delai = self.unit.place.world.time + self.target.extraction_time
-                self.unit.action_target = None
-            elif self.unit.action_target is None:
+                self.unit.stop()
+            elif self.unit.is_idle:
                 self.move_to_or_fail(self.target)
-##                if self.unit.action_target is None: # exhausted or impossible to reach
-##                    self.player.on_resource_exhausted()
         elif self.mode == "gather": # XXX TODO: check if a fight or a teleportation is going on
-#            self.action_target = None # cancel possible attack
             if self.target is None or self.target.place is None: # resource exhausted
-                self.player.on_resource_exhausted()
                 self.mark_as_impossible()
             elif self.unit.place.world.time > self.delai:
                 self._extract_cargo()
@@ -584,16 +653,14 @@ class ComputerOnlyOrder(Order):
 class AutoAttackOrder(ComputerOnlyOrder):
 
     keyword = "auto_attack"
+    is_imperative = True
 
     def on_queued(self):
         pass
 
     def execute(self):
-        if not self.unit.action_target:
-            if self.unit.place.contains_enemy(self.player):
-                self.unit.choose_enemy()
-            else:
-                self.unit.action_target = self.unit.next_stage_enemy()
+        if self.unit.is_idle:
+            self.unit.start_moving_to_enemy()
 
 
 class AutoExploreOrder(ComputerOnlyOrder):
@@ -602,14 +669,33 @@ class AutoExploreOrder(ComputerOnlyOrder):
     is_imperative = True
 
     def on_queued(self):
-        pass
+        player = self.unit.player
+        world = player.world
+        if getattr(player, "_places_to_explore", None) is None:
+            # explore the starting squares first
+            player._places_to_explore = [world.grid[name] for name in world.starting_squares]
+            worldrandom.shuffle(player._places_to_explore)
+            player._already_explored = set()
 
     def execute(self):
-        if len(self.player.world.squares) != len(self.player.observed_before_squares):
-            self.unit.is_an_explorer = True
-            if self.unit.auto_explore():
-                self.mark_as_complete()
-        else:
+        self.unit.auto_explore()
+
+
+class WaitOrder(ComputerOnlyOrder):
+
+    keyword = "wait"
+    nb_args = 1
+    is_imperative = True
+
+    def on_queued(self):
+        self._must_deploy = True
+        self.target = self.player.get_object_by_id(self.args[0])
+
+    def execute(self):
+        if self._must_deploy:
+            self.unit.deploy()
+            self._must_deploy = False
+        if self.player.time_has_come(self.target):
             self.mark_as_complete()
 
 
@@ -631,11 +717,11 @@ class BlockOrder(BasicOrder):
     def execute(self):
         self.update_target()
         if self.mode == "go_block":
-            if self.unit._near_enough_to_use(self.target):
+            if self.unit._near_enough(self.target):
                 self.mode = "block"
-                self.unit.action_target = None
+                self.unit.stop()
                 self.unit.move_on_border(self.target)
-            elif self.unit.action_target is None:
+            elif self.unit.is_idle:
                 self.move_to_or_fail(self.target)
         elif self.mode == "block":
             self.unit.block(self.target)
@@ -660,12 +746,12 @@ class RepairOrder(BasicOrder):
         if self.target is None or self.target.place is None or self.target.is_fully_repaired:
             # if the building has been destroyed or cancelled or completely repaired then the work is complete
             self.mark_as_complete()
-            self.unit.action_target = None
+            self.unit.stop()
         elif self.mode == "go_build":
-            if self.unit._near_enough_to_use(self.target):
+            if self.unit._near_enough(self.target):
                 self.mode = "build"
-                self.unit.action_target = None
-            elif self.unit.action_target is None:
+                self.unit.stop()
+            elif self.unit.is_idle:
                 self.move_to_or_fail(self.target)
         elif self.mode == "build":
             self.target.be_built()
@@ -738,7 +824,7 @@ class BuildOrder(ComplexOrder):
             else:
                 self.cancel()
                 self.mark_as_impossible("count_limit_reached")
-        elif self.unit.action_target is None:
+        elif self.unit.is_idle:
             self.move_to_or_fail(self.target)
 
 

@@ -1,5 +1,5 @@
-from constants import COLLISION_RADIUS, USE_RANGE_MARGIN
-from lib.log import exception, info
+from constants import COLLISION_RADIUS
+from lib.log import exception, warning, info
 from lib.nofloat import PRECISION
 
 
@@ -17,6 +17,8 @@ class Entity(object):
     activity = None
     blocked_exit = None
     building_land = None
+    time_limit = None
+    harm_level = 0
 
     qty = 0
     is_vulnerable = False
@@ -32,8 +34,12 @@ class Entity(object):
     
     is_invisible = False
     is_cloakable = False
+    is_cloaked = False
+    sight_range = 85 * PRECISION / 10
     is_a_detector = False
+    detection_range = 85 * PRECISION / 10
     is_a_cloaker = False
+    cloaking_range = 6 * PRECISION
 
     id = None
 
@@ -44,21 +50,18 @@ class Entity(object):
     def is_memory(self):
         return hasattr(self, "time_stamp")
 
-    def update_all_dicts(self, inc):
-        if getattr(self, "player", None) is not None:
-            self.player.update_all_dicts(self, inc)
-
-    def update_perception(self):
-        try:
-            for p in self.world.players:
-                p.update_perception_of_object(self)
-        except:
-            exception("%s", self.type_name)
+    _previous_square = None
 
     def move_to(self, new_place, x=None, y=None, o=90, exit1=None, exit2=None):
         if x is None:
             x = new_place.x
             y = new_place.y
+
+        # make sure the object is not a memory
+        if self.is_memory:
+            warning("Will move the real object instead of its memorized version.")
+            self.initial_model.move_to(new_place, x, y, o, exit1, exit2)
+            return
 
         # abort if there isn't enough space
         if new_place is not None and self.collision:
@@ -83,8 +86,9 @@ class Entity(object):
             current_place = self.place
             if current_place is not None:
                 # quit the current place
-                self.update_all_dicts(-1)
                 current_place.objects.remove(self)
+                if current_place.__class__.__name__ == "Square":
+                    self._previous_square = current_place
             self.place = new_place
             if new_place is not None:
                 # enter the new place
@@ -95,28 +99,13 @@ class Entity(object):
                     new_place.world.objects[self.id] = self
                     if hasattr(self, "update"):
                         self.place.world.active_objects.append(self)
-                self.update_all_dicts(1)
             else:
                 # quit the world
-                self.action_target = None # probably unnecessary
-                # (probably done by self.set_player(None))
-                # (same remark for self.cancel_all_orders(), not done here)
                 if self in current_place.world.active_objects:
                     current_place.world.active_objects.remove(self)
-            # update perception
-            self.update_perception()
             # reactions
             if new_place is not None:
-                if current_place is not None:
-                    for o in current_place.objects:
-                        o.react_departure(self, exit1)
-                if self.is_vulnerable: # don't react to effects (?)
-                    for p in self.world.players:
-                        if p.is_an_enemy(self) and self in p.perception:
-                            for u in p.units:
-                                u.react_arrival(self)
                 self.action_target = None
-                self.react_self_arrival()
         if self.place is not None and not self.is_inside and self.collision:
             self.world.collision[self.airground_type].add(self.x, self.y)
         if self.speed:
@@ -141,23 +130,8 @@ class Entity(object):
         else:
             return 0
 
-    def is_invisible_or_cloaked(self):
-        return self.is_invisible or \
-               self.is_cloakable and self.place in getattr(self.player, "cloaked_squares", [])
-
     def clean(self):
         self.__dict__ = {}
-
-    def choose_enemy(self, someone=None):
-        pass
-
-    def react_departure(self, other, door):
-        pass
-    def react_self_arrival(self):
-        pass
-
-    def react_death(self, creature):
-        pass
 
     def is_an_enemy(self, a):
         return False
@@ -168,27 +142,6 @@ class Entity(object):
                 if self in player.perception or universal:
                     player.send_event(self, event)
 
-    def aim_range(self, a):
-        range = a.range or 0
-        if a.is_ballistic and a.height > self.height:
-            # each height difference has a bonus of 1
-            bonus = (a.height - self.height) * PRECISION * 1
-            range += bonus
-        return max(a.radius + USE_RANGE_MARGIN, range) + self.radius
-        
-    def use_range(self, a): # use_distance? XXXXXXXXXXX
-        if a.is_an_enemy(self) and a.range is not None:
-            return self.aim_range(a)
-        else:
-            return a.radius + self.radius + USE_RANGE_MARGIN
-
-    def collision_range(self, a):
-        if a.collision and self.collision and \
-           self.airground_type == a.airground_type:
-            return a.radius + self.radius
-        else:
-            return 0
-
     def would_collide_if(self, x, y):
         # optimization: same collision radius for every entity with collision
         if not self.collision:
@@ -197,10 +150,6 @@ class Entity(object):
         result = self.world.collision[self.airground_type].would_collide(x, y)
         self.world.collision[self.airground_type].add(self.x, self.y)
         return result
-
-    def be_used_by(self, a):
-        a.action_target = None
-        a._flee_or_fight_if_enemy()
 
     def contains(self, x, y):
         return True

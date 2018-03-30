@@ -7,12 +7,21 @@ import options
 from constants import NEWLINE_REPLACEMENT, SPACE_REPLACEMENT, VIRTUAL_TIME_INTERVAL
 from definitions import Style
 from lib.log import debug, info, warning
-from lib.msgs import insert_silences, nb2msg
+from lib.msgs import nb2msg
+import msgparts as mp
 from paths import TMP_PATH
 import res
 
 import version
 DEBUG_MODE = version.IS_DEV_VERSION
+
+
+def insert_silences(msg):
+    new_msg = []
+    for sound in msg:
+        new_msg.append(sound)
+        new_msg += mp.PERIOD
+    return new_msg
 
 
 class _State(object):
@@ -206,9 +215,9 @@ class Game(object):
         return self.time * VIRTUAL_TIME_INTERVAL / 1000.0 / 60.0
 
     def get_status_msg(self):
-        return [4018] + self.scenario.title + [9999]\
-               + insert_silences([p.login for p in self.human_players]) + [9999]\
-               + nb2msg(self.get_nb_minutes()) + [65]
+        return mp.MULTIPLAYER + self.scenario.title + mp.PERIOD \
+               + insert_silences([p.login for p in self.human_players]) + mp.PERIOD \
+               + nb2msg(self.get_nb_minutes()) + mp.MINUTES
 
     def close(self):
         info("closed game %s after %s turns (played for %s minutes)", self.id,
@@ -277,14 +286,14 @@ class Game(object):
 
     def invite(self, client):
         self.guests.append(client)
-        client.send_msg([self.admin.login, 4243] + self.scenario.title)
+        client.send_msg([self.admin.login] + mp.INVITES_YOU + self.scenario.title)
 
     def invite_computer(self, level):
         if "admin_only" in self.server.parameters or \
            len(self.players) > 1: # at least two human players if public server
             self.register(_Computer(level))
         else:
-            self.admin.send_msg([1029]) # hostile sound
+            self.admin.send_msg(mp.BEEP)
 
     def uninvite(self, client):
         self.guests.remove(client)
@@ -292,7 +301,7 @@ class Game(object):
     def move_to_alliance(self, player_index, alliance):
         player = self.players[int(player_index)]
         player.alliance = int(alliance)
-        self.broadcast([4284, player.login, 4285] + nb2msg(player.alliance))
+        self.broadcast(mp.MOVE + [player.login] + mp.TO_ALLIANCE + nb2msg(player.alliance))
 
     def set_faction(self, player_index, faction):
         player = self.players[int(player_index)]
@@ -319,16 +328,16 @@ class Game(object):
             client.game = self
             client.alliance = n
             client.faction = "random_faction"
-            self.broadcast([client.login, 4241] + self.status())
+            self.broadcast([client.login] + mp.HAS_JUST_JOINED + self.status())
 
     def status(self):
         assert not self.started
-        msg = nb2msg(len(self.players)) + [4242] + nb2msg(self.scenario.nb_players_max)
+        msg = nb2msg(len(self.players)) + mp.PLAYERS_ON + nb2msg(self.scenario.nb_players_max)
         if len(self.players) >= self.scenario.nb_players_min:
-            msg += [4063]
+            msg += mp.THE_GAME_WILL_START_WHEN_ORGANIZER_IS_READY
         else:
-            msg += [4244] + nb2msg(self.scenario.nb_players_min)
-        msg += [9999] + insert_silences([p.login for p in self.players])
+            msg += mp.NOT_ENOUGH_PLAYERS + nb2msg(self.scenario.nb_players_min)
+        msg += mp.PERIOD + insert_silences([p.login for p in self.players])
         return msg
 
     def unregister(self, client):

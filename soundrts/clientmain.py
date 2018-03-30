@@ -14,14 +14,17 @@ except:
     warning("couldn't set locale")
 
 import os
+from os.path import join
 import pickle
 import sys
+import tempfile
 import time
-import urllib
+import urllib2
 import webbrowser
 
+from campaign import campaigns
 from clientmedia import voice, init_media, close_media
-from clientmenu import Menu, input_string, END_LOOP
+from clientmenu import Menu, input_string, CLOSE_MENU
 from clientserver import connect_and_play, start_server_and_connect
 from clientversion import revision_checker
 import config
@@ -29,245 +32,282 @@ from constants import MAIN_METASERVER_URL
 from definitions import style
 from game import TrainingGame, ReplayGame
 from lib.msgs import nb2msg
+from lib.resource import best_language_match, preferred_language
+from mapfile import worlds_multi
+import msgparts as mp
 from paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
 import res
 import stats
 from version import VERSION
 
 
-_ds = open("cfg/default_servers.txt").readlines()
-_ds = [_x.split() for _x in _ds]
-DEFAULT_SERVERS = [" ".join(["0"] + _x[:1] + [VERSION] + _x[1:]) for _x in _ds]
-SERVERS_LIST_HEADER = "SERVERS_LIST"
-SERVERS_LIST_URL = MAIN_METASERVER_URL + "servers.php?header=%s&include_ports=1" % SERVERS_LIST_HEADER
+def _add_time_and_version(line):
+    words = line.split()
+    words = ["0"] + words[:1] + [VERSION] + words[1:]
+    return " ".join(words)
 
+def _default_servers():
+    lines = open("cfg/default_servers.txt").readlines()
+    return [_add_time_and_version(line) for line in lines
+            if line.strip() and not line.startswith(";")]
 
-class Application(object):
-
-    def choose_server_ip_in_a_list(self):
-        servers_list = None
+def choose_server_ip_in_a_list():
+    # The header is an arbitrary string that the metaserver will include
+    # in the reply to make sure that the PHP script is executed.
+    header = "SERVERS"
+    query = "header=%s&include_ports=1" % header
+    servers_url = MAIN_METASERVER_URL + "servers.php?" + query
+    try:
+        f = urllib2.urlopen(servers_url)
+        if f.read(len(header)) == header:
+            servers = f.readlines()
+    except urllib2.URLError:
+        voice.alert(mp.BEEP)
+        warning("couldn't get the servers list from the metaserver"
+                " => using the default servers list")
+        servers = _default_servers()
+    total = 0
+    compatible = 0
+    menu = Menu()
+    for s in servers:
         try:
-            f = urllib.urlopen(SERVERS_LIST_URL)
-            if f.read(len(SERVERS_LIST_HEADER)) == SERVERS_LIST_HEADER:
-                servers_list = f.readlines()
-        except:
-            pass
-        if servers_list is None:
-            voice.alert([1029]) # hostile sound
-            warning("couldn't get the servers list from the metaserver"
-                    " => using the default servers list")
-            servers_list = DEFAULT_SERVERS
-        nb = 0
-        menu = Menu()
-        for s in servers_list:
-            try:
-                ip, version, login, port = s.split()[1:]
-                # ignore the first parameter (time)
-            except:
-                warning("line not recognized from the metaserver: %s", s)
-                continue
-            nb += 1
-            if version == VERSION:
-                menu.append([login, 4073, login], (connect_and_play, ip, port))
-        menu.title = nb2msg(len(menu.choices)) + [4078] + nb2msg(nb) + [4079]
-        menu.append([4075, 4076], None)
-        menu.run()
-
-    def enter_server_ip(self):
-        host = input_string([], "^[A-Za-z0-9\.]$")
-        if host:
-            connect_and_play(host)
-
-    def multiplayer_menu(self):
-        revision_checker.start_if_needed()
-        if config.login == "player":
-            voice.alert([4235]) # type your new login
-            self.modify_login()
-        menu = Menu([4030], [
-            ([4119], self.choose_server_ip_in_a_list),
-            ([4120], self.enter_server_ip),
-            ([4048], None),
-             ])
-        menu.run()
-
-    def restore_game(self):
-        n = SAVE_PATH
-        if not os.path.exists(n):
-            voice.alert([1029]) # hostile sound
-            return
-        f = open(n)
-        try:
-            i = int(stats.Stats(None, None)._get_weak_user_id())
-            j = int(f.readline())
-        except:
-            i = 0
-            j = "error"
-        if i == j:
-            try:
-                game_session = pickle.load(f)
-            except:
-                exception("cannot load savegame file")
-                voice.alert([1029]) # hostile sound
-                return
-            game_session.run_on()
+            _, ip, version, login, port = s.split()
+        except ValueError:
+            warning("line not recognized from the metaserver: %s", s)
         else:
-            warning("savegame file is not from this machine")
-            voice.alert([1029]) # hostile sound
+            total += 1
+            if version == VERSION:
+                compatible += 1
+                menu.append([login], (connect_and_play, ip, port),
+                            mp.SERVER_HOSTED_BY + [login])
+    menu.title = nb2msg(compatible) + mp.SERVERS_ON + nb2msg(total) \
+                 + mp.ARE_COMPATIBLE
+    menu.append(mp.CANCEL2, None, mp.GO_BACK_TO_PREVIOUS_MENU)
+    menu.run()
 
-    def training_menu_invite(self, ai_type):
-        self.players.append(ai_type)
-        self.factions.append("random_faction")
-        self.menu.update_menu(self.build_training_menu_after_map())
+def enter_server_ip():
+    host = input_string([], "^[A-Za-z0-9\.]$")
+    if host:
+        connect_and_play(host)
 
-    def training_menu_after_map(self, m):
-        style.load(res.get_text_file("ui/style", append=True, localize=True)) # XXX: won't work with factions defined in the map
-        self.players = [config.login]
-        self.factions = ["random_faction"]
-        self.map = m
-        self.menu = self.build_training_menu_after_map()
-        self.menu.loop()
+def multiplayer_menu():
+    if config.login == "player":
+        voice.alert(mp.ENTER_NEW_LOGIN)
+        modify_login()
+    menu = Menu(mp.MAKE_A_SELECTION, [
+        (mp.CHOOSE_SERVER_IN_LIST, choose_server_ip_in_a_list),
+        (mp.ENTER_SERVER_IP, enter_server_ip),
+        (mp.CANCEL, None),
+         ])
+    menu.run()
 
-    def start_training_game(self):
-        game = TrainingGame(self.map, self.players)
-        game.factions = self.factions
+def replay(n):
+    ReplayGame(os.path.join(REPLAYS_PATH, n)).run()
+
+def replay_menu():
+    menu = Menu(mp.OBSERVE_RECORDED_GAME)
+    for n in sorted(os.listdir(REPLAYS_PATH), reverse=True):
+        if n.endswith(".txt"):
+            menu.append([time.strftime("%c", time.localtime(int(n[:-4])))],
+                        (replay, n))
+    menu.append(mp.QUIT2, None)
+    menu.run()
+
+def modify_login():
+    login = input_string(mp.ENTER_NEW_LOGIN + mp.USE_LETTERS_AND_NUMBERS_ONLY,
+                         "^[a-zA-Z0-9]$")
+    if login == None:
+        voice.alert(mp.CURRENT_LOGIN_KEPT)
+    elif (len(login) < 1) or (len(login) > 20):
+        voice.alert(mp.BAD_LOGIN + mp.CURRENT_LOGIN_KEPT)
+    else:
+        voice.alert(mp.NEW_LOGIN + [login])
+        config.login = login
+        config.save()
+
+def restore_game():
+    n = SAVE_PATH
+    if not os.path.exists(n):
+        voice.alert(mp.BEEP)
+        return
+    f = open(n)
+    try:
+        i = int(stats.Stats(None, None)._get_weak_user_id())
+        j = int(f.readline())
+    except:
+        i = 0
+        j = "error"
+    if i == j:
+        try:
+            game_session = pickle.load(f)
+        except:
+            exception("cannot load savegame file")
+            voice.alert(mp.BEEP)
+            return
+        game_session.run_on()
+    else:
+        warning("savegame file is not from this machine")
+        voice.alert(mp.BEEP)
+
+def open_user_folder():
+    webbrowser.open(CONFIG_DIR_PATH)
+
+
+class TrainingMenu(object):
+
+    def _add_ai(self, ai_type):
+        self._players.append(ai_type)
+        self._factions.append("random_faction")
+        self._players_menu.update_menu(self._build_players_menu())
+
+    def _run_game(self):
+        game = TrainingGame(self._map, self._players)
+        game.factions = self._factions
         game.run()
-        return END_LOOP
+        return CLOSE_MENU
 
-    def set_faction(self, pn, r):
-        self.factions[pn] = r
-        self.menu.update_menu(self.build_training_menu_after_map())
+    def _set_faction(self, pn, r):
+        self._factions[pn] = r
+        self._players_menu.update_menu(self._build_players_menu())
 
-    def _add_faction_menu(self, menu, pn, p, pr):
-        if len(self.map.factions) > 1:
-            for r in ["random_faction"] + self.map.factions:
+    def _add_faction_menus(self, menu):
+        for pn, (p, pr) in enumerate(zip(self._players, self._factions)):
+            for r in ["random_faction"] + self._map.factions:
                 if r != pr:
                     menu.append([p,] + style.get(r, "title"),
-                                (self.set_faction, pn, r))
+                                (self._set_faction, pn, r))
 
-    def build_training_menu_after_map(self):
+    def _build_players_menu(self):
         menu = Menu()
-        if len(self.players) < self.map.nb_players_max:
-            menu.append([4058, 4258], (self.training_menu_invite, "easy"))
-            menu.append([4058, 4257], (self.training_menu_invite,
-                                       "aggressive"))
-        if len(self.players) >= self.map.nb_players_min:
-            menu.append([4059], self.start_training_game)
-        for pn, (p, pr) in enumerate(zip(self.players, self.factions)):
-            self._add_faction_menu(menu, pn, p, pr)
-        menu.append([4048, 4060], END_LOOP)
+        if len(self._players) < self._map.nb_players_max:
+            menu.append(mp.INVITE + mp.QUIET_COMPUTER, (self._add_ai, "easy"))
+            menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER,
+                        (self._add_ai, "aggressive"))
+        if len(self._players) >= self._map.nb_players_min:
+            menu.append(mp.START, self._run_game)
+        if len(self._map.factions) > 1:
+            self._add_faction_menus(menu)
+        menu.append(mp.CANCEL, CLOSE_MENU, mp.CANCEL_THIS_GAME)
         return menu
 
-    def training_menu(self):
-        menu = Menu([4055], remember="mapmenu")
-        for m in res.worlds_multi():
-            menu.append(m.title, (self.training_menu_after_map, m))
-        menu.append([4041], None)
+    def _open_players_menu(self, m):
+        # XXX: won't work with factions defined in the map
+        style.load(res.get_text_file("ui/style", append=True, localize=True))
+        self._players = [config.login]
+        self._factions = ["random_faction"]
+        self._map = m
+        self._players_menu = self._build_players_menu()
+        self._players_menu.loop()
+
+    def run(self):
+        menu = Menu(mp.START_A_GAME_ON, remember="mapmenu")
+        for m in worlds_multi():
+            menu.append(m.title, (self._open_players_menu, m))
+        menu.append(mp.QUIT2, None)
         menu.run()
 
-    def replay(self, n):
-        ReplayGame(os.path.join(REPLAYS_PATH, n)).run()
 
-    def replay_menu(self):
-        menu = Menu([4315])
-        for n in sorted(os.listdir(REPLAYS_PATH), reverse=True):
-            if n.endswith(".txt"):
-                menu.append([time.strftime("%c", time.localtime(int(n[:-4])))], (self.replay, n))
-        menu.append([4041], None)
-        menu.run()
+def single_player_menu():
+    Menu(
+        mp.MAKE_A_SELECTION,
+        [(c.title, c) for c in campaigns()] + [
+            (mp.START_A_GAME_ON, TrainingMenu().run),
+            (mp.RESTORE, restore_game),
+            (mp.BACK, CLOSE_MENU),
+        ]).loop()
 
-    def modify_login(self):
-        login = input_string([4235, 4236], "^[a-zA-Z0-9]$") # type your new
-                                        # login ; use alphanumeric characters
-        if login == None:
-            voice.alert([4238]) # current login kept
-        elif (len(login) < 1) or (len(login) > 20):
-            voice.alert([4237, 4238]) # incorrect login ; current login kept
-        else:
-            voice.alert([4239, login]) # new login:
-            config.login = login
-            config.save()
+def server_menu():
+    Menu(mp.WHAT_KIND_OF_SERVER, [
+        (mp.SIMPLE_SERVER, (start_server_and_connect, "admin_only"),
+         mp.SIMPLE_SERVER_EXPLANATION),
+        (mp.PUBLIC_SERVER, (start_server_and_connect, ""),
+         mp.PUBLIC_SERVER_EXPLANATION),
+        (mp.PRIVATE_SERVER,
+         (start_server_and_connect, "admin_only no_metaserver"),
+         mp.PRIVATE_SERVER_EXPLANATION),
+        (mp.CANCEL, None),
+        ]).run()
 
-    def main(self):
-        def open_user_folder():
-            webbrowser.open(CONFIG_DIR_PATH)
-        single_player_menu = Menu([4030],
-            [(c.title, c) for c in res.campaigns()] +
-            [
-            ([4055], self.training_menu),
-            ([4113], self.restore_game),
-            ([4118], END_LOOP),
-            ])
-        server_menu = Menu([4043], [
-            ([4044, 4045], (start_server_and_connect, "admin_only")),
-            ([4046, 4047], (start_server_and_connect, "")),
-            ([4121, 4122], (start_server_and_connect,
-                            "admin_only no_metaserver")),
-            ([4048], None),
-            ])
-        def set_and_launch_mod(mods):
-            config.mods = mods
-            config.save()
-            res.set_mods(config.mods)
-            main_menu().loop() # update the menu title
-            raise SystemExit
-        def mods_menu():
-            mods_menu = Menu([4341])
-            mods_menu.append([0], (set_and_launch_mod, ""))
-            for mod in res.available_mods():
-                mods_menu.append([mod], (set_and_launch_mod, mod))
-            mods_menu.append([4118], END_LOOP)
-            mods_menu.run()
-            return END_LOOP
-        def set_and_launch_soundpack(soundpacks):
-            config.soundpacks = soundpacks
-            config.save()
-            res.set_soundpacks(config.soundpacks)
-            main_menu().loop() # update the menu title
-            raise SystemExit
-        def soundpacks_menu():
-            soundpacks_menu = Menu([4342])
-            soundpacks_menu.append([0], (set_and_launch_soundpack, ""))
-            for soundpack in res.available_soundpacks():
-                soundpacks_menu.append([soundpack], (set_and_launch_soundpack, soundpack))
-            soundpacks_menu.append([4118], END_LOOP)
-            soundpacks_menu.run()
-            return END_LOOP
-        options_menu = Menu([4086], [
-            ([4087], self.modify_login),
-            ((4341, ), mods_menu),
-            ((4342, ), soundpacks_menu),
-            ([4336], open_user_folder),
-            ([4118], END_LOOP),
-            ])
-        def main_menu():
-            import version
-            return Menu(["SoundRTS %s %s %s," % (version.VERSION, res.mods, res.soundpacks), 4030], [
-            [[4031, 4032], single_player_menu.loop],
-            [[4033, 4034], self.multiplayer_menu],
-            [[4035, 4036], server_menu],
-            [[4315], self.replay_menu],
-            [[4037, 4038], options_menu.loop],
-            [[4337], launch_manual],
-            [[4041, 4042], END_LOOP],
-            ])
-        def launch_manual():
-            webbrowser.open(os.path.realpath("doc/help-index.htm"))
-        if "connect_localhost" in sys.argv:
-            connect_and_play()
-        else:
-            main_menu().loop()
+def set_and_launch_mod(mods):
+    config.mods = mods
+    config.save()
+    res.set_mods(config.mods)
+    main_menu() # update the menu title
+    raise SystemExit
 
+def mods_menu():
+    mods_menu = Menu(mp.MODS)
+    mods_menu.append([0], (set_and_launch_mod, ""))
+    for mod in res.available_mods():
+        mods_menu.append([mod], (set_and_launch_mod, mod))
+    mods_menu.append(mp.BACK, CLOSE_MENU)
+    mods_menu.run()
+    return CLOSE_MENU
+
+def set_and_launch_soundpack(soundpacks):
+    config.soundpacks = soundpacks
+    config.save()
+    res.set_soundpacks(config.soundpacks)
+    main_menu().loop() # update the menu title
+    raise SystemExit
+
+def soundpacks_menu():
+    soundpacks_menu = Menu(mp.SOUNDPACKS)
+    soundpacks_menu.append(mp.NOTHING, (set_and_launch_soundpack, ""))
+    for soundpack in res.available_soundpacks():
+        soundpacks_menu.append([soundpack],
+                               (set_and_launch_soundpack, soundpack))
+    soundpacks_menu.append(mp.BACK, CLOSE_MENU)
+    soundpacks_menu.run()
+    return CLOSE_MENU
+
+def options_menu():
+    Menu(mp.OPTIONS_MENU, [
+        (mp.MODIFY_LOGIN, modify_login),
+        (mp.MODS, mods_menu),
+        (mp.SOUNDPACKS, soundpacks_menu),
+        (mp.OPEN_USER_FOLDER, open_user_folder),
+        (mp.BACK, CLOSE_MENU),
+        ]).loop()
+
+def main_menu():
+    Menu(
+        ["SoundRTS %s %s %s," % (VERSION, res.mods, res.soundpacks)]
+        + mp.MAKE_A_SELECTION,
+        [
+            [mp.SINGLE_PLAYER, single_player_menu, mp.SINGLE_PLAYER_EXPLANATION],
+            [mp.MULTIPLAYER2, multiplayer_menu, mp.MULTIPLAYER2_EXPLANATION],
+            [mp.SERVER, server_menu, mp.SERVER_EXPLANATION],
+            [mp.OBSERVE_RECORDED_GAME, replay_menu],
+            [mp.OPTIONS, options_menu, mp.OPTIONS_EXPLANATION],
+            [mp.DOCUMENTATION, launch_manual],
+            [mp.QUIT2, CLOSE_MENU, mp.QUIT2_EXPLANATION],
+        ]).loop()
+
+def launch_manual():
+    if os.path.exists("doc/en"):
+        p = "doc"
+    else:
+        p = join(tempfile.gettempdir(), "soundrts/build/doc")
+    try:
+        lang = best_language_match(preferred_language, os.listdir(p))
+    except OSError:
+        voice.alert(mp.BEEP)
+    else:
+        webbrowser.open(join(p, lang, "help-index.htm"))
 
 def main():
     try:
-        try:
-            init_media()
-            revision_checker.start_if_needed()
-            Application().main()
-        except SystemExit:
-            raise
-        except:
-            exception("error")
+        init_media()
+        revision_checker.start_if_needed()
+        if "connect_localhost" in sys.argv:
+            connect_and_play()
+        else:
+            main_menu()
+    except SystemExit:
+        raise
+    except:
+        exception("error")
     finally:
         close_media()
 

@@ -12,6 +12,7 @@ from lib.msgs import nb2msg
 from lib.nofloat import PRECISION
 from worldunit import BuildingSite
 from lib.sound import psounds, distance
+import msgparts as mp
 
 
 def compute_title(type_name):
@@ -84,7 +85,7 @@ class EntityView(object):
     @property
     def ext_title(self):
         try:
-            return self.title + [107] + self.place.title
+            return self.title + mp.AT + self.place.title
         except:
             exception("problem with %s.ext_title", self.type_name)
 
@@ -141,11 +142,13 @@ class EntityView(object):
             if self.player == self.interface.player:
                 title += nb2msg(self.number)
             elif self.player in self.interface.player.allied:
-                title += [4286] + nb2msg(self.player.number) + [self.player.client.login] # "allied 2"
+                title += mp.ALLY + nb2msg(self.player.number) \
+                         + [self.player.client.login]
             elif hasattr(self.player, "number") and self.player.number:
-                title += [88] + nb2msg(self.player.number) + [self.player.client.login] # "ennemy 2"
+                title += mp.ENEMY + nb2msg(self.player.number) \
+                         + [self.player.client.login]
             else: # "npc_ai"
-                title += [88] # enemy
+                title += mp.ENEMY
         return title
 
     @property
@@ -154,12 +157,12 @@ class EntityView(object):
 
     @property
     def hp_status(self):
-        return nb2msg(self.hp) + [39] + nb2msg(self.hp_max)
+        return nb2msg(self.hp) + mp.HITPOINTS_ON + nb2msg(self.hp_max)
 
     @property
     def mana_status(self):
         if self.mana_max > 0:
-            return nb2msg(self.mana) + [4247] + nb2msg(self.mana_max)
+            return nb2msg(self.mana) + mp.MANA_POINTS_ON + nb2msg(self.mana_max)
         else:
             return []
 
@@ -175,20 +178,21 @@ class EntityView(object):
         d = []
         try:
             if hasattr(self, "qty") and self.qty:
-                d += [134] + nb2msg(self.qty) + style.get("parameters", "resource_%s_title" % self.resource_type)
+                d += mp.CONTAINS + nb2msg(self.qty) \
+                     + style.get("parameters",
+                                 "resource_%s_title" % self.resource_type)
             if hasattr(self, "hp"):
                 d += self.hp_status
             if hasattr(self, "mana"):
                 d += self.mana_status
             if hasattr(self, "upgrades"):
                 d += self.upgrades_status
-            if hasattr(self, "is_invisible_or_cloaked") and \
-               self.is_invisible_or_cloaked():
-                d += [9998, 4289]
+            if getattr(self, "is_invisible", 0) or getattr(self, "is_cloaked", 0):
+                d += mp.COMMA + mp.INVISIBLE
             if getattr(self, "is_a_detector", 0):
-                d += [9998, 4290]
+                d += mp.COMMA + mp.DETECTOR
             if getattr(self, "is_a_cloaker", 0):
-                d += [9998, 4291]
+                d += mp.COMMA + mp.CLOAKER
         except:
             pass # a warning is given by style.get()
         return d
@@ -247,7 +251,7 @@ class EntityView(object):
         return result
 
     def footstep(self):
-        if self.is_moving:
+        if self.is_moving and not self.is_memory:
             if self.next_step is None:
                 self.step_side = 1
                 self.next_step = time.time() + random.random() * self.footstep_interval # start at different moments
@@ -480,12 +484,9 @@ class EntityView(object):
         if get_fullscreen() and attacker_id in self.interface.dobjets:
             self.interface.grid_view.display_attack(attacker_id, self)
 
-    def on_enter_square(self):
-        pass
-
     def on_exhausted(self):
         self.launch_event_style("exhausted")
-        voice.info(self.title + [144])
+        voice.info(self.title + mp.EXHAUSTED)
 
     def on_completeness(self, s): # building train or upgrade
         self.launch_event_style("production")

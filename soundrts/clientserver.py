@@ -10,6 +10,7 @@ from clientversion import revision_checker
 import config
 import options
 from lib.log import info, exception
+import msgparts as mp
 import servermain
 from version import compatibility_version
 
@@ -52,21 +53,17 @@ def connect_and_play(host="127.0.0.1", port=options.port):
         ServerMenu(server).loop()
         server.close() # without this, the server isn't closed after a game
     except UnreachableServerError:
-        # "failure: the server unreachable. The server is closed or behind a firewall or behind a router."
-        voice.alert([4081])
+        voice.alert(mp.SERVER_UNREACHABLE)
     except WrongServerError:
-        # "failure: unexpected reply from the server. The server is not a SoundRTS server" (version)
-        voice.alert([4082, compatibility_version()])
+        voice.alert(mp.UNEXPECTED_REPLY + [compatibility_version()])
     except CompatibilityOrLoginError:
-        # "failure: connexion rejected the server. The server is not a SoundRTS server" (version)
-        # "or your login has been rejected"
-        voice.alert([4083, compatibility_version(), 4084])
+        voice.alert(mp.CONNECTION_REJECTED + [compatibility_version()] + mp.OR_LOGIN_REJECTED)
     except ConnectionAbortedError:
-        voice.alert([4102]) # connection aborted
+        voice.alert(mp.CONNECTION_INTERRUPTED)
     except SystemExit:
         raise
     except:
-        voice.alert([4085]) # "error during connexion to server"
+        voice.alert(mp.ERROR_DURING_CONNECTION)
         exception("error during connection to server")
 
 

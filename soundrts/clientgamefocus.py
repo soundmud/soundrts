@@ -1,18 +1,19 @@
 from lib.voice import voice
 from lib.log import warning
 from lib.nofloat import PRECISION
+import msgparts as mp
 
 
 _subzone_name = {
-    (0, 0): [],
-    (0, 1): [67],
-    (0, -1): [68],
-    (1, 0): [69],
-    (-1, 0): [70],
-    (1, 1): [71],
-    (-1, 1): [72],
-    (1, -1): [73],
-    (-1, -1): [74],
+    (0, 0): mp.AT_THE_CENTER,
+    (0, 1): mp.NORTH,
+    (0, -1): mp.SOUTH,
+    (1, 0): mp.EAST,
+    (-1, 0): mp.WEST,
+    (1, 1): mp.NORTHEAST,
+    (-1, 1): mp.NORTHWEST,
+    (1, -1): mp.SOUTHEAST,
+    (-1, -1): mp.SOUTHWEST,
     }
 
 
