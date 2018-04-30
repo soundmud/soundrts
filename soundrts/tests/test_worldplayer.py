@@ -43,13 +43,14 @@ class DummyClient(worldclient.DummyClient):
 
 class _PlayerBaseTestCase(unittest.TestCase):
 
-    def set_up(self, alliance=(1, 2), cloak=False, map_name="jl1_extended"):
+    def set_up(self, alliance=(1, 2), cloak=False, map_name="jl1_extended",
+               ai=("easy", "easy")):
         self.w = World([])
         self.w.introduction = []
         self.w.load_and_build_map(Map("soundrts/tests/%s.txt" % map_name))
         if cloak:
             self.w.unit_class("new_flyingmachine").dct["is_a_cloaker"] = True
-        self.w.populate_map([DummyClient("easy"), DummyClient("easy")], alliance, random_starts=False)
+        self.w.populate_map([DummyClient(ai[0]), DummyClient(ai[1])], alliance, random_starts=False)
         self.cp, self.cp2 = self.w.players
         self.cp.is_perceiving = is_perceiving_method(self.cp)
         self.cp2.is_perceiving = is_perceiving_method(self.cp2)
@@ -300,6 +301,55 @@ class ComputerTestCase(_PlayerBaseTestCase):
         assert self.find_player_unit(self.cp, "barracks")
         assert not self.cp.get(1, "knight") # => get keep
         assert th.orders
+
+    def testUpgradeToIfAutoexploring(self):
+        self.set_up(map_name="jl1")
+        self.cp.resources = [1000*PRECISION, 1000*PRECISION]
+        self.cp.lang_add_units(["a1", "archer"])
+        self.cp.lang_add_units(["a1", "lumbermill"])
+        self.cp.lang_add_units(["a1", "magestower"])
+        archer = self.find_player_unit(self.cp, "archer")
+        archer.take_order(["auto_explore"])
+        assert not self.cp.get(1, "darkarcher")
+        assert archer.orders[0].keyword == "upgrade_to"
+
+    def testNoAutoexploringIfUpgradeTo(self):
+        self.set_up(map_name="jl1")
+        self.cp.resources = [1000*PRECISION, 1000*PRECISION]
+        self.cp.lang_add_units(["a1", "archer"])
+        self.cp.lang_add_units(["a1", "lumbermill"])
+        self.cp.lang_add_units(["a1", "magestower"])
+        archer = self.find_player_unit(self.cp, "archer")
+        assert not self.cp.get(1, "darkarcher")
+        assert archer.orders[0].keyword == "upgrade_to"
+        assert archer not in self.cp.best_explorers()
+
+    def testIsAIsNotIs(self):
+        self.set_up(map_name="jl1")
+        self.cp.resources = [1000*PRECISION, 1000*PRECISION]
+        self.cp.units[0].die()
+        assert self.cp.nb("townhall") == 0
+        assert not self.cp.has("townhall")
+        self.cp.lang_add_units(["a1", "keep"]) # is a townhall
+        assert self.cp.nb("townhall") == 0
+        assert self.cp.has("townhall")
+        
+    def testIsAFillsTheRequirement(self):
+        self.set_up(map_name="jl1")
+        self.cp.resources = [1000*PRECISION, 1000*PRECISION]
+        self.cp.units[0].die()
+        assert self.cp.nb("townhall") == 0
+        assert not self.cp.has("townhall")
+        self.cp.lang_add_units(["a1", "keep"]) # is a townhall
+        assert self.cp.nb("peasant") == 1
+        p = self.find_player_unit(self.cp, "peasant")
+        assert not p.orders
+        assert self.cp.nb("blacksmith") == 0
+        assert self.cp.has("townhall")
+        self.cp._update_effect_users_and_workers()
+        self.cp._update_perception()
+        assert not self.cp.get(1, "blacksmith") # requires a townhall
+        assert p.orders[0].type.type_name == "blacksmith"
 
     def testMenace(self):
         self.set_up()
@@ -574,12 +624,12 @@ class ComputerTestCase(_PlayerBaseTestCase):
         assert not th.orders
         self.assertEqual(th.place, None)
         self.assertTrue(th not in self.cp.units, "townhall still belongs to the player")
-        # the keep is also a townhall (no need to build another townhall)
         self.assertEqual(self.cp.nb("keep"), 1)
-        self.assertEqual(self.cp.nb("townhall"), 1)
+        self.assertEqual(self.cp.nb("townhall"), 0)
+        assert self.cp.has("townhall") # requirement
         k = self.find_player_unit(self.cp, "keep")
         self.assertTrue(self.cp.check_type(k, "keep"))
-        self.assertTrue(self.cp.check_type(k, "townhall"))
+        self.assertFalse(self.cp.check_type(k, "townhall"))
 
     def testAllied(self):
         # when allied
@@ -665,13 +715,13 @@ class ComputerTestCase(_PlayerBaseTestCase):
         self.assertEqual(th.place.shortest_path_distance_to(th.place), 0)
 
     def testImperativeGo(self):        
-        self.set_up()
+        self.set_up(ai=("timers", "timers"))
         th = self.find_player_unit(self.cp, "townhall")
         p = self.find_player_unit(self.cp, "peasant")
         p.take_order(["go", th.id], imperative=True)
         self.assertEqual(th.hp, th.hp_max)
         for _ in range(100):
-            p.update()
+            self.w.update()
             if th.hp != th.hp_max:
                 break
         self.assertNotEqual(th.hp, th.hp_max)
@@ -689,13 +739,13 @@ class ComputerTestCase(_PlayerBaseTestCase):
         self.assertNotEqual(th.hp, th.hp_max)
 
     def testImperativeGo3(self):        
-        self.set_up()
+        self.set_up(ai=("timers", "timers"))
         th = self.find_player_unit(self.cp, "townhall")
         f = self.find_player_unit(self.cp, "dragon")
         f.take_order(["go", th.id], imperative=True)
         self.assertEqual(th.hp, th.hp_max)
         for _ in range(100):
-            f.update()
+            self.w.update()
             if th.hp != th.hp_max:
                 break
         self.assertNotEqual(th.hp, th.hp_max)

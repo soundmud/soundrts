@@ -19,8 +19,17 @@ class MoveAction(Action):
     
     def update(self):
         if hasattr(self.target, "other_side"):
-            # move towards the center of the next square
-            self.unit.go_to_xy(self.target.other_side.place.x, self.target.other_side.place.y)
+            if self.target.is_a_portal:
+                # move towards the portal
+                self.unit.go_to_xy(self.target.x, self.target.y)
+                if self.unit._near_enough(self.target):
+                    # teleport
+                    os = self.target.other_side
+                    self.unit.move_to(os.place, os.x, os.y, os.o)
+                    self.target = os.place.x, os.place.y
+            else:
+                # move towards the center of the next square
+                self.unit.go_to_xy(self.target.other_side.place.x, self.target.other_side.place.y)
         elif getattr(self.target, "place", None) is self.unit.place:
             self.unit.action_reach_and_stop()
         elif self.unit.airground_type == "air":

@@ -31,15 +31,20 @@ DOWN: select_square 0 -1
 LEFT: select_square -1 0
 RIGHT: select_square 1 0
 
-SHIFT UP: select_square 0 5 no_collision
-SHIFT DOWN: select_square 0 -5 no_collision
-SHIFT LEFT: select_square -5 0 no_collision
-SHIFT RIGHT: select_square 5 0 no_collision
+SHIFT UP: select_square 0 5
+SHIFT DOWN: select_square 0 -5
+SHIFT LEFT: select_square -5 0
+SHIFT RIGHT: select_square 5 0
 
-CTRL UP: select_square 0 1 no_collision cycle
-CTRL DOWN: select_square 0 -1 no_collision cycle
-CTRL LEFT: select_square -1 0 no_collision cycle
-CTRL RIGHT: select_square 1 0 no_collision cycle
+CTRL UP: select_square 0 1 no_collision
+CTRL DOWN: select_square 0 -1 no_collision
+CTRL LEFT: select_square -1 0 no_collision
+CTRL RIGHT: select_square 1 0 no_collision
+
+CTRL SHIFT UP: select_square 0 5 no_collision
+CTRL SHIFT DOWN: select_square 0 -5 no_collision
+CTRL SHIFT LEFT: select_square -5 0 no_collision
+CTRL SHIFT RIGHT: select_square 5 0 no_collision
 
 PAGEDOWN: select_scouted_square 1
 PAGEUP: select_scouted_square -1

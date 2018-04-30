@@ -58,6 +58,23 @@ def direction_to_msgpart(o):
     elif o == 315:
         return mp.SOUTHEAST
 
+def _get_relevant_menu(menu):
+    _m = menu[:]
+    for x in ["stop",
+              "cancel_training", "cancel_upgrading", "cancel_building",
+              "mode_offensive", "mode_defensive",
+              "load", "load_all", "unload", "unload_all"]:
+        if x in _m:
+            _m.remove(x)
+    return _m
+
+def _remove_duplicates(l):
+    m = []
+    for i in l:
+        if i not in m:
+            m.append(i)
+    return m
+
 
 class GameInterface(object):
 
@@ -157,7 +174,6 @@ class GameInterface(object):
 
     def srv_voice_important(self, s):
         voice.confirmation(*eval_msg_and_volume(s)) # remember the pressed key
-#        voice.important(*eval_msg_and_volume(s))
 
     def srv_speed(self, s):
         self.speed = float(s)
@@ -209,9 +225,7 @@ class GameInterface(object):
             return True
 
     def is_selectable(self, o):
-        # must be in the current square or in front of the observer
         return self.is_visible(o)
-        # XXX == is_known ? (is_remembered or seen)
 
     def _object_choices(self, inc, types):
         choices = []
@@ -314,8 +328,6 @@ class GameInterface(object):
         elif cmd == "t":
             self.player.has = lambda x: True
         elif cmd:
-            # This direct way of executing the command might be a bit buggy,
-            # but at the moment this feature is just for cheating or testing anyway.
             cmd = re.sub("^a ", "add_units %s " % getattr(self.place, "name", ""), cmd)
             cmd = re.sub("^v$", "victory", cmd)
             self.server.write_line("cmd " + cmd)
@@ -389,7 +401,7 @@ class GameInterface(object):
 
     def _set_speed(self, speed):
         self.server.write_line("speed %s" % speed)
-        self.speed = speed # XXX too early? if not allowed?
+        self.speed = speed
 
     def gm_slow_speed(self):
         self._set_speed(.5)
@@ -408,7 +420,6 @@ class GameInterface(object):
 
     def gm_save(self):
             self.server.save_game()
-
 
     # clock
 
@@ -630,7 +641,7 @@ class GameInterface(object):
             self._process_srv_event(*e)
 
     def loop(self):
-        from clientserver import ConnectionAbortedError # TODO: remove the cyclic dependencies
+        from clientserver import ConnectionAbortedError
         set_game_mode(True)
         pygame.event.clear()
         self.next_update = time.time()
@@ -644,7 +655,7 @@ class GameInterface(object):
                 eventually_fix_modifier_keys()
                 self._process_events()
                 self._process_srv_events()
-                voice.update() # XXX useful for SAPI
+                voice.update() # useful for SAPI
                 time.sleep(.001)
             except SystemExit:
                 raise
@@ -768,27 +779,14 @@ class GameInterface(object):
 
     # menu monitor
 
-    @staticmethod
-    def _get_relevant_menu(menu):
-        _m = menu[:]
-        # TODO: use a "is_relevant" attribute
-        # (when client side orders are objects)
-        for x in ["stop",
-                  "cancel_training", "cancel_upgrading", "cancel_building",
-                  "mode_offensive", "mode_defensive",
-                  "load", "load_all", "unload", "unload_all"]:
-            if x in _m:
-                _m.remove(x)
-        return _m
-
     def _menu_has_increased(self, type_name, menu):
-        for i in self._get_relevant_menu(menu):
+        for i in _get_relevant_menu(menu):
             if i not in self.previous_menus[type_name]:
                 return True
         return False
 
     def _remember_menu(self, type_name, menu):
-        for i in self._get_relevant_menu(menu):
+        for i in _get_relevant_menu(menu):
             if i not in self.previous_menus[type_name]:
                 self.previous_menus[type_name].append(i)
 
@@ -808,13 +806,7 @@ class GameInterface(object):
                 done.append(u.type_name)
 
     def summary(self, group):
-        def remove_duplicates(l):
-            m = []
-            for i in l:
-                if i not in m:
-                    m.append(i)
-            return m
-        types = remove_duplicates(group) # set() would lose the order
+        types = _remove_duplicates(group) # set() would lose the order
         result = []
         for t in types:
             if t == types[-1] and len(types) > 1:
@@ -1004,7 +996,7 @@ class GameInterface(object):
     def cmd_default(self, *args):
         if not self.group:
             voice.item(mp.NO_UNIT_CONTROLLED)
-        elif self.ui_target.id is not None: # XXX useful?
+        elif self.ui_target.id is not None:
             self.send_order("default", self.ui_target.id, args)
             self._say_default_confirmation()
         self.order = None
@@ -1020,10 +1012,6 @@ class GameInterface(object):
         voice.item(help_msg("game", incr))
 
     def _minimap_stereo(self, place):
-        # TODO: avoid arbitrary flattening_factor and 6.0 (zoom level?)
-        # Maybe the aim is to have a minimap with every sound audible enough.
-        # So if at the same place the volume is minimap max, if very far the
-        # volume is minimap min.
         x, y = self.coords_in_map(place)
         flattening_factor = 2.0
         xc, yc = self.coords_in_map(self.place)
@@ -1075,16 +1063,6 @@ class GameInterface(object):
         if sort:
             result.sort(key=short_title_and_number)
         return result
-
-##    def srv_delunit(self, s):
-##        iu = int(s)
-##        for o in self.group[:]:
-##            if o == iu:
-##                self.group.remove(o)
-##                if not self.group:
-##                    if self.immersion:
-##                        self.toggle_immersion()
-##                break
 
     # select unit
 
@@ -1207,7 +1185,7 @@ class GameInterface(object):
     def orders(self):
         menu = []
         for u in self.group:
-            if u in self.dobjets: # useful?
+            if u in self.dobjets:
                 for o in self.dobjets[u].menu:
                     if o not in menu:
                         menu.append(o)
@@ -1228,7 +1206,7 @@ class GameInterface(object):
         # say the new current order
         msg = order_title(self.order) + order_comment(self.order,
             self.dobjets[self.group[0]].model) # "requires..."
-                    # XXX actually group[0] is not necessary the right
+                    # actually group[0] is not necessary the right
                     # one but it is only used to retrieve the world object
         if order_args(self.order, self.dobjets[self.group[0]].model) == 0:
             msg += mp.COMMA + mp.CONFIRM
@@ -1335,18 +1313,18 @@ class GameInterface(object):
         self.say_square(square, prefix)
         self.follow_mode = False
 
-    def _compute_move(self, dxc, dyc, cycle=True):
+    def _compute_move(self, dxc, dyc):
         xc, yc = self.coords_in_map(self.place)
         xc += dxc
         if xc < 0:
-            xc = self.xcmax if cycle else 0
+            xc = self.xcmax
         if xc > self.xcmax:
-            xc = 0 if cycle else self.xcmax
+            xc = 0
         yc += dyc
         if yc < 0:
-            yc = self.ycmax if cycle else 0
+            yc = self.ycmax
         if yc > self.ycmax:
-            yc = 0 if cycle else self.ycmax
+            yc = 0
         return self.server.player.world.grid[(xc, yc)]
 
     def _get_prefix_and_collision(self, new_square, dxc, dyc):
@@ -1376,7 +1354,6 @@ class GameInterface(object):
         dxc = int(dxc)
         dyc = int(dyc)
         no_collision = "no_collision" in args
-        cycle = "cycle" in args
         if self.immersion:
             if (dxc, dyc) == (-1, 0):
                 self.cmd_rotate_left()
@@ -1387,11 +1364,29 @@ class GameInterface(object):
             self.zoom.select()
             self.zoom.say()
         elif self.place is not None:
-            new_square = self._compute_move(dxc, dyc, cycle)
-            if no_collision:
+            if int(math.copysign(dxc + dyc, 1)) > 1: # several squares at a time
+                # assertion: dxc == 0 or dyc == 0
+                if dxc:
+                    step = int(math.copysign(1, dxc)), 0
+                else:
+                    step = 0, int(math.copysign(1, dyc))
+                prefixes = []
+                for _ in range(int(math.copysign(dxc + dyc, 1))):
+                    new_square = self._compute_move(*step)
+                    prefix, collision = self._get_prefix_and_collision(new_square, *step)
+                    if not no_collision:
+                        prefixes += prefix
+                    if not collision or no_collision:
+                        self.move_to_square(new_square)
+                    else:
+                        break
+                self._select_and_say_square(self.place, prefixes)
+            elif no_collision: # one square at a time without collision
+                new_square = self._compute_move(dxc, dyc)
                 self.move_to_square(new_square)
                 self._select_and_say_square(self.place)
-            else:
+            else: # one square at a time with collision
+                new_square = self._compute_move(dxc, dyc)
                 prefix, collision = self._get_prefix_and_collision(new_square, dxc, dyc)
                 if not collision:
                     self.move_to_square(new_square)
@@ -1414,7 +1409,7 @@ class GameInterface(object):
                 index = 0
             self._select_and_say_square(_squares[index])
         else:
-            voice.item([0]) # "nothing!"
+            voice.item(mp.NOTHING)
 
     def cmd_select_scouted_square(self, increment):
         self._select_square_from_list(increment, self.scouted_squares)
@@ -1456,10 +1451,6 @@ class GameInterface(object):
             xc, yc = self.coords_in_map(self.place)
             self.x = self.square_width * (xc + .5)
             self.y = self.square_width * (yc + 1/8.0)
-##            self.x = place.x
-##            self.y = place.ymin + self.square_width / 8.0
-##            self.x = self.square_width / 2.0
-##            self.y = self.square_width / 8.0 # self.y = 0 ?
             if self.place not in self.scouted_squares:
                 self.y -= self.square_width # lower sounds if fog of war
         psounds.update()

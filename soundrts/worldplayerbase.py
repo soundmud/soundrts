@@ -815,9 +815,9 @@ class Player(object):
         elif inspect.isclass(t): # Deposit, BuildingSite, Worker, Meadow...
             return isinstance(o, t)
         elif hasattr(t, "type_name"):
-            return o.type_name == t.type_name or t.type_name in getattr(o, "expanded_is_a", ())
+            return o.type_name == t.type_name
         elif isinstance(t, str):
-            return o.type_name == t or t in getattr(o, "expanded_is_a", ())
+            return o.type_name == t
 
     def future_count(self, type_name):
         result = 0

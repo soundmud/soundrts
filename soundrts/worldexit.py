@@ -8,8 +8,9 @@ class Exit(Entity):
     collision = 0
     is_an_exit = True
 
-    def __init__(self, place, type_name):
+    def __init__(self, place, type_name, is_a_portal):
         self.type_name = type_name
+        self.is_a_portal = is_a_portal
         place, x, y, o = place
         Entity.__init__(self, place, x, y, o)
         place.exits.append(self)
@@ -38,8 +39,8 @@ class Exit(Entity):
 
 
 def passage(places, exit_type):
-    place1, place2 = places
-    exit1 = Exit(place1, exit_type)
-    exit2 = Exit(place2, exit_type)
+    place1, place2, is_a_portal = places
+    exit1 = Exit(place1, exit_type, is_a_portal)
+    exit2 = Exit(place2, exit_type, is_a_portal)
     exit1.other_side = exit2
     exit2.other_side = exit1

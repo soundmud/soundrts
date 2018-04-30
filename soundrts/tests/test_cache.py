@@ -1,3 +1,4 @@
+import pygame
 import pytest
 
 from soundrts.lib.sound_cache import sounds
@@ -5,17 +6,19 @@ from soundrts.lib.resource import ResourceLoader
 from soundrts import clientmedia
 
 
-@pytest.fixture()
-def default():
+@pytest.fixture(scope="module")
+def default(request):
     clientmedia.minimal_init()
     res = ResourceLoader("", "", [])
+    request.addfinalizer(pygame.display.quit)
     return res
 
 
-@pytest.fixture()
-def test():
+@pytest.fixture(scope="module")
+def test(request):
     clientmedia.minimal_init()
     res = ResourceLoader("", "", [], base_path="soundrts/tests/res")
+    request.addfinalizer(pygame.display.quit)
     return res
 
 

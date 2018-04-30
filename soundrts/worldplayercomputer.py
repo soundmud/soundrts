@@ -30,6 +30,10 @@ def execute_this_method_once_every_n_calls(total_nb):
         return decorated_f
     return decorator
 
+def value_as_an_explorer(u):
+    air = 1 if u.airground_type == "air" else 0
+    return ((air, u.speed, u.hp), u.id)
+
 
 class Computer(Player):
 
@@ -289,14 +293,17 @@ class Computer(Player):
     def unit_class(self, name):
         return self.world.unit_class(name)
 
+    def best_explorers(self):
+        return sorted([u for u in self.units if u.speed > 0
+                       and not (u.orders and u.orders[0].keyword == "upgrade_to")],
+                      key=value_as_an_explorer, reverse=True)
+
     def _send_explorer(self):
-        def value_as_an_explorer(u):
-            air = 1 if u.airground_type == "air" else 0
-            return ((air, u.speed, u.hp), u.id)
-        candidates = sorted([u for u in self.units if u.speed > 0], key=value_as_an_explorer)
+        candidates = self.best_explorers()
         if candidates:
-            best_explorer = candidates[-1]
-            if not (best_explorer.orders and best_explorer.orders[0].keyword == "auto_explore"):
+            best_explorer = candidates[0]
+            if not (best_explorer.orders
+                    and best_explorer.orders[0].keyword == "auto_explore"):
                 explorer = None
                 for u in self.units:
                     if u.orders and u.orders[0].keyword == "auto_explore":
@@ -426,6 +433,8 @@ class Computer(Player):
             if requisition:
                 units.sort(key=self._worker_orders_priority)
             u = units.pop(0)
+            if order[0] == "upgrade_to" and u.orders and u.orders[0].keyword == "auto_explore":
+                u.take_order(["stop"])
             if requisition or not u.orders:
                 if u.orders and u.orders[0].keyword in ("build", "repair"):
                     continue
@@ -485,8 +494,8 @@ class Computer(Player):
 
     def _get_requirements(self, t):
         for r in t.requirements:
-            if not self._get(1, r):
-                return False
+            if not self.has(r): # requirement (eventually is_a)
+                return self._get(1, r) # exact type
         return True
 
     def _builders_place(self):
@@ -508,7 +517,7 @@ class Computer(Player):
                 if self.nb(maker):
                     break
             if type in self.world.unit_class(maker).can_upgrade_to:
-                if self.nb(maker):
+                if self.nb(maker) >= nb:
                     if self.gather(t.cost, t.food_cost):
                         self.order(nb, maker, ["upgrade_to", type])
                 else:
@@ -542,8 +551,11 @@ class Computer(Player):
                 for ability in self.world.unit_class(maker).can_use:
                     effect = rules.get(ability, "effect")
                     if effect and "summon" in effect[:1] and type in effect:
-                        print(maker, "use", ability)
-                        self.order(1, maker, ["use", ability])
+                        if rules.get(ability, "effect_target") == ["ask"]:
+                            self.order(1, maker, ["use", ability, self.units[0].id])
+                            # TODO select best place
+                        else:
+                            self.order(1, maker, ["use", ability])
                         break
 
     def _cataclysm_is_efficient(self, a, units):

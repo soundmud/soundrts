@@ -38,6 +38,9 @@ GLOBAL_FOOD_LIMIT = 80
 
 class Type(object):
 
+    def __repr__(self):
+        return "<Type '%s'>" % self.type_name
+
     def init_dict(self, target):
         target.type_name = self.type_name
         for k, v in self.dct.items():
@@ -466,23 +469,27 @@ class World(object):
             z.arrange_resources_symmetrically(xc, yc)
 
     def _we_places(self, i):
+        is_a_portal = False
         t = string.ascii_lowercase
         col = t.find(i[0]) + 1
         if col == self.nb_columns:
             col = 0
+            is_a_portal = True
         j = t[col] + i[1:]
         if not self.grid.has_key(j):
             map_error("", "The west-east passage starting from %s doesn't exist." % i)
-        return self.grid[i].east_side(), self.grid[j].west_side()
+        return self.grid[i].east_side(), self.grid[j].west_side(), is_a_portal
 
     def _sn_places(self, i):
+        is_a_portal = False
         line = int(i[1:]) + 1
         if line == self.nb_lines + 1:
             line = 1
+            is_a_portal = True
         j = i[0] + str(line)
         if not self.grid.has_key(j):
             map_error("", "The south-north passage starting from %s doesn't exist." % i)
-        return self.grid[i].north_side(), self.grid[j].south_side()
+        return self.grid[i].north_side(), self.grid[j].south_side(), is_a_portal
 
     def _ground_graph(self):
         g = {}
