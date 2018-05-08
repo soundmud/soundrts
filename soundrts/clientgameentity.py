@@ -5,7 +5,6 @@ import pygame
 
 from clientgamenews import must_be_said
 from clientmedia import voice, sounds, get_fullscreen
-from constants import FOOTSTEP_LIMIT  
 from definitions import style
 from lib.log import warning, exception
 from lib.msgs import nb2msg
@@ -14,6 +13,9 @@ from worldunit import BuildingSite
 from lib.sound import psounds, distance
 import msgparts as mp
 
+
+# minimal interval (in seconds) between 2 sounds
+FOOTSTEP_LIMIT = .1
 
 def compute_title(type_name):
     t = style.get(type_name, "title")
@@ -91,7 +93,7 @@ class EntityView(object):
 
     def _menu(self, strict=False):
         menu = []
-        try: # XXX remove this "try... except" when rules.txt checking is implemented
+        try: # TODO: remove this "try... except" when rules.txt checking is implemented
             for order_class in get_orders_list():
                 menu.extend(order_class.menu(self, strict=strict))
         except:
@@ -141,14 +143,12 @@ class EntityView(object):
         if self.player:
             if self.player == self.interface.player:
                 title += nb2msg(self.number)
-            elif self.player in self.interface.player.allied:
-                title += mp.ALLY + nb2msg(self.player.number) \
-                         + [self.player.client.login]
-            elif hasattr(self.player, "number") and self.player.number:
-                title += mp.ENEMY + nb2msg(self.player.number) \
-                         + [self.player.client.login]
-            else: # "npc_ai"
-                title += mp.ENEMY
+            else:
+                if self.player in self.interface.player.allied:
+                    title += mp.ALLY
+                else:
+                    title += mp.ENEMY
+                title += mp.COMMA + self.player.name + mp.COMMA
         return title
 
     @property
@@ -264,7 +264,7 @@ class EntityView(object):
                     self.launch_event(self.footstepnoise()[self.step_side], v, priority=-10, limit=FOOTSTEP_LIMIT)
                 except IndexError:
                     pass
-                self.next_step = time.time() + self.footstep_interval / self.interface.speed
+                self.next_step = time.time() + self.footstep_interval / self.interface.real_speed
                 self.step_side = 1 - self.step_side
         else:
             self.next_step = None

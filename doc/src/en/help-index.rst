@@ -10,3 +10,4 @@ Documentation
 - `Map making guide <mapmaking.htm>`_
 - `Modding guide <modding.htm>`_ (work in progress)
 - `Making AIs Tutorial <aimaking.htm>`_
+- `Server guide <server.htm>`_

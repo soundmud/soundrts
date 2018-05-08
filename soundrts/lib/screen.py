@@ -32,9 +32,19 @@ def _get_desktop_screen_mode():
 def get_desktop_screen_mode():
     return _x, _y
 
-def screen_render(text, xy):
-    ren = _font.render(text, True, (200, 200, 200), (0, 0, 0))
-    _screen.blit(ren, xy)
+def screen_render(text, dest, right=False, center=False, color=(200, 200, 200)):
+    surface = _font.render(text, True, color, (0, 0, 0))
+    r = surface.get_rect()
+    if right:
+        if dest[0] == -1:
+            dest = list(dest)
+            dest[0] += pygame.display.get_surface().get_width()
+        r.right, r.top = dest
+    elif center:
+        r.center = dest
+    else:
+        r = dest
+    _screen.blit(surface, r)
 
 def screen_render_subtitle():
     ren = _font.render(_subtitle, True, (200, 200, 200), (0, 0, 0))
@@ -62,7 +72,7 @@ def set_screen(fullscreen):
         x, y = get_desktop_screen_mode()
         window_style = 0 | FULLSCREEN
     else:
-        x, y = 400, 40
+        x, y = 400, 75
         window_style = 0
         pygame.mouse.set_visible(True)
     try:

@@ -11,19 +11,21 @@ import clientgame
 from clientgameorder import update_orders_list
 import definitions
 import config
-from constants import METASERVER_URL, PROFILE
 from definitions import style, rules
 from lib.log import warning, exception
 from lib.msgs import nb2msg
 from mapfile import Map
 import msgparts as mp
-from paths import CUSTOM_BINDINGS_PATH, REPLAYS_PATH, SAVE_PATH, STATS_PATH
+from paths import CUSTOM_BINDINGS_PATH, REPLAYS_PATH, SAVE_PATH
 import random
 import res
 import stats
 from version import VERSION, compatibility_version
 from world import World
-from worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, HalfDummyClient, send_platform_version_to_metaserver 
+from worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, RemoteClient, send_platform_version_to_metaserver 
+
+
+PROFILE = False
 
 
 class _Game(object):
@@ -62,8 +64,7 @@ class _Game(object):
                              self.nb_human_players)
 
     def _record_stats(self, world):
-        s = stats.Stats(STATS_PATH, METASERVER_URL)
-        s.add(self._game_type(), int(world.time / 1000))
+        stats.add(self._game_type(), int(world.time / 1000))
 
     def run(self, speed=config.speed):
         if self.record_replay:
@@ -75,6 +76,8 @@ class _Game(object):
                 self.map.load_resources()
                 update_orders_list() # when style has changed
                 self.pre_run()
+                if self.world.objective:
+                    voice.confirmation(mp.OBJECTIVE + self.world.objective)
                 self.interface = clientgame.GameInterface(self.me, speed=speed)
                 b = res.get_text_file("ui/bindings", append=True, localize=True)
                 b += "\n" + self.map.get_campaign("ui/bindings.txt")
@@ -84,7 +87,7 @@ class _Game(object):
                 except IOError:
                     pass
                 self.interface.load_bindings(b)
-                self.world.populate_map(self.players, self.alliances, self.factions)
+                self.world.populate_map(self.players)
                 self.nb_human_players = self.world.current_nb_human_players()
                 t = threading.Thread(target=self.world.loop)
                 t.daemon = True
@@ -98,7 +101,7 @@ class _Game(object):
                 self.post_run()
             finally:
                 self.map.unload_resources()
-            self.world.clean()
+            self.world.stop()
         else:
             voice.alert(mp.BEEP + [self.world.map_error])
         if self.record_replay:
@@ -129,16 +132,33 @@ class MultiplayerGame(_MultiplayerGame):
 
     game_type_name = "multiplayer"
 
-    def __init__(self, map, players, my_login, main_server, seed, speed):
+    def _clients(self, players, local_login, main_server):
+        clients = []
+        for login, a, f in players:
+            if login.startswith("ai_"):
+                c = DummyClient(login[3:])
+            else:
+                if login != local_login:
+                    c = RemoteClient(login)
+                else:
+                    c = Coordinator(local_login, main_server, self)
+                    self.me = c
+            c.alliance = a
+            c.faction = f
+            clients.append(c)
+        return clients
+
+    @property
+    def humans(self):
+        return [c for c in self.players if c.__class__ != DummyClient]
+
+    def __init__(self, map, players, local_login, main_server, seed, speed):
         self.map = map
-        computers, humans = self._computers_and_humans(players, my_login)
-        self.me = Coordinator(my_login, main_server, humans, self)
-        humans[humans.index(None)] = self.me
-        self.players = humans + computers # humans first because the first in the list is the game admin
+        self.players = self._clients(players, local_login, main_server)
         self.seed = seed
         self.speed = speed
         self.main_server = main_server
-        if len(humans) > 1:
+        if len(self.humans) > 1:
             self.allow_cheatmode = False
 
     def run(self):
@@ -152,34 +172,16 @@ class MultiplayerGame(_MultiplayerGame):
         pygame.event.clear(KEYDOWN)
 
     def pre_run(self):
-        nb_human_players = len([p for p in self.players if p.login != "ai"])
-        if nb_human_players > 1:
-            send_platform_version_to_metaserver(self.map.get_name(), nb_human_players)
+        if len(self.humans) > 1:
+            send_platform_version_to_metaserver(self.map.get_name(), len(self.humans))
             self._countdown()
 
     def post_run(self):
-        # alert the server of the exit from the game interface
-        if self.interface.forced_quit:
-            self.main_server.write_line("abort_game")
-        else:
-            self.main_server.write_line("quit_game")
+        self.main_server.write_line("quit_game")
         # say score only after quit_game to avoid blocking the main server
         self.say_score()
         voice.menu(mp.MENU + mp.MAKE_A_SELECTION)
         # (long enough to allow history navigation)
-
-    def _computers_and_humans(self, players, my_login):
-        computers = []
-        humans = []
-        for p in players:
-            if p in ["ai_aggressive", "ai_easy"]:
-                computers.append(DummyClient(p[3:]))
-            else:
-                if p != my_login:
-                    humans.append(HalfDummyClient(p))
-                else:
-                    humans.append(None) # marked for further replacement, because the order must be the same (the worlds must be the same)
-        return computers, humans
 
 
 class _Savable(object):
@@ -224,18 +226,10 @@ class _Savable(object):
             t = threading.Thread(target=self.world.loop)
             t.daemon = True
             t.start()
-            # Because the simulation is in a different thread,
-            # sometimes the interface "forgets" to ask for an
-            # update. Maybe a better communication protocol
-            # between interface and simulation would solve
-            # this problem ("update" and "no_end_of_update_yet"
-            # should contain the simulation time, maybe). Maybe
-            # some data in a queue has been lost.
-            self.interface.asked_to_update = False
             self.interface.loop()
             self._record_stats(self.world)
             self.post_run()
-            self.world.clean()
+            self.world.stop()
         finally:
             self.map.unload_resources()
 
@@ -316,10 +310,12 @@ class ReplayGame(_Game):
         self.me = ReplayClient(players[0], self)
         self.players = [self.me]
         for x in players[1:]:
-            if x in ["aggressive", "easy"]: # the "ai_" prefix wasn't recorded
+            if x.startswith("ai_"):
+                x = x[3:]
+            if x in ["aggressive", "easy", "ai2"]:
                 self.players += [DummyClient(x)]
             else:
-                self.players += [HalfDummyClient(x)]
+                self.players += [RemoteClient(x)]
                 self.me.nb_humans += 1
 
     def replay_read(self):

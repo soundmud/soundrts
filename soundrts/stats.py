@@ -5,7 +5,9 @@ except:
 import os
 import urllib
 
+from metaserver import METASERVER_URL
 from lib.log import debug
+from paths import STATS_PATH
 
 
 class Stats(object):
@@ -115,3 +117,7 @@ class Stats(object):
         except:
             debug("can't get volume serial number") # Mac, Linux
             return 0
+
+
+_stats = Stats(STATS_PATH, METASERVER_URL)
+add = _stats.add

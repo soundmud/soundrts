@@ -1,6 +1,8 @@
-from constants import COLLISION_RADIUS
 from lib.log import exception, warning, info
 from lib.nofloat import PRECISION
+
+
+COLLISION_RADIUS = 175 # millimeters # 350 / 2
 
 
 class NotEnoughSpaceError(Exception): pass
@@ -45,6 +47,9 @@ class Entity(object):
 
     speed = 0
     is_moving = False
+
+    def __repr__(self):
+        return "%s()" % self.__class__.__name__
 
     @property
     def is_memory(self):

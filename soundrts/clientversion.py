@@ -2,7 +2,7 @@ import threading
 import urllib
 
 from clientmedia import voice
-from constants import METASERVER_URL
+from metaserver import METASERVER_URL
 import msgparts as mp
 from paths import STATS_PATH, OLD_STATS_PATH
 import stats

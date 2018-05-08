@@ -8,9 +8,13 @@ from soundrts.worldclient import Coordinator
 class CoordinatorTestCase(unittest.TestCase):
 
     def testSyncError(self):
-        c = Coordinator(None, None, None, None)
+        c = Coordinator(None, None, None)
         c.world = World([])
         c.world.load_and_build_map(Map("multi/m2.txt"))
+        c.world.update()
+        c.get_sync_debug_msg_1()
+        c.get_sync_debug_msg_2()
+        c.world.update()
         c.get_sync_debug_msg_1()
         c.get_sync_debug_msg_2()
 #        print c.get_sync_debug_msg_1()

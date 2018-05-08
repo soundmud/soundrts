@@ -2,99 +2,101 @@
 
 import ConfigParser
 import platform
+import os
 import re
 import shutil
+import sys
 
-from lib.log import warning
+from lib.log import info, warning
 from paths import CONFIG_FILE_PATH
 
 
-login = "player"
-num_channels = 16
-speed = 1
-srapi = 1
-srapi_wait = .1
-mods = ""
-soundpacks = ""
-timeout = 20.0
+def login_is_valid(login):
+    return re.match("^[a-zA-Z0-9]{1,20}$", login) is not None
 
+def login_type(s):
+    assert isinstance(s, str)
+    if not login_is_valid(s):
+        raise ValueError
+    return s
 
-def save():
+_options = [
+    ("general", "login", "player", login_type),
+    ("general", "mods", ""),
+    ("general", "soundpacks", ""),
+    ("general", "num_channels", 16),
+    ("general", "speed", 1),
+    ("server", "timeout", 60.0),
+    # fpct must be as small as possible while respecting test_fpct()
+    ("server", "fpct_coef", 2.3),
+    ("server", "require_humans", 0),
+]
+
+if platform.system() == "Windows":
+    _options += [
+        ("tts", "srapi", 1),
+        ("tts", "srapi_wait", .1),
+    ]
+
+def add_converter(option):
+    if len(option) == 4:
+        return option
+    return option + (type(option[2]), )
+
+_options = [add_converter(o) for o in _options]
+
+_module = sys.modules[__name__]
+
+def save(name=CONFIG_FILE_PATH):
     c = ConfigParser.SafeConfigParser()
-    c.add_section("general")
-    c.set("general", "login", login)
-    c.set("general", "mods", mods)
-    c.set("general", "soundpacks", soundpacks)
-    c.set("general", "num_channels", repr(num_channels))
-    c.set("general", "speed", repr(speed))
-    c.add_section("server")
-    c.set("server", "timeout", repr(timeout))
-    c.add_section("tts")
-    if platform.system() == "Windows":
-        c.set("tts", "srapi", repr(srapi))
-        c.set("tts", "srapi_wait", repr(srapi_wait))
-    c.write(open(CONFIG_FILE_PATH, "w"))
+    for section, option, _, _ in _options:
+        if not c.has_section(section):
+            c.add_section(section)
+        c.set(section, option, str(getattr(_module, option)))
+    c.write(open(name, "w"))
 
+def make_a_copy(name):
+    try:
+        shutil.copy(name, name + ".old")
+        warning("made a copy of the old config file")
+    except:
+        warning("could not make a copy of the old config file")
 
-def load():
-    global login, num_channels, speed, mods, soundpacks
-    global timeout
-    global srapi, srapi_wait
+def _copy_to_module(c):
     error = False
-    new_file = False
-    try:
-        f = open(CONFIG_FILE_PATH)
-    except:
-        new_file = True
-    try:
+    for section, option, default, converter in _options:
+        try:
+            raw_value = c.get(section, option)
+        except ConfigParser.Error:
+            info("%r option is missing (will be: %r)", option, default)
+            value = default
+            error = True
+        else:
+            try:
+                value = converter(raw_value)
+            except ValueError:
+                warning("%s will be %r instead of %r", option, default, raw_value)
+                value = default
+                error = True
+        setattr(_module, option, value)
+    return error
+
+def load(name=CONFIG_FILE_PATH):
+    if os.path.isfile(name):
         c = ConfigParser.SafeConfigParser()
-        c.readfp(f)
-    except:
-        error = True
-    try:
-        login = c.get("general", "login")
-        if re.match("^[a-zA-Z0-9]{1,20}$", login) == None:
-            raise ValueError
-    except:
-        error = True
-    try:
-        num_channels = c.getint("general", "num_channels")
-    except:
-        error = True
-    try:
-        speed = c.getint("general", "speed")
-    except:
-        error = True
-    try:
-        mods = c.get("general", "mods")
-    except:
-        error = True
-    try:
-        soundpacks = c.get("general", "soundpacks")
-    except:
-        error = True
-    try:
-        timeout = c.getfloat("server", "timeout")
-    except:
-        error = True
-    if platform.system() == "Windows":
-        try:
-            srapi_wait = c.getfloat("tts", "srapi_wait")
-        except:
-            error = True
-        try:
-            srapi = c.getint("tts", "srapi")
-        except:
-            error = True
-    if error and not new_file:
-        warning("rewriting SoundRTS.ini...")
-        try:
-            n_old = CONFIG_FILE_PATH + ".old"
-            shutil.copy(CONFIG_FILE_PATH, n_old)
-            warning("made a copy of old config file")
-        except:
-            warning("could not make a copy of old config file")
-    save()
+        c.readfp(open(name))
+        error = _copy_to_module(c)
+        if error:
+            warning("Error in %s.", name)
+            make_a_copy(name)
+            warning("Rewriting %s...", name)
+            save(name)
+    else:
+        init()
+        save(name)
 
+def init():
+    for _, option, default, _ in _options:
+        setattr(_module, option, default)
 
-load()
+init()

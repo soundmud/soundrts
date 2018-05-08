@@ -4,7 +4,6 @@ from definitions import get_ai, rules
 from lib.log import info, warning, exception
 from version import IS_DEV_VERSION
 from worldplayerbase import Player
-import worldrandom
 from worldresource import Meadow, Deposit, Corpse
 from worldunit import Worker, BuildingSite, Soldier
 from soundrts.lib.nofloat import PRECISION
@@ -37,23 +36,20 @@ def value_as_an_explorer(u):
 
 class Computer(Player):
 
-    name = "ai"
     AI_type = None
     # the AI might need a longer memory than the player
     memory_duration = 36000000 # 36000 seconds of world time
 
-    def __init__(self, world, client, neutral=False):
+    def __init__(self, world, client):
         self._attacked_places = []
         self._orders = {}
         self._previous_choose = {}
-        self.neutral = neutral
-        if neutral:
-            self.name = "npc_ai"
+        self.neutral = client.neutral
         Player.__init__(self, world, client)
         self.set_ai(client.AI_type)
 
     def __repr__(self):
-        return "<Computer>"
+        return "Computer(%s)" % self.client
 
     @property
     def smart_units(self):
@@ -106,7 +102,7 @@ class Computer(Player):
                 self._line_nb += 1
                 info(cmd[1])
             elif cmd[0] == "goto_random":
-                dest = worldrandom.choice(cmd[1:])
+                dest = self.world.random.choice(cmd[1:])
                 if "label " + dest in self._plan:
                     self._line_nb = self._plan.index("label " + dest)
                 else:
@@ -337,13 +333,15 @@ class Computer(Player):
         return c
 
     def is_ok_for_warehouse(self, z, resource_type):
+        # Eventually, to completely avoid cheating, is_ok() would
+        # return True if "no owned warehouse and no remembered enemy".
+        # a warehouse (allied or not) must not be already there
+        for o2 in z.objects:
+            if resource_type in getattr(o2, "storable_resource_types", ()):
+                return False
         # a resource must be there
         for o in z.objects:
             if isinstance(o, Deposit) and o.resource_type == resource_type:
-                # a warehouse (allied or not) must not be already there
-                for o2 in z.objects: # XXX cheating? => no owned warehouse and no remembered enemy?
-                    if resource_type in getattr(o2, "storable_resource_types", ()):
-                        return False
                 return True
 
     def choose(self, c, resource_type=None, starting_place=None, random=False):
@@ -353,8 +351,6 @@ class Computer(Player):
             return o.place is not None \
                and (resource_type is None or self.is_ok_for_warehouse(o.place, resource_type)) \
                and not self.is_dangerous(o.place)
-        def is_a_candidate(o):
-            return 
         k = "%s %s %s" % (c, resource_type, starting_place)
         if k in self._previous_choose and not random:
             o = self._previous_choose[k]
@@ -504,7 +500,7 @@ class Computer(Player):
             if u.place not in starts: starts[u.place] = 1
             else: starts[u.place] += 1
         if starts:
-            return sorted(starts.items(), key=lambda x: x[1])[-1][0]
+            return sorted(starts.items(), key=lambda x: (x[1], x[0].id))[-1][0]
 
     def build_or_train_or_upgradeto_or_summon(self, t, nb=1):
         if t.__class__ == str:
@@ -658,7 +654,7 @@ class Computer(Player):
                     for u_, a in self._cataclysm_users:
                         if u_ is u and self._cataclysm_is_efficient(a, enemies):
                             u.take_order(["use", a, place.id], forget_previous=False)
-            u.take_order(["wait", place.id], forget_previous=False)
+            #u.take_order(["wait", place.id], forget_previous=False)
             for u_, a in self._summon_users:
                 if u_ is u:
                     u.take_order(["use", a, place.id], forget_previous=False)

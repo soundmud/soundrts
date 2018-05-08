@@ -65,7 +65,7 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
                 voice.item(mp.BEEP + mp.PERIOD + string_to_msg(s, spell))
         elif e.type == USEREVENT:
             voice.update()
-        voice.update() # XXX useful for SAPI
+        voice.update() # useful for SAPI
 
 def _remember_path(menu_name):
     return os.path.join(TMP_PATH, menu_name + ".txt")
@@ -238,7 +238,7 @@ class Menu(object):
             voice.update()
         elif e.type == KEYDOWN:
             self._process_keydown(e)
-        voice.update() # XXX useful for SAPI
+        voice.update() # useful for SAPI
 
     def _get_choice_from_static_menu(self):
         self.choice_done = False

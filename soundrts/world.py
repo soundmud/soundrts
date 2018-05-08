@@ -7,13 +7,14 @@ except ImportError:
     from md5 import md5
 import os.path
 import Queue
+import random
 import re
 import string
 import time
 
+from lib import chronometer as chrono
 from lib import collision
-from constants import COLLISION_RADIUS, VIRTUAL_TIME_INTERVAL, PROFILE
-from definitions import rules, get_ai_names, load_ai
+from definitions import rules, get_ai_names, load_ai, VIRTUAL_TIME_INTERVAL
 from lib.log import warning, exception, info
 from lib.nofloat import to_int, int_distance, PRECISION
 import msgparts as mp
@@ -21,12 +22,12 @@ from paths import MAPERROR_PATH
 import res
 from worldability import Ability
 from worldclient import DummyClient
+from worldentity import COLLISION_RADIUS
 from worldexit import passage
 from worldorders import ORDERS_DICT
 from worldplayerbase import Player, normalize_cost_or_resources
 from worldplayercomputer import Computer
-from worldplayerhuman import Human
-import worldrandom
+from worldplayercomputer2 import Computer2
 from worldresource import Deposit, Meadow
 from worldroom import Square
 from worldunit import Unit, Worker, Soldier, Building, _Building, Effect
@@ -34,6 +35,12 @@ from worldupgrade import Upgrade
 
 
 GLOBAL_FOOD_LIMIT = 80
+PROFILE = False
+
+def check_squares(squares):
+    for sq in squares:
+        if re.match("^[a-z]+[0-9]+$", sq) is None:
+            map_error(line, "%s is not a square" % sq)
 
 
 class Type(object):
@@ -83,16 +90,14 @@ class Type(object):
             raise AttributeError
 
 
-# POSSIBLE TODO: a world doesn't know what is a player or a game...
-# ... except for the resources and tech?!!! and alliances, ennemies
-# rename "player" to "economy", "country", "tribe", "side",
-# "force", "faction", "team"?)
 class World(object):
 
     def __init__(self, default_triggers, seed=0):
         self.default_triggers = default_triggers
+        self.seed = seed
         self.id = self.get_next_id()
-        worldrandom.seed(int(seed))
+        self.random = random.Random()
+        self.random.seed(int(seed))
         self.time = 0
         self.squares = []
         self.active_objects = []
@@ -133,6 +138,9 @@ class World(object):
         self.nb_players_min = 1
         self.nb_players_max = 1
 
+    def __repr__(self):
+        return "World(%s)" % self.seed
+
     def __getstate__(self):
         odict = self.__dict__.copy()
         del odict["_command_queue"]
@@ -151,7 +159,7 @@ class World(object):
         for z in self.squares:
             for e in z.exits:
                 e.place = z
-        self.set_neighbours()
+        self.set_neighbors()
         
     _next_id = 0 # reset ID for each world to avoid big numbers
 
@@ -211,7 +219,7 @@ class World(object):
             self.harm_target_types[(unit_type_name, other_type_name)] = result
             return result
 
-    def clean(self):
+    def _free_memory(self):
         for p in self.players + self.ex_players:
             p.clean()
         for z in self.squares:
@@ -219,7 +227,9 @@ class World(object):
         self.__dict__ = {}
 
     def _get_objects_values(self):
-        names_to_check = ["x", "y", "hp", "action_target"]
+        yield str(self.random.getstate())
+        yield "starting_squares = {}".format(self.starting_squares)
+        names_to_check = ["type_name", "id", "x", "y", "hp", "action_target"]
         if self.time == 0:
             names_to_check += ["id", "player"]
             objects_to_check = []
@@ -227,19 +237,31 @@ class World(object):
                 objects_to_check += z.objects
         else:
             objects_to_check = self.active_objects
+        yield str(self.starting_squares)
         for o in objects_to_check:
+            if getattr(o, "orders", False):
+                yield o.orders[0].keyword
+                if o.orders[0].keyword == "auto_explore":
+                    yield "already=" + str(sorted(list(o.player._already_explored),key=lambda x: getattr(x, "name", None)))
+                    yield "_places_to_explore=" + str(o.player._places_to_explore)
             for name in names_to_check:
                 if hasattr(o, name):
                     value = getattr(o, name)
                     if name in ["action_target", "player"]:
                         if hasattr(value, "id"):
                             value = value.id
+                            if value in self.objects:
+                                if self.objects[value].__class__.__name__ == "Exit":
+                                    value = value, self.objects[value]
+                                else:
+                                    value = value, self.objects[value].__class__.__name__
                         else:
                             continue
-                    yield "%s%s" % (name, value)
+                    yield "%s=%s" % (name, value)
+            yield ""
 
     def get_objects_string(self):
-        return "".join(self._get_objects_values())
+        return "\n".join(self._get_objects_values())
 
     def get_digest(self):
         d = md5(str(self.time))
@@ -283,10 +305,20 @@ class World(object):
                                 for a in p.allied_vision:
                                     a.detected_units.add(iu)
                                 continue
-                    
+
+    previous_state = (0, "")
+
+    def _record_sync_debug_info(self):
+        try:
+            self.previous_previous_state = self.previous_state
+        except AttributeError:
+            pass
+        self.previous_state = self.time, self.get_objects_string()
+
     _previous_slow_update = 0
 
     def update(self):
+        chrono.start("update")
         # normal updates
         self._update_cloaking()
         self._update_detection()
@@ -327,11 +359,12 @@ class World(object):
                 if o.place is None:
                     p.perception.remove(o)
 
+        chrono.stop("update")
+        self._record_sync_debug_info()
+
         # signal the end of the updates for this time
         self.time += VIRTUAL_TIME_INTERVAL
         for p in self.players[:]:
-            if p.is_human():
-                p.ready = False
             try:
                 def _copy(l):
                     return set(copy.copy(o) for o in l)
@@ -424,9 +457,9 @@ class World(object):
 
     # map creation
 
-    def set_neighbours(self):
+    def set_neighbors(self):
         for square in set(self.grid.values()):
-            square.set_neighbours()
+            square.set_neighbors()
 
     def _create_squares_and_grid(self):
         self.grid = {}
@@ -436,7 +469,7 @@ class World(object):
                 self.grid[square.name] = square
                 self.grid[(col, row)] = square
                 square.high_ground = square.name in self.high_grounds
-        self.set_neighbours()
+        self.set_neighbors()
         xmax = self.nb_columns * self.square_width
         res = COLLISION_RADIUS * 2 / 3
         self.collision = {"ground": collision.CollisionMatrix(xmax, res),
@@ -506,7 +539,7 @@ class World(object):
         g = {}
         for z in self.squares:
             g[z] = {}
-            for z2 in z.strict_neighbours:
+            for z2 in z.neighbors:
                 g[z][z2] = int_distance(z.x, z.y, z2.x, z2.y)
         return g  
                 
@@ -604,16 +637,10 @@ class World(object):
             else:
                 map_error("", "error in trigger for %s: unknown owner" % o)
 
+    def random_choice_repl(self, matchobj):
+        return self.random.choice(matchobj.group(1).split("\n#end_choice\n"))
+
     def _load_map(self, map):
-        
-        def random_choice_repl(matchobj):
-            return worldrandom.choice(matchobj.group(1).split("\n#end_choice\n"))
-
-        def check_squares(squares):
-            for sq in squares:
-                if re.match("^[a-z]+[0-9]+$", sq) is None:
-                    map_error(line, "%s is not a square" % sq)
-
         triggers = []
         starting_resources = [0 for _ in range(self.nb_res)]
 
@@ -628,7 +655,7 @@ class World(object):
         s = s.replace("(", " ( ")
         s = s.replace(")", " ) ")
         s = re.sub(r"\s*\n\s*", r"\n", s) # strip lines
-        s = re.sub(r"(?ms)^#random_choice\n(.*?)\n#end_random_choice$", random_choice_repl, s)
+        s = re.sub(r"(?ms)^#random_choice\n(.*?)\n#end_random_choice$", self.random_choice_repl, s)
         s = re.sub(r"(?m)^(goldmine|wood)s\s+([0-9]+)\s+(.*)$", r"\1 \2 \3", s)
         s = re.sub(r"(south_north|west_east)_paths", r"\1 path", s)
         s = re.sub(r"(south_north|west_east)_bridges", r"\1 bridge", s)
@@ -719,17 +746,14 @@ class World(object):
             self.map = map
             self.square_width = int(self.square_width * PRECISION)
             self._build_map()
-            if self.objective:
-                self.introduction = mp.OBJECTIVE + self.objective
-            else:
-                self.introduction = []
         except MapError, msg:
             warning("map error: %s", msg)
             self.map_error = "map error: %s" % msg
             return False
         return True
 
-    def get_factions(self):
+    @property
+    def factions(self):
         return [c for c in rules.classnames()
                 if rules.get(c, "class") == ["faction"]]
 
@@ -738,7 +762,7 @@ class World(object):
     def current_nb_human_players(self):
         n = 0
         for p in self.players:
-            if p.is_human():
+            if p.is_human:
                 n += 1
         return n
 
@@ -753,62 +777,54 @@ class World(object):
     def food_limit(self):
         return self.global_food_limit
 
-    def _add_player(self, player_class, client, start, *args, **kargs):
-        client.player = player_class(self, client, *args, **kargs)
-        self.players.append(client.player)
-        client.player.start = start
+    def _add_player(self, client, start):
+        player = client.player_class(self, client)
+        player.start = start
+        client.player = player
+        self.players.append(player)
 
-    def populate_map(self, players, alliances, factions=(), random_starts=True):
-        # add "true" (non neutral) players
+    def _create_true_players(self, players, random_starts):
+        starts = self.players_starts[:]
         if random_starts:
-            worldrandom.shuffle(self.players_starts)
+            self.random.shuffle(starts)
         for client in players:
-            start = self.players_starts.pop(0)
-            if client.__class__.__name__ == "DummyClient":
-                self._add_player(Computer, client, start)
-            else:
-                self._add_player(Human, client, start)
-        # create the alliances
-        if alliances:
-            for p, pa in zip(self.players, alliances):
-                for other, oa in zip(self.players, alliances):
-                    if other is not p and oa == pa:
-                        p.allied.append(other)
-        else: # computer players are allied by default
-            for p in self.players:
-                if isinstance(p, Computer):
-                    for other in self.players:
-                        if other is not p and isinstance(other, Computer):
-                            p.allied.append(other)
-        # set the factions for players
-        if factions:
-            for p, pr in zip(self.players, factions):
-                if pr == "random_faction":
-                    p.faction = worldrandom.choice(self.get_factions())
-                else:
-                    p.faction = pr
-        # add "neutral" (independent) computers
+            start = starts.pop(0)
+            self._add_player(client, start)
+        for p in self.players:
+            p.init_alliance()
+
+    def _create_neutrals(self):
         for start in self.computers_starts:
-            self._add_player(Computer, DummyClient(), start, neutral=True)
-        # init all players positions
+            self._add_player(DummyClient(neutral=True), start)
+
+    def populate_map(self, players, random_starts=True):
+        self._create_true_players(players, random_starts)
+        self._create_neutrals()
         for player in self.players:
             player.init_position()
-        self.admin = players[0] # define get_admin()?
+
+    def stop(self):
+        self._must_loop = False
+
+    def _loop(self):
+        self._must_loop = True
+        while(self._must_loop):
+            if not self._command_queue.empty():
+                player, order = self._command_queue.get()
+                try:
+                    if player is None:
+                        order()
+                    else:
+                        player.execute_command(order)
+                except:
+                    exception("")
+            else:
+                time.sleep(.001)
 
     def loop(self):
-        def _loop():
-            while(self.__dict__): # cf clean()
-                if not self._command_queue.empty():
-                    player, order = self._command_queue.get()
-                    try:
-                        player.execute_command(order)
-                    except:
-                        exception("")
-                else:
-                    time.sleep(.001)
         if PROFILE:
             import cProfile
-            cProfile.runctx("_loop()", globals(), locals(), "world_profile.tmp")
+            cProfile.runctx("self._loop()", globals(), locals(), "world_profile.tmp")
             import pstats
             for n in ("interface_profile.tmp", "world_profile.tmp"):
                 p = pstats.Stats(n)
@@ -818,7 +834,8 @@ class World(object):
                 p.print_callees(20)
                 p.sort_stats('cumulative').print_stats(50)
         else:
-            _loop()
+            self._loop()
+        self._free_memory()
 
     def queue_command(self, player, order):
         self._command_queue.put((player, order))

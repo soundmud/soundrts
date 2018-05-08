@@ -13,7 +13,7 @@ class Deposit(Entity):
 
     def __init__(self, prototype, square, qty):
         prototype.init_dict(self)
-        self.qty = to_int(qty) # XXX does the value come from the map? (already done in rules)
+        self.qty = to_int(qty) # does the value come from the map? (already done in rules)
         self.qty_max = self.qty
         if self.resource_type == 1: # wood
             self.resource_regen = to_int(".01")

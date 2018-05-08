@@ -189,7 +189,7 @@ class _Voice(object):
         l = pygame.event.get([KEYDOWN])
         if keep_key:
             for e in l: # put events back in queue
-                pygame.event.post(e) # XXX: will the order be preserved?
+                pygame.event.post(e) # will the order be preserved?
         return len(l) != 0
 
 

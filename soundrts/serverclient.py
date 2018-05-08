@@ -4,12 +4,11 @@ import string
 import sys
 import time
 
-from lib.log import debug, info, warning, exception
+from lib.log import info, warning, exception
 from lib.msgs import encode_msg
 from mapfile import worlds_multi
-import msgparts as mp
 import res
-from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game, insert_silences
+from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
 
 
 class ConnectionToClient(asynchat.async_chat):
@@ -31,11 +30,15 @@ class ConnectionToClient(asynchat.async_chat):
         self.push(":")
         self.t1 = time.time()
 
+    @property
+    def name(self):
+        return [self.login]
+
     def collect_incoming_data(self, data):
         self.inbuffer += data
 
     def _execute_command(self, data):
-        args = string.split(data)
+        args = string.split(data, " ")
         if args[0] not in self.state.allowed_commands:
             warning("action not allowed: %s" % args[0])
             return
@@ -47,7 +50,6 @@ class ConnectionToClient(asynchat.async_chat):
 
     def found_terminator(self):
         data = string.replace(self.inbuffer, "\r", "")
-        debug("server data from %s: %s", self.login, data)
         self.inbuffer = ''
         try:
             self._execute_command(data)
@@ -57,10 +59,6 @@ class ConnectionToClient(asynchat.async_chat):
             exception("error executing command: %s" % data)
 
     def handle_close(self):
-        try:
-            debug("ConnectionToClient.handle_close")
-        except:
-            pass
         try:
             self.server.remove_client(self)
         except SystemExit:
@@ -73,10 +71,6 @@ class ConnectionToClient(asynchat.async_chat):
         self.close()
 
     def handle_error(self):
-        try:
-            debug("ConnectionToClient.handle_error %s", sys.exc_info()[0])
-        except:
-            pass
         if sys.exc_info()[0] in [SystemExit, KeyboardInterrupt]:
             sys.exit()
         else:
@@ -88,6 +82,10 @@ class ConnectionToClient(asynchat.async_chat):
             ",".join([str(x) for x in [g.id, g.admin.login] + g.scenario.title])
             for g in self.server.games if self in g.guests]))
 
+    def notify(self, *args):
+        if not self.is_disconnected:
+            self.push(" ".join(map(str, args)) + "\n")
+
     def send_maps(self):
         if self.server.can_create(self):
             self.push("maps %s\n" %
@@ -96,21 +94,18 @@ class ConnectionToClient(asynchat.async_chat):
         else:
             self.push("maps \n")
 
-    def send_e(self, event):
-        self.push("e %s\n" % event)
-
     def is_compatible(self, client):
         return self.version == client.version
 
     # "anonymous" commands
 
     def _unique_login(self, client_login):
+        if client_login.startswith("ai_"):
+            client_login = "player"
         login = client_login
         n = 2
-        # "ai" (or "npc_ai") is reserved
-        # (used to forbid cheatmode in multiplayer games)
-        while login in [x.login for x in self.server.clients] + ["ai", "npc_ai"]:
-            login = client_login + "%s" % n
+        while login in [x.login for x in self.server.clients]:
+            login = client_login + str(n)
             n += 1
         return login
 
@@ -128,15 +123,15 @@ class ConnectionToClient(asynchat.async_chat):
             return (version, None)
         return (version, self._unique_login(login))
 
-    def _send_server_status_msg(self):
-        msg = []
-        for c in self.server.clients:
-            if c.is_compatible(self):
-                msg.append(c.login)
-        self.send_msg(insert_silences(msg))
-        for g in self.server.games:
-            if g.started:
-                self.send_msg(g.get_status_msg())
+    @property
+    def compatible_clients(self):
+        return [c.login for c in self.server.clients if c.is_compatible(self)]
+
+    def _send_server_status(self):
+        self.notify("clients", *self.compatible_clients)
+        for game in self.server.games:
+            if game.started:
+                self.notify("game", *game.short_status)
 
     def _accept_client_after_login(self):
         self.delay = time.time() - self.t1
@@ -151,8 +146,8 @@ class ConnectionToClient(asynchat.async_chat):
         # alert lobby and game admins
         for c in self.server.available_players() + self.server.game_admins():
             if c.is_compatible(self):
-                c.send_e("new_player,%s" % self.login)
-        self._send_server_status_msg()
+                c.notify("logged_in", self.login)
+        self._send_server_status()
         for g in self.server.games:
             g.notify_connection_of(self)
         self.server.log_status()
@@ -182,7 +177,7 @@ class ConnectionToClient(asynchat.async_chat):
             self.server.update_menus()
         else:
             warning("game not created (max number reached)")
-            self.send_msg(mp.TOO_MANY_GAMES)
+            self.notify("too_many_games")
 
     def cmd_register(self, args):
         game = self.server.get_game_by_id(args[0])
@@ -193,7 +188,7 @@ class ConnectionToClient(asynchat.async_chat):
             game.register(self)
             self.server.update_menus()
         else:
-            self.send_msg(mp.BEEP)
+            self.notify("register_error")
 
     def cmd_quit(self, unused_args):
         # When the client wants to quit, he first sends "quit" to the server.
@@ -215,7 +210,7 @@ class ConnectionToClient(asynchat.async_chat):
             self.game.invite(guest)
             self.server.update_menus()
         else:
-            self.send_msg(mp.BEEP)
+            self.notify("invite_error")
 
     def cmd_invite_easy(self, unused_args):
         self.game.invite_computer("easy")
@@ -223,6 +218,10 @@ class ConnectionToClient(asynchat.async_chat):
 
     def cmd_invite_aggressive(self, unused_args):
         self.game.invite_computer("aggressive")
+        self.send_menu() # only the admin
+
+    def cmd_invite_ai2(self, unused_args):
+        self.game.invite_computer("ai2")
         self.send_menu() # only the admin
 
     def cmd_move_to_alliance(self, args):
@@ -246,14 +245,13 @@ class ConnectionToClient(asynchat.async_chat):
     # "playing" commands
 
     def cmd_orders(self, args):
-        self.game.orders(self, args)
+        self.push("pong\n")
+        self.game.orders(self, *args)
 
     def cmd_quit_game(self, unused_args):
-        self.game.quit_game(self)
-        self.server.update_menus()
-
-    def cmd_abort_game(self, unused_args):
-        self.game.abort_game(self)
+        self.game.orders(self, "quit")
+        self.game.remove(self)
+        self.state = InTheLobby()
         self.server.update_menus()
 
     def cmd_timeout(self, unused_args):
@@ -269,16 +267,13 @@ class ConnectionToClient(asynchat.async_chat):
     def send_msg(self, msg):
         self.push("msg %s\n" % encode_msg(msg))
 
-    def login_to_send(self):
-        return self.login
-
     def cmd_debug_info(self, args):
         info(" ".join(args))
 
     def cmd_say(self, args):
-        msg = [self.login] + mp.SAYS + [" ".join(args)]
-        if self.game is not None:
-            self.game.broadcast(msg)
+        if self.game:
+            clients = self.game.human_players
         else:
-            for p in self.server.available_players():
-                p.send_msg(msg)
+            clients = self.server.available_players()
+        for client in clients:
+            client.notify("say", self.login, *args)

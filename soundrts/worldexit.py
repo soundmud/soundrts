@@ -16,6 +16,9 @@ class Exit(Entity):
         place.exits.append(self)
         self._blockers = []
 
+    def __repr__(self):
+        return "<Exit to '%s'>" % self.other_side.place.name
+
     def is_blocked(self, o=None, ignore_enemy_walls=False):
         for b in self._blockers + getattr(self.other_side, "_blockers", []):
             if ignore_enemy_walls and (o is None or o.is_an_enemy(b)):

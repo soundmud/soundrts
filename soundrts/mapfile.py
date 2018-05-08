@@ -206,7 +206,7 @@ class Map(object):
         if self._factions is None and self._mods != res.mods:
             w = world.World([], 0)
             w.load_and_build_map(self)
-            self._factions = w.get_factions()
+            self._factions = w.factions
             self._mods = res.mods
         return self._factions
 

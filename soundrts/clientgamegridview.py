@@ -171,7 +171,7 @@ class GridView(object):
         x, y = pos
         for o in self.interface.dobjets.values():
             xo, yo = self._object_coords(o)
-            if square_of_distance(x, y, xo, yo) <= R2 + 1: # XXX + 1 ?
+            if square_of_distance(x, y, xo, yo) <= R2 + 1: # is + 1 necessary?
                 return o
 
     def units_from_mouserect(self, pos, pos2):

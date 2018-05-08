@@ -3,9 +3,9 @@ import inspect
 import re
 import string
 
-from constants import MAX_NB_OF_RESOURCE_TYPES
-from definitions import rules, style
-from lib.log import debug, warning
+from definitions import rules, style, MAX_NB_OF_RESOURCE_TYPES
+from lib import group
+from lib.log import info, warning, exception
 from lib.msgs import encode_msg, nb2msg
 from lib.nofloat import PRECISION
 import msgparts as mp
@@ -36,10 +36,10 @@ class ZoomTarget(object):
 
     @property
     def building_land(self):
-        # TODO: improve this when ZoomTarget is replaced
-        # with Subsquare and there is 1 building land or resource
-        # in each subsquare. 
-        return self.place.building_land # XXX imprecise
+        for o in self.place.objects:
+            if o.is_a_building_land and self.contains(o.x, o.y):
+                return o
+        return self.place.building_land
 
     def contains(self, x, y):
         subsquare = self.place.world.get_subsquare_id_from_xy
@@ -64,10 +64,8 @@ def normalize_cost_or_resources(lst):
 class Player(object):
 
     cheatmode = False
-    name = None
     used_food = 0
     food = 0
-    neutral = False
     observer_if_defeated = False
     has_victory = False
     has_been_defeated = False
@@ -82,8 +80,12 @@ class Player(object):
     groups = {}
 
     def __init__(self, world, client):
+        self.neutral = client.neutral
+        self.faction = world.random.choice(world.factions) \
+                       if client.faction  == "random_faction" \
+                       else client.faction
         self.allied = [self]
-        if self.name != "npc_ai":
+        if not self.neutral:
             self.number = world.get_next_player_number()
         else:
             self.number = None
@@ -92,10 +94,8 @@ class Player(object):
         self.id = world.get_next_id()
         self.world = world
         self.client = client
-        self.ready = False # ignored if self.client.is_always_ready
         self.ia_start_index = 0
         self.ia_index = 0
-        self.send_voice_important(self.world.introduction)
         self.objectives = {}
         self.units = []
         self.budget = []
@@ -111,6 +111,13 @@ class Player(object):
         self._enemy_menace = {}
         self._enemy_menace_time = {}
         self._subsquare_threat = {}
+
+    @property
+    def name(self):
+        if self.neutral:
+            return []
+        else:
+            return self.client.name
 
     @property
     def is_playing(self):
@@ -148,6 +155,9 @@ class Player(object):
                 set(self.perception).intersection(enemy_units).intersection(place.objects)
                 if u.is_vulnerable and not u.is_inside]
             self._known_enemies_time[place] = self.world.time
+        else:
+            # eventually remove deleted units
+            self._known_enemies[place] = [u for u in self._known_enemies[place] if u.place]
         return self._known_enemies[place]
 
     @property
@@ -174,7 +184,7 @@ class Player(object):
                 while self.level(upgrade_name) < p.level(upgrade_name):
                     self.world.unit_class(upgrade_name).upgrade_player(self)
 
-    def _update_perception(self): # XXX for each allied_vision?
+    def _update_perception(self):
         if self.cheatmode:
             self.observed_squares = set(self.world.squares)
             self.perception = set()
@@ -203,14 +213,12 @@ class Player(object):
         self.observed_before_squares.update(partially_observed_squares)
         # objects revealed by their actions
         for p in self.allied_vision:
-            # XXX cleaning should be done by each player
             for o in p.observed_objects.keys():
                 # remove old observed objects and deleted objects
                 if (p.observed_objects[o] < self.world.time
                     or o.place is None):
                     del p.observed_objects[o]
-            # XXX this can be shared
-            p.perception.update(p.observed_objects.keys())
+            self.perception.update(p.observed_objects.keys())
         # sight
         for p in self.world.players:
             if p in self.allied_vision:
@@ -223,31 +231,24 @@ class Player(object):
                         for avu in avp.units:
                             from lib.nofloat import square_of_distance
                             radius2 = avu.sight_range * avu.sight_range
-                            # XXX add wall condition (get_observed_squares only if radius<10*PRECISION)
                             if (square_of_distance(avu.x, avu.y, u.x, u.y) < radius2
                                 and (avu.sight_range >= self.world.square_width
                                      or u.place in avu.get_observed_squares())):
                                 self.perception.add(u)
                                 continue
         # remove units inside buildings from perception
-        # XXX even friendly units?
-        # remove deleted units from perception
         for o in self.perception.copy():
-##            if o.place is None:
-##                print "removed", o.id
-##                self.perception.remove(o)
-            if o.is_inside:
+            if o.is_inside and o not in self.units:
                 self.perception.remove(o)
 
     def _update_memory(self, previous_perception):
-        # XXX forget deleted corpses, burning buildings, etc, only when an observer notices the absence
         self.observed_before_squares.update(self.observed_squares)
         for m in self.memory.copy():
             # forget units reappearing elsewhere
-            # forget deleted units XXX should be done only if memory is in sight range
+            # forget deleted units
             # forget old memories of mobile units
             if (m.initial_model in self.perception
-                or m.initial_model.place is None
+                or m.initial_model.place is None # ideally: and self.have_an_observer_in_sight_range(m)
                 or m.initial_model.speed and m.time_stamp + self.memory_duration < self.world.time):
                 self._forget(m)
         # memorize disappeared units
@@ -273,26 +274,29 @@ class Player(object):
         self._places_with_friends = set()
         self._cataclysmic_places = set()
         for l in (self.perception, self.memory):
-            for o in l:
+            for o in sorted(l, key=lambda x: x.id): # sort to avoid desync error
+                place = o.place
+                if not hasattr(place, "exits"):
+                    continue
                 if self.is_an_enemy(o):
                     menace = o.menace
                     try:
-                        self._enemy_menace[o.place] += menace
+                        self._enemy_menace[place] += menace
                     except:
-                        self._enemy_menace[o.place] = menace
-                        self._enemy_presence.append(o.place)
+                        self._enemy_menace[place] = menace
+                        self._enemy_presence.append(place)
                     if o.range > PRECISION:
-                        for place in o.place.neighbours:
+                        for place in place.neighbors:
                             try:
                                 self._enemy_menace[place] += menace / 10
                             except:
                                 self._enemy_menace[place] = menace / 10
                 elif isinstance(o, Corpse):
-                    self._places_with_corpses.add(o.place)
+                    self._places_with_corpses.add(place)
                 elif o.player in self.allied and o.is_vulnerable:
-                    self._places_with_friends.add(o.place)
+                    self._places_with_friends.add(place)
                 if o.time_limit and o.harm_level:
-                    self._cataclysmic_places.add(o.place)
+                    self._cataclysmic_places.add(place)
 
     def enemy_menace(self, place):
         try:
@@ -316,9 +320,9 @@ class Player(object):
             return place_or_exit in self._enemy_menace
 
     def balance(self, *squares):
-        # the first square is where the fight will be
-        # XXX versus air, ground
-        # XXX allies (in first square)
+        # The first square is where the fight will be.
+        # TODO: take into account: versus air, ground
+        # TODO: take into account: allies (in first square)
         a = 0
         for u in self.units:
             if u.place in squares:
@@ -452,22 +456,19 @@ class Player(object):
         return self not in self.world.players
 
     def quit_game(self):
-        debug("quit_game %s", self.name)
         self.push("quit")
         if self in self.world.true_players():
-            self.broadcast_to_others_only([self.name, 4261])
+            self.broadcast_to_others_only(self.name + mp.HAS_JUST_QUIT_GAME)
         for u in self.units[:]:
             u.delete()
         self.world.players.remove(self)
         self.world.ex_players.append(self)
-#        self.update_eventuel()
 
     def clean(self):
         self.client.player = None
         self.__dict__ = {}
 
-    def is_human(self):
-        return False
+    is_human = False
 
     def push(self, *args):
         if self.client:
@@ -484,13 +485,6 @@ class Player(object):
     def send_voice_important(self, msg):
         self.push("voice_important", encode_msg(msg))
 
-    def update_eventuel(self):
-        for p in self.world.players:
-            if p.is_human() and not p.ready:
-                debug("no update yet: %s is not ready", p.client.login)
-                return # not yet
-        self.world.update()
-
     nb_units_produced = 0
     nb_units_lost = 0
     nb_units_killed = 0
@@ -502,7 +496,13 @@ class Player(object):
         if rules.get(self.faction, tn):
             return rules.get(self.faction, tn)[0]
         return tn
-        
+
+    def init_alliance(self):
+        if self.client.alliance is None: return
+        for p in self.world.players:
+            if self.client.alliance == p.client.alliance:
+                self.allied.append(p)
+
     def init_position(self):
 
         def equivalent_type(t):
@@ -519,7 +519,7 @@ class Player(object):
             if isinstance(type_, str) and type_[0:1] == "-":
                 self.forbidden_techs.append(type_[1:])
             elif isinstance(type_, Upgrade):
-                self.upgrades.append(type_.type_name) # XXX type_.upgrade_player(self)?
+                self.upgrades.append(type_.type_name) # type_.upgrade_player(self) would require the units already there
             else:
                 place = self.world.grid[place]
                 x, y, land = place.find_and_remove_meadow(type_)
@@ -641,6 +641,8 @@ class Player(object):
                         u.building_land = land
                     except NotEnoughSpaceError:
                         break
+                    except:
+                        warning("pb with lang_add_unit(%s, %s)", items, target)
                     if decay:
                         u.time_limit = self.world.time + decay
                     if notify:
@@ -732,7 +734,7 @@ class Player(object):
         self._quit_alliance()
         self.store_score()
         if self in self.world.true_players():
-            self.broadcast_to_others_only([self.name] + mp.HAS_BEEN_DEFEATED)
+            self.broadcast_to_others_only(self.name + mp.HAS_BEEN_DEFEATED)
         for u in self.units[:]:
             u.delete()
         if force_quit:
@@ -784,7 +786,7 @@ class Player(object):
         self.set_ai(args[0])
 
     def lang_faction(self, args):
-        if args and args[0] in self.world.get_factions():
+        if args and args[0] in self.world.factions:
             self.faction = args[0]
         else:
             warning("unknown faction: %s", " ".join(args))
@@ -833,6 +835,9 @@ class Player(object):
 
     def check_count_limit(self, type_name):
         t = self.world.unit_class(type_name)
+        if t is None:
+            info("couldn't check count_limit for %r", type_name)
+            return False
         if t.count_limit == 0:
             return True
         if self.future_count(t.type_name) >= t.count_limit:
@@ -868,7 +873,7 @@ class Player(object):
         self.my_eval(args)
 
     def _is_admin(self):
-        return self.client == self.world.admin
+        return self.world.players.index(self) == 0
 
     def cmd_speed(self, args):
         if self._is_admin():
@@ -890,3 +895,49 @@ class Player(object):
     def cmd_neutral_quit(self, unused_args):
         if self in self.world.players:
             self.quit_game()
+
+    # Computer may use the following methods later
+
+    def _reset_group(self, name):
+        if name in self.groups:
+            for u in self.groups[name]:
+                u.group = None
+            self.groups[name] = []
+
+    def cmd_order(self, args):
+        self.group_had_enough_mana = False
+        try:
+            order_id = self.world.get_next_order_id() # used when several workers must create the same construction site
+            forget_previous = args[0] == "0"
+            del args[0]
+            imperative = args[0] == "1"
+            del args[0]
+            if args[0] == "reset_group":
+                self._reset_group(args[1])
+                return
+            for u in self.group:
+                if u.group and u.group != self.group:
+                    u.group.remove(u)
+                    u.group = None
+                if u.player in self.allied_control: # in case the unit has died or has been converted
+                    try:
+                        if args[0] == "default":
+                            u.take_default_order(args[1], forget_previous, imperative, order_id)
+                        else:
+                            u.take_order(args, forget_previous, imperative, order_id)
+                    except:
+                        exception("problem with order: %s" % args)
+        except:
+            exception("problem with order: %s" % args)
+
+    def cmd_control(self, args):
+        self.group = []
+        for obj_id in group.decode(" ".join(args)):
+            for u in self.allied_control_units:
+                if u.id == obj_id:
+                    self.group.append(u)
+                    break
+
+    def cmd_say(self, args):
+        msg = self.name + mp.SAYS + [" ".join(args)]
+        self.broadcast_to_others_only(msg)

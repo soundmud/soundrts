@@ -1,12 +1,13 @@
-from constants import MAX_NB_OF_RESOURCE_TYPES, ORDERS_QUEUE_LIMIT, VIRTUAL_TIME_INTERVAL
-from definitions import rules
+from definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
 from lib.log import info
 from lib.nofloat import to_int, PRECISION
-import worldrandom
 from worldaction import AttackAction, MoveXYAction
 from worldresource import Meadow, Deposit, Corpse
 from worldroom import Square
 from soundrts.lib.nofloat import square_of_distance
+
+
+ORDERS_QUEUE_LIMIT = 10
 
 
 class Order(object):
@@ -96,14 +97,10 @@ class Order(object):
             self.unit.deploy() # do not block the path
 
     def _smart_move_to_or_fail(self, target):
-        self.unit.start_moving_to(target, avoid=self.player.smart_units)
+        self.unit.start_moving_to(target, avoid=True)
         if self.unit.is_idle and isinstance(self, (GoOrder, PatrolOrder)):    
             # eventually attack the obstacle
-            next_square = self.unit.next_stage(target)
-            try:
-                next_square = next_square.other_side.place
-            except AttributeError:
-                pass
+            next_square = self.unit.next_square(target)
             if self.player.enemy_menace(next_square) == 0: # no obstacle yet
                 self.unit.start_moving_to(next_square)
             elif next_square is target:
@@ -115,10 +112,8 @@ class Order(object):
                     self.unit.deploy()
                     return
             elif self.player.balance(next_square, self.unit.place) > 1.1:
-                info("attack through")
                 self._grouped_attack(next_square)
             else:
-                info("wait")
                 self.unit.deploy()
                 return
         if self.unit.is_idle: # target is unreachable
@@ -130,9 +125,9 @@ class Order(object):
             self.mark_as_impossible()
             return
         if self.player.smart_units:
-            self._default_move_to_or_fail(target)
-        else:
             self._smart_move_to_or_fail(target)
+        else:
+            self._default_move_to_or_fail(target)
 
     def immediate_action(self):
         if len(self.unit.orders) >= ORDERS_QUEUE_LIMIT:
@@ -225,6 +220,32 @@ class CancelBuildingOrder(ImmediateOrder):
     def immediate_action(self):
         self.unit.player.unpay(self.unit.type.cost)
         self.unit.die()
+
+
+class ModeOffensive(ImmediateOrder):
+
+    keyword = "mode_offensive"
+
+    @classmethod
+    def is_allowed(cls, unit, *unused_args):
+        return unit.can_switch_ai_mode and unit.ai_mode == "defensive"
+
+    def immediate_action(self):
+        self.unit.ai_mode = "offensive"
+        self.unit.notify("order_ok")
+
+
+class ModeDefensive(ImmediateOrder):
+
+    keyword = "mode_defensive"
+
+    @classmethod
+    def is_allowed(cls, unit, *unused_args):
+        return unit.can_switch_ai_mode and unit.ai_mode == "offensive"
+
+    def immediate_action(self):
+        self.unit.ai_mode = "defensive"
+        self.unit.notify("order_ok")
 
 
 class RallyingPointOrder(ImmediateOrder):
@@ -630,7 +651,7 @@ class ComputerOnlyOrder(Order):
 
     @classmethod
     def is_allowed(cls, unit, *unused_args):
-        return not unit.player.is_human()
+        return not unit.player.is_human
 
 
 class AutoAttackOrder(ComputerOnlyOrder):
@@ -657,7 +678,7 @@ class AutoExploreOrder(ComputerOnlyOrder):
         if getattr(player, "_places_to_explore", None) is None:
             player._places_to_explore = [world.grid[name]
                                          for name in world.starting_squares]
-            worldrandom.shuffle(player._places_to_explore)
+            world.random.shuffle(player._places_to_explore)
             player._already_explored = set()
 
     def execute(self):
@@ -846,7 +867,7 @@ class UseOrder(ComplexOrder):
                     self.mark_as_impossible()
                     return
         elif self.type.effect_target == ["random"]:
-            self.target = worldrandom.choice(self.player.world.squares)
+            self.target = self.world.random.choice(self.player.world.squares)
         elif self.type.effect_target == ["self"]:
             self.target = self.unit
         if self.unit.mana < self.type.mana_cost:
@@ -890,6 +911,8 @@ class UseOrder(ComplexOrder):
     def teleportation_is_not_necessary(self):
         units = self.teleportation_targets()
         types = set([u.airground_type for u in units])
+        if not hasattr(self.target, "can_receive"):
+            self.target = self.target.place
         if self.target is self.unit.place:
             return True
         # NOTE: replaced can_receive(t, self.player) with can_receive(t)

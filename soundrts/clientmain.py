@@ -1,3 +1,6 @@
+import config
+config.load()
+
 from lib import log
 from lib.log import exception, warning
 from version import VERSION_FOR_BUG_REPORTS
@@ -19,7 +22,6 @@ import pickle
 import sys
 import tempfile
 import time
-import urllib2
 import webbrowser
 
 from campaign import campaigns
@@ -27,13 +29,12 @@ from clientmedia import voice, init_media, close_media
 from clientmenu import Menu, input_string, CLOSE_MENU
 from clientserver import connect_and_play, start_server_and_connect
 from clientversion import revision_checker
-import config
-from constants import MAIN_METASERVER_URL
 from definitions import style
 from game import TrainingGame, ReplayGame
 from lib.msgs import nb2msg
 from lib.resource import best_language_match, preferred_language
 from mapfile import worlds_multi
+from metaserver import servers_list
 import msgparts as mp
 from paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
 import res
@@ -41,31 +42,8 @@ import stats
 from version import VERSION
 
 
-def _add_time_and_version(line):
-    words = line.split()
-    words = ["0"] + words[:1] + [VERSION] + words[1:]
-    return " ".join(words)
-
-def _default_servers():
-    lines = open("cfg/default_servers.txt").readlines()
-    return [_add_time_and_version(line) for line in lines
-            if line.strip() and not line.startswith(";")]
-
 def choose_server_ip_in_a_list():
-    # The header is an arbitrary string that the metaserver will include
-    # in the reply to make sure that the PHP script is executed.
-    header = "SERVERS"
-    query = "header=%s&include_ports=1" % header
-    servers_url = MAIN_METASERVER_URL + "servers.php?" + query
-    try:
-        f = urllib2.urlopen(servers_url)
-        if f.read(len(header)) == header:
-            servers = f.readlines()
-    except urllib2.URLError:
-        voice.alert(mp.BEEP)
-        warning("couldn't get the servers list from the metaserver"
-                " => using the default servers list")
-        servers = _default_servers()
+    servers = servers_list(voice)
     total = 0
     compatible = 0
     menu = Menu()
@@ -80,8 +58,7 @@ def choose_server_ip_in_a_list():
                 compatible += 1
                 menu.append([login], (connect_and_play, ip, port),
                             mp.SERVER_HOSTED_BY + [login])
-    menu.title = nb2msg(compatible) + mp.SERVERS_ON + nb2msg(total) \
-                 + mp.ARE_COMPATIBLE
+    menu.title = nb2msg(compatible) + mp.SERVERS_ON + nb2msg(total) + mp.ARE_COMPATIBLE
     menu.append(mp.CANCEL2, None, mp.GO_BACK_TO_PREVIOUS_MENU)
     menu.run()
 
@@ -191,7 +168,7 @@ class TrainingMenu(object):
         return menu
 
     def _open_players_menu(self, m):
-        # XXX: won't work with factions defined in the map
+        # note: won't work with factions defined in the map
         style.load(res.get_text_file("ui/style", append=True, localize=True))
         self._players = [config.login]
         self._factions = ["random_faction"]
@@ -310,7 +287,3 @@ def main():
         exception("error")
     finally:
         close_media()
-
-
-if __name__ == "__main__":
-    main()

@@ -17,8 +17,8 @@ from clientgameentity import EntityView
 from clientgamenews import must_be_said
 from clientgameorder import order_title, order_shortcut, order_args, order_comment, order_index, nb2msg_f
 import config
-from constants import ALERT_LIMIT, EVENT_LIMIT, VIRTUAL_TIME_INTERVAL
-from definitions import style
+from definitions import style, VIRTUAL_TIME_INTERVAL
+from lib import chronometer as chrono
 from lib import group
 from lib.bindings import Bindings
 from lib.log import debug, warning, exception
@@ -31,6 +31,12 @@ from lib.screen import set_game_mode, screen_render, get_screen,\
     screen_render_subtitle
 import msgparts as mp
 
+
+# minimal interval (in seconds) between 2 sounds
+ALERT_LIMIT = .5
+
+# don't play events after this limit (in seconds)
+EVENT_LIMIT = 3
 
 BEEP_SOUND = mp.BEEP[0]
 POSITIONAL_BEEP_SOUND = mp.POSITIONAL_BEEP[0]
@@ -125,12 +131,16 @@ class GameInterface(object):
         except:
             return None
 
+    @property
+    def world(self):
+        return self.server.player.world
+
     _square_width = None
     
     @property
     def square_width(self):
         if self._square_width is None:
-            self._square_width = self.server.player.world.square_width / 1000.0
+            self._square_width = self.world.square_width / 1000.0
         return self._square_width
 
     def _process_srv_event(self, *e):
@@ -161,13 +171,10 @@ class GameInterface(object):
         self.server.write_line("say %s" % msg)
 
     def cmd_say_players(self):
-        l = []
-        for p in self.server.player.world.players:
-            if p.number is not None:
-                l.append([p.number, p.name])
-        l.sort()
-        for n, name in l:
-            voice.info(nb2msg(n) + mp.COMMA + [name] + mp.PERIOD)
+        msg = []
+        for p in self.world.players:
+            msg += p.name + mp.COMMA
+        voice.item(msg)
 
     def srv_msg(self, s):
         voice.info(*eval_msg_and_volume(s))
@@ -290,8 +297,8 @@ class GameInterface(object):
 
     def cmd_objectives(self):
         msg = []
-        if self.player.world.introduction:
-            msg += self.player.world.introduction + mp.PERIOD
+        if self.world.objective:
+            msg += mp.OBJECTIVE + self.world.objective + mp.PERIOD
         if self.player.objectives:
             msg += mp.OBJECTIVE + mp.COMMA
             for o in self.player.objectives.values():
@@ -301,7 +308,7 @@ class GameInterface(object):
     def cmd_toggle_cheatmode(self):
         if self.server.allow_cheatmode:
             self.server.write_line("toggle_cheatmode")
-            if self.server.player.cheatmode:
+            if self.player.cheatmode:
                 voice.item(mp.CHEATMODE + mp.IS_NOW_OFF)
             else:
                 voice.item(mp.CHEATMODE + mp.IS_NOW_ON)
@@ -351,9 +358,20 @@ class GameInterface(object):
         else:
             voice.item(mp.BEEP)
 
+    def _next_player(self, player):
+        players = self.world.players
+        index = (players.index(player) + 1) % len(players)
+        return players[index]
+
+    def _change_player(self, new_player):
+        self.server.player.client = new_player.client
+        self.server.player = new_player
+        self.server.player.client = self.server
+        self.update_fog_of_war()
+
     def cmd_change_player(self):
         if self.server.allow_cheatmode:
-            self.server.write_line("change_player")
+            self._change_player(self._next_player(self.player))
             voice.item(mp.YOU_ARE + [self.player.name])
         else:
             voice.item(mp.BEEP)
@@ -470,13 +488,13 @@ class GameInterface(object):
         except ZeroDivisionError:
             return 100
 
+    @property
+    def real_speed(self):
+        return self._get_relative_speed()
+
     def _get_relative_speed(self):
         normal_speed_tps = 1 / (VIRTUAL_TIME_INTERVAL / 1000.0)
         return self._get_tps() / normal_speed_tps
-        
-    def display_tps(self):
-        screen_render("%.0f turns per second" % self._get_tps(), (0, 0))
-        screen_render("(normal x %.1f)" % self._get_relative_speed(), (0, 15))
 
     def cmd_toggle_tick(self):
         self._must_play_tick = not self._must_play_tick
@@ -485,9 +503,7 @@ class GameInterface(object):
 
     def srv_voila(self, t, memory, perception, scouted_squares, scouted_before_squares, collision_debug):
         self.last_virtual_time = float(t) / 1000.0
-        if not self.asked_to_update:
-            self._ask_for_update()
-        self.asked_to_update = False
+        self.waiting_for_world_update = False
 
         self.memory = memory
         self.perception = perception
@@ -512,29 +528,29 @@ class GameInterface(object):
             self._play_tick()
         self._record_update_time()
 
-    asked_to_update = False
+    waiting_for_world_update = False
 
     def _ask_for_update(self):
-        self.server.write_line("update")
-        self.asked_to_update = True
+        for player, order in self.server.get_orders():
+            self.world.queue_command(player, order)
+        self.world.queue_command(None, self.world.update)
+        self.waiting_for_world_update = True
         interval = VIRTUAL_TIME_INTERVAL / 1000.0 / self.speed
-        self.next_update = max(time.time(), self.next_update + interval)
+        self.next_update = time.time() + interval
 
     def _time_to_ask_for_next_update(self):
-        return not self.asked_to_update and time.time() >= self.next_update
-
-    def _remind_server_if_needed(self):
-        if self.asked_to_update and time.time() >= self.next_update:
-            self.server.write_line("no_end_of_update_yet")
+        return not self.waiting_for_world_update and time.time() >= self.next_update
 
     previous_animation = 0
 
     def _animate_objects(self):
         if time.time() >= self.previous_animation + .1:
+            chrono.start("animate")
             self.set_obs_pos()
             for o in self.dobjets.values():
                 o.animate()
             self.previous_animation = time.time()
+            chrono.stop("animate")
 
     def _process_fullscreen_mode_mouse_event(self, e):
         if e.type == MOUSEMOTION:
@@ -648,9 +664,13 @@ class GameInterface(object):
         self.end_loop = False
         while not self.end_loop:
             try:
-                if self._time_to_ask_for_next_update():
+                if 0 and IS_DEV_VERSION and not get_fullscreen():
+                    # updated often (for total delay)
+                    self.display()
+                self.server.update()
+                if self._time_to_ask_for_next_update() \
+                   and self.server.orders_are_ready():
                     self._ask_for_update()
-                self._remind_server_if_needed()
                 self._animate_objects()
                 eventually_fix_modifier_keys()
                 self._process_events()
@@ -1267,11 +1287,11 @@ class GameInterface(object):
 
     @property
     def xcmax(self):
-        return self.server.player.world.nb_columns - 1
+        return self.world.nb_columns - 1
 
     @property
     def ycmax(self):
-        return self.server.player.world.nb_lines - 1
+        return self.world.nb_lines - 1
 
     def coords_in_map(self, square):
         if square is not None:
@@ -1325,7 +1345,7 @@ class GameInterface(object):
             yc = self.ycmax
         if yc > self.ycmax:
             yc = 0
-        return self.server.player.world.grid[(xc, yc)]
+        return self.world.grid[(xc, yc)]
 
     def _get_prefix_and_collision(self, new_square, dxc, dyc):
         if new_square is self.place:
@@ -1467,9 +1487,65 @@ class GameInterface(object):
 
     # display
 
+    def display_metrics(self):
+        warn = (255, 0, 0)
+        normal = (0, 200, 0)
+        screen_render(get_modifier_keys_status(), (0, 0))
+        screen_render("total delay: %sms" % chrono.ms(time.time() - self.next_update),
+                      (0, 30),
+                      color=warn if time.time() > self.next_update else normal)
+        if hasattr(self.server, "turn"):
+            screen_render("com turn(sim subturn): %s(%s/%s)" % (self.server.turn, self.server.sub_turn + 1, self.server.fpct),
+                      (0, 45))
+            screen_render("com delay: %sms" % chrono.ms(self.server.delay),
+                      (0, 60),
+                      color=warn if self.server.delay > 0 else normal)
+        screen_render(chrono.text("ping"), (-1, 0), right=True)
+        screen_render(chrono.text("update", label="world update"), (-1, 30), right=True)
+        screen_render(chrono.text("animate"), (-1, 45), right=True)
+        screen_render(chrono.text("display"), (-1, 60), right=True)
+        screen_render("speed: %.0f sim turns per second (normal x%.1f)"
+                      % (self._get_tps(), self._get_relative_speed()),
+                      (0, 15),
+                      color=warn if self._get_relative_speed() < self.speed * .9
+                      else normal)
+
+    def _display_target_info(self):
+        dy = 0
+        if self.target is not None:
+            try:
+                screen_render(repr(self.target.model), (-1, 100 + dy), color=(255, 255, 255), right=True)
+                dy += 15
+                d = self.target.model.__dict__
+                for k in sorted(d):
+                    screen_render(k + ": " + repr(d[k]), (-1, 100 + dy), right=True)
+                    dy += 15
+            except:
+                exception("error inspecting target: %s", self.target)
+        if self.place is not None:
+            dy += 15
+            try:
+                screen_render(repr(self.place), (-1, 100 + dy), color=(255, 255, 255), right=True)
+                dy += 15
+                d = self.place.__dict__
+                for k in sorted(d):
+                    screen_render(k + ": " + repr(d[k]), (-1, 100 + dy), right=True)
+                    dy += 15
+            except:
+                exception("error inspecting place: %s", self.place)
+        dy = 0
+        d = self.player.__dict__
+        for k in sorted(d):
+            try:
+                screen_render(k + ": " + repr(d[k]), (-1, 100 + dy))
+                dy += 15
+            except:
+                exception("error inspecting player: %s", self.player)
+
     def display(self):
         if get_screen() is None:
             return # this might allow some machines to work without any display
+        chrono.start("display")
         get_screen().fill((0, 0, 0))
         if get_fullscreen():
             self.grid_view.display()
@@ -1477,14 +1553,19 @@ class GameInterface(object):
                 x, y = self.mouse_select_origin
                 x2, y2 = pygame.mouse.get_pos()
                 pygame.draw.rect(get_screen(), (255, 255, 255), (min(x, x2), min(y, y2), abs(x - x2), abs(y - y2)), 1)
-        else:
-            screen_render("[Ctrl + F2] display.", (5, 45))
-        if IS_DEV_VERSION:
-            screen_render(get_modifier_keys_status(), (0, 0))
-        if self._must_play_tick:
-            self.display_tps()
+        elif not IS_DEV_VERSION:
+            screen_render(
+                "[Ctrl + F2] display",
+                pygame.display.get_surface().get_rect().center,
+                center=True
+            )
+        if self._must_play_tick or IS_DEV_VERSION:
+            self.display_metrics()
+        if IS_DEV_VERSION and get_fullscreen():
+            self._display_target_info()
         screen_render_subtitle()
         pygame.display.flip()
+        chrono.stop("display")
 
     def cmd_fullscreen(self):
         toggle_fullscreen()
@@ -1493,15 +1574,15 @@ class GameInterface(object):
 
     @property
     def resources(self):
-        return [int(x / PRECISION) for x in self.server.player.resources]
+        return [int(x / PRECISION) for x in self.player.resources]
 
     @property
     def available_food(self):
-        return self.server.player.available_food
+        return self.player.available_food
 
     @property
     def used_food(self):
-        return self.server.player.used_food
+        return self.player.used_food
 
     def cmd_resource_status(self, resource_type):
         resource_type = int(resource_type)

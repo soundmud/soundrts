@@ -4,6 +4,9 @@ from lib.nofloat import to_int
 from lib.log import debug, info, warning
 from lib.defs import preprocess
 
+VIRTUAL_TIME_INTERVAL = 300 # milliseconds
+MAX_NB_OF_RESOURCE_TYPES = 10
+
 
 class _Definitions:
 

@@ -37,20 +37,16 @@ class ServerInAThread(threading.Thread):
 def start_server_and_connect(parameters):
     info("active threads: %s", threading.enumerate())
     ServerInAThread(parameters).start()
-    # TODO: catch exceptions raised by the starting server
-    # for example: RegisteringError ProbablyNoInternetError
-    # voice.alert([4049]) # "The server couldn't probably register on the metaserver. check you are connected to the Internet."
-    # voice.alert([4080]) # "failure: the server couldn't start"
     time.sleep(.01) # Linux needs a small delay (at least on the Eee PC 4G)
     revision_checker.start_if_needed()
     connect_and_play()
     info("active threads: %s", threading.enumerate())
     sys.exit()
 
-def connect_and_play(host="127.0.0.1", port=options.port):
+def connect_and_play(host="127.0.0.1", port=options.port, auto=False):
     try:
         server = ConnectionToServer(host, port)
-        ServerMenu(server).loop()
+        ServerMenu(server, auto=auto).loop()
         server.close() # without this, the server isn't closed after a game
     except UnreachableServerError:
         voice.alert(mp.SERVER_UNREACHABLE)
@@ -102,10 +98,9 @@ class ConnectionToServer(object):
             self.data += self.tn.read_very_eager()
         except: # EOFError or (10054, 'Connection reset by peer')
             raise ConnectionAbortedError
-        lines = self.data.split("\n", 1)
-        self.data = lines.pop()
-        if lines:
-            return lines[0]
+        if "\n" in self.data:
+            line, self.data = self.data.split("\n", 1)
+            return line
 
     def write_line(self, s):
         try:

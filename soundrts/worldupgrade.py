@@ -1,4 +1,4 @@
-from constants import MAX_NB_OF_RESOURCE_TYPES
+from definitions import MAX_NB_OF_RESOURCE_TYPES
 from lib.log import warning
 
 
@@ -11,7 +11,7 @@ class Upgrade(object): # or Tech
     food_cost = 0
     effect = None
 
-    cls = object # XXX
+    cls = object # useful?
 
     def __init__(self, name, dct):
         self.type_name = name

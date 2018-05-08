@@ -1,9 +1,9 @@
 import string
 
-from constants import COLLISION_RADIUS
 from lib.msgs import nb2msg
 from lib.nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
 from lib.priodict import priorityDictionary
+from worldentity import COLLISION_RADIUS
 from worldresource import Meadow
 
 
@@ -65,7 +65,7 @@ class Square(object):
         self.y = (self.ymax + self.ymin) / 2
 
     def __repr__(self):
-        return "<Square '%s'>" % self.name
+        return "<'%s'>" % self.name
 
     @property
     def height(self):
@@ -75,7 +75,7 @@ class Square(object):
             return 0
 
     @property
-    def strict_neighbours(self):
+    def strict_neighbors(self):
         result = []
         for dc, dr in ((0, 1), (0, -1), (1, 0), (-1, 0)):
             s = self.world.grid.get((self.col + dc, self.row + dr))
@@ -84,14 +84,14 @@ class Square(object):
         return result
  
 
-    def set_neighbours(self):
+    def set_neighbors(self):
         result = []
         for dc, dr in ((0, 1), (0, -1), (1, 0), (-1, 0),
                        (1, 1), (1, -1), (-1, 1), (-1, -1)):
             s = self.world.grid.get((self.col + dc, self.row + dr))
             if s is not None:
                 result.append(s)
-        self.neighbours = result
+        self.neighbors = result
 
     @property
     def building_land(self):
@@ -103,8 +103,8 @@ class Square(object):
         d = self.__dict__.copy()
         if d.has_key('spiral'):
             del d['spiral']
-        if d.has_key('neighbours'):
-            del d['neighbours']
+        if d.has_key('neighbors'):
+            del d['neighbors']
         return d
 
     def __setstate__(self, d):
@@ -126,22 +126,12 @@ class Square(object):
                self.ymin <= y < self.ymax
 
     def shortest_path_to(self, dest, player=None, plane="ground", places=False, avoid=False):
-        if getattr(player, "player", None) is not None:
-            # player is a unit
-            player = player.player # same result for any unit of the same player
-        if dest.__class__.__name__ != "Square":
-            dest = dest.place
         if places:
             return self._shortest_path_to(dest, plane, player, places=True, avoid=avoid)
         else:
             return self._shortest_path_to(dest, plane, player, avoid=avoid)[0]
 
     def shortest_path_distance_to(self, dest, player=None, plane="ground", avoid=False):
-        if getattr(player, "player", None) is not None:
-            # player is a unit
-            player = player.player # same result for any unit of the same player
-        if dest.__class__.__name__ != "Square":
-            dest = dest.place
         return self._shortest_path_to(dest, plane, player, avoid=avoid)[1]
 
     @cache

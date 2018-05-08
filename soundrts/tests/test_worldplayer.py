@@ -16,7 +16,7 @@ def disable_ai(player):
 
 # this unefficient method should only be used in legacy tests
 # (not in new tests, not in the main code)
-# XXX the necessary updates should be done explicitly in the tests
+# the necessary updates should be done explicitly in the tests
 def is_perceiving_method(self):
     def f(o):
         self.world._update_cloaking()
@@ -46,11 +46,13 @@ class _PlayerBaseTestCase(unittest.TestCase):
     def set_up(self, alliance=(1, 2), cloak=False, map_name="jl1_extended",
                ai=("easy", "easy")):
         self.w = World([])
-        self.w.introduction = []
         self.w.load_and_build_map(Map("soundrts/tests/%s.txt" % map_name))
         if cloak:
             self.w.unit_class("new_flyingmachine").dct["is_a_cloaker"] = True
-        self.w.populate_map([DummyClient(ai[0]), DummyClient(ai[1])], alliance, random_starts=False)
+        cp = DummyClient(ai[0])
+        cp2 = DummyClient(ai[1])
+        cp.alliance, cp2.alliance = alliance
+        self.w.populate_map([cp, cp2], random_starts=False)
         self.cp, self.cp2 = self.w.players
         self.cp.is_perceiving = is_perceiving_method(self.cp)
         self.cp2.is_perceiving = is_perceiving_method(self.cp2)
@@ -758,7 +760,7 @@ class ComputerTestCase(_PlayerBaseTestCase):
         p.take_order(["go", self.w.grid["a1"].id])
         x, y = p.x, p.y
         self.w.update() # for the order
-        assert (x, y) == (p.x, p.y) # XXX not important
+        assert (x, y) == (p.x, p.y) # not important
         self.w.update() # move
         assert (x, y) != (p.x, p.y)
         x2, y2 = p.x, p.y
@@ -771,7 +773,7 @@ class ComputerTestCase(_PlayerBaseTestCase):
         p.take_order(["go", self.w.grid["a1"].id])
         assert (x, y) == (p.x, p.y)
         self.w.update() # for the order
-        assert (x, y) == (p.x, p.y) # XXX not important
+        assert (x, y) == (p.x, p.y) # not important
         self.w.update() # move
         assert (x, y) != (p.x, p.y)
         assert (x2, y2) == (p.x, p.y)
@@ -785,7 +787,7 @@ class ComputerTestCase(_PlayerBaseTestCase):
         p.take_order(["go", self.w.grid["a1"].id])
         assert (x, y) == (p.x, p.y)
         self.w.update() # for the order
-        assert (x, y) == (p.x, p.y) # XXX not important
+        assert (x, y) == (p.x, p.y) # not important
         self.w.update() # move
         assert (x, y) != (p.x, p.y)
         assert (x2, y2) == (p.x, p.y)
