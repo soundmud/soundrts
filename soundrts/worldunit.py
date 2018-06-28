@@ -572,6 +572,12 @@ class Creature(Entity):
         damage = max(self.minimal_damage, self.damage - target.armor)
         target.receive_hit(damage, self)
 
+    def _hit_or_miss(self, target):
+        if self.has_hit(target):
+            self.hit(target)
+        else:
+            target.notify("missed")
+
     def splash_aim(self, target):
         damage_radius_2 = self.damage_radius * self.damage_radius
         for o in target.place.objects[:]:
@@ -579,9 +585,8 @@ class Creature(Entity):
                 pass  # no friendly fire (unless o is the target)
             elif isinstance(o, Creature) \
                and square_of_distance(o.x, o.y, target.x, target.y) <= damage_radius_2 \
-               and self.can_attack_if_in_range(o) \
-               and self.has_hit(o):
-                self.hit(o)
+               and self.can_attack_if_in_range(o):
+                self._hit_or_miss(o)
 
     def chance_to_hit(self, target):
         high_ground = not self.place.high_ground and target.place.high_ground \
@@ -600,10 +605,8 @@ class Creature(Entity):
             self.notify("launch_attack")
             if self.splash:
                 self.splash_aim(target)
-            elif self.has_hit(target):
-                self.hit(target)
             else:
-                target.notify("missed")
+                self._hit_or_miss(target)
 
     # orders
 

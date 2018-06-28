@@ -82,10 +82,15 @@ def loop2():
         time.sleep(.1)
 
 
-def init(srapi=1, srapi_wait=.1):
+def init(jaws=0, srapi=1, srapi_wait=.1):
     global _tts, is_available, _lock, pyTTS
     if platform.system() == "Windows":
-        if srapi == 0:
+        if jaws == 1:
+            try:
+                from . import windows_jaws as pyTTS
+            except:
+                print "Couldn't use Jaws."
+        elif srapi == 0:
             try:
                 from . import windows_sapi5 as pyTTS
             except:

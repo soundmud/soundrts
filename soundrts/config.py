@@ -34,6 +34,7 @@ _options = [
 
 if platform.system() == "Windows":
     _options += [
+        ("tts", "jaws", 0),
         ("tts", "srapi", 1),
         ("tts", "srapi_wait", .1),
     ]

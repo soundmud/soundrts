@@ -265,6 +265,8 @@ class GameAdminMenu(_BeforeGameMenu):
                         (self.server.write_line, "invite_easy"))
             menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER,
                         (self.server.write_line, "invite_aggressive"))
+            menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER + nb2msg(2),
+                        (self.server.write_line, "invite_ai2"))
         if len(self.registered_players) >= self.map.nb_players_min:
             menu.append(mp.START, (self.server.write_line, "start"))
         for pn, (login, pa, pr) in enumerate(self.registered_players):

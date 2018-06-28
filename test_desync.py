@@ -5,7 +5,7 @@ import time
 import win32gui
 
 from soundrts import config
-config.mods = "crazymod9beta9"
+config.mods = "crazymod9beta10"
 
 from soundrts.lib.voice import voice
 from soundrts import clientmain

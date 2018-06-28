@@ -18,7 +18,7 @@ class VoiceChannel(object):
 
     def __init__(self, config=None):
         self.c = pygame.mixer.Channel(0)
-        tts.init(srapi=config.srapi, srapi_wait=config.srapi_wait)
+        tts.init(jaws=config.jaws, srapi=config.srapi, srapi_wait=config.srapi_wait)
 
     def play(self, msg):
         if DEBUG_MODE:

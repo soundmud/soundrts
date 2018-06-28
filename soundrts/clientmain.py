@@ -138,9 +138,7 @@ class TrainingMenu(object):
         self._players_menu.update_menu(self._build_players_menu())
 
     def _run_game(self):
-        game = TrainingGame(self._map, self._players)
-        game.factions = self._factions
-        game.run()
+        TrainingGame(self._map, self._players, self._factions).run()
         return CLOSE_MENU
 
     def _set_faction(self, pn, r):
@@ -160,6 +158,8 @@ class TrainingMenu(object):
             menu.append(mp.INVITE + mp.QUIET_COMPUTER, (self._add_ai, "easy"))
             menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER,
                         (self._add_ai, "aggressive"))
+            menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER + nb2msg(2),
+                        (self._add_ai, "ai2"))
         if len(self._players) >= self._map.nb_players_min:
             menu.append(mp.START, self._run_game)
         if len(self._map.factions) > 1:
