@@ -498,7 +498,7 @@ class Player(object):
         return tn
 
     def init_alliance(self):
-        if self.client.alliance is None: return
+        if self.client.alliance in [None, "None"]: return
         for p in self.world.players:
             if self.client.alliance == p.client.alliance:
                 self.allied.append(p)

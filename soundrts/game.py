@@ -32,8 +32,6 @@ class _Game(object):
 
     default_triggers = () # empty tuple; a tuple is immutable
     game_type_name = None
-    alliances = ()
-    factions = ()
     record_replay = True
     allow_cheatmode = True
 
@@ -51,8 +49,10 @@ class _Game(object):
         else:
             self.replay_write(self.map.pack())
         self.replay_write(players)
-        self.replay_write(" ".join(map(str, self.alliances)))
-        self.replay_write(" ".join(self.factions))
+        alliances = [p.alliance for p in self.players]
+        self.replay_write(" ".join(map(str, alliances)))
+        factions = [p.faction for p in self.players]
+        self.replay_write(" ".join(factions))
         self.replay_write(str(self.seed))
 
     def replay_write(self, s):
@@ -306,8 +306,8 @@ class ReplayGame(_Game):
             self.map = Map()
             self.map.unpack(campaign_path_or_packed_map)
         players = self.replay_read().split()
-        self.alliances = map(int, self.replay_read().split())
-        self.factions = self.replay_read().split()
+        alliances = self.replay_read().split()
+        factions = self.replay_read().split()
         self.seed = int(self.replay_read())
         self.me = ReplayClient(players[0], self)
         self.players = [self.me]
@@ -319,6 +319,9 @@ class ReplayGame(_Game):
             else:
                 self.players += [RemoteClient(x)]
                 self.me.nb_humans += 1
+        for p, a, f in zip(self.players, alliances, factions):
+            p.alliance = a
+            p.faction = f
 
     def replay_read(self):
         s = self._file.readline()

@@ -7,6 +7,25 @@ import win32gui
 from soundrts import config
 config.mods = "crazymod9beta10"
 
+from soundrts import worldplayercomputer2 as wpc2
+from soundrts.lib.nofloat import PRECISION
+
+
+class Computer2ForTests(wpc2.Computer2):
+
+    def cheat(self):
+        self.has = lambda x: True
+        self.resources = [1000 * PRECISION for _ in self.resources]
+
+    _play = wpc2.Computer2.play
+
+    def play(self):
+        self.cheat()
+        self._play()
+
+
+wpc2.Computer2 = Computer2ForTests
+
 from soundrts.lib.voice import voice
 from soundrts import clientmain
 from soundrts.game import MultiplayerGame

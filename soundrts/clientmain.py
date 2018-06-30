@@ -189,7 +189,7 @@ def single_player_menu():
         mp.MAKE_A_SELECTION,
         [(c.title, c) for c in campaigns()] + [
             (mp.START_A_GAME_ON, TrainingMenu().run),
-            (mp.RESTORE, restore_game),
+#            (mp.RESTORE, restore_game),
             (mp.BACK, CLOSE_MENU),
         ]).loop()
 
