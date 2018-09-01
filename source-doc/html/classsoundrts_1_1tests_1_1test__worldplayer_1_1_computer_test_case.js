@@ -1,0 +1,26 @@
+var classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case =
+[
+    [ "testAI", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#aae2a5a91dd7b858e879b19739f797f89", null ],
+    [ "testAllied", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#acbdfcde305065404686b58d275929efb", null ],
+    [ "testAllied2", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#a809dda3db6bd963faed8e1dcf64b4213", null ],
+    [ "testAlliedObserverAfterDefeat", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#ae44170d1dda2d05b86b24ed85861582c", null ],
+    [ "testDieToAirTransport", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#a680cbe42e8721574f5370aa58156fb5d", null ],
+    [ "testHas", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#ac365ff5730b90e90d9637300a4ca56ec", null ],
+    [ "testHas2", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#a5e41d96cfab90468168ff283bdd88d88", null ],
+    [ "testImmediateOrder", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#a7e6505002917fb9877d61febff658e92", null ],
+    [ "testImperativeGo", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#ab86ba2e6ffecf04bf7c15f677fa4192a", null ],
+    [ "testImperativeGo2", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#adbc29d6cb7b287461a9d4150587a7662", null ],
+    [ "testImperativeGo3", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#aff5204309488441ce6aaf985d856fd8b", null ],
+    [ "testInitAndGetAFootman", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#ae03300e7a2dc6a09a1e73127b44956b2", null ],
+    [ "testInitAndGetAPeasant", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#a0c6c499c2a0dafc2409708ec60b763c9", null ],
+    [ "testInitAndUpgradeToAKeep", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#acce97db551e2bcd64c89550d9bf22797", null ],
+    [ "testMemoryOfResourceWhenAlliance", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#ad430acba58326b91d51e4199071e3c16", null ],
+    [ "testMenace", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#accc6868f33d1a7e90f6910c6dcb5f7ae", null ],
+    [ "testMoveSlowly", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#a3671bd41f258c2f2973cfea0c02c9938", null ],
+    [ "testPerception", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#a3ebeacde90c666b806b07000264cc9fe", null ],
+    [ "testPerceptionAfterUnitDeath", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#a5cec1754cb267154a9a17ab0d8b59589", null ],
+    [ "testPerceptionAfterUnitOwnershipChange", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#a1bc5a19ab569b5bd74650dd75a46dbed", null ],
+    [ "testReact", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#ab29e384f608449465fb56e7941bb99c5", null ],
+    [ "testSurviveToGroundTransport", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#ad95bcfac08c4e5839725596e0d6d8a43", null ],
+    [ "testUpgradeTo", "classsoundrts_1_1tests_1_1test__worldplayer_1_1_computer_test_case.html#a5b7ef03ab4f9800241e9327bc04240a1", null ]
+];
