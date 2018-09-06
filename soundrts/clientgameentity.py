@@ -229,7 +229,7 @@ class EntityView(object):
     def footstepnoise(self):
         # assert: "only immobile objects must be taken into account"
         result = style.get(self.type_name, "move")
-        if self.airground_type == "ground":
+        if self.airground_type == "ground" and len(self.place.objects) < 30: # save CPU
             d_min = 9999999
             for m in self.place.objects:
                 if getattr(m, "speed", 0):
@@ -244,7 +244,10 @@ class EntityView(object):
                         o = self.interface.dobjets[m.id]
                     except KeyError: # probably caused by the world client updates
                         continue
-                    d = distance(o.x, o.y, self.x, self.y) / k
+                    try:
+                        d = distance(o.x, o.y, self.x, self.y) / k
+                    except ZeroDivisionError:
+                        continue
                     if d < d_min:
                         result = style.get(self.type_name, "move_on_%s" % g[0])
                         d_min = d

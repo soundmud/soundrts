@@ -1,5 +1,5 @@
-from soundrts import version
-DEBUG_MODE = version.IS_DEV_VERSION
+#from soundrts import version
+DEBUG_MODE = False #version.IS_DEV_VERSION
 
 
 SHAPE = (

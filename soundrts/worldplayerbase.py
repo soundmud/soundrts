@@ -7,12 +7,15 @@ from definitions import rules, style, MAX_NB_OF_RESOURCE_TYPES
 from lib import group
 from lib.log import info, warning, exception
 from lib.msgs import encode_msg, nb2msg
-from lib.nofloat import PRECISION
+from lib.nofloat import square_of_distance, PRECISION
 import msgparts as mp
 from worldentity import NotEnoughSpaceError, Entity
 from worldresource import Corpse
 from worldunit import BuildingSite, Soldier
 from worldupgrade import Upgrade
+
+
+A = 12 * PRECISION # bucket side length
 
 
 class ZoomTarget(object):
@@ -184,6 +187,32 @@ class Player(object):
                 while self.level(upgrade_name) < p.level(upgrade_name):
                     self.world.unit_class(upgrade_name).upgrade_player(self)
 
+    def _potential_neighbors(self, x, y):
+        result = []
+        x = x / A
+        y = y / A
+        for dx in [0, 1, -1]:
+            for dy in [0, 1, -1]:
+                k = x + dx, y + dy
+                # probably faster to check the key instead of catching a KeyError exception
+                # (most buckets are empty)
+                if k in self._buckets:
+                    result.extend(self._buckets[k])
+        return result
+        
+    def _is_seeing(self, u):
+        if (u.is_invisible or u.is_cloaked) and u not in self.detected_units:
+            return
+        x = u.x
+        y = u.y
+        for avp in self.allied_vision:
+            for avu in self._potential_neighbors(x, y):
+                radius2 = avu.sight_range * avu.sight_range
+                if (square_of_distance(avu.x, avu.y, x, y) < radius2
+                    and (avu.sight_range >= self.world.square_width
+                         or u.place in avu.get_observed_squares())):
+                    return True
+
     def _update_perception(self):
         if self.cheatmode:
             self.observed_squares = set(self.world.squares)
@@ -225,17 +254,8 @@ class Player(object):
                 self.perception.update(p.units)
             else:
                 for u in p.units:
-                    if (u.is_invisible or u.is_cloaked) and u not in self.detected_units:
-                        continue
-                    for avp in self.allied_vision:
-                        for avu in avp.units:
-                            from lib.nofloat import square_of_distance
-                            radius2 = avu.sight_range * avu.sight_range
-                            if (square_of_distance(avu.x, avu.y, u.x, u.y) < radius2
-                                and (avu.sight_range >= self.world.square_width
-                                     or u.place in avu.get_observed_squares())):
-                                self.perception.add(u)
-                                continue
+                    if self._is_seeing(u):
+                        self.perception.add(u)
         # remove units inside buildings from perception
         for o in self.perception.copy():
             if o.is_inside and o not in self.units:
@@ -260,9 +280,17 @@ class Player(object):
                 self._memorize(o)
 
     def _update_perception_and_memory(self):
+        if self._updated_perception:
+            return
         previous_perception = self.perception.copy()
         self._update_perception()
         self._update_memory(previous_perception)
+        self._updated_perception = True
+        for p in self.allied:
+            if not p._updated_perception:
+                p.perception = self.perception
+                p.memory = self.memory
+                p._updated_perception = True
 
     def _update_menace(self):
         self._menace = sum(u.menace for u in self.units if u.speed > 0 and isinstance(u, Soldier))

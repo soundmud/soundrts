@@ -25,7 +25,7 @@ from worldclient import DummyClient
 from worldentity import COLLISION_RADIUS
 from worldexit import passage
 from worldorders import ORDERS_DICT
-from worldplayerbase import Player, normalize_cost_or_resources
+from worldplayerbase import Player, normalize_cost_or_resources, A
 from worldplayercomputer import Computer
 from worldplayercomputer2 import Computer2
 from worldresource import Deposit, Meadow
@@ -191,6 +191,13 @@ class World(object):
         return [o for z in self.squares for o in z.objects
                 if filter(o) and square_of_distance(x, y, o.x, o.y) <= radius_2]
 
+    def get_objects2(self, x, y, radius, filter=lambda x: True, players=None):
+        if not players:
+            players = self.players
+        radius_2 = radius * radius
+        return [o for p in players for o in p._potential_neighbors(x, y)
+                if filter(o) and square_of_distance(x, y, o.x, o.y) <= radius_2]
+
     def get_place_from_xy(self, x, y):
         return self.grid.get((x / self.square_width,
                               y / self.square_width))
@@ -273,6 +280,16 @@ class World(object):
             d.update(ov)
         return d.hexdigest()
 
+    def _update_buckets(self):
+        for p in self.players:
+            p._buckets = {}
+            for u in p.units:
+                k = (u.x / A, u.y / A)
+                try:
+                    p._buckets[k].append(u)
+                except:
+                    p._buckets[k] = [u]
+
     def _update_cloaking(self):
         for p in self.players:
             for u in p.units:
@@ -283,8 +300,8 @@ class World(object):
                 if u.is_a_cloaker:
                     radius2 = u.cloaking_range * u.cloaking_range
                     for vp in p.allied:
-                        for vu in vp.units:
-                            if not vu.is_cloakable: continue
+                        for vu in vp._potential_neighbors(u.x, u.y):
+                            if not vu.is_cloakable or vu.is_cloaked: continue
                             if square_of_distance(vu.x, vu.y, u.x, u.y) < radius2:
                                 vu.is_cloaked = True
                                 continue
@@ -298,7 +315,7 @@ class World(object):
                     radius2 = u.detection_range * u.detection_range
                     for e in self.players:
                         if e in p.allied: continue
-                        for iu in e.units:
+                        for iu in e._potential_neighbors(u.x, u.y):
                             if not (iu.is_invisible or iu.is_cloaked): continue
                             if iu in p.detected_units: continue
                             if square_of_distance(iu.x, iu.y, u.x, u.y) < radius2:
@@ -320,8 +337,11 @@ class World(object):
     def update(self):
         chrono.start("update")
         # normal updates
+        self._update_buckets()
         self._update_cloaking()
         self._update_detection()
+        for p in self.players[:]:
+            p._updated_perception = False
         for p in self.players[:]:
             if p in self.players:
                 try:
@@ -826,13 +846,15 @@ class World(object):
             import cProfile
             cProfile.runctx("self._loop()", globals(), locals(), "world_profile.tmp")
             import pstats
-            for n in ("interface_profile.tmp", "world_profile.tmp"):
+            for n in ("world_profile.tmp", ):
                 p = pstats.Stats(n)
                 p.strip_dirs()
                 p.sort_stats('time', 'cumulative').print_stats(30)
                 p.print_callers(30)
                 p.print_callees(20)
                 p.sort_stats('cumulative').print_stats(50)
+                p.print_callers(100)
+                p.print_callees(100)
         else:
             self._loop()
         self._free_memory()

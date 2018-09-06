@@ -487,8 +487,9 @@ class Creature(Entity):
         # level 1 of healing: 1 hp every 7.5 seconds
         hp = self.heal_level * PRECISION / 25
         allies = self.player.allied
-        units = self.world.get_objects(self.x, self.y, 6 * PRECISION,
-                filter=lambda x: x.player in allies and x.is_healable and x.hp < x.hp_max)
+        units = self.world.get_objects2(self.x, self.y, 6 * PRECISION,
+                filter=lambda x: x.is_healable and x.hp < x.hp_max,
+                players=allies)
         for u in units:
             u.hp = min(u.hp_max, u.hp + hp)
 
@@ -500,7 +501,7 @@ class Creature(Entity):
     def harm_nearby_units(self):
         # level 1: 1 hp every 7.5 seconds
         hp = self.harm_level * PRECISION / 25
-        units = self.world.get_objects(self.x, self.y, 6 * PRECISION,
+        units = self.world.get_objects2(self.x, self.y, 6 * PRECISION,
                 filter=lambda x: x.is_vulnerable and self._can_harm(x))
         for u in units:
             u.receive_hit(hp, self, notify=False)

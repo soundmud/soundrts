@@ -19,8 +19,11 @@ def disable_ai(player):
 # the necessary updates should be done explicitly in the tests
 def is_perceiving_method(self):
     def f(o):
+        self.world._update_buckets()
         self.world._update_cloaking()
         self.world._update_detection()
+        for p in self.world.players:
+            p._updated_perception = False
         self._update_perception_and_memory()
         return o in self.perception
     return f
@@ -56,6 +59,7 @@ class _PlayerBaseTestCase(unittest.TestCase):
         self.cp, self.cp2 = self.w.players
         self.cp.is_perceiving = is_perceiving_method(self.cp)
         self.cp2.is_perceiving = is_perceiving_method(self.cp2)
+        self.w._update_buckets()
 
     def find_player_unit(self, p, cls_name, index=0):
         for u in p.units:
@@ -349,6 +353,7 @@ class ComputerTestCase(_PlayerBaseTestCase):
         assert self.cp.nb("blacksmith") == 0
         assert self.cp.has("townhall")
         self.cp._update_effect_users_and_workers()
+        self.w._update_buckets()
         self.cp._update_perception()
         assert not self.cp.get(1, "blacksmith") # requires a townhall
         assert p.orders[0].type.type_name == "blacksmith"
@@ -648,13 +653,8 @@ class ComputerTestCase(_PlayerBaseTestCase):
         th.heal_level = 1 # force healing by the townhall (only the priest heals now)
         p2.hp = 0
         p2.move_to(p.place)
-        for _ in range(1):
-            th.update()
-            th.slow_update()
-            if p2.hp > 0:
-                break
+        self.w.update() # update healing and cloaking
         assert p2.hp > 0
-        self.w.update() # update cloaking
         # allied: cloak
         self.assertTrue(p.is_cloaked)
         self.assertTrue(p2.is_cloaked)

@@ -95,6 +95,14 @@ class _Game(object):
                 if PROFILE:
                     import cProfile
                     cProfile.runctx("self.interface.loop()", globals(), locals(), "interface_profile.tmp")
+                    import pstats
+                    for n in ("interface_profile.tmp", ):
+                        p = pstats.Stats(n)
+                        p.strip_dirs()
+                        p.sort_stats('time', 'cumulative').print_stats(30)
+                        p.print_callers(30)
+                        p.print_callees(20)
+                        p.sort_stats('cumulative').print_stats(50)
                 else:
                     self.interface.loop()
                 self._record_stats(self.world)

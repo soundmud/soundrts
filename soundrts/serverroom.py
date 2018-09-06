@@ -221,11 +221,15 @@ class Game(object):
 
     def fpct(self):
         """number of simulation frames per communication turn"""
-        tps = self.real_speed * 1000 / VIRTUAL_TIME_INTERVAL
-        # Avoid unrealistic ping values.
-        ping = min(self.max_ping, self.ping)
-        result = int(tps * ping * config.fpct_coef) + 1
-        return min(100, result)
+        # 1 is probably the best number in most cases because the game is often CPU-bound.
+        return 1
+
+        # the following number could be chosen instead someday
+##        tps = self.real_speed * 1000 / VIRTUAL_TIME_INTERVAL
+##        # Avoid unrealistic ping values.
+##        ping = min(self.max_ping, self.ping)
+##        result = int(tps * ping * config.fpct_coef) + 1
+##        return min(100, result)
 
     def _dispatch_orders_if_needed(self):
         while self._orders.are_ready():
