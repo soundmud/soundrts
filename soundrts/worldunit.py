@@ -928,10 +928,18 @@ class Worker(Unit):
                 return
         if self.orders:
             return
-        deposits = [o for o in self.place.objects if isinstance(o, Deposit)]
-        if deposits:
-            o = self.world.random.choice(deposits)
-            self.take_order(["gather", o.id])
+        local_warehouses_resource_types = set()
+        for w in self.place.objects:
+            if w.player in self.player.allied:
+                local_warehouses_resource_types.update(w.storable_resource_types)
+        if local_warehouses_resource_types:
+            deposits = [o for o in self.place.objects if isinstance(o, Deposit)
+                        and o.resource_type in local_warehouses_resource_types]
+            if deposits:
+                if self.cargo and self.cargo[0] not in local_warehouses_resource_types:
+                    self.cargo = None
+                o = self.world.random.choice(deposits)
+                self.take_order(["gather", o.id])
 
 
 class Soldier(Unit):
