@@ -445,7 +445,12 @@ class EntityView(object):
 
     def launch_event(self, sound, volume=1, priority=0, limit=0, ambient=False):
         if self.place is self.interface.place:
-            return psounds.play(sounds.get_sound(sound), volume, self.x, self.y, priority, limit, ambient)
+            pass
+        elif self.place in self.interface.place.neighbors:
+            priority -= 1
+        else:
+            return
+        return psounds.play(sounds.get_sound(sound), volume, self.x, self.y, priority, limit, ambient)
 
     def launch_alert(self, sound):
         self.interface.launch_alert(self.place, sound)

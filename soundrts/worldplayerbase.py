@@ -78,6 +78,7 @@ class Player(object):
     group = ()
     group_had_enough_mana = False # used to warn if not enough mana
 
+    is_cpu_intensive = False
     smart_units = False
 
     groups = {}
@@ -94,6 +95,7 @@ class Player(object):
             self.number = None
         self.perception = set()
         self.memory = set()
+        self._memory_index = {}
         self.id = world.get_next_id()
         self.world = world
         self.client = client
@@ -226,9 +228,13 @@ class Player(object):
         partially_observed_squares = set()
         # terrain, exits, resources
         for p in self.allied_vision:
+            done = []
             for u in p.units:
+                k = (u.is_inside, u.sight_range  < self.world.square_width, u.height, u.place)
+                if k in done: continue
                 self.observed_squares.update(u.get_observed_squares(strict=True))
                 partially_observed_squares.update(u.get_observed_squares())
+                done.append(k)
         partially_observed_squares -= self.observed_squares
         for s in self.observed_squares:
             for o in s.objects:
@@ -290,6 +296,8 @@ class Player(object):
             if not p._updated_perception:
                 p.perception = self.perception
                 p.memory = self.memory
+                p.observed_squares = self.observed_squares
+                p.observed_before_squares = self.observed_before_squares
                 p._updated_perception = True
 
     def _update_menace(self):
@@ -418,17 +426,21 @@ class Player(object):
         self.observed_objects[o] = self.world.time + 3000
 
     def _memorize(self, o):
-        for m in self.memory:
-            if m.initial_model is o:
-                self.memory.remove(m)
-                break
-        remembrance = copy.copy(o)
-        remembrance.time_stamp = self.world.time
-        remembrance.initial_model = o
-        self.memory.add(remembrance)
+        if o in self._memory_index:
+            self._memory_index[o].time_stamp = self.world.time
+        else:
+            remembrance = copy.copy(o)
+            remembrance.time_stamp = self.world.time
+            remembrance.initial_model = o
+            self.memory.add(remembrance)
+            self._memory_index[o] = remembrance
 
-    def _forget(self, o):
+    def _forget(self, o): # o is a memory object
         self.memory.remove(o)
+        try:
+            del self._memory_index[o.initial_model]
+        except KeyError: # a test requires this to pass
+            pass
         o.place = None # make sure this object is not reused
 
     def remembers(self, actual_object):

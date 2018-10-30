@@ -10,25 +10,6 @@ from soundrts.lib.nofloat import PRECISION
 from soundrts.worldorders import UseOrder
 
 
-_timers = {}
-
-def execute_this_method_once_every_n_calls(total_nb):
-    def decorator(f):
-        def decorated_f(*args):
-            try:
-                _timers[(f, args[0])]
-            except:
-                _timers[(f, args[0])] = 0
-            if _timers[(f, args[0])] <= 0:
-#                print "do", (f, args[0])
-                f(*args)
-                _timers[(f, args[0])] = total_nb - 1
-            else:
-#                print "don't do", (f, args[0])
-                _timers[(f, args[0])] -= 1
-        return decorated_f
-    return decorator
-
 def value_as_an_explorer(u):
     air = 1 if u.airground_type == "air" else 0
     return ((air, u.speed, u.hp), u.id)
@@ -50,6 +31,10 @@ class Computer(Player):
 
     def __repr__(self):
         return "Computer(%s)" % self.client
+
+    @property
+    def is_cpu_intensive(self):
+        return self.AI_type != "timers"
 
     @property
     def smart_units(self):
@@ -200,9 +185,15 @@ class Computer(Player):
                 except:
                     self._gathered_deposits[deposit] = 1
 
-    @execute_this_method_once_every_n_calls(10)
+    def _should_play_this_turn(self):
+        players = self.world.cpu_intensive_players()
+        turn = players.index(self) * 10 / len(players)
+        return self.world.turn % 10 == turn
+
     def play(self):
         if self.AI_type == "timers": return
+        if not self._should_play_this_turn(): return
+        #print self.number, "plays turn", self.world.turn
         self._update_effect_users_and_workers()
         self._update_time_has_come()
         self._send_workers_to_forgotten_building_sites()

@@ -612,6 +612,7 @@ class GatherOrder(BasicOrder):
                 self.storage = self.player.nearest_warehouse(self.unit.place,
                                                              self.unit.cargo[0])
                 if self.storage is None:
+                    self.unit.cargo = None
                     self.mark_as_impossible()
                 else:
                     self.unit.start_moving_to(self.storage)
