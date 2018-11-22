@@ -922,8 +922,8 @@ class Worker(Unit):
             return
         for u in self.player.units:
             if u.place is self.place and u.is_repairable and u.hp < u.hp_max \
-               and (isinstance(u, BuildingSite)
-                    or self.check_if_enough_resources(u.repair_cost) is None):
+               and not isinstance(u, BuildingSite) \
+               and self.check_if_enough_resources(u.repair_cost) is None:
                 self.take_order(["repair", u.id])
                 return
         if self.orders:

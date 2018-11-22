@@ -29,6 +29,7 @@ _options = [
     ("server", "timeout", 60.0),
     # fpct must be as small as possible while respecting test_fpct()
     ("server", "fpct_coef", 2.3),
+    ("server", "fpct_max", 3),
     ("server", "require_humans", 0),
 ]
 

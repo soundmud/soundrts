@@ -7,7 +7,7 @@ import os
 import res
 
 
-VERSION = "1.2-c8"
+VERSION = "1.2-c9"
 IS_DEV_VERSION = VERSION.endswith("-dev")
 
 

@@ -33,7 +33,10 @@ def get_desktop_screen_mode():
     return _x, _y
 
 def screen_render(text, dest, right=False, center=False, color=(200, 200, 200)):
-    surface = _font.render(text, True, color, (0, 0, 0))
+    try:
+        surface = _font.render(text, True, color, (0, 0, 0))
+    except:
+        surface = _font.render(text[:160] + "...", True, color, (0, 0, 0))
     r = surface.get_rect()
     if right:
         if dest[0] == -1:

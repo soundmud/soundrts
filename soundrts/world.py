@@ -348,8 +348,6 @@ class World(object):
         self._update_cloaking()
         self._update_detection()
         for p in self.players[:]:
-            p._updated_perception = False
-        for p in self.players[:]:
             if p in self.players:
                 try:
                     p.update()

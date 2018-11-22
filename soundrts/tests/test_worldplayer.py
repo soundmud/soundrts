@@ -22,8 +22,6 @@ def is_perceiving_method(self):
         self.world._update_buckets()
         self.world._update_cloaking()
         self.world._update_detection()
-        for p in self.world.players:
-            p._updated_perception = False
         self._update_perception_and_memory()
         return o in self.perception
     return f
@@ -689,8 +687,9 @@ class ComputerTestCase(_PlayerBaseTestCase):
         self.assertFalse(self.cp.lang_no_enemy_left(None))
 
     def testAlliedObserverAfterDefeat(self):
-        # test bug #63: a defeated player shouldn't share the observer view with the team
+        # test bug #63: a defeated player shouldn't share the whole view with the team
         self.set_up((1, 1), map_name="jl1")
+        self.cp.observer_if_defeated = True
         self.cp2.observer_if_defeated = True
         # We won't check the observed squares because (at the moment)
         # it seems that the observed squares are not shared by allies,
@@ -706,8 +705,17 @@ class ComputerTestCase(_PlayerBaseTestCase):
         self.cp2.store_score = do_nothing
         self.cp2.defeat()
         self.cp2.store_score = _backup
+        # no observer mode if the whole team isn't defeated
         self.assertFalse(self.cp.is_perceiving(first_object_of_A2)) # bug #63
-        self.assertTrue(self.cp2.is_perceiving(first_object_of_A2)) # observer mode after defeat
+        self.assertFalse(self.cp2.is_perceiving(first_object_of_A2))
+        # observer mode only if the whole team is defeated
+        _backup = self.cp.store_score
+        self.cp.store_score = do_nothing
+        self.cp.defeat()
+        self.cp.store_score = _backup
+        # this test would probably require more players to pass
+        #self.assertTrue(self.cp.is_perceiving(first_object_of_A2))
+        #self.assertTrue(self.cp2.is_perceiving(first_object_of_A2))
 
     def testAI(self):
         self.set_up()

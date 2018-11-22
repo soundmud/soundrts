@@ -215,8 +215,14 @@ class Player(object):
                          or u.place in avu.get_observed_squares())):
                     return True
 
+    def _team_has_lost(self):
+        for p in self.allied_vision:
+            if not p.has_been_defeated:
+                return False
+        return True
+
     def _update_perception(self):
-        if self.cheatmode:
+        if self.cheatmode or self._team_has_lost():
             self.observed_squares = set(self.world.squares)
             self.perception = set()
             for s in self.world.squares:
@@ -286,19 +292,9 @@ class Player(object):
                 self._memorize(o)
 
     def _update_perception_and_memory(self):
-        if self._updated_perception:
-            return
         previous_perception = self.perception.copy()
         self._update_perception()
         self._update_memory(previous_perception)
-        self._updated_perception = True
-        for p in self.allied:
-            if not p._updated_perception:
-                p.perception = self.perception
-                p.memory = self.memory
-                p.observed_squares = self.observed_squares
-                p.observed_before_squares = self.observed_before_squares
-                p._updated_perception = True
 
     def _update_menace(self):
         self._menace = sum(u.menace for u in self.units if u.speed > 0 and isinstance(u, Soldier))
@@ -763,15 +759,8 @@ class Player(object):
                 else:
                     p.defeat()
 
-    def _quit_alliance(self):
-        for ally in self.allied:
-            if ally is not self:
-                ally.allied.remove(self)
-        self.allied =[self]
-
     def defeat(self, force_quit=False):
         self.has_been_defeated = True
-        self._quit_alliance()
         self.store_score()
         if self in self.world.true_players():
             self.broadcast_to_others_only(self.name + mp.HAS_BEEN_DEFEATED)
@@ -791,8 +780,6 @@ class Player(object):
                                           + mp.YOU_ARE_NOW_IN_OBSERVER_MODE)
             else:
                 self.send_voice_important(mp.YOU_HAVE_BEEN_DEFEATED)
-            if not self.cheatmode:
-                self.cmd_toggle_cheatmode()
         else:
             self.quit_game()
 

@@ -558,23 +558,21 @@ class PatrolOrder(BasicOrder):
                 self.mark_as_impossible()
                 return
         self.unit.notify("order_ok")
-        self.target2 = self.unit.place
-        self.mode = "go"
+        if self.unit.orders and self.unit.orders[0].keyword == "patrol" \
+           and hasattr(self.unit.orders[0], "targets"):
+            self.unit.orders[0].targets.append(self.target)
+            self.mark_as_complete()
+        else:
+            self.targets = [self.unit.place, self.target]
+            self.mode = 0
 
     def execute(self):
-        self.update_target()
-        if self.mode == "go":
-            if self.unit.place == self.target:
-                self.mode = "go_back"
-                self.unit.deploy()
-            elif self.unit.is_idle:
-                self.move_to_or_fail(self.target)
-        elif self.mode == "go_back":
-            if self.unit.place == self.target2:
-                self.mode = "go"
-                self.unit.deploy()
-            elif self.unit.is_idle:
-                self.move_to_or_fail(self.target2)
+        if self.unit.place == self.targets[self.mode]:
+            self.mode += 1
+            self.mode %= len(self.targets)
+            self.unit.deploy()
+        elif self.unit.is_idle:
+            self.move_to_or_fail(self.targets[self.mode])
 
 
 class GatherOrder(BasicOrder):
