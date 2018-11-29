@@ -1,9 +1,9 @@
 ; solo map 2
 ;
 ;  *******
-; 3* + + *
+; 5* + + *
 ;  ***+***
-; 2* + + *
+; 3* + + *
 ;  *+***+*
 ; 1* + + *
 ;  *******
@@ -18,27 +18,38 @@ trigger player1 (timer 0) (add_objective 1 4021)
 square_width 12
 
 nb_columns 3
-nb_lines 3
+nb_lines 5
 
+
+; terrain
+
+terrain mountain a4 c4
+terrain mountain_pass b4
+high_grounds b4
+terrain ford a2 c2
+terrain river b2
+terrain marsh b3
+speed .5 1 a2 c2 b3 b4; half speed in the ford, the marsh and the mountain pass
 
 ; paths (give only the starting square)
 
-west_east_paths a1 b1 a2 b2 a3 b3
+west_east_paths a1 b1 a3 b3 a5 b5
 west_east_bridges
 
-south_north_paths b2
-south_north_bridges a1 c1
+south_north_paths b3 b4
+south_north_paths a1 c1 a2 c2 ; ford
 
 
 ; resources
 
 goldmines 75 a1
 
-woods 75 c1 c2 c2
+woods 75 c1 c3 c3
 
 nb_meadows_by_square 1
-additional_meadows b1 a2
-remove_meadows b2
+additional_meadows b1 a3
+remove_meadows b3
+remove_meadows a2 b2 c2 a4 c4
 
 
 ; players (human or computer)
@@ -47,18 +58,18 @@ player 10 10 -archer -knight -keep -lumbermill -blacksmith -scouttower -townhall
 
 ; computer only
 
-computer_only 0 0 a2 footman c2 footman a3 2 footman c3 4 archer b3 4 footman
+computer_only 0 0 a3 footman c3 footman a5 2 footman c5 4 archer b5 4 footman
 
 ; triggers
 
 timer_coefficient 80
 
-trigger computer1 (timer 1) (order (a2 1 footman) ((go a1)))
+trigger computer1 (timer 1) (order (a3 1 footman) ((go a1)))
 trigger computer1 (timer 2) (order (a1 1 footman) ((go b1) (auto_attack)))
-trigger computer1 (timer 3) (order (c2 1 footman) ((go c1) (go b1) (auto_attack)))
-trigger computer1 (timer 6) (order (a3 2 footman) ((go a1) (go b1) (auto_attack)))
-trigger computer1 (timer 9) (order (c3 4 archer) ((go c1) (go b1) (auto_attack)))
-trigger computer1 (timer 12) (order (b3 4 footman) ((go a1) (go b1) (auto_attack)))
+trigger computer1 (timer 3) (order (c3 1 footman) ((go c1) (go b1) (auto_attack)))
+trigger computer1 (timer 6) (order (a5 2 footman) ((go a1) (go b1) (auto_attack)))
+trigger computer1 (timer 9) (order (c5 4 archer) ((go c1) (go b1) (auto_attack)))
+trigger computer1 (timer 12) (order (b5 4 footman) ((go a1) (go b1) (auto_attack)))
 
 
 trigger player1 (no_enemy_left) (objective_complete 1)

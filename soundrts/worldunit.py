@@ -13,6 +13,8 @@ DISTANCE_MARGIN = 175 # millimeters
 class Creature(Entity):
 
     type_name = None
+    is_a_unit = False
+    is_a_building = False
 
     def get_action_target(self):
         if self.action:
@@ -185,10 +187,12 @@ class Creature(Entity):
         else:
             return self.place.height + self.bonus_height
 
-    def get_observed_squares(self, strict=False):
+    def get_observed_squares(self, strict=False, partial=False):
         if self.is_inside or self.place is None:
             return []
         result = [self.place]
+        if partial:
+            return result + self.place.neighbors
         if strict and self.sight_range < self.world.square_width:
             return result
         for sq in self.place.neighbors:
@@ -594,7 +598,10 @@ class Creature(Entity):
                       and target.airground_type == "ground" \
                       and not self.is_melee \
                       and self.height < target.height
-        return 50 if high_ground else 100
+        result = 50 if high_ground else 100
+        if not self.is_melee:
+            result = result * (100 - target.place.terrain_cover[0 if target.airground_type == "ground" else 1]) / 100
+        return result
 
     def has_hit(self, target):
         chance = self.chance_to_hit(target)
@@ -789,6 +796,7 @@ class Unit(Creature):
 
     is_cloakable = True
     is_a_gate = True
+    is_a_unit = True
 
     def __init__(self, player, place, x, y, o=90):
         Creature.__init__(self, player, place, x, y, o)
@@ -909,6 +917,8 @@ class Unit(Creature):
 class Worker(Unit):
 
     ai_mode = "defensive"
+    auto_gather = True
+    auto_repair = True
     can_switch_ai_mode = True
     _basic_abilities = ["go", "attack", "gather", "repair", "block", "join_group"]
     is_teleportable = True
@@ -920,26 +930,29 @@ class Worker(Unit):
             return
         if self.orders and self.orders[0].keyword != "gather":
             return
-        for u in self.player.units:
-            if u.place is self.place and u.is_repairable and u.hp < u.hp_max \
-               and not isinstance(u, BuildingSite) \
-               and self.check_if_enough_resources(u.repair_cost) is None:
-                self.take_order(["repair", u.id])
-                return
+        if self.auto_repair:
+            for p in self.player.allied:
+                for u in p.units:
+                    if u.place is self.place and u.is_repairable and u.hp < u.hp_max \
+                       and not isinstance(u, BuildingSite) \
+                       and self.check_if_enough_resources(u.repair_cost) is None:
+                        self.take_order(["repair", u.id])
+                        return
         if self.orders:
             return
-        local_warehouses_resource_types = set()
-        for w in self.place.objects:
-            if w.player in self.player.allied:
-                local_warehouses_resource_types.update(w.storable_resource_types)
-        if local_warehouses_resource_types:
-            deposits = [o for o in self.place.objects if isinstance(o, Deposit)
-                        and o.resource_type in local_warehouses_resource_types]
-            if deposits:
-                if self.cargo and self.cargo[0] not in local_warehouses_resource_types:
-                    self.cargo = None
-                o = self.world.random.choice(deposits)
-                self.take_order(["gather", o.id])
+        if self.auto_gather:
+            local_warehouses_resource_types = set()
+            for w in self.place.objects:
+                if w.player in self.player.allied:
+                    local_warehouses_resource_types.update(w.storable_resource_types)
+            if local_warehouses_resource_types:
+                deposits = [o for o in self.place.objects if isinstance(o, Deposit)
+                            and o.resource_type in local_warehouses_resource_types]
+                if deposits:
+                    if self.cargo and self.cargo[0] not in local_warehouses_resource_types:
+                        self.cargo = None
+                    o = self.world.random.choice(deposits)
+                    self.take_order(["gather", o.id])
 
 
 class Soldier(Unit):
@@ -969,6 +982,7 @@ class _Building(Creature):
 
     is_repairable = True # or buildable (in the case of a BuildingSite)
     is_healable = False
+    is_a_building = True
 
     transport_volume = 99
 

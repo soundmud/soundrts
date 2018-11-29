@@ -92,9 +92,10 @@ class Type(object):
 
 class World(object):
 
-    def __init__(self, default_triggers, seed=0):
+    def __init__(self, default_triggers, seed=0, must_apply_equivalent_type=False):
         self.default_triggers = default_triggers
         self.seed = seed
+        self.must_apply_equivalent_type = must_apply_equivalent_type
         self.id = self.get_next_id()
         self.random = random.Random()
         self.random.seed(int(seed))
@@ -128,6 +129,10 @@ class World(object):
 
         self.west_east = []
         self.south_north = []
+
+        self.terrain = {}
+        self.terrain_speed = {}
+        self.terrain_cover = {}
 
         # "squares words"
         self.starting_squares = []
@@ -221,9 +226,9 @@ class World(object):
                 result = True
                 for t in unit.harm_target_type:
                     if t == "healable" and not other.is_healable or \
-                       t == "building" and not isinstance(other, _Building) or \
+                       t == "building" and not other.is_a_building or \
                        t in ("air", "ground") and other.airground_type != t or \
-                       t == "unit" and not isinstance(other, Unit) or \
+                       t == "unit" and not other.is_a_unit or \
                        t == "undead" and not other.is_undead:
                         result = False
                         break
@@ -494,6 +499,12 @@ class World(object):
                 self.grid[square.name] = square
                 self.grid[(col, row)] = square
                 square.high_ground = square.name in self.high_grounds
+                if square.name in self.terrain:
+                    square.type_name = self.terrain[square.name]
+                if square.name in self.terrain_speed:
+                    square.terrain_speed = self.terrain_speed[square.name]
+                if square.name in self.terrain_cover:
+                    square.terrain_cover = self.terrain_cover[square.name]
         self.set_neighbors()
         xmax = self.nb_columns * self.square_width
         res = COLLISION_RADIUS * 2 / 3
@@ -692,7 +703,7 @@ class World(object):
             if w[0:1] == ";":
                 continue # comment
             for _w in words[1:]:
-                if w in ["south_north", "west_east"]:
+                if w in ["south_north", "west_east", "terrain", "speed", "cover"]:
                     continue # TODO: check that the exit type_name is defined in style
                 for _w in _w.split(","):
                     if _w and _w[0] == "-": _w = _w[1:]
@@ -741,6 +752,24 @@ class World(object):
                 self._add_start(w, words, line)
             elif w == "trigger":
                 triggers.append(words[1:])
+            elif w == "terrain":
+                t = words[1]
+                squares = words[2:]
+                check_squares(squares)
+                for sq in squares:
+                    self.terrain[sq] = t
+            elif w == "speed":
+                t = tuple(int(float(x) * 100) for x in words[1:3])
+                squares = words[3:]
+                check_squares(squares)
+                for sq in squares:
+                    self.terrain_speed[sq] = t
+            elif w == "cover":
+                t = tuple(int(float(x) * 100) for x in words[1:3])
+                squares = words[3:]
+                check_squares(squares)
+                for sq in squares:
+                    self.terrain_cover[sq] = t
             else:
                 map_error(line, "unknown command: %s" % w)
         # build self.players_starts

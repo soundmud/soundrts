@@ -34,6 +34,7 @@ class _Game(object):
     game_type_name = None
     record_replay = True
     allow_cheatmode = True
+    must_apply_equivalent_type = False
 
     def create_replay(self):
         self._replay_file = open(os.path.join(REPLAYS_PATH, "%s.txt" % int(time.time())), "w")
@@ -69,7 +70,7 @@ class _Game(object):
     def run(self, speed=config.speed):
         if self.record_replay:
             self.create_replay()
-        self.world = World(self.default_triggers, self.seed)
+        self.world = World(self.default_triggers, self.seed, must_apply_equivalent_type=self.must_apply_equivalent_type)
         if self.world.load_and_build_map(self.map):
             self.map.load_style(res)
             try:
@@ -134,6 +135,7 @@ class _MultiplayerGame(_Game):
         ["players", ["no_building_left"], ["defeat"]],
         ["computers", ["no_unit_left"], ["defeat"]],
         ) # a tuple is immutable
+    must_apply_equivalent_type = True
 
 
 class MultiplayerGame(_MultiplayerGame):
@@ -296,6 +298,7 @@ class ReplayGame(_Game):
         game_type_name = self.replay_read()
         if game_type_name in ("multiplayer", "training"):
             self.default_triggers = _MultiplayerGame.default_triggers
+            self.must_apply_equivalent_type = True
         game_name = self.replay_read()
         voice.alert([game_name])
         version = self.replay_read()

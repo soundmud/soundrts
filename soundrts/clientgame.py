@@ -103,6 +103,7 @@ class GameInterface(object):
         self.neutralized_units = []
         self.previous_menus = {}
         self.scout_info = set()
+        self._known_resource_places = set()
         server.interface = self
         self.grid_view = GridView(self)
         self.set_self_as_listener()
@@ -541,6 +542,28 @@ class GameInterface(object):
     def _time_to_ask_for_next_update(self):
         return not self.waiting_for_world_update and time.time() >= self.next_update
 
+    _terrain_loop = None
+    _terrain_loop_square = None
+
+    def _animate_terrain(self):
+        sq = self.place
+        if sq and self._terrain_loop_square != sq:
+            if self._terrain_loop and self._terrain_loop.is_playing():
+                self._terrain_loop.stop()
+            if sq not in self.scouted_squares and sq not in self.scouted_before_squares:
+                return
+            t = sq.type_name
+            if t:
+                st = style.get(t, "noise")
+                if st:
+                    if st[0] == "loop":
+                        try:
+                            volume = float(st[2])
+                        except:
+                            volume = 1
+                        self._terrain_loop = psounds.play_loop(sounds.get_sound(st[1]), volume, sq.x/1000.0, sq.y/1000.0, -10)
+            self._terrain_loop_square = sq
+
     previous_animation = 0
 
     def _animate_objects(self):
@@ -549,6 +572,7 @@ class GameInterface(object):
             self.set_obs_pos()
             for o in self.dobjets.values():
                 o.animate()
+            self._animate_terrain()
             self.previous_animation = time.time()
             chrono.stop("animate")
 
@@ -718,6 +742,12 @@ class GameInterface(object):
         if _id in self.group:
             self.group.remove(_id)
 
+    def _must_report_resource(self, m):
+        if getattr(m, "resource_type", None) is not None \
+           and m.place not in self._known_resource_places:
+            self._known_resource_places.add(m.place)
+            return True
+
     def update_fog_of_war(self):
         # updates dobjets (the dictionary of view objects)
         
@@ -729,12 +759,13 @@ class GameInterface(object):
                 self.dobjets[m.id] = EntityView(self, m)
                 if self.target and m.id == self.target.id: # keep target
                     self.target = self.dobjets[m.id]
+                if self._must_report_resource(m):
+                    self.scout_info.add(m.place)
             else:
                 self.dobjets[m.id].model = m
         for m in self.perception:
             if m.id not in self.dobjets:
-                if self.player.is_an_enemy(m) or \
-                   getattr(m, "resource_type", None) is not None:
+                if self.player.is_an_enemy(m) or self._must_report_resource(m):
                     self.scout_info.add(m.place)
             elif self.dobjets[m.id].is_memory:
                 self._delete_object(m.id) # perception will replace memory
@@ -1310,15 +1341,25 @@ class GameInterface(object):
                 o.stop()
         sound_stop(stop_voice_too=False) # cut the long nonlooping environment sounds
 
+    def _square_terrain(self, place):
+        result = []
+        t = place.type_name
+        if t:
+            title = style.get(t, "title")
+            if title:
+                result += mp.COMMA + title
+        if place.high_ground: result += mp.COMMA + mp.PLATEAU
+        return result
+        
     def square_postfix(self, place):
         postfix = []
         if place in self.scouted_squares:
-            if place.high_ground: postfix += mp.PLATEAU
+            postfix += self._square_terrain(place)
         elif place in self.scouted_before_squares:
-            if place.high_ground: postfix += mp.PLATEAU
-            postfix += mp.IN_THE_FOG
+            postfix += self._square_terrain(place)
+            postfix += mp.COMMA + mp.IN_THE_FOG
         else:
-            postfix += mp.UNKNOWN
+            postfix += mp.COMMA + mp.UNKNOWN
         return postfix
         
     def say_square(self, place, prefix=[]):

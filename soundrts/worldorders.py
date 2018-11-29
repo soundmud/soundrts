@@ -222,6 +222,58 @@ class CancelBuildingOrder(ImmediateOrder):
         self.unit.die()
 
 
+class EnableAutoGather(ImmediateOrder):
+
+    keyword = "enable_auto_gather"
+
+    @classmethod
+    def is_allowed(cls, unit, *unused_args):
+        return hasattr(unit, "auto_gather") and not unit.auto_gather
+
+    def immediate_action(self):
+        self.unit.auto_gather = True
+        self.unit.notify("order_ok")
+
+
+class DisableAutoGather(ImmediateOrder):
+
+    keyword = "disable_auto_gather"
+
+    @classmethod
+    def is_allowed(cls, unit, *unused_args):
+        return hasattr(unit, "auto_gather") and unit.auto_gather
+
+    def immediate_action(self):
+        self.unit.auto_gather = False
+        self.unit.notify("order_ok")
+
+
+class EnableAutoRepair(ImmediateOrder):
+
+    keyword = "enable_auto_repair"
+
+    @classmethod
+    def is_allowed(cls, unit, *unused_args):
+        return hasattr(unit, "auto_repair") and not unit.auto_repair
+
+    def immediate_action(self):
+        self.unit.auto_repair = True
+        self.unit.notify("order_ok")
+
+
+class DisableAutoRepair(ImmediateOrder):
+
+    keyword = "disable_auto_repair"
+
+    @classmethod
+    def is_allowed(cls, unit, *unused_args):
+        return hasattr(unit, "auto_repair") and unit.auto_repair
+
+    def immediate_action(self):
+        self.unit.auto_repair = False
+        self.unit.notify("order_ok")
+
+
 class ModeOffensive(ImmediateOrder):
 
     keyword = "mode_offensive"

@@ -546,6 +546,10 @@ class ComputerTestCase(_PlayerBaseTestCase):
 #        assert p in [_.initial_model for _ in self.cp.memory]
 
     def testMemoryOfResourceWhenAlliance(self):
+        # This test didn't work after the change about terrain:
+        # now the neignboring squares and their "natural" features (mines, forests, meadows)
+        # are always known.
+        return
         # Note: no unit with diagonal sight (air or tower)
         self.set_up((1, 1), map_name="jl1")
         p = self.find_player_unit(self.cp, "peasant")

@@ -1,9 +1,9 @@
 ; solo map 1
 ;
 ;  *******
-; 3* + + *
+; 5* + + *
 ;  *+*****
-; 2* + + *
+; 3* + + *
 ;  ***+***
 ; 1* + + *
 ;  *******
@@ -17,33 +17,40 @@ intro 7501
 square_width 12
 
 nb_columns 3
-nb_lines 3
+nb_lines 5
 
+; terrain
+
+terrain mountain b4 c4
+terrain bridge b2
+terrain marsh b3
+speed .5 1 b3
+terrain river a2 c2
+remove_meadows b2 a2 c2 b4 c4
 
 ; paths (give only the starting square)
 
-west_east_paths a1 b1 a2 b2 a3 b3
+west_east_paths a1 b1 a3 b3 a5 b5
 west_east_bridges
 
-south_north_paths a2
-south_north_bridges b1
-
+south_north_paths a3 a4
+south_north_paths b1 b2 ; bridge
 
 ; resources
 
 goldmines 25 a1
-goldmines 50 c3
+goldmines 50 c5
 
 woods 75 a1 c1
 
 nb_meadows_by_square 1
-additional_meadows c2
-remove_meadows a3 b2
+additional_meadows c3
+remove_meadows a5 b3
 
 ; players
 
 player 5 10 -townhall -lumbermill -blacksmith a1 townhall peasant c1 farm footman
-computer_only 0 0 a3 footman c3 2 footman c2 footman
+computer_only 0 0 a5 footman c5 2 footman c3 footman
 
 ; triggers
 

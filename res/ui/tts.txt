@@ -488,3 +488,18 @@
 4341	Mods
 4342	Soundpacks
 4343 speed
+
+4344 sea
+4345 lake
+4346 river
+4347 mountain
+4348 bridge
+4349 ford
+4350 marsh
+4351 ocean
+4352 mountain pass
+
+4353 enable auto-repair
+4354 disable auto-repair
+4355 enable auto-gather
+4356 disable auto-gather

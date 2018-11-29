@@ -239,7 +239,7 @@ class Player(object):
                 k = (u.is_inside, u.sight_range  < self.world.square_width, u.height, u.place)
                 if k in done: continue
                 self.observed_squares.update(u.get_observed_squares(strict=True))
-                partially_observed_squares.update(u.get_observed_squares())
+                partially_observed_squares.update(u.get_observed_squares(partial=True))
                 done.append(k)
         partially_observed_squares -= self.observed_squares
         for s in self.observed_squares:
@@ -366,7 +366,10 @@ class Player(object):
 
     def _update_actual_speed(self):
         for u in self.units:
-            u.actual_speed = u.speed
+            try:
+                u.actual_speed = u.speed * u.place.terrain_speed[0 if u.airground_type == "ground" else 1] / 100
+            except:
+                u.actual_speed = u.speed
         for g in self.groups.values():
             if g:
                 actual_speed = min(u.speed for u in g)
@@ -551,7 +554,8 @@ class Player(object):
         normalize_cost_or_resources(self.resources)
         self.gathered_resources = self.resources[:]
         for place, type_ in self.start[1]:
-            type_ = equivalent_type(type_)
+            if self.world.must_apply_equivalent_type:
+                type_ = equivalent_type(type_)
             if isinstance(type_, str) and type_[0:1] == "-":
                 self.forbidden_techs.append(type_[1:])
             elif isinstance(type_, Upgrade):

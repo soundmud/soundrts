@@ -49,7 +49,15 @@ class EntityView(object):
     def __init__(self, interface, model):
         self.interface = interface
         self.model = model
-        self.footstep_interval = .5 + random.random() * .2 # to avoid strange synchronicity of footsteps when several units are walking
+        self.footstep_random = random.random() * .2 # to avoid strange synchronicity of footsteps when several units are walking
+
+    @property
+    def footstep_interval(self):
+        try:
+            s = self.model.actual_speed
+        except:
+            s = self.model.speed
+        return 1000.0 / s / 2 + self.footstep_random
 
     @property
     def when_moving_through(self):
@@ -226,10 +234,19 @@ class EntityView(object):
         else:
             return self.color()
 
+    def _terrain_footstep(self):
+        t = self.place.type_name
+        if t:
+            g = style.get(t, "ground")
+            if g and style.has(self.type_name, "move_on_%s" % g[0]):
+                return style.get(self.type_name, "move_on_%s" % g[0])
+
     def footstepnoise(self):
         # assert: "only immobile objects must be taken into account"
         result = style.get(self.type_name, "move")
-        if self.airground_type == "ground" and len(self.place.objects) < 30: # save CPU
+        if self.airground_type == "ground" and self._terrain_footstep():
+            return self._terrain_footstep()
+        elif self.airground_type == "ground" and len(self.place.objects) < 30: # save CPU
             d_min = 9999999
             for m in self.place.objects:
                 if getattr(m, "speed", 0):
@@ -257,7 +274,7 @@ class EntityView(object):
         if self.is_moving and not self.is_memory:
             if self.next_step is None:
                 self.step_side = 1
-                self.next_step = time.time() + random.random() * self.footstep_interval # start at different moments
+                self.next_step = time.time() + random.random() * self.footstep_interval / self.interface.real_speed # start at different moments
             elif time.time() > self.next_step:
                 if self.interface.immersion and (self.x, self.y) == (self.interface.x, self.interface.y):
                     v = 1 / 2.0
@@ -448,6 +465,10 @@ class EntityView(object):
             pass
         elif self.place in self.interface.place.neighbors:
             priority -= 1
+            # Diminishing the volume is necessary as long as
+            # "in the fog of war" squares are implemented
+            # by shifting the observer backwards along the y axis.
+            volume /= 4.0
         else:
             return
         return psounds.play(sounds.get_sound(sound), volume, self.x, self.y, priority, limit, ambient)

@@ -44,6 +44,9 @@ def cache(f):
 class Square(object):
 
     transport_capacity = 0
+    type_name = ""
+    terrain_speed = (100, 100)
+    terrain_cover = (0, 0)
 
     def __init__(self, world, col, row, width):
         self.col = col

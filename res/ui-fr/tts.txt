@@ -476,3 +476,18 @@
 4341 mods
 4342 soundpacks
 4343 vitesse
+
+4344 mer
+4345 lac
+4346 rivière
+4347 montagne
+4348 pont
+4349 gué
+4350 marais
+4351 océan
+4352 col de montagne
+
+4353 activer réparation automatique
+4354 désactiver réparation automatique
+4355 activer exploitation automatique
+4356 désactiver exploitation automatique
