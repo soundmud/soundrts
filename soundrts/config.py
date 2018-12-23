@@ -26,6 +26,7 @@ _options = [
     ("general", "soundpacks", ""),
     ("general", "num_channels", 16),
     ("general", "speed", 1),
+    ("general", "verbosity", "menu_changed,unit_added,unit_complete,scout_info,food,resources,resource_exhausted"),
     ("server", "timeout", 60.0),
     # fpct must be as small as possible while respecting test_fpct()
     ("server", "fpct_coef", 2.3),

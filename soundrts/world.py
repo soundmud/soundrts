@@ -30,14 +30,14 @@ from worldplayercomputer import Computer
 from worldplayercomputer2 import Computer2
 from worldresource import Deposit, Meadow
 from worldroom import Square
-from worldunit import Unit, Worker, Soldier, Building, _Building, Effect
+from worldunit import Unit, Worker, Soldier, Building, _Building, Effect, ground_or_air
 from worldupgrade import Upgrade
 
 
 GLOBAL_FOOD_LIMIT = 80
 PROFILE = False
 
-def check_squares(squares):
+def check_squares(line, squares):
     for sq in squares:
         if re.match("^[a-z]+[0-9]+$", sq) is None:
             map_error(line, "%s is not a square" % sq)
@@ -133,6 +133,7 @@ class World(object):
         self.terrain = {}
         self.terrain_speed = {}
         self.terrain_cover = {}
+        self.water_squares = set()
 
         # "squares words"
         self.starting_squares = []
@@ -227,7 +228,7 @@ class World(object):
                 for t in unit.harm_target_type:
                     if t == "healable" and not other.is_healable or \
                        t == "building" and not other.is_a_building or \
-                       t in ("air", "ground") and other.airground_type != t or \
+                       t in ("air", "ground") and ground_or_air(other.airground_type) != t or \
                        t == "unit" and not other.is_a_unit or \
                        t == "undead" and not other.is_undead:
                         result = False
@@ -505,11 +506,14 @@ class World(object):
                     square.terrain_speed = self.terrain_speed[square.name]
                 if square.name in self.terrain_cover:
                     square.terrain_cover = self.terrain_cover[square.name]
+                if square.name in self.water_squares:
+                    square.is_water = True
         self.set_neighbors()
         xmax = self.nb_columns * self.square_width
         res = COLLISION_RADIUS * 2 / 3
         self.collision = {"ground": collision.CollisionMatrix(xmax, res),
                           "air": collision.CollisionMatrix(xmax, res)}
+        self.collision["water"] = self.collision["ground"]
 
     def _meadows(self):
         m = []
@@ -578,6 +582,18 @@ class World(object):
             for z2 in z.neighbors:
                 g[z][z2] = int_distance(z.x, z.y, z2.x, z2.y)
         return g  
+
+    def _water_graph(self):
+        g = {}
+        for z in self.squares:
+            g[z] = {}
+            if not z.is_water:
+                continue
+            for z2 in z.strict_neighbors:
+                if not z2.is_water:
+                    continue
+                g[z][z2] = int_distance(z.x, z.y, z2.x, z2.y)
+        return g  
                 
     def _create_passages(self):
         for t, squares in self.west_east:
@@ -589,6 +605,7 @@ class World(object):
         self.g = {}
         self.g["ground"] = self._ground_graph()
         self.g["air"] = self._air_graph()
+        self.g["water"] = self._water_graph()
 
     def _build_map(self):
         self._create_squares_and_grid()
@@ -730,11 +747,11 @@ class World(object):
                     map_error(line, "%s must be an integer" % w)
             elif w in ["south_north", "west_east"]:
                 squares = words[2:]
-                check_squares(squares)
+                check_squares(line, squares)
                 getattr(self, w).append((words[1], squares))
             elif w in squares_words:
                 squares = words[1:]
-                check_squares(squares)
+                check_squares(line, squares)
                 getattr(self, w).extend(squares)
             elif w in ["starting_resources"]:
                 starting_resources = []
@@ -755,21 +772,25 @@ class World(object):
             elif w == "terrain":
                 t = words[1]
                 squares = words[2:]
-                check_squares(squares)
+                check_squares(line, squares)
                 for sq in squares:
                     self.terrain[sq] = t
             elif w == "speed":
                 t = tuple(int(float(x) * 100) for x in words[1:3])
                 squares = words[3:]
-                check_squares(squares)
+                check_squares(line, squares)
                 for sq in squares:
                     self.terrain_speed[sq] = t
             elif w == "cover":
                 t = tuple(int(float(x) * 100) for x in words[1:3])
                 squares = words[3:]
-                check_squares(squares)
+                check_squares(line, squares)
                 for sq in squares:
                     self.terrain_cover[sq] = t
+            elif w == "water":
+                squares = words[1:]
+                check_squares(line, squares)
+                self.water_squares.update(squares)
             else:
                 map_error(line, "unknown command: %s" % w)
         # build self.players_starts

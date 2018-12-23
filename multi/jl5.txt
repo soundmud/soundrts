@@ -20,6 +20,7 @@ goldmines 300 a9 b9 j1 j2
 woods 75 a9 j1 a9 j1 
 nb_meadows_by_square 3
 terrain sea a1 b1 i1 a2 b2 c2 i2 h3 i3 j3 c7 d7 a8 b8 c8 h8 i8 c9 j9
+water a1 b1 i1 a2 b2 c2 i2 h3 i3 j3 c7 d7 a8 b8 c8 h8 i8 c9 j9
 remove_meadows a1 b1 i1 a2 b2 c2 i2 h3 i3 j3 c7 d7 a8 b8 c8 h8 i8 c9 j9
 remove_meadows a1 b1 i1 a2 b2 c2 i2 h3 i3 j3 c7 d7 a8 b8 c8 h8 i8 c9 j9
 remove_meadows a1 b1 i1 a2 b2 c2 i2 h3 i3 j3 c7 d7 a8 b8 c8 h8 i8 c9 j9

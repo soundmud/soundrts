@@ -365,6 +365,7 @@ class GameInterface(object):
         return players[index]
 
     def _change_player(self, new_player):
+        new_player.client.login, self.server.player.client.login = self.server.player.client.login, new_player.client.login
         self.server.player.client = new_player.client
         self.server.player = new_player
         self.server.player.client = self.server
@@ -373,7 +374,7 @@ class GameInterface(object):
     def cmd_change_player(self):
         if self.server.allow_cheatmode:
             self._change_player(self._next_player(self.player))
-            voice.item(mp.YOU_ARE + [self.player.name])
+            voice.item(mp.YOU_ARE + self.player.name)
         else:
             voice.item(mp.BEEP)
         
@@ -569,10 +570,19 @@ class GameInterface(object):
     def _animate_objects(self):
         if time.time() >= self.previous_animation + .1:
             chrono.start("animate")
-            self.set_obs_pos()
+            try:
+                self.set_obs_pos()
+            except:
+                exception("couldn't set user interface position")
             for o in self.dobjets.values():
-                o.animate()
-            self._animate_terrain()
+                try:
+                    o.animate()
+                except:
+                    exception("couldn't animate object")
+            try:
+                self._animate_terrain()
+            except:
+                exception("couldn't animate terrain")
             self.previous_animation = time.time()
             chrono.stop("animate")
 
@@ -849,6 +859,7 @@ class GameInterface(object):
         self._remember_menu(type_name, menu)
 
     def send_menu_alerts_if_needed(self):
+        if "menu_changed" not in config.verbosity: return
         done = []
         for u in self.player.units:
             u = EntityView(self, u)
@@ -931,6 +942,7 @@ class GameInterface(object):
     previous_scout_info = None
 
     def scout_info_if_needed(self):
+        if "scout_info" not in config.verbosity: return
         if self.scout_info and (self.previous_scout_info is None or
                 time.time() > self.previous_scout_info + 10):
             for place in self.scout_info:
@@ -1053,7 +1065,11 @@ class GameInterface(object):
         self.order = None
 
     def cmd_unit_status(self):
-        self.say_group(self.place.title)
+        try:
+            place = self.dobjets[self.group[0]].place.title
+        except:
+            place = self.place.title
+        self.say_group(place)
         if self.group:
             self.follow_mode = True
             self._follow_if_needed()
@@ -1602,7 +1618,7 @@ class GameInterface(object):
             )
         if self._must_play_tick or IS_DEV_VERSION:
             self.display_metrics()
-        if IS_DEV_VERSION and get_fullscreen():
+        if False and IS_DEV_VERSION and get_fullscreen():
             self._display_target_info()
         screen_render_subtitle()
         pygame.display.flip()
@@ -1627,8 +1643,11 @@ class GameInterface(object):
 
     def cmd_resource_status(self, resource_type):
         resource_type = int(resource_type)
-        voice.item(nb2msg(self.resources[resource_type]) + style.get(
-            "parameters", "resource_%s_title" % resource_type))
+        try:
+            voice.item(nb2msg(self.resources[resource_type]) + style.get(
+                "parameters", "resource_%s_title" % resource_type))
+        except IndexError:
+            voice.item(mp.BEEP)
 
     def cmd_food_status(self):
         voice.item(nb2msg_f(self.available_food)
@@ -1651,7 +1670,7 @@ class GameInterface(object):
             r = int(r)
             if r != self._previous_resources[i]:
                 self._previous_resources[i] = r
-                if must_be_said(r):
+                if "resources" in config.verbosity and must_be_said(r):
                     self.send_msg_if_playing(nb2msg(r) + style.get(
                         "parameters", "resource_%s_title" % i),
                         update_type="resource_%s" % i)
@@ -1659,7 +1678,8 @@ class GameInterface(object):
            self.used_food > self._previous_used_food or \
            (self.used_food < self._previous_used_food and
             self._previous_used_food == self.available_food):
-            if 0 <= self.available_food - self.used_food <= \
+            if "food" in config.verbosity and \
+               0 <= self.available_food - self.used_food <= \
                self.available_food * .20:
                 self.send_msg_if_playing(
                     nb2msg_f(self.available_food)

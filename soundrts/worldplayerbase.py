@@ -16,6 +16,7 @@ from worldupgrade import Upgrade
 
 
 A = 12 * PRECISION # bucket side length
+VERY_SLOW = int(.01 * PRECISION)
 
 
 class ZoomTarget(object):
@@ -367,14 +368,25 @@ class Player(object):
     def _update_actual_speed(self):
         for u in self.units:
             try:
-                u.actual_speed = u.speed * u.place.terrain_speed[0 if u.airground_type == "ground" else 1] / 100
+                if u.airground_type == "water":
+                    u.actual_speed = u.speed
+                else:
+                    u.actual_speed = u.speed * u.place.terrain_speed[0 if u.airground_type == "ground" else 1] / 100
+                if u.speed:
+                    u.actual_speed = max(u.actual_speed , VERY_SLOW) # never stuck
             except:
                 u.actual_speed = u.speed
         for g in self.groups.values():
             if g:
-                actual_speed = min(u.speed for u in g)
+                actual_speed = min(u.actual_speed for u in g)
                 for u in g:
                     u.actual_speed = actual_speed
+
+    def _update_drowning(self):
+        for u in self.units[:]:
+            if u.is_vulnerable and u.airground_type == "ground" \
+               and getattr(u.place, "is_water", False):
+                u.die()
 
     def update(self):
         self._update_actual_speed()
@@ -384,6 +396,7 @@ class Player(object):
         self._update_menace()
         self._update_enemy_menace_and_presence_and_corpses()
         self.play()
+        self._update_drowning()
 
     def level(self, type_name):
         return self.upgrades.count(type_name)
@@ -650,6 +663,7 @@ class Player(object):
         return n
 
     def lang_add_units(self, items, target=None, decay=0, from_corpse=False, corpses=[], notify=True):
+        sq = self.world.grid["a1"]
         multiplicator = 1
         for i in items:
             if self.world.grid.has_key(i):

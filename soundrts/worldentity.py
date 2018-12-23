@@ -55,6 +55,10 @@ class Entity(object):
     def is_memory(self):
         return hasattr(self, "time_stamp")
 
+    @property
+    def is_near_water(self):
+        return getattr(self.place, "is_near_water", False)
+
     _previous_square = None
 
     def move_to(self, new_place, x=None, y=None, o=90, exit1=None, exit2=None):

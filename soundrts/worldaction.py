@@ -32,7 +32,7 @@ class MoveAction(Action):
                 self.unit.go_to_xy(self.target.other_side.place.x, self.target.other_side.place.y)
         elif getattr(self.target, "place", None) is self.unit.place:
             self.unit.action_reach_and_stop()
-        elif self.unit.airground_type == "air":
+        elif self.unit.airground_type in ["air", "water"]:
             self.unit.go_to_xy(self.target.x, self.target.y)
         else:
             self.complete()

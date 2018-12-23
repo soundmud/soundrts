@@ -503,3 +503,9 @@
 4354 disable auto-repair
 4355 enable auto-gather
 4356 disable auto-gather
+
+4357 shipyard
+4358 boat
+4359 destroyer
+4360 battleship
+4361 submarine

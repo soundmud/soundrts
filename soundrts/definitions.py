@@ -180,6 +180,7 @@ class Rules(_Definitions):
                     "is_teleportable",
                     "is_a_gate",
                     "is_buildable_on_exits_only",
+                    "is_buildable_near_water_only",
                     "count_limit",
                     )
     precision_properties = _precision_properties_extended

@@ -26,7 +26,7 @@ def servers_list(voice):
         f = urllib2.urlopen(servers_url)
         if f.read(len(header)) == header:
             servers = f.readlines()
-    except urllib2.URLError:
+    except:
         voice.alert(mp.BEEP)
         warning("couldn't get the servers list from the metaserver"
                 " => using the default servers list")

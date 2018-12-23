@@ -225,7 +225,7 @@ def set_and_launch_soundpack(soundpacks):
     config.soundpacks = soundpacks
     config.save()
     res.set_soundpacks(config.soundpacks)
-    main_menu().loop() # update the menu title
+    main_menu() # update the menu title
     raise SystemExit
 
 def soundpacks_menu():

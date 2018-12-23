@@ -1,3 +1,4 @@
+#! python2.7
 from soundrts.lib import log
 log.add_console_handler()
 

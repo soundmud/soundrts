@@ -5,6 +5,7 @@ import pygame
 
 from clientgamenews import must_be_said
 from clientmedia import voice, sounds, get_fullscreen
+import config
 from definitions import style
 from lib.log import warning, exception
 from lib.msgs import nb2msg
@@ -463,7 +464,7 @@ class EntityView(object):
     def launch_event(self, sound, volume=1, priority=0, limit=0, ambient=False):
         if self.place is self.interface.place:
             pass
-        elif self.place in self.interface.place.neighbors:
+        elif self.place in getattr(self.interface.place, "neighbors", []):
             priority -= 1
             # Diminishing the volume is necessary as long as
             # "in the fog of war" squares are implemented
@@ -515,7 +516,8 @@ class EntityView(object):
 
     def on_exhausted(self):
         self.launch_event_style("exhausted")
-        voice.info(self.title + mp.EXHAUSTED)
+        if "resource_exhausted" in config.verbosity:
+            voice.info(self.title + mp.EXHAUSTED)
 
     def on_completeness(self, s): # building train or upgrade
         self.launch_event_style("production")
@@ -524,7 +526,7 @@ class EntityView(object):
     def on_complete(self):
         if self.player is not self.interface.player: return
         self.launch_event_style("complete", alert=True)
-        if must_be_said(self.number):
+        if "unit_complete" in config.verbosity and must_be_said(self.number):
             voice.info(substitute_args(self.get_style("complete_msg"), [self.title]))
         self.interface.send_menu_alerts_if_needed() # not necessary for "on_repair_complete" (if it existed)
 
@@ -534,7 +536,7 @@ class EntityView(object):
 
     def on_added(self):
         self.launch_event_style("added", alert=True)
-        if must_be_said(self.number):
+        if "unit_added" in config.verbosity and must_be_said(self.number):
             voice.info(substitute_args(self.get_style("added_msg"), [self.ext_title]))
 
 

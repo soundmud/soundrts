@@ -491,3 +491,9 @@
 4354 désactiver réparation automatique
 4355 activer exploitation automatique
 4356 désactiver exploitation automatique
+
+4357 chantier naval
+4358 bateau
+4359 destroyer
+4360 cuirassé
+4361 sous-marin

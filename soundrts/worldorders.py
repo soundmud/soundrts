@@ -74,6 +74,8 @@ class Order(object):
            t not in p.perception and \
            t not in p.memory:
             self.target = p.get_object_by_id(t.id)
+        if hasattr(self.target, "place") and self.target.place is None:
+            self.target = None
 
     def _group_is_ready(self):
         for u in self.player.units:
@@ -358,6 +360,7 @@ class ComplexOrder(Order):
     @classmethod
     def is_almost_allowed(cls, unit, type_name, *unused_args):
         return type_name in cls.allowed_types(unit) \
+               and unit.player is not None \
                and type_name not in unit.player.forbidden_techs \
                and (not unit.orders or unit.orders[-1].can_be_followed) \
                and cls.additional_condition(unit, type_name) \
@@ -447,15 +450,28 @@ class TrainOrder(ProductionOrder):
     cancel_order = "cancel_training"
 
     def complete(self):
-        x, y = self.unit.place.find_free_space(self.type.airground_type,
-                                               self.unit.x, self.unit.y,
-                                               player=self.player)
+        if self.type.airground_type == "water" and self.unit.is_buildable_near_water_only:
+            place = self.unit.nearest_water()
+            if place is None:
+                self.cancel()
+                self.mark_as_impossible("not_enough_space")
+                return
+            x, y = place.find_free_space(
+                self.type.airground_type,
+                place.x, place.y,
+                player=self.player)
+        else:
+            place = self.unit.place
+            x, y = place.find_free_space(
+                self.type.airground_type,
+                self.unit.x, self.unit.y,
+                player=self.player)
         if x is None:
             self.cancel()
             self.mark_as_impossible("not_enough_space")
             return
         self.player.used_food -= self.food_cost # end food reservation
-        u = self.type(self.player, self.unit.place, x, y)
+        u = self.type(self.player, place, x, y)
         u.notify("complete")
         u.take_default_order(self.unit.rallying_point)
 
@@ -680,7 +696,7 @@ class GatherOrder(BasicOrder):
                 self._store_cargo()
                 self.mode = "go_gather"
         elif self.mode == "go_gather":
-            if self.target is None or self.target.place is None: # resource exhausted
+            if self.target is None: # resource exhausted
                 self.mark_as_impossible()
                 self.unit.deploy()
             elif self.unit._near_enough(self.target):
@@ -690,7 +706,7 @@ class GatherOrder(BasicOrder):
             elif self.unit.is_idle:
                 self.move_to_or_fail(self.target)
         elif self.mode == "gather":
-            if self.target is None or self.target.place is None: # resource exhausted
+            if self.target is None: # resource exhausted
                 self.mark_as_impossible()
             elif self.unit.place.world.time > self.delay:
                 self._extract_cargo()
@@ -796,7 +812,7 @@ class RepairOrder(BasicOrder):
 
     def execute(self):
         self.update_target()
-        if self.target is None or self.target.place is None \
+        if self.target is None \
            or self.target.is_fully_repaired: # destroyed, cancelled or fully repaired
             self.mark_as_complete()
             self.unit.stop()
@@ -836,6 +852,9 @@ class BuildOrder(ComplexOrder):
             if not getattr(self.target, "is_an_exit", False):
                 self.mark_as_impossible("cannot_build_here")
                 return
+        elif self.type.is_buildable_near_water_only and not getattr(self.target, "is_near_water", False):
+            self.mark_as_impossible("cannot_build_here")
+            return
         elif not self.type.is_buildable_anywhere:
             if not getattr(self.target, "is_a_building_land", False):
                 self.target = getattr(self.target, "building_land", None)
@@ -855,7 +874,7 @@ class BuildOrder(ComplexOrder):
 
     def execute(self):
         self.update_target()
-        if self.target is None or self.target.place is None: # meadow already used
+        if self.target is None: # meadow already used
             self.mark_as_impossible()
             return
         if self.target is self.unit.place or self.target.place is self.unit.place:
@@ -1095,6 +1114,12 @@ class LoadOrder(TransportOrder):
         self.update_target()
         if self.target is None or not self.unit.have_enough_space(self.target):
             self.mark_as_impossible()
+        elif self.unit.airground_type == "water":
+            if self.target.place in self.unit.place.strict_neighbors and not self.target.place.high_ground:
+                self.mark_as_complete()
+                self.unit.load(self.target)
+            else:
+                self.mark_as_impossible()
         elif self.unit.place != self.target.place:
             self.move_to_or_fail(self.target.place)
         else:
@@ -1114,7 +1139,9 @@ class EnterOrder(ImmediateOrder):
     def immediate_action(self):
         self.target = self.player.get_object_by_id(self.args[0])
         self.target.take_order(["load", self.unit.id], forget_previous=False)
-        self.unit.take_order(["go", self.target.id])
+        if not (self.unit.airground_type == "ground"
+                and self.target.airground_type == "water"):
+            self.unit.take_order(["go", self.target.id])
 
 
 class LoadAllOrder(TransportOrder):
@@ -1135,6 +1162,12 @@ class LoadAllOrder(TransportOrder):
         self.update_target()
         if self.target is None:
             self.mark_as_impossible()
+        elif self.unit.airground_type == "water":
+            if self.target in self.unit.place.strict_neighbors and not self.target.high_ground:
+                self.mark_as_complete()
+                self.unit.load_all(self.target)
+            else:
+                self.mark_as_impossible()
         elif self.unit.place != self.target:
             self.move_to_or_fail(self.target)
         else:
@@ -1160,6 +1193,13 @@ class UnloadAllOrder(TransportOrder):
         self.update_target()
         if self.target is None:
             self.mark_as_impossible()
+        elif self.unit.airground_type == "water":
+            if self.target in self.unit.place.strict_neighbors \
+               and not self.target.is_water and not self.target.high_ground:
+                self.mark_as_complete()
+                self.unit.unload_all(self.target)
+            else:
+                self.mark_as_impossible()
         elif self.unit.place != self.target:
             self.move_to_or_fail(self.target)
         else:

@@ -21,7 +21,7 @@ and 23
 resource_0_title 131
 resource_1_title 132
 food_title 133
-recommended_maps jl5
+recommended_maps jl5 jl6 jl7
 
 ; units menus
 
@@ -495,6 +495,10 @@ def massive_gate
 is_a building
 title 4339
 
+def shipyard
+is_a building
+title 4357
+
 ; units
 
 def peasant
@@ -610,6 +614,36 @@ title 110 4230 ; offensive flying machine
 launch_attack 1322
 attack_hit 1323
 shortcut f
+
+def boat
+is_a unit
+title 4358
+move 1088 1088
+keyboard soldier7
+
+def destroyer
+is_a unit
+title 4359
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+move 1088 1088
+keyboard soldier7
+
+def battleship
+is_a unit
+title 4360
+noise repeat 9 1311 1312 1313 ; 1082 1083 ?
+launch_attack 1084
+attack_hit 1085
+move 1088 1088
+keyboard soldier7
+
+def submarine
+is_a unit
+title 4361
+move 1088 1088
+keyboard soldier7
 
 def holy_vision
 is_a thing

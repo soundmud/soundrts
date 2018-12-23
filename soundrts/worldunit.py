@@ -9,7 +9,10 @@ from worldresource import Corpse, Deposit
 
 DISTANCE_MARGIN = 175 # millimeters
 
+def ground_or_air(t):
+    return "ground" if t == "water" else t
 
+    
 class Creature(Entity):
 
     type_name = None
@@ -186,6 +189,11 @@ class Creature(Entity):
             return 2
         else:
             return self.place.height + self.bonus_height
+
+    def nearest_water(self):
+        places = [sq for sq in self.place.strict_neighbors if sq.is_water]
+        if places:
+            return min(places, key=lambda sq: square_of_distance(sq.x, sq.y, self.x, self.y))
 
     def get_observed_squares(self, strict=False, partial=False):
         if self.is_inside or self.place is None:
@@ -477,7 +485,7 @@ class Creature(Entity):
             if o.place is self: # not enough space
                 o.collision = 0
                 o.move_to(self.place, self.x, self.y)
-            if self.airground_type == "air":
+            if self.airground_type != "ground":
                 o.die(attacker)
         self.notify("death")
         if attacker is not None:
@@ -529,7 +537,7 @@ class Creature(Entity):
         if other is None \
            or other.place is None \
            or getattr(other, "hp", 0) < 0 \
-           or getattr(other, "airground_type", None) not in self.target_types:
+           or ground_or_air(getattr(other, "airground_type", None)) not in self.target_types:
             return False
         if not other.is_vulnerable:
             return False
@@ -600,7 +608,7 @@ class Creature(Entity):
                       and self.height < target.height
         result = 50 if high_ground else 100
         if not self.is_melee:
-            result = result * (100 - target.place.terrain_cover[0 if target.airground_type == "ground" else 1]) / 100
+            result = result * (100 - target.place.terrain_cover[0 if target.airground_type != "air" else 1]) / 100
         return result
 
     def has_hit(self, target):
@@ -769,14 +777,23 @@ class Creature(Entity):
         target.notify("enter")
         target.move_to(self, 0, 0)
 
-    def load_all(self):
+    def load_all(self, place=None):
+        if place is None:
+            place = self.place
         for u in sorted(self.player.units, key=lambda x: x.transport_volume, reverse=True):
-            if u.place is self.place and self.have_enough_space(u):
+            if u.place is place and self.have_enough_space(u):
                 self.load(u)
 
-    def unload_all(self):
+    def unload_all(self, place=None):
+        if place is None:
+            place = self.place
+            x = self.x
+            y = self.y
+        else:
+            x = place.x
+            y = place.y
         for o in self.objects[:]:
-            o.move_to(self.place, self.x, self.y)
+            o.move_to(place, x, y)
             o.notify("exit")
 
     #
@@ -1029,6 +1046,10 @@ class BuildingSite(_Building):
         return self.type.is_buildable_on_exits_only
 
     @property
+    def is_buildable_near_water_only(self):
+        return self.type.is_buildable_near_water_only
+
+    @property
     def is_a_gate(self):
         return self.type.is_a_gate
 
@@ -1063,6 +1084,7 @@ class Building(_Building):
 
     is_buildable_anywhere = False
     is_buildable_on_exits_only = False
+    is_buildable_near_water_only = False
     provides_survival = True
 
     def __init__(self, prototype, player, place, x, y):

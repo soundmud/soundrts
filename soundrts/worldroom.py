@@ -47,6 +47,7 @@ class Square(object):
     type_name = ""
     terrain_speed = (100, 100)
     terrain_cover = (0, 0)
+    is_water = False
 
     def __init__(self, world, col, row, width):
         self.col = col
@@ -101,6 +102,14 @@ class Square(object):
         for o in self.objects:
             if o.is_a_building_land:
                 return o
+
+    @property
+    def is_near_water(self):
+        if self.is_water or self.high_ground:
+            return False
+        for sq in self.strict_neighbors:
+            if sq.is_water:
+                return True
 
     def __getstate__(self):
         d = self.__dict__.copy()
@@ -282,6 +291,7 @@ class Square(object):
                 self.spiral = {}
                 self.spiral["ground"] = square_spiral(x, y)
                 self.spiral["air"] = square_spiral(x, y)
+                self.spiral["water"] = square_spiral(x, y)
             spiral = self.spiral[airground_type] # reuse spiral (don't retry used places: much faster!)
         else:
             spiral = square_spiral(x, y)
