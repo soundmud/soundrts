@@ -389,6 +389,7 @@ hp_max 30
 mana_max 200
 mana_regen 1 ; mana / second
 speed 1
+speed_on_terrain marsh 1 ford 1
 can_use a_raise_dead a_deadly_fog
 range 4.5
 cooldown 1.5

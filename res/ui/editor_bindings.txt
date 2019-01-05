@@ -1,0 +1,99 @@
+; The key names are case sensitive.
+; The reference for the key names is at http://www.pygame.org/docs/ref/key.html
+; The game adds "K_" to the beginning of the key names.
+; The game adds "KMOD_" to the beginning of the key modifier names. The modifiers are optional.
+; For example, "CTRL LEFT" are translated to the pygame constants "KMOD_CONTROL K_LEFT".
+; The allowed modifiers are: CONTROL, ALT and SHIFT.
+
+
+
+LCTRL: examine
+RCTRL: examine
+
+; explore the map
+
+UP: select_square 0 1
+DOWN: select_square 0 -1
+LEFT: select_square -1 0
+RIGHT: select_square 1 0
+
+SHIFT UP: select_square 0 5
+SHIFT DOWN: select_square 0 -5
+SHIFT LEFT: select_square -5 0
+SHIFT RIGHT: select_square 5 0
+
+CTRL UP: select_square 0 1 no_collision
+CTRL DOWN: select_square 0 -1 no_collision
+CTRL LEFT: select_square -1 0 no_collision
+CTRL RIGHT: select_square 1 0 no_collision
+
+; toggle exit
+CTRL SHIFT UP: cmd te 0 1
+CTRL SHIFT DOWN: cmd te 0 -1
+CTRL SHIFT LEFT: cmd te -1 0
+CTRL SHIFT RIGHT: cmd te 1 0
+
+; select next terrain from palette
+PAGEDOWN: cmd st 1
+PAGEUP: cmd st -1
+
+; apply terrain
+RETURN: cmd at
+
+; save map
+CTRL s: cmd sm
+
+F8: toggle_zoom
+
+; select a target
+
+TAB: select_target 1 
+SHIFT TAB: select_target -1 
+
+CTRL TAB: select_target 1 useful
+CTRL SHIFT TAB: select_target -1 useful
+
+
+; miscellaneous
+
+ESCAPE: escape
+
+F1: help 1
+SHIFT F1: help -1
+
+F2: help -1
+CTRL F2: fullscreen
+CTRL SHIFT F2: toggle_cheatmode
+
+F3: say_time
+CTRL SHIFT F3: toggle_tick
+CTRL F3: toggle_talking_clock
+
+CTRL SHIFT F4: change_player
+
+F5: history_previous
+F6: history_next
+
+LALT: history_stop
+RALT: history_stop
+LSHIFT: history_stop
+RSHIFT: history_stop
+
+F9: objectives
+
+F10: gamemenu
+CTRL c: gamemenu
+ALT F4: gamemenu
+
+F11: say_players
+
+F7: say
+
+HOME: volume
+KP_PLUS: volume
+END: volume -1 
+KP_MINUS: volume -1 
+
+CTRL SPACE: immersion
+
+BACKQUOTE: console

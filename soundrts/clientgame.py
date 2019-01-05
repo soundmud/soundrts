@@ -81,6 +81,50 @@ def _remove_duplicates(l):
             m.append(i)
     return m
 
+def load_palette():
+    p = []
+    with open("res/ui/editor_palette.txt", "U") as f:
+        for s in f:
+            s = s.strip()
+            if s and not s.startswith(";"):
+                if s.startswith("def"):
+                    k = s.split()[1]
+                    t = dict()
+                    p.append((k, t))
+                    t["style"] = k
+                    t["water"] = False
+                    t["ground"] = True
+                    t["air"] = True
+                    t["high_ground"] = False
+                    t["meadows"] = 0
+                    t["woods"] = (0, "75")
+                    t["goldmines"] = (0, "150")
+                    t["speed"] = (100, 100)
+                    t["cover"] = (0, 0)
+                else:
+                    k = s.split()[0]
+                    v = s.split()[1:]
+                    if k in ["air", "ground", "water", "high_ground", "meadows"]:
+                        v = int(v[0])
+                    elif k == "style":
+                        if v:
+                            v = v[0]
+                        else:
+                            v = None
+                    elif k in ["water", "ground", "air", "high_ground"]:
+                        v = bool(v)
+                    elif k in ["woods", "goldmines"]:
+                        v = int(v[0]), v[1]
+                    elif k in ["speed", "cover"]:
+                        v = tuple(map(lambda x: int(float(x) * 100), v[:2]))
+                    t[k] = v
+    return p
+
+##for k, v in load_palette():
+##    print k
+##    for kk, vv in v.items():
+##        print " ", kk, vv
+
 
 class GameInterface(object):
 
@@ -316,6 +360,8 @@ class GameInterface(object):
         else:
             voice.item(mp.BEEP)
 
+    _editor = False
+
     def _execute_command(self, cmd):
         if cmd.startswith("s "):
             self.speed = float(cmd.split(" ")[1])
@@ -335,6 +381,70 @@ class GameInterface(object):
             self.player.resources = [n + 1000 * PRECISION for n in self.player.resources]
         elif cmd == "t":
             self.player.has = lambda x: True
+        elif cmd == "edit":
+            self._editor = not self._editor
+            if self._editor:
+                self.player.cheatmode = True
+                for p in self.world.players:
+                    p.triggers = []
+                self._bindings = Bindings()
+                self._bindings.load(open("res/ui/editor_bindings.txt", "U").read(), self)
+                voice.item(["editor"])
+            else:
+                voice.item(mp.BEEP)
+        elif cmd == "sm":
+            def next_available_filename(name):
+                import os.path
+                n = 0
+                while os.path.exists(name % n):
+                    n += 1
+                return name % n
+            self.world.save_map(next_available_filename("user/multi/editor%s.txt"))
+        elif cmd.startswith("te "):
+            delta = map(int, cmd.split(" ")[1:3])
+            if self.place.toggle_path(*delta):
+                voice.item(["path"])
+            else:
+                voice.item(["obstacle"])
+        elif cmd.startswith("st "):
+            pal = load_palette()
+            name = cmd.split(" ")[1]
+            if name in ["1", "-1"]:
+                try:
+                    i = [d for k, d in pal].index(self._editor_terrain) + int(name)
+                    i %= len(pal)
+                except:
+                    i = 0
+                self._editor_terrain = pal[i][1]
+                voice.item([pal[i][0]])
+            else:
+                for k, d in pal:
+                    if k == name:
+                        self._editor_terrain = d
+                        voice.item([name])
+                        return
+                voice.item(mp.BEEP)
+        elif cmd == "at":
+            d = self._editor_terrain
+            p = self.place
+            p.type_name = d["style"]
+            self._terrain_loop_square = None # must update terrain audio background
+            p.is_water = d["water"]
+            p.is_ground = d["ground"]
+            p.is_air = d["air"]
+            p.high_ground = d["high_ground"]
+            for p2 in p.strict_neighbors:
+                if p.is_ground and p2.is_ground and p.high_ground == p2.high_ground:
+                    p.ensure_path(p2)
+                else:
+                    p.ensure_nopath(p2)
+            p.ensure_resources("goldmine", *d["goldmines"])
+            p.ensure_resources("wood", *d["woods"])
+            p.ensure_meadows(d["meadows"])
+            p.terrain_speed = d["speed"]
+            p.terrain_cover = d["cover"]
+            if d["style"]:
+                voice.item([d["style"]])
         elif cmd:
             cmd = re.sub("^a ", "add_units %s " % getattr(self.place, "name", ""), cmd)
             cmd = re.sub("^v$", "victory", cmd)
@@ -344,14 +454,13 @@ class GameInterface(object):
         if self.server.allow_cheatmode:
             cmd = " ".join(split_cmd)
             self._execute_command(cmd)
-            voice.item([cmd])
         else:
             voice.item(mp.BEEP)
 
     def cmd_console(self):
         if self.server.allow_cheatmode:
             cmd = input_string(msg=mp.ENTER_COMMAND,
-                               pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$",
+                               pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+-=?!]$",
                                spell=False)
             if cmd is None:
                 return
@@ -411,7 +520,11 @@ class GameInterface(object):
     forced_quit = False
 
     def gm_quit(self):
-        if not self.already_asked_to_quit:
+        if self._editor:
+            self.world.save_map("user/multi/editor_autosave.txt")
+            self.srv_quit() # forced quit
+            self.forced_quit = True
+        elif not self.already_asked_to_quit:
             self.server.write_line("quit")
             pygame.event.clear()
             self.already_asked_to_quit = True
@@ -1219,6 +1332,8 @@ class GameInterface(object):
         types = [x for x in style.classnames()
                  if style.has(x, "keyboard")
                  and style.get(x, "keyboard")[0] in keyboard_types]
+        if keyboard_types and not types: # no keyboard type actually exists in the style
+            types = [None] # will select nothing
         return types, local, idle, even_if_no_menu
 
     def cmd_select_unit(self, inc, *args):
@@ -1407,7 +1522,8 @@ class GameInterface(object):
     def _get_prefix_and_collision(self, new_square, dxc, dyc):
         if new_square is self.place:
             return style.get("parameters", "no_path_in_this_direction"), True
-        if self.place not in self.scouted_before_squares:
+        if self.place not in self.scouted_before_squares or \
+           self.place.is_water and new_square.is_water:
             return [], False
         exits = [o for o in self.dobjets.values() if o.is_in(self.place)
                  and self.is_selectable(o)

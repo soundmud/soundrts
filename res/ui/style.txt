@@ -21,7 +21,7 @@ and 23
 resource_0_title 131
 resource_1_title 132
 food_title 133
-recommended_maps jl5 jl6 jl7
+recommended_maps jl8 jl7 jl6 jl5
 
 ; units menus
 
@@ -322,6 +322,24 @@ exhausted
 
 
 ; terrain
+
+def _meadows ; this terrain is applied automatically to any square with meadows and without woods
+title 4362
+noise
+ground ; footstep noise determined by the nearest object
+color
+
+def _forest ; this terrain is applied automatically to any square with some woods
+title 4363
+noise
+ground ; footstep noise determined by the nearest object
+color
+
+def _dense_forest ; this terrain is applied automatically to any square with many woods
+title 4364
+noise
+ground ; footstep noise determined by the nearest object
+color
 
 def river
 title 4346

@@ -46,6 +46,7 @@ class Entity(object):
     id = None
 
     speed = 0
+    speed_on_terrain = ()
     is_moving = False
 
     def __repr__(self):

@@ -509,3 +509,7 @@
 4359 destroyer
 4360 battleship
 4361 submarine
+
+4362 meadows
+4363 forest
+4364 dense forest

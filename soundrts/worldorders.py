@@ -1195,7 +1195,7 @@ class UnloadAllOrder(TransportOrder):
             self.mark_as_impossible()
         elif self.unit.airground_type == "water":
             if self.target in self.unit.place.strict_neighbors \
-               and not self.target.is_water and not self.target.high_ground:
+               and self.target.is_ground and not self.target.high_ground:
                 self.mark_as_complete()
                 self.unit.unload_all(self.target)
             else:

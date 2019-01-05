@@ -66,6 +66,8 @@ class Type(object):
         self.__name__ = name
         self.type_name = name
         self.cls = bases[0]
+        if "cost" not in dct and hasattr(self.cls, "cost"):
+            dct["cost"] = [0] * rules.get("parameters", "nb_of_resource_types")
         if "sight_range" in dct and dct["sight_range"] == 1 * PRECISION:
             dct["sight_range"] = 12 * PRECISION
             dct["bonus_height"] = 1
@@ -120,6 +122,8 @@ class World(object):
         self.computers_starts = []
         self.players_starts = []
         self.starting_units = []
+        self.starting_resources = [] # just for the editor
+        self.specific_starts = [] # just for the editor
 
         self.square_width = 12 # default value
         self.nb_lines = 0
@@ -134,6 +138,8 @@ class World(object):
         self.terrain_speed = {}
         self.terrain_cover = {}
         self.water_squares = set()
+        self.no_air_squares = set()
+        self.ground_squares = set()
 
         # "squares words"
         self.starting_squares = []
@@ -345,11 +351,17 @@ class World(object):
     def cpu_intensive_players(self):
         return [p for p in self.players if p.is_cpu_intensive]
 
+    def _update_terrain(self):
+        for s in self.squares:
+            if s.type_name in ["", "_meadows", "_forest", "_dense_forest"]:
+                s.update_terrain()
+
     _previous_slow_update = 0
 
     def update(self):
         chrono.start("update")
         # normal updates
+        self._update_terrain()
         self._update_buckets()
         self._update_cloaking()
         self._update_detection()
@@ -508,6 +520,9 @@ class World(object):
                     square.terrain_cover = self.terrain_cover[square.name]
                 if square.name in self.water_squares:
                     square.is_water = True
+                    square.is_ground = square.name in self.ground_squares
+                if square.name in self.no_air_squares:
+                    square.is_air = False
         self.set_neighbors()
         xmax = self.nb_columns * self.square_width
         res = COLLISION_RADIUS * 2 / 3
@@ -579,7 +594,16 @@ class World(object):
         g = {}
         for z in self.squares:
             g[z] = {}
-            for z2 in z.neighbors:
+            if not z.is_air:
+                continue
+            # This is not perfect. Some diagonals will be missing.
+            if [z2 for z2 in z.strict_neighbors if not z2.is_air]:
+                n = z.strict_neighbors
+            else:
+                n = z.neighbors
+            for z2 in n:
+                if not z2.is_air:
+                    continue
                 g[z][z2] = int_distance(z.x, z.y, z2.x, z2.y)
         return g  
 
@@ -589,7 +613,12 @@ class World(object):
             g[z] = {}
             if not z.is_water:
                 continue
-            for z2 in z.strict_neighbors:
+            # This is not perfect. Some diagonals will be missing.
+            if [z2 for z2 in z.strict_neighbors if not z2.is_water]:
+                n = z.strict_neighbors
+            else:
+                n = z.neighbors
+            for z2 in n:
                 if not z2.is_water:
                     continue
                 g[z][z2] = int_distance(z.x, z.y, z2.x, z2.y)
@@ -602,6 +631,8 @@ class World(object):
         for t, squares in self.south_north:
             for i in squares:
                 passage(self._sn_places(i), t)
+
+    def _create_graphs(self):
         self.g = {}
         self.g["ground"] = self._ground_graph()
         self.g["air"] = self._air_graph()
@@ -612,6 +643,7 @@ class World(object):
         self._create_resources()
         self._arrange_resources_symmetrically()
         self._create_passages()
+        self._create_graphs()
 
     def _add_start_to(self, starts, resources, items, sq=None):
         def is_a_square(x):
@@ -634,7 +666,7 @@ class World(object):
 
     @property
     def nb_res(self):
-        return int(rules.get("parameters", "nb_of_resource_types")[0])
+        return rules.get("parameters", "nb_of_resource_types")
 
     def _add_start(self, w, words, line):
         # get start type
@@ -754,6 +786,7 @@ class World(object):
                 check_squares(line, squares)
                 getattr(self, w).extend(squares)
             elif w in ["starting_resources"]:
+                self.starting_resources = " ".join(words[1:]) # just for the editor
                 starting_resources = []
                 for c in words[1:]:
                     try:
@@ -766,6 +799,7 @@ class World(object):
             elif w in ["starting_units"]:
                 getattr(self, w).extend(words[1:]) # TODO: error msg (types)
             elif w in ["player", "computer_only", "computer"]:
+                self.specific_starts.append(" ".join(words)) # just for the editor
                 self._add_start(w, words, line)
             elif w == "trigger":
                 triggers.append(words[1:])
@@ -791,6 +825,14 @@ class World(object):
                 squares = words[1:]
                 check_squares(line, squares)
                 self.water_squares.update(squares)
+            elif w == "ground":
+                squares = words[1:]
+                check_squares(line, squares)
+                self.ground_squares.update(squares)
+            elif w == "no_air":
+                squares = words[1:]
+                check_squares(line, squares)
+                self.no_air_squares.update(squares)
             else:
                 map_error(line, "unknown command: %s" % w)
         # build self.players_starts
@@ -916,6 +958,78 @@ class World(object):
 
     def queue_command(self, player, order):
         self._command_queue.put((player, order))
+
+    def save_map(self, filename):
+        def _sorted(squares):
+            return sorted(squares, key=lambda n: (n[0], int(n[1:])))
+        def res():
+            return sorted(set((o.type_name, o.qty / PRECISION) for s in set(self.grid.values()) for o in s.objects if getattr(o, "resource_type", None) is not None),
+                          key=lambda x: (x[0], -x[1]))
+        with open(filename, "w") as f:
+            f.write("title %s\n" % " ".join(map(str, self.title)))
+            f.write("objective %s\n" % " ".join(map(str, self.objective)))
+            f.write("\n")
+            f.write("square_width %s\n" % (self.square_width / PRECISION))
+            f.write("nb_columns %s\n" % self.nb_columns)
+            f.write("nb_lines %s\n" % self.nb_lines)
+            f.write("\n")
+            f.write("nb_players_min %s\n" % self.nb_players_min)
+            f.write("nb_players_max %s\n" % self.nb_players_max)
+            f.write("starting_squares %s\n" % " ".join(_sorted(self.starting_squares)))
+            f.write("starting_units %s\n" % " ".join(self.starting_units))
+            f.write("starting_resources %s\n" % self.starting_resources)
+            for line in self.specific_starts:
+                f.write(line + "\n")
+            f.write("\n")
+            for t, q in res():
+                squares = _sorted(s.name for s in set(self.grid.values()) for o in s.objects if o.type_name == t and o.qty / PRECISION == q)
+                f.write("%s %s %s\n" % (t, q, " ".join(squares)))
+            f.write("\nnb_meadows_by_square 0\n")
+            for n in sorted(set([s.nb_meadows for s in self.grid.values() if s.nb_meadows])):
+                squares = _sorted([s.name for s in set(self.grid.values()) if s.nb_meadows == n])
+                if n == 1:
+                    f.write("; 1 meadow\n")
+                else:
+                    f.write("; %s meadows\n" % n)
+                for _ in range(n):
+                    f.write("additional_meadows %s\n" % " ".join(squares))
+            f.write("\n")
+            for t in sorted(set([s.type_name for s in self.grid.values() if s.type_name])):
+                squares = _sorted([s.name for s in set(self.grid.values()) if s.type_name == t])
+                f.write("terrain %s %s\n" % (t, " ".join(squares)))
+            squares = _sorted([s.name for s in set(self.grid.values()) if s.high_ground])
+            f.write("high_grounds %s\n" % " ".join(squares))
+            squares = _sorted([s.name for s in set(self.grid.values()) if s.is_water])
+            f.write("water %s\n" % " ".join(squares))
+            squares = _sorted([s.name for s in set(self.grid.values()) if s.is_ground and s.is_water])
+            f.write("ground %s\n" % " ".join(squares))
+            squares = _sorted([s.name for s in set(self.grid.values()) if not s.is_air])
+            f.write("no_air %s\n" % " ".join(squares))
+            for t in sorted(set([s.terrain_cover for s in self.grid.values() if s.terrain_cover != (0, 0)])):
+                squares = _sorted([s.name for s in set(self.grid.values()) if s.terrain_cover == t])
+                f.write("cover %s %s\n" % (" ".join(map(lambda x: str(x / 100.0), t)), " ".join(squares)))
+            for t in sorted(set([s.terrain_speed for s in self.grid.values() if s.terrain_speed != (100, 100)])):
+                squares = _sorted([s.name for s in set(self.grid.values()) if s.terrain_speed == t])
+                f.write("speed %s %s\n" % (" ".join(map(lambda x: str(x / 100.0), t)), " ".join(squares)))
+            f.write("\n")
+            we = dict()
+            sn = dict()
+            for s in set(self.grid.values()):
+                for e in s.exits:
+                    o = e.other_side.place
+                    delta = o.col - s.col, o.row - s.row
+                    if delta == (1, 0):
+                        if e.type_name not in we:
+                            we[e.type_name] = []
+                        we[e.type_name].append(s.name)
+                    elif delta == (0, 1):
+                        if e.type_name not in sn:
+                            sn[e.type_name] = []
+                        sn[e.type_name].append(s.name)
+            for tn in we:
+                f.write("west_east %s %s\n" % (tn, " ".join(_sorted(we[tn]))))
+            for tn in sn:
+                f.write("south_north %s %s\n" % (tn, " ".join(_sorted(sn[tn]))))
 
 
 class MapError(Exception):

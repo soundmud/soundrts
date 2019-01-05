@@ -18,7 +18,7 @@ If you are allowed to write in the folder where SoundRTS (or SoundRTS test) is i
 then you can store your first multiplayer map in the "multi" folder.
 
 If you are not allowed to write in the program files folder because you work in non-admin mode, you can store your working map file in the "multi"
-folder in "C:\\Documents and Settings\\Your Login\\Application Data\\SoundRTS". This folder is created the first time you start SoundRTS.
+folder in "C:\\Documents and Settings\\Your Login\\Application Data\\SoundRTS". This folder is created the first time you start SoundRTS, unless a "user" folder exists near soundrts.exe.
 Another solution is to install SoundRTS in a folder where you are allowed to write, and to work in the folder mentionned in the previous paragraph.
 
 How to edit a map
@@ -417,3 +417,43 @@ sequence 7500 7501 7502
 The first line is a keyword used to tell the game that this chapter is a cut scene and not a mission.
 The title line is used in the campaign menu.
 The sequence line means: "play the sound 7500.ogg followed by 7501 and 7502; if the player presses a key, skip the current sound and play the next one." 
+
+Map editor (experimental)
+-------------------------
+
+The client includes an experimental map editor for multiplayer maps. It only works for the terrain, so you still have to edit manually the map for the units.
+
+Launch the editor
+"""""""""""""""""
+
+Start a game on a map. This map will be the starting point. Enter the console (press the key under escape) and enter the command: "edit". Press Enter. The editor keyboard bindings will be loaded from res/ui/editor_bindings.txt.
+
+Select a terrain from the palette
+"""""""""""""""""""""""""""""""""
+
+Press PageUp or PageDown to select a terrain. The meaning of each terrain is stored in res/ui/editor_palette.txt
+
+Apply a terrain to a square
+"""""""""""""""""""""""""""
+
+Press Enter to apply the terrain to the current square. Neighboring squares with the same caracteristics (ground and same height) will be linked automatically by a path. Different squares will have their path removed.
+
+Toggle path to a neighbor
+"""""""""""""""""""""""""
+
+Press Control + Shift + arrow to add or remove the path in the corresponding direction.
+
+Save map
+""""""""
+
+Press Control + s to save the map. The file will never overwrite another file. The name of the file will be user/multi/editor0.txt, editor1.txt, editor2.txt, etc.
+
+Quit editor
+"""""""""""
+
+Press F10 and quit the game to leave the editor. An autosave of the map will be done just in case (but don't count on it too much). Its name is user/multi/editor_autosave.txt
+
+Add units
+"""""""""
+
+Open the file in a text editor. Use commands mentionned in `Defining the starting resources of the players`_.

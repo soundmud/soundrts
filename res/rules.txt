@@ -244,6 +244,7 @@ class soldier
 food_cost 0
 hp_max 23
 speed 1
+speed_on_terrain marsh 1 ford 1
 can_use melee_weapon melee_armor
 armor 0.5
 armor_bonus 1
@@ -294,6 +295,7 @@ class soldier
 food_cost 0
 hp_max 15
 speed 1.5
+speed_on_terrain marsh 1.5 ford 1.5
 can_use archer_weapon archer_armor archer_range
 armor 0
 cooldown 1.5
@@ -384,6 +386,7 @@ hp_max 30
 mana_max 200
 mana_regen 1 ; mana / second
 speed 1
+speed_on_terrain marsh 1 ford 1
 can_use a_raise_dead a_deadly_fog
 range 6
 cooldown 1.5

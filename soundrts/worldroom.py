@@ -4,7 +4,8 @@ from lib.msgs import nb2msg
 from lib.nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
 from lib.priodict import priorityDictionary
 from worldentity import COLLISION_RADIUS
-from worldresource import Meadow
+from worldexit import passage
+from worldresource import Deposit, Meadow
 
 
 SPACE_LIMIT = 144
@@ -47,7 +48,9 @@ class Square(object):
     type_name = ""
     terrain_speed = (100, 100)
     terrain_cover = (0, 0)
+    is_ground = True
     is_water = False
+    is_air = True
 
     def __init__(self, world, col, row, width):
         self.col = col
@@ -105,7 +108,7 @@ class Square(object):
 
     @property
     def is_near_water(self):
-        if self.is_water or self.high_ground:
+        if not self.is_ground or self.high_ground:
             return False
         for sq in self.strict_neighbors:
             if sq.is_water:
@@ -256,10 +259,11 @@ class Square(object):
         return int_angle(xc, yc, self.col * 10 + 5, self.row * 10 + 5)
 
     def arrange_resources_symmetrically(self, xc, yc):
+        things = [o for o in self.objects if isinstance(o, (Deposit, Meadow))]
         square_width = self.xmax - self.xmin
-        nb = len(self.objects)
+        nb = len(things)
         shift = self._shift(xc, yc)
-        for i, o in enumerate(self.objects):
+        for i, o in enumerate(things):
             x = self.x
             y = self.y
             if nb > 1:
@@ -300,3 +304,65 @@ class Square(object):
                not self.world.collision[airground_type].would_collide(x, y):
                 return x, y
         return None, None
+
+    def ensure_path(self, other):
+        if other not in [e.other_side.place for e in self.exits]:
+            x = (self.x + other.x) / 2
+            y = (self.y + other.y) / 2
+            passage(((self, x, y, 0), (other, x, y, 0), False), "path")
+            self.world._create_graphs()
+
+    def ensure_nopath(self, other):
+        for e in self.exits:
+            if other == e.other_side.place:
+                e.delete()
+
+    def toggle_path(self, dc, dr):
+        other = self.world.grid.get((self.col + dc, self.row + dr))
+        if not other: # border
+            return
+        if other in [e.other_side.place for e in self.exits]:
+            self.ensure_nopath(other)
+        else:
+            self.ensure_path(other)
+            return True
+
+    def ensure_meadows(self, n):
+        for o in self.objects[:]:
+            if n >= self.nb_meadows:
+                break
+            if o.is_a_building_land and not getattr(o, "is_an_exit", False):
+                o.delete()
+        for _ in range(n - self.nb_meadows):
+            Meadow(self)
+        self.arrange_resources_symmetrically(self.x, self.y)
+
+    def ensure_resources(self, t, n, q):
+        for o in self.objects[:]:
+            if o.type_name == t:
+                o.delete()
+        for _ in range(n):
+            self.world.unit_class(t)(self, q)
+
+    @property
+    def nb_meadows(self):
+        return len([o for o in self.objects if o.is_a_building_land and not getattr(o, "is_an_exit", False) or o.building_land and not getattr(o, "qty", 0)])
+
+    def update_terrain(self):
+        meadows = len([o for o in self.objects if o.type_name == "meadow"])
+        woods = len([o for o in self.objects if o.type_name == "wood"])
+        if woods >= 3:
+            self.type_name = "_dense_forest"
+        elif woods:
+            self.type_name = "_forest"
+        elif meadows:
+            self.type_name = "_meadows"
+        else:
+            self.type_name = ""
+        # dynamic path through forest
+        if self.type_name == "_dense_forest":
+            for s in self.strict_neighbors:
+                if s.type_name == "_dense_forest":
+                    self.ensure_nopath(s)
+                elif s.high_ground == self.high_ground:
+                    self.ensure_path(s)

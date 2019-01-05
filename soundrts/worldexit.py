@@ -17,7 +17,10 @@ class Exit(Entity):
         self._blockers = []
 
     def __repr__(self):
-        return "<Exit to '%s'>" % self.other_side.place.name
+        try:
+            return "<Exit to '%s'>" % self.other_side.place.name
+        except:
+            return "<Exit to nowhere>"
 
     def is_blocked(self, o=None, ignore_enemy_walls=False):
         for b in self._blockers + getattr(self.other_side, "_blockers", []):
@@ -39,6 +42,13 @@ class Exit(Entity):
     @property
     def is_a_building_land(self):
         return not self.is_blocked(None)
+
+    def delete(self):
+        self.place.exits.remove(self)
+        if self.other_side:
+            self.other_side.other_side = None
+            self.other_side.delete()
+        Entity.delete(self)
 
 
 def passage(places, exit_type):

@@ -48,13 +48,13 @@ class Bindings(object):
 
     def __init__(self):
         self._bindings = {}
-        self._definitions = []
+        self._definitions = dict()
 
     def _apply_definitions(self, line):
         # "\w" means "alphanumeric character (or the underscore)"
         # "(?<!\w)" means "no '\w' before"
         # "(?!\w)" means "no '\w' after"
-        for name, value in self._definitions:
+        for name, value in self._definitions.items():
             # replace name with value
             line = re.sub(r"(?<!\w)%s(?!\w)" % name, value, line)
         return line
@@ -64,7 +64,7 @@ class Bindings(object):
             _, name, value = line.strip().split(" ", 2)
         except ValueError:
             raise _Error("the defined value is missing")
-        self._definitions.append([name, value])
+        self._definitions[name] = value
 
     def _add_binding(self, line, command_from_name):
         key_string, command_string = line.strip().split(":", 1)

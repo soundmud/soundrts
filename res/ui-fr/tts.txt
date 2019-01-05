@@ -497,3 +497,7 @@
 4359 destroyer
 4360 cuirassé
 4361 sous-marin
+
+4362 prairies
+4363 forêt
+4364 forêt épaisse

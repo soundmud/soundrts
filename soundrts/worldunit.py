@@ -419,7 +419,7 @@ class Creature(Entity):
 
         self.is_moving = False
 
-        if self.is_inside:
+        if self.is_inside or self.player is None:
             return
 
         if self.heal_level:

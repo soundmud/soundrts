@@ -1,5 +1,7 @@
 import urllib2
 
+import msgparts as mp
+
 
 # old value used by some features (stats, ...)
 METASERVER_URL = "http://jlpo.free.fr/soundrts/metaserver/"

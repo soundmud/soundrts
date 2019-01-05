@@ -7,7 +7,7 @@ from definitions import rules, style, MAX_NB_OF_RESOURCE_TYPES
 from lib import group
 from lib.log import info, warning, exception
 from lib.msgs import encode_msg, nb2msg
-from lib.nofloat import square_of_distance, PRECISION
+from lib.nofloat import square_of_distance, to_int, PRECISION
 import msgparts as mp
 from worldentity import NotEnoughSpaceError, Entity
 from worldresource import Corpse
@@ -58,7 +58,7 @@ class Objective(object):
 
 
 def normalize_cost_or_resources(lst):
-    n = int(rules.get("parameters", "nb_of_resource_types")[0])
+    n = rules.get("parameters", "nb_of_resource_types")
     while len(lst) < n:
         lst += [0]
     while len(lst) > n:
@@ -368,7 +368,9 @@ class Player(object):
     def _update_actual_speed(self):
         for u in self.units:
             try:
-                if u.airground_type == "water":
+                if u.place.type_name in u.speed_on_terrain:
+                    u.actual_speed = to_int(u.speed_on_terrain[u.speed_on_terrain.index(u.place.type_name) + 1])
+                elif u.airground_type == "water":
                     u.actual_speed = u.speed
                 else:
                     u.actual_speed = u.speed * u.place.terrain_speed[0 if u.airground_type == "ground" else 1] / 100
@@ -385,7 +387,7 @@ class Player(object):
     def _update_drowning(self):
         for u in self.units[:]:
             if u.is_vulnerable and u.airground_type == "ground" \
-               and getattr(u.place, "is_water", False):
+               and not getattr(u.place, "is_ground", True):
                 u.die()
 
     def update(self):
@@ -573,6 +575,8 @@ class Player(object):
                 self.forbidden_techs.append(type_[1:])
             elif isinstance(type_, Upgrade):
                 self.upgrades.append(type_.type_name) # type_.upgrade_player(self) would require the units already there
+            elif not type_:
+                warning("couldn't create an initial unit")
             else:
                 place = self.world.grid[place]
                 x, y, land = place.find_and_remove_meadow(type_)
