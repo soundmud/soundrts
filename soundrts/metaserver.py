@@ -1,5 +1,6 @@
 import urllib2
 
+from lib.log import warning
 import msgparts as mp
 
 
