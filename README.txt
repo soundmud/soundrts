@@ -1,6 +1,6 @@
 SoundRTS is a real-time strategy audio game.
 
-Warning: the source code is the contorted result of a lot of iterations on an ever-evolving prototype. Some refactorings made things even worse. Sorry for that.
+Feel free to experiment on the code base, but don't feel obliged to contribute back.
 
 The license for the Python source code is a BSD 3-clause license (LICENSE.txt).
 The license for the rest is unclear at the moment.
