@@ -40,6 +40,12 @@ if platform.system() == "Windows":
         ("tts", "srapi", 1),
         ("tts", "srapi_wait", .1),
     ]
+else:
+    _options += [
+        ("tts", "jaws", 0),
+        ("tts", "srapi", 0),
+        ("tts", "srapi_wait", .1),
+    ]
 
 def add_converter(option):
     if len(option) == 4:
