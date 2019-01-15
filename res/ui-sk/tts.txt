@@ -59,7 +59,7 @@
 115 na
 116 na východ
 117 na západ
-118 upraviť
+118 opraviť
 119 na
 120 boj
 121 proti
@@ -82,7 +82,7 @@
 139 skupinu
 
 142 produkcia pozastavená
-143 zoznam je plný
+143 poradovník je plný
 144 vyčerpaný
 145 neutralizovaných
 146 stratených
@@ -94,7 +94,7 @@
 152 upozornenie
 153 most
 154 otvorené
-155 postúpili ste
+155 postúpili ste do levelu
 156 v strede
 
 
@@ -150,7 +150,43 @@
 2057 ovládanie všetkých roľníkov na vami vybratom políčku
 2058 ovládanie ďalšej stavby
 2059 ovládanie ďalšieho roľníka
-
+3000 0
+3001 1
+3002 2
+3003 3
+3004 4
+3005 5
+3006 6
+3007 7
+3008 8
+3009 9
+3010 10
+3011 11
+3012 12
+3013 13
+3014 14
+3015 15
+3016 16
+3017 17
+3018 18
+3019 19
+3020 20
+3021 21
+3030 30
+3031 31
+3040 40
+3041 41
+3050 50
+3051 51
+3060 60
+3061 61
+3070 70
+3071 71
+3080 80
+3090 90 
+3100 sto
+3101 tisíc
+3102 milión
 
 4000 hra
 4001 na internete
@@ -159,7 +195,7 @@
 4005 zlihalo
 4006 úspešne
 4007 vyberte si
-4008 pošlite svoje pripomienky na jlpo@free.fr
+4008 prosím, pošlite vaše pripomienky na jlpo@free.fr
 4009 ukončiť
 4010 menu
 4011 pokračovať
@@ -172,7 +208,7 @@
 4019 pripojiť sa
 4020 úloha:
 4021 ubrániť sa nepriateľským útokom
-4022 produkovaný
+4022 produkovaných
 4023 produkovaných
 4024 využitých
 4025 stavba
@@ -186,7 +222,7 @@
 4033 viac hráčov
 4034 hrať na internete
 4035 server
-4036 spustiť server na vašom počítači pre vytváranie hier pre viacero hráčov
+4036 spustiť server na vašom počítači pre vytváranie hier pre viacerých hráčov
 4037 nastavenia
 4038 zmeňte svoje parametre
 
@@ -198,14 +234,14 @@
 4046 verejný server
 4047 hráči môžu vytvárať hry
 4048 zrušiť
-4049 Váš server nemôže byť registrovaný na metaserveri. Skontrolujte vaše pripojenie na internet.
+4049 Vášmu serveru sa pravdepodobne nepodarilo zaregistrovať na metaserveri. Skontrolujte vaše pripojenie na internet.
 4051 dovidenia
 4052 stlačte tab na výber, stlačte enter na potvrdenie
 4053 prijať pozvanie od
 4054 pripojiť sa
 4055 začať hru na
 4056 vitajte
-4057 Chyba: Je príliš veľa hier!
+4057 Chyba: Je priveľa hier!
 4058 pozvať
 4059 začať
 4060 zrušiť túto hru
@@ -227,9 +263,9 @@
 4077 Momentálne nie je na metaserveri registrovaný žiadny server. Skúste to neskôr.
 4078 servery na
 4079 použite kompatibilnú verziu
-4080 Chyba: Server sa nemôže spustiť.
-4081 Chyba: Nie je možné nadviazať spojenie so serverom. Server je vypnutý, alebo sa nachádza za bránou Firewall, alebo routrom.
-4082 chyba: od tohoto servera boli prijaté nečakané údaje. Toto nie je SoundRTS server.
+4080 Chyba: Server sa nemohol spustiť.
+4081 Chyba: server neodpovedá. Server je vypnutý, alebo sa nachádza za bránou Firewall, alebo routerom.
+4082 chyba: tento server odoslal nečakané údaje. Toto nie je SoundRTS server.
 4083 chyba: server odmietol pripojenie. Toto nie je SoundRTS server.
 4084 alebo vaše prihlasovacie údaje boli odmietnuté.
 4085 chyba pri pripájaní na server
@@ -252,7 +288,7 @@
 4114 hrať proti počítaču na mape
 4115 počítač verzus počítač
 
-4118 naspäť na predchádzajúce menu
+4118 naspäť do predchádzajúceho menu
 4119 vybrať server zo zoznamu
 4120 vložiť IP adresu servera
 4121 súkromný server
@@ -304,8 +340,8 @@
 4243 vás pozýva
 4244 Nie je dosť hráčov na začatie hry. Minimálny počet je
 4245 aktuálne prihlasovacie meno
-4246 limit populácie bol dosiahnutý
-4247 mana body z
+4246 populačný limit bol dosiahnutý
+4247 mana bodov z
 4248 trénovať
 4249 super liečiteľ
 4250 teleportácia
@@ -313,7 +349,7 @@
 4252 nie je dosť many
 4253 percento hlasitosti
 4254 rýchlosť koní
-4255 určte zhromaždenie pre ďalšie jednotky
+4255 určite miesto zhromažďovania sa pre ďalšie jednotky
 4256 získaných
 4257 agresívny počítač
 4258 pokojný počítač
@@ -340,14 +376,41 @@
 4279 naložiť všetko z
 4280 vyložiť
 4281 vyložiť všetko z
-4282 vlož do
+4282 vložiť do
 4283 temný lukostrelec
+
+5000 a
+5001 b
+5002 c
+5003 d
+5004 e
+5005 f
+5006 g
+5007 h
+5008 i
+5009 j
+5010 k
+5011 l
+5012 m
+5013 n
+5014 o
+5015 p
+5016 q
+5017 r
+5018 s
+5019 t
+5020 u
+5021 v
+5022 w
+5023 x
+5024 y
+5025 z
 
 5026 bodka
 
 4284 presuň
 4285 do aliancie
-4286 príbuzný
+4286 spojenec
 4287 povedal
 4288 zadajte vašu správu
 
@@ -377,7 +440,7 @@
 4305 smrtiaca hmla
 4306 meteory
 
-4307 povolanie
+4307 zavolať späť
 
 4308 kameňa
 4309 kameňolom
@@ -422,3 +485,32 @@
 
 4338 masívne hradby
 4339 masívna brána
+4340 Začať verejnú hru na
+4341 Mody
+4342 Zvukové balíčky
+4343 rýchlosť
+
+4344 more
+4345 jazero
+4346 rieka
+4347 vrch
+4348 most
+4349 brod
+4350 močiar
+4351 oceán
+4352 horský priechod
+
+4353 povoliť automatické opravy
+4354 zakázať automatické opravy
+4355 povoliť automatické zhromažďovanie
+4356 zakázať automatické zhromažďovanie
+
+4357 lodenica
+4358 čln
+4359 torpédoborec
+4360 bojová loď
+4361 ponorka
+
+4362 lúky
+4363 les
+4364 hustý les
