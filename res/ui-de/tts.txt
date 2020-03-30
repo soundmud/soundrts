@@ -443,3 +443,73 @@
 
 4308 stein
 4309 steinbruch
+
+4311 wurde besiegt
+4312 Du wurdest besiegt.
+4313 Du bist jetzt im Beobachter-Modus.
+
+4314 plateau
+
+4315 Beobachte ein aufgenommenes Spiel.
+4316 Drücke strg+shift+F4, um einen anderen Spieler zu beobachten.
+
+4317 Gebe einen Befehl ein.
+
+4318 zoom
+
+4319 Die Reihenfolge ändern, in der Mods geladen werden.
+4320 Einen Mod zur Liste hinzufügen
+4321 die Liste ist leer
+4322 wird geladen
+
+4323 Pakete
+4324 Paketmenü
+4325 Paket installieren
+4326 Paket deinstallieren
+4327 Paket aktualisieren
+4328 Lade herunter...
+4329 Extrahiere...
+4330 Konnte mod nicht finden:
+
+4331 Mauer
+4332 Tor
+4333 block
+
+4334 zufällige Art
+
+4335 Höchste Anzahl erreicht
+
+4336 user-Ordner öffnen
+4337 Anleitung
+
+4338 massive Mauer
+4339 massives Tor
+4340 Starte ein öffentliches Spiel auf
+4341 Mods
+4342 Soundpacks
+4343 Geschwindigkeit
+
+4344 Meer
+4345 See
+4346 Fluss
+4347 Berg
+4348 Brücke
+4349 Furt
+4350 Sumpf
+4351 Ozean
+4352 Gebirgspass
+
+4353 automatische Reparatur aktivieren
+4354 automatische Reparatur deaktivieren
+4355 automatisches Sammeln aktivieren
+5356 automatisches Sammeln deaktivieren
+
+5357 Schiffswerft
+4358 Boot
+4359 Zerstörer
+4360 Kampfschiff
+4361 U-Boot
+
+4362 Wiese
+4363 Wald
+4364 dichter Wald
