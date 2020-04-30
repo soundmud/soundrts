@@ -22,7 +22,6 @@ from lib import chronometer as chrono
 from lib import group
 from lib.bindings import Bindings
 from lib.log import debug, warning, exception
-from lib.fixmods import eventually_fix_modifier_keys, get_modifier_keys_status
 from lib.msgs import nb2msg, eval_msg_and_volume
 from lib.nofloat import PRECISION
 from version import IS_DEV_VERSION
@@ -819,7 +818,6 @@ class GameInterface(object):
                    and self.server.orders_are_ready():
                     self._ask_for_update()
                 self._animate_objects()
-                eventually_fix_modifier_keys()
                 self._process_events()
                 self._process_srv_events()
                 voice.update() # useful for SAPI
@@ -1663,7 +1661,6 @@ class GameInterface(object):
     def display_metrics(self):
         warn = (255, 0, 0)
         normal = (0, 200, 0)
-        screen_render(get_modifier_keys_status(), (0, 0))
         screen_render("total delay: %sms" % chrono.ms(time.time() - self.next_update),
                       (0, 30),
                       color=warn if time.time() > self.next_update else normal)
