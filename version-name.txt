@@ -1,1 +1,1 @@
-1.2 continuous 13
+1.3 beta 1
