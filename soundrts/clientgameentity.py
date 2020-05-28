@@ -332,13 +332,13 @@ class EntityView(object):
         if st[0] == "ambient":
             self.ambient_noise = True
             del st[0]
-        if st[0] == "loop":
+        if st[0] == "loop" and len(st) >= 2:
             self.loop_noise = st[1]
             try:
                 self.loop_volume = float(st[2])
             except IndexError:
                 self.loop_volume = 1
-        elif st[0] == "repeat":
+        elif st[0] == "repeat" and len(st) >= 3:
             self.repeat_interval = float(st[1])
             self.repeat_noises = st[2:]
 
