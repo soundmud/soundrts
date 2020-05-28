@@ -966,7 +966,7 @@ class Player(object):
                 return
             for u in self.group:
                 if u.group and u.group != self.group:
-                    u.group.remove(u)
+                    if u in u.group: u.group.remove(u)
                     u.group = None
                 if u.player in self.allied_control: # in case the unit has died or has been converted
                     try:
