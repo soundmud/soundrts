@@ -250,7 +250,9 @@ class GameInterface(object):
             if self.order.startswith("build") and o.is_a_building_land:
                 p = 0
         else:
-            if o.qty > 0:
+            if self.player.is_an_enemy(o):
+                p = .5
+            elif o.qty > 0:
                 p = 1 + o.resource_type / 100.0 # less than 100 resource types
             elif o.is_repairable and o.hp < o.hp_max:
                 p = 2
