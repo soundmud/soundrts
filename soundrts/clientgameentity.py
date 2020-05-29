@@ -187,15 +187,15 @@ class EntityView(object):
         d = []
         try:
             if hasattr(self, "qty") and self.qty:
-                d += mp.CONTAINS + nb2msg(self.qty) \
+                d += mp.COMMA + mp.CONTAINS + nb2msg(self.qty) \
                      + style.get("parameters",
                                  "resource_%s_title" % self.resource_type)
             if hasattr(self, "hp"):
-                d += self.hp_status
+                d += mp.COMMA + self.hp_status
             if hasattr(self, "mana"):
-                d += self.mana_status
+                d += mp.COMMA + self.mana_status
             if hasattr(self, "upgrades"):
-                d += self.upgrades_status
+                d += mp.COMMA + self.upgrades_status
             if getattr(self, "is_invisible", 0) or getattr(self, "is_cloaked", 0):
                 d += mp.COMMA + mp.INVISIBLE
             if getattr(self, "is_a_detector", 0):
