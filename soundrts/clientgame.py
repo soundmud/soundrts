@@ -144,6 +144,7 @@ class GameInterface(object):
         self.group = []
         self.lost_units = []
         self.neutralized_units = []
+        self.new_enemy_units = []
         self.previous_menus = {}
         self.scout_info = set()
         self._known_resource_places = set()
@@ -890,7 +891,9 @@ class GameInterface(object):
                 self.dobjets[m.id].model = m
         for m in self.perception:
             if m.id not in self.dobjets:
-                if self.player.is_an_enemy(m) or self._must_report_resource(m):
+                if self.player.is_an_enemy(m):
+                    self.new_enemy_units.append([EntityView(self, m).short_title, m.place])
+                if self._must_report_resource(m):
                     self.scout_info.add(m.place)
             elif self.dobjets[m.id].is_memory:
                 self._delete_object(m.id) # perception will replace memory
@@ -1007,9 +1010,9 @@ class GameInterface(object):
                 continue
             if self.player.is_an_enemy(obj.model):
                 enemies.append(obj.short_title)
-            if obj.model.player in self.player.allied and not obj.model in self.player.units:
+            if obj.model.player in self.player.allied and obj.model.player is not self.player:
                 allies.append(obj.short_title)
-            if obj.model in self.player.units:
+            if obj.model.player is self.player:
                 units.append(obj.short_title)
             if getattr(obj.model, "resource_type", None) is not None:
                 resources.append(obj.short_title)
@@ -1072,11 +1075,12 @@ class GameInterface(object):
     previous_units_alert = None
 
     def units_alert_if_needed(self, place=None):
-        if (self.neutralized_units or self.lost_units) and \
+        if (self.neutralized_units or self.lost_units or self.new_enemy_units) and \
            (self.previous_units_alert is None
                 or time.time() > self.previous_units_alert + 10):
             self.units_alert(self.neutralized_units, mp.NEUTRALIZED, brief=False)
             self.units_alert(self.lost_units, mp.LOST)
+            self.units_alert(self.new_enemy_units, mp.ENEMY)
             if place:
                 self.tell_enemies_in_square(place) # if lost fight
             self.previous_units_alert = time.time()
