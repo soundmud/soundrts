@@ -982,8 +982,10 @@ class GameInterface(object):
                 self._send_menu_alert_if_needed(u.type_name, u.strict_menu, u.short_title)
                 done.append(u.type_name)
 
-    def summary(self, group):
+    def summary(self, group, brief=False):
         types = _remove_duplicates(group) # set() would lose the order
+        if brief and len(types) > 2:
+            return nb2msg(len(group))
         result = []
         for t in types:
             if t == types[-1] and len(types) > 1:
@@ -993,7 +995,7 @@ class GameInterface(object):
             result += nb2msg(group.count(t)) + t
         return result
 
-    def place_summary(self, place, me=True, zoom=None):
+    def place_summary(self, place, me=True, zoom=None, brief=False):
         enemies = []
         allies = []
         units = []
@@ -1013,12 +1015,12 @@ class GameInterface(object):
                 resources.append(obj.short_title)
         result = []
         if enemies:
-            result += mp.COMMA + self.summary(enemies) + mp.ENEMY
+            result += mp.COMMA + self.summary(enemies, brief=brief) + mp.ENEMY
         if me and allies:
             result += mp.COMMA + self.summary(allies) + mp.ALLY
         if me and units:
             result += mp.COMMA + self.summary(units)
-        if resources:
+        if resources and (not enemies or not brief):
             result += mp.COMMA + self.summary(resources)
         return result
 
@@ -1040,13 +1042,13 @@ class GameInterface(object):
         enemies = [x.short_title for x in self.dobjets.values()
                    if x.is_in(place) and self.player.is_an_enemy(x.model)]
         if enemies:
-            voice.info(self.summary(enemies) + mp.ENEMY + mp.AT + place.title)
+            voice.info(self.summary(enemies, brief=True) + mp.ENEMY + mp.AT + place.title)
 
-    def units_alert(self, units, msg_end):
+    def units_alert(self, units, msg_end, brief=True):
         places = set([x[1] for x in units if x[1] is not None])
         for place in places:
             units_in_place = [x[0] for x in units if x[1] is place]
-            s = self.summary(units_in_place)
+            s = self.summary(units_in_place, brief=brief)
             if s:
                 voice.info(s + msg_end + mp.AT + place.title)
         while units:
@@ -1061,7 +1063,7 @@ class GameInterface(object):
         if self.scout_info and (self.previous_scout_info is None or
                 time.time() > self.previous_scout_info + 10):
             for place in self.scout_info:
-                s = self.place_summary(place, me=False)
+                s = self.place_summary(place, me=False, brief=True)
                 if s:
                     voice.info(s + mp.AT + place.title)
             self.scout_info = set()
@@ -1073,7 +1075,7 @@ class GameInterface(object):
         if (self.neutralized_units or self.lost_units) and \
            (self.previous_units_alert is None
                 or time.time() > self.previous_units_alert + 10):
-            self.units_alert(self.neutralized_units, mp.NEUTRALIZED)
+            self.units_alert(self.neutralized_units, mp.NEUTRALIZED, brief=False)
             self.units_alert(self.lost_units, mp.LOST)
             if place:
                 self.tell_enemies_in_square(place) # if lost fight
