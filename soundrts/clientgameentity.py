@@ -162,7 +162,10 @@ class EntityView(object):
 
     @property
     def short_title(self):
-        return compute_title(self.type_name)
+        if self.type_name == "buildingsite":
+            return compute_title(self.type.type_name) + compute_title(self.type_name)
+        else:
+            return compute_title(self.type_name)
 
     @property
     def hp_status(self):
