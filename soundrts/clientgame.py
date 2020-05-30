@@ -858,6 +858,8 @@ class GameInterface(object):
             self.toggle_immersion()
         elif self.zoom_mode:
             self.cmd_toggle_zoom()
+        elif self.target:
+            self._select_and_say_square(self.place)
 
     def _delete_object(self, _id):
         self.dobjets[_id].stop()
