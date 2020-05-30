@@ -73,10 +73,10 @@ class Zoom(object):
         self.parent.target = None
         self.parent.follow_mode = False
 
-    def say(self):
+    def say(self, prefix=[]):
         postfix = self.parent.square_postfix(self.parent.place)
         summary = self.parent.place_summary(self.parent.place, zoom=self)
-        voice.item(self.title + postfix + summary)
+        voice.item(prefix + self.title + postfix + summary)
 
     def update_coords(self):
         sq = self.parent.place

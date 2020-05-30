@@ -1656,9 +1656,10 @@ class GameInterface(object):
         self.zoom_mode = not self.zoom_mode
         if self.zoom_mode:
             self.zoom = Zoom(self)
-            voice.item(mp.ZOOM + mp.IS_NOW_ON)
+            self.target = None
+            self.zoom.say(prefix=mp.ZOOM+mp.IS_NOW_ON+mp.COMMA)
         else:
-            voice.item(mp.ZOOM + mp.IS_NOW_OFF)
+            self._select_and_say_square(self.place, prefix=mp.ZOOM+mp.IS_NOW_OFF+mp.COMMA)
 
     # display
 
