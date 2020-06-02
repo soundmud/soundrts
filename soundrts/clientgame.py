@@ -527,6 +527,7 @@ class GameInterface(object):
             self.srv_quit() # forced quit
             self.forced_quit = True
         elif not self.already_asked_to_quit:
+            self.next_update = time.time() # useful if the game is paused
             self.server.write_line("quit")
             pygame.event.clear()
             self.already_asked_to_quit = True
