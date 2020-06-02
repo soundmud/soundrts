@@ -447,6 +447,8 @@ class GameInterface(object):
             p.terrain_cover = d["cover"]
             if d["style"]:
                 voice.item([d["style"]])
+        elif cmd == "dti":
+            self._must_display_target_info = not self._must_display_target_info
         elif cmd:
             cmd = re.sub("^a ", "add_units %s " % getattr(self.place, "name", ""), cmd)
             cmd = re.sub("^v$", "victory", cmd)
@@ -1692,9 +1694,13 @@ class GameInterface(object):
                       color=warn if self._get_relative_speed() < self.speed * .9
                       else normal)
 
+    _must_display_target_info = False
+
     def _display_target_info(self):
         dy = 0
         if self.target is not None:
+            screen_render("TARGET INFO", (-1, 100 + dy), right=True)
+            dy += 15
             try:
                 screen_render(repr(self.target.model), (-1, 100 + dy), color=(255, 255, 255), right=True)
                 dy += 15
@@ -1706,6 +1712,8 @@ class GameInterface(object):
                 exception("error inspecting target: %s", self.target)
         if self.place is not None:
             dy += 15
+            screen_render("PLACE INFO", (-1, 100 + dy), right=True)
+            dy += 15
             try:
                 screen_render(repr(self.place), (-1, 100 + dy), color=(255, 255, 255), right=True)
                 dy += 15
@@ -1716,6 +1724,8 @@ class GameInterface(object):
             except:
                 exception("error inspecting place: %s", self.place)
         dy = 0
+        screen_render("PLAYER INFO", (-1, 100 + dy))
+        dy += 15
         d = self.player.__dict__
         for k in sorted(d):
             try:
@@ -1743,7 +1753,7 @@ class GameInterface(object):
             )
         if self._must_play_tick or IS_DEV_VERSION:
             self.display_metrics()
-        if False and IS_DEV_VERSION and get_fullscreen():
+        if self._must_display_target_info and get_fullscreen():
             self._display_target_info()
         screen_render_subtitle()
         pygame.display.flip()
