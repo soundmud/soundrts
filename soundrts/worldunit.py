@@ -653,8 +653,6 @@ class Creature(Entity):
         order.immediate_action()
 
     def get_default_order(self, target_id):
-        if target_id and target_id.startswith("zoom"):
-            return "go"
         target = self.player.get_object_by_id(target_id)
         if not target:
             return
