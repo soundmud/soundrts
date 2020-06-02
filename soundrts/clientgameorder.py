@@ -75,7 +75,7 @@ class OrderView(object):
                 result += style.get(self.target.type.type_name, "title")
             else:
                 result += EntityView(self.interface, self.target).title
-        return result
+        return mp.COMMA + result
 
     def get_shortcut(self):
         if self.shortcut:

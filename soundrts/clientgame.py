@@ -1036,13 +1036,18 @@ class GameInterface(object):
             u = self.dobjets[self.group[0]]
             voice.item(prefix + mp.YOU_CONTROL + u.ext_title + u.orders_txt)
         elif len(self.group) > 1:
-            u = self.dobjets[self.group[0]]
-            group = [self.dobjets[x].short_title for x in self.group
-                     if x in self.dobjets]
-            voice.item(prefix + mp.YOU_CONTROL + self.summary(group)
-                       + u.orders_txt)
+            orders = [self.dobjets[x].orders_txt for x in self.group if x in self.dobjets]
+            if len(_remove_duplicates(orders)) == 1:
+                group = [self.dobjets[x].short_title
+                         for x in self.group if x in self.dobjets]
+                voice.item(prefix + mp.COMMA + mp.YOU_CONTROL + self.summary(group)
+                           + mp.COMMA + orders[0])
+            else:
+                group = [self.dobjets[x].short_title + mp.COMMA + self.dobjets[x].orders_txt
+                         for x in self.group if x in self.dobjets]
+                voice.item(prefix + mp.COMMA + mp.YOU_CONTROL + self.summary(group))
         else:
-            voice.item(prefix + mp.NO_UNIT_CONTROLLED)
+            voice.item(prefix + mp.COMMA + mp.NO_UNIT_CONTROLLED)
 
     def tell_enemies_in_square(self, place):
         enemies = [x.short_title for x in self.dobjets.values()
