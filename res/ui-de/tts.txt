@@ -473,7 +473,7 @@
 
 4331 Mauer
 4332 Tor
-4333 block
+4333 blockiere
 
 4334 zufällige Art
 
