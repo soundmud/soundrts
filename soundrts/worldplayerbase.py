@@ -74,7 +74,7 @@ class Player(object):
     has_victory = False
     has_been_defeated = False
     faction = "human_faction"
-    memory_duration = 30000 # 30 seconds of world time
+    memory_duration = 3 * 60 * 1000 # 3 minutes of world time
 
     group = ()
     group_had_enough_mana = False # used to warn if not enough mana

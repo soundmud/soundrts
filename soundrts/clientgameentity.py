@@ -158,6 +158,16 @@ class EntityView(object):
                 else:
                     title += mp.ENEMY
                 title += mp.COMMA + self.player.name + mp.COMMA
+        if self.is_memory:
+            title += mp.IN_THE_FOG + mp.COMMA
+            if self.speed:
+                s = (self.world.time - self.time_stamp) / 1000
+                m = s / 60
+                if m:
+                    title += nb2msg(m) + mp.MINUTES
+                elif s:
+                    title += nb2msg(s) + mp.SECONDS
+                title += mp.COMMA
         return title
 
     @property
