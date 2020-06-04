@@ -1,516 +1,442 @@
-; coding: utf_8
+; coding: Windows-1250
 
-0 niÄ!
-1 ste
+0	niè!
+1	ste
 
-3 pred vami
-4 za vami
-5 AkÃ© sÃº vaÅ¡e rozkazy?
+3	pred vami
+4	za vami
+5	Aké sú vaše rozkazy?
 
-23 a
+23	a
 
-38 mÃ¡te
-39 zÃ¡sahovÃ½ch bodov z
-40 level
+38	máte
+39	hitpointy z
+40	level
 
-54 na
-55 metrov
+54	na
+55	metrov
 
-59 hrÃ¡Ä
-60 ste
-61 zabitÃ½
+59	hráè
+60	ste
+61	zabitı
 
-65 minÃºt
-66 sekund
-67 sever
-68 juh
-69 vÃ½chod
-70 zÃ¡pad
-71 severovÃ½chod
-72 severozÃ¡pad
-73 juhovÃ½chod
-74 juhozÃ¡pad
-79 na lÃºke obkolesenej stromami
-80 les
-81 zlatÃ¡ baÅˆa
-82 radnica
-83 farma
-84 cesta
-85 roÄ¾nÃ­k
-86 peÅ¡iak
-87 lukostrelec
-88 nepriateÄ¾
-89 priateÄ¾
-99 kasÃ¡reÅˆ
-100 Ã­sÅ¥
-101 postaviÅ¥
-102 Å¥aÅ¾iÅ¥
-103 hliadkovaÅ¥
-104 reÅ¾im
-105 ok!
-106 zastaviÅ¥
-107 na
-108 na
-110 ÃºtoÄnÃ½
-111 obrannÃ½
-112 ostaÅ¥ namieste
-113 zatajiÅ¥ sa
-114 Ãºtok
-115 na
-116 na vÃ½chod
-117 na zÃ¡pad
-118 opraviÅ¥
-119 na
-120 boj
-121 proti
-122 lÃºka
-123 naverbovaÅ¥
-124 pripravenÃ½!
-125 zhromaÅ¾diÅ¥
-126 dokonÄenÃ½
-127 zruÅ¡iÅ¥
-128 stavba
-129 vyÅ¾aduje
-130 jednotky
-131 zlata
-132 dreva
-133 jedla
-134 obsahuje
-135 nie je dosÅ¥
-137 jedla
-138 ovlÃ¡date
-139 skupinu
+65	minút
+66	sekund
+67	sever
+68	juh
+69	vıchod
+70	západ
+71	severovıchod
+72	severozápad
+73	juhovıchod
+74	juhozápad
+79	na lúke porastenej stromami
+80	les
+81	zlatá baòa
+82	radnica
+83	farma
+84	cesta
+85	ro¾ník
+86	pešiak
+87	lukostrelec
+88	nepriate¾
+89	priate¾
+99	kasáreò
+100	ís
+101	postavi
+102	ai
+103	hliadkova
+104	reim
+105	ok!
+106	zastavi
+107	na
+108	na
+110	útoènı
+111	obrannı
+112	osta namieste
+113	zataji sa
+114	útok
+115	na
+116	na vıchod
+117	na západ
+118	upravi
+119	na
+120	boj
+121	proti
+122	lúka
+123	naverbova
+124	pripravenı!
+125	zhromadi
+126	dokonèenı
+127	zruši
+128	stavba
+129	vyaduje
+130	jednotky
+131	zlata
+132	dreva
+133	jedla
+134	obsahuje
+135	nie je dos
+137	jedla
+138	ovládate
++139	skupinu
 
-142 produkcia pozastavenÃ¡
-143 poradovnÃ­k je plnÃ½
-144 vyÄerpanÃ½
-145 neutralizovanÃ½ch
-146 stratenÃ½ch
-147 produkcia
-148 pÃ­la
-149 vÃ­Å¥azstvo!
-150 porÃ¡Å¾ka
-151 1
-152 upozornenie
-153 most
-154 otvorenÃ©
-155 postÃºpili ste do levelu
-156 v strede
-
+142	produkcia pozastavená
+143	fronta je plná
+144	vyèerpanı
+145	neutralizovanıch
+146	stratenıch
+147	produkcia
+148	píla
+149	víazstvo!
+150	poráka
+152	upozornenie
+153	most
+154	otvorené
+155	postúpili ste
+156	v strede
 
 
-2008 stlaÄte F5 pre opÃ¤tovnÃ© vypoÄutie
-2010 stlaÄte
-2011 na
-2012 tab
-2013 vyberte
-2014 enter
-2015 potvrdiÅ¥
-2016 A a Q
-2017 rozkaz
-2018 Z a S
-2019 ovlÃ¡danie ÄalÅ¡ej jednotky
-2020 X alebo W
-2021 skontrolovanie zdrojov
-2022 1, 2 alebo 3
-2023 ovlÃ¡danie skupiny
-2024 0
-2025 ovlÃ¡danie jedinej jednotky
-2026 backspace
-2027 zadaÅ¥ typickÃ½ prÃ­kaz pre vami vybranÃ½ cieÄ¾
-2028 F5 a F6
-2029 histÃ³ria
-2030 alt
-2031 preruÅ¡enie reÄi
-2032 escape
-2033 zruÅ¡iÅ¥
-2034 shift
-2035 spÃ¤Å¥
-2036 otvoriÅ¥ menu
-2037 kurzorovÃ© Å¡Ã­pky
-2038 pohyb po mape
-2039 control
-2040 ignorovanie prekÃ¡Å¾ok
-2041 page down
-2042 presunÃºÅ¥ na ÄalÅ¡ie zaujÃ­mavÃ© polÃ­Äko
-2043 medzernÃ­k
-2044 presunÃºÅ¥ na polÃ­Äko jednotky, ktorÃº prÃ¡ve ovlÃ¡date, a sledovaÅ¥ ju
-2045 ovlÃ¡danie nasledujÃºcej miestnej jednotky
-2046 vÃ½ber ÄalÅ¡ieho cieÄ¾a
-2047 vÃ½ber ÄalÅ¡ieho rozkazu
-2048 ovlÃ¡danie jednotky rovnakÃ©ho typu, na polÃ­Äku, ako je vami vybranÃ¡ jednotka
-2049 potvrdenie vami vybranÃ©ho prÃ­kazu
-2050 zadanie najbeÅ¾nejÅ¡ieho prÃ­kazu pre vami vybranÃ½ cieÄ¾
-2051 vypoÄuÅ¥ si, koÄ¾ko mÃ¡te zlata, dreva a jedla
-2052 vypoÄuÅ¥ si, koÄ¾ko mÃ¡ vami vybranÃ¡ jednotka zdravia
-2053 ovlÃ¡danie polovice jednotky rovnakÃ©ho typu na vami vybratom polÃ­Äku
-2054 ovlÃ¡danie jednÃ©ho z jednotky
-2055 q
-2056 ovlÃ¡danie vÅ¡etkÃ½ch vojakov na vami vybratom polÃ­Äku
-2057 ovlÃ¡danie vÅ¡etkÃ½ch roÄ¾nÃ­kov na vami vybratom polÃ­Äku
-2058 ovlÃ¡danie ÄalÅ¡ej stavby
-2059 ovlÃ¡danie ÄalÅ¡ieho roÄ¾nÃ­ka
-3000 0
-3001 1
-3002 2
-3003 3
-3004 4
-3005 5
-3006 6
-3007 7
-3008 8
-3009 9
-3010 10
-3011 11
-3012 12
-3013 13
-3014 14
-3015 15
-3016 16
-3017 17
-3018 18
-3019 19
-3020 20
-3021 21
-3030 30
-3031 31
-3040 40
-3041 41
-3050 50
-3051 51
-3060 60
-3061 61
-3070 70
-3071 71
-3080 80
-3090 90 
-3100 sto
-3101 tisÃ­c
-3102 miliÃ³n
 
-4000 hra
-4001 na internete
-4002 na poÄÃ­taÄi
-4004 pracuje sa
-4005 zlihalo
-4006 ÃºspeÅ¡ne
-4007 vyberte si
-4008 prosÃ­m, poÅ¡lite vaÅ¡e pripomienky na jlpo@free.fr
-4009 ukonÄiÅ¥
-4010 menu
-4011 pokraÄovaÅ¥
-4012 chyba verzie
-4014 strategickÃ¡ hra
-4015 kapitola
-4016 jeden hrÃ¡Ä
-4017 mapa
-4018 viac hrÃ¡Äov
-4019 pripojiÅ¥ sa
-4020 Ãºloha:
-4021 ubrÃ¡niÅ¥ sa nepriateÄ¾skÃ½m Ãºtokom
-4022 produkovanÃ½ch
-4023 produkovanÃ½ch
-4024 vyuÅ¾itÃ½ch
-4025 stavba
-4026 skÃ³re
+2008	stlaète F5 pre opakované vypoèutie
+2010	stlaète
+2011	na
+2013	vyberte
+2015	potvrdenie
+2016	A a Q
+2017	rozkaz
+2018	Z a S
+2019	ovládanie ïalšej jednotky
+2020	X alebo W
+2021	skontrolovanie zdrojov
+2022	1, 2 alebo 3
+2023	ovládanie skupiny
+2025	ovládanie jedného z jednotky
+2027	da typickı príkaz pre vami vybranı cie¾
+2028	F5 a F6
+2029	história
+2031	prerušenie reèi
+2033	zruši
+2035	spä
+2036	otvorenie menu
+2037	kurzorové šípky
+2038	pohyb po mape
+2040	ignorovanie prekáok
+2042	presun na ïalšie zaujímavé políèko
+2043	medzerník
+2044	presun na políèko jednotky, ktorú práve ovládate a sledova ju
+2045	ovládanie miestnej jednotky
+2046	vıber ïalšieho cie¾a
+2047	vıber ïalšieho rozkazu
+2048	ovládanie jednotky rovnakého typu, na rovnakom polyèku, ako je vami vybraná jednotka
+2049	potvrdenie vami vybraného príkazu
+2050	spoloènı rozkaz pre vami vybranı cie¾
+2051	vypoèutie, ko¾ko máte zlata, dreva a jedla
+2052	vypoèutie zdravia vami vybranej jednotky
+2053	ovládanie polovice jednotky rovnakého typu a na rovnakom políèku, ako ste vybrali
+2054	ovládanie jedného z jednotky
+2055	q
+2056	ovládanie všetkıch vojakov na rovnakom políèku, ktoré ste vybrali
+2057	ovládanie všetkıch ro¾níkov na vami vybratom políèku
+2058	ovládanie ïalšej stavby
+2059	ovládanie ïalšieho ro¾níka
 
-4028 stlaÄte F1 pre pomoc
-4029 hlavnÃ© menu
-4030 vyberte si
-4031 jeden hrÃ¡Ä
-4032 hraÅ¥ na vaÅ¡om poÄÃ­taÄi
-4033 viac hrÃ¡Äov
-4034 hraÅ¥ na internete
-4035 server
-4036 spustiÅ¥ server na vaÅ¡om poÄÃ­taÄi pre vytvÃ¡ranie hier pre viacerÃ½ch hrÃ¡Äov
-4037 nastavenia
-4038 zmeÅˆte svoje parametre
 
-4041 koniec
-4042 ukonÄiÅ¥ tento program
-4043 AkÃ½ druh serveru?
-4044 jednoduchÃ½ server
-4045 len vy mÃ´Å¾ete vytvÃ¡raÅ¥ hry
-4046 verejnÃ½ server
-4047 hrÃ¡Äi mÃ´Å¾u vytvÃ¡raÅ¥ hry
-4048 zruÅ¡iÅ¥
-4049 VÃ¡Å¡mu serveru sa pravdepodobne nepodarilo zaregistrovaÅ¥ na metaserveri. Skontrolujte vaÅ¡e pripojenie na internet.
-4051 dovidenia
-4052 stlaÄte tab na vÃ½ber, stlaÄte enter na potvrdenie
-4053 prijaÅ¥ pozvanie od
-4054 pripojiÅ¥ sa
-4055 zaÄaÅ¥ hru na
-4056 vitajte
-4057 Chyba: Je priveÄ¾a hier!
-4058 pozvaÅ¥
-4059 zaÄaÅ¥
-4060 zruÅ¡iÅ¥ tÃºto hru
-4061 opustiÅ¥ tÃºto hru
-4062 hra zaÄne o 5 sekund
-4063 hra zaÄne, keÄ organizÃ¡tor bude pripravenÃ½
-4064 stlaÄte enter pre potvrdenie
+4000	hra
+4001	na internete
+4002	na poèítaèi
+4004	pracuje sa
+4005	zlihalo
+4006	úspešne
+4007	vyberte si
+4008	pošlite svoje pripomienky na jlpo@free.fr
+4009	ukonèi
+4010	menu
+4011	pokraèova
+4012	chyba verzie
+4014	strategická hra
+4015	kapitola
+4016	jeden hráè
+4017	mapa
+4018	viac hráèov
+4019	pripoji sa
+4020	úloha:
+4021	obráni sa nepriate¾skım útokom
+4022	produkovanı
+4023	produkovanıch
+4024	vyuitıch
+4025	stavba
+4026	skóre
 
-4066 stlaÄte opakovane tab pre prepÃ­nanie medzi vÅ¡etkÃ½mi viditeÄ¾nÃ½mi objektmi
-4067 stlaÄte tab na vÃ½ber cieÄ¾a a potom enter pre potvrdenie
+4028	stlaète F1 pre pomoc
+4029	hlavné menu
+4030	vyberte si
+4031	jeden hráè
+4032	hra na vašom poèítaèi
+4033	viac hráèov
+4034	hra na internete
+4035	server
+4036	spusti server na vašom poèítaèi pre vytváranie hier pre viacero hráèov
+4037	nastavenia
+4038	zmeòte svoje parametre
 
-4070 zruÅ¡iÅ¥ hru
-4071 pokraÄovaÅ¥ v hre
-4072 nedÃ¡ sa spojiÅ¥ s metaserverom
-4073 server vytvorenÃ½ uÅ¾Ã­vateÄ¾om
-4074 pre
-4075 zruÅ¡iÅ¥
-4076 spÃ¤Å¥ na predoÅ¡lÃ© menu
-4077 MomentÃ¡lne nie je na metaserveri registrovanÃ½ Å¾iadny server. SkÃºste to neskÃ´r.
-4078 servery na
-4079 pouÅ¾ite kompatibilnÃº verziu
-4080 Chyba: Server sa nemohol spustiÅ¥.
-4081 Chyba: server neodpovedÃ¡. Server je vypnutÃ½, alebo sa nachÃ¡dza za brÃ¡nou Firewall, alebo routerom.
-4082 chyba: tento server odoslal neÄakanÃ© Ãºdaje. Toto nie je SoundRTS server.
-4083 chyba: server odmietol pripojenie. Toto nie je SoundRTS server.
-4084 alebo vaÅ¡e prihlasovacie Ãºdaje boli odmietnutÃ©.
-4085 chyba pri pripÃ¡janÃ­ na server
-4086 menu nastavenia
-4087 zmeÅˆte svoje prihlasovacie meno
+4041	koniec
+4042	ukonèi tento program
+4043	Akı druh serveru?
+4044	jednoduchı server
+4045	len ty môeš vytvára hry
+4046	verejnı server
+4047	hráè môe vytvára hry
+4048	zruši
+4049	Váš server nemôe by registrovanı na metaservery. Skontrolujte vaše pripojenie na internet.
+4051	dovidenia
+4052	stlaète tab na vıber. stlaète enter na potvrdenie
+4053	akceptova pozvanie od
+4054	pripoji sa
+4055	zaèa hru na
+4056	vitajte
+4057	Chyba: Je príliš ve¾a hier!
+4058	pozva
+4059	zaèa
+4060	zruši túto hru
+4061	opusti túto hru
+4062	hra zaène o 5 sekund
+4063	hra zaène, keï organizátor bude pripravenı.
+4064	stlaète enter pre potvrdenie
 
-4096 uloÅ¾iÅ¥
-4097 uloÅ¾te svoje nastavenia a vrÃ¡Å¥te sa do hlavnÃ©ho menu
-4098 zruÅ¡iÅ¥,
-4099 vrÃ¡tiÅ¥ sa do hlavnÃ©ho menu bez uloÅ¾enia zmien
+4066	stlaète opakovane tab pre okruh všetkıch vidite¾nıch objektov
+4067	stlaète tab na vıber cie¾a a potom enter pre potvrdenie
 
-4101 otvorÃ­ sa novÃ© okno
-4102 spojenie sa preruÅ¡ilo
-4103 nastaviÅ¥ rÃ½chlosÅ¥ hry na pomalÃº
-4104 nastaviÅ¥ rÃ½chlosÅ¥ hry na normÃ¡lnu
-4105 nastaviÅ¥ rÃ½chlosÅ¥ hry na rÃ½chlu
+4070	zruši hru
+4071	pokraèova v hre
+4072	nedá sa spoji s metaserverom
+4073	server vytvorenı uívate¾om
+4074	pre
+4075	zruši
+4076	spä na predošlé menu
+4077	momentálne nie je iaden server registrovanı na metaservery. Skuste to neskôr.
+4078	servery na
+4079	pouite kompatibilnú verziu
+4080	Chyba: Server sa nemôe spusti.
+4081	Chyba: Server nedosiahnute¾nı. Server je pravdepodobne uzatvorenı bránou Firewall, alebo rutrom.
+4082	chyba: Neiadúce údaje boli odoslané z tohoto servera. Toto nie je Sound RTS server.
+4083	chyba: pripojenie zamietnuté serverom. Toto nie je Sound RTS server.
+4084	alebo vaše prihlasovacie meno bolo zamietnuté.
+4085	chyba pri pripájaní na server
+4086	menu nastavenia
+4087	zmeòte vaše prihlasovacie meno
 
-4112 uloÅ¾iÅ¥ hru
-4113 naÄÃ­taÅ¥ uloÅ¾enÃº hru
-4114 hraÅ¥ proti poÄÃ­taÄu na mape
-4115 poÄÃ­taÄ verzus poÄÃ­taÄ
+4096	uloi
+4097	uloi vaše nastavenia a návrat do hlavného menu
+4098	zruši,
+4099	vráti sa do hlavného menu bez nastavenia zmien
 
-4118 naspÃ¤Å¥ do predchÃ¡dzajÃºceho menu
-4119 vybraÅ¥ server zo zoznamu
-4120 vloÅ¾iÅ¥ IP adresu servera
-4121 sÃºkromnÃ½ server
-4122 server nebude pridanÃ½ do zoznamu
+4101	nové okno bude otvorené
+4102	pripájanie bolo prerušené
+4103	nastavi rıchlos hry na pomalú
+4104	nastavi rıchlos hry na normálnu
+4105	nastavi rıchlos hry na rıchlu
 
-4200 Å¥aÅ¾ba dreva bola vylepÅ¡ena
-4201 katapult
-4202 ÄakÃ¡ na vaÅ¡e rozkazy
-4203 z
-4204 tam stavaÅ¥ nemÃ´Å¾ete
-4205 neovlÃ¡date Å¾iadnu jednotku
-4206 grafika je teraz zapnutÃ¡
-4207 grafika je teraz vypnutÃ¡
-4208 neznÃ¡my
-4209 v hmle vojny
-4210 F10 pre prÃ­stup do menu
-4211 reÅ¾im z pohÄ¾adu prvej osoby
-4212 reÅ¾im mapy
-4213 kovÃ¡Äska dielÅˆa
-4214 vylepÅ¡iÅ¥
-4215 meÄe
-4216 Å¡Ã­py
-4217 brnenie peÅ¡iakov
-4218 brnenie lukostrelcov
-4219 na
-4220 pevnosÅ¥
-4221 hrad
-4222 stajne
-4223 ponuka
-4224 sa prÃ¡ve zmenila
-4225 rytier
-4226 dielÅˆa
-4227 draÄia nora
-4228 veÅ¾a mÃ¡gov
-4229 mÃ¡g
-4230 lietajÃºci stroj
-4231 drak
-4232 chyba servera
-4233 dostrel luku
-4234 na internete  je dostupnÃ¡ novÃ¡ verzia programu
-4235 zadajte vaÅ¡e novÃ© prihlasovacie meno
-4236 pouÅ¾Ã­vajte len pÃ­smenÃ¡ a ÄÃ­slice
-4237 neplatnÃ© prihlasovacie meno
-4238 vaÅ¡e aktuÃ¡lne prihlasovacie meno bolo ponechanÃ©
-4239 novÃ© prihlasovacie meno
-4240 sa prÃ¡ve prihlÃ¡sil
-4241 sa prÃ¡ve pripojil
-4242 hrÃ¡Äov
-4243 vÃ¡s pozÃ½va
-4244 Nie je dosÅ¥ hrÃ¡Äov na zaÄatie hry. MinimÃ¡lny poÄet je
-4245 aktuÃ¡lne prihlasovacie meno
-4246 populaÄnÃ½ limit bol dosiahnutÃ½
-4247 mana bodov z
-4248 trÃ©novaÅ¥
-4249 super lieÄiteÄ¾
-4250 teleportÃ¡cia
-4251 na
-4252 nie je dosÅ¥ many
-4253 percento hlasitosti
-4254 rÃ½chlosÅ¥ konÃ­
-4255 urÄite miesto zhromaÅ¾Äovania sa pre ÄalÅ¡ie jednotky
-4256 zÃ­skanÃ½ch
-4257 agresÃ­vny poÄÃ­taÄ
-4258 pokojnÃ½ poÄÃ­taÄ
-4259 sa prÃ¡ve odhlÃ¡sil
-4260 na serveri
-4261 prÃ¡ve opustil hru
-4262 prÃ­davnÃ½ zvukovÃ½ balÃ­Äek
-4263 je teraz zapnutÃ½
-4264 je teraz vypnutÃ½
-4265 reÅ¾im podvÃ¡dzania
-4266 reÅ¡tartovaÅ¥
-4267 kampaÅˆ
-4268 novÃ¡ Ãºloha
-4269 Ãºloha splnenÃ¡
-4270 misia splnenÃ¡
-4271 kapitola
-4272 prolÃ³g
-4273 epylÃ³g
-4274 premena
-4275 prieskumnÃ­cka veÅ¾a
-4276 strÃ¡Å¾na veÅ¾a
-4277 delovÃ¡ veÅ¾a
-4278 naloÅ¾iÅ¥
-4279 naloÅ¾iÅ¥ vÅ¡etko z
-4280 vyloÅ¾iÅ¥
-4281 vyloÅ¾iÅ¥ vÅ¡etko z
-4282 vloÅ¾iÅ¥ do
-4283 temnÃ½ lukostrelec
+4112	uloi hru
+4113	obnovi uloenú hru
+4114	hra proti poèítaèu
+4115	poèítaè verzus poèítaè
 
-5000 a
-5001 b
-5002 c
-5003 d
-5004 e
-5005 f
-5006 g
-5007 h
-5008 i
-5009 j
-5010 k
-5011 l
-5012 m
-5013 n
-5014 o
-5015 p
-5016 q
-5017 r
-5018 s
-5019 t
-5020 u
-5021 v
-5022 w
-5023 x
-5024 y
-5025 z
+4118	naspä na predchádzajúce menu
+4119	vybra server zo zoznamu
+4120	vloi IP adresu servera
+4121	súkromnı server
+4122	server nebude pridanı v zozname
+4202	aba dreva bola vylepšena
+4201	katapult
+4202	èaká na vaše rozkazy
+4203	z
+4204	tam stava nemôete
+4205	neovládate iadnu jednotku
+4206	grafika je teraz zapnutá
+4207	grafika je teraz vypnutá
+4208	neznámy
+4209	v hmle vojny
+4210	F10 pre prístup do menu
+4211	reim z poh¾adu prvej osoby
+4212	reim mapy
+4213	kováèska dielòa
+4214	vylepši
+4215	meèe
+4216	šípy
+4217	brnenie pešiakov
+4218	brnenie lukostrelcov
+4219	na
+4220	pevnos
+4221	hrad
+4222	stajne
+4223	ponuka
+4224	sa práve zmenila
+4225	rytier
+4226	dielòa
+4227	draèia nora
+4228	vea mágov
+4229	mág
+4230	lietajúci stroj
+4231	drak
+4232	chyba servera
+4233	dostrel luku
+4234	nová verzia programu je dostupná na internete
+4235	zadaj tvoje nové prihlasovacie meno
+4236	pouívajte len písmená a èísla
+4237	zlé prihlasovacie menno
+4238	vaše predošlé prihlasovacie meno bolo ponechané
+4239	nové prihlasovacie meno
+4240	sa práve prihlásil
+4241	sa práve pripojil
+4242	hráèov
+4243	vás pozıva
+4244	nie je dos na zaèatie hry
+4245	aktuálne prihlasovacie meno
+4246	limiit populácie bol obsadenı
+4247	mana body z
+4248	trénova
+4249	super lieèite¾
+4250	teleportácia
+4251	na
+4252	nie je dos many
+4253	percento hlasitosti
+4254	rıchlos koní
+4255	urète zhromadenie pre ïalšie jednotky
+4256	získanıch
+4257	agresívny poèítaè
+4258	pokojnı poèítaè
+4259	sa práve odhlásil
+4260	na servery
+4261	práve opustil hru
+4262	prídavnı zvukovı balík
+4263	je teraz zapnutı
+4264	je teraz vypnutı
+4265	reim podvádzania
+4266	reštartova
+4267	kampaò
+4268	nová úloha
+4269	úloha splnená
+4270	misia splnená
+4271	kapitola
+4272	prológ
+4273	epylóg
+4274	premena
+4275	prieskumnícka vea
+4276	strána vea
+4277	delová vea
+4278	naloi
+4279	naloi všetko z
+4280	vyloi
+4281	vyloi všetko z
+4282	vlo do
+4283	temnı lukostrelec
 
-5026 bodka
 
-4284 presuÅˆ
-4285 do aliancie
-4286 spojenec
-4287 povedal
-4288 zadajte vaÅ¡u sprÃ¡vu
+5026	bodka
 
-4289 neviditeÄ¾nÃ½
-4290 detektor
-4291 zahaÄ¾ovaÄ
+4284	presuò
+4285	do aliancie
+4286	príbuznı
+4287	povedal
+4288	napíš svoju správu
 
-4292 privolaÅ¥
-4293 zobudiÅ¥ mÅ•tvych
-4294 oÅ¾iviÅ¥
+4289	nevidite¾nı
+4290	detektor
+4291	zaha¾ovaè
+4292	privola
+4293	získa smr
+4294	oivi
 
-4295 zombi
-4296 kostlivec
+4295	zombi
+4296	kostlivec
 
-4297 mnÃ­ch
-4298 chrÃ¡m
+4297	mních
+4298	chrám
 
-4299 svÃ¤tÃ¡ vÃ­zia
-4300 zariekanie
+4299	svätá vízia
+4300	zariekanie
 
-4301 Älovek
-4302 ohyzd
+4301	èlovek
+4302	ohyzd
 
-4303 nekromantik
-4304 nekropolis
+4303	nekromantik
+4304	nekropolis
 
-4305 smrtiaca hmla
-4306 meteory
+4305	smrtiaca hmla
+4306	meteory
 
-4307 zavolaÅ¥ spÃ¤Å¥
+4307	povolanie
 
-4308 kameÅˆa
-4309 kameÅˆolom
+4308	kameòa
+4309	kameòolom
 
-4311 bol porazenÃ½
-4312 Boli ste porazenÃ½.
-4313 NachÃ¡dzate sa teraz v pozorovacom reÅ¾ime.
+4311 bol porazenı
+4312 Boli ste porazenı.
+4313 Ste v pozorovacom reime.
 
-4314 planina
+4314 plošina
 
-4315 pozorovaÅ¥ zaznamenanÃº hru
-4316 StlaÄte Control Shift F4 pre pozorovanie ÄalÅ¡ieho hrÃ¡Äa.
+4315 pozrite si nahratú hru
+4316 Stlaète Control shift a F4 na pozorovania iného hráèa.
 
-4317 Zadajte prÃ­kaz.
+4317 Vlote príkaz.
 
-4318 priblÃ­Å¾iÅ¥
+4318 zväèši
 
-4319 zmeniÅ¥ poradie naÄÃ­tania tohoto modu
-4320 pridaÅ¥ mod do zoznamu
-4321 zoznam je prÃ¡zdny
-4322 NaÄÃ­tavam
+4319 zmeò poradie naèítanıch módov
+4320 Prida novı mód do zoznamu
+4321 zoznam je prázdny
+4322 naèítavam
 
-4323 balÃ­Äky
-4324 menu balÃ­Äky
-4325 nainÅ¡talovaÅ¥ balÃ­Äek
-4326 odinÅ¡talovaÅ¥ balÃ­Äek
-4327 aktualizovaÅ¥ balÃ­Äek
-4328 SÅ¥ahujem...
-4329 RozbaÄ¾ujem...
-4330 Nie je moÅ¾nÃ© nÃ¡jsÅ¥ mod:
+4323 balíky
+4324 menu balíkov
+4325 nainštaluj balík
+4326 odinštaluj balík
+4327 aktualizuj balík
+4328 sahujem...
+4329 rozba¾ujem...
+4330 Nemôem nájs mód:
 
-4331 hradby
-4332 brÃ¡na
-4333 zatarasiÅ¥
+4331 múr
+4332 brána
+4333 zablokuj
 
-4334 nÃ¡hodnÃ© spojenectvo
+4334 náhodná frakcia
 
-4335 DosiahnutÃ½ maximÃ¡lny poÄet
+4335 Dosiahol sa limit poètu
 
-4336 otvoriÅ¥ uÅ¾Ã­vateÄ¾skÃ½ prieÄinok
-4337 dokumentÃ¡cia
+4336 otvor pouívate¾skı prieèinok
+4337 Dokumentácia
 
-4338 masÃ­vne hradby
-4339 masÃ­vna brÃ¡na
-4340 ZaÄaÅ¥ verejnÃº hru na
-4341 Mody
-4342 ZvukovÃ© balÃ­Äky
-4343 rÃ½chlosÅ¥
+4338 masívny múr
+4339 masívna brána
+4340 zaèa verejnú hru na
+4341 reimy
+4342 zvukové balíky
+4343 rıchlos
 
 4344 more
 4345 jazero
 4346 rieka
-4347 vrch
+4347 hora
 4348 most
 4349 brod
-4350 moÄiar
-4351 oceÃ¡n
-4352 horskÃ½ priechod
+4350 moèiar
+4351 oceán
+4352 horskı priesmyk
 
-4353 povoliÅ¥ automatickÃ© opravy
-4354 zakÃ¡zaÅ¥ automatickÃ© opravy
-4355 povoliÅ¥ automatickÃ© zhromaÅ¾Äovanie
-4356 zakÃ¡zaÅ¥ automatickÃ© zhromaÅ¾Äovanie
+4353 povoli automatickú úpravu
+4354 zakáza automatickú úpravu
+4355 povoli automatické zhromaïovanie
+4356 zakáza automatické zhromaïovanie
 
 4357 lodenica
-4358 Äln
-4359 torpÃ©doborec
-4360 bojovÃ¡ loÄ
+4358 èln
+4359 torpédoborec
+4360 vojnová loï
 4361 ponorka
 
-4362 lÃºky
-4363 les
-4364 hustÃ½ les
+4362 lúky
+4363 lesy
+4364 hustı les
