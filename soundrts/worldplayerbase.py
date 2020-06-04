@@ -251,7 +251,10 @@ class Player(object):
         for s in partially_observed_squares:
             for o in s.objects:
                 if o.player is None:
-                    self._memorize(o)
+                    if self._is_seeing(o):
+                        self.perception.add(o)
+                    else:
+                        self._memorize(o)
         self.observed_before_squares.update(partially_observed_squares)
         # objects revealed by their actions
         for p in self.allied_vision:
