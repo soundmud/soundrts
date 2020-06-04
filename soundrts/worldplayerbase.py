@@ -280,9 +280,11 @@ class Player(object):
             # forget units reappearing elsewhere
             # forget deleted units
             # forget old memories of mobile units
+            # forget if in an observed square
             if (m.initial_model in self.perception
                 or m.initial_model.place is None # ideally: and self.have_an_observer_in_sight_range(m)
-                or m.initial_model.speed and m.time_stamp + self.memory_duration < self.world.time):
+                or m.initial_model.speed and m.time_stamp + self.memory_duration < self.world.time
+                or m.place in self.observed_squares):
                 self._forget(m)
         # memorize disappeared units
         # don't memorize deleted units
