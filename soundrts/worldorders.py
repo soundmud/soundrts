@@ -143,30 +143,15 @@ class Order(object):
             self.on_queued()
 
     @classmethod
-    def menu(cls, unit, strict=False):
-        if strict:
-            condition = cls.is_allowed
-        else:
-            condition = cls.is_almost_allowed
-        if cls.unit_menu_attribute is None:
-            if condition(unit):
-                return [cls.keyword]
-            else:
-                return []
-        else:
-            m = []
-            for t in getattr(unit, cls.unit_menu_attribute):
-                if condition(unit, t):
-                    m.append(cls.keyword + " " + t)
-            return m
-
-    @classmethod
     def is_allowed(cls, unit, *unused_args):
         return cls.keyword in unit.basic_abilities
 
     @classmethod
-    def is_almost_allowed(cls, *args):
-        return cls.is_allowed(*args)
+    def menu(cls, unit, strict=False):
+        if cls.is_allowed(unit):
+            return [cls.keyword]
+        else:
+            return []
 
     @property
     def missing_requirements(self):
@@ -354,18 +339,31 @@ class ComplexOrder(Order):
         return True
 
     @classmethod
-    def is_almost_allowed(cls, unit, type_name, *unused_args):
-        return (type_name in getattr(unit, cls.unit_menu_attribute) # example: "farm" in unit.can_build
-                and unit.player is not None
-                and type_name not in unit.player.forbidden_techs
-                and (not unit.orders or unit.orders[-1].can_be_followed)
-                and cls.additional_condition(unit, type_name)
-                and unit.player.check_count_limit(type_name))
+    def _is_almost_allowed(cls, unit, type_name):
+        return (
+            # unit can train/research/upgrade_to/build/use type_name
+            type_name in getattr(unit, cls.unit_menu_attribute)
+            and unit.player is not None
+            and type_name not in unit.player.forbidden_techs
+            and (not unit.orders or unit.orders[-1].can_be_followed)
+            and cls.additional_condition(unit, type_name)
+            and unit.player.check_count_limit(type_name))
 
     @classmethod
-    def is_allowed(cls, unit, type_name, *args):
-        return cls.is_almost_allowed(unit, type_name, *args) \
-               and unit.player.has_all(unit.player.world.unit_class(type_name).requirements)
+    def is_allowed(cls, unit, type_name, *unused_args):
+        return (
+            cls._is_almost_allowed(unit, type_name)
+            and unit.player.has_all(
+                unit.player.world.unit_class(type_name).requirements))
+
+    @classmethod
+    def menu(cls, unit, strict=False):
+        is_allowed = cls.is_allowed if strict else cls._is_almost_allowed
+        m = []
+        for t in getattr(unit, cls.unit_menu_attribute):
+            if is_allowed(unit, t):
+                m.append(cls.keyword + " " + t)
+        return m
 
     @property
     def missing_requirements(self):
