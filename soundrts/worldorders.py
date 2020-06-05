@@ -349,22 +349,18 @@ class ComplexOrder(Order):
     def time_cost(self):
         return self.type.time_cost
 
-    @classmethod
-    def allowed_types(cls, unit):
-        return getattr(unit, cls.unit_menu_attribute)
-
-    @classmethod
-    def additional_condition(cls, unit, type_name):
+    @staticmethod
+    def additional_condition(unit, type_name):
         return True
 
     @classmethod
     def is_almost_allowed(cls, unit, type_name, *unused_args):
-        return type_name in cls.allowed_types(unit) \
-               and unit.player is not None \
-               and type_name not in unit.player.forbidden_techs \
-               and (not unit.orders or unit.orders[-1].can_be_followed) \
-               and cls.additional_condition(unit, type_name) \
-               and unit.player.check_count_limit(type_name)
+        return (type_name in getattr(unit, cls.unit_menu_attribute) # example: "farm" in unit.can_build
+                and unit.player is not None
+                and type_name not in unit.player.forbidden_techs
+                and (not unit.orders or unit.orders[-1].can_be_followed)
+                and cls.additional_condition(unit, type_name)
+                and unit.player.check_count_limit(type_name))
 
     @classmethod
     def is_allowed(cls, unit, type_name, *args):
@@ -486,17 +482,15 @@ class ResearchOrder(ProductionOrder):
         self.type.upgrade_player(self.player)
         self.unit.notify("research_complete")
 
-    @classmethod
-    def is_not_already_being_researched(cls, player, type_name):
-        for u in player.units:
-            for w in u.orders:
-                if w.__class__ == cls and w.type.__name__ == type_name:
+    @staticmethod
+    def additional_condition(unit, type_name):
+        if type_name in unit.player.upgrades:
+            return False
+        for u in unit.player.units:
+            for w in unit.orders:
+                if w.__class__ == ResearchOrder and w.type.__name__ == type_name:
                     return False
         return True
-
-    @classmethod
-    def additional_condition(cls, unit, type_name):
-        return type_name not in unit.player.upgrades and cls.is_not_already_being_researched(unit.player, type_name)
 
 
 class UpgradeToOrder(ProductionOrder):
@@ -542,8 +536,8 @@ class UpgradeToOrder(ProductionOrder):
             Meadow(place, x, y)
 
 
-    @classmethod
-    def additional_condition(cls, unit, unused_type_name):
+    @staticmethod
+    def additional_condition(unit, unused_type_name):
         return not unit.orders
 
 
@@ -1084,10 +1078,10 @@ class UseOrder(ComplexOrder):
             else:
                 break
 
-    @classmethod
-    def additional_condition(cls, unused_unit, type_name):
+    @staticmethod
+    def additional_condition(unused_unit, type_name):
         e = rules.get(type_name, "effect")
-        return e and hasattr(cls, "execute_%s" % e[0])
+        return e and hasattr(UseOrder, "execute_%s" % e[0])
 
 
 class TransportOrder(Order):
