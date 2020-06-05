@@ -141,7 +141,7 @@ class EntityView(object):
                 t += OrderView(o, self.interface).title_msg()
         if prev:
             t += OrderView(prev, self.interface).title_msg(nb)
-        return t
+        return t + mp.COMMA
 
     @property
     def title(self):
