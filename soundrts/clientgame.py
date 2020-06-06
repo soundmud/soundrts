@@ -1380,12 +1380,18 @@ class GameInterface(object):
 
     order = None
 
-    def orders(self):
+    def orders(self, inactive=False):
+        if inactive:
+            menu_type = "menu"
+            ok = lambda o, u: o not in self.dobjets[u].strict_menu
+        else:
+            menu_type = "strict_menu"
+            ok = lambda o, u: True
         menu = []
         for u in self.group:
             if u in self.dobjets:
-                for o in self.dobjets[u].menu:
-                    if o not in menu:
+                for o in getattr(self.dobjets[u], menu_type):
+                    if o not in menu and ok(o, u):
                         menu.append(o)
         # sort the menu by index
         menu.sort(key=order_index)
@@ -1412,9 +1418,9 @@ class GameInterface(object):
             msg += mp.COMMA + mp.SELECT_TARGET_AND_CONFIRM
         voice.item(msg)
 
-    def cmd_select_order(self, inc):
+    def cmd_select_order(self, inc, *args):
         inc = int(inc)
-        orders = self.orders() # do this once (can take a long time)
+        orders = self.orders(inactive="inactive" in args) # do this once (can take a long time)
         # if no menu then do nothing
         if not orders:
             voice.item(mp.NOTHING)
