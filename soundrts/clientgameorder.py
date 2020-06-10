@@ -1,4 +1,4 @@
-from definitions import style
+from definitions import style, rules
 from lib.log import warning
 from lib.msgs import nb2msg
 from lib.nofloat import PRECISION
@@ -14,37 +14,67 @@ def nb2msg_f(n):
     return nb2msg(n)
 
 
-class OrderView(object):
+class OrderTypeView(object): # future order
 
-    comment = []
-    title = []
-    index = None
-    shortcut = None
+    type = None
+    requirements = []
 
-    def __init__(self, model, interface=None):
-        self.model = model
-        self.interface = interface
-        for k, v in style.get_dict(model.keyword).items():
-            if hasattr(self, k):
-                setattr(self, k, v)
+    def __init__(self, order, unit):
+        self.unit = unit
+        o = order.split()
+        self.cls = ORDERS_DICT[o[0]]
+        if len(o) > 1:
+            self.type = o[1]
+            self.requirements = self.unit.player.world.unit_class(self.type).requirements
+        self.title = self._get_title()
+        self.shortcut = self._get_shortcut()
+        self.index = _ord_index(self.cls.keyword)
+
+        self.comment = style.get(self.cls.keyword, "comment", False)
+        if self.comment is None: self.comment = []
+
+        self.cost = self.cls(unit, [self.type]).cost
+        self.food_cost = self.cls(unit, [self.type]).food_cost
+        self.nb_args = self.cls.nb_args
+
+    def __eq__(self, other):
+        return self.cls.keyword == other.cls.keyword and self.type == other.type
+
+    def _get_title(self):
+        t = style.get(self.cls.keyword, "title")
+        if t is None:
+            t = []
+            warning("%s.title is None", self.cls.keyword)
+        if self.type:
+            t2 = style.get(self.type, "title")
+            if t2 is None:
+                warning("%s.title is None", self.type)
             else:
-                warning("in %s: %s doesn't have any attribute called '%s'", model.keyword, self.__class__.__name__, k)
+                t = substitute_args(t, [t2])
+        return t
 
-    def __getattr__(self, name):
-        return getattr(self.model, name)
+    def _get_shortcut(self):
+        s = style.get(self.cls.keyword, "shortcut", False)
+        if s:
+            return unicode(s[0])
+        if self.type:
+            s = style.get(self.type, "shortcut", False)
+            if s:
+                return unicode(s[0])
 
-    @property
-    def requirements_msg(self):
+    def _get_requirements_msg(self):
         and_index = 0
         msg = []
-        for t in self.missing_requirements:
+        missing = [r for r in self.requirements if not self.unit.player.has(r)]
+        for t in missing:
             and_index = len(msg)
             msg += style.get(t, "title")
-        if not self.missing_requirements:
-            for i, c in enumerate(self.cost):
-                if c:
-                    and_index = len(msg)
-                    msg += nb2msg(c / PRECISION) + style.get("parameters", "resource_%s_title" % i)
+        if not missing:
+            if self.cost:
+                for i, c in enumerate(self.cost):
+                    if c:
+                        and_index = len(msg)
+                        msg += nb2msg(c / PRECISION) + style.get("parameters", "resource_%s_title" % i)
             if self.food_cost:
                 and_index = len(msg)
                 msg += nb2msg_f(self.food_cost) + style.get("parameters", "food_title")
@@ -57,51 +87,15 @@ class OrderView(object):
 
     @property
     def full_comment(self):
-        return self.comment + self.requirements_msg
+        return self.comment + self._get_requirements_msg()
 
-    def title_msg(self, nb=1):
-        if self.is_deferred:
-            result = style.get("messages", "production_deferred")
-        else:
-            result = []
-        result += self.title
-        if self.type is not None:
-            t = style.get(self.type.type_name, "title")
-            if nb != 1:
-                t = nb2msg(nb) + t
-            result = substitute_args(result, [t])
-        if self.target is not None:
-            if self.keyword == "build_phase_two":
-                result += style.get(self.target.type.type_name, "title")
-            else:
-                result += EntityView(self.interface, self.target).title
-        return mp.COMMA + result
+    @property
+    def encode(self):
+        result = self.cls.keyword
+        if self.type:
+            result += " " + self.type
+        return result        
 
-    def get_shortcut(self):
-        if self.shortcut:
-            return unicode(self.shortcut[0])
-        if self.type and self.type.type_name:
-            s = style.get(self.type.type_name, "shortcut", False)
-            if s:
-                return unicode(s[0])
-
-
-def order_title(order):
-    o = order.split()
-    t = style.get(o[0], "title")
-    if t is None:
-        t = []
-        warning("%s.title is None", o[0])
-    if len(o) > 1:
-        t2 = style.get(o[1], "title")
-        if t2 is None:
-            warning("%s.title is None", o[1])
-        else:
-            t = substitute_args(t, [t2])
-    return t
-
-def order_index(x):
-    return _ord_index(x.split()[0])
 
 def _ord_index(keyword):
     try:
@@ -125,18 +119,10 @@ def update_orders_list():
 def get_orders_list():
     return _orders_list
 
-def order_comment(order, unit):
-    return create_order(order, unit).full_comment
-
-def order_args(order, unit):
-    return create_order(order, unit).nb_args
-
-def order_shortcut(order, unit):
-    return create_order(order, unit).get_shortcut()
-
-def create_order(order, unit):
-    """Create Order instance from string."""
-    o = order.split()
-    return OrderView(ORDERS_DICT[o[0]](unit, o[1:]))
-
-from clientgameentity import EntityView, substitute_args
+def substitute_args(t, args):
+    if t is not None:
+        while "$1" in t:
+            i = t.index("$1")
+            del t[i]
+            t[i:i] = args[0]
+        return t

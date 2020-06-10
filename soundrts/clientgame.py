@@ -15,7 +15,7 @@ from lib.mouse import set_cursor
 from clientmenu import Menu, input_string
 from clientgameentity import EntityView
 from clientgamenews import must_be_said
-from clientgameorder import order_title, order_shortcut, order_args, order_comment, order_index, nb2msg_f
+from clientgameorder import OrderTypeView, nb2msg_f
 import config
 from definitions import style, VIRTUAL_TIME_INTERVAL
 from lib import chronometer as chrono
@@ -248,8 +248,11 @@ class GameInterface(object):
     def _priority(self, o):
         p = 10
         if self.an_order_requiring_a_target_is_selected:
-            if self.order.startswith("build") and o.is_a_building_land:
-                p = 0
+            if self.order.cls.keyword == "build" and o.is_a_building_land:
+                if o.is_an_exit:
+                    p = .5
+                else:
+                    p = 0
         else:
             if self.player.is_an_enemy(o):
                 p = .5
@@ -296,7 +299,7 @@ class GameInterface(object):
     def say_target(self):
         if self.an_order_requiring_a_target_is_selected:
             d, vg, vd = self.get_description_of(self.target)
-            voice.item(d + order_title(self.order), vg, vd)
+            voice.item(d + self.order.title, vg, vd)
         else:
             voice.item(*self.get_description_of(self.target))
 
@@ -714,7 +717,7 @@ class GameInterface(object):
                     self.say_target()
                     self.display()
                     if self.an_order_requiring_a_target_is_selected:
-                        if self.order.find("build") == 0:
+                        if self.order.cls.keyword == "build":
                             set_cursor("square")
                         else:
                             set_cursor("target")
@@ -725,7 +728,7 @@ class GameInterface(object):
                     self._select_and_say_square(square)
                     self.target = target
                     if self.an_order_requiring_a_target_is_selected:
-                        if self.order.find("build") == 0:
+                        if self.order.cls.keyword == "build":
                             set_cursor("square")
                         else:
                             set_cursor("target")
@@ -767,11 +770,10 @@ class GameInterface(object):
         self._bindings.load(s, self)
 
     def _execute_order_shortcut(self, e):
-        first_unit = self.dobjets[self.group[0]].model
         for o in self.orders():
-            if order_shortcut(o, first_unit) == e.unicode:
+            if o.shortcut == e.unicode:
                 self._select_order(o)
-                if order_args(o, first_unit) == 0:
+                if o.nb_args == 0:
                     self.cmd_validate()
                 return
         voice.item(mp.BEEP)
@@ -1149,17 +1151,17 @@ class GameInterface(object):
         elif self.order is None: # nothing to validate
             self.cmd_command_unit()
         elif self.an_order_not_requiring_a_target_is_selected:
-            self.send_order(self.order, None, args)
-            voice.item(order_title(self.order)) # confirmation
+            self.send_order(self.order.encode, None, args)
+            voice.item(self.order.title) # confirmation
             self._previous_order = self.order
         elif self.an_order_requiring_a_target_is_selected:
             if self.order not in self.orders():
                 # the order is not in the menu anymore
                 psounds.play_stereo(sounds.get_sound(BEEP_SOUND))
             elif self.ui_target.id is not None:
-                self.send_order(self.order, self.ui_target.id, args)
+                self.send_order(self.order.encode, self.ui_target.id, args)
                 # confirmation
-                voice.item(order_title(self.order) + self.ui_target.title)
+                voice.item(self.order.title + self.ui_target.title)
                 self._previous_order = self.order
         self.order = None
 
@@ -1172,9 +1174,10 @@ class GameInterface(object):
         msgs = []
         for u in self.group:
             if u in self.dobjets:
-                order = self.dobjets[u].model.get_default_order(self.ui_target.id)
+                u = self.dobjets[u]
+                order = u.model.get_default_order(self.ui_target.id)
                 if order is not None:
-                    msg = order_title(order) + self.ui_target.title
+                    msg = OrderTypeView(order, u).title + self.ui_target.title
                     if msg not in msgs:
                         msgs.append(msg)
         confirmation = []
@@ -1383,36 +1386,36 @@ class GameInterface(object):
     def orders(self, inactive=False):
         if inactive:
             menu_type = "menu"
-            ok = lambda o, u: o not in self.dobjets[u].strict_menu
+            ok = lambda o, u: o not in u.strict_menu
         else:
             menu_type = "strict_menu"
             ok = lambda o, u: True
         menu = []
+        done = []
         for u in self.group:
             if u in self.dobjets:
-                for o in getattr(self.dobjets[u], menu_type):
-                    if o not in menu and ok(o, u):
-                        menu.append(o)
+                u = self.dobjets[u]
+                for o in getattr(u, menu_type):
+                    if o not in done and ok(o, u):
+                        menu.append(OrderTypeView(o, u))
+                        done.append(o)
         # sort the menu by index
-        menu.sort(key=order_index)
+        menu.sort(key=lambda x: x.index)
         return menu
 
     @property
     def an_order_not_requiring_a_target_is_selected(self):
-        return self.order and self.group and order_args(self.order, self.dobjets[self.group[0]].model) == 0
+        return self.order and self.order.nb_args == 0
 
     @property
     def an_order_requiring_a_target_is_selected(self):
-        return self.order and self.group and order_args(self.order, self.dobjets[self.group[0]].model)
+        return self.order and self.order.nb_args
 
     def _select_order(self, order):
         self.order = order
         # say the new current order
-        msg = order_title(self.order) + order_comment(self.order,
-            self.dobjets[self.group[0]].model) # "requires..."
-                    # actually group[0] is not necessary the right
-                    # one but it is only used to retrieve the world object
-        if order_args(self.order, self.dobjets[self.group[0]].model) == 0:
+        msg = self.order.title + self.order.full_comment
+        if self.order.nb_args == 0:
             msg += mp.COMMA + mp.CONFIRM
         else:
             msg += mp.COMMA + mp.SELECT_TARGET_AND_CONFIRM
@@ -1444,11 +1447,10 @@ class GameInterface(object):
     def cmd_order_shortcut(self):
         if self.group:
             msg = []
-            first_unit = self.dobjets[self.group[0]].model
             for o in self.orders():
-                shortcut = order_shortcut(o, first_unit)
+                shortcut = o.shortcut
                 if shortcut:
-                    msg += [str(shortcut)] + order_title(o) + mp.COMMA
+                    msg += [str(shortcut)] + o.title + mp.COMMA
             if msg:
                 self.shortcut_mode = True
                 voice.item(msg)
@@ -1458,8 +1460,7 @@ class GameInterface(object):
     def cmd_do_again(self, *args):
         if self._previous_order is not None and self.group:
             self._select_order(self._previous_order)
-            if "now" in args and \
-               order_args(self.order, self.dobjets[self.group[0]].model) == 0:
+            if "now" in args and self.order.nb_args == 0:
                 args = [a for a in args if a in ("queue_order", "imperative")]
                 self.cmd_validate(*args)
 

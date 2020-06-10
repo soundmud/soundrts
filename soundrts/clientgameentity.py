@@ -4,6 +4,7 @@ import time
 import pygame
 
 from clientgamenews import must_be_said
+from clientgameorder import get_orders_list, substitute_args
 from clientmedia import voice, sounds, get_fullscreen
 import config
 from definitions import style
@@ -25,13 +26,23 @@ def compute_title(type_name):
     else:
         return [int(x) for x in t]
 
-def substitute_args(t, args):
-    if t is not None:
-        while "$1" in t:
-            i = t.index("$1")
-            del t[i]
-            t[i:i] = args[0]
-        return t
+def _order_title_msg(order, interface, nb=1):
+    if order.is_deferred:
+        result = style.get("messages", "production_deferred")
+    else:
+        result = []
+    result += style.get(order.keyword, "title")
+    if order.type is not None:
+        t = style.get(order.type.type_name, "title")
+        if nb != 1:
+            t = nb2msg(nb) + t
+        result = substitute_args(result, [t])
+    if order.target is not None:
+        if order.keyword == "build_phase_two":
+            result += style.get(order.target.type.type_name, "title")
+        else:
+            result += EntityView(interface, order.target).title
+    return mp.COMMA + result
 
 
 class EntityView(object):
@@ -127,20 +138,20 @@ class EntityView(object):
                 if o.keyword == "train" and prev.type == o.type:
                     nb += 1
                 else:
-                    t += OrderView(prev, self.interface).title_msg(nb)
+                    t += _order_title_msg(prev, self.interface, nb)
                     if o.keyword == "train":
                         prev = o
                         nb = 1
                     else:
-                        t += OrderView(o, self.interface).title_msg()
+                        t += _order_title_msg(o, self.interface)
                         prev = None
             elif o.keyword == "train":
                 prev = o
                 nb = 1
             else:
-                t += OrderView(o, self.interface).title_msg()
+                t += _order_title_msg(o, self.interface)
         if prev:
-            t += OrderView(prev, self.interface).title_msg(nb)
+            t += _order_title_msg(prev, self.interface, nb)
         return t + mp.COMMA
 
     @property
@@ -551,6 +562,3 @@ class EntityView(object):
         self.launch_event_style("added", alert=True)
         if "unit_added" in config.verbosity and must_be_said(self.number):
             voice.info(substitute_args(self.get_style("added_msg"), [self.ext_title]))
-
-
-from clientgameorder import OrderView, get_orders_list

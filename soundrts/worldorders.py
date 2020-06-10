@@ -153,9 +153,6 @@ class Order(object):
         else:
             return []
 
-    @property
-    def missing_requirements(self):
-        return []
 
 class ImmediateOrder(Order):
 
@@ -364,10 +361,6 @@ class ComplexOrder(Order):
             if is_allowed(unit, t):
                 m.append(cls.keyword + " " + t)
         return m
-
-    @property
-    def missing_requirements(self):
-        return [r for r in self.type.requirements if not self.unit.player.has(r)]
 
 
 class ProductionOrder(ComplexOrder):
