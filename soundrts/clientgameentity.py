@@ -37,7 +37,10 @@ def _order_title_msg(order, interface, nb=1):
         if nb != 1:
             t = nb2msg(nb) + t
         result = substitute_args(result, [t])
-    if order.target is not None:
+    if hasattr(order, "targets"): # patrol
+        for t in getattr(order, "targets"):
+            result += EntityView(interface, t).title + mp.COMMA
+    elif order.target is not None:
         if order.keyword == "build_phase_two":
             result += style.get(order.target.type.type_name, "title")
         else:
@@ -150,6 +153,8 @@ class EntityView(object):
                 nb = 1
             else:
                 t += _order_title_msg(o, self.interface)
+            if o.keyword == "patrol":
+                break
         if prev:
             t += _order_title_msg(prev, self.interface, nb)
         return t + mp.COMMA
