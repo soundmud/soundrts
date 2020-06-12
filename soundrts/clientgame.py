@@ -299,7 +299,7 @@ class GameInterface(object):
     def say_target(self):
         if self.an_order_requiring_a_target_is_selected:
             d, vg, vd = self.get_description_of(self.target)
-            voice.item(d + self.order.title, vg, vd)
+            voice.item(d + mp.COMMA + self.order.title, vg, vd)
         else:
             voice.item(*self.get_description_of(self.target))
 
@@ -1417,7 +1417,7 @@ class GameInterface(object):
     def _select_order(self, order, help=True):
         self.order = order
         # say the new current order
-        msg = self.order.title + self.order.full_comment
+        msg = self.order.title + mp.COMMA + self.order.full_comment
         if help:
             if self.order.nb_args == 0:
                 msg += mp.COMMA + mp.CONFIRM
