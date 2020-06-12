@@ -371,6 +371,7 @@ class World(object):
                     p.update()
                 except:
                     exception("")
+        self.random.shuffle(self.active_objects)
         for o in self.active_objects[:]:
             # much faster way to check if "o in self.active_objects":
             if o.place is not None:
