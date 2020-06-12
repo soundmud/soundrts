@@ -505,7 +505,9 @@ class Computer(Player):
                     break
             if type in self.world.unit_class(maker).can_upgrade_to:
                 if self.nb(maker) >= nb:
-                    if self.gather(t.cost, t.food_cost):
+                    m = self.world.unit_class(maker)
+                    if self.gather([t.cost[i] - m.cost[i] for i in range(len(t.cost))],
+                                   t.food_cost - m.food_cost):
                         self.order(nb, maker, ["upgrade_to", type])
                 else:
                     self._get(nb, maker)
