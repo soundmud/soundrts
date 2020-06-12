@@ -1383,8 +1383,11 @@ class GameInterface(object):
 
     order = None
 
-    def orders(self, inactive=False):
-        if inactive:
+    def orders(self, inactive_only=False, inactive_included=False):
+        if inactive_included:
+            menu_type = "menu"
+            ok = lambda o, u: True
+        elif inactive_only:
             menu_type = "menu"
             ok = lambda o, u: o not in u.strict_menu
         else:
@@ -1411,19 +1414,22 @@ class GameInterface(object):
     def an_order_requiring_a_target_is_selected(self):
         return self.order and self.order.nb_args
 
-    def _select_order(self, order):
+    def _select_order(self, order, help=True):
         self.order = order
         # say the new current order
         msg = self.order.title + self.order.full_comment
-        if self.order.nb_args == 0:
-            msg += mp.COMMA + mp.CONFIRM
-        else:
-            msg += mp.COMMA + mp.SELECT_TARGET_AND_CONFIRM
+        if help:
+            if self.order.nb_args == 0:
+                msg += mp.COMMA + mp.CONFIRM
+            else:
+                msg += mp.COMMA + mp.SELECT_TARGET_AND_CONFIRM
         voice.item(msg)
 
     def cmd_select_order(self, inc, *args):
         inc = int(inc)
-        orders = self.orders(inactive="inactive" in args) # do this once (can take a long time)
+        # call self.orders() once (can take a long time)
+        orders = self.orders(inactive_only="inactive_only" in args,
+                             inactive_included="inactive_included" in args)
         # if no menu then do nothing
         if not orders:
             voice.item(mp.NOTHING)
@@ -1442,7 +1448,7 @@ class GameInterface(object):
             index = len(orders) - 1
         elif index >= len(orders):
             index = 0
-        self._select_order(orders[index])
+        self._select_order(orders[index], help="inactive_only" not in args)
 
     def cmd_order_shortcut(self):
         if self.group:
