@@ -1,3 +1,4 @@
+from __future__ import print_function
 import unittest
 
 from soundrts.mapfile import Map
@@ -39,7 +40,7 @@ class DummyClient(worldclient.DummyClient):
 
     def push(self, *args):
         if False: # remove this to check the values
-            print args
+            print(args)
  
 
 class _PlayerBaseTestCase(unittest.TestCase):
