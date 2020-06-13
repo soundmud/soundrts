@@ -1,4 +1,5 @@
 """"use integers to make sure that any computer will give the same results"""
+from __future__ import print_function
 
 import math
 import sys
@@ -22,9 +23,9 @@ def make_tables():
                       for a in range(360))
     acos_table = dict(((c, int(math.degrees(math.acos(c / 100.0))))
                        for c in range(-100, 101)))
-    print "_COS_TABLE =", cos_table
-    print "_SIN_TABLE =", sin_table
-    print "_ACOS_TABLE =", acos_table
+    print("_COS_TABLE =", cos_table)
+    print("_SIN_TABLE =", sin_table)
+    print("_ACOS_TABLE =", acos_table)
 
 
 def to_int(s):
@@ -32,7 +33,7 @@ def to_int(s):
     assert isinstance(s, str)  # don't convert twice!
     result = int(float(s) * PRECISION)
     if isinstance(result, long):
-        warning("%s is a long integer (greater than %s).", result, sys.maxint)
+        warning("%s is a long integer (greater than %s).", result, sys.maxsize)
     return result
 
 

@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 import random
 import time
 
-import config
-from definitions import VIRTUAL_TIME_INTERVAL
-from lib.log import info, warning
-from version import IS_DEV_VERSION
+from . import config
+from .definitions import VIRTUAL_TIME_INTERVAL
+from .lib.log import info, warning
+from .version import IS_DEV_VERSION
 
 
 def same(strings):

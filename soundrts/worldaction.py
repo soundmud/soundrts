@@ -1,4 +1,5 @@
-from lib.nofloat import square_of_distance
+from __future__ import absolute_import
+from .lib.nofloat import square_of_distance
 
 
 class Action:

@@ -1,20 +1,21 @@
 """This ugly module is fighting with res.py to make some useful job."""
+from __future__ import absolute_import
 
 import os
 import platform
 
 import pygame
 
-from lib import tts
-from lib.msgs import nb2msg
-from lib.screen import set_screen
-from lib.sound import init_sound, sound_stop, get_volume, set_volume
-from lib.sound_cache import sounds
-from lib.voice import voice
-import config
-import msgparts as mp
-import res
-from version import VERSION
+from .lib import tts
+from .lib.msgs import nb2msg
+from .lib.screen import set_screen
+from .lib.sound import init_sound, sound_stop, get_volume, set_volume
+from .lib.sound_cache import sounds
+from .lib.voice import voice
+from . import config
+from . import msgparts as mp
+from . import res
+from .version import VERSION
 
 
 if platform.system() == "Windows":

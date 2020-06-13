@@ -1,7 +1,8 @@
-from lib.voice import voice
-from lib.log import warning
-from lib.nofloat import PRECISION
-import msgparts as mp
+from __future__ import absolute_import
+from .lib.voice import voice
+from .lib.log import warning
+from .lib.nofloat import PRECISION
+from . import msgparts as mp
 
 
 _subzone_name = {

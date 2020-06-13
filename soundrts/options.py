@@ -1,8 +1,9 @@
 """command line options"""
+from __future__ import absolute_import
 
 import optparse
 
-from lib.log import warning
+from .lib.log import warning
 
 
 ip = None

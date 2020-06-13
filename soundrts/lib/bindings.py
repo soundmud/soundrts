@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 import re
 
 import pygame
 from pygame import KMOD_CTRL, KMOD_ALT, KMOD_SHIFT
 from pygame import K_LCTRL, K_LALT, K_LSHIFT, K_RCTRL, K_RALT, K_RSHIFT
 
-from log import warning
+from .log import warning
 
 
 class _Error(Exception):

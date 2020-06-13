@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import asyncore
 import re
 import sys
@@ -5,15 +6,15 @@ import socket
 import urllib
 import urllib2
 
-from metaserver import MAIN_METASERVER_URL
-from lib.log import debug, info, warning, exception
-from serverclient import ConnectionToClient
-from serverroom import InTheLobby, OrganizingAGame, Playing, WaitingForTheGameToStart
-from lib.ticker import Ticker
-from version import VERSION
+from .metaserver import MAIN_METASERVER_URL
+from .lib.log import debug, info, warning, exception
+from .serverclient import ConnectionToClient
+from .serverroom import InTheLobby, OrganizingAGame, Playing, WaitingForTheGameToStart
+from .lib.ticker import Ticker
+from .version import VERSION
 
-import config
-import options
+from . import config
+from . import options
 
 
 REGISTER_INTERVAL = 10 * 60 # register server every 10 minutes

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 
 
@@ -7,7 +8,7 @@ def _mkdir(path):
             os.mkdir(path)
         except:
             # no log file at this stage
-            print "cannot make dir: %s" % path
+            print("cannot make dir: %s" % path)
 
 def _get_stage():
     stage = open("cfg/stage.txt").read().strip()
@@ -18,9 +19,9 @@ def _get_stage():
 
 if os.path.exists("user"):
     CONFIG_DIR_PATH = "user"
-elif os.environ.has_key("APPDATA"): # Windows XP
+elif "APPDATA" in os.environ: # Windows XP
     CONFIG_DIR_PATH = os.path.join(os.environ["APPDATA"], "SoundRTS%s" % _get_stage())
-elif os.environ.has_key("HOME"): # Linux
+elif "HOME" in os.environ: # Linux
     CONFIG_DIR_PATH = os.path.join(os.environ["HOME"], ".SoundRTS%s" % _get_stage())
 else: # Windows 95, Windows 98 ?
     CONFIG_DIR_PATH = os.getcwd()

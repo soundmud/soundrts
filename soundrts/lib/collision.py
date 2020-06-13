@@ -1,3 +1,4 @@
+from __future__ import print_function
 #from soundrts import version
 DEBUG_MODE = False #version.IS_DEV_VERSION
 
@@ -81,32 +82,32 @@ if __name__ == "__main__":
         pass
     m = CollisionMatrix(200, 2)
 #    assert m._key(0, 0) == 0
-    print m._key(50, 0)
-    print m._key(0, 50)
+    print(m._key(50, 0))
+    print(m._key(0, 50))
     for x, y in ((0, 0), ( 50, 0), (0, 50), (20, 56), ):
         k = m._key(x, y)
-        print (x, y), k, m._xy(k)
+        print((x, y), k, m._xy(k))
         assert m._xy(k) == (x, y)
     for x, y in ((20, 57), ):
         k = m._key(x, y)
-        print (x, y), k, m._xy(k)
+        print((x, y), k, m._xy(k))
         assert m._xy(k) != (x, y)
     o = O()
     o.collision = 1
     o.x = 6
     o.y = 6
-    print m._shape(o.x, o.y)
+    print(m._shape(o.x, o.y))
     assert len(m._shape(o.x, o.y)) in (5, 9)
     if m.would_collide(o.x, o.y):
-        print "error"
+        print("error")
     m.add(o.x, o.y)
-    print m.xy_set()
+    print(m.xy_set())
 #    m.add(o.x, o.y)
     if not m.would_collide(o.x, o.y):
-        print "error"
+        print("error")
     m.remove(o.x, o.y)
     if m.would_collide(o.x, o.y):
-        print "error"
+        print("error")
 ##    m.remove(o.x, o.y)
 ##    if m.would_collide(o.x, o.y):
 ##        print "error"

@@ -1,12 +1,13 @@
+from __future__ import absolute_import
 import threading
 import urllib
 
-from clientmedia import voice
-from metaserver import METASERVER_URL
-import msgparts as mp
-from paths import STATS_PATH, OLD_STATS_PATH
-import stats
-from version import VERSION, IS_DEV_VERSION
+from .clientmedia import voice
+from .metaserver import METASERVER_URL
+from . import msgparts as mp
+from .paths import STATS_PATH, OLD_STATS_PATH
+from . import stats
+from .version import VERSION, IS_DEV_VERSION
 
 
 class RevisionChecker(threading.Thread):

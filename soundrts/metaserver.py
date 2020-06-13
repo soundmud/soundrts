@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 import urllib2
 
-from lib.log import warning
-import msgparts as mp
+from .lib.log import warning
+from . import msgparts as mp
 
 
 # old value used by some features (stats, ...)

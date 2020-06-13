@@ -1,5 +1,6 @@
-from definitions import MAX_NB_OF_RESOURCE_TYPES
-from lib.log import warning
+from __future__ import absolute_import
+from .definitions import MAX_NB_OF_RESOURCE_TYPES
+from .lib.log import warning
 
 
 class Upgrade(object): # or Tech

@@ -1,3 +1,4 @@
+from __future__ import print_function
 def encode_range(r):
     i, j = r
     if i == j:
@@ -38,11 +39,11 @@ if __name__ == "__main__":
 
     def test(a, b):
         c = encode(a)
-        print '%s => "%s"' % (a, b)
+        print('%s => "%s"' % (a, b))
         if c != b:
-            print "ERROR!", c
+            print("ERROR!", c)
         if decode(encode(a)) != a:
-            print "ENCODE-DECODE ERROR!"
+            print("ENCODE-DECODE ERROR!")
 
     test(["0", "1", "2"], "0-2")
     test(["0", "1", "2"], "0-2")

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 try:
     from ctypes import create_string_buffer, sizeof, windll, c_ulong, byref
 except:
@@ -5,9 +6,9 @@ except:
 import os
 import urllib
 
-from metaserver import METASERVER_URL
-from lib.log import debug
-from paths import STATS_PATH
+from .metaserver import METASERVER_URL
+from .lib.log import debug
+from .paths import STATS_PATH
 
 
 class Stats(object):
@@ -50,7 +51,7 @@ class Stats(object):
         try:
             if duration >= 60:
                 stats = self._read_file()
-                if stats.has_key(game_type):
+                if game_type in stats:
                     stats[game_type][0] += 1
                     stats[game_type][1] += duration
                 else:
@@ -61,7 +62,7 @@ class Stats(object):
 
     def get(self, game_type): # used for unit test
         stats = self._read_file()
-        if stats.has_key(game_type):
+        if game_type in stats:
             return tuple(stats[game_type])
         else:
             return None

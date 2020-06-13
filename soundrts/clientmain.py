@@ -1,10 +1,11 @@
-import config
+from __future__ import absolute_import
+from . import config
 config.load()
 
-from lib import log
-from lib.log import exception, warning
-from version import VERSION_FOR_BUG_REPORTS
-from paths import CLIENT_LOG_PATH
+from .lib import log
+from .lib.log import exception, warning
+from .version import VERSION_FOR_BUG_REPORTS
+from .paths import CLIENT_LOG_PATH
 log.set_version(VERSION_FOR_BUG_REPORTS)
 log.add_secure_file_handler(CLIENT_LOG_PATH, "w")
 log.add_http_handler("http://jlpo.free.fr/soundrts/metaserver")
@@ -24,22 +25,22 @@ import tempfile
 import time
 import webbrowser
 
-from campaign import campaigns
-from clientmedia import voice, init_media, close_media
-from clientmenu import Menu, input_string, CLOSE_MENU
-from clientserver import connect_and_play, start_server_and_connect
-from clientversion import revision_checker
-from definitions import style
-from game import TrainingGame, ReplayGame
-from lib.msgs import nb2msg
-from lib.resource import best_language_match, preferred_language
-from mapfile import worlds_multi
-from metaserver import servers_list
-import msgparts as mp
-from paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
-import res
-import stats
-from version import VERSION
+from .campaign import campaigns
+from .clientmedia import voice, init_media, close_media
+from .clientmenu import Menu, input_string, CLOSE_MENU
+from .clientserver import connect_and_play, start_server_and_connect
+from .clientversion import revision_checker
+from .definitions import style
+from .game import TrainingGame, ReplayGame
+from .lib.msgs import nb2msg
+from .lib.resource import best_language_match, preferred_language
+from .mapfile import worlds_multi
+from .metaserver import servers_list
+from . import msgparts as mp
+from .paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
+from . import res
+from . import stats
+from .version import VERSION
 
 
 def choose_server_ip_in_a_list():

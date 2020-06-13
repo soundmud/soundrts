@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # read/write the config file
 
 import ConfigParser
@@ -7,8 +8,8 @@ import re
 import shutil
 import sys
 
-from lib.log import info, warning
-from paths import CONFIG_FILE_PATH
+from .lib.log import info, warning
+from .paths import CONFIG_FILE_PATH
 
 
 def login_is_valid(login):

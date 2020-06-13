@@ -1,11 +1,12 @@
+from __future__ import absolute_import
 import string
 
-from lib.msgs import nb2msg
-from lib.nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
-from lib.priodict import priorityDictionary
-from worldentity import COLLISION_RADIUS
-from worldexit import passage
-from worldresource import Deposit, Meadow
+from .lib.msgs import nb2msg
+from .lib.nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
+from .lib.priodict import priorityDictionary
+from .worldentity import COLLISION_RADIUS
+from .worldexit import passage
+from .worldresource import Deposit, Meadow
 
 
 SPACE_LIMIT = 144
@@ -116,9 +117,9 @@ class Square(object):
 
     def __getstate__(self):
         d = self.__dict__.copy()
-        if d.has_key('spiral'):
+        if 'spiral' in d:
             del d['spiral']
-        if d.has_key('neighbors'):
+        if 'neighbors' in d:
             del d['neighbors']
         return d
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import copy
 from soundrts.lib.sound import distance
 from soundrts.lib.nofloat import square_of_distance
@@ -12,26 +13,26 @@ import re
 import string
 import time
 
-from lib import chronometer as chrono
-from lib import collision
-from definitions import rules, get_ai_names, load_ai, VIRTUAL_TIME_INTERVAL
-from lib.log import warning, exception, info
-from lib.nofloat import to_int, int_distance, PRECISION
-import msgparts as mp
-from paths import MAPERROR_PATH
-import res
-from worldability import Ability
-from worldclient import DummyClient
-from worldentity import COLLISION_RADIUS
-from worldexit import passage
-from worldorders import ORDERS_DICT
-from worldplayerbase import Player, normalize_cost_or_resources, A
-from worldplayercomputer import Computer
-from worldplayercomputer2 import Computer2
-from worldresource import Deposit, Meadow
-from worldroom import Square
-from worldunit import Unit, Worker, Soldier, Building, _Building, Effect, ground_or_air
-from worldupgrade import Upgrade
+from .lib import chronometer as chrono
+from .lib import collision
+from .definitions import rules, get_ai_names, load_ai, VIRTUAL_TIME_INTERVAL
+from .lib.log import warning, exception, info
+from .lib.nofloat import to_int, int_distance, PRECISION
+from . import msgparts as mp
+from .paths import MAPERROR_PATH
+from . import res
+from .worldability import Ability
+from .worldclient import DummyClient
+from .worldentity import COLLISION_RADIUS
+from .worldexit import passage
+from .worldorders import ORDERS_DICT
+from .worldplayerbase import Player, normalize_cost_or_resources, A
+from .worldplayercomputer import Computer
+from .worldplayercomputer2 import Computer2
+from .worldresource import Deposit, Meadow
+from .worldroom import Square
+from .worldunit import Unit, Worker, Soldier, Building, _Building, Effect, ground_or_air
+from .worldupgrade import Upgrade
 
 
 GLOBAL_FOOD_LIMIT = 80
@@ -449,7 +450,7 @@ class World(object):
 
         At the moment, unit_classes contains also: upgrades, abilities...
         """
-        if not self.unit_classes.has_key(s):
+        if s not in self.unit_classes:
             try:
                 base = self.unit_base_classes[rules.get(s, "class")[0]]
             except:
@@ -565,7 +566,7 @@ class World(object):
             col = 0
             is_a_portal = True
         j = t[col] + i[1:]
-        if not self.grid.has_key(j):
+        if j not in self.grid:
             map_error("", "The west-east passage starting from %s doesn't exist." % i)
         return self.grid[i].east_side(), self.grid[j].west_side(), is_a_portal
 
@@ -576,7 +577,7 @@ class World(object):
             line = 1
             is_a_portal = True
         j = i[0] + str(line)
-        if not self.grid.has_key(j):
+        if j not in self.grid:
             map_error("", "The south-north passage starting from %s doesn't exist." % i)
         return self.grid[i].north_side(), self.grid[j].south_side(), is_a_portal
 
@@ -864,7 +865,7 @@ class World(object):
             self.map = map
             self.square_width = int(self.square_width * PRECISION)
             self._build_map()
-        except MapError, msg:
+        except MapError as msg:
             warning("map error: %s", msg)
             self.map_error = "map error: %s" % msg
             return False

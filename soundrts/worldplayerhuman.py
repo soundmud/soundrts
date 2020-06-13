@@ -1,4 +1,5 @@
-from worldplayerbase import Player
+from __future__ import absolute_import
+from .worldplayerbase import Player
 
 
 class Human(Player):

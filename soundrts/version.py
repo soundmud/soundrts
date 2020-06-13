@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 try:
     from hashlib import md5
 except ImportError:
     from md5 import md5
 import os
 
-import res
+from . import res
 
 
 VERSION = "1.3-b1-dev"

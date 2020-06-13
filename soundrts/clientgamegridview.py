@@ -1,12 +1,13 @@
+from __future__ import absolute_import
 from math import sin, cos, radians
 
 import pygame
 
-from lib.screen import get_screen, draw_line, draw_rect
-from lib.log import warning
-from lib.nofloat import square_of_distance
+from .lib.screen import get_screen, draw_line, draw_rect
+from .lib.log import warning
+from .lib.nofloat import square_of_distance
 
-from definitions import style
+from .definitions import style
 
 
 R = int(0.5 * 10)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import os.path
 import pickle
 import threading
@@ -6,23 +7,23 @@ import time
 import pygame
 from pygame.locals import KEYDOWN
 
-from clientmedia import voice, play_sequence
-import clientgame
-from clientgameorder import update_orders_list
-import definitions
-import config
-from definitions import style, rules
-from lib.log import warning, exception
-from lib.msgs import nb2msg
-from mapfile import Map
-import msgparts as mp
-from paths import CUSTOM_BINDINGS_PATH, REPLAYS_PATH, SAVE_PATH
+from .clientmedia import voice, play_sequence
+from . import clientgame
+from .clientgameorder import update_orders_list
+from . import definitions
+from . import config
+from .definitions import style, rules
+from .lib.log import warning, exception
+from .lib.msgs import nb2msg
+from .mapfile import Map
+from . import msgparts as mp
+from .paths import CUSTOM_BINDINGS_PATH, REPLAYS_PATH, SAVE_PATH
 import random
-import res
-import stats
-from version import VERSION, compatibility_version
-from world import World
-from worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, RemoteClient, send_platform_version_to_metaserver 
+from . import res
+from . import stats
+from .version import VERSION, compatibility_version
+from .world import World
+from .worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, RemoteClient, send_platform_version_to_metaserver 
 
 
 PROFILE = False
@@ -311,7 +312,7 @@ class ReplayGame(_Game):
                     version, mods)
         campaign_path_or_packed_map = self.replay_read()
         if game_type_name == "mission" and "***" not in campaign_path_or_packed_map:
-            from campaign import Campaign
+            from .campaign import Campaign
             self.map = Campaign(campaign_path_or_packed_map)._get(int(self.replay_read()))
         else:
             self.map = Map()

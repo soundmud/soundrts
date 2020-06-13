@@ -1,4 +1,5 @@
-import res
+from __future__ import absolute_import
+from . import res
 
 
 def _read_table_from_file(name):

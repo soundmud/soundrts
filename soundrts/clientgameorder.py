@@ -1,9 +1,10 @@
-from definitions import style, rules
-from lib.log import warning
-from lib.msgs import nb2msg
-from lib.nofloat import PRECISION
-import msgparts as mp
-from worldorders import ORDERS_DICT
+from __future__ import absolute_import
+from .definitions import style, rules
+from .lib.log import warning
+from .lib.msgs import nb2msg
+from .lib.nofloat import PRECISION
+from . import msgparts as mp
+from .worldorders import ORDERS_DICT
 
 
 def nb2msg_f(n):

@@ -1,11 +1,12 @@
+from __future__ import absolute_import
 import re
 
-from definitions import get_ai, rules
-from lib.log import info, warning, exception
-from version import IS_DEV_VERSION
-from worldplayerbase import Player
-from worldresource import Meadow, Deposit, Corpse
-from worldunit import Worker, BuildingSite, Soldier
+from .definitions import get_ai, rules
+from .lib.log import info, warning, exception
+from .version import IS_DEV_VERSION
+from .worldplayerbase import Player
+from .worldresource import Meadow, Deposit, Corpse
+from .worldunit import Worker, BuildingSite, Soldier
 from soundrts.lib.nofloat import PRECISION
 from soundrts.worldorders import UseOrder
 

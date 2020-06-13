@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 try:
     from hashlib import md5
 except ImportError:
@@ -7,13 +8,13 @@ import sys
 import time
 import urllib
 
-from version import VERSION, IS_DEV_VERSION
-from metaserver import METASERVER_URL
-from lib import chronometer as chrono
-from lib.log import info, warning, exception
-from worldplayercomputer import Computer
-from worldplayercomputer2 import Computer2
-from worldplayerhuman import Human
+from .version import VERSION, IS_DEV_VERSION
+from .metaserver import METASERVER_URL
+from .lib import chronometer as chrono
+from .lib.log import info, warning, exception
+from .worldplayercomputer import Computer
+from .worldplayercomputer2 import Computer2
+from .worldplayerhuman import Human
 
 
 FIRST_FPCT = 1
@@ -51,7 +52,7 @@ class _Controller(object):
 
     @property
     def name(self):
-        from clientservermenu import name
+        from .clientservermenu import name
         return name(self.login)
 
     def __repr__(self):

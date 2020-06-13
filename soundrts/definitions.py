@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 import re
 
-from lib.nofloat import to_int
-from lib.log import debug, info, warning
-from lib.defs import preprocess
+from .lib.nofloat import to_int
+from .lib.log import debug, info, warning
+from .lib.defs import preprocess
 
 VIRTUAL_TIME_INTERVAL = 300 # milliseconds
 MAX_NB_OF_RESOURCE_TYPES = 10
@@ -73,9 +74,9 @@ class _Definitions:
             debug("*** pass %s ***", n)
             # for every object
             for ko, o in d.items():
-                if o.has_key("is_a"):
+                if "is_a" in o:
                     # init "expanded_is_a" (first pass)
-                    if expanded_is_a and not o.has_key("expanded_is_a"):
+                    if expanded_is_a and "expanded_is_a" not in o:
                         o["expanded_is_a"] = o["is_a"][:]
                         debug("%s.%s = %s", ko, "expanded_is_a", o["expanded_is_a"])
                         modified = True
@@ -102,13 +103,13 @@ class _Definitions:
 
     def _val(self, obj, attr):
         d = self._dict
-        if not d.has_key(obj):
+        if obj not in d:
             return
         o = d[obj]
-        if not o.has_key(attr):
-            if o.has_key("is_a"):
+        if attr not in o:
+            if "is_a" in o:
                 for p in o["is_a"]:
-                    if d.has_key(p) and self._val(p, attr) is not None:
+                    if p in d and self._val(p, attr) is not None:
                         return self._val(p, attr)
             return
         return o[attr]

@@ -1,18 +1,19 @@
+from __future__ import absolute_import
 import socket
 import sys
 import telnetlib
 import threading
 import time
 
-from clientmedia import voice
-from clientservermenu import ServerMenu
-from clientversion import revision_checker
-import config
-import options
-from lib.log import info, exception
-import msgparts as mp
-import servermain
-from version import compatibility_version
+from .clientmedia import voice
+from .clientservermenu import ServerMenu
+from .clientversion import revision_checker
+from . import config
+from . import options
+from .lib.log import info, exception
+from . import msgparts as mp
+from . import servermain
+from .version import compatibility_version
 
 
 class _Error(Exception): pass

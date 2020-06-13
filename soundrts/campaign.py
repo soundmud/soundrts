@@ -1,17 +1,18 @@
+from __future__ import absolute_import
 import ConfigParser
 import os
 import re
 
-from clientmedia import voice, sounds, play_sequence
-from clientmenu import Menu
-import config
-from game import MissionGame
-from mapfile import Map
-from lib.msgs import nb2msg
-import msgparts as mp
-from paths import CAMPAIGNS_CONFIG_PATH
-import res
-from res import get_all_packages_paths
+from .clientmedia import voice, sounds, play_sequence
+from .clientmenu import Menu
+from . import config
+from .game import MissionGame
+from .mapfile import Map
+from .lib.msgs import nb2msg
+from . import msgparts as mp
+from .paths import CAMPAIGNS_CONFIG_PATH
+from . import res
+from .res import get_all_packages_paths
 
 
 class MissionChapter(Map):

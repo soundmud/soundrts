@@ -2,12 +2,13 @@
 http://stackoverflow.com/questions/3612094/better-way-to-zip-files-in-python-zip-a-whole-directory-with-a-single-command?lq=1
 http://stackoverflow.com/questions/10060069/safely-extract-zip-or-tar-using-python
 """
+from __future__ import absolute_import
 
 import os
 import string
 import zipfile
 
-from log import warning
+from .log import warning
 
 
 def zipdir(target_dir, dest_file):

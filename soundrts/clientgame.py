@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 import Queue
 import re
@@ -7,28 +8,28 @@ import time
 import pygame
 from pygame.locals import KEYDOWN, QUIT, USEREVENT, KMOD_ALT, MOUSEBUTTONDOWN, KMOD_SHIFT, KMOD_CTRL, MOUSEBUTTONUP, MOUSEMOTION
 
-from clientgamegridview import GridView 
-from clientgamefocus import Zoom
-from clienthelp import help_msg
-from clientmedia import voice, sounds, sound_stop, modify_volume, get_fullscreen, toggle_fullscreen, play_sequence
-from lib.mouse import set_cursor
-from clientmenu import Menu, input_string
-from clientgameentity import EntityView
-from clientgamenews import must_be_said
-from clientgameorder import OrderTypeView, nb2msg_f
-import config
-from definitions import style, VIRTUAL_TIME_INTERVAL
-from lib import chronometer as chrono
-from lib import group
-from lib.bindings import Bindings
-from lib.log import debug, warning, exception
-from lib.msgs import nb2msg, eval_msg_and_volume
-from lib.nofloat import PRECISION
-from version import IS_DEV_VERSION
-from lib.sound import psounds, distance, angle, vision_stereo, stereo
-from lib.screen import set_game_mode, screen_render, get_screen,\
+from .clientgamegridview import GridView 
+from .clientgamefocus import Zoom
+from .clienthelp import help_msg
+from .clientmedia import voice, sounds, sound_stop, modify_volume, get_fullscreen, toggle_fullscreen, play_sequence
+from .lib.mouse import set_cursor
+from .clientmenu import Menu, input_string
+from .clientgameentity import EntityView
+from .clientgamenews import must_be_said
+from .clientgameorder import OrderTypeView, nb2msg_f
+from . import config
+from .definitions import style, VIRTUAL_TIME_INTERVAL
+from .lib import chronometer as chrono
+from .lib import group
+from .lib.bindings import Bindings
+from .lib.log import debug, warning, exception
+from .lib.msgs import nb2msg, eval_msg_and_volume
+from .lib.nofloat import PRECISION
+from .version import IS_DEV_VERSION
+from .lib.sound import psounds, distance, angle, vision_stereo, stereo
+from .lib.screen import set_game_mode, screen_render, get_screen,\
     screen_render_subtitle
-import msgparts as mp
+from . import msgparts as mp
 
 
 # minimal interval (in seconds) between 2 sounds
@@ -811,7 +812,7 @@ class GameInterface(object):
             self._process_srv_event(*e)
 
     def loop(self):
-        from clientserver import ConnectionAbortedError
+        from .clientserver import ConnectionAbortedError
         set_game_mode(True)
         pygame.event.clear()
         self.next_update = time.time()

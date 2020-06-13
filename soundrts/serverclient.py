@@ -1,14 +1,15 @@
+from __future__ import absolute_import
 import asynchat
 import re
 import string
 import sys
 import time
 
-from lib.log import info, warning, exception
-from lib.msgs import encode_msg
-from mapfile import worlds_multi
-import res
-from serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
+from .lib.log import info, warning, exception
+from .lib.msgs import encode_msg
+from .mapfile import worlds_multi
+from . import res
+from .serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
 
 
 class ConnectionToClient(asynchat.async_chat):
@@ -18,7 +19,8 @@ class ConnectionToClient(asynchat.async_chat):
     version = None
     game = None
 
-    def __init__(self, server, (connection, address)):
+    def __init__(self, server, xxx_todo_changeme):
+        (connection, address) = xxx_todo_changeme
         info("Connected: %s:%s" % address)
         asynchat.async_chat.__init__(self, connection)
         self.id = server.get_next_id()

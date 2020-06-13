@@ -1,12 +1,13 @@
 """SoundRTS resource manager"""
+from __future__ import absolute_import
 
 import os
 
-from lib.resource import ResourceLoader
-import config
-import msgparts as mp
-import options
-from paths import MAPS_PATHS
+from .lib.resource import ResourceLoader
+from . import config
+from . import msgparts as mp
+from . import options
+from .paths import MAPS_PATHS
 
 
 def get_all_packages_paths():
@@ -26,19 +27,19 @@ load_sounds = _r.load_sounds
 
 
 def on_loading():
-    from lib.voice import voice
+    from .lib.voice import voice
     voice.item(mp.LOADING + [mods, "."]) 
 
 
 def on_complete():
-    from lib.voice import voice
+    from .lib.voice import voice
     for mod in _r.unavailable_mods:
         voice.alert(mp.BEEP + mp.MOD_NOT_FOUND + [mod])
 
 
 def reload_all():
     global mods, soundpacks
-    from clientmedia import sounds, update_display_caption
+    from .clientmedia import sounds, update_display_caption
     _r.update_mods_list(mods, soundpacks, get_all_packages_paths())
     mods = _r.mods
     soundpacks = _r.soundpacks

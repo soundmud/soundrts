@@ -1,10 +1,11 @@
-from definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
-from lib.log import debug, warning, exception
-from lib.nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
-from worldaction import Action, AttackAction, MoveAction, MoveXYAction
-from worldentity import Entity
-from worldorders import ORDERS_DICT, GoOrder, RallyingPointOrder, BuildPhaseTwoOrder, UpgradeToOrder
-from worldresource import Corpse, Deposit
+from __future__ import absolute_import
+from .definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
+from .lib.log import debug, warning, exception
+from .lib.nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
+from .worldaction import Action, AttackAction, MoveAction, MoveXYAction
+from .worldentity import Entity
+from .worldorders import ORDERS_DICT, GoOrder, RallyingPointOrder, BuildPhaseTwoOrder, UpgradeToOrder
+from .worldresource import Corpse, Deposit
 
 
 DISTANCE_MARGIN = 175 # millimeters
