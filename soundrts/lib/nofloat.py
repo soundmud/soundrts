@@ -2,7 +2,6 @@
 from __future__ import print_function
 
 import math
-import sys
 
 from .log import warning
 
@@ -32,8 +31,6 @@ def to_int(s):
     """convert a string to an integer with PRECISION"""
     assert isinstance(s, str)  # don't convert twice!
     result = int(float(s) * PRECISION)
-    if isinstance(result, long):
-        warning("%s is a long integer (greater than %s).", result, sys.maxsize)
     return result
 
 
