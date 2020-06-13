@@ -19,8 +19,8 @@ class ConnectionToClient(asynchat.async_chat):
     version = None
     game = None
 
-    def __init__(self, server, xxx_todo_changeme):
-        (connection, address) = xxx_todo_changeme
+    def __init__(self, server, connection_and_address):
+        (connection, address) = connection_and_address
         info("Connected: %s:%s" % address)
         asynchat.async_chat.__init__(self, connection)
         self.id = server.get_next_id()
