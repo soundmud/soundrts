@@ -3,6 +3,7 @@ http://stackoverflow.com/questions/3612094/better-way-to-zip-files-in-python-zip
 http://stackoverflow.com/questions/10060069/safely-extract-zip-or-tar-using-python
 """
 from __future__ import absolute_import
+from builtins import input
 
 import os
 import string
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     if os.path.exists(dest):
         shutil.rmtree(dest)
     unzipdir(zf, dest)
-    raw_input("Check %s and %s, then press Enter to continue the test." % (zf, dest))
+    input("Check %s and %s, then press Enter to continue the test." % (zf, dest))
     try:
         unzipdir(zf, dest)
     except:

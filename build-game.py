@@ -1,5 +1,6 @@
 #! python2.7
 from __future__ import print_function
+from builtins import input
 import compileall
 from logging import *
 import os
@@ -16,7 +17,7 @@ VERSION_TXT = open("version.txt").read().strip()
 VERSION = re.search('VERSION = "([^"]+)"', open("soundrts/version.py").read()).group(1)
 if VERSION != VERSION_TXT:
     print("different versions: %s (version.txt) and %s (Python files)" % (VERSION_TXT, VERSION))
-    raw_input("[press ENTER to exit]")
+    input("[press ENTER to exit]")
     sys.exit()
 else:
     print(VERSION)
@@ -127,4 +128,4 @@ try:
             my_copy("metaserver", e, dest + "metaserver")
 except:
     exception("error")
-    raw_input("[press ENTER to exit]")
+    input("[press ENTER to exit]")

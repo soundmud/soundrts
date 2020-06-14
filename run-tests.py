@@ -1,4 +1,5 @@
 #! python2.7
+from builtins import input
 from soundrts.lib import log
 log.add_console_handler()
 
@@ -10,4 +11,4 @@ import pytest
 
 # note: "--capture=sys" is necessary to run in IDLE
 pytest.main("soundrts/tests --capture=sys")
-raw_input("[press ENTER to quit]")
+input("[press ENTER to quit]")
