@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 import random
 import time
 
@@ -178,8 +179,8 @@ class EntityView(object):
         if self.is_memory:
             title += mp.IN_THE_FOG + mp.COMMA
             if self.speed:
-                s = (self.world.time - self.time_stamp) / 1000
-                m = s / 60
+                s = (self.world.time - self.time_stamp) // 1000
+                m = s // 60
                 if m:
                     title += nb2msg(m) + mp.MINUTES
                 elif s:
@@ -261,7 +262,7 @@ class EntityView(object):
 
     def corrected_color(self):
         if self.model in self.interface.memory:
-            return tuple([x / 2 for x in self.color()])
+            return tuple([x // 2 for x in self.color()])
         else:
             return self.color()
 

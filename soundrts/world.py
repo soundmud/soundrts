@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 import copy
 from soundrts.lib.sound import distance
 from soundrts.lib.nofloat import square_of_distance
@@ -176,7 +177,7 @@ class World(object):
 
     @property
     def turn(self):
-        return self.time / VIRTUAL_TIME_INTERVAL
+        return self.time // VIRTUAL_TIME_INTERVAL
 
     _next_id = 0 # reset ID for each world to avoid big numbers
 
@@ -216,11 +217,11 @@ class World(object):
                 if filter(o) and square_of_distance(x, y, o.x, o.y) <= radius_2]
 
     def get_place_from_xy(self, x, y):
-        return self.grid.get((x / self.square_width,
-                              y / self.square_width))
+        return self.grid.get((x // self.square_width,
+                              y // self.square_width))
 
     def get_subsquare_id_from_xy(self, x, y):
-        return x * 3 / self.square_width, y * 3 / self.square_width
+        return x * 3 // self.square_width, y * 3 // self.square_width
 
     def can_harm(self, unit_type_name, other_type_name): 
         try:
@@ -301,7 +302,7 @@ class World(object):
         for p in self.players:
             p._buckets = {}
             for u in p.units:
-                k = (u.x / A, u.y / A)
+                k = (u.x // A, u.y // A)
                 try:
                     p._buckets[k].append(u)
                 except:
@@ -527,7 +528,7 @@ class World(object):
                     square.is_air = False
         self.set_neighbors()
         xmax = self.nb_columns * self.square_width
-        res = COLLISION_RADIUS * 2 / 3
+        res = COLLISION_RADIUS * 2 // 3
         self.collision = {"ground": collision.CollisionMatrix(xmax, res),
                           "air": collision.CollisionMatrix(xmax, res)}
         self.collision["water"] = self.collision["ground"]
@@ -553,8 +554,8 @@ class World(object):
             Meadow(self.grid[z])
 
     def _arrange_resources_symmetrically(self):
-        xc = self.nb_columns * 10 / 2
-        yc = self.nb_lines * 10 / 2
+        xc = self.nb_columns * 10 // 2
+        yc = self.nb_lines * 10 // 2
         for z in self.squares:
             z.arrange_resources_symmetrically(xc, yc)
 
@@ -965,13 +966,13 @@ class World(object):
         def _sorted(squares):
             return sorted(squares, key=lambda n: (n[0], int(n[1:])))
         def res():
-            return sorted(set((o.type_name, o.qty / PRECISION) for s in set(self.grid.values()) for o in s.objects if getattr(o, "resource_type", None) is not None),
+            return sorted(set((o.type_name, o.qty // PRECISION) for s in set(self.grid.values()) for o in s.objects if getattr(o, "resource_type", None) is not None),
                           key=lambda x: (x[0], -x[1]))
         with open(filename, "w") as f:
             f.write("title %s\n" % " ".join(map(str, self.title)))
             f.write("objective %s\n" % " ".join(map(str, self.objective)))
             f.write("\n")
-            f.write("square_width %s\n" % (self.square_width / PRECISION))
+            f.write("square_width %s\n" % (self.square_width // PRECISION))
             f.write("nb_columns %s\n" % self.nb_columns)
             f.write("nb_lines %s\n" % self.nb_lines)
             f.write("\n")
@@ -984,7 +985,7 @@ class World(object):
                 f.write(line + "\n")
             f.write("\n")
             for t, q in res():
-                squares = _sorted(s.name for s in set(self.grid.values()) for o in s.objects if o.type_name == t and o.qty / PRECISION == q)
+                squares = _sorted(s.name for s in set(self.grid.values()) for o in s.objects if o.type_name == t and o.qty // PRECISION == q)
                 f.write("%s %s %s\n" % (t, q, " ".join(squares)))
             f.write("\nnb_meadows_by_square 0\n")
             for n in sorted(set([s.nb_meadows for s in self.grid.values() if s.nb_meadows])):

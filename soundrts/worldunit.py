@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 from .definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
 from .lib.log import debug, warning, exception
 from .lib.nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
@@ -235,12 +236,12 @@ class Creature(Entity):
         return n
 
     def _future_coords(self, rotation, target_d):
-        d = self.actual_speed * VIRTUAL_TIME_INTERVAL / 1000
+        d = self.actual_speed * VIRTUAL_TIME_INTERVAL // 1000
         if rotation == 0:
             d = min(d, target_d) # stop before colliding target
         a = self.o + rotation
-        x = self.x + d * int_cos_1000(a) / 1000
-        y = self.y + d * int_sin_1000(a) / 1000
+        x = self.x + d * int_cos_1000(a) // 1000
+        y = self.y + d * int_sin_1000(a) // 1000
         return x, y
 
     def _heuristic_value(self, rotation, target_d):
@@ -498,7 +499,7 @@ class Creature(Entity):
 
     def heal_nearby_units(self):
         # level 1 of healing: 1 hp every 7.5 seconds
-        hp = self.heal_level * PRECISION / 25
+        hp = self.heal_level * PRECISION // 25
         allies = self.player.allied
         units = self.world.get_objects2(self.x, self.y, 6 * PRECISION,
                 filter=lambda x: x.is_healable and x.hp < x.hp_max,
@@ -513,7 +514,7 @@ class Creature(Entity):
 
     def harm_nearby_units(self):
         # level 1: 1 hp every 7.5 seconds
-        hp = self.harm_level * PRECISION / 25
+        hp = self.harm_level * PRECISION // 25
         units = self.world.get_objects2(self.x, self.y, 6 * PRECISION,
                 filter=lambda x: x.is_vulnerable and self._can_harm(x))
         for u in units:
@@ -609,7 +610,7 @@ class Creature(Entity):
                       and self.height < target.height
         result = 50 if high_ground else 100
         if not self.is_melee:
-            result = result * (100 - target.place.terrain_cover[0 if target.airground_type != "air" else 1]) / 100
+            result = result * (100 - target.place.terrain_cover[0 if target.airground_type != "air" else 1]) // 100
         return result
 
     def has_hit(self, target):
@@ -734,9 +735,9 @@ class Creature(Entity):
         # Initial formula (reordered for a better precision):
         # delta = (percentage / 100) * total / (self.time_cost / VIRTUAL_TIME_INTERVAL)
         try:
-            delta = int(total * percentage * VIRTUAL_TIME_INTERVAL / self.time_cost / 100)
+            delta = int(total * percentage * VIRTUAL_TIME_INTERVAL // self.time_cost // 100)
         except ZeroDivisionError:
-            delta = int(total * percentage * VIRTUAL_TIME_INTERVAL / 100)
+            delta = int(total * percentage * VIRTUAL_TIME_INTERVAL // 100)
         if delta == 0 and total != 0:
             warning("insufficient precision (delta: %s total: %s)", delta, total)
         return delta
@@ -1027,9 +1028,9 @@ class BuildingSite(_Building):
         _Building.__init__(self, None, player, place, x, y)
         self.type = building_type
         self.hp_max = building_type.hp_max
-        self._starting_hp = building_type.hp_max * 5 / 100
+        self._starting_hp = building_type.hp_max * 5 // 100
         self.hp = self._starting_hp
-        self.timer = building_type.time_cost / VIRTUAL_TIME_INTERVAL
+        self.timer = building_type.time_cost // VIRTUAL_TIME_INTERVAL
         self.damage_during_construction = 0
 
     def receive_hit(self, damage, attacker, *args, **kargs):

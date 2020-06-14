@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 from .definitions import style, rules
 from .lib.log import warning
 from .lib.msgs import nb2msg

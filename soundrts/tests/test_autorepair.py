@@ -1,4 +1,5 @@
 from __future__ import print_function
+from __future__ import division
 import pytest
 
 from soundrts.mapfile import Map
@@ -25,7 +26,7 @@ def test_decide_repair(world):
     player = Human(world, DummyClient())
     p = world.unit_class("peasant")(player, place, place.x, place.y)
     th = world.unit_class("townhall")(player, place, place.x, place.y)
-    th.hp = th.hp / 2
+    th.hp = th.hp // 2
     player.resources = [1000, 1000]
     p.decide()
     assert p.orders[0].keyword == "repair"
@@ -36,7 +37,7 @@ def test_decide_no_repair_if_no_resource(world):
     player = Human(world, DummyClient())
     p = world.unit_class("peasant")(player, place, place.x, place.y)
     th = world.unit_class("townhall")(player, place, place.x, place.y)
-    th.hp = th.hp / 2
+    th.hp = th.hp // 2
     player.resources = [0, 0]
     p.decide()
     assert not p.orders
@@ -50,7 +51,7 @@ def test_decide_gather_if_no_repair(world):
     player.resources = [1000, 1000]
     p.decide()
     assert p.orders[0].keyword == "gather"
-    th.hp = th.hp / 2
+    th.hp = th.hp // 2
     p.decide()
     assert p.orders[0].keyword == "repair"
     
@@ -60,7 +61,7 @@ def test_repair_unit(world):
     player = Human(world, DummyClient())
     p = world.unit_class("peasant")(player, place, place.x, place.y)
     c = world.unit_class("catapult")(player, place, place.x, place.y)
-    c.hp = c.hp / 2
+    c.hp = c.hp // 2
     player.resources = [10000, 10000]
     p.decide()
     assert p.orders[0].keyword == "repair"

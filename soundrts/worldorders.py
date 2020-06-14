@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 from .definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
 from .lib.log import info
 from .lib.nofloat import to_int, PRECISION
@@ -1061,7 +1062,7 @@ class UseOrder(ComplexOrder):
                 u.player = None
                 u.place = None
                 u.id = None # so the unit will be added to world.active_objects
-                u.hp = u.hp_max / 3
+                u.hp = u.hp_max // 3
                 u.set_player(self.unit.player)
                 u.move_to(c.place, c.x, c.y)
                 if u.decay:

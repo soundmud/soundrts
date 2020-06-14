@@ -1,4 +1,5 @@
 from __future__ import print_function
+from __future__ import division
 #from soundrts import version
 DEBUG_MODE = False #version.IS_DEV_VERSION
 
@@ -31,19 +32,19 @@ class CollisionMatrix(object):
         self._set = set()
         self.xmax = xmax
         self.res = res
-        self.amax = self.xmax / self.res
+        self.amax = self.xmax // self.res
 
 ##    def _key(self, x, y): # tuple variant
-##        return x / self.res, y / self.res
+##        return x // self.res, y // self.res
 
     def _key(self, x, y):
-        return x / self.res + self.amax * (y / self.res)
+        return x // self.res + self.amax * (y // self.res)
 
 ##    def _xy(self, k): # tuple variant
 ##        return (k[0] * self.res, k[1] * self.res)
 
     def _xy(self, k):
-        b = k / self.amax
+        b = k // self.amax
         a = k % self.amax
         return a * self.res, b * self.res
 

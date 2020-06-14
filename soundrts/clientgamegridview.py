@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 from math import sin, cos, radians
 
 import pygame
@@ -100,10 +101,10 @@ class GridView(object):
                 color = (155,0,0)
             else:
                 color = (0, 0, 0)
-            pygame.draw.circle(get_screen(), color, (x, y), R/2, 0)
+            pygame.draw.circle(get_screen(), color, (x, y), R // 2, 0)
             if getattr(o, "hp", None) is not None and \
                o.hp != o.hp_max:
-                hp_prop = 100 * o.hp / o.hp_max
+                hp_prop = 100 * o.hp // o.hp_max
                 if hp_prop > 80:
                     color = (0, 255, 0)
 ##                elif hp_prop > 50:
@@ -117,7 +118,7 @@ class GridView(object):
                                  (x - W + 2 * W, y - R - 2))
                 pygame.draw.line(get_screen(), color,
                                  (x - W, y - R - 2),
-                                 (x - W + hp_prop * (2 * W) / 100, y - R - 2))
+                                 (x - W + hp_prop * (2 * W) // 100, y - R - 2))
 
     def display_objects(self):
         for o in self.interface.dobjets.values():
@@ -130,8 +131,8 @@ class GridView(object):
                     warning("(memory)")
 
     def _update_coefs(self):
-        self.square_view_width = self.square_view_height = min((get_screen().get_width() - 200) / (self.interface.xcmax + 1),
-            get_screen().get_height() / (self.interface.ycmax + 1)) # 200 = graphic console
+        self.square_view_width = self.square_view_height = min((get_screen().get_width() - 200) // (self.interface.xcmax + 1),
+            get_screen().get_height() // (self.interface.ycmax + 1)) # 200 = graphic console
         self.ymax = self.square_view_height * (self.interface.ycmax + 1)
 
     def _collision_display(self):
@@ -169,8 +170,8 @@ class GridView(object):
     def square_from_mousepos(self, pos):
         self._update_coefs()
         x, y = pos
-        xc = x / self.square_view_width
-        yc = (self.ymax - y) / self.square_view_height
+        xc = x // self.square_view_width
+        yc = (self.ymax - y) // self.square_view_height
         if 0 <= xc <= self.interface.xcmax and 0 <= yc <= self.interface.ycmax:
             return self.interface.server.player.world.grid[(xc, yc)]
 
@@ -206,7 +207,7 @@ class GridView(object):
                          self.interface.grid_view._object_coords(target),
                          self.interface.grid_view._object_coords(a))
         pygame.draw.circle(get_screen(), (100, 100, 100),
-                           self.interface.grid_view._object_coords(target), R*3/2, 0)
+                           self.interface.grid_view._object_coords(target), R * 3 // 2, 0)
         pygame.display.flip() # not very clean but seems to work (persistence of vision?)
         # better: interface.anims queue to render when the time has come
         # (not during the world model update)

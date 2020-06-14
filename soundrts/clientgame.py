@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 import math
 import Queue
 import re
@@ -684,7 +685,7 @@ class GameInterface(object):
                             volume = float(st[2])
                         except:
                             volume = 1
-                        self._terrain_loop = psounds.play_loop(sounds.get_sound(st[1]), volume, sq.x/1000.0, sq.y/1000.0, -10)
+                        self._terrain_loop = psounds.play_loop(sounds.get_sound(st[1]), volume, sq.x / 1000.0, sq.y / 1000.0, -10)
             self._terrain_loop_square = sq
 
     previous_animation = 0
@@ -1291,7 +1292,7 @@ class GameInterface(object):
                      (not local or self.zoom_mode and self.zoom.contains(x)
                       or not self.zoom_mode and x.is_in(local_place)) and \
                      (not idle or not x.orders)]
-                self.group += m[: len(m) / portion]
+                self.group += m[: len(m) // portion]
             if initial_unit.id not in self.group \
                and initial_unit.type_name in types:
                 if self.group:
@@ -1673,7 +1674,7 @@ class GameInterface(object):
         else:
             xc, yc = self.coords_in_map(self.place)
             self.x = self.square_width * (xc + .5)
-            self.y = self.square_width * (yc + 1/8.0)
+            self.y = self.square_width * (yc + 1 / 8.0)
             if self.place not in self.scouted_squares:
                 self.y -= self.square_width # lower sounds if fog of war
         psounds.update()

@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 import re
 
 from .definitions import get_ai, rules
@@ -165,7 +166,7 @@ class Computer(Player):
     def _is_powerful_enough(self, units, place):
         # sometimes food limit prevents units with more than 1 food cost
         ratio = 180 if self.used_food < self.world.food_limit - 5 else 100
-        return sum(u.menace for u in units if u.speed > 0 and isinstance(u, Soldier)) > self.enemy_menace(place) * ratio / 100
+        return sum(u.menace for u in units if u.speed > 0 and isinstance(u, Soldier)) > self.enemy_menace(place) * ratio // 100
 
     def _send_workers_to_forgotten_building_sites(self):
         for site in self._building_sites:
@@ -188,7 +189,7 @@ class Computer(Player):
 
     def _should_play_this_turn(self):
         players = self.world.cpu_intensive_players()
-        turn = players.index(self) * 10 / len(players)
+        turn = players.index(self) * 10 // len(players)
         return self.world.turn % 10 == turn
 
     def play(self):
@@ -438,7 +439,7 @@ class Computer(Player):
         result = 9999
         for i, res in enumerate(self.resources):
             if cost[i]:
-                result = min(result, res / cost[i])
+                result = min(result, res // cost[i])
         return result
 
     def get(self, nb, type):

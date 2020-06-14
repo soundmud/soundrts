@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 from .lib.voice import voice
 from .lib.log import warning
 from .lib.nofloat import PRECISION

@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 import copy
 import inspect
 import re
@@ -143,12 +144,12 @@ class Player(object):
             return 0
 
     def get_safest_subsquare(self, place):
-        x = place.x * 3 / self.world.square_width
-        y = place.y * 3 / self.world.square_width
+        x = place.x * 3 // self.world.square_width
+        y = place.y * 3 // self.world.square_width
         candidates = list((x + dx, y + dy) for dx in (0, 1, -1) for dy in (0, 1, -1))
         sub = sorted(candidates, key=self._get_threat)[0]
-        return (sub[0] * self.world.square_width / 3 + self.world.square_width / 6,
-                sub[1] * self.world.square_width / 3 + self.world.square_width / 6)
+        return (sub[0] * self.world.square_width // 3 + self.world.square_width // 6,
+                sub[1] * self.world.square_width // 3 + self.world.square_width // 6)
     
     def known_enemies(self, place):
         # assert: "memory is not included"
@@ -193,8 +194,8 @@ class Player(object):
 
     def _potential_neighbors(self, x, y):
         result = []
-        x = x / A
-        y = y / A
+        x = x // A
+        y = y // A
         for dx in [0, 1, -1]:
             for dy in [0, 1, -1]:
                 k = x + dx, y + dy
@@ -327,9 +328,9 @@ class Player(object):
                     if o.range > PRECISION:
                         for place in place.neighbors:
                             try:
-                                self._enemy_menace[place] += menace / 10
+                                self._enemy_menace[place] += menace // 10
                             except:
-                                self._enemy_menace[place] = menace / 10
+                                self._enemy_menace[place] = menace // 10
                 elif isinstance(o, Corpse):
                     self._places_with_corpses.add(place)
                 elif o.player in self.allied and o.is_vulnerable:
@@ -367,7 +368,7 @@ class Player(object):
             if u.place in squares:
                 a += u.menace
         try:
-            return a / self.enemy_menace(squares[0])
+            return a // self.enemy_menace(squares[0])
         except ZeroDivisionError:
             return 1000
 
@@ -379,7 +380,7 @@ class Player(object):
                 elif u.airground_type == "water":
                     u.actual_speed = u.speed
                 else:
-                    u.actual_speed = u.speed * u.place.terrain_speed[0 if u.airground_type == "ground" else 1] / 100
+                    u.actual_speed = u.speed * u.place.terrain_speed[0 if u.airground_type == "ground" else 1] // 100
                 if u.speed:
                     u.actual_speed = max(u.actual_speed , VERY_SLOW) # never stuck
             except:
@@ -622,7 +623,7 @@ class Player(object):
         # float(args[0]) is probably not a problem for synchro since the result
         # of the multiplication is not reused after the comparison.
         # And for example: 6 == .1 * 60 (tested in Python 2.4)
-        return self.world.time / 1000 >= float(args[0]) * self.world.timer_coefficient
+        return self.world.time // 1000 >= float(args[0]) * self.world.timer_coefficient
         
     def lang_order(self, args):
         select, orders = args
@@ -736,7 +737,7 @@ class Player(object):
     def _get_score(self):
         score = self.nb_units_produced - self.nb_units_lost + self.nb_units_killed + self.nb_buildings_produced - self.nb_buildings_lost + self.nb_buildings_killed
         for i, _ in enumerate(self.resources):
-            score += (self.gathered_resources[i] + self.consumed_resources()[i]) / PRECISION
+            score += (self.gathered_resources[i] + self.consumed_resources()[i]) // PRECISION
         return score
 
     def _get_score_msgs(self):
@@ -744,8 +745,8 @@ class Player(object):
             victory_or_defeat = mp.VICTORY
         else:
             victory_or_defeat = mp.DEFEAT
-        t = self.world.time / 1000
-        m = int(t / 60)
+        t = self.world.time // 1000
+        m = int(t // 60)
         s = int(t - m * 60)
         msgs = []
         msgs.append(victory_or_defeat + mp.AT
@@ -763,10 +764,10 @@ class Player(object):
                     + nb2msg(self.nb_buildings_killed) + mp.NEUTRALIZED)
         res_msg = []
         for i, _ in enumerate(self.resources):
-            res_msg += nb2msg(self.gathered_resources[i] / PRECISION) \
+            res_msg += nb2msg(self.gathered_resources[i] // PRECISION) \
                        + style.get("parameters", "resource_%s_title" % i) \
                        + mp.GATHERED + mp.COMMA \
-                       + nb2msg(self.consumed_resources()[i] / PRECISION) \
+                       + nb2msg(self.consumed_resources()[i] // PRECISION) \
                        + mp.CONSUMED + mp.PERIOD
         msgs.append(res_msg[:-1])
         msgs.append(mp.SCORE + nb2msg(self._get_score())

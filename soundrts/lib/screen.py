@@ -1,3 +1,4 @@
+from __future__ import division
 import ctypes
 
 import pygame
@@ -51,7 +52,7 @@ def screen_render(text, dest, right=False, center=False, color=(200, 200, 200)):
 
 def screen_render_subtitle():
     ren = _font.render(_subtitle, True, (200, 200, 200), (0, 0, 0))
-    x = (_screen.get_width() - ren.get_width()) / 2
+    x = (_screen.get_width() - ren.get_width()) // 2
     y = _screen.get_height() - ren.get_height()
     _screen.blit(ren, (x, y))
 
