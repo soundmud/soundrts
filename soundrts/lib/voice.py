@@ -43,7 +43,7 @@ class _Voice(object):
     def _current_message_is_unsaid(self):
         return self._exists(self.current) and not self.msgs[self.current].said
 
-    def next(self, history_only=False):
+    def say_next(self, history_only=False):
         if self.active:
             if self._current_message_is_unsaid():
                 if not history_only:
@@ -177,7 +177,7 @@ class _Voice(object):
                 break
             elif interruptible and self._key_hit(): # keep_key=False? (and remove next line?)
                 if self._unsaid_exists():
-                    self.next()
+                    self.say_next()
                     pygame.event.get([KEYDOWN]) # consequence: _key_hit() == False
                 else:
                     break

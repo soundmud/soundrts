@@ -502,10 +502,10 @@ class GameInterface(object):
         voice.previous()
 
     def cmd_history_stop(self):
-        voice.next()
+        voice.say_next()
 
     def cmd_history_next(self):
-        voice.next(history_only=True)
+        voice.say_next(history_only=True)
 
     def cmd_gamemenu(self):
         voice.silent_flush()

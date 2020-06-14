@@ -163,9 +163,9 @@ class Menu(object):
         elif e.key == K_F5:
             voice.previous()
         elif e.key in [K_LALT,K_RALT]:
-            voice.next()
+            voice.say_next()
         elif e.key == K_F6:
-            voice.next(history_only=True)
+            voice.say_next(history_only=True)
         elif e.key in [K_HOME, K_KP_PLUS]:
             modify_volume(1)
         elif e.key in [K_END, K_KP_MINUS]:
