@@ -1,3 +1,4 @@
+from builtins import range
 import pytest
 
 from soundrts.mapfile import Map

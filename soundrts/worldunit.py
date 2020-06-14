@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from __future__ import division
+from builtins import range
 from .definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
 from .lib.log import debug, warning, exception
 from .lib.nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
@@ -312,7 +313,7 @@ class Creature(Entity):
                     return
             if not self._rotations:
                 # enter "smooth rotation mode"
-                self._smooth_rotations = range(1, 180, 1)
+                self._smooth_rotations = list(range(1, 180, 1))
                 self.walked = []
                 self._mark_the_dead_end()
                 self.notify("collision")

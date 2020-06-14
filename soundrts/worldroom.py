@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from __future__ import division
+from builtins import range
 import string
 
 from .lib.msgs import nb2msg

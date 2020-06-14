@@ -1,4 +1,5 @@
 from __future__ import division
+from builtins import range
 import math
 import random
 import time
@@ -58,7 +59,7 @@ def stereo(x, y, xo, yo, o, volume=1, vision=False):
 def find_idle_channel():
     # because pygame.mixer.find_channel() doesn't work
     # (it can return the reserved channel 0)
-    for n in xrange(1, pygame.mixer.get_num_channels()): # avoid channel 0
+    for n in range(1, pygame.mixer.get_num_channels()): # avoid channel 0
         if not pygame.mixer.Channel(n).get_busy():
             return pygame.mixer.Channel(n)
 

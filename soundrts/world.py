@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from __future__ import division
+from builtins import range
 import copy
 from soundrts.lib.sound import distance
 from soundrts.lib.nofloat import square_of_distance

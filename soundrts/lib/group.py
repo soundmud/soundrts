@@ -1,4 +1,5 @@
 from __future__ import print_function
+from builtins import range
 def encode_range(r):
     i, j = r
     if i == j:
@@ -29,7 +30,7 @@ def decode(s):
     for r in s.split(" "):
         if "-" in r:
             a, b = r.split("-")
-            result.extend(range(int(a),int(b)+1))
+            result.extend(list(range(int(a),int(b)+1)))
         else:
             result.append(int(r))
     return [str(i) for i in result]
