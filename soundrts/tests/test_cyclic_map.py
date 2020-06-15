@@ -1,3 +1,4 @@
+from builtins import object
 from builtins import range
 import pytest
 
@@ -5,7 +6,7 @@ from soundrts.mapfile import Map
 from soundrts.world import World
 
 
-class Player:
+class Player(object):
     food = 0
     nb_units_produced = 0
     used_food = 0

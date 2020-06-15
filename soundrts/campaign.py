@@ -1,5 +1,8 @@
 from __future__ import absolute_import
-import ConfigParser
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+import configparser
 import os
 import re
 
@@ -52,7 +55,7 @@ class MissionChapter(Map):
             self._defeat()
 
 
-class CutSceneChapter:
+class CutSceneChapter(object):
 
     def __init__(self, path, campaign=None, id=None):
         self.path = path
@@ -61,7 +64,7 @@ class CutSceneChapter:
         self._load()
 
     def _load(self):
-        s = open(self.path, "U").read() # "universal newlines"
+        s = open(self.path, "r").read()
         # header
         m = re.search("(?m)^title[ \t]+([0-9 ]+)$", s)
         if m:
@@ -106,7 +109,7 @@ class Campaign(object):
                 if not os.path.isdir(cp):
                     break
             if os.path.isfile(cp) and \
-               open(cp, "U").readline() == "cut_scene_chapter\n":
+               open(cp, "r").readline() == "cut_scene_chapter\n":
                 c = CutSceneChapter(cp, campaign=self, id=i)
             else:
                 c = MissionChapter(cp, campaign=self, id=i)
@@ -131,7 +134,7 @@ class Campaign(object):
         return re.sub("[^a-zA-Z0-9]", "_", self.path)
 
     def _get_bookmark(self):
-        c = ConfigParser.SafeConfigParser()
+        c = configparser.SafeConfigParser()
         if os.path.isfile(CAMPAIGNS_CONFIG_PATH):
             c.readfp(open(CAMPAIGNS_CONFIG_PATH))
         try:
@@ -143,7 +146,7 @@ class Campaign(object):
         return self.chapters[:self._get_bookmark() + 1]
 
     def _set_bookmark(self, number):
-        c = ConfigParser.SafeConfigParser()
+        c = configparser.SafeConfigParser()
         if os.path.isfile(CAMPAIGNS_CONFIG_PATH):
             c.readfp(open(CAMPAIGNS_CONFIG_PATH))
         if self._get_id() not in c.sections():

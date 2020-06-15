@@ -14,7 +14,7 @@ srapi_wait = .1
 tts_async = 0
 tts_purge_before_speak = 0
 
-_srapi = ctypes.windll.ScreenReaderAPI
+_srapi = ctypes.WinDLL(r".\ScreenReaderAPI.dll")
 
 
 class TTS(object):

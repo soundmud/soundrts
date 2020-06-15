@@ -1,10 +1,12 @@
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
 import asyncore
 import re
 import sys
 import socket
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 
 from .metaserver import MAIN_METASERVER_URL
 from .lib.log import debug, info, warning, exception
@@ -63,7 +65,7 @@ class Server(asyncore.dispatcher):
 
     def _cleanup(self):
         for c in self.clients[:]:
-            if c not in asyncore.socket_map.values():
+            if c not in list(asyncore.socket_map.values()):
                 self.clients.remove(c)
         if self.games and not self.clients:
             self.games = []
@@ -129,7 +131,7 @@ class Server(asyncore.dispatcher):
     def unregister(self):
         try:
             info("unregistering server...")
-            s = urllib.urlopen(UNREGISTER_URL + "?ip=" + self.ip).read()
+            s = urllib.request.urlopen(UNREGISTER_URL + "?ip=" + self.ip).read()
         except:
             s = "couldn't access to the metaserver"
         if s:
@@ -142,7 +144,7 @@ class Server(asyncore.dispatcher):
             self.ip = options.ip
             return
         try:
-            self.ip = urllib2.urlopen(WHATISMYIP_URL, timeout=3).read().strip()
+            self.ip = urllib.request.urlopen(WHATISMYIP_URL, timeout=3).read().strip()
             if not re.match("^[0-9.]{7,40}$", self.ip):
                 self.ip = ""
         except:
@@ -154,7 +156,7 @@ class Server(asyncore.dispatcher):
 
     def _register(self):
         try:
-            s = urllib.urlopen(REGISTER_URL + "?version=%s&login=%s&ip=%s&port=%s" %
+            s = urllib.request.urlopen(REGISTER_URL + "?version=%s&login=%s&ip=%s&port=%s" %
                                (VERSION, self.login, self.ip,
                                 options.port)).read()
         except:

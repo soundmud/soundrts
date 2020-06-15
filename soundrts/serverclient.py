@@ -1,7 +1,8 @@
 from __future__ import absolute_import
+from builtins import map
+from builtins import str
 import asynchat
 import re
-import string
 import sys
 import time
 
@@ -24,13 +25,16 @@ class ConnectionToClient(asynchat.async_chat):
         info("Connected: %s:%s" % address)
         asynchat.async_chat.__init__(self, connection)
         self.id = server.get_next_id()
-        self.set_terminator('\n')
+        self.set_terminator(b'\n')
         self.server = server
-        self.inbuffer = ''
+        self.inbuffer = b''
         self.address = address
         self.state = Anonymous()
         self.push(":")
         self.t1 = time.time()
+
+    def push(self, s):
+        return asynchat.async_chat.push(self, s.encode("ascii"))
 
     @property
     def name(self):
@@ -40,7 +44,7 @@ class ConnectionToClient(asynchat.async_chat):
         self.inbuffer += data
 
     def _execute_command(self, data):
-        args = string.split(data, " ")
+        args = data.decode("ascii").split(" ")
         if args[0] not in self.state.allowed_commands:
             warning("action not allowed: %s" % args[0])
             return
@@ -51,8 +55,8 @@ class ConnectionToClient(asynchat.async_chat):
             warning("action unknown: %s" % args[0])
 
     def found_terminator(self):
-        data = string.replace(self.inbuffer, "\r", "")
-        self.inbuffer = ''
+        data = self.inbuffer.replace(b"\r", b"")
+        self.inbuffer = b''
         try:
             self._execute_command(data)
         except SystemExit:

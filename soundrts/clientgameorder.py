@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 from __future__ import division
+from builtins import str
+from builtins import object
 from .definitions import style, rules
 from .lib.log import warning
 from .lib.msgs import nb2msg
@@ -58,11 +60,11 @@ class OrderTypeView(object): # future order
     def _get_shortcut(self):
         s = style.get(self.cls.keyword, "shortcut", False)
         if s:
-            return unicode(s[0])
+            return str(s[0])
         if self.type:
             s = style.get(self.type, "shortcut", False)
             if s:
-                return unicode(s[0])
+                return str(s[0])
 
     def _get_requirements_msg(self):
         and_index = 0
@@ -114,7 +116,7 @@ _orders_list = ()
 def update_orders_list():
     global _orders_list
     # this sorted list of order classes is used when generating the menu
-    _orders_list = sorted([_x for _x in ORDERS_DICT.values()
+    _orders_list = sorted([_x for _x in list(ORDERS_DICT.values())
                           if _has_ord_index(_x.keyword)],
                          key=lambda x:_ord_index(x.keyword))
 

@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 from __future__ import division
+from builtins import str
+from builtins import object
 from builtins import range
 import random
 import time
@@ -97,22 +99,22 @@ class Orders(object):
 
     def pop_and_pack(self):
         _all_orders = []
-        for player, queue in self.all_orders.items():
+        for player, queue in list(self.all_orders.items()):
             orders = queue.pop(0)[0]
             _all_orders.append("%s/%s" % (player.login, orders))
         return " ".join(_all_orders)
 
     def are_ready(self):
-        return [] not in self.all_orders.values()
+        return [] not in list(self.all_orders.values())
 
     def remove(self, client):
         del self.all_orders[client]
 
     def players_without_orders(self):
-        return [player for player, queue in self.all_orders.items() if not queue]
+        return [player for player, queue in list(self.all_orders.items()) if not queue]
 
     def get_next_check_strings(self):
-        return [queue[0][1] for queue in self.all_orders.values()]
+        return [queue[0][1] for queue in list(self.all_orders.values())]
 
 
 class Game(object):

@@ -31,7 +31,7 @@ def compatibility_version():
 
 def rules_hash():
     rules_and_ai = res.get_text_file("rules", append=True) + res.get_text_file("ai", append=True)
-    return md5(rules_and_ai).hexdigest()
+    return md5(rules_and_ai.encode()).hexdigest()
 
 
 # VERSION_FOR_BUG_REPORTS helps ignoring automatic bug reports related to

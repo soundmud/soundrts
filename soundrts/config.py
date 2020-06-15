@@ -1,7 +1,10 @@
 from __future__ import absolute_import
 # read/write the config file
 
-import ConfigParser
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+import configparser
 import platform
 import os
 import re
@@ -58,7 +61,7 @@ _options = [add_converter(o) for o in _options]
 _module = sys.modules[__name__]
 
 def save(name=CONFIG_FILE_PATH):
-    c = ConfigParser.SafeConfigParser()
+    c = configparser.ConfigParser()
     for section, option, _, _ in _options:
         if not c.has_section(section):
             c.add_section(section)
@@ -77,7 +80,7 @@ def _copy_to_module(c):
     for section, option, default, converter in _options:
         try:
             raw_value = c.get(section, option)
-        except ConfigParser.Error:
+        except configparser.Error:
             info("%r option is missing (will be: %r)", option, default)
             value = default
             error = True
@@ -93,8 +96,8 @@ def _copy_to_module(c):
 
 def load(name=CONFIG_FILE_PATH):
     if os.path.isfile(name):
-        c = ConfigParser.SafeConfigParser()
-        c.readfp(open(name))
+        c = configparser.ConfigParser()
+        c.read_file(open(name, "r"))
         error = _copy_to_module(c)
         if error:
             warning("Error in %s.", name)

@@ -1,8 +1,13 @@
 from __future__ import absolute_import
 from __future__ import division
+from future import standard_library
+standard_library.install_aliases()
+from builtins import map
+from builtins import str
+from builtins import object
 from builtins import range
 import math
-import Queue
+import queue
 import re
 import sys
 import time
@@ -85,7 +90,7 @@ def _remove_duplicates(l):
 
 def load_palette():
     p = []
-    with open("res/ui/editor_palette.txt", "U") as f:
+    with open("res/ui/editor_palette.txt", "r") as f:
         for s in f:
             s = s.strip()
             if s and not s.startswith(";"):
@@ -118,7 +123,7 @@ def load_palette():
                     elif k in ["woods", "goldmines"]:
                         v = int(v[0]), v[1]
                     elif k in ["speed", "cover"]:
-                        v = tuple(map(lambda x: int(float(x) * 100), v[:2]))
+                        v = tuple([int(float(x) * 100) for x in v[:2]])
                     t[k] = v
     return p
 
@@ -155,7 +160,7 @@ class GameInterface(object):
         self.grid_view = GridView(self)
         self.set_self_as_listener()
         voice.silent_flush()
-        self._srv_queue = Queue.Queue()
+        self._srv_queue = queue.Queue()
         self.scouted_squares = ()
         self.scouted_before_squares = ()
         self._bindings = Bindings()
@@ -167,7 +172,7 @@ class GameInterface(object):
 
     def __setstate__(self, dictionary):
         self.__dict__.update(dictionary)
-        self._srv_queue = Queue.Queue()
+        self._srv_queue = queue.Queue()
 
     def set_self_as_listener(self):
         psounds.set_listener(self)
@@ -289,7 +294,7 @@ class GameInterface(object):
 
     def _object_choices(self, inc, types):
         choices = []
-        for o in self.dobjets.values():
+        for o in list(self.dobjets.values()):
             if self.is_selectable(o) and (
                 not types or getattr(o, "type_name", None) in types
                 or "useful" in types and o.is_a_useful_target()):
@@ -354,7 +359,7 @@ class GameInterface(object):
             msg += mp.OBJECTIVE + self.world.objective + mp.PERIOD
         if self.player.objectives:
             msg += mp.OBJECTIVE + mp.COMMA
-            for o in self.player.objectives.values():
+            for o in list(self.player.objectives.values()):
                 msg += o.description + mp.COMMA
         voice.item(msg)
 
@@ -396,7 +401,7 @@ class GameInterface(object):
                 for p in self.world.players:
                     p.triggers = []
                 self._bindings = Bindings()
-                self._bindings.load(open("res/ui/editor_bindings.txt", "U").read(), self)
+                self._bindings.load(open("res/ui/editor_bindings.txt", "r").read(), self)
                 voice.item(["editor"])
             else:
                 voice.item(mp.BEEP)
@@ -409,7 +414,7 @@ class GameInterface(object):
                 return name % n
             self.world.save_map(next_available_filename("user/multi/editor%s.txt"))
         elif cmd.startswith("te "):
-            delta = map(int, cmd.split(" ")[1:3])
+            delta = list(map(int, cmd.split(" ")[1:3]))
             if self.place.toggle_path(*delta):
                 voice.item(["path"])
             else:
@@ -698,7 +703,7 @@ class GameInterface(object):
                 self.set_obs_pos()
             except:
                 exception("couldn't set user interface position")
-            for o in self.dobjets.values():
+            for o in list(self.dobjets.values()):
                 try:
                     o.animate()
                 except:
@@ -915,7 +920,7 @@ class GameInterface(object):
         # remove missing objects
         pm = set(o.id for o in self.memory)
         pm.update(o.id for o in self.perception)
-        for i in self.dobjets.keys():
+        for i in list(self.dobjets.keys()):
             if i in pm:
                 continue
             self._delete_object(i)
@@ -1011,7 +1016,7 @@ class GameInterface(object):
         allies = []
         units = []
         resources = []
-        for obj in self.dobjets.values():
+        for obj in list(self.dobjets.values()):
             if not obj.is_in(place):
                 continue
             if zoom and not zoom.contains(obj):
@@ -1055,7 +1060,7 @@ class GameInterface(object):
             voice.item(prefix + mp.COMMA + mp.NO_UNIT_CONTROLLED)
 
     def tell_enemies_in_square(self, place):
-        enemies = [x.short_title for x in self.dobjets.values()
+        enemies = [x.short_title for x in list(self.dobjets.values())
                    if x.is_in(place) and self.player.is_an_enemy(x.model)]
         if enemies:
             voice.info(self.summary(enemies, brief=True) + mp.ENEMY + mp.AT + place.title)
@@ -1103,7 +1108,7 @@ class GameInterface(object):
     def squares_alert_if_needed(self):
         if self.alert_squares and (self.previous_squares_alert is None or
            time.time() > self.previous_squares_alert + 10):
-            titles = sorted([sq.title for sq, t in self.alert_squares.items()
+            titles = sorted([sq.title for sq, t in list(self.alert_squares.items())
                              if time.time() < t + 5]) # recent attacks only
             if len(titles) > 1:
                 titles.insert(-1, mp.AND)
@@ -1499,7 +1504,7 @@ class GameInterface(object):
             self.display()
 
     def _silence_square(self):
-        for o in self.dobjets.values():
+        for o in list(self.dobjets.values()):
             if not o.is_in(self.place):
                 o.stop()
         sound_stop(stop_voice_too=False) # cut the long nonlooping environment sounds
@@ -1557,7 +1562,7 @@ class GameInterface(object):
         if self.place not in self.scouted_before_squares or \
            self.place.is_water and new_square.is_water:
             return [], False
-        exits = [o for o in self.dobjets.values() if o.is_in(self.place)
+        exits = [o for o in list(self.dobjets.values()) if o.is_in(self.place)
                  and self.is_selectable(o)
                  and o.is_an_exit
                  and not o.is_blocked(self.player)]
@@ -1626,7 +1631,9 @@ class GameInterface(object):
             _squares = list(squares) # make a copy
             if self.place not in _squares:
                 _squares.append(self.place)
-            _squares.sort()
+            if self.player.units:
+                u = self.player.units[0]
+                _squares.sort(key=lambda s: distance(s.x, s.y, u.x, u.y))
             index = _squares.index(self.place) + int(increment)
             if index < 0:
                 index = len(_squares) - 1
@@ -1640,7 +1647,7 @@ class GameInterface(object):
         self._select_square_from_list(increment, self.scouted_squares)
 
     def cmd_select_conflict_square(self, increment):
-        enemy_units = [o for o in self.dobjets.values()
+        enemy_units = [o for o in list(self.dobjets.values())
                        if o.player and o.player.player_is_an_enemy(self.player)]
         conflict_squares = []
         for u in enemy_units:
@@ -1655,7 +1662,7 @@ class GameInterface(object):
 
     def cmd_select_resource_square(self, increment):
         resource_squares = []
-        for o in self.dobjets.values():
+        for o in list(self.dobjets.values()):
             if getattr(o, "resource_type", None) is not None:
                 if o.place not in resource_squares:
                     resource_squares.append(o.place)

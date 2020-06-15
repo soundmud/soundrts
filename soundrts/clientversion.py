@@ -1,6 +1,8 @@
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
 import threading
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from .clientmedia import voice
 from .metaserver import METASERVER_URL
@@ -21,7 +23,7 @@ class RevisionChecker(threading.Thread):
         try:
             stage = file("stage.txt").read().strip()
             url = "http://jlpo.free.fr/soundrts/%sversion.txt" % stage
-            rev = urllib.urlopen(url).read().strip()
+            rev = urllib.request.urlopen(url).read().strip()
             if (rev != VERSION) and (rev.find("404") == -1):
                 voice.important(mp.UPDATE_AVAILABLE)
             stats.Stats(OLD_STATS_PATH, METASERVER_URL).send()

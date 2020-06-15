@@ -1,8 +1,9 @@
 from __future__ import absolute_import
+from builtins import object
 from .lib.nofloat import square_of_distance
 
 
-class Action:
+class Action(object):
     
     def __init__(self, unit, target):
         self.unit = unit

@@ -1,3 +1,5 @@
+from builtins import str
+from builtins import object
 from builtins import range
 import time
 
@@ -8,7 +10,7 @@ from soundrts.mapfile import Map
 from soundrts.serverroom import same, time_string, Game, Orders
 
 
-class Client:
+class Client(object):
 
     def __init__(self, login):
         self.login = login

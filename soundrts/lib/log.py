@@ -1,8 +1,13 @@
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import logging
 import logging.handlers
 import os
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 
 FULL_FORMAT = "%(asctime)s %(levelname)s: %(message)s"
@@ -27,9 +32,9 @@ class HTTPHandler(logging.Handler):
         if self._done:
             return
         msg = "exception with %s:\n%s" % (_version, record.exc_text)
-        params = urllib.urlencode({"msg": msg})
+        params = urllib.parse.urlencode({"msg": msg})
         try:
-            urllib.urlopen("%s/logging_errors.php?%s" % (self._url, params)).read()
+            urllib.request.urlopen("%s/logging_errors.php?%s" % (self._url, params)).read()
         except:
             pass
         self._done = True

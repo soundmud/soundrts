@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from builtins import object
 from .definitions import MAX_NB_OF_RESOURCE_TYPES
 from soundrts.lib.nofloat import PRECISION
 

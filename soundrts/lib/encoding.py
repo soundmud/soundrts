@@ -4,30 +4,30 @@ import re
 
 
 def encoding(text):
-    result = _encoding(text.split("\n"))
+    result = _encoding(text.split(b"\n"))
     if result is None:
         result = "latin_1"
     return result
 
 def _encoding(lines):
     for n, line in enumerate(lines):
-        if n == 0 and line.startswith("\xef\xbb\xbf"):
+        if n == 0 and line.startswith(b"\xef\xbb\xbf"):
             return "utf-8"
         if n > 1:
             break
-        m = re.search(r"coding[:=]\s*([-\w.]+)", line)
+        m = re.search(br"coding[:=]\s*([-\w.]+)", line)
         if m is not None:
-            return m.group(1)
+            return m.group(1).decode("ascii")
 
 
 if __name__ == "__main__":
-    assert _encoding(("; coding: big5\n", )) == "big5"
-    assert _encoding(("; coding: latin_1\n", )) == "latin_1"
-    assert _encoding(("; coding: latin-1\n", )) == "latin-1"
-    assert _encoding(("; test\n", "; coding: big5\n")) == "big5"
-    assert _encoding((";", "; test\n", "; coding: big5\n")) is None
-    assert _encoding(("; coding: big5\n", )) == "big5"
-    assert _encoding(("; encoding: big5\n", )) == "big5"
-    assert _encoding(("# -*- coding: big5 -*-", )) == "big5"
-    assert _encoding(("# vim: set fileencoding=big5 :", )) == "big5"
-    assert _encoding(("\xef\xbb\xbf; coding: big5\n", )) == "utf-8"
+    assert _encoding((b"; coding: big5\n", )) == "big5"
+    assert _encoding((b"; coding: latin_1\n", )) == "latin_1"
+    assert _encoding((b"; coding: latin-1\n", )) == "latin-1"
+    assert _encoding((b"; test\n", b"; coding: big5\n")) == "big5"
+    assert _encoding((b";", b"; test\n", b"; coding: big5\n")) is None
+    assert _encoding((b"; coding: big5\n", )) == "big5"
+    assert _encoding((b"; encoding: big5\n", )) == "big5"
+    assert _encoding((b"# -*- coding: big5 -*-", )) == "big5"
+    assert _encoding((b"# vim: set fileencoding=big5 :", )) == "big5"
+    assert _encoding((b"\xef\xbb\xbf; coding: big5\n", )) == "utf-8"

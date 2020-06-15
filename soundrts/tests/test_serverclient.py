@@ -1,25 +1,26 @@
+from builtins import object
 from soundrts.serverclient import ConnectionToClient
 
 
 class Client(ConnectionToClient):
 
     def __init__(self):
-        self.inbuffer = ""
+        self.inbuffer = b""
 
     def _execute_command(self, data):
         self.cmd = data
 
 
-class Server:
+class Server(object):
 
     clients = []
 
 
 def test_found_terminator():
     c = Client()
-    c.collect_incoming_data("0")
+    c.collect_incoming_data(b"0")
     c.found_terminator()
-    assert c.cmd == "0"
+    assert c.cmd == b"0"
 
 def test_unique_login():
     c = Client()

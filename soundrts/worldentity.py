@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+from __future__ import division
+from builtins import object
 from .lib.log import exception, warning, info
 from .lib.nofloat import PRECISION
 
@@ -38,9 +40,9 @@ class Entity(object):
     is_invisible = False
     is_cloakable = False
     is_cloaked = False
-    sight_range = 85 * PRECISION / 10
+    sight_range = 85 * PRECISION // 10
     is_a_detector = False
-    detection_range = 85 * PRECISION / 10
+    detection_range = 85 * PRECISION // 10
     is_a_cloaker = False
     cloaking_range = 6 * PRECISION
 

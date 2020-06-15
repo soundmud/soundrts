@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from builtins import object
 import re
 
 import pygame
@@ -55,7 +56,7 @@ class Bindings(object):
         # "\w" means "alphanumeric character (or the underscore)"
         # "(?<!\w)" means "no '\w' before"
         # "(?!\w)" means "no '\w' after"
-        for name, value in self._definitions.items():
+        for name, value in list(self._definitions.items()):
             # replace name with value
             line = re.sub(r"(?<!\w)%s(?!\w)" % name, value, line)
         return line

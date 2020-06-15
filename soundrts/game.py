@@ -1,5 +1,9 @@
 from __future__ import absolute_import
 from __future__ import division
+from builtins import zip
+from builtins import map
+from builtins import str
+from builtins import object
 import os.path
 import pickle
 import threading
@@ -86,7 +90,7 @@ class _Game(object):
                 b += "\n" + self.map.get_campaign("ui/bindings.txt")
                 b += "\n" + self.map.get_additional("ui/bindings.txt")
                 try:
-                    b += "\n" + open(CUSTOM_BINDINGS_PATH, "U").read()
+                    b += "\n" + open(CUSTOM_BINDINGS_PATH, "r").read()
                 except IOError:
                     pass
                 self.interface.load_bindings(b)

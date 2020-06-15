@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from __future__ import division
+from builtins import object
 from builtins import range
 import string
 
@@ -208,7 +209,7 @@ class Square(object):
         # exploit the results
         if end not in P:
             # no path exists
-            return [] if places else (None, None)
+            return [] if places else (None, float("inf"))
         Path = []
         while 1:
             Path.append(end)

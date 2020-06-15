@@ -1,4 +1,5 @@
 #! python2.7
+from builtins import object
 from builtins import range
 from multiprocessing import Process
 import os
@@ -62,7 +63,7 @@ def run_server():
     servermain.start_server(parameters="no_metaserver")
 
 
-class Create:
+class Create(object):
 
     def __init__(self, map_index, speed, public=""):
         self.map_index = map_index
@@ -74,7 +75,7 @@ class Create:
         return True
 
 
-class Invite:
+class Invite(object):
 
     def __init__(self, nb):
         self.nb = nb
@@ -87,7 +88,7 @@ class Invite:
                 return True
 
 
-class InviteAI:
+class InviteAI(object):
 
     def __init__(self, easy=0, aggressive=0, ai2=0):
         self.easy = easy
@@ -107,7 +108,7 @@ class InviteAI:
         return True
 
 
-class Register:
+class Register(object):
 
     def run(self, menu):
         if menu.invitations:
@@ -115,7 +116,7 @@ class Register:
             return True
 
 
-class Start:
+class Start(object):
 
     def run(self, menu):
         if len(menu.registered_players) >= menu.map.nb_players_min:

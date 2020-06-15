@@ -1,16 +1,17 @@
+from builtins import object
 from soundrts.clientserver import ConnectionToServer
 
 
-class Telnet:
+class Telnet(object):
 
     done = False
 
     def read_very_eager(self):
         if self.done:
-            return ""
+            return b""
         else:
             self.done = True
-            return "0\n1\n2\n"
+            return b"0\n1\n2\n"
 
 
 def test_read_line_chronological():

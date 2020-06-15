@@ -1,8 +1,11 @@
 """Packages that can be installed, uninstalled, and updated through the network.
 Only the resource loader decides how packages act over the resource tree."""
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import os
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from .log import warning
 import zipfile
@@ -25,14 +28,14 @@ class PackageManager(object):
 
     def get_packages_urls(self):
         try:
-            urls = urllib.urlopen(self.packages_metaserver_url).read()
+            urls = urllib.request.urlopen(self.packages_metaserver_url).read()
             open(self.packages_urls_cache_path, "w").write(urls)
         except IOError:
             try:
-                urls = open(self.packages_urls_cache_path, "U").read()
+                urls = open(self.packages_urls_cache_path, "r").read()
             except IOError:
                 urls = ""
-        urls += "\n" + open("cfg/additional_packages_urls.txt", "U").read()
+        urls += "\n" + open("cfg/additional_packages_urls.txt", "r").read()
         return [url.strip() for url in urls.split("\n") if url.strip()]
 
     def get_packages_paths(self):
@@ -103,7 +106,7 @@ class DownloadablePackage(object):
 
     def update(self):
         """Update the package from the network."""
-        f = urllib.urlopen(self.url)
+        f = urllib.request.urlopen(self.url)
         remote_size = f.info()['Content-Length']
         try:
             local_size = open(self.size_filename()).read()
@@ -113,7 +116,7 @@ class DownloadablePackage(object):
                 not os.path.isdir(self.pathname):
             self.manager.say_downloading()
             zip_name = os.path.join(self.tmp_path, self.name + ".zip")
-            urllib.urlretrieve(self.url, zip_name)
+            urllib.request.urlretrieve(self.url, zip_name)
             self.manager.say_extracting()
             self._unzip(zip_name)
             open(self.size_filename(), "w").write(remote_size)

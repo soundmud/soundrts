@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from builtins import object
 import socket
 import sys
 import telnetlib
@@ -66,7 +67,7 @@ def connect_and_play(host="127.0.0.1", port=options.port, auto=False):
 
 class ConnectionToServer(object):
 
-    data = ""
+    data = b""
     tn = None
 
     def __init__(self, host, port):
@@ -81,13 +82,13 @@ class ConnectionToServer(object):
         except socket.error:
             raise UnreachableServerError
         try:
-            if self.tn.read_until(":", 3) != ":":
+            if self.tn.read_until(b":", 3) != b":":
                 raise WrongServerError
-            self.tn.write("login " + compatibility_version() + " %s\n" % config.login)
+            self.tn.write(("login " + compatibility_version() + " %s\n" % config.login).encode())
         except (EOFError, socket.error):
             raise WrongServerError
         try:
-            self.tn.read_until("ok!", 5)
+            self.tn.read_until(b"ok!", 5)
         except EOFError:
             raise CompatibilityOrLoginError
 
@@ -99,12 +100,12 @@ class ConnectionToServer(object):
             self.data += self.tn.read_very_eager()
         except: # EOFError or (10054, 'Connection reset by peer')
             raise ConnectionAbortedError
-        if "\n" in self.data:
-            line, self.data = self.data.split("\n", 1)
-            return line
+        if b"\n" in self.data:
+            line, self.data = self.data.split(b"\n", 1)
+            return line.decode("ascii")
 
     def write_line(self, s):
         try:
-            self.tn.write(s + "\n")
+            self.tn.write(s.encode("ascii") + b"\n")
         except socket.error: # connection aborted
             raise ConnectionAbortedError

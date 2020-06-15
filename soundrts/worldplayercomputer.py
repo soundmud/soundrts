@@ -362,8 +362,8 @@ class Computer(Player):
             candidates = self._remove_far_candidates(candidates, starting_place, 10)
         else:
             candidates.sort(key=lambda x: starting_place.shortest_path_distance_to(x.place, self, avoid=True))
-            while candidates and starting_place.shortest_path_distance_to(candidates[0].place, self, avoid=True) is None: # None < 0
-                del candidates[0] # no path
+            while candidates and starting_place.shortest_path_distance_to(candidates[-1].place, self, avoid=True) is float("inf"):
+                del candidates[-1] # no path
         if random:
             if candidates:
                 p = candidates[0].place
@@ -494,7 +494,7 @@ class Computer(Player):
             if u.place not in starts: starts[u.place] = 1
             else: starts[u.place] += 1
         if starts:
-            return sorted(starts.items(), key=lambda x: (x[1], x[0].id))[-1][0]
+            return sorted(list(starts.items()), key=lambda x: (x[1], x[0].id))[-1][0]
 
     def build_or_train_or_upgradeto_or_summon(self, t, nb=1):
         if t.__class__ == str:

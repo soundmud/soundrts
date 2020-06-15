@@ -1,6 +1,9 @@
 from __future__ import print_function
+from builtins import str
+from future import standard_library
+standard_library.install_aliases()
 import platform
-import Queue
+import queue
 import threading
 import time
 
@@ -13,7 +16,7 @@ TTS_TIMEOUT = .1 # in seconds
 _tts = None
 _is_speaking = False
 
-_queue = Queue.Queue()
+_queue = queue.Queue()
 
 
 def is_speaking():
@@ -36,7 +39,7 @@ def _speak(text):
 
 def speak(text):
     global _is_speaking
-    assert isinstance(text, unicode)
+    assert isinstance(text, str)
     if not is_available: return
     _queue.put((_speak, text))
     _is_speaking = True

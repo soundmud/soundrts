@@ -1,4 +1,5 @@
 from __future__ import print_function
+from builtins import str
 from builtins import range
 def encode_range(r):
     i, j = r

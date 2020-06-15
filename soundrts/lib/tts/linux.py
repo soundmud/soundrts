@@ -3,6 +3,7 @@ This module behaves like pyTTS. It runs on Linux.
 The only behavior provided is the behavior that tts.py needs.
 """
 
+from builtins import object
 import speechd  # @UnresolvedImport
 
 

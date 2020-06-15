@@ -1,10 +1,10 @@
 from __future__ import absolute_import
 from __future__ import division
+from builtins import object
 from builtins import range
 import copy
 import inspect
 import re
-import string
 
 from .definitions import rules, style, MAX_NB_OF_RESOURCE_TYPES
 from .lib import group
@@ -261,12 +261,12 @@ class Player(object):
         self.observed_before_squares.update(partially_observed_squares)
         # objects revealed by their actions
         for p in self.allied_vision:
-            for o in p.observed_objects.keys():
+            for o in list(p.observed_objects.keys()):
                 # remove old observed objects and deleted objects
                 if (p.observed_objects[o] < self.world.time
                     or o.place is None):
                     del p.observed_objects[o]
-            self.perception.update(p.observed_objects.keys())
+            self.perception.update(list(p.observed_objects.keys()))
         # sight
         for p in self.world.players:
             if p in self.allied_vision:
@@ -326,7 +326,7 @@ class Player(object):
                     except:
                         self._enemy_menace[place] = menace
                         self._enemy_presence.append(place)
-                    if o.range > PRECISION:
+                    if o.range and o.range > PRECISION:
                         for place in place.neighbors:
                             try:
                                 self._enemy_menace[place] += menace // 10
@@ -386,7 +386,7 @@ class Player(object):
                     u.actual_speed = max(u.actual_speed , VERY_SLOW) # never stuck
             except:
                 u.actual_speed = u.speed
-        for g in self.groups.values():
+        for g in list(self.groups.values()):
             if g:
                 actual_speed = min(u.actual_speed for u in g)
                 for u in g:
@@ -537,8 +537,8 @@ class Player(object):
             self.client.push(*args)
 
     def execute_command(self, data):
-        args = string.split(data)
-        cmd = "cmd_" + string.lower(args[0])
+        args = data.split()
+        cmd = "cmd_" + args[0].lower()
         if hasattr(self, cmd):
             getattr(self, cmd)(args[1:])
         else:

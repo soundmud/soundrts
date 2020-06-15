@@ -2,6 +2,10 @@
 Loaded from resources (depending on the active language,
 packages, mods, campaign, map)."""
 
+from __future__ import unicode_literals
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 import re
 
 import pygame
@@ -130,10 +134,10 @@ class SoundCache(object):
         if re.match("^[0-9]+$", key) is not None:
             warning("this sound may be missing: %s", sound_number)
         try:
-            return unicode(key)
+            return str(key)
         except:
             warning("Unicode error in %s", repr(key))
-            return unicode(key, errors="ignore")
+            return str(key, errors="ignore")
 
 
 sounds = SoundCache()

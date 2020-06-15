@@ -1,6 +1,7 @@
 from __future__ import print_function
 from __future__ import division
 #from soundrts import version
+from builtins import object
 DEBUG_MODE = False #version.IS_DEV_VERSION
 
 

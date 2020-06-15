@@ -1,4 +1,9 @@
 from __future__ import absolute_import
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import map
+from builtins import object
 try:
     from hashlib import md5
 except ImportError:
@@ -6,7 +11,7 @@ except ImportError:
 import platform
 import sys
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from .version import VERSION, IS_DEV_VERSION
 from .metaserver import METASERVER_URL
@@ -31,8 +36,8 @@ def _unpack(player_orders):
 
 def send_error_to_metaserver(error_msg):
     try:
-        params = urllib.urlencode({"method": "add", "msg": error_msg})
-        urllib.urlopen(METASERVER_URL + "errors.php?%s" % params).read()
+        params = urllib.parse.urlencode({"method": "add", "msg": error_msg})
+        urllib.request.urlopen(METASERVER_URL + "errors.php?%s" % params).read()
     except:
         exception("could not send error message to web server")
 

@@ -1,5 +1,11 @@
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import map
+from builtins import str
+from builtins import object
 from builtins import range
 import copy
 from soundrts.lib.sound import distance
@@ -9,7 +15,7 @@ try:
 except ImportError:
     from md5 import md5
 import os.path
-import Queue
+import queue
 import random
 import re
 import string
@@ -53,7 +59,7 @@ class Type(object):
 
     def init_dict(self, target):
         target.type_name = self.type_name
-        for k, v in self.dct.items():
+        for k, v in list(self.dct.items()):
             if k == "class":
                 continue
             if (hasattr(self.cls, k) or
@@ -112,7 +118,7 @@ class World(object):
         self.unit_classes = {}
         self.objects = {}
         self.harm_target_types = {}
-        self._command_queue = Queue.Queue()
+        self._command_queue = queue.Queue()
 
         # "map" properties
 
@@ -163,7 +169,7 @@ class World(object):
 
     def __setstate__(self, dict):
         self.__dict__.update(dict)
-        self._command_queue = Queue.Queue()
+        self._command_queue = queue.Queue()
 
     def remove_links_for_savegame(self): # avoid pickle recursion problem
         for z in self.squares:
@@ -290,13 +296,13 @@ class World(object):
         return "\n".join(self._get_objects_values())
 
     def get_digest(self):
-        d = md5(str(self.time))
+        d = md5(bytes(self.time))
         for p in self.players:
-            d.update(str(len(p.units)))
+            d.update(bytes(len(p.units)))
         for z in self.squares:
-            d.update(str(len(z.objects)))
+            d.update(bytes(len(z.objects)))
         for ov in self._get_objects_values():
-            d.update(ov)
+            d.update(ov.encode())
         return d.hexdigest()
 
     def _update_buckets(self):
@@ -342,14 +348,14 @@ class World(object):
                                     a.detected_units.add(iu)
                                 continue
 
-    previous_state = (0, "")
+    previous_state = (0, b"")
 
     def _record_sync_debug_info(self):
         try:
             self.previous_previous_state = self.previous_state
         except AttributeError:
             pass
-        self.previous_state = self.time, self.get_objects_string()
+        self.previous_state = self.time, self.get_objects_string().encode()
 
     def cpu_intensive_players(self):
         return [p for p in self.players if p.is_cpu_intensive]
@@ -536,7 +542,7 @@ class World(object):
 
     def _meadows(self):
         m = []
-        for square in sorted([x for x in self.grid.keys() if isinstance(x, str)]):
+        for square in sorted([x for x in list(self.grid.keys()) if isinstance(x, str)]):
             m.extend([square] * self.nb_meadows_by_square)
         m.extend(self.additional_meadows)
         for square in self.remove_meadows:
@@ -989,7 +995,7 @@ class World(object):
                 squares = _sorted(s.name for s in set(self.grid.values()) for o in s.objects if o.type_name == t and o.qty // PRECISION == q)
                 f.write("%s %s %s\n" % (t, q, " ".join(squares)))
             f.write("\nnb_meadows_by_square 0\n")
-            for n in sorted(set([s.nb_meadows for s in self.grid.values() if s.nb_meadows])):
+            for n in sorted(set([s.nb_meadows for s in list(self.grid.values()) if s.nb_meadows])):
                 squares = _sorted([s.name for s in set(self.grid.values()) if s.nb_meadows == n])
                 if n == 1:
                     f.write("; 1 meadow\n")
@@ -998,7 +1004,7 @@ class World(object):
                 for _ in range(n):
                     f.write("additional_meadows %s\n" % " ".join(squares))
             f.write("\n")
-            for t in sorted(set([s.type_name for s in self.grid.values() if s.type_name])):
+            for t in sorted(set([s.type_name for s in list(self.grid.values()) if s.type_name])):
                 squares = _sorted([s.name for s in set(self.grid.values()) if s.type_name == t])
                 f.write("terrain %s %s\n" % (t, " ".join(squares)))
             squares = _sorted([s.name for s in set(self.grid.values()) if s.high_ground])
@@ -1009,12 +1015,12 @@ class World(object):
             f.write("ground %s\n" % " ".join(squares))
             squares = _sorted([s.name for s in set(self.grid.values()) if not s.is_air])
             f.write("no_air %s\n" % " ".join(squares))
-            for t in sorted(set([s.terrain_cover for s in self.grid.values() if s.terrain_cover != (0, 0)])):
+            for t in sorted(set([s.terrain_cover for s in list(self.grid.values()) if s.terrain_cover != (0, 0)])):
                 squares = _sorted([s.name for s in set(self.grid.values()) if s.terrain_cover == t])
-                f.write("cover %s %s\n" % (" ".join(map(lambda x: str(x / 100.0), t)), " ".join(squares)))
-            for t in sorted(set([s.terrain_speed for s in self.grid.values() if s.terrain_speed != (100, 100)])):
+                f.write("cover %s %s\n" % (" ".join([str(x / 100.0) for x in t]), " ".join(squares)))
+            for t in sorted(set([s.terrain_speed for s in list(self.grid.values()) if s.terrain_speed != (100, 100)])):
                 squares = _sorted([s.name for s in set(self.grid.values()) if s.terrain_speed == t])
-                f.write("speed %s %s\n" % (" ".join(map(lambda x: str(x / 100.0), t)), " ".join(squares)))
+                f.write("speed %s %s\n" % (" ".join([str(x / 100.0) for x in t]), " ".join(squares)))
             f.write("\n")
             we = dict()
             sn = dict()

@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from builtins import object
 import base64
 try: 
     from hashlib import md5
@@ -47,7 +48,7 @@ class Map(object):
     def _read_additional_file(self, n):
         p = os.path.join(self.path, n)
         if os.path.isfile(p):
-            return open(p, "U").read()
+            return open(p, "r").read()
         else:
             return ""
 
@@ -56,7 +57,7 @@ class Map(object):
             return ""
         p = os.path.join(self.campaign.path, n)
         if os.path.isfile(p):
-            return open(p, "U").read()
+            return open(p, "r").read()
         else:
             return ""
         
@@ -101,9 +102,9 @@ class Map(object):
         if self.map_string is not None:
             return self.map_string
         elif os.path.isdir(self.path):
-            return open(os.path.join(self.path, "map.txt"), "U").read()
+            return open(os.path.join(self.path, "map.txt"), "r").read()
         else:
-            return open(self.path, "U").read()
+            return open(self.path, "r").read()
 
     def _extract_title(self, s):
         m = re.search("(?m)^title[ \t]+([0-9 ]+)$", s)
@@ -111,7 +112,7 @@ class Map(object):
             self.title = [int(x) for x in m.group(1).split(" ")]
         else:
             name = os.path.split(self.path)[1].lower()
-            name = re.sub("\.txt$", "", name)
+            name = re.sub(r"\.txt$", "", name)
             name = re.sub("[^a-zA-Z0-9]", "", name)
             self.title = [name]
 
@@ -125,7 +126,7 @@ class Map(object):
         except:
             s = ""
         s += self.additional_rules + self.additional_ai
-        return md5(s).hexdigest()
+        return md5(s.encode()).hexdigest()
 
     def _check_digest(self):
         if self.digest is None:
@@ -160,25 +161,25 @@ class Map(object):
             return self._original_map_string
         if os.path.isfile(self.path):
             map_name = os.path.split(self.path)[-1]
-            content = base64.b64encode(open(self.path, "U").read())
-            return map_name + "***" + content
+            content = base64.b64encode(open(self.path, "rb").read())
+            return map_name.encode() + b"***" + content
         else:
             dest = os.path.join(TMP_PATH, "map.tmp")
             z = zipdir.zipdir(self.path, dest)
             content = base64.b64encode(open(dest, "rb").read())
             os.remove(dest)
-            return "zip" + "***" + content
+            return b"zip" + b"***" + content
 
     def unpack(self, map_string):
         self._original_map_string = map_string
         try:
             self.path, content = map_string.split("***", 1)
             if self.path != "zip":
-                self.map_string = base64.b64decode(content)
-                open(os.path.join(TMP_PATH, "recent_map.txt"), "wb").write(self.map_string)
+                self.map_string = base64.b64decode(content).decode()
+                open(os.path.join(TMP_PATH, "recent_map.txt"), "wb").write(self.map_string.encode())
             else:
                 zf = os.path.join(TMP_PATH, "recent_map.tmp")
-                open(zf, "wb").write(base64.b64decode(content))
+                open(zf, "wb").write(base64.b64decode(content).encode())
                 zd = os.path.join(TMP_PATH, "recent_map")
                 shutil.rmtree(zd, True)
                 zipdir.unzipdir(zf, zd)

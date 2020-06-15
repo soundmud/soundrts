@@ -5,9 +5,13 @@ Some resources will be combined differently: some are replaced (sounds),
 some are merged (some text files).
 """
 
+from __future__ import unicode_literals
+from builtins import str
+from builtins import object
 import locale
 import os
 import re
+import sys
 
 from soundrts.lib import encoding
 from soundrts.lib.log import warning
@@ -142,7 +146,13 @@ class ResourceLoader(object):
         for root in roots:
             for text_file_path in self._localized_paths(os.path.join(root, name), localize):
                 if os.path.isfile(text_file_path):
-                    result.append(open(text_file_path, "rU").read())
+                    b = open(text_file_path, "rb").read()
+                    e = encoding.encoding(b)
+                    if sys.version_info[0] == 3:
+                        txt = open(text_file_path, "r", encoding=e).read()
+                    else:
+                        txt = b.decode(e)
+                    result.append(txt)
         return result
 
     def get_text_file(self, name, localize=False, append=False, root=None):
@@ -166,18 +176,12 @@ class ResourceLoader(object):
         result = {}
         for txt in self._get_text_files(TXT_FILE, localize=True, root=root):
             lines = txt.split("\n")
-            encoding_name = encoding.encoding(txt)
             for line in lines:
                 try:
                     line = line.strip()
                     if line:
                         key, value = line.split(None, 1)
                         if value:
-                            try:
-                                value = unicode(value, encoding_name)
-                            except ValueError:
-                                value = unicode(value, encoding_name, "replace")
-                                warning("in '%s', encoding error: %s", TXT_FILE, line)
                             result[key] = value
                         else:
                             warning("in '%s', line ignored: %s", TXT_FILE, line)

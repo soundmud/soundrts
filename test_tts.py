@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from builtins import range
 import time
 
@@ -5,7 +6,7 @@ from soundrts.lib import tts
 
 
 def say(txt):
-    tts.speak(unicode(txt))
+    tts.speak(txt)
     while tts.is_speaking():
         time.sleep(.01)
 

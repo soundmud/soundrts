@@ -4,6 +4,7 @@ It runs on Windows with win32com and SAPI 5.
 The only behavior provided is the behavior that tts.py needs.
 """
 
+from builtins import object
 import win32com.client
 
 
