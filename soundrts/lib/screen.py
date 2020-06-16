@@ -8,7 +8,7 @@ from .log import warning
 
 
 pygame.font.init()
-_font = pygame.font.Font("freesansbold.ttf", 12)
+_font = pygame.font.SysFont("arial", 12, bold=True)
 
 def draw_line(color, xy1, xy2):
     pygame.draw.line(_screen, color, xy1, xy2)
