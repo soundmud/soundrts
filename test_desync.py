@@ -1,4 +1,4 @@
-#! python2.7
+#! python3
 from builtins import object
 from builtins import range
 from multiprocessing import Process

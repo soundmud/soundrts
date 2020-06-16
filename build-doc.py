@@ -1,4 +1,4 @@
-#! python2
+#! python3
 import os
 from os.path import join
 import shutil

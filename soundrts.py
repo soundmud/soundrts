@@ -1,4 +1,4 @@
-#! python2.7
+#! python3
 from soundrts import clientmain
 
 
