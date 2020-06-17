@@ -1,3 +1,4 @@
+#! python3
 from soundrts.lib import log
 log.add_console_handler()
 
@@ -65,6 +66,7 @@ def cost(p, n):
         return ""
 
 def nb(u, n):
+    n = float(n)
     if isinstance(u, tuple):
         if n <= 1:
             return u[0]
@@ -123,8 +125,8 @@ def can_use(c, t):
     return sorted(r, key=kcost)
 
 rules = RulesForDoc()
-rules.load(open("res/rules.txt", "rU").read(),
-           open("res/ui/rules_doc.txt", "rU").read())
+rules.load(open("res/rules.txt", "r").read(),
+           open("res/ui/rules_doc.txt", "r").read())
 for cat in (("1. Units", ("worker", "soldier")),
             ("2. Buildings", ("building", )),
             ("3. Abilities", ("ability", )),
