@@ -36,7 +36,9 @@ if os.path.exists(dest):
     print(f"{dest} already exists. Deleting...")
     shutil.rmtree(dest)
 setup(options = {'build_exe': build_options},
-      executables = executables)
+      executables = executables,
+      name = "SoundRTS",
+      version = VERSION.replace("-dev", ".9999"))
 print("Creating empty user folder...")
 os.mkdir(rf"{dest}\user")
 print(r"Reseting cfg\language.txt ...") 
