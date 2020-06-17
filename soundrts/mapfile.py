@@ -158,7 +158,7 @@ class Map(object):
 
     def pack(self):
         if self._original_map_string is not None:
-            return self._original_map_string
+            return self._original_map_string.encode()
         if os.path.isfile(self.path):
             map_name = os.path.split(self.path)[-1]
             content = base64.b64encode(open(self.path, "rb").read())
