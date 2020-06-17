@@ -1,8 +1,6 @@
 """Packages that can be installed, uninstalled, and updated through the network.
 Only the resource loader decides how packages act over the resource tree."""
 
-from future import standard_library
-standard_library.install_aliases()
 import os
 import urllib.request, urllib.parse, urllib.error
 

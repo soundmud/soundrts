@@ -1,5 +1,3 @@
-from future import standard_library
-standard_library.install_aliases()
 import urllib.request, urllib.error, urllib.parse
 
 from .lib.log import warning

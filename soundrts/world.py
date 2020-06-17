@@ -1,5 +1,3 @@
-from future import standard_library
-standard_library.install_aliases()
 import copy
 from soundrts.lib.sound import distance
 from soundrts.lib.nofloat import square_of_distance

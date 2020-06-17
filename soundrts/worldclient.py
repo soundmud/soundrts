@@ -1,5 +1,3 @@
-from future import standard_library
-standard_library.install_aliases()
 try:
     from hashlib import md5
 except ImportError:

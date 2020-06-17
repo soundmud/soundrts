@@ -1,7 +1,5 @@
 # read/write the config file
 
-from future import standard_library
-standard_library.install_aliases()
 import configparser
 import platform
 import os

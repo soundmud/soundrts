@@ -1,5 +1,3 @@
-from future import standard_library
-standard_library.install_aliases()
 try:
     from ctypes import create_string_buffer, sizeof, windll, c_ulong, byref
 except:
