@@ -1,0 +1,9 @@
+future
+
+pygame
+pywin32
+
+docutils
+cx_Freeze
+
+pytest
