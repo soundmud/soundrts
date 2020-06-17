@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import object
 import random
 import time
 
@@ -51,7 +48,7 @@ def _order_title_msg(order, interface, nb=1):
     return mp.COMMA + result
 
 
-class EntityView(object):
+class EntityView:
 
     next_step = None
 

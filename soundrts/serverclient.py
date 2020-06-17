@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from builtins import map
-from builtins import str
 import asynchat
 import re
 import sys
@@ -145,7 +142,7 @@ class ConnectionToClient(asynchat.async_chat):
              (self.address[0], self.login, self.version, self.delay))
         # welcome client to server
         self.push("ok!\n")
-        self.push("welcome %s %s\n" % (self.login, self.server.login))
+        self.push(f"welcome {self.login} {self.server.login}\n")
         self.server.clients.append(self)
         # move client to lobby
         self.state = InTheLobby()

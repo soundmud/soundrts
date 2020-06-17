@@ -1,8 +1,7 @@
-from builtins import object
 from soundrts.clientserver import ConnectionToServer
 
 
-class Telnet(object):
+class Telnet:
 
     done = False
 

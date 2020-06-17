@@ -1,8 +1,5 @@
-from __future__ import unicode_literals
 from future import standard_library
 standard_library.install_aliases()
-from builtins import str
-from builtins import object
 import logging
 import logging.handlers
 import os
@@ -31,10 +28,10 @@ class HTTPHandler(logging.Handler):
     def emit(self, record):
         if self._done:
             return
-        msg = "exception with %s:\n%s" % (_version, record.exc_text)
+        msg = f"exception with {_version}:\n{record.exc_text}"
         params = urllib.parse.urlencode({"msg": msg})
         try:
-            urllib.request.urlopen("%s/logging_errors.php?%s" % (self._url, params)).read()
+            urllib.request.urlopen(f"{self._url}/logging_errors.php?{params}").read()
         except:
             pass
         self._done = True
@@ -63,7 +60,7 @@ class SecureFileHandler(logging.FileHandler):
                     self.stream.write("*** too many records, logging stopped ***\n")
 
 
-class _NeverCrash(object):
+class _NeverCrash:
     """
     Prevents crash with pythonw.exe (problems with stdout or stderr).
     """
@@ -73,7 +70,7 @@ class _NeverCrash(object):
     def __call__(self, *args, **kargs):
         try:
             self._f(*args, **kargs)
-        except IOError:
+        except OSError:
             if "Errno 9" not in str(sys.exc_info()[1]):
                 raise
 

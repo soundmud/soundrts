@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import range
 from .definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
 from .lib.log import debug, warning, exception
 from .lib.nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
@@ -914,7 +911,7 @@ class Unit(Creature):
                     return
                 else:
                     self.player._places_to_explore.remove(place)
-            self.player._already_explored = set([o.place for o in self.player.perception])
+            self.player._already_explored = {o.place for o in self.player.perception}
         elif self.player.is_very_dangerous(self.action_target):
             if not self.player.is_very_dangerous(self.place):
                 self.action_target = None

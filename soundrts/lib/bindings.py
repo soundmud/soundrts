@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-from builtins import object
 import re
 
 import pygame
@@ -46,7 +44,7 @@ def _preprocess(s):
     return s
 
 
-class Bindings(object):
+class Bindings:
 
     def __init__(self):
         self._bindings = {}

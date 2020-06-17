@@ -1,9 +1,5 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
 from future import standard_library
 standard_library.install_aliases()
-from builtins import map
-from builtins import object
 try:
     from hashlib import md5
 except ImportError:
@@ -42,7 +38,7 @@ def send_error_to_metaserver(error_msg):
         exception("could not send error message to web server")
 
 def send_platform_version_to_metaserver(game, nb):
-    error_msg = "not_an_error time=%s soundrts=%s map=%s players=%s platform=%s python=%s" % (
+    error_msg = "not_an_error time={} soundrts={} map={} players={} platform={} python={}".format(
         time.time(),
         VERSION,
         game,
@@ -53,7 +49,7 @@ def send_platform_version_to_metaserver(game, nb):
     send_error_to_metaserver(error_msg)
 
 
-class _Controller(object):
+class _Controller:
 
     @property
     def name(self):
@@ -61,7 +57,7 @@ class _Controller(object):
         return name(self.login)
 
     def __repr__(self):
-        return "%s(%r)" % (self.__class__.__name__, self.login)
+        return f"{self.__class__.__name__}({self.login!r})"
 
     player_class = Human
     alliance = None
@@ -246,17 +242,17 @@ class Coordinator(_Client): # client coordinator for multiplayer games
     # communications with the world
 
     def get_digest(self):
-        return "%s-%s.%s-%s" % (self.world.time,
+        return "{}-{}.{}-{}".format(self.world.time,
                                 self.turn, self.sub_turn,
                                 md5(self.world.previous_state[1]).hexdigest())
 
     def get_sync_debug_msg_1(self):
-        return "out_of_sync_error: map=%s version=%s platform=%s python=%s md5=%s time=%s" % (
+        return "out_of_sync_error: map={} version={} platform={} python={} md5={} time={}".format(
             self.world.map.get_name(), VERSION, platform.platform(), sys.version.replace("\n", " "),
             self.get_digest(), self.world.previous_state[0])
 
     def get_sync_debug_msg_2(self):
-        return "out_of_sync_error:debug_info orders=%s objects=%s" % (
+        return "out_of_sync_error:debug_info orders={} objects={}".format(
                self._all_orders,
                self.world.previous_state[1][-150:],
                )
@@ -289,11 +285,11 @@ class Coordinator(_Client): # client coordinator for multiplayer games
                 self.delay = time.time() - self.interface.next_update
             elif args[0] == "synchronization_error":
                 if IS_DEV_VERSION:
-                    open("user/tmp/%s-%s.txt" % (
+                    open("user/tmp/{}-{}.txt".format(
                         self.world.previous_state[0],
                         md5(self.world.previous_state[1]).hexdigest()),
                          "w").write(self.world.previous_state[1])
-                    open("user/tmp/%s-%s.txt" % (
+                    open("user/tmp/{}-{}.txt".format(
                         self.world.previous_previous_state[0],
                         md5(self.world.previous_previous_state[1]).hexdigest()),
                          "w").write(self.world.previous_previous_state[1])

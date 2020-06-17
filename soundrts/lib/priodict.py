@@ -1,7 +1,6 @@
 # Priority dictionary using binary heaps
 # David Eppstein, UC Irvine, 8 Mar 2002
 
-from __future__ import generators
 
 class priorityDictionary(dict):
     def __init__(self):

@@ -1,12 +1,11 @@
-from builtins import object
 from soundrts.worldclient import ReplayClient
 
 
-class Player(object):
+class Player:
     pass
 
 
-class ReplayGame(object):
+class ReplayGame:
 
     record_replay = False
 
@@ -16,7 +15,7 @@ class ReplayGame(object):
         return ""
 
 
-class World(object):
+class World:
 
     time = 0
 

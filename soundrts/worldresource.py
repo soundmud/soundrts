@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 import copy
 
 from .lib.nofloat import to_int, PRECISION

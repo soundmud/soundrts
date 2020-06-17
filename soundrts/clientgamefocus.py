@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import object
 from .lib.voice import voice
 from .lib.log import warning
 from .lib.nofloat import PRECISION
@@ -20,7 +17,7 @@ _subzone_name = {
     }
 
 
-class Zoom(object):
+class Zoom:
 
     sub_x = 0
     sub_y = 0
@@ -37,7 +34,7 @@ class Zoom(object):
         sq = self.parent.place
         x = sq.x + self.sub_x * self.xstep
         y = sq.y + self.sub_y * self.ystep
-        return "zoom-%s-%s-%s" % (sq.id, int(x), int(y))
+        return "zoom-{}-{}-{}".format(sq.id, int(x), int(y))
 
     @property
     def title(self):

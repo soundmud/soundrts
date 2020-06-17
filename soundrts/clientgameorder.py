@@ -1,7 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import str
-from builtins import object
 from .definitions import style, rules
 from .lib.log import warning
 from .lib.msgs import nb2msg
@@ -18,7 +14,7 @@ def nb2msg_f(n):
     return nb2msg(n)
 
 
-class OrderTypeView(object): # future order
+class OrderTypeView: # future order
 
     type = None
     requirements = []

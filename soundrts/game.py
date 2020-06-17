@@ -1,9 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import zip
-from builtins import map
-from builtins import str
-from builtins import object
 import os.path
 import pickle
 import threading
@@ -34,7 +28,7 @@ from .worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, R
 PROFILE = False
 
 
-class _Game(object):
+class _Game:
 
     default_triggers = () # empty tuple; a tuple is immutable
     game_type_name = None
@@ -66,7 +60,7 @@ class _Game(object):
         self._replay_file.write(s + "\n")
       
     def _game_type(self):
-        return "%s/%s/%s" % (VERSION,
+        return "{}/{}/{}".format(VERSION,
                              self.game_type_name + "-" + self.map.get_name(),
                              self.nb_human_players)
 
@@ -90,8 +84,8 @@ class _Game(object):
                 b += "\n" + self.map.get_campaign("ui/bindings.txt")
                 b += "\n" + self.map.get_additional("ui/bindings.txt")
                 try:
-                    b += "\n" + open(CUSTOM_BINDINGS_PATH, "r").read()
-                except IOError:
+                    b += "\n" + open(CUSTOM_BINDINGS_PATH).read()
+                except OSError:
                     pass
                 self.interface.load_bindings(b)
                 self.world.populate_map(self.players)
@@ -200,7 +194,7 @@ class MultiplayerGame(_MultiplayerGame):
         # (long enough to allow history navigation)
 
 
-class _Savable(object):
+class _Savable:
 
     def __getstate__(self):
         odict = self.__dict__.copy()

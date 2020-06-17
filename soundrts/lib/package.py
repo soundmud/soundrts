@@ -3,7 +3,6 @@ Only the resource loader decides how packages act over the resource tree."""
 
 from future import standard_library
 standard_library.install_aliases()
-from builtins import object
 import os
 import urllib.request, urllib.parse, urllib.error
 
@@ -11,7 +10,7 @@ from .log import warning
 import zipfile
 
 
-class PackageManager(object):
+class PackageManager:
     """The package manager."""
     def __init__(self, packages_metaserver_url, tmp_path, packages_path, say_downloading, say_extracting):
         """
@@ -30,12 +29,12 @@ class PackageManager(object):
         try:
             urls = urllib.request.urlopen(self.packages_metaserver_url).read()
             open(self.packages_urls_cache_path, "w").write(urls)
-        except IOError:
+        except OSError:
             try:
-                urls = open(self.packages_urls_cache_path, "r").read()
-            except IOError:
+                urls = open(self.packages_urls_cache_path).read()
+            except OSError:
                 urls = ""
-        urls += "\n" + open("cfg/additional_packages_urls.txt", "r").read()
+        urls += "\n" + open("cfg/additional_packages_urls.txt").read()
         return [url.strip() for url in urls.split("\n") if url.strip()]
 
     def get_packages_paths(self):
@@ -50,7 +49,7 @@ class PackageManager(object):
         return [p for p in self.packages if p.is_active]
 
 
-class DownloadablePackage(object):
+class DownloadablePackage:
     """a downloadable package
 
     (its name is guessed from its URL)

@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from builtins import zip
-from builtins import object
 from . import config
 config.load()
 
@@ -64,7 +61,7 @@ def choose_server_ip_in_a_list():
     menu.run()
 
 def enter_server_ip():
-    host = input_string([], "^[A-Za-z0-9\.]$")
+    host = input_string([], r"^[A-Za-z0-9\.]$")
     if host:
         connect_and_play(host)
 
@@ -131,7 +128,7 @@ def open_user_folder():
     webbrowser.open(CONFIG_DIR_PATH)
 
 
-class TrainingMenu(object):
+class TrainingMenu:
 
     def _add_ai(self, ai_type):
         self._players.append(ai_type)
@@ -250,7 +247,7 @@ def options_menu():
 
 def main_menu():
     Menu(
-        ["SoundRTS %s %s %s," % (VERSION, res.mods, res.soundpacks)]
+        [f"SoundRTS {VERSION} {res.mods} {res.soundpacks},"]
         + mp.MAKE_A_SELECTION,
         [
             [mp.SINGLE_PLAYER, single_player_menu, mp.SINGLE_PLAYER_EXPLANATION],

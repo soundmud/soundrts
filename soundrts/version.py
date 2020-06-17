@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 try:
     from hashlib import md5
 except ImportError:
@@ -40,4 +39,4 @@ try:
     _s = os.path.getsize("library.zip")
 except os.error:
     _s = 0
-VERSION_FOR_BUG_REPORTS = "%s (%s)" % (VERSION, _s)
+VERSION_FOR_BUG_REPORTS = f"{VERSION} ({_s})"

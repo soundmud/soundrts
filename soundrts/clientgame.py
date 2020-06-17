@@ -1,11 +1,5 @@
-from __future__ import absolute_import
-from __future__ import division
 from future import standard_library
 standard_library.install_aliases()
-from builtins import map
-from builtins import str
-from builtins import object
-from builtins import range
 import math
 import queue
 import re
@@ -90,7 +84,7 @@ def _remove_duplicates(l):
 
 def load_palette():
     p = []
-    with open("res/ui/editor_palette.txt", "r") as f:
+    with open("res/ui/editor_palette.txt") as f:
         for s in f:
             s = s.strip()
             if s and not s.startswith(";"):
@@ -133,7 +127,7 @@ def load_palette():
 ##        print " ", kk, vv
 
 
-class GameInterface(object):
+class GameInterface:
 
     last_virtual_time = 0
     x = y = o = 0
@@ -401,7 +395,7 @@ class GameInterface(object):
                 for p in self.world.players:
                     p.triggers = []
                 self._bindings = Bindings()
-                self._bindings.load(open("res/ui/editor_bindings.txt", "r").read(), self)
+                self._bindings.load(open("res/ui/editor_bindings.txt").read(), self)
                 voice.item(["editor"])
             else:
                 voice.item(mp.BEEP)
@@ -918,7 +912,7 @@ class GameInterface(object):
                 self.dobjets[m.id].model = m
 
         # remove missing objects
-        pm = set(o.id for o in self.memory)
+        pm = {o.id for o in self.memory}
         pm.update(o.id for o in self.perception)
         for i in list(self.dobjets.keys()):
             if i in pm:
@@ -1066,7 +1060,7 @@ class GameInterface(object):
             voice.info(self.summary(enemies, brief=True) + mp.ENEMY + mp.AT + place.title)
 
     def units_alert(self, units, msg_end, brief=True):
-        places = set([x[1] for x in units if x[1] is not None])
+        places = {x[1] for x in units if x[1] is not None}
         for place in places:
             units_in_place = [x[0] for x in units if x[1] is place]
             s = self.summary(units_in_place, brief=brief)
@@ -1137,7 +1131,7 @@ class GameInterface(object):
             # make a copy to make sure that it is not modified later
             self.previous_group = g[:]
         if target is not None:
-            order = "%s %s" % (order, target)
+            order = f"{order} {target}"
         self.server.write_line("order %s %s %s" %
                                (queue_order, imperative, order))
 
@@ -1707,7 +1701,7 @@ class GameInterface(object):
                       (0, 30),
                       color=warn if time.time() > self.next_update else normal)
         if hasattr(self.server, "turn"):
-            screen_render("com turn(sim subturn): %s(%s/%s)" % (self.server.turn, self.server.sub_turn + 1, self.server.fpct),
+            screen_render("com turn(sim subturn): {}({}/{})".format(self.server.turn, self.server.sub_turn + 1, self.server.fpct),
                       (0, 45))
             screen_render("com delay: %sms" % chrono.ms(self.server.delay),
                       (0, 60),

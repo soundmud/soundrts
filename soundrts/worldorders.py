@@ -1,7 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import object
-from builtins import range
 from .definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
 from .lib.log import info
 from .lib.nofloat import to_int, PRECISION
@@ -14,7 +10,7 @@ from soundrts.lib.nofloat import square_of_distance
 ORDERS_QUEUE_LIMIT = 10
 
 
-class Order(object):
+class Order:
 
     target = None
     type = None
@@ -969,7 +965,7 @@ class UseOrder(ComplexOrder):
 
     def teleportation_is_not_necessary(self):
         units = self.teleportation_targets()
-        types = set([u.airground_type for u in units])
+        types = {u.airground_type for u in units}
         if not hasattr(self.target, "can_receive"):
             self.target = self.target.place
         if self.target is self.unit.place:
@@ -994,7 +990,7 @@ class UseOrder(ComplexOrder):
         units = self.recall_targets()
         if not units:
             return True
-        types = set([u.airground_type for u in units])
+        types = {u.airground_type for u in units}
         if self.target is self.unit.place:
             return True
         elif not [t for t in types if self.unit.place.can_receive(t)]:
@@ -1198,5 +1194,5 @@ class UnloadAllOrder(TransportOrder):
 
 # build a dictionary containing order classes
 # for example: ORDERS_DICT["go"] == GoOrder
-ORDERS_DICT = dict([(_v.keyword, _v) for _v in list(locals().values())
-                    if hasattr(_v, "keyword") and issubclass(_v, Order)])
+ORDERS_DICT = {_v.keyword: _v for _v in list(locals().values())
+                    if hasattr(_v, "keyword") and issubclass(_v, Order)}

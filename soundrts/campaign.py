@@ -1,7 +1,5 @@
-from __future__ import absolute_import
 from future import standard_library
 standard_library.install_aliases()
-from builtins import object
 import configparser
 import os
 import re
@@ -55,7 +53,7 @@ class MissionChapter(Map):
             self._defeat()
 
 
-class CutSceneChapter(object):
+class CutSceneChapter:
 
     def __init__(self, path, campaign=None, id=None):
         self.path = path
@@ -64,7 +62,7 @@ class CutSceneChapter(object):
         self._load()
 
     def _load(self):
-        s = open(self.path, "r").read()
+        s = open(self.path).read()
         # header
         m = re.search("(?m)^title[ \t]+([0-9 ]+)$", s)
         if m:
@@ -92,7 +90,7 @@ class CutSceneChapter(object):
             self._get_next().run()
 
 
-class Campaign(object):
+class Campaign:
 
     def __init__(self, path, title=None):
         self.path = path
@@ -109,7 +107,7 @@ class Campaign(object):
                 if not os.path.isdir(cp):
                     break
             if os.path.isfile(cp) and \
-               open(cp, "r").readline() == "cut_scene_chapter\n":
+               open(cp).readline() == "cut_scene_chapter\n":
                 c = CutSceneChapter(cp, campaign=self, id=i)
             else:
                 c = MissionChapter(cp, campaign=self, id=i)

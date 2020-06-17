@@ -1,4 +1,3 @@
-from builtins import object
 import time
 
 import pygame
@@ -11,7 +10,7 @@ from soundrts import version
 DEBUG_MODE = version.IS_DEV_VERSION
 
 
-class VoiceChannel(object):
+class VoiceChannel:
 
     _queue = [] # sounds of the message currently said
     _starting_time = 0

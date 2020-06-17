@@ -1,7 +1,5 @@
-from __future__ import absolute_import
 from future import standard_library
 standard_library.install_aliases()
-from builtins import object
 try:
     from ctypes import create_string_buffer, sizeof, windll, c_ulong, byref
 except:
@@ -14,7 +12,7 @@ from .lib.log import debug
 from .paths import STATS_PATH
 
 
-class Stats(object):
+class Stats:
 
     def __init__(self, filepath, server):
         self.filepath = filepath
@@ -77,7 +75,7 @@ class Stats(object):
             for game_type in list(stats.keys()):
                 nb_games, total_duration = stats[game_type]
                 try:
-                    s = urllib.request.urlopen(self.server + "stats.php?method=add&game_type=%s&nb_games=%s&total_duration=%s&weak_id=%s" % (game_type, nb_games, total_duration, weak_id)).read()
+                    s = urllib.request.urlopen(self.server + f"stats.php?method=add&game_type={game_type}&nb_games={nb_games}&total_duration={total_duration}&weak_id={weak_id}").read()
                 except:
                     debug("stats server didn't reply")
                     break # don't try next stats

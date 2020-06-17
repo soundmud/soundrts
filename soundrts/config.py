@@ -1,9 +1,7 @@
-from __future__ import absolute_import
 # read/write the config file
 
 from future import standard_library
 standard_library.install_aliases()
-from builtins import str
 import configparser
 import platform
 import os
@@ -97,7 +95,7 @@ def _copy_to_module(c):
 def load(name=CONFIG_FILE_PATH):
     if os.path.isfile(name):
         c = configparser.ConfigParser()
-        c.read_file(open(name, "r"))
+        c.read_file(open(name))
         error = _copy_to_module(c)
         if error:
             warning("Error in %s.", name)

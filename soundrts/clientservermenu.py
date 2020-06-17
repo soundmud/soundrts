@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-from builtins import range
 import re
 import time
 
@@ -156,7 +154,7 @@ class ServerMenu(_ServerMenu):
     def _get_speed_submenu(self, args):
         n, title, is_public = args
         def create_with_speed(speed):
-            s = "create %s %s %s" % (n, speed, is_public)
+            s = f"create {n} {speed} {is_public}"
             return (self.server.write_line, s)
         Menu(title,
              [(mp.SET_SPEED_TO_SLOW, create_with_speed("0.5")),
@@ -241,7 +239,7 @@ class _BeforeGameMenu(_ServerMenu):
                 if r != pr:
                     menu.append(name(p) + style.get(r, "title"),
                                 (self.server.write_line,
-                                 "faction %s %s" % (pn, r)))
+                                 f"faction {pn} {r}"))
 
     def srv_start_game(self, args):
         players, local_login, seed, speed = args
@@ -277,7 +275,7 @@ class GameAdminMenu(_BeforeGameMenu):
                 if a != pa:
                     menu.append(mp.MOVE + name(login) + mp.TO_ALLIANCE + nb2msg(a),
                                 (self.server.write_line,
-                                 "move_to_alliance %s %s" % (pn, a)))
+                                 f"move_to_alliance {pn} {a}"))
             if login == self.server.login or login.startswith("ai_"):
                 self._add_faction_menu(menu, pn, login, pr)
         menu.append(mp.CANCEL + mp.CANCEL_THIS_GAME,

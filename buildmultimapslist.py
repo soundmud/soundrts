@@ -15,7 +15,7 @@ def size(m):
 
 def add_digest(m):
     p = os.path.join(DIR, m)
-    return "%s %s" % (m, Map(p).get_digest())
+    return "{} {}".format(m, Map(p).get_digest())
 
 def build():
     print("Updating list of official maps...")

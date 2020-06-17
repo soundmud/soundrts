@@ -2,10 +2,7 @@
 Loaded from resources (depending on the active language,
 packages, mods, campaign, map)."""
 
-from __future__ import unicode_literals
-from builtins import str
 from past.builtins import basestring
-from builtins import object
 import re
 
 import pygame
@@ -18,14 +15,14 @@ SHORT_SILENCE = "9998"  # 0.01 s
 SILENCE = "9999"  # 0.2 s
 
 
-class Layer(object):
+class Layer:
 
     def __init__(self):
         self.sounds = {}
         self.txt = {}
 
 
-class SoundCache(object):
+class SoundCache:
     """The sound cache contains numbered sounds and texts.
     Usually a number will give only one type of value, but strange things
     can happen (until I fix this), with SHORT_SILENCE and SILENCE for example.
@@ -85,8 +82,8 @@ class SoundCache(object):
 
     def _add_special_values(self):
         """add some values not defined in text files"""
-        self.default.txt[SHORT_SILENCE] = u","
-        self.default.txt[SILENCE] = u"."
+        self.default.txt[SHORT_SILENCE] = ","
+        self.default.txt[SILENCE] = "."
 
     def load_default(self, res, on_loading=None, on_complete=None):
         """load the default layer into memory from res"""
@@ -128,7 +125,7 @@ class SoundCache(object):
         if self.has_text(key):
             return self.get_text(key)
         if re.match("^[0-9]+$", key) is not None and int(key) >= NB_ENCODE_SHIFT:
-            return u"%s" % (int(key) - NB_ENCODE_SHIFT)
+            return "%s" % (int(key) - NB_ENCODE_SHIFT)
         if self.has_sound(key):
             return self.get_sound(key)
         if re.match("^[0-9]+$", key) is not None:

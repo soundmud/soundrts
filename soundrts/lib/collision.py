@@ -1,7 +1,4 @@
-from __future__ import print_function
-from __future__ import division
 #from soundrts import version
-from builtins import object
 DEBUG_MODE = False #version.IS_DEV_VERSION
 
 
@@ -24,7 +21,7 @@ SHAPE = (
 ##                 )
 
 
-class CollisionMatrix(object):
+class CollisionMatrix:
 
     def __init__(self, xmax, res):
         if DEBUG_MODE:
@@ -63,7 +60,7 @@ class CollisionMatrix(object):
             assert x >= 0
             assert x <= self.xmax
         k = self._key(x, y)
-        return set((k + a + self.amax * b for (a, b) in SHAPE))
+        return {k + a + self.amax * b for (a, b) in SHAPE}
 
     def would_collide(self, *args):
         return self._set.intersection(self._shape(*args))
@@ -80,7 +77,7 @@ class CollisionMatrix(object):
 
 
 if __name__ == "__main__":
-    class O(object):
+    class O:
         pass
     m = CollisionMatrix(200, 2)
 #    assert m._key(0, 0) == 0

@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from .worldorders import ORDERS_DICT
 from .worldplayerbase import Player
 

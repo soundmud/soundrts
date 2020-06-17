@@ -1,4 +1,3 @@
-from builtins import object
 from soundrts.serverclient import ConnectionToClient
 
 
@@ -11,7 +10,7 @@ class Client(ConnectionToClient):
         self.cmd = data
 
 
-class Server(object):
+class Server:
 
     clients = []
 

@@ -5,9 +5,6 @@ Some resources will be combined differently: some are replaced (sounds),
 some are merged (some text files).
 """
 
-from __future__ import unicode_literals
-from builtins import str
-from builtins import object
 import locale
 import os
 import re
@@ -24,7 +21,7 @@ def localize_path(path, lang):
     """Return the path modified for this language.
     For example, "ui" becomes "ui-fr".
     """
-    return re.sub("(?<!\w)ui(?!\w)", "ui-" + lang, path)
+    return re.sub(r"(?<!\w)ui(?!\w)", "ui-" + lang, path)
 
 
 def best_language_match(lang, available_languages):
@@ -66,7 +63,7 @@ else:
                 "and write 'pl' for example.")
 
 
-class ResourceLoader(object):
+class ResourceLoader:
     """Load resources.
     Depends on language, active packages, loading order of the mods.
     Ideally, it should only care about folders and files.
@@ -149,7 +146,7 @@ class ResourceLoader(object):
                     b = open(text_file_path, "rb").read()
                     e = encoding.encoding(b)
                     if sys.version_info[0] == 3:
-                        txt = open(text_file_path, "r", encoding=e).read()
+                        txt = open(text_file_path, encoding=e).read()
                     else:
                         txt = b.decode(e)
                     result.append(txt)

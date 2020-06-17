@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-from builtins import object
 import socket
 import sys
 import telnetlib
@@ -65,7 +63,7 @@ def connect_and_play(host="127.0.0.1", port=options.port, auto=False):
         exception("error during connection to server")
 
 
-class ConnectionToServer(object):
+class ConnectionToServer:
 
     data = b""
     tn = None
@@ -79,13 +77,13 @@ class ConnectionToServer(object):
     def open(self):
         try:
             self.tn = telnetlib.Telnet(self.host, self.port)
-        except socket.error:
+        except OSError:
             raise UnreachableServerError
         try:
             if self.tn.read_until(b":", 3) != b":":
                 raise WrongServerError
             self.tn.write(("login " + compatibility_version() + " %s\n" % config.login).encode())
-        except (EOFError, socket.error):
+        except (EOFError, OSError):
             raise WrongServerError
         try:
             self.tn.read_until(b"ok!", 5)
@@ -107,5 +105,5 @@ class ConnectionToServer(object):
     def write_line(self, s):
         try:
             self.tn.write(s.encode("ascii") + b"\n")
-        except socket.error: # connection aborted
+        except OSError: # connection aborted
             raise ConnectionAbortedError

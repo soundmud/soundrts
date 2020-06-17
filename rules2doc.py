@@ -81,7 +81,7 @@ def _int(p, n, u):
     v = rules.get(c, n)
     if v:
         s = p
-        s += " %s %s" % (v, nb(u, v))
+        s += " {} {}".format(v, nb(u, v))
         return s
     else:
         return ""
@@ -125,8 +125,8 @@ def can_use(c, t):
     return sorted(r, key=kcost)
 
 rules = RulesForDoc()
-rules.load(open("res/rules.txt", "r").read(),
-           open("res/ui/rules_doc.txt", "r").read())
+rules.load(open("res/rules.txt").read(),
+           open("res/ui/rules_doc.txt").read())
 for cat in (("1. Units", ("worker", "soldier")),
             ("2. Buildings", ("building", )),
             ("3. Abilities", ("ability", )),
@@ -147,7 +147,7 @@ for cat in (("1. Units", ("worker", "soldier")),
 
         if rules.get(c, "effect"):
             if rules.get(c, "effect")[0] == "bonus":
-                pr("- effect: %s + %s" % (rules.get(c, "effect")[1], rules.get(c, "effect")[2]))
+                pr("- effect: {} + {}".format(rules.get(c, "effect")[1], rules.get(c, "effect")[2]))
             elif rules.get(c, "effect")[0] == "apply_bonus":
                 pr("- effect: applies the %s upgrade bonus of the unit" % rules.get(c, "effect")[1])
         pr(_int("- health: ", "hp_max", "hit points"))
@@ -155,7 +155,7 @@ for cat in (("1. Units", ("worker", "soldier")),
         pr(_int("- armor: ", "armor", "hit points"))
         pr(_int("- armor upgrade bonus: ", "armor_bonus", "hit points"))
         if rules.get(c, "damage"):
-            pr("- attack: %s every %s" % (_int("", "damage", "hit points"),
+            pr("- attack: {} every {}".format(_int("", "damage", "hit points"),
                                        _int("", "cooldown", "seconds")))
         pr(_int("- damage radius (area of effect): ", "damage_radius", "meters"))        
         pr(_int("- attack upgrade bonus: ", "damage_bonus", "hit points"))

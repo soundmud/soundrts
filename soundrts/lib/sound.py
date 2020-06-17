@@ -1,6 +1,3 @@
-from __future__ import division
-from builtins import object
-from builtins import range
 import math
 import random
 import time
@@ -65,7 +62,7 @@ def find_idle_channel():
             return pygame.mixer.Channel(n)
 
 
-class SoundManager(object):
+class SoundManager:
 
     soundsources = []
     soundtime = {}
@@ -150,7 +147,7 @@ class SoundManager(object):
 psounds = SoundManager() # psounds = positional sounds (3D)
 
 
-class _SoundSource(object):
+class _SoundSource:
 
     channel = None
     previous_vol = (0, 0)

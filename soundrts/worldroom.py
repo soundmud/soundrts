@@ -1,7 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import object
-from builtins import range
 import string
 
 from .lib.msgs import nb2msg
@@ -46,7 +42,7 @@ def cache(f):
     return decorated_f
 
 
-class Square(object):
+class Square:
 
     transport_capacity = 0
     type_name = ""
@@ -59,7 +55,7 @@ class Square(object):
     def __init__(self, world, col, row, width):
         self.col = col
         self.row = row
-        self.name = "%s%s" % (string.ascii_lowercase[col], row + 1)
+        self.name = "{}{}".format(string.ascii_lowercase[col], row + 1)
         self.id = world.get_next_id()
         self.world = world
         world.squares.append(self)

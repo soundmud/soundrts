@@ -1,5 +1,4 @@
 """command line options"""
-from __future__ import absolute_import
 
 import optparse
 

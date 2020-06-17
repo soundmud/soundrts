@@ -1,5 +1,4 @@
 """This ugly module is fighting with res.py to make some useful job."""
-from __future__ import absolute_import
 
 import os
 import platform
@@ -27,7 +26,7 @@ fullscreen = False
 
 def update_display_caption():
     """set the window title"""
-    pygame.display.set_caption("SoundRTS %s %s %s" % (VERSION, res.mods, res.soundpacks))
+    pygame.display.set_caption(f"SoundRTS {VERSION} {res.mods} {res.soundpacks}")
 
 
 def minimal_init():

@@ -1,10 +1,8 @@
-from __future__ import absolute_import
-from builtins import object
 from .definitions import MAX_NB_OF_RESOURCE_TYPES
 from soundrts.lib.nofloat import PRECISION
 
 
-class Ability(object): # or UnitOption or UnitMenuItem or ActiveAbility or SpecialAbility
+class Ability: # or UnitOption or UnitMenuItem or ActiveAbility or SpecialAbility
 
     cost = (0,) * MAX_NB_OF_RESOURCE_TYPES # required by the user interface
     count_limit = 0 # ugly but necessary; used by ComplexOrder.is_allowed()

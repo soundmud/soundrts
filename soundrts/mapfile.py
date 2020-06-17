@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-from builtins import object
 import base64
 try: 
     from hashlib import md5
@@ -17,7 +15,7 @@ from .paths import TMP_PATH
 from . import world
 
 
-class Map(object):
+class Map:
 
     map_string = None
 
@@ -48,7 +46,7 @@ class Map(object):
     def _read_additional_file(self, n):
         p = os.path.join(self.path, n)
         if os.path.isfile(p):
-            return open(p, "r").read()
+            return open(p).read()
         else:
             return ""
 
@@ -57,7 +55,7 @@ class Map(object):
             return ""
         p = os.path.join(self.campaign.path, n)
         if os.path.isfile(p):
-            return open(p, "r").read()
+            return open(p).read()
         else:
             return ""
         
@@ -102,9 +100,9 @@ class Map(object):
         if self.map_string is not None:
             return self.map_string
         elif os.path.isdir(self.path):
-            return open(os.path.join(self.path, "map.txt"), "r").read()
+            return open(os.path.join(self.path, "map.txt")).read()
         else:
-            return open(self.path, "r").read()
+            return open(self.path).read()
 
     def _extract_title(self, s):
         m = re.search("(?m)^title[ \t]+([0-9 ]+)$", s)

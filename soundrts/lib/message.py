@@ -1,5 +1,3 @@
-from builtins import object
-from builtins import str
 import time
 
 from soundrts.lib.screen import screen_subtitle_set
@@ -11,7 +9,7 @@ def is_text(o):
     return isinstance(o, str)
 
 
-class Message(object):
+class Message:
 
     def __init__(self, list_of_sound_numbers, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME, said=False, expiration_delay=45, update_type=None):
         self.list_of_sound_numbers = list_of_sound_numbers

@@ -1,12 +1,9 @@
-from __future__ import print_function
-from builtins import str
-from builtins import range
 def encode_range(r):
     i, j = r
     if i == j:
         return str(i)
     else:
-        return "%s-%s" % (i, j)
+        return f"{i}-{j}"
 
 def encode(g):
     result = [[int(i), int(i)] for i in g]
@@ -41,7 +38,7 @@ if __name__ == "__main__":
 
     def test(a, b):
         c = encode(a)
-        print('%s => "%s"' % (a, b))
+        print(f'{a} => "{b}"')
         if c != b:
             print("ERROR!", c)
         if decode(encode(a)) != a:

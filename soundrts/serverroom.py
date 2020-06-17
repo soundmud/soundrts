@@ -1,8 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import str
-from builtins import object
-from builtins import range
 import random
 import time
 
@@ -23,7 +18,7 @@ def pack(p):
     return ",".join((p.login, str(p.alliance), p.faction))
 
 
-class _State(object):
+class _State:
 
     def send_menu(self, client):
         pass
@@ -74,7 +69,7 @@ class Playing(_State):
     allowed_commands = ("orders", "quit_game", "timeout", "debug_info", "say")
 
 
-class _Computer(object):
+class _Computer:
 
     def __init__(self, level):
         self.level = level
@@ -84,7 +79,7 @@ class _Computer(object):
         return "ai_" + self.level
 
 
-class Orders(object):
+class Orders:
 
     def __init__(self, game):
         self.all_orders = {}
@@ -101,7 +96,7 @@ class Orders(object):
         _all_orders = []
         for player, queue in list(self.all_orders.items()):
             orders = queue.pop(0)[0]
-            _all_orders.append("%s/%s" % (player.login, orders))
+            _all_orders.append(f"{player.login}/{orders}")
         return " ".join(_all_orders)
 
     def are_ready(self):
@@ -117,7 +112,7 @@ class Orders(object):
         return [queue[0][1] for queue in list(self.all_orders.values())]
 
 
-class Game(object):
+class Game:
 
     started = False
     speed = 1

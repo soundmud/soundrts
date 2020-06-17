@@ -1,12 +1,5 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import unicode_literals
 from future import standard_library
 standard_library.install_aliases()
-from builtins import map
-from builtins import str
-from builtins import object
-from builtins import range
 import copy
 from soundrts.lib.sound import distance
 from soundrts.lib.nofloat import square_of_distance
@@ -52,7 +45,7 @@ def check_squares(line, squares):
             map_error(line, "%s is not a square" % sq)
 
 
-class Type(object):
+class Type:
 
     def __repr__(self):
         return "<Type '%s'>" % self.type_name
@@ -101,7 +94,7 @@ class Type(object):
             raise AttributeError
 
 
-class World(object):
+class World:
 
     def __init__(self, default_triggers, seed=0, must_apply_equivalent_type=False):
         self.default_triggers = default_triggers
@@ -420,7 +413,7 @@ class World(object):
         for p in self.players[:]:
             try:
                 def _copy(l):
-                    return set(copy.copy(o) for o in l)
+                    return {copy.copy(o) for o in l}
                 collision_debug = None
 #                    collision_debug = copy.deepcopy(self.collision)
                 if p.is_local_human(): # avoid unnecessary copies
@@ -973,7 +966,7 @@ class World(object):
         def _sorted(squares):
             return sorted(squares, key=lambda n: (n[0], int(n[1:])))
         def res():
-            return sorted(set((o.type_name, o.qty // PRECISION) for s in set(self.grid.values()) for o in s.objects if getattr(o, "resource_type", None) is not None),
+            return sorted({(o.type_name, o.qty // PRECISION) for s in set(self.grid.values()) for o in s.objects if getattr(o, "resource_type", None) is not None},
                           key=lambda x: (x[0], -x[1]))
         with open(filename, "w") as f:
             f.write("title %s\n" % " ".join(map(str, self.title)))
@@ -993,9 +986,9 @@ class World(object):
             f.write("\n")
             for t, q in res():
                 squares = _sorted(s.name for s in set(self.grid.values()) for o in s.objects if o.type_name == t and o.qty // PRECISION == q)
-                f.write("%s %s %s\n" % (t, q, " ".join(squares)))
+                f.write("{} {} {}\n".format(t, q, " ".join(squares)))
             f.write("\nnb_meadows_by_square 0\n")
-            for n in sorted(set([s.nb_meadows for s in list(self.grid.values()) if s.nb_meadows])):
+            for n in sorted({s.nb_meadows for s in list(self.grid.values()) if s.nb_meadows}):
                 squares = _sorted([s.name for s in set(self.grid.values()) if s.nb_meadows == n])
                 if n == 1:
                     f.write("; 1 meadow\n")
@@ -1004,9 +997,9 @@ class World(object):
                 for _ in range(n):
                     f.write("additional_meadows %s\n" % " ".join(squares))
             f.write("\n")
-            for t in sorted(set([s.type_name for s in list(self.grid.values()) if s.type_name])):
+            for t in sorted({s.type_name for s in list(self.grid.values()) if s.type_name}):
                 squares = _sorted([s.name for s in set(self.grid.values()) if s.type_name == t])
-                f.write("terrain %s %s\n" % (t, " ".join(squares)))
+                f.write("terrain {} {}\n".format(t, " ".join(squares)))
             squares = _sorted([s.name for s in set(self.grid.values()) if s.high_ground])
             f.write("high_grounds %s\n" % " ".join(squares))
             squares = _sorted([s.name for s in set(self.grid.values()) if s.is_water])
@@ -1015,12 +1008,12 @@ class World(object):
             f.write("ground %s\n" % " ".join(squares))
             squares = _sorted([s.name for s in set(self.grid.values()) if not s.is_air])
             f.write("no_air %s\n" % " ".join(squares))
-            for t in sorted(set([s.terrain_cover for s in list(self.grid.values()) if s.terrain_cover != (0, 0)])):
+            for t in sorted({s.terrain_cover for s in list(self.grid.values()) if s.terrain_cover != (0, 0)}):
                 squares = _sorted([s.name for s in set(self.grid.values()) if s.terrain_cover == t])
-                f.write("cover %s %s\n" % (" ".join([str(x / 100.0) for x in t]), " ".join(squares)))
-            for t in sorted(set([s.terrain_speed for s in list(self.grid.values()) if s.terrain_speed != (100, 100)])):
+                f.write("cover {} {}\n".format(" ".join([str(x / 100.0) for x in t]), " ".join(squares)))
+            for t in sorted({s.terrain_speed for s in list(self.grid.values()) if s.terrain_speed != (100, 100)}):
                 squares = _sorted([s.name for s in set(self.grid.values()) if s.terrain_speed == t])
-                f.write("speed %s %s\n" % (" ".join([str(x / 100.0) for x in t]), " ".join(squares)))
+                f.write("speed {} {}\n".format(" ".join([str(x / 100.0) for x in t]), " ".join(squares)))
             f.write("\n")
             we = dict()
             sn = dict()
@@ -1037,9 +1030,9 @@ class World(object):
                             sn[e.type_name] = []
                         sn[e.type_name].append(s.name)
             for tn in we:
-                f.write("west_east %s %s\n" % (tn, " ".join(_sorted(we[tn]))))
+                f.write("west_east {} {}\n".format(tn, " ".join(_sorted(we[tn]))))
             for tn in sn:
-                f.write("south_north %s %s\n" % (tn, " ".join(_sorted(sn[tn]))))
+                f.write("south_north {} {}\n".format(tn, " ".join(_sorted(sn[tn]))))
 
 
 class MapError(Exception):
@@ -1048,7 +1041,7 @@ class MapError(Exception):
 
 
 def map_error(line, msg):
-    w = 'error in "%s": %s' % (line, msg)
+    w = f'error in "{line}": {msg}'
     try:
         open(MAPERROR_PATH, "w").write(w)
     except:

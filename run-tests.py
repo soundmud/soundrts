@@ -1,5 +1,4 @@
 #! python3
-from builtins import input
 from soundrts.lib import log
 log.add_console_handler()
 

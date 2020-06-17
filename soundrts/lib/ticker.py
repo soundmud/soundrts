@@ -1,4 +1,3 @@
-from __future__ import print_function
 from threading import Event as _Event, Thread as _Thread
 
 

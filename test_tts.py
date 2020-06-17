@@ -1,6 +1,4 @@
 #! python3
-from __future__ import unicode_literals
-from builtins import range
 import time
 
 from soundrts.lib import tts

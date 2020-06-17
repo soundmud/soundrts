@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-from builtins import object
 import re
 
 from .lib.nofloat import to_int
@@ -10,7 +8,7 @@ VIRTUAL_TIME_INTERVAL = 300 # milliseconds
 MAX_NB_OF_RESOURCE_TYPES = 10
 
 
-class _Definitions(object):
+class _Definitions:
 
     int_properties = ()
     precision_properties = ()

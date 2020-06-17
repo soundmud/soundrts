@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from builtins import object
-from builtins import range
 import os
 import re
 import sys
@@ -85,7 +82,7 @@ def _first_letter(choice):
                 pass
 
 
-class Menu(object):
+class Menu:
 
     server = None
 

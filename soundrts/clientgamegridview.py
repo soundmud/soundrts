@@ -1,7 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import object
-from builtins import range
 from math import sin, cos, radians
 
 import pygame
@@ -17,7 +13,7 @@ R = int(0.5 * 10)
 R2 = R * R
 
 
-class GridView(object):
+class GridView:
 
     def __init__(self, interface):
         self.interface = interface
@@ -57,8 +53,8 @@ class GridView(object):
                 squares_to_view.append(sq)
         # walls
         for sq in squares_to_view:
-            exits = set([e.o for e in sq.exits if not e.is_blocked()])
-            walls = set([-90, 90, 180, 0]) - exits
+            exits = {e.o for e in sq.exits if not e.is_blocked()}
+            walls = {-90, 90, 180, 0} - exits
             x, y = self._xy_coords(sq.x, sq.y)
             for color, borders in (((100, 100, 100), walls), ((0, 0, 0), exits)):
                 for o in borders:

@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import object
 from .lib.log import exception, warning, info
 from .lib.nofloat import PRECISION
 
@@ -11,7 +8,7 @@ COLLISION_RADIUS = 175 # millimeters # 350 / 2
 class NotEnoughSpaceError(Exception): pass
 
 
-class Entity(object):
+class Entity:
 
     collision = 1
     place = None

@@ -1,6 +1,4 @@
 #! python3
-from builtins import object
-from builtins import range
 from multiprocessing import Process
 import os
 import time
@@ -46,7 +44,7 @@ def remove_voice():
 MultiplayerGame._countdown = do_nothing
 
 def set_position(x, y):
-    os.environ['SDL_VIDEO_WINDOW_POS'] = "%s,%s" % (x, y)
+    os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x},{y}"
 
 def run_client(n, auto):
     if 0:#n == 0:
@@ -63,7 +61,7 @@ def run_server():
     servermain.start_server(parameters="no_metaserver")
 
 
-class Create(object):
+class Create:
 
     def __init__(self, map_index, speed, public=""):
         self.map_index = map_index
@@ -71,11 +69,11 @@ class Create(object):
         self.public = public
 
     def run(self, menu):
-        menu.push("create %s %s %s" % (self.map_index, self.speed, self.public))
+        menu.push(f"create {self.map_index} {self.speed} {self.public}")
         return True
 
 
-class Invite(object):
+class Invite:
 
     def __init__(self, nb):
         self.nb = nb
@@ -88,7 +86,7 @@ class Invite(object):
                 return True
 
 
-class InviteAI(object):
+class InviteAI:
 
     def __init__(self, easy=0, aggressive=0, ai2=0):
         self.easy = easy
@@ -108,7 +106,7 @@ class InviteAI(object):
         return True
 
 
-class Register(object):
+class Register:
 
     def run(self, menu):
         if menu.invitations:
@@ -116,7 +114,7 @@ class Register(object):
             return True
 
 
-class Start(object):
+class Start:
 
     def run(self, menu):
         if len(menu.registered_players) >= menu.map.nb_players_min:

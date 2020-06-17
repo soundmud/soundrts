@@ -1,8 +1,5 @@
 """"use integers to make sure that any computer will give the same results"""
-from __future__ import print_function
-from __future__ import division
 
-from builtins import range
 import math
 
 from .log import warning
@@ -22,8 +19,8 @@ def make_tables():
                       for a in range(360))
     sin_table = tuple(int(math.sin(math.radians(a)) * PRECISION)
                       for a in range(360))
-    acos_table = dict(((c, int(math.degrees(math.acos(c / 100.0))))
-                       for c in range(-100, 101)))
+    acos_table = {c: int(math.degrees(math.acos(c / 100.0)))
+                       for c in range(-100, 101)}
     print("_COS_TABLE =", cos_table)
     print("_SIN_TABLE =", sin_table)
     print("_ACOS_TABLE =", acos_table)
@@ -62,10 +59,10 @@ def int_sqrt(x):
     """should return the same integer square root on any computer"""
     r = int(math.sqrt(x))
     while r * r > x:
-        warning("sqrt(%s): removing 1 to %s" % (x, r))
+        warning(f"sqrt({x}): removing 1 to {r}")
         r -= 1
     while (r + 1) * (r + 1) < x:
-        warning("sqrt(%s): adding 1 to %s" % (x, r))
+        warning(f"sqrt({x}): adding 1 to {r}")
         r += 1
     return r
 

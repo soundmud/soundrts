@@ -1,7 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import object
-from builtins import range
 import copy
 import inspect
 import re
@@ -22,7 +18,7 @@ A = 12 * PRECISION # bucket side length
 VERY_SLOW = int(.01 * PRECISION)
 
 
-class ZoomTarget(object):
+class ZoomTarget:
 
     collision = 0
     radius = 0
@@ -53,7 +49,7 @@ class ZoomTarget(object):
         return subsquare(self.x, self.y) == subsquare(x, y)
 
 
-class Objective(object):
+class Objective:
 
     def __init__(self, number, description):
         self.number = number
@@ -68,7 +64,7 @@ def normalize_cost_or_resources(lst):
         del lst[-1]
 
 
-class Player(object):
+class Player:
 
     cheatmode = False
     used_food = 0
@@ -542,7 +538,7 @@ class Player(object):
         if hasattr(self, cmd):
             getattr(self, cmd)(args[1:])
         else:
-            warning("unknown command: '%s' (%s)" % (cmd, data))
+            warning(f"unknown command: '{cmd}' ({data})")
 
     def send_voice_important(self, msg):
         self.push("voice_important", encode_msg(msg))

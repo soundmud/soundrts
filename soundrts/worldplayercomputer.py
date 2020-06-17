@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from builtins import range
 import re
 
 from .definitions import get_ai, rules
@@ -306,7 +303,7 @@ class Computer(Player):
                 best_explorer.take_order(["auto_explore"])
 
     def _remove_far_candidates(self, candidates, start, limit):
-        ids = dict([(o.id, o) for o in candidates])
+        ids = {o.id: o for o in candidates}
         c = []
         queue = [start]
         done = []
@@ -345,7 +342,7 @@ class Computer(Player):
             return o.place is not None \
                and (resource_type is None or self.is_ok_for_warehouse(o.place, resource_type)) \
                and not self.is_dangerous(o.place)
-        k = "%s %s %s" % (c, resource_type, starting_place)
+        k = f"{c} {resource_type} {starting_place}"
         if k in self._previous_choose and not random:
             o = self._previous_choose[k]
             if (o in self.perception or o in self.memory) and is_ok(o):
@@ -551,7 +548,7 @@ class Computer(Player):
                         break
 
     def _cataclysm_is_efficient(self, a, units):
-        type_names = set(u.type_name for u in units)
+        type_names = {u.type_name for u in units}
         e = rules.get(a, "effect")
         if e[0] == "summon":
             for item in e[1:]:

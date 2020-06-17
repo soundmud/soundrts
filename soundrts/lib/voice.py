@@ -1,4 +1,3 @@
-from builtins import object
 import threading
 import time
 
@@ -10,7 +9,7 @@ from soundrts.lib.sound import DEFAULT_VOLUME
 from soundrts.lib.voicechannel import VoiceChannel
 
 
-class _Voice(object):
+class _Voice:
     
     msgs = [] # said and unsaid messages
     active = False # currently talking (not just self.item())
