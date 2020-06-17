@@ -2,7 +2,6 @@
 Loaded from resources (depending on the active language,
 packages, mods, campaign, map)."""
 
-from past.builtins import basestring
 import re
 
 import pygame
@@ -42,7 +41,7 @@ class SoundCache:
         for layer in self.layers:
             if key in layer.sounds:
                 s = layer.sounds[key]
-                if isinstance(s, basestring): # full path of the sound
+                if isinstance(s, str): # full path of the sound
                     # load the sound now
                     try:
                         layer.sounds[key] = pygame.mixer.Sound(s)
