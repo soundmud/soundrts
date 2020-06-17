@@ -56,7 +56,7 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
                 voice.item(string_to_msg(s, spell))
             elif re.match(pattern, e.unicode) != None:
                 try:
-                    c = e.unicode.encode("ascii") # telnetlib doesn't like unicode
+                    c = e.unicode
                     s += c
                     voice.item(string_to_msg(c)
                                + mp.PERIOD
