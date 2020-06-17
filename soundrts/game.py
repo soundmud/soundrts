@@ -54,7 +54,7 @@ class _Game(object):
             self.replay_write(self.map.campaign.path)
             self.replay_write(str(self.map.id))
         else:
-            self.replay_write(self.map.pack())
+            self.replay_write(self.map.pack().decode())
         self.replay_write(players)
         alliances = [p.alliance for p in self.players]
         self.replay_write(" ".join(map(str, alliances)))
