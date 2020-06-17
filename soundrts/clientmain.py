@@ -20,10 +20,8 @@ except:
     warning("couldn't set locale")
 
 import os
-from os.path import join
 import pickle
 import sys
-import tempfile
 import time
 import webbrowser
 
@@ -265,16 +263,13 @@ def main_menu():
         ]).loop()
 
 def launch_manual():
-    if os.path.exists("doc/en"):
-        p = "doc"
-    else:
-        p = join(tempfile.gettempdir(), "soundrts/build/doc")
+    p = "doc"
     try:
         lang = best_language_match(preferred_language, os.listdir(p))
     except OSError:
         voice.alert(mp.BEEP)
     else:
-        webbrowser.open(join(p, lang, "help-index.htm"))
+        webbrowser.open(os.path.join(p, lang, "help-index.htm"))
 
 def main():
     try:

@@ -1,3 +1,4 @@
 *.pyc
-/doc/src/*/stats.inc
+/doc_src/src/*/stats.inc
 /user
+/doc

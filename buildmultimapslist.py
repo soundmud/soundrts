@@ -17,12 +17,16 @@ def add_digest(m):
     p = os.path.join(DIR, m)
     return "%s %s" % (m, Map(p).get_digest())
 
-
-f = open("cfg/official_maps.txt", "w")
-maps = []
-for m in os.listdir(DIR):
-    if m != "list.txt": # XXX not necessary
+def build():
+    print("Updating list of official maps...")
+    f = open("cfg/official_maps.txt", "w")
+    maps = []
+    for m in os.listdir(DIR):
         maps.append(m)
-maps.sort(key=size)
-f.write("\n".join([add_digest(m) for m in maps]))
-f.close()
+    maps.sort(key=size)
+    f.write("\n".join([add_digest(m) for m in maps]))
+    f.close()
+
+
+if __name__ == "__main__":
+    build()
