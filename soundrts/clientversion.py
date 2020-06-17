@@ -21,7 +21,7 @@ class RevisionChecker(threading.Thread):
         if IS_DEV_VERSION:
             return
         try:
-            stage = file("stage.txt").read().strip()
+            stage = ".".join(VERSION.split(".")[:2])
             url = "http://jlpo.free.fr/soundrts/%sversion.txt" % stage
             rev = urllib.request.urlopen(url).read().strip()
             if (rev != VERSION) and (rev.find("404") == -1):

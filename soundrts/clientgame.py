@@ -49,7 +49,7 @@ BEEP_SOUND = mp.BEEP[0]
 POSITIONAL_BEEP_SOUND = mp.POSITIONAL_BEEP[0]
 
 def direction_to_msgpart(o):
-    o = round(o / 45.0) * 45.0
+    o = round(o / 45) * 45
     while o >= 360:
         o -= 360
     while o < 0:
