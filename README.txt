@@ -10,10 +10,9 @@ Tested with Python 3.8.
 To install the requirements:
 pip install -r requirements.txt -U
 
-Running server.py requires:
-* future
+Running server.py doesn't require any package.
 
-Running soundrts.py requires also:
+Running soundrts.py requires:
 * pygame
 * win32com (if you use SAPI 5)
 

@@ -1,5 +1,3 @@
-future
-
 pygame
 pywin32
 
