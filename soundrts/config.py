@@ -32,20 +32,8 @@ _options = [
     ("server", "fpct_coef", 2.3),
     ("server", "fpct_max", 3),
     ("server", "require_humans", 0),
+    ("tts", "wait_delay_per_character", .1),
 ]
-
-if platform.system() == "Windows":
-    _options += [
-        ("tts", "jaws", 0),
-        ("tts", "srapi", 1),
-        ("tts", "srapi_wait", .1),
-    ]
-else:
-    _options += [
-        ("tts", "jaws", 0),
-        ("tts", "srapi", 0),
-        ("tts", "srapi_wait", .1),
-    ]
 
 def add_converter(option):
     if len(option) == 4:

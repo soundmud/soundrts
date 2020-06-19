@@ -14,11 +14,6 @@ In this game, you will explore the surroundings, exploit goldmines and woods, bu
 The game is by default in map mode : you are heading north, and you can select all the object without rotating.
 But you can also play in first person mode, nice for exploration and attack.
 
-Windows uses a screen reader (or SAPI 5).
-Linux uses Speech Dispatcher.
-Mac OS X uses NS Speech Synthesis.
-Recorded speech has been totally removed (SoundRTS 1.2 alpha 9).
-
 2. Tutorial
 -----------
 
@@ -344,26 +339,16 @@ Sound pack
 
 SoundRTS comes with a mod called "soundpack" containing alternative sounds. To activate this mod, in SoundRTS.ini_ replace the "mods =" line with "mods = soundpack". Then restart the game.
 
-SAPI 5 (Windows)
-^^^^^^^^^^^^^^^^
+wait_delay_per_character
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-In `Soundrts.ini`_, if "srapi = 0", the default SAPI 5 voice will be used directly.
+Since sometimes it is difficult to know when a screen reader has finished talking, a better-than-nothing solution is to evaluate the duration of a message.
+So, a parameter called "wait_delay_per_character" determines how long SoundRTS will wait before sending the next message.
+With "wait_delay_per_character = .1" and a message of 10 characters, SoundRTS will wait for .1 * 10 = 1 second.
 
-Windows srapi parameter
-^^^^^^^^^^^^^^^^^^^^^^^
+Increase the value of wait_delay_per_character if some messages are interrupted by the next one.
 
-In `Soundrts.ini`_, use "srapi = 1" to use a screen reader (through ScreenReaderAPI).
-
-Windows srapi_wait parameter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Since I couldn't find a way to know when a screen reader stops talking on Windows, I had to evaluate the duration of a message.
-An additional parameter called "srapi_wait" determines how long SoundRTS will wait before sending the next message.
-With "srapi_wait = .1" and a message of 10 characters, SoundRTS will wait for .1 * 10 = 1 second.
-
-Increase the value of srapi_wait if some messages are interrupted by the next one.
-Decrease the value of srapi_wait if the silence between two messages is too long.
-
+Decrease the value of wait_delay_per_character if the silence between two messages is too long.
 
 Temporary folder
 ^^^^^^^^^^^^^^^^

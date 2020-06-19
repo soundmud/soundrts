@@ -5,7 +5,6 @@ import platform
 
 import pygame
 
-from .lib import tts
 from .lib.msgs import nb2msg
 from .lib.screen import set_screen
 from .lib.sound import init_sound, sound_stop, get_volume, set_volume
@@ -72,7 +71,6 @@ def close_media():
     """try to clean up before closing the client"""
     sound_stop()
     pygame.quit()
-    tts.close()
 
 
 def play_sequence(names):

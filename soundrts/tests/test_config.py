@@ -60,7 +60,6 @@ def test_load_defaults_if_file_with_errors(cfg):
     assert config.num_channels == 16
     assert config.timeout == 60.0
     assert config.mods == ""
-    assert config.srapi == 1
     os.unlink(o)
 
 def test_load_and_save(cfg):

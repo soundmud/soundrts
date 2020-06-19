@@ -14,7 +14,7 @@ Running server.py doesn't require any package.
 
 Running soundrts.py requires:
 * pygame
-* win32com (if you use SAPI 5)
+* accessible_output2
 
 Building a package requires also:
 * docutils
