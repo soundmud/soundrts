@@ -38,9 +38,6 @@ setup(options = {'build_exe': build_options},
       executables = executables,
       name = "SoundRTS",
       version = VERSION.replace("-dev", ".9999"))
-print("Copying libraries for accessible_output2...")
-shutil.copytree(os.path.join(dest, "lib", "accessible_output2", "lib"),
-                os.path.join(dest, "accessible_output2", "lib"))
 print("Creating empty user folder...")
 os.mkdir(rf"{dest}\user")
 print(r"Reseting cfg\language.txt ...") 
