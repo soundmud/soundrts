@@ -2,6 +2,7 @@ import os.path
 import pickle
 import threading
 import time
+from typing import List, Tuple
 
 import pygame
 from pygame.locals import KEYDOWN
@@ -30,8 +31,8 @@ PROFILE = False
 
 class _Game:
 
-    default_triggers = () # empty tuple; a tuple is immutable
-    game_type_name = None
+    default_triggers: List[Tuple[str, List[str], List[str]]] = []
+    game_type_name: str
     record_replay = True
     allow_cheatmode = True
     must_apply_equivalent_type = False
@@ -130,11 +131,11 @@ class _Game:
 
 class _MultiplayerGame(_Game):
 
-    default_triggers = (
-        ["players", ["no_enemy_player_left"], ["victory"]],
-        ["players", ["no_building_left"], ["defeat"]],
-        ["computers", ["no_unit_left"], ["defeat"]],
-        ) # a tuple is immutable
+    default_triggers = [
+        ("players", ["no_enemy_player_left"], ["victory"]),
+        ("players", ["no_building_left"], ["defeat"]),
+        ("computers", ["no_unit_left"], ["defeat"]),
+        ]
     must_apply_equivalent_type = True
 
 

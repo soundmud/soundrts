@@ -1,10 +1,7 @@
 import copy
 from soundrts.lib.sound import distance
 from soundrts.lib.nofloat import square_of_distance
-try:
-    from hashlib import md5
-except ImportError:
-    from md5 import md5
+from hashlib import md5
 import os.path
 import queue
 import random

@@ -77,8 +77,6 @@ class CollisionMatrix:
 
 
 if __name__ == "__main__":
-    class O:
-        pass
     m = CollisionMatrix(200, 2)
 #    assert m._key(0, 0) == 0
     print(m._key(50, 0))
@@ -91,10 +89,11 @@ if __name__ == "__main__":
         k = m._key(x, y)
         print((x, y), k, m._xy(k))
         assert m._xy(k) != (x, y)
+    class O:
+        collision = 1
+        x = 6
+        y = 6
     o = O()
-    o.collision = 1
-    o.x = 6
-    o.y = 6
     print(m._shape(o.x, o.y))
     assert len(m._shape(o.x, o.y)) in (5, 9)
     if m.would_collide(o.x, o.y):

@@ -1,10 +1,8 @@
-try:
-    from hashlib import md5
-except ImportError:
-    from md5 import md5
+from hashlib import md5
 import platform
 import sys
 import time
+from typing import Optional
 import urllib.request, urllib.parse, urllib.error
 
 from .version import VERSION, IS_DEV_VERSION
@@ -58,7 +56,7 @@ class _Controller:
         return f"{self.__class__.__name__}({self.login!r})"
 
     player_class = Human
-    alliance = None
+    alliance: Optional[str] = None
     faction = "random_faction"
     neutral = False
 

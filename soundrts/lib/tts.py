@@ -1,4 +1,7 @@
-import queue
+from __future__ import annotations
+from typing import Callable, List, Tuple
+
+from queue import Queue
 import threading
 import time
 
@@ -33,7 +36,7 @@ class _TTS:
 _tts = None
 _is_speaking = False
 
-_queue = queue.Queue()
+_queue: Queue[Tuple[Callable, List]] = Queue()
 
 
 def is_speaking():
@@ -48,10 +51,10 @@ def _speak(text):
             exception("error during _tts.Speak('%s')", text)
 
 
-def speak(text):
+def speak(text: str):
     global _is_speaking
     assert isinstance(text, str)
-    _queue.put((_speak, text))
+    _queue.put((_speak, [text]))
     _is_speaking = True
 
 
@@ -66,18 +69,18 @@ def _stop():
     
 def stop():
     global _is_speaking
-    _queue.put((_stop, ))
+    _queue.put((_stop, []))
     _is_speaking = False
 
 
 def _loop():
     while(True):
-        cmd = _queue.get()
+        cmd, args = _queue.get()
         if not _queue.empty():
-            #print "skipped!", cmd
+            #print("skipped!", cmd, args)
             continue
         try:
-            cmd[0](*cmd[1:])
+            cmd(*args)
         except:
             exception("")
 

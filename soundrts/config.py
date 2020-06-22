@@ -11,6 +11,9 @@ from .lib.log import info, warning
 from .paths import CONFIG_FILE_PATH
 
 
+mods: str
+soundpacks: str
+
 def login_is_valid(login):
     return re.match("^[a-zA-Z0-9]{1,20}$", login) is not None
 

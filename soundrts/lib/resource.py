@@ -9,6 +9,7 @@ import locale
 import os
 import re
 import sys
+from typing import Optional
 
 from soundrts.lib import encoding
 from soundrts.lib.log import warning
@@ -52,7 +53,7 @@ def best_language_match(lang, available_languages):
 
 _cfg = open("cfg/language.txt").read().strip()
 if _cfg:
-    preferred_language = _cfg
+    preferred_language: Optional[str] = _cfg
 else:
     try:
         preferred_language = locale.getdefaultlocale()[0]

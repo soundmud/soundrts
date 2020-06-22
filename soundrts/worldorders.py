@@ -19,7 +19,6 @@ class Order:
     is_imperative = False
     cancel_order = "stop"
     never_forget_previous = False
-    unit_menu_attribute = None
     can_be_followed = True
 
     cost = (0,) * MAX_NB_OF_RESOURCE_TYPES
@@ -314,6 +313,8 @@ class JoinGroupOrder(ImmediateOrder):
 
 
 class ComplexOrder(Order):
+
+    unit_menu_attribute: str
 
     def __init__(self, unit, args):
         Order.__init__(self, unit, args[1:])

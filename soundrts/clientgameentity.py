@@ -1,5 +1,6 @@
 import random
 import time
+from typing import List
 
 import pygame
 
@@ -56,7 +57,7 @@ class EntityView:
     loop_volume = 0
     loop_source = None
 
-    repeat_noises = []
+    repeat_noises: List[str] = []
     repeat_interval = -1
     repeat_source = None
     next_repeat = None

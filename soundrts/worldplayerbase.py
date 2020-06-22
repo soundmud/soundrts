@@ -1,6 +1,7 @@
 import copy
 import inspect
 import re
+from typing import Dict, List
 
 from .definitions import rules, style, MAX_NB_OF_RESOURCE_TYPES
 from .lib import group
@@ -10,7 +11,7 @@ from .lib.nofloat import square_of_distance, to_int, PRECISION
 from . import msgparts as mp
 from .worldentity import NotEnoughSpaceError, Entity
 from .worldresource import Corpse
-from .worldunit import BuildingSite, Soldier
+from .worldunit import BuildingSite, Soldier, Unit
 from .worldupgrade import Upgrade
 
 
@@ -81,7 +82,7 @@ class Player:
     is_cpu_intensive = False
     smart_units = False
 
-    groups = {}
+    groups: Dict[str, List[Unit]] = {}
 
     def __init__(self, world, client):
         self.neutral = client.neutral

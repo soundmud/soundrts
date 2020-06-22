@@ -1,5 +1,6 @@
 import threading
 import time
+from typing import List
 
 import pygame
 from pygame.locals import KEYDOWN
@@ -11,7 +12,7 @@ from soundrts.lib.voicechannel import VoiceChannel
 
 class _Voice:
     
-    msgs = [] # said and unsaid messages
+    msgs: List[Message] = [] # said and unsaid messages
     active = False # currently talking (not just self.item())
     history = False # in "history" mode
     current = 0 # index of the message currently said

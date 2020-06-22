@@ -1,3 +1,5 @@
+from typing import List
+
 from .definitions import style, rules
 from .lib.log import warning
 from .lib.msgs import nb2msg
@@ -17,7 +19,7 @@ def nb2msg_f(n):
 class OrderTypeView: # future order
 
     type = None
-    requirements = []
+    requirements: List[str] = []
 
     def __init__(self, order, unit):
         self.unit = unit

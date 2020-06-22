@@ -1,3 +1,5 @@
+from typing import List, Optional, Set, Tuple
+
 from .definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
 from .lib.log import debug, warning, exception
 from .lib.nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
@@ -5,7 +7,7 @@ from .worldaction import Action, AttackAction, MoveAction, MoveXYAction
 from .worldentity import Entity
 from .worldorders import ORDERS_DICT, GoOrder, RallyingPointOrder, BuildPhaseTwoOrder, UpgradeToOrder
 from .worldresource import Corpse, Deposit
-
+from .worldroom import Square
 
 DISTANCE_MARGIN = 175 # millimeters
 
@@ -15,7 +17,7 @@ def ground_or_air(t):
     
 class Creature(Entity):
 
-    type_name = None
+    type_name: Optional[str] = None
     is_a_unit = False
     is_a_building = False
 
@@ -42,13 +44,13 @@ class Creature(Entity):
     mana_max = 0
     mana_start = 0
     mana_regen = 0
-    walked = []
+    walked: List[Tuple[Optional[Square], int, int, int]] = []
 
     cost = (0,) * MAX_NB_OF_RESOURCE_TYPES
     time_cost = 0
     food_cost = 0
     food_provided = 0
-    ai_mode = None
+    ai_mode: Optional[str] = None
     can_switch_ai_mode = False
     storable_resource_types = ()
     storage_bonus = ()
@@ -70,7 +72,7 @@ class Creature(Entity):
     damage = 0
     damage_level = 0
 
-    basic_abilities = []
+    basic_abilities: Set[str] = set()
 
     is_vulnerable = True
     is_healable = True
@@ -262,8 +264,8 @@ class Creature(Entity):
                 else:
                     return True
 
-    def _mark_the_dead_end(self):
-        self.walked.append([self.place, self.x, self.y, 5])
+    def _mark_the_dead_end(self) -> None:
+        self.walked.append((self.place, self.x, self.y, 5))
 
     def _must_hold(self):
         return (not self.orders or self.orders[0].is_complete) and \
@@ -295,7 +297,7 @@ class Creature(Entity):
         else:
             if not self._rotations:
                 # update memory of dead ends
-                self.walked = [x[0:3] + [x[3] - 1] for x in self.walked if x[3] > 1]
+                self.walked = [x[0:3] + (x[3] - 1, ) for x in self.walked if x[3] > 1]
                 # "go straight" mode
                 if not self.walked and self._try(0, target_d): return
                 # enter "rotation mode"
@@ -829,7 +831,7 @@ class Unit(Creature):
     def basic_abilities(self):
         for o in self.orders:
             if isinstance(o, UpgradeToOrder):
-                return []
+                return set()
         return self._basic_abilities
 
     # actions
@@ -935,7 +937,7 @@ class Worker(Unit):
     auto_gather = True
     auto_repair = True
     can_switch_ai_mode = True
-    _basic_abilities = ["go", "attack", "gather", "repair", "block", "join_group"]
+    _basic_abilities = {"go", "attack", "gather", "repair", "block", "join_group"}
     is_teleportable = True
     cargo = None # gathered resource
 
@@ -974,7 +976,7 @@ class Soldier(Unit):
 
     ai_mode = "offensive"
     can_switch_ai_mode = True
-    _basic_abilities = ["go", "attack", "patrol", "block", "join_group"]
+    _basic_abilities = {"go", "attack", "patrol", "block", "join_group"}
     is_teleportable = True
 
 
@@ -982,9 +984,9 @@ class Effect(Unit):
     collision = 0
     corpse = 0
     food_cost = 0
-    is_vulnerable = 0
+    is_vulnerable = False
     presence = 0
-    _basic_abilities = []
+    _basic_abilities: Set[str] = set()
 
     def die(self, attacker=None):
         self.delete()
@@ -1019,7 +1021,7 @@ class _Building(Creature):
 class BuildingSite(_Building):
 
     type_name = "buildingsite"
-    basic_abilities = ["cancel_building"]
+    basic_abilities = {"cancel_building"}
 
     def __init__(self, player, place, x, y, building_type):
         player.pay(building_type.cost)

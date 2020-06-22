@@ -1,4 +1,5 @@
 import time
+from typing import Any, List, Tuple
 
 import pygame
 
@@ -7,12 +8,12 @@ from soundrts.lib.message import is_text
 from soundrts.lib import tts
 
 from soundrts import version
+
 DEBUG_MODE = version.IS_DEV_VERSION
 
 
 class VoiceChannel:
-
-    _queue = [] # sounds of the message currently said
+    _queue: List[Tuple[Any, float, float]] = []  # sounds of the message currently said
     _starting_time = 0
     _total_duration = 0
 
@@ -25,19 +26,19 @@ class VoiceChannel:
             msg.display()
         self.stop()
         for p in msg.translate_and_collapse():
-            self._queue.append([p, msg.lv, msg.rv])
+            self._queue.append((p, msg.lv, msg.rv))
         self.update()
         self._starting_time = time.time()
 
     def is_almost_done(self):
         duration = time.time() - self._starting_time
-        if duration > 1: # >1s
+        if duration > 1:  # >1s
             return True
         else:
             return False
 
     def stop(self):
-        self.c.stop() # interrupt
+        self.c.stop()  # interrupt
         tts.stop()
         self._queue = []
 
@@ -54,7 +55,7 @@ class VoiceChannel:
             self._play(s, lv, rv)
 
     def get_busy(self):
-        return self.c.get_busy() or self._queue or (self.c.get_queue() != None) \
+        return self.c.get_busy() or self._queue or (self.c.get_queue() is not None) \
                or tts.is_speaking()
 
     def _play(self, s, lv, rv):

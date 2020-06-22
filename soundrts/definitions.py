@@ -1,4 +1,5 @@
 import re
+from typing import Set
 
 from .lib.nofloat import to_int
 from .lib.log import debug, info, warning
@@ -10,11 +11,11 @@ MAX_NB_OF_RESOURCE_TYPES = 10
 
 class _Definitions:
 
-    int_properties = ()
-    precision_properties = ()
-    int_list_properties = ()
-    precision_list_properties = ()
-    string_properties = ()
+    int_properties: Set[str] = set()
+    precision_properties: Set[str] = set()
+    int_list_properties: Set[str] = set()
+    precision_list_properties: Set[str] = set()
+    string_properties: Set[str] = set()
 
     def __init__(self):
         self._dict = {}
@@ -132,7 +133,7 @@ class _Definitions:
         self._dict = other._dict
 
 
-_precision_properties = (
+_precision_properties = {
                 "armor",
                 "damage", "minimal_damage",
                 "damage_radius", "range", "minimal_range",
@@ -148,18 +149,16 @@ _precision_properties = (
                 "speed", 
                 "effect_range", "effect_radius",
                 "sight_range", "cloaking_range", "detection_range",
-                )
-_precision_properties_extended = []
-for _ in _precision_properties:
-    _precision_properties_extended.extend((_, _ + "_bonus"))
+                }
+_precision_properties_extended = _precision_properties.union(s + "_bonus" for s in _precision_properties)
 assert "armor" in _precision_properties_extended
 assert "armor_bonus" in _precision_properties_extended
 
 
 class Rules(_Definitions):
 
-    string_properties = ("airground_type",)
-    int_properties = (
+    string_properties = {"airground_type",}
+    int_properties = {
                     "nb_of_resource_types", # only in parameters
                     "collision",
                     "corpse",
@@ -187,10 +186,10 @@ class Rules(_Definitions):
                     "is_buildable_on_exits_only",
                     "is_buildable_near_water_only",
                     "count_limit",
-                    )
+                    }
     precision_properties = _precision_properties_extended
-    int_list_properties = ("storable_resource_types",)
-    precision_list_properties = ("cost", "storage_bonus")
+    int_list_properties = {"storable_resource_types",}
+    precision_list_properties = {"cost", "storage_bonus"}
 
     def load(self, *strings):
         self._dict = {}

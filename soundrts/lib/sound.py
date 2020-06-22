@@ -1,6 +1,7 @@
 import math
 import random
 import time
+from typing import Dict, List
 
 import pygame
 
@@ -64,8 +65,8 @@ def find_idle_channel():
 
 class SoundManager:
 
-    soundsources = []
-    soundtime = {}
+    soundsources: List['SoundSource'] = []
+    soundtime: Dict['SoundSource', float] = {}
 
     def remember_starttime(self, sound):
         self.soundtime[sound] = time.time()
