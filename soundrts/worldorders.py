@@ -694,6 +694,9 @@ class GatherOrder(BasicOrder):
         elif self.mode == "gather":
             if self.target is None: # resource exhausted
                 self.mark_as_impossible()
+            elif not self.unit._near_enough(self.target):
+                self.mode = "go_gather"
+                self.unit.stop()
             elif self.unit.place.world.time > self.delay:
                 self._extract_cargo()
                 self.mode = "bring_back"
@@ -809,7 +812,11 @@ class RepairOrder(BasicOrder):
             elif self.unit.is_idle:
                 self.move_to_or_fail(self.target)
         elif self.mode == "build":
-            self.target.be_built(self.unit)
+            if not self.unit._near_enough(self.target):
+                self.mode = "go_build"
+                self.unit.stop()
+            else:
+                self.target.be_built(self.unit)
 
 
 class BuildPhaseTwoOrder(RepairOrder):
