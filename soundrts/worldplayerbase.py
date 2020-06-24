@@ -1,7 +1,7 @@
 import copy
 import inspect
 import re
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from .definitions import rules, style, MAX_NB_OF_RESOURCE_TYPES
 from .lib import group
@@ -10,7 +10,9 @@ from .lib.msgs import encode_msg, nb2msg
 from .lib.nofloat import square_of_distance, to_int, PRECISION
 from . import msgparts as mp
 from .worldentity import NotEnoughSpaceError, Entity
-from .worldresource import Corpse
+from .worldexit import Exit
+from .worldresource import Corpse, Deposit
+from .worldroom import Square
 from .worldunit import BuildingSite, Soldier, Unit
 from .worldupgrade import Upgrade
 
@@ -148,7 +150,7 @@ class Player:
         sub = sorted(candidates, key=self._get_threat)[0]
         return (sub[0] * self.world.square_width // 3 + self.world.square_width // 6,
                 sub[1] * self.world.square_width // 3 + self.world.square_width // 6)
-    
+
     def known_enemies(self, place):
         # assert: "memory is not included"
         # warning: memory objects are not in place.objects
@@ -202,7 +204,7 @@ class Player:
                 if k in self._buckets:
                     result.extend(self._buckets[k])
         return result
-        
+
     def _is_seeing(self, u):
         if (u.is_invisible or u.is_cloaked) and u not in self.detected_units:
             return
@@ -260,8 +262,7 @@ class Player:
         for p in self.allied_vision:
             for o in list(p.observed_objects.keys()):
                 # remove old observed objects and deleted objects
-                if (p.observed_objects[o] < self.world.time
-                    or o.place is None):
+                if p.observed_objects[o] < self.world.time or o.place is None:
                     del p.observed_objects[o]
             self.perception.update(list(p.observed_objects.keys()))
         # sight
@@ -339,23 +340,48 @@ class Player:
     def enemy_menace(self, place):
         try:
             return self._enemy_menace[place]
-        except:
+        except KeyError:
             return 0
 
-    def is_very_dangerous(self, place_or_exit):
-        if not self.is_dangerous(place_or_exit):
-            # presence without menace
-            return False
-        try:
-            return place_or_exit.other_side.place in self._enemy_presence
-        except:
-            return place_or_exit in self._enemy_presence
+    def is_very_dangerous(self, square_or_exit: Union[Square, Exit]) -> bool:
+        if isinstance(square_or_exit, Square):
+            return (self.square_is_dangerous(square_or_exit)
+                    and square_or_exit in self._enemy_presence)
+        else:
+            return (square_or_exit.other_side is not None
+                    and self.exit_is_dangerous(square_or_exit)
+                    and square_or_exit.other_side.place in self._enemy_presence)
 
-    def is_dangerous(self, place_or_exit):
-        try:
-            return place_or_exit.other_side.place in self._enemy_menace
-        except:
-            return place_or_exit in self._enemy_menace
+    def square_is_dangerous(self, s: Square) -> bool:
+        return s in self._enemy_menace
+
+    def exit_is_dangerous(self, e: Exit) -> bool:
+        return e.other_side.place in self._enemy_menace
+
+    @property
+    def unknown_starting_squares(self) -> List[Square]:
+        starting_squares = [self.world.grid[n] for n in self.world.starting_squares]
+        result = [s for s in starting_squares if s not in self.observed_before_squares]
+        return self.world.random.sample(result, len(result))
+
+    @property
+    def unknown_squares(self) -> List[Square]:
+        result = [p for p in self.world.squares if p not in self.observed_before_squares]
+        return self.world.random.sample(result, len(result))
+
+    @property
+    def squares_to_watch(self) -> List[Square]:
+        result = set()
+        for m in self.memory:  # desync risk
+            if self.is_an_enemy(m):
+                result.add(m.place)
+                for e in m.place.exits:
+                    if e.other_side is not None:
+                        result.add(e.other_side.place)
+            elif isinstance(m, Deposit):
+                result.add(m.place)
+        list(result).sort(key=lambda s: s.name)  # avoid desync
+        return self.world.random.sample(result, len(result))
 
     def balance(self, *squares):
         # The first square is where the fight will be.
@@ -434,7 +460,7 @@ class Player:
         for o in self.memory:
             if o.id == i:
                 return o
-        
+
     def is_local_human(self):
         return hasattr(self.client, "interface")
 
@@ -589,7 +615,7 @@ class Player:
                 if x is not None:
                     unit = type_(self, place, x, y)
                     unit.building_land = land
-                        
+
         self.triggers = self.start[2]
 
         if rules.get(self.faction, getattr(self, "AI_type", "")):
@@ -622,7 +648,7 @@ class Player:
         # of the multiplication is not reused after the comparison.
         # And for example: 6 == .1 * 60 (tested in Python 2.4)
         return self.world.time // 1000 >= float(args[0]) * self.world.timer_coefficient
-        
+
     def lang_order(self, args):
         select, orders = args
         for x in select:
@@ -695,7 +721,7 @@ class Player:
                         else:
                             return
                     elif target:
-                        x, y = target.x, target.y 
+                        x, y = target.x, target.y
                         sq = target if target in self.world.squares else target.place
                     else:
                         x, y, land = sq.find_and_remove_meadow(cls)
@@ -711,7 +737,7 @@ class Player:
                     if notify:
                         u.notify("added")
                 multiplicator = 1
-            
+
     def lang_no_enemy_left(self, unused_args):
         return not [p for p in self.world.players if self.player_is_an_enemy(p)
                     and p.is_playing]
@@ -773,7 +799,7 @@ class Player:
         return msgs
 
     score_msgs = ()
-    
+
     def store_score(self):
         self.score_msgs = self._get_score_msgs()
 
@@ -879,7 +905,7 @@ class Player:
         result = 0
         for u in self.units:
             if u.type_name == type_name or \
-                u.type_name == "buildingsite" and u.type.type_name == type_name: 
+                u.type_name == "buildingsite" and u.type.type_name == type_name:
                 result += 1
             for o in u.orders:
                 # don't count the "build" orders because they might concern the same building

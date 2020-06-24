@@ -341,7 +341,7 @@ class Computer(Player):
         def is_ok(o):
             return o.place is not None \
                and (resource_type is None or self.is_ok_for_warehouse(o.place, resource_type)) \
-               and not self.is_dangerous(o.place)
+               and not self.square_is_dangerous(o.place)
         k = f"{c} {resource_type} {starting_place}"
         if k in self._previous_choose and not random:
             o = self._previous_choose[k]

@@ -207,7 +207,7 @@ class Creature(Entity):
             return result
         for sq in self.place.neighbors:
             if self.height > sq.height \
-            or self.height == sq.height and self._can_go(sq):
+                    or self.height == sq.height and self._can_go(sq):
                 result.append(sq)
         return result
 
@@ -875,51 +875,39 @@ class Unit(Creature):
         else:
             self.action_target = self._next_stage_to_enemy()
 
-##    def _should_explore_now(self, place):
-##        return place not in self._already_explored and \
-##            not self.player.is_very_dangerous(place)
-##
-##    def __auto_explore(self):
-##        self._already_explored.update(self.player.observed_squares)
-##        if self.is_idle:
-##            self._places_to_explore = [x for x in self._places_to_explore
-##                                       if x not in self._already_explored]
-##            if self._places_to_explore:
-##                place = self._places_to_explore[0]
-##                self.start_moving_to(place, avoid=True)
-##                if self.is_idle: # place is inaccessible
-##                    self._places_to_explore.remove(place)
-##            if not self._places_to_explore:
-##                self._places_to_explore = [p for p in self.world.squares
-##                                           if self._should_explore_now(p)]
-##                self.world.random.shuffle(self._places_to_explore)
-##                self._already_explored = set()
-##        elif self.player.is_very_dangerous(self.action_target):
-##            self.stop()
+    _destination = None
 
-    def auto_explore(self):
+    def auto_explore(self) -> None:
+        assert self.player is not None
         if not self.action_target:
-            def should_explore_now(place):
-                return place not in self.player._already_explored and \
-                    not self.player.is_very_dangerous(place)
-            self.player._already_explored.update([o.place for o in self.player.perception])
-            self.player._places_to_explore = [x for x in self.player._places_to_explore if x not in self.player._already_explored]
-            if not self.player._places_to_explore:
-                self.player._places_to_explore = [p for p in self.world.squares if should_explore_now(p)]
-                self.world.random.shuffle(self.player._places_to_explore)
-            for place in self.player._places_to_explore[:]:
-                self.action_target = self.next_stage(place, avoid=True)
+            if self.place is not self._destination:
+                self.action_target = self.next_stage(self._destination, avoid=True)
                 if self.action_target is not None:
                     return
-                else:
-                    self.player._places_to_explore.remove(place)
-            self.player._already_explored = {o.place for o in self.player.perception}
+            for place in self.player.unknown_starting_squares:
+                self.action_target = self.next_stage(place, avoid=True)
+                if self.action_target is not None:
+                    self._destination = place
+                    return
+            for place in self.player.unknown_squares[:10]:
+                self.action_target = self.next_stage(place, avoid=True)
+                if self.action_target is not None:
+                    self._destination = place
+                    return
+            for place in self.player.squares_to_watch[:10]:
+                self.action_target = self.next_stage(place, avoid=True)
+                if self.action_target is not None:
+                    self._destination = place
+                    return
+            # any square
+            self._destination = self.world.random.choice(self.world.squares)
+            self.action_target = self.next_stage(self._destination)
         elif self.player.is_very_dangerous(self.action_target):
             if not self.player.is_very_dangerous(self.place):
                 self.action_target = None
         elif self.player.is_very_dangerous(self.place):
-            # assertion: self._previous_square is not None
-            if not self.player.is_very_dangerous(self._previous_square):
+            if (self._previous_square is not None
+                    and not self.player.is_very_dangerous(self._previous_square)):
                 self.start_moving_to(self._previous_square)
 
     def move_on_border(self, e):

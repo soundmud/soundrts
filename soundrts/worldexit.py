@@ -4,7 +4,7 @@ from .worldentity import Entity
 
 class Exit(Entity):
 
-    other_side = None
+    other_side: 'Exit'
     collision = 0
     is_an_exit = True
 

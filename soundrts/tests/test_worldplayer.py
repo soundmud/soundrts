@@ -14,7 +14,7 @@ def disable_ai(player):
         pass
     player.play = do_nothing
 
-# this unefficient method should only be used in legacy tests
+# this inefficient method should only be used in legacy tests
 # (not in new tests, not in the main code)
 # the necessary updates should be done explicitly in the tests
 def is_perceiving_method(self):
@@ -441,9 +441,9 @@ class ComputerTestCase(_PlayerBaseTestCase):
         assert p.player.enemy_menace(p2.place)
         assert not p2.player.is_perceiving(p)
         assert not p2.player.enemy_menace(p.place)
-        assert not p2.player.is_dangerous(p.place)
+        assert not p2.player.square_is_dangerous(p.place)
         assert not p2.player.enemy_menace(p2.place)
-        assert not p2.player.is_dangerous(p2.place)
+        assert not p2.player.square_is_dangerous(p2.place)
         assert p2.next_stage(p.place, avoid=True)
         p.hit(p2) # p2.player.observe(p)
         assert p2.player.is_perceiving(p)
@@ -456,9 +456,9 @@ class ComputerTestCase(_PlayerBaseTestCase):
         assert not p2.player.is_perceiving(p)
         assert p2.player.remembers(p)
         assert p2.player.enemy_menace(p.place)
-        assert p2.player.is_dangerous(p.place)
+        assert p2.player.square_is_dangerous(p.place)
         assert p2.player.enemy_menace(p2.place)
-        assert p2.player.is_dangerous(p2.place)
+        assert p2.player.square_is_dangerous(p2.place)
         assert not p2.next_stage(p.place, avoid=True)
 
     def testPerceptionByObserveWithPlateauOneShot(self):
@@ -481,9 +481,9 @@ class ComputerTestCase(_PlayerBaseTestCase):
         p2place = p2.place
         assert not p2p.is_perceiving(p)
         assert not p2p.enemy_menace(p.place)
-        assert not p2p.is_dangerous(p.place)
+        assert not p2p.square_is_dangerous(p.place)
         assert not p2p.enemy_menace(p2.place)
-        assert not p2p.is_dangerous(p2.place)
+        assert not p2p.square_is_dangerous(p2.place)
         assert p2.next_stage(p.place, avoid=True)
         p.hit(p2) # p2p.observe(p)
         assert p2p.is_perceiving(p)
@@ -496,9 +496,9 @@ class ComputerTestCase(_PlayerBaseTestCase):
         assert not p2p.is_perceiving(p)
         assert p2p.remembers(p)
         assert p2p.enemy_menace(p.place)
-        assert p2p.is_dangerous(p.place)
+        assert p2p.square_is_dangerous(p.place)
         assert p2p.enemy_menace(p2place)
-        assert p2p.is_dangerous(p2place)
+        assert p2p.square_is_dangerous(p2place)
 
     def testPerceptionAfterUnitDeath(self):
         self.set_up()
