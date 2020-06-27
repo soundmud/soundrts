@@ -6,7 +6,7 @@ import pygame
 
 from .clientgamenews import must_be_said
 from .clientgameorder import get_orders_list, substitute_args
-from .clientmedia import voice, sounds, get_fullscreen
+from .clientmedia import voice, sounds
 from . import config
 from .definitions import style
 from .lib.log import warning, exception
@@ -541,7 +541,7 @@ class EntityView:
                 self.launch_event(random.choice(s))
         else:
             warning("no sound found for: %s %s", attacker_type, "attack_hit_level_%s" % level)
-        if get_fullscreen() and attacker_id in self.interface.dobjets:
+        if self.interface.display_is_active and attacker_id in self.interface.dobjets:
             self.interface.grid_view.display_attack(attacker_id, self)
 
     def on_exhausted(self):

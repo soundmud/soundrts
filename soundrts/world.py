@@ -248,37 +248,6 @@ class World:
 
     def _get_objects_values(self):
         yield str(self.random.getstate())
-##        yield "starting_squares = {}".format(self.starting_squares)
-##        names_to_check = ["type_name", "id", "x", "y", "hp", "action_target"]
-##        if self.time == 0:
-##            names_to_check += ["id", "player"]
-##            objects_to_check = []
-##            for z in self.squares:
-##                objects_to_check += z.objects
-##        else:
-##            objects_to_check = self.active_objects
-##        yield str(self.starting_squares)
-##        for o in objects_to_check:
-##            if getattr(o, "orders", False):
-##                yield o.orders[0].keyword
-##                if o.orders[0].keyword == "auto_explore":
-##                    yield "already=" + str(sorted(list(o.player._already_explored),key=lambda x: getattr(x, "name", None)))
-##                    yield "_places_to_explore=" + str(o.player._places_to_explore)
-##            for name in names_to_check:
-##                if hasattr(o, name):
-##                    value = getattr(o, name)
-##                    if name in ["action_target", "player"]:
-##                        if hasattr(value, "id"):
-##                            value = value.id
-##                            if value in self.objects:
-##                                if self.objects[value].__class__.__name__ == "Exit":
-##                                    value = value, self.objects[value]
-##                                else:
-##                                    value = value, self.objects[value].__class__.__name__
-##                        else:
-##                            continue
-##                    yield "%s=%s" % (name, value)
-##            yield ""
 
     def get_objects_string(self):
         return "\n".join(self._get_objects_values())

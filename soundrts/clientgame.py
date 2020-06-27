@@ -170,6 +170,10 @@ class GameInterface:
         psounds.set_listener(self)
 
     @property
+    def display_is_active(self):
+        return get_fullscreen() or IS_DEV_VERSION
+
+    @property
     def player(self):
         try:
             return self.server.player
@@ -798,8 +802,7 @@ class GameInterface:
                         self._bindings.process_keydown_event(e)
                     except KeyError:
                         voice.item(mp.BEEP)
-                    self.display() # for example when a new square is selected
-            elif get_fullscreen():
+            elif self.display_is_active:
                 self._process_fullscreen_mode_mouse_event(e)
 
     def queue_srv_event(self, *e):
@@ -1695,6 +1698,11 @@ class GameInterface:
     def display_metrics(self):
         warn = (255, 0, 0)
         normal = (0, 200, 0)
+        if not get_fullscreen():
+            screen_render(f"x{self._get_relative_speed():.1f}", (0,0))
+            screen_render(chrono.text("update", label="w"), (-1, 0), right=True)
+            screen_render(chrono.text("display", label="d"), (-1, 15), right=True)
+            return
         screen_render("total delay: %sms" % chrono.ms(time.time() - self.next_update),
                       (0, 30),
                       color=warn if time.time() > self.next_update else normal)
@@ -1708,11 +1716,9 @@ class GameInterface:
         screen_render(chrono.text("update", label="world update"), (-1, 30), right=True)
         screen_render(chrono.text("animate"), (-1, 45), right=True)
         screen_render(chrono.text("display"), (-1, 60), right=True)
-        screen_render("speed: %.0f sim turns per second (normal x%.1f)"
-                      % (self._get_tps(), self._get_relative_speed()),
-                      (0, 15),
-                      color=warn if self._get_relative_speed() < self.speed * .9
-                      else normal)
+        screen_render(f"turn: {self.world.turn}", (0, 0))
+        s = "speed: {:.0f} sim turns per second (normal x{:.1f})".format(self._get_tps(), self._get_relative_speed())
+        screen_render(s, (0, 15), color=warn if self._get_relative_speed() < self.speed * .9 else normal)
 
     _must_display_target_info = False
 
@@ -1759,7 +1765,7 @@ class GameInterface:
             return # this might allow some machines to work without any display
         chrono.start("display")
         get_screen().fill((0, 0, 0))
-        if get_fullscreen():
+        if self.display_is_active:
             self.grid_view.display()
             if self.mouse_select_origin and self.mouse_select_origin != pygame.mouse.get_pos():
                 x, y = self.mouse_select_origin

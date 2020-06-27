@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import FULLSCREEN
 
 from .log import warning
-
+from .. import version
 
 pygame.font.init()
 _font = pygame.font.SysFont("arial", 12, bold=True)
@@ -73,11 +73,13 @@ def set_screen(fullscreen):
     global _screen
     if fullscreen:
         x, y = get_desktop_screen_mode()
-        window_style = 0 | FULLSCREEN
+        window_style = FULLSCREEN
     else:
-        x, y = 400, 75
+        if version.IS_DEV_VERSION:
+            x, y = 200, 200
+        else:
+            x, y = 400, 75
         window_style = 0
-        pygame.mouse.set_visible(True)
     try:
         _screen = pygame.display.set_mode((x, y), window_style)
     except:

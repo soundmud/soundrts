@@ -4,13 +4,10 @@ import pygame
 
 from .lib.screen import get_screen, draw_line, draw_rect
 from .lib.log import warning
-from .lib.nofloat import square_of_distance
+from .lib.nofloat import square_of_distance, PRECISION
 
 from .definitions import style
-
-
-R = int(0.5 * 10)
-R2 = R * R
+from .worldentity import COLLISION_RADIUS
 
 
 class GridView:
@@ -87,7 +84,12 @@ class GridView:
             rect = x-R, y-R, R*2, R*2
             draw_rect(o.corrected_color(), rect, width)
         else:
-            pygame.draw.circle(get_screen(), o.corrected_color(), (x, y), R, width)
+            if o.collision:
+                pygame.draw.circle(get_screen(), o.corrected_color(), (x, y), R, width)
+            elif self.interface.target is not None and self.interface.target is o:
+                pygame.draw.circle(get_screen(), o.corrected_color(), (x, y), R, 0)
+            else:
+                get_screen().set_at((x, y), o.corrected_color())
         if getattr(o.model, "player", None) is not None:
             if o.id in self.interface.group:
                 color = (0,255,0)
@@ -129,9 +131,12 @@ class GridView:
                     warning("(memory)")
 
     def _update_coefs(self):
-        self.square_view_width = self.square_view_height = min((get_screen().get_width() - 200) // (self.interface.xcmax + 1),
-            get_screen().get_height() // (self.interface.ycmax + 1)) # 200 = graphic console
+        global R, R2
+        self.square_view_width = self.square_view_height = min(get_screen().get_width() // (self.interface.xcmax + 1),
+            get_screen().get_height() // (self.interface.ycmax + 1))
         self.ymax = self.square_view_height * (self.interface.ycmax + 1)
+        R = max(1, int(COLLISION_RADIUS / PRECISION / self.interface.square_width * self.square_view_width))
+        R2 = R * R
 
     def _collision_display(self):
         for t, c in (("ground", (0, 0, 255)), ("air", (255, 0, 0))):
@@ -147,10 +152,6 @@ class GridView:
         else:
             rect = self._get_rect_from_map_coords(*self.interface.coords_in_map(self.interface.place))
             rect = list(rect)
-            rect[0] += 3
-            rect[1] += 3
-            rect[2] -= 6
-            rect[3] -= 6
         if self.interface.target is None:
             color = (255, 255, 255)
         else:
@@ -201,11 +202,9 @@ class GridView:
             color = (255, 0, 0)
         else:
             color = (0, 255, 0)
-        pygame.draw.line(get_screen(), color,
+        r1 = pygame.draw.line(get_screen(), color,
                          self.interface.grid_view._object_coords(target),
                          self.interface.grid_view._object_coords(a))
-        pygame.draw.circle(get_screen(), (100, 100, 100),
+        r2 = pygame.draw.circle(get_screen(), (100, 100, 100),
                            self.interface.grid_view._object_coords(target), R * 3 // 2, 0)
-        pygame.display.flip() # not very clean but seems to work (persistence of vision?)
-        # better: interface.anims queue to render when the time has come
-        # (not during the world model update)
+        pygame.display.update(r1.union(r2))

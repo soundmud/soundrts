@@ -284,11 +284,11 @@ class Coordinator(_Client): # client coordinator for multiplayer games
                     open("user/tmp/{}-{}.txt".format(
                         self.world.previous_state[0],
                         md5(self.world.previous_state[1]).hexdigest()),
-                         "w").write(self.world.previous_state[1])
+                         "bw").write(self.world.previous_state[1])
                     open("user/tmp/{}-{}.txt".format(
                         self.world.previous_previous_state[0],
                         md5(self.world.previous_previous_state[1]).hexdigest()),
-                         "w").write(self.world.previous_previous_state[1])
+                         "bw").write(self.world.previous_previous_state[1])
                 else:
                     try:
                         send_error_to_metaserver(self.get_sync_debug_msg_1())

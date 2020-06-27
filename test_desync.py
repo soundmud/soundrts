@@ -24,7 +24,7 @@ class Computer2ForTests(wpc2.Computer2):
         self._play()
 
 
-wpc2.Computer2 = Computer2ForTests
+wpc2.Computer2 = Computer2ForTests  # type: ignore
 
 from soundrts.lib.voice import voice
 from soundrts import clientmain
@@ -41,7 +41,7 @@ def remove_voice():
     voice.item = do_nothing
     voice.info = do_nothing
 
-MultiplayerGame._countdown = do_nothing
+MultiplayerGame._countdown = do_nothing   # type: ignore
 
 def set_position(x, y):
     os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x},{y}"
@@ -51,7 +51,7 @@ def run_client(n, auto):
         world.PROFILE = True
     if 1:#n != 0:
         remove_voice()
-    set_position(0, n * 110 + 50)
+    set_position(0, n * 235 + 50)
     clientmain.init_media()
     clientmain.connect_and_play(auto=auto)
 
