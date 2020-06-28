@@ -371,16 +371,16 @@ class Player:
 
     @property
     def squares_to_watch(self) -> List[Square]:
-        result = set()
+        squares = set()
         for m in self.memory:  # desync risk
             if self.is_an_enemy(m):
-                result.add(m.place)
+                squares.add(m.place)
                 for e in m.place.exits:
                     if e.other_side is not None:
-                        result.add(e.other_side.place)
+                        squares.add(e.other_side.place)
             elif isinstance(m, Deposit):
-                result.add(m.place)
-        list(result).sort(key=lambda s: s.name)  # avoid desync
+                squares.add(m.place)
+        result = sorted(squares, key=lambda s: s.name)  # avoid desync
         return self.world.random.sample(result, len(result))
 
     def balance(self, *squares):
