@@ -371,7 +371,7 @@ class Player:
 
     @property
     def squares_to_watch(self) -> List[Square]:
-        squares = set()
+        squares = set()  # desync risk
         for m in self.memory:  # desync risk
             if self.is_an_enemy(m):
                 squares.add(m.place)
