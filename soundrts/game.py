@@ -249,13 +249,14 @@ class TrainingGame(_MultiplayerGame, _Savable):
 
     game_type_name = "training"
 
-    def __init__(self, map, players, factions):
+    def __init__(self, map, players, factions, alliances):
         self.map = map
         self.seed = random.randint(0, 10000)
         self.me = DirectClient(config.login, self)
         self.players = [self.me] + [DummyClient(x) for x in players[1:]]
-        for p, f in zip(self.players, factions):
+        for p, f, a in zip(self.players, factions, alliances):
             p.faction = f
+            p.alliance = a
 
 
 class MissionGame(_Game, _Savable):

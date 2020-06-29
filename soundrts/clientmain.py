@@ -136,7 +136,8 @@ class TrainingMenu:
         self._players_menu.update_menu(self._build_players_menu())
 
     def _run_game(self):
-        TrainingGame(self._map, self._players, self._factions).run()
+        alliances = ["1"] + ["2"] * (len(self._players) - 1)
+        TrainingGame(self._map, self._players, self._factions, alliances).run()
         return CLOSE_MENU
 
     def _set_faction(self, pn, r):
