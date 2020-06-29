@@ -1,8 +1,9 @@
 square_width 12
 nb_columns 2
-nb_lines 1
+nb_lines 2
 
-west_east_paths a1
+west_east_paths a1 a2
+south_north_paths b1
 high_grounds a1
 
 nb_players_min 2

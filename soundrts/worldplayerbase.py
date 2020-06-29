@@ -211,11 +211,10 @@ class Player:
         x = u.x
         y = u.y
         for avp in self.allied_vision:
-            for avu in self._potential_neighbors(x, y):
+            for avu in avp._potential_neighbors(x, y):
                 radius2 = avu.sight_range * avu.sight_range
                 if (square_of_distance(avu.x, avu.y, x, y) < radius2
-                    and (avu.sight_range >= self.world.square_width
-                         or u.place in avu.get_observed_squares())):
+                        and u.place in avu.get_observed_squares()):
                     return True
 
     def _team_has_lost(self):

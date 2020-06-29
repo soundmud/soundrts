@@ -201,8 +201,6 @@ class Creature(Entity):
         if self.is_inside or self.place is None:
             return []
         result = [self.place]
-        if partial:
-            return result + self.place.neighbors
         if strict and self.sight_range < self.world.square_width:
             return result
         for sq in self.place.neighbors:
@@ -263,6 +261,11 @@ class Creature(Entity):
                         self.player.observe(o)
                 else:
                     return True
+            else:
+                for e2 in e.other_side.place.exits:
+                    if e2.other_side.place is new_place:
+                        if ignore_blockers or not e2.is_blocked(self):
+                            return True
 
     def _mark_the_dead_end(self) -> None:
         self.walked.append((self.place, self.x, self.y, 5))
