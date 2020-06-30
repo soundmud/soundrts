@@ -197,7 +197,7 @@ class Creature(Entity):
         if places:
             return min(places, key=lambda sq: square_of_distance(sq.x, sq.y, self.x, self.y))
 
-    def get_observed_squares(self, strict=False, partial=False):
+    def get_observed_squares(self, strict=False):
         if self.is_inside or self.place is None:
             return []
         result = [self.place]

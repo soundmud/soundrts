@@ -241,7 +241,7 @@ class Player:
                 k = (u.is_inside, u.sight_range  < self.world.square_width, u.height, u.place)
                 if k in done: continue
                 self.observed_squares.update(u.get_observed_squares(strict=True))
-                partially_observed_squares.update(u.get_observed_squares(partial=True))
+                partially_observed_squares.update(u.get_observed_squares())
                 done.append(k)
         partially_observed_squares -= self.observed_squares
         for s in self.observed_squares:

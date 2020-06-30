@@ -24,7 +24,7 @@ def test_must_not_see_plateau_from_below_even_if_path_exists(world):
     b1 = g["b1"]
     player = Human(world, DummyClient())
     p = world.unit_class("peasant")(player, b1, b1.x, b1.y)
-    assert a1 not in p.get_observed_squares(partial=True)
+    assert a1 not in p.get_observed_squares()
 
 def test_must_see_diagonal_if_path_exists(world):
     g = world.grid
@@ -32,4 +32,4 @@ def test_must_see_diagonal_if_path_exists(world):
     b1 = g["b1"]
     player = Human(world, DummyClient())
     p = world.unit_class("peasant")(player, b1, b1.x, b1.y)
-    assert a2 in p.get_observed_squares(partial=True)
+    assert a2 in p.get_observed_squares()
