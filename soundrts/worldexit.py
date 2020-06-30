@@ -6,6 +6,7 @@ class Exit(Entity):
 
     other_side: 'Exit'
     collision = 0
+    is_a_building_land = False
     is_an_exit = True
 
     def __init__(self, place, type_name, is_a_portal):
@@ -38,10 +39,6 @@ class Exit(Entity):
 
     def remove_blocker(self, o):
         self._blockers.remove(o)
-
-    @property
-    def is_a_building_land(self):
-        return not self.is_blocked(None)
 
     def delete(self):
         self.place.exits.remove(self)
