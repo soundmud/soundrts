@@ -45,7 +45,12 @@ class ZoomTarget:
         for o in self.place.objects:
             if o.is_a_building_land and self.contains(o.x, o.y):
                 return o
-        return self.place.building_land
+
+    @property
+    def exit(self):
+        for o in self.place.exits:
+            if not o.is_blocked() and self.contains(o.x, o.y):
+                return o
 
     def contains(self, x, y):
         subsquare = self.place.world.get_subsquare_id_from_xy

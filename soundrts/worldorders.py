@@ -843,6 +843,11 @@ class BuildOrder(ComplexOrder):
         self.target = self.player.get_object_by_id(self.args[0])
         if self.type.is_buildable_on_exits_only:
             if not getattr(self.target, "is_an_exit", False):
+                self.target = getattr(self.target, "exit", None)
+                if self.target is None:
+                    self.mark_as_impossible("cannot_build_here")
+                    return
+            if self.target.is_blocked():
                 self.mark_as_impossible("cannot_build_here")
                 return
         elif self.type.is_buildable_near_water_only and not getattr(self.target, "is_near_water", False):
