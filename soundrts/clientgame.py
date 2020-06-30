@@ -282,8 +282,9 @@ class GameInterface:
                 # visible if in front of you (190 degrees field)
                 a = angle(self.x, self.y, o.x, o.y, self.o)
                 return math.cos(a) > math.cos(math.radians(95))
-        else:
-            return True
+        if o.is_an_exit and o.is_blocked():
+            return False
+        return True
 
     def is_selectable(self, o):
         return self.is_visible(o)
