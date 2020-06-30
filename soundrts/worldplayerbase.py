@@ -110,6 +110,7 @@ class Player:
         self.upgrades = []
         self.forbidden_techs = []
         self.observed_before_squares = set()
+        self.strictly_observed_before_squares = set()
         self.observed_squares = set()
         self.observed_objects = {}
         self.detected_units = set()
@@ -244,6 +245,8 @@ class Player:
                 partially_observed_squares.update(u.get_observed_squares())
                 done.append(k)
         partially_observed_squares -= self.observed_squares
+        self.observed_before_squares.update(partially_observed_squares)
+        self.strictly_observed_before_squares.update(self.observed_squares)
         for s in self.observed_squares:
             for o in s.objects:
                 if o.player is None:
@@ -256,7 +259,6 @@ class Player:
                         self.perception.add(o)
                     else:
                         self._memorize(o)
-        self.observed_before_squares.update(partially_observed_squares)
         # objects revealed by their actions
         for p in self.allied_vision:
             for o in list(p.observed_objects.keys()):
@@ -360,12 +362,12 @@ class Player:
     @property
     def unknown_starting_squares(self) -> List[Square]:
         starting_squares = [self.world.grid[n] for n in self.world.starting_squares]
-        result = [s for s in starting_squares if s not in self.observed_before_squares]
+        result = [s for s in starting_squares if s not in self.strictly_observed_before_squares]
         return self.world.random.sample(result, len(result))
 
     @property
     def unknown_squares(self) -> List[Square]:
-        result = [p for p in self.world.squares if p not in self.observed_before_squares]
+        result = [p for p in self.world.squares if p not in self.strictly_observed_before_squares]
         return self.world.random.sample(result, len(result))
 
     @property
