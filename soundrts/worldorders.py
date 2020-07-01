@@ -853,7 +853,12 @@ class BuildOrder(ComplexOrder):
         elif self.type.is_buildable_near_water_only and not getattr(self.target, "is_near_water", False):
             self.mark_as_impossible("cannot_build_here")
             return
-        elif not self.type.is_buildable_anywhere:
+        elif self.type.is_buildable_anywhere:
+            self.target = getattr(self.target, "any_land", None)
+            if self.target is None:
+                self.mark_as_impossible("cannot_build_here")
+                return
+        else:
             if not getattr(self.target, "is_a_building_land", False):
                 self.target = getattr(self.target, "building_land", None)
                 if self.target is None:

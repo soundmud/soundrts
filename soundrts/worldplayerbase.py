@@ -26,12 +26,11 @@ class ZoomTarget:
     collision = 0
     radius = 0
 
-    def __init__(self, i, player):
-        self.id = i
-        _, place_id, x, y = i.split("-")
-        self.x = int(x)
-        self.y = int(y)
-        self.place = player.get_object_by_id(place_id)
+    def __init__(self, place, x, y, id=None):
+        self.place = place
+        self.x = x
+        self.y = y
+        self.id = id
         self.title = self.place.title # TODO: full zoom title
 
     def __eq__(self, other):
@@ -51,6 +50,13 @@ class ZoomTarget:
         for o in self.place.exits:
             if not o.is_blocked() and self.contains(o.x, o.y):
                 return o
+
+    @property
+    def any_land(self):
+        for o in self.place.objects:
+            if getattr(o, "is_buildable_anywhere", False) and self.contains(o.x, o.y):
+                return
+        return self
 
     def contains(self, x, y):
         subsquare = self.place.world.get_subsquare_id_from_xy
@@ -456,7 +462,9 @@ class Player:
 
     def get_object_by_id(self, i):
         if isinstance(i, str) and i.startswith("zoom"):
-            return ZoomTarget(i, self)
+            _, place_id, x, y = i.split("-")
+            o = ZoomTarget(self.get_object_by_id(place_id), int(x), int(y), id=i)
+            return o
         if i in self.world.grid:
             return self.world.grid[i]
         if i in self.world.objects:

@@ -178,3 +178,9 @@ class Entity:
         if self.blocked_exit:
             self.blocked_exit.remove_blocker(self)
             self.blocked_exit = None
+
+    @property
+    def any_land(self):
+        for s in self.place.subsquares:
+            if s.contains(self.x, self.y):
+                return s.any_land

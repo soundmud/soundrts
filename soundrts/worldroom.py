@@ -113,6 +113,20 @@ class Square:
                 return o
 
     @property
+    def subsquares(self):
+        from soundrts.worldplayerbase import ZoomTarget
+        k = (self.xmax - self.xmin) // 3
+        for dx in [0, 1, -1]:
+            for dy in [0, 1, -1]:
+                yield ZoomTarget(self, self.x + dx * k, self.y + dy * k)
+
+    @property
+    def any_land(self):
+        for s in self.subsquares:
+            if s.any_land:
+                return s
+
+    @property
     def is_near_water(self):
         if not self.is_ground or self.high_ground:
             return False
