@@ -106,46 +106,42 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         disable_ai(self.cp)
         self.cp.lang_add_units(["b2", "peasant"])
         self.cp.resources = [1000*PRECISION, 1000*PRECISION]
-        self.w.unit_class("barracks").is_buildable_anywhere = True
         self.w.unit_class("barracks").count_limit = 1
         self.w.update()
         p1 = self.find_player_unit(self.cp, "peasant")
         p2 = self.find_player_unit(self.cp, "peasant", 1)
-        self.assertEqual(p1.orders, [])
-        self.assertEqual(p2.orders, [])
+        for p in [p1, p2]:
+            self.assertEqual(p.orders, [])
         self.assertIn("build barracks", BuildOrder.menu(p1))
-        p1.take_order(["build", "barracks", "a2"])
-        p2.take_order(["build", "barracks", "a2"])
-        assert p1.orders
-        assert p2.orders
+        for p in [p1, p2]:
+            p.take_order(["build", "barracks", "a2"])
+            assert p.orders
         for _ in range(1000):
             self.w.update()
             if not (p1.orders or p2.orders):
                 break
-        self.assertEqual(p1.orders, [])
-        self.assertEqual(p2.orders, [])
+        for p in [p1, p2]:
+            self.assertEqual(p.orders, [])
         self.assertEqual(self.cp.nb("barracks"), 1)
         self.assertNotIn("build barracks", BuildOrder.menu(p1))
-        p1.take_order(["build", "barracks", "a2"])
-        p2.take_order(["build", "barracks", "a2"])
-        self.assertEqual(p1.orders, [])
-        self.assertEqual(p2.orders, [])
+        for p in [p1, p2]:
+            p.take_order(["build", "barracks", "a2"])
+            self.assertEqual(p.orders, [])
         self.assertEqual(self.cp.nb("barracks"), 1)
         self.w.unit_class("barracks").count_limit = 2
         self.w.update()
         self.assertEqual(self.cp.future_count("barracks"), 1)
-        p1.take_order(["build", "barracks", "a2"])
-        p2.take_order(["build", "barracks", "a2"])
+        for p in [p1, p2]:
+            p.take_order(["build", "barracks", "a2"])
+            assert p.orders[0].keyword == "build"
+            assert p.orders[0].type.type_name == "barracks"
         self.assertEqual(self.cp.future_count("barracks"), 1)
-        assert p1.orders[0].keyword == "build"
-        assert p1.orders[0].type.type_name == "barracks"
-        assert p2.orders[0].keyword == "build"
         for _ in range(1000):
             self.w.update()
             if not (p1.orders or p2.orders):
                 break
-        self.assertEqual(p1.orders, [])
-        self.assertEqual(p2.orders, [])
+        for p in [p1, p2]:
+            self.assertEqual(p.orders, [])
         self.assertEqual(self.cp.future_count("barracks"), 2)
         self.assertEqual(self.cp.nb("barracks"), 2)
         self.assertEqual(self.cp.nb("farm"), 1)
@@ -161,19 +157,15 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         disable_ai(self.cp)
         self.cp.lang_add_units(["b2", "peasant"])
         self.cp.resources = [1000*PRECISION, 1000*PRECISION]
-        self.w.unit_class("barracks").is_buildable_anywhere = True
         self.w.unit_class("barracks").count_limit = 1
         self.w.update()
         p1 = self.find_player_unit(self.cp, "peasant")
         p2 = self.find_player_unit(self.cp, "peasant", 1)
-        self.assertEqual(p1.orders, [])
-        self.assertEqual(p2.orders, [])
-        p1.take_order(["build", "barracks", "a2"])
-        p2.take_order(["build", "barracks", "a2"])
-        p1.take_order(["build", "barracks", "a2"], forget_previous=False)
-        p2.take_order(["build", "barracks", "a2"], forget_previous=False)
-        assert len(p1.orders) == 2
-        assert len(p2.orders) == 2
+        for p in [p1, p2]:
+            self.assertEqual(p.orders, [])
+            p.take_order(["build", "barracks", "a2"])
+            p.take_order(["build", "barracks", "a2"], forget_previous=False)
+            assert len(p.orders) == 2
         for _ in range(1000):
             self.w.update()
             if not (p1.orders or p2.orders):

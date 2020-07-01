@@ -30,7 +30,7 @@ goldmines 75 a1 c4
 goldmines 150 c2 a3
 woods 75 c1 a4 c2 c2 a3 a3
 nb_meadows_by_square 2
-additional_meadows b1 b4
+additional_meadows a2 b1 b4
 
 ; players
 nb_players_min 2
