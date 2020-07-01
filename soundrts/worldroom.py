@@ -107,6 +107,12 @@ class Square:
                 return o
 
     @property
+    def exit(self):
+        for o in self.exits:
+            if o.is_an_exit and not o.is_blocked():
+                return o
+
+    @property
     def is_near_water(self):
         if not self.is_ground or self.high_ground:
             return False
