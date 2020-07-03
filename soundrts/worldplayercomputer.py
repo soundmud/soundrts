@@ -220,12 +220,13 @@ class Computer(Player):
 
     def _deposit_priority(self, deposit):
         if deposit is None:
-            return (-100, 0, 0)
+            return -100, 0, 0
         try:
             workers = self._gathered_deposits[deposit]
         except:
             workers = 0
-        return (-workers, -self.resources[deposit.resource_type], deposit.id) # deterministic (avoid sync errors)
+        # The resources difference is taken into account only if the difference is significant.
+        return -self.resources[deposit.resource_type] // 10, -workers, deposit.id # deterministic (avoid sync errors)
 
     def _update_effect_users_and_workers(self):
         self._workers = []
