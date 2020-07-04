@@ -23,8 +23,8 @@ from . import res
 from . import stats
 from .version import VERSION, compatibility_version
 from .world import World
-from .worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, RemoteClient, send_platform_version_to_metaserver 
-
+from .worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, RemoteClient, \
+    send_platform_version_to_metaserver, _Controller
 
 PROFILE = False
 
@@ -36,6 +36,7 @@ class _Game:
     record_replay = True
     allow_cheatmode = True
     must_apply_equivalent_type = False
+    players: List[_Controller]
 
     def create_replay(self):
         self._replay_file = open(os.path.join(REPLAYS_PATH, "%s.txt" % int(time.time())), "w")
@@ -295,7 +296,7 @@ class ReplayGame(_Game):
     game_type_name = "replay" # probably useless (or maybe for stats)
     record_replay = False
 
-    def __init__(self, replay):
+    def __init__(self, replay: str) -> None:
         self._file = open(replay)
         game_type_name = self.replay_read()
         if game_type_name in ("multiplayer", "training"):
@@ -316,8 +317,7 @@ class ReplayGame(_Game):
             from .campaign import Campaign
             self.map = Campaign(campaign_path_or_packed_map)._get(int(self.replay_read()))
         else:
-            self.map = Map()
-            self.map.unpack(campaign_path_or_packed_map)
+            self.map = Map(unpack=campaign_path_or_packed_map.encode())
         players = self.replay_read().split()
         alliances = self.replay_read().split()
         factions = self.replay_read().split()

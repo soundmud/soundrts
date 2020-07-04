@@ -1,9 +1,13 @@
 import random
 import time
+from typing import List, TYPE_CHECKING, Union
 
 from . import config
 from .definitions import VIRTUAL_TIME_INTERVAL
 from .lib.log import info, warning
+from .mapfile import Map
+if TYPE_CHECKING:
+    from .serverclient import ConnectionToClient
 from .version import IS_DEV_VERSION
 
 
@@ -117,7 +121,7 @@ class Game:
     started = False
     speed = 1
 
-    def __init__(self, scenario, speed, server, admin, is_public=False):
+    def __init__(self, scenario: Map, speed, server, admin, is_public=False) -> None:
         self.id = server.get_next_id()
         self.scenario = scenario
         self.speed = speed
@@ -125,8 +129,8 @@ class Game:
         self.server = server
         self.admin = admin
         self.is_public = is_public
-        self.players = []
-        self.guests = []
+        self.players: List[Union['ConnectionToClient', _Computer]] = []
+        self.guests: List[Union['ConnectionToClient', _Computer]] = []
         self.register(admin)
         if self.is_public:
             self._process_public_game()
@@ -141,7 +145,7 @@ class Game:
             self.invite(client)
 
     @property
-    def human_players(self):
+    def human_players(self) -> List['ConnectionToClient']:
         return [p for p in self.players if not isinstance(p, _Computer)]
 
     def _start(self):

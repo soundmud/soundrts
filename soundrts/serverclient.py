@@ -3,11 +3,14 @@ import re
 import sys
 import time
 
+from typing import TYPE_CHECKING
+
 from .lib.log import info, warning, exception
 from .lib.msgs import encode_msg
 from .mapfile import worlds_multi
-from . import res
-from .serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game
+if TYPE_CHECKING:
+    from .servermain import Server
+from .serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game, _State
 
 
 class ConnectionToClient(asynchat.async_chat):
@@ -17,7 +20,7 @@ class ConnectionToClient(asynchat.async_chat):
     version = None
     game = None
 
-    def __init__(self, server, connection_and_address):
+    def __init__(self, server: 'Server', connection_and_address) -> None:
         (connection, address) = connection_and_address
         info("Connected: %s:%s" % address)
         asynchat.async_chat.__init__(self, connection)
@@ -26,7 +29,7 @@ class ConnectionToClient(asynchat.async_chat):
         self.server = server
         self.inbuffer = b''
         self.address = address
-        self.state = Anonymous()
+        self.state: _State = Anonymous()
         self.push(":")
         self.t1 = time.time()
 
@@ -166,13 +169,18 @@ class ConnectionToClient(asynchat.async_chat):
 
     # "in the lobby" commands
 
-    def cmd_create(self, args):
+    def cmd_create(self, args: str) -> None:
         if self.server.can_create(self):
             self.state = OrganizingAGame()
             self.push("game_admin_menu\n")
             scs = worlds_multi()
-            scenario = scs[int(args[0])]
-            self.push("map %s\n" % scenario.pack())
+            try:
+                scenario = scs[int(args[0])]
+            except ValueError:
+                for scenario in scs:
+                    if args[0] in scenario.path:
+                        break
+            self.push("map %s\n" % scenario.pack().decode())
             speed = float(args[1])
             is_public = len(args) >= 3 and args[2] == "public"
             self.server.games.append(Game(scenario, speed, self.server,
@@ -182,12 +190,12 @@ class ConnectionToClient(asynchat.async_chat):
             warning("game not created (max number reached)")
             self.notify("too_many_games")
 
-    def cmd_register(self, args):
+    def cmd_register(self, args: str) -> None:
         game = self.server.get_game_by_id(args[0])
         if game is not None and game.can_register():
             self.state = WaitingForTheGameToStart()
             self.push("game_guest_menu\n")
-            self.push("map %s\n" % game.scenario.pack())
+            self.push("map %s\n" % game.scenario.pack().decode())
             game.register(self)
             self.server.update_menus()
         else:

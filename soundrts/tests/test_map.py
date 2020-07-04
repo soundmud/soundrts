@@ -21,5 +21,11 @@ class CoordinatorTestCase(unittest.TestCase):
 #        print c.get_sync_debug_msg_2()
         
 
+def test_nb_players_after_unpack():
+    for n in ["jl1.txt", "jl4"]:
+        m = Map(unpack=Map(f"multi/{n}").pack())
+        assert m.nb_players_min == 2
+
+
 if __name__ == "__main__":
     unittest.main()

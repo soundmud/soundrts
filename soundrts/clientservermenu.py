@@ -1,5 +1,6 @@
 import re
 import time
+from typing import List
 
 from .clientmedia import voice, sounds, play_sequence
 from .clientmenu import Menu
@@ -225,9 +226,8 @@ class _BeforeGameMenu(_ServerMenu):
 
     registered_players = ()
 
-    def srv_map(self, args):
-        self.map = mapfile.Map()
-        self.map.unpack(" ".join(args)) # warning: args is split from a stripped string
+    def srv_map(self, args: List[str]) -> None:
+        self.map = mapfile.Map(unpack=" ".join(args).encode())  # warning: args is split from a stripped string
         self.map.load_style(res)
 
     def srv_registered_players(self, args):

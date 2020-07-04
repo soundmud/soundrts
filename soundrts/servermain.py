@@ -8,7 +8,7 @@ import urllib.request, urllib.error, urllib.parse
 from .metaserver import MAIN_METASERVER_URL
 from .lib.log import debug, info, warning, exception
 from .serverclient import ConnectionToClient
-from .serverroom import InTheLobby, OrganizingAGame, Playing, WaitingForTheGameToStart
+from .serverroom import InTheLobby, OrganizingAGame, Playing, WaitingForTheGameToStart, Game
 from .lib.ticker import Ticker
 from .version import VERSION
 
@@ -205,11 +205,12 @@ class Server(asyncore.dispatcher):
             if c.login == login:
                 return c
 
-    def get_game_by_id(self, ident):
+    def get_game_by_id(self, ident) -> Game:
         ident = int(ident)
         for o in self.games:
             if o.id == ident:
                 return o
+        raise
 
 
 def start_server(parameters=sys.argv, is_standalone=True):

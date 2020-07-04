@@ -8,7 +8,6 @@ some are merged (some text files).
 import locale
 import os
 import re
-import sys
 from typing import Optional
 
 from soundrts.lib import encoding
@@ -51,7 +50,8 @@ def best_language_match(lang, available_languages):
     return "en"
 
 
-_cfg = open("cfg/language.txt").read().strip()
+with open("cfg/language.txt") as t:
+    _cfg = t.read().strip()
 if _cfg:
     preferred_language: Optional[str] = _cfg
 else:
@@ -144,13 +144,10 @@ class ResourceLoader:
         for root in roots:
             for text_file_path in self._localized_paths(os.path.join(root, name), localize):
                 if os.path.isfile(text_file_path):
-                    b = open(text_file_path, "rb").read()
-                    e = encoding.encoding(b)
-                    if sys.version_info[0] == 3:
-                        txt = open(text_file_path, encoding=e).read()
-                    else:
-                        txt = b.decode(e)
-                    result.append(txt)
+                    with open(text_file_path, "rb") as b:
+                        e = encoding.encoding(b.read())
+                    with open(text_file_path, encoding=e) as t:
+                        result.append(t.read())
         return result
 
     def get_text_file(self, name, localize=False, append=False, root=None):

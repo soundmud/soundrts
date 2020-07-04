@@ -1,8 +1,13 @@
 import base64
+import io
+import zipfile
 from hashlib import md5
 import os.path
 import re
 import shutil
+from typing import Optional, List
+
+import pygame
 
 from .definitions import Style
 from . import res
@@ -15,17 +20,25 @@ from . import world
 class Map:
 
     map_string = None
+    path: str
 
-    def __init__(self, p=None, digest="no_digest", official=False):
-        self.path = p
+    def __init__(self, p: Optional[str] = None, digest="no_digest", official=False, unpack: Optional[bytes] = None):
         self.digest = digest
         self.official = official
-        if p:
+        if unpack is not None:
+            self._unpack(unpack)
+        elif p is not None:
+            self.path = p
             self._load_header()
 
     def load_resources(self):
         from .clientmedia import sounds, res
         sounds.enter_map(res, self.path)
+        if self._zip is not None:
+            for name in self._zip.namelist():
+                if ".ogg" in name:
+                    sounds.map.sounds[name[:4]] = pygame.mixer.Sound(self._zip.read(name))
+                    print(sounds.map.sounds[name[:4]])
 
     def unload_resources(self):
         from .clientmedia import sounds
@@ -96,10 +109,12 @@ class Map:
     def read(self):
         if self.map_string is not None:
             return self.map_string
-        elif os.path.isdir(self.path):
-            return open(os.path.join(self.path, "map.txt")).read()
+        if os.path.isdir(self.path):
+            p = os.path.join(self.path, "map.txt")
         else:
-            return open(self.path).read()
+            p = self.path
+        with open(p) as f:
+            return f.read()
 
     def _extract_title(self, s):
         m = re.search("(?m)^title[ \t]+([0-9 ]+)$", s)
@@ -131,13 +146,15 @@ class Map:
             debug("%s\n>>>%s<<<", self.path, self.get_digest())
 
     def _extract_nb_players(self, s):
-        try:
-            self.nb_players_min = int(re.search("(?m)^nb_players_min[ \t]+([0-9]+)$", s).group(1))
-        except:
+        search = re.search(r"(?m)^nb_players_min[ \t]+([0-9]+)$", s)
+        if search is not None:
+            self.nb_players_min = int(search.group(1))
+        else:
             self.nb_players_min = 1
-        try:
-            self.nb_players_max = int(re.search("(?m)^nb_players_max[ \t]+([0-9]+)$", s).group(1))
-        except:
+        search = re.search(r"(?m)^nb_players_max[ \t]+([0-9]+)$", s)
+        if search is not None:
+            self.nb_players_max = int(search.group(1))
+        else:
             self.nb_players_max = 1
 
     def _load_header(self):
@@ -149,37 +166,41 @@ class Map:
         self._check_digest()
         self._extract_nb_players(s)
 
-    _original_map_string = None
+    _original_map_bytes = None
 
-    def pack(self):
-        if self._original_map_string is not None:
-            return self._original_map_string.encode()
+    def pack(self) -> bytes:
+        if self._original_map_bytes is not None:
+            return self._original_map_bytes
         if os.path.isfile(self.path):
             map_name = os.path.split(self.path)[-1]
-            content = base64.b64encode(open(self.path, "rb").read())
+            with open(self.path) as t:
+                content = base64.b64encode(t.read().encode())
             return map_name.encode() + b"***" + content
         else:
-            dest = os.path.join(TMP_PATH, "map.tmp")
-            z = zipdir.zipdir(self.path, dest)
-            content = base64.b64encode(open(dest, "rb").read())
-            os.remove(dest)
+            b = io.BytesIO()
+            zipdir.zipdir(self.path, b)
+            content = base64.b64encode(b.getvalue())
             return b"zip" + b"***" + content
 
-    def unpack(self, map_string):
-        self._original_map_string = map_string
+    _zip = None
+
+    def _unpack(self, map_bytes: bytes) -> None:
+        self._original_map_bytes = map_bytes
         try:
-            self.path, content = map_string.split("***", 1)
+            path, content = map_bytes.split(b"***", 1)
+            self.path = path.decode()
             if self.path != "zip":
                 self.map_string = base64.b64decode(content).decode()
-                open(os.path.join(TMP_PATH, "recent_map.txt"), "wb").write(self.map_string.encode())
+                with open(os.path.join(TMP_PATH, "recent_map.txt"), "w") as t:
+                    t.write(self.map_string)
             else:
-                zf = os.path.join(TMP_PATH, "recent_map.tmp")
-                open(zf, "wb").write(base64.b64decode(content).encode())
                 zd = os.path.join(TMP_PATH, "recent_map")
                 shutil.rmtree(zd, True)
-                zipdir.unzipdir(zf, zd)
+                b = io.BytesIO(base64.b64decode(content))
+                zipdir.unzipdir(b, zd)
                 self.path = zd
-                os.remove(zf)
+                b.seek(0)
+                self._zip = zipfile.ZipFile(b)
         except:
             exception("unpacking problem")
         else:
@@ -242,7 +263,7 @@ def _get_worlds_multi():
 _multi_maps = None
 _mods_at_the_previous_multi_maps_update = None
 
-def worlds_multi():
+def worlds_multi() -> List[Map]:
     global _multi_maps, _mods_at_the_previous_multi_maps_update
     if _multi_maps is None or _mods_at_the_previous_multi_maps_update != res.mods:
         _multi_maps = _get_worlds_multi()
