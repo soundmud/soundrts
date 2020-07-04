@@ -74,8 +74,8 @@ CTRL SHIFT TAB: select_target -1 useful
 a: select_order 1
 SHIFT a: select_order -1
 
-CTRL a: select_order 1 inactive_only
-CTRL SHIFT a: select_order -1 inactive_only
+CTRL a: select_order 1
+CTRL SHIFT a: select_order -1
 
 ALT a: order_shortcut ; order shortcuts are defined in style.txt
 
