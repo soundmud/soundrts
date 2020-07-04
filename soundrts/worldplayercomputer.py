@@ -6,7 +6,7 @@ from .version import IS_DEV_VERSION
 from .worldplayerbase import Player
 from .worldresource import Meadow, Deposit, Corpse
 from .worldunit import Worker, BuildingSite, Soldier
-from soundrts.lib.nofloat import PRECISION
+from soundrts.lib.nofloat import PRECISION, square_of_distance
 from soundrts.worldorders import UseOrder
 
 
@@ -20,6 +20,7 @@ class Computer(Player):
     AI_type = None
     # the AI might need a longer memory than the player
     memory_duration = 36000000 # 36000 seconds of world time
+    _sensible_building = None
 
     def __init__(self, world, client):
         self._attacked_places = []
@@ -190,6 +191,34 @@ class Computer(Player):
         turn = players.index(self) * 10 // len(players)
         return self.world.turn % 10 == turn
 
+    def _defensive_routine(self):
+        if self._sensible_building is not None:
+            if self._sensible_building not in self.units:
+                self._sensible_building = None
+
+        # regroup at a valuable place (and get healed or repaired)
+        self._send_units(self._idle_fighters, self._builders_place())
+
+        # commented-out variant: regroup at a dangerous place
+        # if self._sensible_building is None:
+        #     self._send_units(self._idle_fighters, self._builders_place())
+        # else:
+        #     wounded = [u for u in self._idle_fighters if u.hp < u.hp_max]
+        #     ok = [u for u in self._idle_fighters if u.hp == u.hp_max]
+        #     self._send_units(wounded, self._builders_place())
+        #     self._send_units(ok, self._sensible_building.place)
+
+        # build static defenses
+        if self._sensible_building is not None:
+            def nearest_exit(u):
+                result = sorted(u.place.exits, key=lambda e: square_of_distance(u.x, u.y, e.x, e.y))
+                if result:
+                    return result[0]
+            e = nearest_exit(self._sensible_building)
+            if e is not None and not e.is_blocked() and self.gather(self.world.unit_class("gate").cost, 0):
+                for w in self._workers:
+                    w.take_order(["build", "gate", e.id])
+
     def play(self):
         if self.AI_type == "timers": return
         if not self._should_play_this_turn(): return
@@ -204,6 +233,8 @@ class Computer(Player):
             self._attacked_places = []
         elif self.constant_attacks:
             self._eventually_attack(self._enemy_presence)
+        else:
+            self._defensive_routine()
         if self.research:
             self.idle_buildings_research()
         self._raise_dead()
@@ -631,6 +662,9 @@ class Computer(Player):
         return place in self._places_with_friends
 
     def _send_units(self, units, place):
+        if place is None:
+            return
+        units = [u for u in units if u.place != place]
         for u in units:
             u.cancel_all_orders()
         used_teleportation = False
@@ -676,6 +710,8 @@ class Computer(Player):
             # Don't react now. Constant attacks will do the job if active.
             # And the easy computer AI shouldn't be aggressive.
             return
+        if unit.is_a_building:
+            self._sensible_building = unit
         if attacker in self.perception:
             place = attacker.place
         else:
