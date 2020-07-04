@@ -504,10 +504,11 @@ class Computer(Player):
     def gather(self, cost, food):
         if self.missing_resources(cost):
             return
-        if food != 0 and food > self.food - self.used_food:
-            t = self.equivalent("farm")
-            if self.future_nb(t) == self.nb(t):
-                self.build_or_train_or_upgradeto_or_summon(t)
+        if food != 0 and food > self.available_food - self.used_food:
+            if self.available_food < self.world.food_limit:
+                t = self.equivalent("farm")
+                if self.future_nb(t) == self.nb(t):
+                    self.build_or_train_or_upgradeto_or_summon(t)
         else:
             return True
 
