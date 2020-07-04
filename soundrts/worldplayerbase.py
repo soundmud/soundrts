@@ -390,7 +390,7 @@ class Player:
         for m in self.memory:  # desync risk
             if self.is_an_enemy(m):
                 squares.add(m.place)
-                for e in m.place.exits:
+                for e in getattr(m.place, "exits", []):
                     if e.other_side is not None:
                         squares.add(e.other_side.place)
             elif isinstance(m, Deposit):

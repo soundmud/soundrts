@@ -209,13 +209,14 @@ class Computer(Player):
         #     self._send_units(ok, self._sensible_building.place)
 
         # build static defenses
-        if self._sensible_building is not None:
+        gate = self.world.unit_class("gate")
+        if self._sensible_building is not None and gate is not None:
             def nearest_exit(u):
                 result = sorted(u.place.exits, key=lambda e: square_of_distance(u.x, u.y, e.x, e.y))
                 if result:
                     return result[0]
             e = nearest_exit(self._sensible_building)
-            if e is not None and not e.is_blocked() and self.gather(self.world.unit_class("gate").cost, 0):
+            if e is not None and not e.is_blocked() and self.gather(gate.cost, 0):
                 for w in self._workers:
                     w.take_order(["build", "gate", e.id])
 
