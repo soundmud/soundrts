@@ -290,17 +290,20 @@ class Player:
             if o.is_inside and o not in self.units:
                 self.perception.remove(o)
 
+    def _should_be_seeing(self, m):
+        return self._is_seeing(m)
+
     def _update_memory(self, previous_perception):
         self.observed_before_squares.update(self.observed_squares)
         for m in self.memory.copy():
             # forget units reappearing elsewhere
             # forget deleted units
             # forget old memories of mobile units
-            # forget if in an observed square
+            # forget memories that should be seen if they were there
             if (m.initial_model in self.perception
-                or m.initial_model.place is None # ideally: and self.have_an_observer_in_sight_range(m)
-                or m.initial_model.speed and m.time_stamp + self.memory_duration < self.world.time
-                or m.place in self.observed_squares):
+                    or m.initial_model.place is None  # ideally: and self.have_an_observer_in_sight_range(m)
+                    or m.initial_model.speed and m.time_stamp + self.memory_duration < self.world.time
+                    or self._should_be_seeing(m)):
                 self._forget(m)
         # memorize disappeared units
         # don't memorize deleted units
