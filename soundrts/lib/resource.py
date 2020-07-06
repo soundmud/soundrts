@@ -4,11 +4,12 @@ the active packages, the loading order of the mods.
 Some resources will be combined differently: some are replaced (sounds),
 some are merged (some text files).
 """
-
+import io
 import locale
 import os
 import re
-from typing import Optional
+import zipfile
+from typing import Optional, Dict, Union, List
 
 from soundrts.lib import encoding
 from soundrts.lib.log import warning
@@ -132,9 +133,7 @@ class ResourceLoader:
             result.append(localize_path(path, self.language))
         return result
 
-    def _get_text_files(self, name, localize=False, root=None):
-        """Return a list of text files contents.
-        """
+    def _get_text_files(self, name: str, localize=False, root=None) -> List[str]:
         name += ".txt"
         if root is None:
             roots = self._paths
@@ -142,12 +141,21 @@ class ResourceLoader:
             roots = [root]
         result = []
         for root in roots:
-            for text_file_path in self._localized_paths(os.path.join(root, name), localize):
-                if os.path.isfile(text_file_path):
-                    with open(text_file_path, "rb") as b:
-                        e = encoding.encoding(b.read())
-                    with open(text_file_path, encoding=e) as t:
-                        result.append(t.read())
+            if isinstance(root, zipfile.ZipFile):
+                for text_file_path in self._localized_paths(name, localize):
+                    if text_file_path in root.namelist():
+                        with root.open(text_file_path) as b:
+                            e = encoding.encoding(b.read())
+                        with root.open(text_file_path) as b:
+                            w = io.TextIOWrapper(b, encoding=e)  # type: ignore
+                            result.append(w.read())
+            else:
+                for text_file_path in self._localized_paths(os.path.join(root, name), localize):
+                    if os.path.isfile(text_file_path):
+                        with open(text_file_path, "rb") as b:
+                            e = encoding.encoding(b.read())
+                        with open(text_file_path, encoding=e) as t:
+                            result.append(t.read())
         return result
 
     def get_text_file(self, name, localize=False, append=False, root=None):
@@ -159,15 +167,7 @@ class ResourceLoader:
         else:
             return self._get_text_files(name, localize, root)[-1]
 
-    def load_texts(self, root=None):
-        """load and return a dictionary of texts
-        
-        Args:
-            root (str): the path of the root
-            
-        Returns:
-            dict: texts
-        """
+    def load_texts(self, root: Optional[Union[str, zipfile.ZipFile]] = None) -> Dict[str, str]:
         result = {}
         for txt in self._get_text_files(TXT_FILE, localize=True, root=root):
             lines = txt.split("\n")
@@ -184,7 +184,7 @@ class ResourceLoader:
                     warning("in '%s', syntax error: %s", TXT_FILE, line)
         return result
 
-    def _get_sound_paths(self, path, root=None):
+    def get_sound_paths(self, path, root=None):
         """Return the list of sound paths.
         Depends on the load order of the mods and the preferred language.
         The list is reversed so the most relevant paths appear first.
@@ -197,24 +197,3 @@ class ResourceLoader:
         for root in roots:
             result.extend(self._localized_paths(os.path.join(root, path), True))
         return reversed(result)
-
-    def _load_sound_if_needed(self, filename, root, dest, sound_is_not_needed):
-        """load the sound to the dictionary
-        If a text exists for the sound number, the sound won't be loaded."""
-        if filename[-4:] == ".ogg":
-            key = filename[:-4]
-            if sound_is_not_needed(key):
-                warning("didn't load %s (text exists)", filename)
-                return
-            if key not in dest:
-                full_path = os.path.join(root, filename)
-                dest[key] = full_path # load it later
-
-    def load_sounds(self, root, dest, sound_is_not_needed):
-        """load the sounds to the dictionary
-        If a text exists with the same name, the sound won't be loaded."""
-        for path in self._get_sound_paths("ui", root):
-            if os.path.isdir(path):
-                for root, _, files in os.walk(path):
-                    for filename in files:
-                        self._load_sound_if_needed(filename, root, dest, sound_is_not_needed)

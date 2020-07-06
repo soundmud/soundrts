@@ -210,7 +210,7 @@ class Server(asyncore.dispatcher):
         for o in self.games:
             if o.id == ident:
                 return o
-        raise
+        assert False
 
 
 def start_server(parameters=sys.argv, is_standalone=True):

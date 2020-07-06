@@ -1,8 +1,10 @@
 """Sounds and text stored in memory (cache).
 Loaded from resources (depending on the active language,
 packages, mods, campaign, map)."""
-
+import os
 import re
+from typing import Optional, Union, Dict
+import zipfile
 
 import pygame
 
@@ -16,32 +18,57 @@ SILENCE = "9999"  # 0.2 s
 
 class Layer:
 
-    def __init__(self):
+    txt: Dict[str, str]
+    sounds: Dict[str, Union[str, tuple, pygame.mixer.Sound]]
+
+    def __init__(self, res, path=None):
+        self.txt = res.load_texts(path)
+        self._load_sounds(res, path)
+        if path is None:
+            # the silent sounds are needed (used as random noises in style.txt)
+            self.txt[SHORT_SILENCE] = ","
+            self.txt[SILENCE] = "."
+        self.path = path
+
+    def _load_sound(self, key, file_ref):
+        # if a text exists with the same name, the sound won't be loaded
+        if key in self.txt:
+            warning("didn't load %s.ogg (text exists)", key)
+        elif key not in self.sounds:
+            self.sounds[key] = file_ref
+
+    def _load_sounds(self, res, root: Optional[Union[str, zipfile.ZipFile]]):
         self.sounds = {}
-        self.txt = {}
+        if isinstance(root, zipfile.ZipFile):
+            for path in res.get_sound_paths("ui", ""):
+                for name in root.namelist():
+                    if name.startswith(path) and name.endswith(".ogg"):
+                        self._load_sound(os.path.basename(name)[:-4], (root, name))
+        else:
+            for path in res.get_sound_paths("ui", root):
+                if os.path.isdir(path):
+                    for dirpath, _, filenames in os.walk(path):
+                        for name in filenames:
+                            if name.endswith(".ogg"):
+                                self._load_sound(name[:-4], os.path.join(dirpath, name))
 
 
 class SoundCache:
     """The sound cache contains numbered sounds and texts.
     Usually a number will give only one type of value, but strange things
     can happen (until I fix this), with SHORT_SILENCE and SILENCE for example.
-    The cache contains a maximum of three layers: default, campaign and map.
     """
-    default = Layer()
-    campaign = Layer()
-    map = Layer()
 
-    @property
-    def layers(self):
-        return (self.map, self.campaign, self.default)
+    def __init__(self):
+        self.layers = []
 
     def get_sound(self, name, warn=True):
         """return the sound corresponding to the given name"""
         key = "%s" % name
-        for layer in self.layers:
+        for layer in reversed(self.layers):
             if key in layer.sounds:
                 s = layer.sounds[key]
-                if isinstance(s, str): # full path of the sound
+                if isinstance(s, str):  # full path of the sound
                     # load the sound now
                     try:
                         layer.sounds[key] = pygame.mixer.Sound(s)
@@ -49,8 +76,12 @@ class SoundCache:
                     except:
                         warning("couldn't load %s" % s)
                         del layer.sounds[key]
-                        continue # try next layer
-                else: # sound
+                        continue  # try next layer
+                elif isinstance(s, tuple):
+                    zip_archive, name = s
+                    layer.sounds[key] = pygame.mixer.Sound(file=zip_archive.open(name))
+                    return layer.sounds[key]
+                else:  # sound
                     return s
         if warn:
             warning("this sound may be missing: %s", name)
@@ -63,57 +94,28 @@ class SoundCache:
     def has_text(self, key):
         """return True if the cache have a text with that name"""
         assert isinstance(key, str)
-        for layer in self.layers:
+        for layer in reversed(self.layers):
             if key in layer.txt:
                 return True
         return False
 
-    def sound_is_not_needed(self, key):
-        # the silent sounds are needed (used as random noises in style.txt)
-        return self.has_text(key) and key not in [SHORT_SILENCE, SILENCE]
-
     def get_text(self, key):
         """return the text corresponding to the given name"""
         assert isinstance(key, str)
-        for layer in self.layers:
+        for layer in reversed(self.layers):
             if key in layer.txt:
                 return layer.txt[key]
 
-    def _add_special_values(self):
-        """add some values not defined in text files"""
-        self.default.txt[SHORT_SILENCE] = ","
-        self.default.txt[SILENCE] = "."
-
-    def load_default(self, res, on_loading=None, on_complete=None):
+    def load_default(self, res):
         """load the default layer into memory from res"""
-        self.default.sounds = {}
-        self.default.txt = res.load_texts()
-        self._add_special_values()
-        if on_loading:
-            on_loading()
-        res.load_sounds(None, self.default.sounds, self.sound_is_not_needed)
-        if on_complete:
-            on_complete()
+        self.layers = [Layer(res)]
 
-    def enter_campaign(self, res, path):
-        """load the campaign layer into memory from res and campaign path"""
-        self.campaign.txt = res.load_texts(path)
-        res.load_sounds(path, self.campaign.sounds, self.sound_is_not_needed)
+    def load(self, res, path):
+        self.layers.append(Layer(res, path))
 
-    def exit_campaign(self):
-        """unload the campaign layer"""
-        self.campaign = Layer()
-
-    def enter_map(self, res, path):
-        """load the map layer into memory from res and map path"""
-        if path is None:
-            return
-        self.map.txt = res.load_texts(path)
-        res.load_sounds(path, self.map.sounds, self.sound_is_not_needed)
-
-    def exit_map(self):
-        """unload the map layer"""
-        self.map = Layer()
+    def unload(self, path):
+        assert self.layers[-1].path == path
+        del self.layers[-1]
 
     def translate_sound_number(self, sound_number):
         """Return the text or sound corresponding to the sound number.

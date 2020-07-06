@@ -4,7 +4,6 @@ import os
 
 from .lib.resource import ResourceLoader
 from . import config
-from . import msgparts as mp
 from . import options
 from .paths import MAPS_PATHS
 
@@ -12,6 +11,7 @@ from .paths import MAPS_PATHS
 def get_all_packages_paths():
     """return the default "maps and mods" paths followed by the paths of the active packages"""
     return MAPS_PATHS # + package_manager.get_packages_paths()
+
 
 if options.mods is not None:
     mods = options.mods
@@ -22,18 +22,7 @@ mods = _r.mods
 soundpacks = _r.soundpacks
 get_text_file = _r.get_text_file
 load_texts = _r.load_texts
-load_sounds = _r.load_sounds
-
-
-def on_loading():
-    from .lib.voice import voice
-    voice.item(mp.LOADING + [mods, "."]) 
-
-
-def on_complete():
-    from .lib.voice import voice
-    for mod in _r.unavailable_mods:
-        voice.alert(mp.BEEP + mp.MOD_NOT_FOUND + [mod])
+get_sound_paths = _r.get_sound_paths
 
 
 def reload_all():
@@ -43,7 +32,7 @@ def reload_all():
     mods = _r.mods
     soundpacks = _r.soundpacks
     update_display_caption()
-    sounds.load_default(_r, on_loading, on_complete)
+    sounds.load_default(_r)
 
 
 def set_mods(new_mods):

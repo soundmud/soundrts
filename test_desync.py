@@ -127,7 +127,7 @@ if __name__ == "__main__":
     n = 1
     Process(target=run_server).start()
     ais = (0, 1, 10)
-    #ais = (1, 1, 10)
+    # ais = (1, 1, 10)
     # map_index = 10
     map_index = "jl4"
     Process(target=run_client, args=(0, [Create(map_index, 20), Invite(n), InviteAI(*ais), Start()], )).start()

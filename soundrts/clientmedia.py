@@ -41,7 +41,7 @@ def init_media():
     """initialize sound, voice, screen, window title, keyboard,
     and sound cache"""
     minimal_init()
-    sounds.load_default(res, res.on_loading, res.on_complete)
+    sounds.load_default(res)
 
 
 def modify_volume(incr):

@@ -246,7 +246,7 @@ class Game:
 
     def invite(self, client):
         self.guests.append(client)
-        client.notify("invitation", self.admin.login, self.scenario.get_name()[:-4])
+        client.notify("invitation", self.admin.login, self.scenario.get_name(short=True))
 
     def invite_computer(self, level):
         if not config.require_humans or \
@@ -290,7 +290,7 @@ class Game:
 
     @property
     def short_status(self):
-        return (self.scenario.get_name()[:-4],
+        return (self.scenario.get_name(short=True),
                 ",".join([c.login for c in self.players]),
                 self.nb_minutes)
 

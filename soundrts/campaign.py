@@ -4,7 +4,6 @@ import re
 
 from .clientmedia import voice, sounds, play_sequence
 from .clientmenu import Menu
-from . import config
 from .game import MissionGame
 from .mapfile import Map
 from .lib.msgs import nb2msg
@@ -88,6 +87,12 @@ class CutSceneChapter:
             self._get_next().run()
 
 
+def _is_a_cutscene(path):
+    if os.path.isfile(path):
+        with open(path) as t:
+            return t.readline() == "cut_scene_chapter\n"
+
+
 class Campaign:
 
     def __init__(self, path, title=None):
@@ -104,8 +109,7 @@ class Campaign:
                 cp = os.path.join(self.path, "%s" % i)
                 if not os.path.isdir(cp):
                     break
-            if os.path.isfile(cp) and \
-               open(cp).readline() == "cut_scene_chapter\n":
+            if _is_a_cutscene(cp):
                 c = CutSceneChapter(cp, campaign=self, id=i)
             else:
                 c = MissionChapter(cp, campaign=self, id=i)
@@ -157,10 +161,10 @@ class Campaign:
                 self._set_bookmark(next_chapter.id)
 
     def load_resources(self):
-        sounds.enter_campaign(res, self.path)
+        sounds.load(res, self.path)
 
     def unload_resources(self):
-        sounds.exit_campaign()
+        sounds.unload(self.path)
 
     def run(self):
         if self.mods is not None:

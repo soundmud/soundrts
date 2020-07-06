@@ -98,7 +98,7 @@ def test_get_rules_and_ai(test):
     assert get_ai("easy") == ['get 1 peasant', 'goto -1']
 
 
-def test_isolated_map(test):
+def test_folder_map(test):
     res = test
     from soundrts.mapfile import Map
     from soundrts.definitions import rules, get_ai, style
@@ -140,6 +140,7 @@ def test_campaign_map(test):
     map0.unload_resources()
     c.unload_resources()
 
+
 def test_campaign_map_with_special_rules(test):
     res = test
     from soundrts.campaign import Campaign
@@ -157,3 +158,38 @@ def test_campaign_map_with_special_rules(test):
     assert sounds.get_text("0") == "campaign1 map1"
     map1.unload_resources()
     c.unload_resources()
+
+
+def test_unpacked_folder_map_redefines_text(test):
+    from soundrts.mapfile import Map
+    default_text = sounds.get_text("0")
+    m = Map(unpack=Map("soundrts/tests/single/map1").pack())
+    m.load_resources()
+    assert sounds.get_text("0") == "map1"
+    assert sounds.get_text("0") != default_text
+    m.unload_resources()
+    assert sounds.get_text("0") == default_text
+
+
+def test_unpacked_folder_map_redefines_sound(test):
+    from soundrts.mapfile import Map
+    default_sound = sounds.get_sound("9998")
+    m = Map(unpack=Map("soundrts/tests/single/map1").pack())
+    m.load_resources()
+    assert isinstance(sounds.get_sound("9998"), pygame.mixer.Sound)
+    assert sounds.get_sound("9998") is not default_sound
+    m.unload_resources()
+    assert sounds.get_sound("9998") is default_sound
+
+
+def test_unpacked_folder_map_redefines_rules_ai_and_style(test):
+    res = test
+    from soundrts.mapfile import Map
+    from soundrts.definitions import rules, get_ai, style
+    m = Map(unpack=Map("soundrts/tests/single/map1").pack())
+    m.load_rules_and_ai(res)
+    m.load_style(res)
+    assert rules.get("test", "cost") == [0, 0]
+    assert rules.get("peasant", "cost") == [6000, 0]
+    assert get_ai("easy") == ['get 6 peasant', 'goto -1']
+    assert style.get("peasant", "noise") == ["6"]

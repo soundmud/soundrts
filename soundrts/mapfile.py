@@ -33,16 +33,19 @@ class Map:
 
     def load_resources(self):
         from .clientmedia import sounds, res
-        sounds.enter_map(res, self.path)
         if self._zip is not None:
-            for name in self._zip.namelist():
-                if ".ogg" in name:
-                    sounds.map.sounds[name[:4]] = pygame.mixer.Sound(self._zip.read(name))
-                    print(sounds.map.sounds[name[:4]])
+            path = self._zip
+        else:
+            path = self.path
+        sounds.load(res, path)
 
     def unload_resources(self):
         from .clientmedia import sounds
-        sounds.exit_map()
+        if self._zip is not None:
+            path = self._zip
+        else:
+            path = self.path
+        sounds.unload(path)
 
     def load_rules_and_ai(self, res):
         from .definitions import rules, load_ai
@@ -56,7 +59,8 @@ class Map:
     def _read_additional_file(self, n):
         p = os.path.join(self.path, n)
         if os.path.isfile(p):
-            return open(p).read()
+            with open(p) as t:
+                return t.read()
         else:
             return ""
 
@@ -65,7 +69,8 @@ class Map:
             return ""
         p = os.path.join(self.campaign.path, n)
         if os.path.isfile(p):
-            return open(p).read()
+            with open(p) as t:
+                return t.read()
         else:
             return ""
         
@@ -99,12 +104,14 @@ class Map:
     def get_campaign(self, n):
         return self._read_campaign_file(n)
         
-    def get_name(self):
-        try:
-            return re.sub("[^A-Za-z0-9._-]", "",
-                       os.path.split(self.path)[-1])
-        except:
-            return "unknown"
+    def get_name(self, short=False) -> str:
+        name = os.path.basename(self.path)
+        if short:
+            name = os.path.splitext(name)[0]
+        name = re.sub("[^A-Za-z0-9._-]", "", name)
+        if name == "":
+            name = "unknown"
+        return name
 
     def read(self):
         if self.map_string is not None:
@@ -249,7 +256,7 @@ def _move_recommended_maps(w):
     style.load(res.get_text_file("ui/style", append=True, localize=True))
     for n in reversed(style.get("parameters", "recommended_maps")):
         for m in reversed(w[:]): # reversed so the custom map is after the official map
-            if m.get_name()[:-4] == n:
+            if m.get_name(short=True) == n:
                 w.remove(m)
                 w.insert(0, m)
 
