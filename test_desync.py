@@ -1,9 +1,13 @@
 #! python3
+import sys
 from multiprocessing import Process
 import os
 import time
 
-import win32gui
+try:
+    import win32gui
+except ModuleNotFoundError:
+    pass
 
 from soundrts import config
 config.mods = "crazymod9beta10"
@@ -57,8 +61,9 @@ def run_client(n, auto):
     clientmain.connect_and_play(auto=auto)
 
 def run_server():
-    hwnd = win32gui.GetForegroundWindow()
-    win32gui.MoveWindow(hwnd, 400, 0, 800, 800, True)
+    if "win32gui" in sys.modules:
+        hwnd = win32gui.GetForegroundWindow()
+        win32gui.MoveWindow(hwnd, 400, 0, 800, 800, True)
     servermain.start_server(parameters="no_metaserver")
 
 
