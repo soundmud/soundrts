@@ -4,7 +4,7 @@ import os
 from . import res
 
 
-VERSION = "1.3.0-dev"
+VERSION = "1.3.0"
 IS_DEV_VERSION = VERSION.endswith("-dev")
 
 
