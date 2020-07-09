@@ -46,6 +46,8 @@ def choose_server_ip_in_a_list():
     compatible = 0
     menu = Menu()
     for s in servers:
+        if s == "":
+            continue
         try:
             _, ip, version, login, port = s.split()
         except ValueError:
