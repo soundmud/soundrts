@@ -71,11 +71,11 @@ CTRL SHIFT TAB: select_target -1 useful
 
 ; give an order
 
-a: select_order 1
-SHIFT a: select_order -1
+a: select_order 1 inactive_included
+SHIFT a: select_order -1 inactive_included
 
-CTRL a: select_order 1
-CTRL SHIFT a: select_order -1
+CTRL a: select_order 1 inactive_only
+CTRL SHIFT a: select_order -1 inactive_only
 
 ALT a: order_shortcut ; order shortcuts are defined in style.txt
 
