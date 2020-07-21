@@ -1,4 +1,6 @@
 #! python3
+from typing import Set
+
 from soundrts.lib import log
 log.add_console_handler()
 
@@ -7,9 +9,9 @@ from soundrts.definitions import Rules
 
 class RulesForDoc(Rules):
 
-    precision_properties = ()
-    precision_list_properties = ()
-    string_properties = list(Rules.string_properties) + list(Rules.precision_properties)
+    precision_properties: Set[str] = set()
+    precision_list_properties: Set[str] = set()
+    string_properties = Rules.string_properties | Rules.precision_properties
 
 
 _s = ""
