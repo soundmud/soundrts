@@ -1,5 +1,4 @@
 from hashlib import md5
-import os
 
 from . import res
 
@@ -33,7 +32,7 @@ def rules_hash():
 # VERSION_FOR_BUG_REPORTS helps ignoring automatic bug reports related to
 # modified code.
 try:
-    _s = os.path.getsize("library.zip")
-except os.error:
-    _s = 0
-VERSION_FOR_BUG_REPORTS = f"{VERSION} ({_s})"
+    with open("lib/full_version.txt") as t:
+        VERSION_FOR_BUG_REPORTS = t.read()
+except OSError:
+    VERSION_FOR_BUG_REPORTS = VERSION
