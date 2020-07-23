@@ -3,7 +3,7 @@ from hashlib import md5
 from . import res
 
 
-VERSION = "1.3.0"
+VERSION = "1.3.1"
 IS_DEV_VERSION = VERSION.endswith("-dev")
 
 
