@@ -1,11 +1,17 @@
-#! python3
+#! .venv\Scripts\python.exe
 """
-From the command-line: py setup.py build
+From the command-line, type: py setup.py build
+Or activate the virtual environment and type: python setup.py build
+
+Warning: the py launcher ignores the virtual environment if a "#!" line is specified!
+(see PEP 486)
 """
 
 import os
+import platform
 import shutil
 from subprocess import Popen, check_output
+import sys
 
 from cx_Freeze import setup, Executable
 
@@ -13,6 +19,10 @@ import builddoc
 import buildmultimapslist
 from soundrts.version import VERSION
 
+
+if platform.system() == "Windows" and ".venv" not in sys.executable:
+    print(f"WARNING: {sys.executable} (not a virtual environment?)")
+    input("[press Enter to continue; press Control+C to stop]")
 
 try:
     full_version = check_output(["git", "describe", "--tags"]).strip().decode()

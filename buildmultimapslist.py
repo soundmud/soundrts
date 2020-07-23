@@ -1,4 +1,4 @@
-#! python3
+#! .venv\Scripts\python.exe
 from soundrts.lib import log
 log.add_console_handler()
 

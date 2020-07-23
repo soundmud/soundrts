@@ -1,4 +1,4 @@
-#! python3
+#! .venv\Scripts\python.exe
 import sys
 from multiprocessing import Process
 import os

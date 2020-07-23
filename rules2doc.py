@@ -1,4 +1,4 @@
-#! python3
+#! .venv\Scripts\python.exe
 from typing import Set
 
 from soundrts.lib import log

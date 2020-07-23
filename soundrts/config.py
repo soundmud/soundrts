@@ -13,6 +13,7 @@ from .paths import CONFIG_FILE_PATH
 
 mods: str
 soundpacks: str
+wait_delay_per_character: float
 
 def login_is_valid(login):
     return re.match("^[a-zA-Z0-9]{1,20}$", login) is not None

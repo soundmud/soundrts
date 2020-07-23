@@ -1,4 +1,4 @@
-#! python3
+#! .venv\Scripts\python.exe
 import os
 from os.path import join
 import shutil
