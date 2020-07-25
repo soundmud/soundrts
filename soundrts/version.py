@@ -5,13 +5,11 @@ from . import res
 
 VERSION = "1.3.1"
 IS_DEV_VERSION = VERSION.endswith("-dev")
+CLIENT_COMPATIBILITY = "1.3.0"
 
 
-def _remove_dev(s):
-    if s.endswith("-dev"):
-        return s[:-4]
-    else:
-        return s
+def server_is_compatible(version):
+    return version.startswith("1.3.") or version == "1.2-c12"
 
 
 def compatibility_version():
@@ -20,8 +18,7 @@ def compatibility_version():
 # Don't check *.pyc (or library.zip, soundrts.exe and server.exe)
 # because it would require to add an internal version for every file.
 # (a bit complicated for the moment, and not as useful as checking rules.txt)
-# TODO: use Git to include a version in every *.pyc? (check other projects)
-    return _remove_dev(VERSION) + "-" + rules_hash()
+    return CLIENT_COMPATIBILITY + "-" + rules_hash()
 
 
 def rules_hash():

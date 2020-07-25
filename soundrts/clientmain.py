@@ -37,7 +37,7 @@ from . import msgparts as mp
 from .paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
 from . import res
 from . import stats
-from .version import VERSION
+from .version import VERSION, server_is_compatible
 
 
 def choose_server_ip_in_a_list():
@@ -54,11 +54,12 @@ def choose_server_ip_in_a_list():
             warning("line not recognized from the metaserver: %s", s)
         else:
             total += 1
-            if version == VERSION:
+            if server_is_compatible(version):
                 compatible += 1
-                menu.append([login], (connect_and_play, ip, port),
+                menu.append([login, version], (connect_and_play, ip, port),
                             mp.SERVER_HOSTED_BY + [login])
-    menu.title = nb2msg(compatible) + mp.SERVERS_ON + nb2msg(total) + mp.ARE_COMPATIBLE
+    menu.choices.sort(key=lambda x: (0 if x[0][1] == VERSION else 1, x[0][0]))
+    menu.title = nb2msg(compatible) + mp.SERVERS_ON + nb2msg(total)
     menu.append(mp.CANCEL2, None, mp.GO_BACK_TO_PREVIOUS_MENU)
     menu.run()
 
