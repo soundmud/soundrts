@@ -15,6 +15,7 @@ Main changes:
 
 Minor changes:
 
+- slightly decreased the verbosity of server.log
 - improved the standalone server guide (still not perfect though)
 - added "release notes" to the documentation
 

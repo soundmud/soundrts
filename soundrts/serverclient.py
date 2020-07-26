@@ -5,7 +5,7 @@ import time
 
 from typing import TYPE_CHECKING
 
-from .lib.log import info, warning, exception
+from .lib.log import info, warning, exception, debug
 from .lib.msgs import encode_msg
 from .mapfile import worlds_multi
 if TYPE_CHECKING:
@@ -22,7 +22,7 @@ class ConnectionToClient(asynchat.async_chat):
 
     def __init__(self, server: 'Server', connection_and_address) -> None:
         (connection, address) = connection_and_address
-        info("Connected: %s:%s" % address)
+        debug("Connected: %s:%s" % address)
         asynchat.async_chat.__init__(self, connection)
         self.id = server.get_next_id()
         self.set_terminator(b'\n')
