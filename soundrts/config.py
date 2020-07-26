@@ -1,7 +1,6 @@
 # read/write the config file
 
 import configparser
-import platform
 import os
 import re
 import shutil
@@ -11,6 +10,7 @@ from .lib.log import info, warning
 from .paths import CONFIG_FILE_PATH
 
 
+debug_mode: int
 mods: str
 soundpacks: str
 wait_delay_per_character: float
@@ -31,6 +31,7 @@ _options = [
     ("general", "num_channels", 16),
     ("general", "speed", 1),
     ("general", "verbosity", "menu_changed,unit_added,unit_complete,scout_info,food,resources,resource_exhausted"),
+    ("general", "debug_mode", 0),
     ("server", "timeout", 60.0),
     # fpct must be as small as possible while respecting test_fpct()
     ("server", "fpct_coef", 2.3),
