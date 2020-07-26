@@ -25,7 +25,7 @@ import webbrowser
 from .campaign import campaigns
 from .clientmedia import voice, init_media, close_media
 from .clientmenu import Menu, input_string, CLOSE_MENU
-from .clientserver import connect_and_play, start_server_and_connect
+from .clientserver import connect_and_play, start_server_and_connect, server_delay
 from .clientversion import revision_checker
 from .definitions import style
 from .game import TrainingGame, ReplayGame
@@ -56,9 +56,13 @@ def choose_server_ip_in_a_list():
             total += 1
             if server_is_compatible(version):
                 compatible += 1
-                menu.append([login, version], (connect_and_play, ip, port),
-                            mp.SERVER_HOSTED_BY + [login])
-    menu.choices.sort(key=lambda x: (0 if x[0][1] == VERSION else 1, x[0][0]))
+                delay = server_delay(ip, port)
+                if delay is not None:
+                    menu.append(
+                        [login, f"{int(delay * 1000)}ms"],
+                        (connect_and_play, ip, port),
+                        mp.SERVER_HOSTED_BY + [login, version])
+    menu.choices.sort(key=lambda x: int(x[0][1][:-2]))
     menu.title = nb2msg(compatible) + mp.SERVERS_ON + nb2msg(total)
     menu.append(mp.CANCEL2, None, mp.GO_BACK_TO_PREVIOUS_MENU)
     menu.run()

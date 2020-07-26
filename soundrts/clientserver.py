@@ -22,6 +22,21 @@ class CompatibilityOrLoginError(_Error): pass
 class ConnectionAbortedError(_Error): pass
 
 
+def server_delay(host, port):
+    t = time.time()
+    try:
+        tn = telnetlib.Telnet(host, port, .5)
+    except OSError:
+        return
+    try:
+        if tn.read_until(b":", .5) != b":":
+            return
+        else:
+            return time.time() - t
+    except (EOFError, OSError):
+        return
+
+
 class ServerInAThread(threading.Thread):
 
     daemon = True

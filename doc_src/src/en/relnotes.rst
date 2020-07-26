@@ -10,8 +10,11 @@ Changes from 1.3.1:
 
 Main changes:
 
-- the "choose a server in a list" menu will include any server with a compatible server version (not only the same version)
+- the "choose a server" menu will include any server with a compatible server version (not only the same version) so the servers won't have to be updated as often
 - compatible clients with different versions will be allowed to play together
+- the "nearest" servers will appear first in the "choose a server" menu (servers with the smallest delay of response)
+- the time taken to check if a server is available will be mentioned (expressed in milliseconds) in the "choose a server" menu for comparison
+- the unavailable servers won't appear in the "choose a server" menu
 
 Minor changes:
 
