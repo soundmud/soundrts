@@ -59,10 +59,10 @@ def choose_server_ip_in_a_list():
                 delay = server_delay(ip, port)
                 if delay is not None:
                     menu.append(
-                        [login, f"{int(delay * 1000)}ms"],
+                        [login],
                         (connect_and_play, ip, port),
-                        mp.SERVER_HOSTED_BY + [login, version])
-    menu.choices.sort(key=lambda x: int(x[0][1][:-2]))
+                        [f"{int(delay * 1000)}ms", ","] + mp.SERVER_HOSTED_BY + [login])
+    menu.choices.sort(key=lambda x: int(x[2][0][:-2]))
     menu.title = nb2msg(compatible) + mp.SERVERS_ON + nb2msg(total)
     menu.append(mp.CANCEL2, None, mp.GO_BACK_TO_PREVIOUS_MENU)
     menu.run()
