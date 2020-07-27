@@ -259,8 +259,8 @@
 4079	utilisent la même version que vous. A quel serveur souhaitez-vous vous connecter ?
 4080	échec: le serveur n'a pas pu démarrer
 4081	échec : serveur inaccessible. Le serveur est soit fermé, soit derrière un pare-feu, soit derrière un routeur.
-4082	échec : réponse du serveur imprévue. Le serveur n'est pas un serveur soundmud
-4083	échec : connexion refusée par le serveur. Le serveur n'est pas un serveur soundmud
+4082	échec : réponse du serveur imprévue. Le serveur n'est pas un serveur SoundRTS
+4083	échec : connexion refusée par le serveur. Le serveur n'est pas un serveur SoundRTS
 4084	ou bien votre pseudo a été refusé
 4085	erreur durant la connexion au serveur
 4086	menu options

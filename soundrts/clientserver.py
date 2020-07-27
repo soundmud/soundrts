@@ -25,15 +25,15 @@ class ConnectionAbortedError(_Error): pass
 def server_delay(host, port):
     t = time.time()
     try:
-        tn = telnetlib.Telnet(host, port, .5)
+        with telnetlib.Telnet(host, port, .5) as tn:
+            try:
+                if tn.read_until(b":", .5) != b":":
+                    return
+                else:
+                    return time.time() - t
+            except EOFError:
+                return
     except OSError:
-        return
-    try:
-        if tn.read_until(b":", .5) != b":":
-            return
-        else:
-            return time.time() - t
-    except (EOFError, OSError):
         return
 
 
@@ -66,9 +66,9 @@ def connect_and_play(host="127.0.0.1", port=options.port, auto=False):
     except UnreachableServerError:
         voice.alert(mp.SERVER_UNREACHABLE)
     except WrongServerError:
-        voice.alert(mp.UNEXPECTED_REPLY + [compatibility_version()])
+        voice.alert(mp.UNEXPECTED_REPLY)
     except CompatibilityOrLoginError:
-        voice.alert(mp.CONNECTION_REJECTED + [compatibility_version()] + mp.OR_LOGIN_REJECTED)
+        voice.alert(mp.CONNECTION_REJECTED + mp.OR_LOGIN_REJECTED)
     except ConnectionAbortedError:
         voice.alert(mp.CONNECTION_INTERRUPTED)
     except SystemExit:
@@ -91,17 +91,18 @@ class ConnectionToServer:
 
     def open(self):
         try:
-            self.tn = telnetlib.Telnet(self.host, self.port)
+            self.tn = telnetlib.Telnet(self.host, self.port, 1)
         except OSError:
             raise UnreachableServerError
         try:
-            if self.tn.read_until(b":", 3) != b":":
+            if self.tn.read_until(b":", 1) != b":":
                 raise WrongServerError
             self.tn.write(("login " + compatibility_version() + " %s\n" % config.login).encode())
         except (EOFError, OSError):
             raise WrongServerError
         try:
-            self.tn.read_until(b"ok!", 5)
+            if not self.tn.read_until(b"ok!", 1).endswith(b"ok!"):
+                raise EOFError
         except EOFError:
             raise CompatibilityOrLoginError
 
