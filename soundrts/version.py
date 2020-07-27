@@ -6,10 +6,13 @@ from . import res, config
 VERSION = "1.3.1"
 IS_DEV_VERSION = config.debug_mode
 CLIENT_COMPATIBILITY = "1.3.0"
+SERVER_COMPATIBILITY = "0"
 
 
 def server_is_compatible(version):
-    return version.startswith("1.3.") or version == "1.2-c12"
+    if version in ["1.2-c12", "1.3.0", "1.3.1"]:
+        version = "0"
+    return version == SERVER_COMPATIBILITY
 
 
 def compatibility_version():

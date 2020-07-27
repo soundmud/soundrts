@@ -10,7 +10,7 @@ from .lib.log import debug, info, warning, exception
 from .serverclient import ConnectionToClient
 from .serverroom import InTheLobby, OrganizingAGame, Playing, WaitingForTheGameToStart, Game
 from .lib.ticker import Ticker
-from .version import VERSION
+from .version import SERVER_COMPATIBILITY
 
 from . import config
 from . import options
@@ -78,7 +78,9 @@ class Server(asyncore.dispatcher):
 
     def remove_client(self, client):
         client.is_disconnected = True
+        must_log = False
         if client in self.clients:  # not anonymous
+            must_log = True
             info("disconnect: %s" % client.login)
             self.clients.remove(client)
             for c in self.players_not_playing():
@@ -94,7 +96,8 @@ class Server(asyncore.dispatcher):
         if self._is_admin(client) and not self.is_standalone:
             info("the admin has disconnected => close the server")
             sys.exit()
-        self.log_status()
+        if must_log:
+            self.log_status()
 
     def handle_write(self):
         pass
@@ -154,7 +157,7 @@ class Server(asyncore.dispatcher):
     def _register(self):
         try:
             s = urllib.request.urlopen(REGISTER_URL + "?version=%s&login=%s&ip=%s&port=%s" %
-                               (VERSION, self.login, self.ip,
+                               (SERVER_COMPATIBILITY, self.login, self.ip,
                                 options.port)).read()
         except:
             s = "couldn't access to the metaserver"
