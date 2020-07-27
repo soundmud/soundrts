@@ -1,0 +1,5 @@
+7000 świńska farma
+7001 barak
+7002 wielki hol
+7003 czeladnik
+7004 lekarz
