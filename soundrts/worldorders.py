@@ -964,6 +964,7 @@ class UseOrder(ComplexOrder):
            > self.type.effect_range * self.type.effect_range:
             self.move_to_or_fail(self.target) # move closer
             return
+        self.unit.stop()
         if self.type.effect[0] == "conversion" and self.target.is_memory:
             self.mark_as_impossible()
             return
