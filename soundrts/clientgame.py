@@ -1017,6 +1017,8 @@ class GameInterface:
                 continue
             if zoom and not zoom.contains(obj):
                 continue
+            if not obj.short_title:
+                continue
             if self.player.is_an_enemy(obj.model):
                 enemies.append(obj.short_title)
             if obj.model.player in self.player.allied and obj.model.player is not self.player:
