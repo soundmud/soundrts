@@ -37,7 +37,7 @@ class OrderTypeView: # future order
 
         self.cost = self.cls(unit, [self.type]).cost
         self.food_cost = self.cls(unit, [self.type]).food_cost
-        self.nb_args = self.cls.nb_args
+        self.nb_args = self.cls(unit, [self.type]).nb_args
 
     def __eq__(self, other):
         return self.cls.keyword == other.cls.keyword and self.type == other.type
