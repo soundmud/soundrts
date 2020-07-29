@@ -6,7 +6,14 @@ from .metaserver import METASERVER_URL
 from . import msgparts as mp
 from .paths import STATS_PATH, OLD_STATS_PATH
 from . import stats
-from .version import VERSION, IS_DEV_VERSION
+from .version import VERSION
+
+
+def _patch(version):
+    try:
+        return int(version.split(".")[2])
+    except (ValueError, IndexError):
+        return -1
 
 
 class RevisionChecker(threading.Thread):
@@ -15,14 +22,16 @@ class RevisionChecker(threading.Thread):
     never_started = True
 
     def run(self):
-        if IS_DEV_VERSION:
-            return
         try:
-            stage = ".".join(VERSION.split(".")[:2])
-            url = "http://jlpo.free.fr/soundrts/%sversion.txt" % stage
-            rev = urllib.request.urlopen(url).read().strip()
-            if (rev != VERSION) and (rev.find("404") == -1):
-                voice.important(mp.UPDATE_AVAILABLE)
+            if _patch(VERSION) != -1:
+                major_minor = ".".join(VERSION.split(".")[:2])
+                url = f"http://jlpo.free.fr/soundrts/{major_minor}version.txt"
+                latest_version = urllib.request.urlopen(url).read().strip().decode()
+                if "404" not in latest_version and _patch(VERSION) < _patch(latest_version):
+                    voice.important(mp.UPDATE_AVAILABLE)
+        except:
+            pass
+        try:
             stats.Stats(OLD_STATS_PATH, METASERVER_URL).send()
             stats.Stats(STATS_PATH, METASERVER_URL).send()
         except:
