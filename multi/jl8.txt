@@ -8,13 +8,19 @@ nb_lines 6
 nb_players_min 2
 nb_players_max 2
 starting_squares b1 b6
-starting_units townhall farm peasant
+starting_units townhall 2 farm 4 peasant
 starting_resources 10 10
 
-goldmine 150 a5 c2
-goldmine 75 c6
-goldmine 68 a1
-wood 100 a3 a3 a3 a4 a4 a4 b3 b3 b3 b4 b4 b4 c3 c3 c3 c4 c4 c4
+goldmine 300 a5 c2
+goldmine 100 b6
+goldmine 100 b1
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
 wood 75 a5 a5 a6 c1 c2 c2
 
 nb_meadows_by_square 0
