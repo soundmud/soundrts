@@ -205,7 +205,7 @@ class Creature(Entity):
             return result
         for sq in self.place.neighbors:
             if self.height > sq.height \
-                    or self.height == sq.height and self._can_go(sq):
+                    or self.height == sq.height and self._can_go(sq, ignore_forests=True):
                 result.append(sq)
         return result
 
@@ -246,7 +246,7 @@ class Creature(Entity):
         x, y = self._future_coords(rotation, target_d)
         return abs(rotation) + self._already_walked(x, y) * 200
 
-    def _can_go(self, new_place, ignore_blockers=False):
+    def _can_go(self, new_place, ignore_blockers=False, ignore_forests=False):
         if new_place is None: return False # out of the map
         if self.airground_type != "ground":
             return True
@@ -256,7 +256,7 @@ class Creature(Entity):
             if e.other_side.place is new_place:
                 if ignore_blockers:
                     return True
-                if e.is_blocked(self):
+                if e.is_blocked(self, ignore_forests=ignore_forests):
                     for o in e.blockers:
                         self.player.observe(o)
                 else:
@@ -264,7 +264,7 @@ class Creature(Entity):
             else:
                 for e2 in e.other_side.place.exits:
                     if e2.other_side.place is new_place:
-                        if ignore_blockers or not e2.is_blocked(self):
+                        if ignore_blockers or not e2.is_blocked(self, ignore_forests=ignore_forests):
                             return True
 
     def _mark_the_dead_end(self) -> None:

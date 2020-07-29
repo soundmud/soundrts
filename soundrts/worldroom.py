@@ -337,6 +337,16 @@ class Square:
             if other == e.other_side.place:
                 e.delete()
 
+    def ensure_free_path(self, other):
+        for e in self.exits:
+            if other == e.other_side.place:
+                e.is_blocked_by_forests = False
+
+    def ensure_blocked_path(self, other):
+        for e in self.exits:
+            if other == e.other_side.place:
+                e.is_blocked_by_forests = True
+
     def toggle_path(self, dc, dr):
         other = self.world.grid.get((self.col + dc, self.row + dr))
         if not other: # border
@@ -371,7 +381,7 @@ class Square:
     def update_terrain(self):
         meadows = len([o for o in self.objects if o.type_name == "meadow"])
         woods = len([o for o in self.objects if o.type_name == "wood"])
-        if woods >= 3:
+        if woods >= 7:
             self.type_name = "_dense_forest"
         elif woods:
             self.type_name = "_forest"
@@ -383,6 +393,9 @@ class Square:
         if self.type_name == "_dense_forest":
             for s in self.strict_neighbors:
                 if s.type_name == "_dense_forest":
-                    self.ensure_nopath(s)
-                elif s.high_ground == self.high_ground:
-                    self.ensure_path(s)
+                    self.ensure_blocked_path(s)
+                else:
+                    self.ensure_free_path(s)
+        else:
+            for s in self.strict_neighbors:
+                self.ensure_free_path(s)

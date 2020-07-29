@@ -23,7 +23,11 @@ class Exit(Entity):
         except:
             return "<Exit to nowhere>"
 
-    def is_blocked(self, o=None, ignore_enemy_walls=False):
+    is_blocked_by_forests = False
+
+    def is_blocked(self, o=None, ignore_enemy_walls=False, ignore_forests=False):
+        if not ignore_forests and self.is_blocked_by_forests:
+            return True
         for b in self._blockers + getattr(self.other_side, "_blockers", []):
             if ignore_enemy_walls and (o is None or o.is_an_enemy(b)):
                 continue
