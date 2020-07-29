@@ -12,7 +12,7 @@ nb_lines 1
 
 ; paths (give only the starting square)
 
-west_east_paths
+west_east_paths a1
 west_east_bridges b1
 
 south_north_paths 
@@ -21,18 +21,19 @@ south_north_bridges
 
 ; resources
 
-goldmines 75 a1
+goldmines 75 c1
 
-woods 75 b1 b1 b1 b1 b1
+woods 75 a1 a1 a1 a1 a1 a1 a1
+woods 75 b1 b1 b1 b1 b1 b1 b1
 
 nb_meadows_by_square 0
-additional_meadows a1
+additional_meadows
 remove_meadows 
 
 
 ; players (human or computer)
 
-player 1000 1000 b1 mage u_recall a1 130 footman
+player 1000 1000 b1 mage u_recall a1 130 footman c1 holy_vision
 
 ; computer only
 
