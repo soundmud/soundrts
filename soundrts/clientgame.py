@@ -1554,11 +1554,20 @@ class GameInterface:
             yc = 0
         return self.world.grid[(xc, yc)]
 
+    @property
+    def _shouldnt_collide(self):
+        for x in self.group:
+            if x in self.dobjets and self.dobjets[x].airground_type == "air":
+                return True
+        if self.order and self.order.nb_args and self.order.target_shouldnt_collide:
+            return True
+
     def _get_prefix_and_collision(self, new_square, dxc, dyc):
         if new_square is self.place:
             return style.get("parameters", "no_path_in_this_direction"), True
-        if self.place not in self.scouted_before_squares or \
-           self.place.is_water and new_square.is_water:
+        if (self.place not in self.scouted_before_squares
+                or self.place.is_water and new_square.is_water
+                or self._shouldnt_collide):
             return [], False
         exits = [o for o in list(self.dobjets.values()) if o.is_in(self.place)
                  and self.is_selectable(o)

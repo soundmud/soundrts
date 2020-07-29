@@ -40,6 +40,10 @@ class OrderTypeView: # future order
         self.food_cost = order.food_cost
         self.nb_args = order.nb_args
 
+    @property
+    def target_shouldnt_collide(self):
+        return self.cls.keyword == "use" and self.cls(self.unit, [self.type]).type.effect_range > 12 * PRECISION
+
     def __eq__(self, other):
         return self.cls.keyword == other.cls.keyword and self.type == other.type
 
