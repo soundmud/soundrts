@@ -3,6 +3,50 @@ Release notes
 
 .. contents::
 
+1.3.3
+-----
+
+For multiplayer games, this version requires:
+
+- client: 1.3.3 or later (if compatible)
+- server: 1.2-c12, 1.3.0, 1.3.1, 1.3.2, 1.3.3 or later (if compatible)
+
+Changes from 1.3.2:
+
+- bug fixed: a unit wouldn't stop after using an ability requiring to get closer (deadly fog, exorcism...) and would move to the enemy...
+- bug fixed: the game would require a target for an ability centered on the caster (for example: raise dead)
+- bug fixed: water couldn't be seen from low ground (for example in map jl7)
+
+The map interface should feel more natural:
+
+- moving in the map won't cause collisions if you control a flying unit
+- moving in the map won't cause collisions if you are defining the target of a recall order (for example)
+- removed collisions between water and low ground
+
+Dense forests:
+
+- bug fixed: dense forests would create paths when cleared (even if there wasn't any paths before)
+- now forests are dense if they have at least 7 woods (instead of 3)
+- multiplayer map 8: updated (7 woods) and improved (faster economy)
+- editor: updated terrain palette (dense forest if at least 7 woods)
+
+Internationalization:
+
+- bug fixed: maps with non US-ASCII characters could not be read on platforms using GBK or UTF-8 by default (now maps are always read as UTF-8 and errors are replaced with "?")
+- converted the following maps to UTF-8: bs2, can1, qc1, qc2 and qc3
+- updated Polish translation (thanks to Patryk Mojsiewicz)
+
+Tiny changes in the main campaign:
+
+- chapter 9: with the "deadly fog" bug fixed, necromancers should be easier to manage
+- slightly improved chapters 5 and 10
+
+Tip: to quickly check for improvements in a specific chapter of a campaign you have already played:
+
+- press the "console" key under Escape and press "v" and Enter for an instant victory
+- or edit user/campaigns.ini: in [single_campaign] "chapter = 11" for example
+
+
 1.3.2
 -----
 
