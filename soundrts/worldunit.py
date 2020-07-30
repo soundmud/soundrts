@@ -435,6 +435,9 @@ class Creature(Entity):
         if self.action:
             self.action.update()
 
+        if self.player is None:
+            return
+
         if self.has_imperative_orders():
             # warning: completing UpgradeToOrder deletes the object
             self._execute_orders()
