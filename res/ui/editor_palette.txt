@@ -26,13 +26,13 @@ meadows 3
 def woods
 style
 meadows 1
-woods 2 100
+woods 3 100
 cover .1 0
 
 def dense_woods
 style
 meadows 0
-woods 3 100
+woods 7 100
 cover .1 0
 
 def goldmine
@@ -50,14 +50,14 @@ def high_woods
 style
 high_ground 1
 meadows 1
-woods 2 75
+woods 3 75
 cover .1 0
 
 def high_dense_woods
 style
 high_ground 1
 meadows 0
-woods 3 75
+woods 7 75
 cover .1 0
 
 def high_goldmine
