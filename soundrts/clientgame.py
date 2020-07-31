@@ -435,7 +435,11 @@ class GameInterface:
                         return
                 voice.item(mp.BEEP)
         elif cmd == "at":
-            d = self._editor_terrain
+            try:
+                d = self._editor_terrain
+            except AttributeError:
+                voice.item(mp.BEEP)
+                return
             p = self.place
             p.type_name = d["style"]
             self._terrain_loop_square = None # must update terrain audio background
