@@ -44,7 +44,6 @@ class MoveXYAction(Action):
         x, y = self.target
         u = self.unit
         subsquare = u.world.get_subsquare_id_from_xy
-        d2 = square_of_distance(x, y, u.x, u.y)
         if subsquare(x, y) != subsquare(u.x, u.y):
             if u.go_to_xy(x, y):
                 self.complete()
