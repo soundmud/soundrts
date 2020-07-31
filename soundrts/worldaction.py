@@ -18,7 +18,7 @@ class Action:
 class MoveAction(Action):
     
     def update(self):
-        if hasattr(self.target, "other_side"):
+        if getattr(self.target, "other_side", None) is not None:
             if self.target.is_a_portal:
                 # move towards the portal
                 self.unit.go_to_xy(self.target.x, self.target.y)
