@@ -1,6 +1,6 @@
 ; Carte multijoueur simple pour 12 joueurs
-; Crée par QuentinC http://quentinc.net/
-;2ème version de la carte à 12 joueurs, avec aucune ressource. Avec une telle carte il faut changer sa stratégie et revoir le nombre de paysans à la baisse...
+; CrÃ©e par QuentinC http://quentinc.net/
+;2Ã¨me version de la carte Ã  12 joueurs, avec aucune ressource. Avec une telle carte il faut changer sa stratÃ©gie et revoir le nombre de paysans Ã  la baisse...
 ;
 title 5016 5002 3003
 objective 145 88

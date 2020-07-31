@@ -2,7 +2,7 @@
 ; By Bryan Smart (bryansmart@bryansmart.com)
 ; Last modified 10/22/2007
 ;
-; You know that they’re coming. Across the large 9X9 central wilderness, there could be as
+; You know that theyâ€™re coming. Across the large 9X9 central wilderness, there could be as
 ; many as three just like you. You will need to build a force and head out into the
 ; wilderness to avoid a siege. Dragons in G7 guard a large treasure, but the wilderness is
 ; full of resources.

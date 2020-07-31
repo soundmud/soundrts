@@ -1,5 +1,5 @@
-; map 01! première map de Canne, pour 6 joueurs, 26 sur 30 pour jeu 
-; aérer et pour pas être les uns sur les autres.
+; map 01! premiÃ¨re map de Canne, pour 6 joueurs, 26 sur 30 pour jeu 
+; aÃ©rer et pour pas Ãªtre les uns sur les autres.
 
 title 5002 5000 5013 3001
 objective 145 88

@@ -1,5 +1,5 @@
 ; Carte multijoueur simple pour 8 joueurs
-; Crée par QuentinC http://quentinc.net/
+; CrÃ©e par QuentinC http://quentinc.net/
 
 title 5016 5002 3001
 objective 145 88

@@ -1,7 +1,7 @@
 ; Carte multijoueur simple pour 12 joueurs
-; Crée par QuentinC http://quentinc.net/
-; La particularité de cette carte est que tout le monde ne peut pas être directement en contact avec tout le monde. Lorsque la carte est jouée au complet (avec 12 joueurs donc), chacun a deux voisins directement accessibles, ni plus, ni moins.
-; Attention avec les ressources : elles paraissent abondantes mais il ne faut pas oublier qu'il n'y a qu'un seul emplacement prévu par joueur. Quand on joue à 12, il n'y a en fait pas beaucoup de réserves. A moins que vous ne connaissiez la petite astuce...
+; CrÃ©e par QuentinC http://quentinc.net/
+; La particularitÃ© de cette carte est que tout le monde ne peut pas Ãªtre directement en contact avec tout le monde. Lorsque la carte est jouÃ©e au complet (avec 12 joueurs donc), chacun a deux voisins directement accessibles, ni plus, ni moins.
+; Attention avec les ressources : elles paraissent abondantes mais il ne faut pas oublier qu'il n'y a qu'un seul emplacement prÃ©vu par joueur. Quand on joue Ã  12, il n'y a en fait pas beaucoup de rÃ©serves. A moins que vous ne connaissiez la petite astuce...
 ;
 title 5016 5002 3002
 objective 145 88
