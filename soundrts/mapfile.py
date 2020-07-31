@@ -59,7 +59,7 @@ class Map:
     def _read_additional_file(self, n):
         p = os.path.join(self.path, n)
         if os.path.isfile(p):
-            with open(p) as t:
+            with open(p, encoding='utf-8', errors='replace') as t:
                 return t.read()
         else:
             return ""
@@ -69,7 +69,7 @@ class Map:
             return ""
         p = os.path.join(self.campaign.path, n)
         if os.path.isfile(p):
-            with open(p) as t:
+            with open(p, encoding='utf-8', errors='replace') as t:
                 return t.read()
         else:
             return ""
@@ -120,8 +120,8 @@ class Map:
             p = os.path.join(self.path, "map.txt")
         else:
             p = self.path
-        with open(p) as f:
-            return f.read()
+        with open(p, encoding='utf-8', errors='replace') as t:
+            return t.read()
 
     def _extract_title(self, s):
         m = re.search("(?m)^title[ \t]+([0-9 ]+)$", s)
@@ -180,7 +180,7 @@ class Map:
             return self._original_map_bytes
         if os.path.isfile(self.path):
             map_name = os.path.split(self.path)[-1]
-            with open(self.path) as t:
+            with open(self.path, encoding='utf-8', errors='replace') as t:
                 content = base64.b64encode(t.read().encode())
             return map_name.encode() + b"***" + content
         else:
@@ -198,7 +198,7 @@ class Map:
             self.path = path.decode()
             if self.path != "zip":
                 self.map_string = base64.b64decode(content).decode()
-                with open(os.path.join(TMP_PATH, "recent_map.txt"), "w") as t:
+                with open(os.path.join(TMP_PATH, "recent_map.txt"), "w", encoding='utf-8', errors='replace') as t:
                     t.write(self.map_string)
             else:
                 zd = os.path.join(TMP_PATH, "recent_map")
