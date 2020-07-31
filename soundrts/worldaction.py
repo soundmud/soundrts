@@ -57,7 +57,7 @@ class MoveXYAction(Action):
 class AttackAction(Action):
 
     def update(self): # without moving to another square
-        if self.unit.range and self.target in self.unit.place.objects:
+        if self.unit.speed and self.target in self.unit.place.objects:
             self.unit.action_reach_and_aim()
         elif self.unit.can_attack(self.target):
             self.unit.aim(self.target)

@@ -339,7 +339,7 @@ class Player:
                     except:
                         self._enemy_menace[place] = menace
                         self._enemy_presence.append(place)
-                    if o.range and o.range > PRECISION:
+                    if not o.is_melee:
                         for place in place.neighbors:
                             try:
                                 self._enemy_menace[place] += menace // 10

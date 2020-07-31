@@ -81,7 +81,7 @@ class Creature(Entity):
 
     damage_radius = 0
     target_types = ["ground"]
-    range = None
+    range = 0
     is_ballistic = 0
     minimal_range = 0
     cooldown = 0
@@ -342,8 +342,8 @@ class Creature(Entity):
     # reach
 
     @property
-    def is_melee(self):
-        return self.range <= 2 * PRECISION
+    def is_melee(self) -> bool:
+        return self.range < 2 * PRECISION
 
     def _near_enough_to_aim(self, target):
         # Melee units shouldn't attack units on the other side of a wall.
@@ -351,12 +351,11 @@ class Creature(Entity):
             return False
         if self.minimal_range and square_of_distance(self.x, self.y, target.x, target.y) < self.minimal_range * self.minimal_range:
             return False
-        range = self.range
+        actual_range = self.range
         if self.is_ballistic and self.height > target.height:
             # each height difference has a bonus of 1
-            bonus = (self.height - target.height) * PRECISION * 1
-            range += bonus
-        d = max(self.radius + DISTANCE_MARGIN, range) + target.radius
+            actual_range += (self.height - target.height) * PRECISION
+        d = max(self.radius + DISTANCE_MARGIN, actual_range) + target.radius
         return square_of_distance(self.x, self.y, target.x, target.y) < d * d
 
     def _near_enough(self, target):
@@ -554,7 +553,7 @@ class Creature(Entity):
     def can_attack(self, other): # without moving to another square
         if not self.can_attack_if_in_range(other):
             return False
-        if self.range and other.place is self.place:
+        if self.speed and other.place is self.place:
             return True
         return self._near_enough_to_aim(other)
 
