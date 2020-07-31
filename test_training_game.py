@@ -2,6 +2,7 @@
 import traceback
 
 from soundrts import config
+config.debug_mode = 1
 from soundrts.mapfile import Map
 
 config.mods = ""

@@ -10,6 +10,7 @@ except ModuleNotFoundError:
     pass
 
 from soundrts import config
+config.debug_mode = 1
 config.mods = "crazymod9beta10"
 
 from soundrts import worldplayercomputer2 as wpc2
