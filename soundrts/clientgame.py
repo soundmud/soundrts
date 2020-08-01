@@ -1570,7 +1570,7 @@ class GameInterface:
         if new_square is self.place:
             return style.get("parameters", "no_path_in_this_direction"), True
         if (self.place not in self.scouted_before_squares
-                or self.place.is_water and new_square.is_water
+                or (self.place.is_water or new_square.is_water) and self.place.height == new_square.height
                 or self._shouldnt_collide):
             return [], False
         exits = [o for o in list(self.dobjets.values()) if o.is_in(self.place)
