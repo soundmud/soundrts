@@ -204,8 +204,11 @@ class Creature(Entity):
         if strict and self.sight_range < self.world.square_width:
             return result
         for sq in self.place.neighbors:
-            if self.height > sq.height \
-                    or self.height == sq.height and self._can_go(sq, ignore_forests=True):
+            if (self.height > sq.height
+                or self.height == sq.height and (
+                    self._can_go(sq, ignore_forests=True)
+                    or sq.is_water
+                    or self.place.is_water)):
                 result.append(sq)
         return result
 
