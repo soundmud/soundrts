@@ -1,9 +1,10 @@
-import urllib.request, urllib.error, urllib.parse
+import urllib.parse
+import urllib.request
 from typing import List
 
 from .lib.log import warning
 from . import msgparts as mp
-from .version import VERSION
+from .version import SERVER_COMPATIBILITY
 
 # old value used by some features (stats, ...)
 METASERVER_URL = "http://jlpo.free.fr/soundrts/metaserver/"
@@ -13,7 +14,7 @@ MAIN_METASERVER_URL = open("cfg/metaserver.txt").read().strip()
 
 def _add_time_and_version(line):
     words = line.split()
-    words = ["0"] + words[:1] + [VERSION] + words[1:]
+    words = ["0"] + words[:1] + [SERVER_COMPATIBILITY] + words[1:]
     return " ".join(words)
 
 
@@ -38,8 +39,9 @@ def servers_list(voice) -> List[str]:
             voice.alert(mp.BEEP)
             warning(f"the servers list from the metaserver doesn't start with {header}"
                     " => using the default servers list")
-    except urllib.error.URLError:
-        voice.alert(mp.BEEP)
+    except OSError as e:
+        voice.alert(mp.BEEP + [str(e)])  # type: ignore
+        warning(str(e))
         warning("couldn't get the servers list from the metaserver"
                 " => using the default servers list")
     return servers
