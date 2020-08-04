@@ -69,6 +69,8 @@ def choose_server_ip_in_a_list():
 
 def enter_server_ip():
     host = input_string([], r"^[A-Za-z0-9\.]$")
+    if host == "":
+        host = "localhost"
     if host:
         connect_and_play(host)
 
