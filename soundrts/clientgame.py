@@ -525,8 +525,8 @@ class GameInterface:
             (mp.SET_SPEED_TO_FAST, self.gm_fast_speed),
             (mp.SET_SPEED_TO_FAST + nb2msg(4), self.gm_very_fast_speed),
             ])
-#        if self.can_save():
-#            menu.append(mp.SAVE, self.gm_save)
+        if self.can_save():
+            menu.append(mp.SAVE, self.gm_save)
         menu.append(mp.CONTINUE_GAME, None)
         set_game_mode(False)
         menu.run()

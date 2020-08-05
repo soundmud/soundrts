@@ -204,9 +204,9 @@ class _Savable:
         return odict
 
     def save(self):
-        f = open(SAVE_PATH, "w")
+        f = open(SAVE_PATH, "wb")
         i = stats.Stats(None, None)._get_weak_user_id()
-        f.write("%s\n" % i)
+        f.write(("%s\n" % i).encode(encoding='ascii'))
         self.world.remove_links_for_savegame()
         self._rules = rules
         self._ai = definitions._ai
@@ -238,6 +238,7 @@ class _Savable:
             t = threading.Thread(target=self.world.loop)
             t.daemon = True
             t.start()
+            self.interface.waiting_for_world_update = False
             self.interface.loop()
             self._record_stats(self.world)
             self.post_run()

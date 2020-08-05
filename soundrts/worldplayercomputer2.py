@@ -22,6 +22,10 @@ def _id(x):
     return x.id
 
 
+def _has(x):
+    return True
+
+
 class Computer2(Player):
 
     name = ["ai2"]
@@ -55,5 +59,5 @@ class Computer2(Player):
                     u.take_order(order)
 
     def cheat(self):
-        self.has = lambda x: True
+        self.has = _has
         self.resources = [1000 * PRECISION for _ in self.resources]
