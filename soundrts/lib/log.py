@@ -1,6 +1,7 @@
 import logging
 import logging.handlers
 import os
+import platform
 import sys
 import urllib.request, urllib.parse, urllib.error
 
@@ -26,7 +27,7 @@ class HTTPHandler(logging.Handler):
     def emit(self, record):
         if self._done:
             return
-        msg = f"exception with {_version}:\n{record.exc_text}"
+        msg = f"exception with version={_version} platform={platform.platform()}:\n{record.exc_text}"
         params = urllib.parse.urlencode({"msg": msg})
         try:
             urllib.request.urlopen(f"{self._url}/logging_errors.php?{params}").read()
