@@ -218,9 +218,10 @@ class Creature(Entity):
 
     @property
     def activity(self):
-        if not self.orders:
+        try:
+            o = self.orders[0]
+        except IndexError:
             return
-        o = self.orders[0]
         if hasattr(o, "mode") and o.mode == "build":
             return "building"
         if hasattr(o, "mode") and o.mode == "gather" and hasattr(o.target, "type_name"):
