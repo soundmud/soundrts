@@ -260,15 +260,17 @@ class Coordinator(_Client): # client coordinator for multiplayer games
         players_orders = all_orders[1:]
         for player_orders in players_orders:
             player, orders = player_orders.split("/")
-            direct_player = self.get_client_by_login(player).player
-            if direct_player:
-                orders = _unpack(orders)
-                for order in orders.split("\n"):
-                    if order:
-                        self.queue_command(direct_player, order)
-                if not order.startswith("control"):
-                    self._all_orders += order.replace("order 0 0 ", "") + ";"
-                    self._all_orders = self._all_orders[-100:]
+            client = self.get_client_by_login(player)
+            if client:
+                direct_player = client.player
+                if direct_player:
+                    orders = _unpack(orders)
+                    for order in orders.split("\n"):
+                        if order:
+                            self.queue_command(direct_player, order)
+                    if not order.startswith("control"):
+                        self._all_orders += order.replace("order 0 0 ", "") + ";"
+                        self._all_orders = self._all_orders[-100:]
 
     def update(self):
         s = self.main_server.read_line()
