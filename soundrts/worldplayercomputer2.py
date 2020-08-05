@@ -1,3 +1,4 @@
+from .lib.nofloat import PRECISION
 from .worldorders import ORDERS_DICT
 from .worldplayerbase import Player
 
@@ -42,6 +43,7 @@ class Computer2(Player):
             return order
 
     def play(self):
+        self.cheat()
         # sort to avoid desync
         targets = list(self.perception) + list(self.memory)
         targets = [x for x in targets if not getattr(x, "is_an_exit", False)]
@@ -51,3 +53,7 @@ class Computer2(Player):
                 order = self._random_order(u, targets)
                 if order:
                     u.take_order(order)
+
+    def cheat(self):
+        self.has = lambda x: True
+        self.resources = [1000 * PRECISION for _ in self.resources]
