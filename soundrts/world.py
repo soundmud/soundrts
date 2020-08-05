@@ -509,9 +509,12 @@ class World:
 
     def _create_resources(self):
         for z, cls, n in self.map_objects:
-            C = self.unit_class(cls)
+            if z not in self.grid:
+                warning(f"{z} is not a valid coordinate")
+                continue
+            resource_class = self.unit_class(cls)
             if self.grid[z].can_receive("ground"): # avoids using the spiral
-                resource = C(self.grid[z], n)
+                resource = resource_class(self.grid[z], n)
                 resource.building_land = Meadow(self.grid[z])
                 resource.building_land.delete()
         for z in self._meadows():
