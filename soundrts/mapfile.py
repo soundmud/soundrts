@@ -181,8 +181,8 @@ class Map:
         if os.path.isfile(self.path):
             map_name = os.path.split(self.path)[-1]
             with open(self.path, encoding='utf-8', errors='replace') as t:
-                content = base64.b64encode(t.read().encode())
-            return map_name.encode() + b"***" + content
+                content = base64.b64encode(t.read().encode(encoding='utf-8', errors='replace'))
+            return map_name.encode(encoding='utf-8', errors='replace') + b"***" + content
         else:
             b = io.BytesIO()
             zipdir.zipdir(self.path, b)
@@ -195,9 +195,9 @@ class Map:
         self._original_map_bytes = map_bytes
         try:
             path, content = map_bytes.split(b"***", 1)
-            self.path = path.decode()
+            self.path = path.decode(encoding='utf-8', errors='replace')
             if self.path != "zip":
-                self.map_string = base64.b64decode(content).decode()
+                self.map_string = base64.b64decode(content).decode(encoding='utf-8', errors='replace')
                 with open(os.path.join(TMP_PATH, "recent_map.txt"), "w", encoding='utf-8', errors='replace') as t:
                     t.write(self.map_string)
             else:
