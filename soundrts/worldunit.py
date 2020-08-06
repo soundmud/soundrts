@@ -435,6 +435,9 @@ class Creature(Entity):
         if self.harm_level:
             self.harm_nearby_units()
 
+        if self.player is None:
+            return
+
         if self.action:
             self.action.update()
 
