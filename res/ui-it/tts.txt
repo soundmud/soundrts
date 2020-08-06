@@ -137,7 +137,7 @@ controlla la prossima unita' nella locazione
 2047	sceglie l'ordine successivo
 2048	controlla tutte le unita' dello stesso tipo, presenti nella medesima locazione dell'unita' corrente
 2049	conferma l'ordine corrente
-2050	impartisce l'ordine pi˘ logico da dare alla destinazione scelta
+2050	impartisce l'ordine pi√π logico da dare alla destinazione scelta
 2051	sapere quanto oro, quanto legname e quanto cibo possiedi
 2052	sapere lo stato di salute dell'unita' corrente
 2053	controlla meta' delle unita' dello stesso tipo e presenti nella locazione dell'unita' corrente
@@ -228,7 +228,7 @@ controlla la prossima unita' nella locazione
 4044	un server semplice
 4045	solo tu potrai creare una partita
 4046	un server pubblico
-4047	un ospite puÚ creare una partita
+4047	un ospite pu√≤ creare una partita
 4048	cancella
 4049	Probabilmente il server non riesce a registrarsi nel metaserver verifica di essere connesso ad internet
 4051	arrivederci
@@ -294,7 +294,7 @@ controlla la prossima unita' nella locazione
 4201	catapulta
 4202	aspetta i tuoi ordini
 4203	di
-4204	non puÚ essere costruita la
+4204	non pu√≤ essere costruita la
 4205	non stai controllando nessuna unita'
 4206	il display e' ora acceso
 4207	Il display e' ora spento
@@ -398,9 +398,9 @@ controlla la prossima unita' nella locazione
 
 5026	punto
 
-2045 controlla la prossima unit‡ locale
+2045 controlla la prossima unit√† locale
 2049 conferma l'ordine corrente
-2054 controlla solo 1 unit‡
+2054 controlla solo 1 unit√†
 4278 caricare
 4279 caricare tutto da
 4280 scaricare
@@ -463,7 +463,7 @@ controlla la prossima unita' nella locazione
 
 4319 modifica l'ordine di caricamento delle mods
 4320 aggiungi una mod all'elenco
-4321 l'elenco Ë vuoto
+4321 l'elenco √® vuoto
 4322 Caricamento
 4323 pacchetti
 4324 menu dei pacchetti
@@ -484,3 +484,35 @@ controlla la prossima unita' nella locazione
 
 4336 apri la cartella utente
 4337 documentazione
+
+4338 Muro imponente
+4339 Cancello imponente
+4340	Inizia un gioco pubblico su
+4341	Mods
+4342	Pacchetti di suoni
+4343 velocit√†
+
+4344 mare
+4345 lago
+4346 fiume
+4347 montagna
+4348 ponte
+4349 guado
+4350 palude
+4351 oceano
+4352 valico
+
+4353 abilita autoriparazione
+4354 disabilita autoriparazione
+4355 abilita auto-raccolta
+4356 disabilita auto-raccolta
+
+4357 cantiere navale
+4358 barca
+4359 distruttore
+4360 nave da guerra
+4361 sottomarino
+
+4362 prati
+4363 foresta
+4364 foresta densa
