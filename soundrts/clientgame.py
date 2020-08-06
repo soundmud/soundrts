@@ -1500,6 +1500,8 @@ class GameInterface:
         return -1, -1
 
     def move_to_square(self, square):
+        if hasattr(square.place, "col"):  # square is actually a container
+            square = square.place
         if self.place is not square and self.coords_in_map(square) != (-1, -1):
             self.place = square
             self._silence_square()

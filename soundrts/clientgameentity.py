@@ -84,6 +84,9 @@ class EntityView:
         return style.has(self.model.type_name, "when_moving_through")
 
     def is_in(self, place):
+        # a unit inside a transporter is also inside the place of the transporter
+        if getattr(self, 'is_inside', False):
+            return self.place.place is place
         # For the interface, a blocker is also on the other side of the exit.
         return self.place is place or \
             getattr(self, "blocked_exit", None) and self.blocked_exit.other_side.place is place 
