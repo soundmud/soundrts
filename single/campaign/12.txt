@@ -1,0 +1,12 @@
+title 4271 3012
+trigger player1 (timer 0) (add_objective 1 100 115 5001 3001)
+square_width 12
+nb_columns 2
+nb_lines 1
+west_east_paths a1
+woods 1 a1 a1 a1 a1 a1 a1 a1
+woods 1 b1 b1 b1 b1 b1 b1 b1
+goldmines 10000 b1
+nb_meadows_by_square 0
+player 0 0 a1 peasant
+trigger player1 (has_entered b1) (objective_complete 1)
