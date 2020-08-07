@@ -3,7 +3,7 @@ from hashlib import md5
 from . import res, config
 
 
-VERSION = "1.3.3"
+VERSION = "1.3.4"
 IS_DEV_VERSION = config.debug_mode
 CLIENT_COMPATIBILITY = "6"
 SERVER_COMPATIBILITY = "0"

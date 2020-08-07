@@ -3,6 +3,45 @@ Release notes
 
 .. contents::
 
+1.3.4
+-----
+
+For multiplayer games, this version requires:
+
+- client: 1.3.4 or later
+- server: 1.2-c12 or later
+
+Changes from 1.3.3:
+
+- probably fixed speech in a few more cases (please report if you still cannot start the client)
+- restored save and restore (it seems to be working, but please be careful)
+- restored infinite resources and tech for "aggressive computer 2" (more interesting)
+
+Multiplayer:
+
+- the client will remember the previously downloaded list of servers and use it if the metaserver is temporarily down
+- in "enter the IP address of the server", entering an empty IP address will select your computer (no need to type: "localhost")
+- standalone server: removed pygame dependency
+
+Interface:
+
+- console command: "a u_recall" will add the recall upgrade to the current player
+- minor bug fixed: the interface wouldn't follow a unit inside a transport (if the unit was in follow mode before being transported)
+
+Internationalization:
+
+- updated Italian translation (thanks to Luigi Russo)
+
+Main campaign:
+
+- added chapter 12, a tiny map to show how dense forests work (the rule is: "any path between two dense forests is blocked")
+
+Tip: to quickly check for improvements in a specific chapter of a campaign you have already played:
+
+- press the "console" key under Escape and press "v" and Enter for an instant victory
+- or edit user/campaigns.ini: in [single_campaign] "chapter = 12" for example
+
+
 1.3.3
 -----
 
