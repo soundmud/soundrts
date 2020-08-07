@@ -1,6 +1,11 @@
 from . import config
 config.load()
 
+# hide the pygame support prompt from players
+if not config.debug_mode:
+    import os
+    os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+
 from .lib import log
 from .lib.log import exception, warning
 from .version import VERSION_FOR_BUG_REPORTS
