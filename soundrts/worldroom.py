@@ -240,7 +240,7 @@ class Square:
     def find_nearest_meadow(self, unit):
         def _d(o):
             # o.id to make sure that the result is the same on any computer
-            return (int_distance(o.x, o.y, unit.x, unit.y), o.id)
+            return int_distance(o.x, o.y, unit.x, unit.y), o.id
         meadows = sorted([o for o in self.objects if isinstance(o, Meadow)], key=_d)
         if meadows:
             return meadows[0]

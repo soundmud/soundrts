@@ -9,6 +9,7 @@ from .lib.log import info, warning, exception
 from .lib.msgs import encode_msg, nb2msg
 from .lib.nofloat import square_of_distance, to_int, PRECISION
 from . import msgparts as mp
+from .worldability import Ability
 from .worldentity import NotEnoughSpaceError, Entity
 from .worldexit import Exit
 from .worldresource import Corpse, Deposit
@@ -716,46 +717,58 @@ class Player:
                 n += 1
         return n
 
+    def _add_unit(self, cls, square, target, decay, from_corpse, corpses, notify):
+        land = None
+        if from_corpse:
+            if corpses:
+                corpse = corpses.pop(0)
+                x, y = corpse.x, corpse.y
+                square = corpse.place
+                corpse.delete()
+            else:
+                return
+        elif target:
+            x, y = target.x, target.y
+            square = target if target in self.world.squares else target.place
+        else:
+            x, y, land = square.find_and_remove_meadow(cls)
+        u = cls(self, square, x, y)
+        u.building_land = land
+        if decay:
+            u.time_limit = self.world.time + decay
+        if notify:
+            u.notify("added")
+
     def lang_add_units(self, items, target=None, decay=0, from_corpse=False, corpses=[], notify=True):
-        sq = self.world.grid["a1"]
-        multiplicator = 1
+        square = self.world.grid["a1"]
+        nb = 1
         for i in items:
             if i in self.world.grid:
-                sq = self.world.grid[i]
-                multiplicator = 1
+                square = self.world.grid[i]
+                nb = 1
             elif re.match("[0-9]+$", i):
-                multiplicator = int(i)
+                nb = int(i)
             else:
                 cls = self.world.unit_class(i)
-                for _ in range(multiplicator):
-                    if not self.check_count_limit(i):
-                        break
-                    land = None
-                    if from_corpse:
-                        if corpses:
-                            corpse = corpses.pop(0)
-                            x, y = corpse.x, corpse.y
-                            sq = corpse.place
-                            corpse.delete()
-                        else:
-                            return
-                    elif target:
-                        x, y = target.x, target.y
-                        sq = target if target in self.world.squares else target.place
-                    else:
-                        x, y, land = sq.find_and_remove_meadow(cls)
-                    try:
-                        u = cls(self, sq, x, y)
-                        u.building_land = land
-                    except NotEnoughSpaceError:
-                        break
-                    except:
-                        warning("pb with lang_add_unit(%s, %s)", items, target)
-                    if decay:
-                        u.time_limit = self.world.time + decay
-                    if notify:
-                        u.notify("added")
-                multiplicator = 1
+                if isinstance(cls, Upgrade):
+                    self.upgrades.append(i)
+                    self.send_voice_important(mp.OK)
+                elif getattr(cls, "cls", None) == Ability:
+                    self.send_voice_important(mp.BEEP)
+                    warning("cannot add an ability")
+                elif cls:
+                    for _ in range(nb):
+                        if not self.check_count_limit(i):
+                            break
+                        try:
+                            self._add_unit(cls, square, target, decay, from_corpse, corpses, notify)
+                        except NotEnoughSpaceError:
+                            warning("not enough space")
+                        except:
+                            exception("couldn't add unit: %s", cls)
+                else:
+                    self.send_voice_important(mp.BEEP)
+                nb = 1
 
     def lang_no_enemy_left(self, unused_args):
         return not [p for p in self.world.players if self.player_is_an_enemy(p)
