@@ -1,5 +1,4 @@
 import copy
-from soundrts.lib.sound import distance
 from soundrts.lib.nofloat import square_of_distance
 from hashlib import md5
 import os.path
@@ -14,7 +13,6 @@ from .lib import collision
 from .definitions import rules, get_ai_names, load_ai, VIRTUAL_TIME_INTERVAL
 from .lib.log import warning, exception, info
 from .lib.nofloat import to_int, int_distance, PRECISION
-from . import msgparts as mp
 from .paths import MAPERROR_PATH
 from . import res
 from .worldability import Ability
@@ -23,11 +21,9 @@ from .worldentity import COLLISION_RADIUS
 from .worldexit import passage
 from .worldorders import ORDERS_DICT
 from .worldplayerbase import Player, normalize_cost_or_resources, A
-from .worldplayercomputer import Computer
-from .worldplayercomputer2 import Computer2
 from .worldresource import Deposit, Meadow
 from .worldroom import Square
-from .worldunit import Unit, Worker, Soldier, Building, _Building, Effect, ground_or_air
+from .worldunit import Unit, Worker, Soldier, Building, Effect, ground_or_air
 from .worldupgrade import Upgrade
 
 

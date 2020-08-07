@@ -7,8 +7,6 @@ import re
 import shutil
 from typing import Optional, List
 
-import pygame
-
 from .definitions import Style
 from . import res
 from .lib.log import debug, exception
