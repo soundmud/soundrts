@@ -479,13 +479,13 @@ class Creature(Entity):
             self._raise_subsquare_threat(damage)
         else:
             warning("player is None in receive_hit()")
+        if notify:
+            self.notify("wounded,{},{},{}".format(
+                attacker.type_name, attacker.id, attacker.damage_level))
         self.hp -= damage
         if self.hp < 0:
             self.die(attacker)
         else:
-            if notify:
-                self.notify("wounded,%s,%s,%s" %
-                            (attacker.type_name, attacker.id, attacker.damage_level))
             self.player.on_unit_attacked(self, attacker)
 
     def delete(self):
