@@ -764,6 +764,7 @@ class Player:
                             self._add_unit(cls, square, target, decay, from_corpse, corpses, notify)
                         except NotEnoughSpaceError:
                             warning("not enough space")
+                            self.units[-1].delete()
                         except:
                             exception("couldn't add unit: %s", cls)
                 else:
