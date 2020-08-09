@@ -205,7 +205,8 @@ class World:
             players = self.players
         radius_2 = radius * radius
         return [o for p in players for o in p._potential_neighbors(x, y)
-                if filter(o) and square_of_distance(x, y, o.x, o.y) <= radius_2]
+                if o.place is not None
+                and filter(o) and square_of_distance(x, y, o.x, o.y) <= radius_2]
 
     def get_place_from_xy(self, x, y):
         return self.grid.get((x // self.square_width,

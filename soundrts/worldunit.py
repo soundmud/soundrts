@@ -474,11 +474,10 @@ class Creature(Entity):
                 p.raise_threat(subsquare, delta)
 
     def receive_hit(self, damage, attacker, notify=True):
-        if self.player is not None:
-            self.player.observe(attacker)
-            self._raise_subsquare_threat(damage)
-        else:
-            warning("player is None in receive_hit()")
+        if self.player is None:
+            return
+        self.player.observe(attacker)
+        self._raise_subsquare_threat(damage)
         if notify:
             self.notify("wounded,{},{},{}".format(
                 attacker.type_name, attacker.id, attacker.damage_level))
