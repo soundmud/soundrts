@@ -1,0 +1,341 @@
+; ; CrazyMod v9
+
+77000 bomber airship
+77001 explosives magazine
+77002 high quality explosives
+77003 explode
+77004 dragons' life
+77005 burrow
+77006 savage
+77007 fruit farm
+77008 hideout
+77009 thicket of the brigands
+77010 freebooters' wood
+77011 hospital
+77012 public health
+77013 training's bivouac
+77014 musketeer
+77015 magnesite extractor	
+77016 electric trap
+77017 wild beast's cage
+77018 magnetic thunderstorm
+77019 hypnotic wave
+77020 magnetic tower
+77021 spells' hut 
+77022 huntress
+77023 wolf
+77024 sentinel tree
+77025 sow sentinel tree
+77026 bewitchment
+77027 ectoplasm
+77028 call ectoplasm
+77029 evil fog
+77030 spectral tower
+77031 ghoul
+77032 graveyard
+77033 tame wolves
+77034 paladin
+77035 sow darkness tree
+77036 sow serenity tree
+77037 darkness tree
+77038 serenity tree
+77039 recycle deads into carnivorous plants
+77040 recycle deads into medicinal plants
+77041 carnivorous plant
+77042 medicinal plant
+77043 high quality magnesite
+77044 highest quality magnesite
+77045 explosion
+77046 thunderbolt
+77047 transporting airship
+77048 lion
+77049 tame lions
+77050 crossbowman
+77051 tear gas
+77052 grenade launcher
+77053 starting point
+77054 vision
+77055 small fort
+77056 serf
+77057 cursed gargoyle
+77058 thorny plant
+77059 city hall
+77060 governor headquarters
+77061 chancellor's palace
+77062 ballistic anti-air battery
+77063 military camp
+77064 energetic ball
+77065 generate power ball
+77066 worker
+77067 erudite
+77068 clouds' storm
+77069 dragons' attack
+77070 airship factory
+77071 clone
+77072 rogue
+77073 cloned nimble archer
+77074 spying airship
+77075 super armor
+77076 super attack
+77077 super life
+77078 super speed
+77079 super exorcism
+77080 overheated plasma cannon
+77081 animal farm
+77082 fighter airship
+77083 pigsty
+77084 garage
+77085 minicomputer
+77086 mainframe computer
+77087 supercomputer
+77088 hydroponic farm
+77089 robotic factory
+77090 optical laboratory
+77091 scavengers' farm
+77092 signal modulator
+77093 particle accelerator
+77094 laser tower
+77095 radar tower
+77096 geek
+77097 power farm
+77098 laser shooter
+77099 hunting-ground
+77100 magnetic cannon
+77101 plasma cannon
+77102 dragons' range
+77103 mobile sensor
+77104 dragons' armor
+77105 drone
+77106 laser vessel
+77107 dragons' speed
+77108 laser power
+77109 plasma power
+77110 radar image
+77111 sunny library
+77112 flesh golem
+77113 mausoleum
+77114 vault
+77115 skeletal dragon
+77116 death's breath
+77117 crypt
+77118 labyrinth
+77119 bone trap
+77120 undead slave
+77121 magic power
+77122 ghost
+77123 spectrum in armor
+77124 winged horse
+77125 tame winged horse
+77126 thestral
+77127 surveillance tower
+77128 lich
+77129 arrows' trap
+77130 cross through wall
+77131 spook-light
+77132 call spook-lights
+77133 supply tunnel
+77134 dig supply tunnel
+77135 blaze
+77136 unstable portal
+77137 portal
+77138 firework's launcher
+77139 war troll
+77140 defense tower
+77141 clearing
+77142 arboreal city
+77143 domain
+77144 wooded arena
+77145 leafy garden
+77146 ballista tower
+77147 campanile
+77148 enchanted wood
+77149 root trap
+77150 harvester
+77151 belfry
+77152 nimble archer
+77153 forest archer
+77154 centaur
+77155 toughness in combat
+77156 ardor in combat
+77157 observation post
+77158 missile anti-air battery
+77159 druid
+77160 witch
+77161 fairy
+77162 dark tower
+77163 foggy tower
+77164 torments tower
+77165 swarm
+77166 terrors tower
+77167 green storm
+77168 transform corpses into ghosts
+77169 penetrating roots
+77170 transform corpses into zombies
+77171 transform corpses into flesh golems
+77172 magnetic field
+77173 uncontroled magnetic field
+77174 vigilance tower
+77175 encampment
+77176 fortified encampment
+77177 fortress
+77178 pit
+77179 pen
+77180 high guard tower
+77181 nest
+77182 tepee
+77183 spike trap
+77184 peon
+77185 bruiser troll
+77186 slaughter troll
+77187 leafy tower
+77188 tower with sharp leaves
+77189 ogre stone thrower
+77190 snake
+77191 mirrors tower
+77192 winged serpent
+77193 hippogriff
+77194 voodoo priest
+77195 solar tower
+77196 kamikaze
+77197 transport ball
+77198 highest quality explosives
+77199 possession
+77200 traditional
+77201 technical
+77202 robotic
+77203 dark
+77204 elven
+77205 orc
+77206 solar ray
+77207 promontory
+77208 wooded illusion
+77209 grape shot tower
+77210 bombards tower
+77211 scree
+77212 massive tower
+77213 tame snakes
+77214 aggressiveness
+77215 watchfulness turret
+77216 hidden bomb
+77217 reinforced structure
+77218 elemental circle
+77219 fire tower
+77220 water tower
+77221 air tower
+77222 earth tower
+77223 fire elemental
+77224 water elemental
+77225 air elemental
+77226 earth elemental
+77227 élémental
+77228 magnetic shooter
+77229 vermin
+77230 stump
+77231 brooder
+77232 nursery
+77233 larval laboratory
+77234 transgenic reproducer
+77235 multiplier incubator
+77236 fruit tree
+77237 termite nest
+77238 honey tree
+77239 mud room
+77240 mushroom gallery
+77241 twinkling tree
+77242 Devourer tree
+77243 guardian termite
+77244 conqueror termite
+77245 royal worker
+77246 armored termite
+77247 angry wasp
+77248 sting shooter wasp
+77249 thousand stings' wasp
+77250 insatiable mosquito
+77251 terrible mosquito
+77252 bloodthirsty mosquito
+77253 pinch crab
+77254 shell shooter crab
+77255 siege crab
+77256 rowdy mushroom
+77257 toxic mushroom
+77258 devastating mushroom
+77259 scout firefly
+77260 dazzling firefly
+77261 blazing firefly
+77262 generate stump
+77263 generate larvae
+77264 larva
+77265 survival pheromone
+77266 toxic spores
+77267 hallucinogenic spores
+77268 care spores
+77269 walking worker
+77270 winged worker
+77271 dark elf
+77272 shack
+77273 villa
+77274 manor
+77275 cutlery
+77276 playhouse
+77277 Cenacle
+77278 windy tower
+77279 thief
+77280 prowler
+77281 assassin
+77282 assassin master
+77283 illusionist
+77284 puppet
+77285 doctress
+77286 flying shuriken
+77287 vortex
+77288 whirlwind
+77289 throwing technique
+77290 animation speed
+77291 Fatal Blade
+77292 smoke
+77293 call shadows
+77294 mahouts' house
+77295 aviary
+77296 pigeon
+77297 rain of arrows
+77298 ambush turret
+77299 ambush high tower
+77300 perch tower
+77301 carnivore tree
+77302 voracious tree
+77303 root system
+77304 berserk
+77305 berserker troll
+77306 steel leaf
+77307 tame pigeons
+77308 animate puppet
+77309 elephant
+77310 tame elephant
+77311 peacefull vine
+77312 invasive vine
+77313 sow peacefull vine
+77314 set arrows' trap
+77315 earthquake
+77316 fire blast
+77317 recover
+77318 blast of wind
+77319 volcanic eruption
+77320 mud golem
+77321 sandstorm
+77322 vapor cloud
+77323 ice sky
+77324 mahout
+77325 elephant with turret
+77326 soul absorption
+77327 field of necromancy
+77328 cadaveric explosion
+77329 plagued cadaver
+77330 transmit the plague to the corpses
+77331 shadow
+77332 secret agent
+77333 set hidden bomb
+77334 set electric trap
+77335 set bone trap
+77336 set root trap
+77337 set spike trap
+77338 drop secret agent

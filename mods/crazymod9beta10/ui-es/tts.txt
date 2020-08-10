@@ -1,0 +1,317 @@
+; CrazyMod v8.3
+
+4307 reagrupar
+77000 avión bombardero
+77001 polvorín
+77002 explosivos de alta calidad
+77003 estallar!
+77004 vida de los dragones
+77005 madriguera
+77006 salvaje
+77007 Granja de Frutas
+77008 escondite
+77009 arboleda de los ladrones
+77010 bosque de los filibusteros
+77011 hospital
+77012 salud pública
+77013 vívack de entrenamiento
+77014 mosquetero
+77015 extractor de magnesita
+77016 trampa eléctrica
+77017 jaula de leones
+77018 tormenta magnética
+77019 onda hipnótica
+77020 torre magnética
+77021 choza de los sortilegios
+77022 cazadora
+77023 lobo
+77024 árbol de vigilancia
+77025 sembrar árbol de vigilancia
+77026 hechizar
+77027 ectoplasma
+77028 llamar ectoplasma
+77029 bruma maléfica
+77030 torre espectral
+77031 demonio necrófago
+77032 cementerio
+77033 domar lobos
+77034 paladín
+77035 sembrar árboles de las tinieblas
+77036 sembrar árboles de la serenidad
+77037 árbol de las tinieblas
+77038 árbol de la serenidad
+77039 reciclar cadáveres en plantas carnívoras
+77040 reciclar cadáveres en plantas medicinales
+77041 planta carnívora
+77042 planta medicinal
+77043 magnesita de alta calidad
+77044 magnesita de muy alta calidad
+77045 explosión
+77046 rayo
+77047 avión de transporte
+77048 león
+77049 domar leones
+77050 ballestero
+77051 gases lacrimógenos
+77052 lanza-granadas
+77053 punto de inicio
+77054 visión
+77055 fortín
+77056 siervo
+77057 gárgola maldita
+77058 planta espinosa
+77059 ayuntamiento
+77060 sede del governador
+77061 palacio del canciller
+77062 batería antiaérea
+77063 campo militar
+77064 bola de energía
+77065 generar bola de energía
+77066 trabajador
+77067 erudito
+77068 tormenta de nuves
+77069 ataque de los dragones
+77070 fábrica de aviones
+77071 clonación
+77072 bribón
+77073 arquerito clonado
+77074 avión de vigilancia
+77075 súper armadura
+77076 súper ataque
+77077 súper vida
+77078 súper velocidad
+77079 súper exorcismo
+77080 cañón de plasma sobrecalentado
+77081 granja de animales
+77082 avión de caza
+77083 pocilga
+77084 garage
+77085 computador personal
+77086 computador
+77087 súper computador
+77088 granja hidropónica
+77089 fábrica robótica
+77090 laboratorio óptico
+77091 cría de carroñeros
+77092 modulador de señal
+77093 ascelerador de partículas
+77094 torre láser
+77095 torre radar
+77096 operario
+77097 granja de energía
+77098 tirador láser
+77099 campo de caza
+77100 cañón magnético
+77101 cañón de plasma
+77102 alcance de los dragones
+77103 captador móvil
+77104 armadura de los dragones
+77105 nave espía
+77106 nave láser
+77107 velocidad de los dragones
+77108 potencia de láseres
+77109 potencia de plasma
+77110 escaneo
+77111 biblioteca solar
+77112 golem de carne
+77113 mausoleo
+77114 panteón
+77115 dragón esqueleto
+77116 aliento de la muerte
+77117 cripta
+77118 laberinto
+77119 trampa de ueso
+77120 esclavo de no-muertos
+77121 poder mágico
+77122 fantasma
+77123 espectro con armadura
+77124 pegaso
+77125 domar pegaso
+77126 thestral
+77128 lich
+77129 trampa de flechas '
+77130 pasamurallas
+77131 fuego fatuo
+77132 llamar fuegos fatuos
+
+77136 portal inestable
+77137 portal estable
+
+77141 claro
+77142 ciudad arbórea
+77143 domanio
+77144 arena arbolada
+77145 jardín frondoso
+77148 bosque encantado
+77149 trampa de raíces
+
+77150 recolector
+77152 arquerito
+77153 arquero del bosque
+77154 centauro
+77159 druida
+77160 bruja
+77161 hada
+
+77165 enjambre
+
+77167 tormenta verde
+
+77169 raíces penetrantes
+
+77175 campamento
+77176 campamento fortificado
+77177 fortaleza
+77178 fosa
+77179 cercado
+
+77181 nido
+77182 tipi
+77183 trampa puntiaguda
+
+77184 peón
+77185 bruto
+77186 trol
+
+77189 ogro lanzarroca
+
+77190 serpiente
+
+77192 serpiente alada
+77193 hipogrifo
+77194 sacerdote vudú
+
+77196 kamikaze
+77197 bola transportadora
+77198 explosivos de muy alta calidad
+
+77199 posesión
+
+77200 tradicionales
+77201 técnicos
+77202 robots
+77203 oscuros
+77204 élficos
+77205 orcos
+
+77208 ilusión arbolada
+
+77213 domar serpientes
+77212 alta agresividad
+
+77216 bomba camuflada
+77217 estructura reforzada
+
+77218 círculo de los elementos
+77219 torre del fuego
+77220 torre del agua
+77221 torre del aire
+77222 torre de la tierra
+77223 elemental de fuego
+77224 elemental de agua
+77225 elemental de aire
+77226 elemental de tierra
+77227 elementales
+77228 tirador magnético
+77229 bichos
+77230 cepa
+77231 chocadeira
+77232 vivero
+77233 laboratorio de larvas
+77234 fecundador transgénico
+77235 incubadora multiplicador
+77236 árbol frutal
+77237 termitero
+77238 árbol de miel
+77239 sala de barro
+77240 galería de setas
+77241 árbol chispeante
+77242 árbol devorador
+77243 termita guardiána
+77244 termita conquistadora
+77245 trabajo real
+77246 termita blindada
+77247 avispa colérica
+77248 guèpe lanceuse de dard
+77249 guèpe aux mille dards
+77250 moustique insatiable
+77251 moustique terrible
+77252 moustique sanguinaire
+77253 crabe pinceur
+77254 crabe lanceur de coquille
+77255 crabe de siège
+77256 champignon bagarreur
+77257 champignon toxique
+77258 champignon dévastateur
+77259 luciole éclaireuse
+77260 luciole éblouissante
+77261 luciole enflammée
+77262 générer souche
+77263 générer larves
+77264 larve
+77265 phéromone de survie
+77266 spores toxiques
+77267 spores hallucinogènes
+77268 spores de soin
+77269 ouvrière marcheuse
+77270 ouvrière ailée
+77271 elfe noir
+77272 cabane
+77273 villa
+77274 manoir
+77275 coutellerie
+77276 scène
+77277 cénacle
+77278 tour venteuse
+77279 voleur
+77280 rodeur
+77281 assassin
+77282 maître assassin
+77283 illusionniste
+77284 pantin
+77285 doctoresse
+77286 shuriken volant
+77287 vortex
+77288 tourbillon
+77289 technique de lancer
+77290 vitesse d'animation
+77291 lame fatale
+77292 fumigène
+77293 faux vortex
+77294 plantation carnivore
+77295 volière
+77296 pigeon
+77297 pluie de flêches
+77298 tourelle des embusqués
+77299 haute tour des embusqués
+77300 tour à perchoir
+77301 arbre carnivore
+77302 arbre vorace
+77303 réseau racinaire
+77304 berserk
+77305 troll berserker
+77306 feuille d'acier
+77307 apprivoiser pigeons
+77308 animer pantin
+77309 éléphant
+77310 apprivoiser éléphant
+77311 vigne paisible
+77312 vigne envahissante
+77313 semer vigne paisible
+77314 poser piège à flêches
+77315 séisme
+77316 déflagration
+77317 soin
+77318 coup de vent
+77319 mer de lave
+77320 golem de boue
+77321 tempête de sable
+77322 nuage de vapeur
+77323 ciel de glace
+77324 cornac
+77325 éléphant à tourelle
+77326 absorption des âmes
+77327 champ de nécromancie
+77328 explosion de cadavre
+77329 cadavre pestiféré
+77330 pestifération de cadavre

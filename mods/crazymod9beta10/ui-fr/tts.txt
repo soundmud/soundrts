@@ -1,0 +1,341 @@
+; CrazyMod v9
+
+77000 bombardier dirigeable
+77001 poudrière
+77002 poudre de haute qualité
+77003 faire exploser
+77004 vitalité dragonique
+77005 terrier
+77006 sauvage
+77007 exploitation fruitière
+77008 planque
+77009 bosquet des brigands
+77010 bois des flibustiers
+77011 hôpital
+77012 santé publique
+77013 bivouac d'entraînement
+77014 mousquetaire
+77015 extracteur de magnésite
+77016 piège electrique
+77017 cage aux fauves
+77018 orage
+77019 onde hypnose
+77020 tour magnétique
+77021 hutte des sortilèges
+77022 chasseresse
+77023 loup
+77024 arbre sentinelle
+77025 semer arbre sentinelle
+77026 envoutement
+77027 ectoplasme
+77028 appeler ectoplasme
+77029 brume maléfique
+77030 tour spectrale
+77031 goule
+77032 cimetière
+77033 dompter loups
+77034 paladin
+77035 semer arbre des ténèbres
+77036 semer arbre de la sérénité
+77037 arbre des ténèbres
+77038 arbre de la sérénité
+77039 recycler cadavres en plantes carnivores
+77040 recycler cadavres en plantes médicinales
+77041 plante carnivore
+77042 plante médicinale
+77043 magnésite de haute qualité
+77044 magnésite de très haute qualité
+77045 explosion
+77046 foudre
+77047 transporteur dirigeable
+77048 lion
+77049 dompter lions
+77050 arbalétrier
+77051 gaz lacrymogène
+77052 lance-grenade
+77053 point de départ
+77054 vision
+77055 chatelet
+77056 serf
+77057 gargouille maudite
+77058 plante épineuse
+77059 mairie
+77060 siège du gouverneur
+77061 palais du chancelier
+77062 DCA
+77063 camp militaire
+77064 boule d'énergie
+77065 générer boule d'énergie
+77066 travailleur
+77067 érudit
+77068 tempête de nuages
+77069 attaque dragonique
+77070 chantier aéronaval
+77071 clonage
+77072 gredin
+77073 archerot clone
+77074 dirigeable d'observation
+77075 super armure
+77076 super attaque
+77077 super vie
+77078 super vitesse
+77079 super exorcisme
+77080 canon plasma surchauffé
+77081 élevage
+77082 chasseur dirigeable
+77083 porcherie
+77084 garage
+77085 ordinateur
+77086 calculateur
+77087 supercalculateur
+77088 ferme hydroponique
+77089 usine robotique
+77090 laboratoire optique
+77091 élevage de nécrophages
+77092 modulateur de signal
+77093 accélérateur de particules
+77094 tour laser
+77095 tour radar
+77096 geek
+77097 ferme de puissance
+77098 tireur laser
+77099 terrain de chasse
+77100 canon magnétique
+77101 canon plasma
+77102 souffle dragonique
+77103 capteur mobile
+77104 résistance dragonique
+77105 drône
+77106 vaisseau laser
+77107 vitesse dragonique
+77108 puissance laser
+77109 puissance plasma
+77110 image radar
+77111 bibliothèque ensoleillée
+77112 golem de chair
+77113 mausolée
+77114 caveau
+77115 dragon squelette
+77116 souffle de mort
+77117 crypte
+77118 labyrinthe
+77119 piège d'os
+77120 esclave mort-vivant
+77121 puissance magique
+77122 fantôme
+77123 spectre en armure
+77124 cheval ailé
+77125 dompter cheval ailé
+77126 sombral
+77127 tour de surveillance
+77128 liche
+77129 piège à flêches
+77130 passe muraille
+77131 feu follet
+77132 appeler feu follet
+77133 tunnel d'approvisionnement
+77134 creuser tunnel d'approvisionnement
+77135 brasier
+77136 portail instable
+77137 portail stable
+77138 tireur de fusée
+77139 troll de guerre
+77140 tour de défense
+77141 clairière
+77142 cité arboricole
+77143 domaine
+77144 arène boisée
+77145 jardin feuillu
+77146 tour à baliste
+77147 campanile
+77148 bois enchanté
+77149 piège de racines
+77150 récolteur
+77151 beffroi
+77152 archerot
+77153 archer des forêts
+77154 centaure
+77155 ténacité au combat
+77156 ardeur au combat
+77157 poste d'observation
+77158 batterie de missiles anti-aériens
+77159 druide
+77160 ensorceleuse
+77161 fée
+77162 tour sombre
+77163 tour brumeuse
+77164 tour des tourments
+77165 essaim
+77166 tour des terreurs
+77167 tempête verte
+77168 transformer les cadavres en fantomes
+77169 racines pénétrantes
+77170 transformer les cadavres en zombies
+77171 transformer les cadavres en golems de chair
+77172 champ magnétique
+77173 perturbation magnétique non contrôlée
+77174 tour de vigilance
+77175 campement
+77176 campement fortifié
+77177 forteresse
+77178 fosse
+77179 enclos
+77180 grande tour de garde
+77181 nid
+77182 tipi
+77183 piège à pointes
+77184 péon
+77185 troll cogneur
+77186 troll massacreur
+77187 tour feuillue
+77188 tour aux feuilles tranchantes
+77189 ogre lanceur de roche
+77190 serpent
+77191 tour des miroirs
+77192 serpent ailé
+77193 hippogriffe
+77194 prêtre vaudou
+77195 tour solaire
+77196 kamikaze
+77197 boule de transport
+77198 poudre de très haute qualité
+77199 possession
+77200 traditionnel
+77201 technique
+77202 robotique
+77203 ténèbre
+77204 elfique
+77205 orc
+77206 rayon solaire
+77207 promontoire
+77208 illusion boisée
+77209 tour de mitraille
+77210 tour de bombarde
+77211 éboulis
+77212 tour massive
+77213 dompter serpents
+77214 grande agressivité
+77215 tourelle de veille
+77216 bombe camouflée
+77217 structure renforcée
+77218 cercle des éléments
+77219 tour du feu
+77220 tour de l'eau
+77221 tour de l'air
+77222 tour de la terre
+77223 élémental de feu
+77224 élémental d'eau
+77225 élémental d'air
+77226 élémental de terre
+77227 élémentale
+77228 tireur magnétique
+77229 vermine
+77230 souche
+77231 couveuse
+77232 pouponnière
+77233 laboratoire larvaire
+77234 fertiliseur transgénétique
+77235 incubateur démultiplicateur
+77236 arbre à fruit
+77237 termitière
+77238 arbre à miel
+77239 chambre boueuse
+77240 galerie aux champignons
+77241 arbre étincelant
+77242 arbre dévoreur
+77243 termite gardien
+77244 termite conquérant
+77245 ouvrière royale
+77246 termite tank
+77247 guèpe colérique
+77248 guèpe lanceuse de dard
+77249 guèpe aux mille dards
+77250 moustique insatiable
+77251 moustique terrible
+77252 moustique sanguinaire
+77253 crabe pinceur
+77254 crabe lanceur de coquille
+77255 crabe de siège
+77256 champignon bagarreur
+77257 champignon toxique
+77258 champignon dévastateur
+77259 luciole éclaireuse
+77260 luciole éblouissante
+77261 luciole enflammée
+77262 générer souche
+77263 générer larves
+77264 larve
+77265 phéromone de survie
+77266 spores toxiques
+77267 spores hallucinogènes
+77268 spores de soin
+77269 ouvrière marcheuse
+77270 ouvrière ailée
+77271 elfe noir
+77272 cabane
+77273 villa
+77274 manoir
+77275 coutellerie
+77276 scène
+77277 cénacle
+77278 tour venteuse
+77279 voleur
+77280 rodeur
+77281 assassin
+77282 maître assassin
+77283 illusionniste
+77284 pantin
+77285 doctoresse
+77286 shuriken volant
+77287 vortex
+77288 tourbillon
+77289 technique de lancer
+77290 vitesse d'animation
+77291 lame fatale
+77292 fumigène
+77293 appel aux ombres
+77294 maison des cornacs
+77295 volière
+77296 pigeon
+77297 pluie de flêches
+77298 tourelle des embusqués
+77299 haute tour des embusqués
+77300 tour à perchoir
+77301 arbre carnivore
+77302 arbre vorace
+77303 réseau racinaire
+77304 berserk
+77305 troll berserker
+77306 feuille d'acier
+77307 apprivoiser pigeons
+77308 animer pantin
+77309 éléphant
+77310 apprivoiser éléphant
+77311 vigne paisible
+77312 vigne envahissante
+77313 semer vigne paisible
+77314 poser piège à flêches
+77315 séisme
+77316 déflagration
+77317 soin
+77318 coup de vent
+77319 mer de lave
+77320 golem de boue
+77321 tempête de sable
+77322 nuage de vapeur
+77323 ciel de glace
+77324 cornac
+77325 éléphant à tourelle
+77326 absorption des âmes
+77327 champ de nécromancie
+77328 explosion de cadavre
+77329 cadavre pestiféré
+77330 pestifération de cadavre
+77331 ombre
+77332 agent secret
+77333 poser bombe camouflée
+77334 poser piège électrique
+77335 poser piège d'os
+77336 poser piège de racines
+77337 poser piège à pointes
+77338 larguer agent secret

@@ -1,0 +1,578 @@
+; CrazyMod v8.3a
+
+; messages
+def patrol
+shortcut y
+
+; miscellaneous parameters
+
+
+
+
+; abilities
+
+def a_recall
+shortcut r
+
+; upgrades
+
+
+; research
+
+
+; buildings
+
+
+def farm
+shortcut g
+
+def barracks 
+shortcut b
+
+def lumbermill 
+shortcut c
+
+def townhall
+shortcut a
+
+def stables
+shortcut e
+
+def blacksmith 
+shortcut f
+
+def workshop 
+shortcut t
+
+def temple  
+shortcut t
+
+
+def necropolis
+shortcut n
+
+
+; units
+
+
+
+; resources
+
+
+; passages
+
+
+
+; races
+
+
+
+; Mod des cinglés
+
+
+def bombardier_dirigeable
+shortcut b
+
+def poudriere
+shortcut p
+
+def  cannontower
+shortcut t
+
+def poudre_de_haute_qualite
+shortcut a
+
+def poudre_de_tres_haute_qualite
+shortcut m
+
+def a_faire_exploser_poudriere
+shortcut e
+
+def exploitation_fruitiere
+shortcut g
+
+def hopital
+shortcut h
+
+def sante_publique
+shortcut s
+
+def mousquetaire
+shortcut m
+
+def extracteur_de_magnesite
+shortcut e
+
+def piege_electrique
+shortcut i
+
+
+; nouveautés v2
+
+def a_orage_magnetique
+shortcut t
+
+def a_onde_hypnose
+shortcut h
+
+def tour_magnetique
+shortcut q
+
+def a_envoutement
+shortcut h
+
+def a_appeler_ectoplasme
+shortcut i
+
+def a_brume_malefique
+shortcut b 
+
+def tour_spectrale
+shortcut t
+
+def goule
+shortcut n
+
+def cimetiere
+shortcut m
+
+def a_semer_arbre_des_tenebres
+shortcut s
+
+def a_semer_arbre_de_la_serenite
+shortcut s
+
+def a_recycler_en_plante_carnivore
+shortcut r
+
+def a_recycler_en_plante_medicinale
+shortcut r
+
+def magnesite_de_haute_qualite
+shortcut a
+
+def magnesite_de_tres_haute_qualite
+shortcut m
+
+def transporteur_dirigeable
+shortcut t
+
+def lance_grenade
+shortcut l
+
+def chatelet
+shortcut n
+
+def dragonslair 
+shortcut g
+
+def serf
+shortcut s
+
+def mairie
+shortcut a
+
+def camp_militaire
+shortcut c
+
+def travailleur
+shortcut t
+
+def chantier_aeronaval
+shortcut o
+
+def dirigeable_d_observation
+shortcut e
+
+def chasseur_dirigeable
+shortcut c
+
+def garage
+shortcut a
+
+def ordinateur
+shortcut c
+
+def usine_robotique
+shortcut f
+
+def laboratoire_optique
+shortcut l
+
+def modulateur_de_signal
+shortcut m
+
+def accelerateur_de_particules
+shortcut p
+
+def tour_laser
+shortcut t
+
+def tour_radar
+shortcut r
+
+def geek
+shortcut g
+
+def tireur_laser
+shortcut t
+
+def canon_magnetique
+shortcut g
+
+def canon_plasma
+shortcut p
+
+def capteur_mobile
+shortcut v
+
+def drone
+shortcut e
+
+def vaisseau_laser
+shortcut l 
+
+def puissance_laser
+shortcut l
+
+def puissance_plasma
+shortcut p
+
+def a_image_radar
+shortcut s
+
+def mausolee
+shortcut m
+
+def caveau
+shortcut p
+
+def crypte
+shortcut c
+
+def piege_d_os
+shortcut h
+
+def esclave_mort_vivant
+shortcut e
+
+def gargouille_maudite
+shortcut g
+
+def sombral
+shortcut t
+
+def liche
+shortcut l 
+
+def a_passe_muraille
+shortcut p
+
+def a_deadly_fog
+shortcut n
+
+def a_appeler_feu_follet
+shortcut f
+
+def u_portail_instable
+shortcut i
+
+def a_portail_instable
+shortcut i
+
+def u_portail_stable
+shortcut p
+
+def a_portail_stable
+shortcut p
+
+def clairiere
+shortcut a
+
+def  guardtower
+shortcut t
+
+def arene_boisee
+shortcut a
+
+def jardin_feuillu
+shortcut j
+
+def bois_enchante
+shortcut b
+
+def piege_de_racines
+shortcut r
+
+def recolteur
+shortcut r
+
+def archerot
+shortcut a
+
+def archer_des_forets
+shortcut b
+
+def centaure
+shortcut c
+
+def druide
+shortcut d
+
+def ensorceleuse
+shortcut b
+
+def fee
+shortcut h
+
+def a_essaim
+shortcut e
+
+def a_tempete_verte
+shortcut t
+
+def campement
+shortcut c
+
+def fosse
+shortcut f
+
+def enclos
+shortcut e
+
+def nid
+shortcut n 
+
+def tipi
+shortcut i
+
+def piege_a_pointes
+shortcut u
+
+def peon
+shortcut p
+
+def cogneur
+shortcut b
+
+def troll
+shortcut t
+
+def ogre_lanceur_de_roche
+shortcut r
+
+def serpent_aile
+shortcut s
+
+def hippogriffe
+shortcut h
+
+def pretre_vaudou
+shortcut s
+
+def kamikaze
+shortcut k
+
+def a_possession
+shortcut p 
+
+def a_illusion_boisee
+shortcut i
+
+def a_faire_exploser_kamikaze
+shortcut e
+
+def grande_agressivite
+shortcut g
+
+def cercle_des_elements
+shortcut c
+
+def tour_du_feu
+shortcut f
+
+def tour_de_l_eau
+shortcut a
+
+def tour_de_l_air
+shortcut r
+
+def tour_de_la_terre
+shortcut t
+
+def elemental_de_feu
+shortcut f
+
+def elemental_d_eau
+shortcut a
+
+def elemental_d_air
+shortcut r
+
+def elemental_de_terre
+shortcut t
+
+def bombe_camouflee
+shortcut b
+
+def a_faire_exploser_bombe_camouflee
+shortcut e
+
+def structure_renforcee
+shortcut r
+
+def tireur_magnetique
+shortcut m
+
+def boule_de_transport
+shortcut b
+
+def arbaletrier
+shortcut b
+
+def a_dompter_loup
+shortcut o 
+
+def a_dompter_lion
+shortcut l
+
+def a_dompter_serpent
+shortcut s
+
+def terrier
+shortcut m
+
+def planque
+shortcut e
+
+def bivouac_d_entrainement
+shortcut b
+
+def cage_aux_fauves
+shortcut j
+
+def hutte_des_sortileges
+shortcut s
+
+def gredin
+shortcut b
+
+def chasseresse
+shortcut c
+
+def a_racines_penetrantes
+shortcut r
+
+def a_semer_arbre_sentinelle
+shortcut s
+
+def paladin
+shortcut p
+
+def super_armure
+shortcut s
+
+def super_attaque
+shortcut s
+
+def super_vie
+shortcut s
+
+def super_vitesse
+shortcut s
+
+def a_foudre
+shortcut r
+
+def a_holy_vision
+shortcut v
+
+def labyrinthe
+shortcut l
+
+def dca
+shortcut v 
+
+def necromancer
+shortcut n
+
+def a_boule_d_energie
+shortcut b
+
+def erudit
+shortcut e
+
+def a_tempete_de_nuages
+shortcut t
+
+def a_clonage
+shortcut c
+
+def super_exorcisme
+shortcut s
+
+def knight
+shortcut c
+
+def canon_plasma_surchauffe
+shortcut p
+
+def a_gaz_lacrymogene
+shortcut g
+
+def priest
+shortcut s
+
+def dragon
+shortcut d
+
+def elevage
+shortcut g
+
+def porcherie
+shortcut g
+
+def ferme_hydroponique
+shortcut g
+
+def elevage_de_necrophages
+shortcut g
+
+def ferme_de_puissance
+shortcut g
+
+def terrain_de_chasse
+shortcut z
+
+def vitalite_dragonique
+shortcut v
+
+def attaque_dragonique
+shortcut a
+
+def souffle_dragonique
+shortcut l
+
+def resistance_dragonique
+shortcut a
+
+def vitesse_dragonique
+shortcut i
+
+def bibliotheque_ensoleillee
+shortcut s
+
+def a_souffle_de_mort
+shortcut a
+
+def a_dompter_cheval_aile
+shortcut p
+
+def a_meteors
+shortcut m
+
+def puissance_magique
+shortcut p 
+
+def piege_a_fleches
+shortcut t
