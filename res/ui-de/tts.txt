@@ -1,3 +1,5 @@
+ï»¿; coding: utf-8
+
 0	unbekannt!
 1	Sie 
 
@@ -16,18 +18,18 @@
 
 59	der Spieler
 60	Sie sind
-61	getötet
+61	getÃ¶tet
 
 65	Minuten
 66	Sekunden
 67	Norden
-68	Süden
+68	SÃ¼den
 69	Osten
 70	Westen
 71	Nord-Osten
 72	Nord-Westen
-73	Süd-Osten
-74	Süd-Westen
+73	SÃ¼d-Osten
+74	SÃ¼d-Westen
 79	Aue
 80	Wald
 81	Goldmine
@@ -36,7 +38,7 @@
 84	Weg
 85	Arbeiter
 86	Soldat
-87	Schütze
+87	SchÃ¼tze
 88	Feind
 89	Freund
 99	kaserne
@@ -68,13 +70,13 @@
 126	abgeschlossen
 127	abbrechen von
 128	bauen
-129	benötigt
+129	benÃ¶tigt
 130	Einheiten
 131	Gold
 132	Holz
 133	Nahrung
-134	enthält
-135	nicht genügend
+134	enthÃ¤lt
+135	nicht genÃ¼gend
 136	dasselbe !
 137	Nahrung
 138	Sie befehligen
@@ -86,37 +88,37 @@
 145	neutralisiert
 146	verloren
 147	Produktion
-148	Sägemühle 
+148	SÃ¤gemÃ¼hle 
 149	Sieg!
 150	Niederlage
 151	1
 152	Alarm
-153	Brücke
+153	BrÃ¼cke
 154	offen
 155	Level abgeschlossen
 156	im Zentrum
 
 
 
-2008	Drücken Sie F5 für Wiederholung
-2010	drücken Sie
-2011	für
+2008	DrÃ¼cken Sie F5 fÃ¼r Wiederholung
+2010	drÃ¼cken Sie
+2011	fÃ¼r
 2012	Tab
 2013	zu navigieren.
 2014	Eingabe
-2015	zu bestätigen.
+2015	zu bestÃ¤tigen.
 2016	A und Q
 2017	Geben Sie Ihre Befehle
 2018	Z und S
 2019	eine andere Einheit steuern
 2020	X und W
-2021	überprüfen Sie die ressourcen
+2021	Ã¼berprÃ¼fen Sie die ressourcen
 2022	1, 2 oder 3
 2023	Steuern Sie eine Gruppe
 2024	0
 2025	Steuern Sie eine einzelne Einheit
-2026	Rücktaste
-2027	führt die standard aktion des aktuellen ziel aus.
+2026	RÃ¼cktaste
+2027	fÃ¼hrt die standard aktion des aktuellen ziel aus.
 2028	F5 und F6
 2029	die letzten meldungen wiederholen
 2030	Alt
@@ -125,30 +127,30 @@
 2033	abzubrechen.
 2034	schift
 2035	in gegengesetzter Richtung.
-2036	das Öffnen des Menüs.
+2036	das Ã–ffnen des MenÃ¼s.
 2037	Pfeiltasten
 2038	das Navigieren auf der Karte.
 2039	steuerung
 2040	Hindernisse werden ignoriert.
 2041	bild runter
-2042	das Navigieren zum nächsten interessanten Sektor.
+2042	das Navigieren zum nÃ¤chsten interessanten Sektor.
 2043	leertaste
 2044	das Navigieren zu der aktuell befehligten Einheit.
-2045	das Befehligen der nächsten Einheit im aktuellen Sektor.
-2046	das Auswählen des nächsten Ziels.
-2047	das Auswählen des nächsten Auftrags.
+2045	das Befehligen der nÃ¤chsten Einheit im aktuellen Sektor.
+2046	das AuswÃ¤hlen des nÃ¤chsten Ziels.
+2047	das AuswÃ¤hlen des nÃ¤chsten Auftrags.
 2048	das Befehligen aller Einheiten des selben Typs im aktuellen Sektor.
-2049	das Bestätigen des gewählten Auftrags.
-2050	das Ausführen der Standardaktion.
+2049	das BestÃ¤tigen des gewÃ¤hlten Auftrags.
+2050	das AusfÃ¼hren der Standardaktion.
 2051	das Abfragen von Gold, Holz und Nahrung.
 2052	das Abfragen der Gesundheit der aktuellen Einheit.
-2053	das Befehligen der hälfte aller Einheiten des selben Typs im aktuellen Sektor.
+2053	das Befehligen der hÃ¤lfte aller Einheiten des selben Typs im aktuellen Sektor.
 2054	das Befehligen einer Einheit des selben Typs im aktuellen Sektor.
 2055	q
 2056	das Befehligen aller Kampfeinheiten im aktuellen Sektor.
 2057	das Befehligen aller Arbeiter im aktuellen Sektor.
-2058	das Befehligen des nächsten Gebäudes.
-2059	das Befehligen des nächsten Arbeiters.
+2058	das Befehligen des nÃ¤chsten GebÃ¤udes.
+2059	das Befehligen des nÃ¤chsten Arbeiters.
 3000	0
 3001	1
 3002	2
@@ -193,10 +195,10 @@
 4004	verarbeitung
 4005	fehler
 4006	erfolgreich!
-4007	bitte wählen Sie einen Eintrag.
+4007	bitte wÃ¤hlen Sie einen Eintrag.
 4008	bitte senden Sie kommentare an die E-Mail-Adresse: jlpo@free.fr
-4009	zurück,
-4010	Menü
+4009	zurÃ¼ck,
+4010	MenÃ¼
 4011	Fortfahren
 4012	Version Fehler
 4014	Strategiespiel
@@ -209,13 +211,13 @@
 4021	emun gegen feindliche angriffe.
 4022	produziert,
 4023	produziert,
-4024	benötigt
-4025	Gebäude
+4024	benÃ¶tigt
+4025	GebÃ¤ude
 4026	punkte
 
-4028	F1 für Hilfe
-4029	Hauptmenü,
-4030	bitte wählen Sie einen Eintrag.
+4028	F1 fÃ¼r Hilfe
+4029	HauptmenÃ¼,
+4030	bitte wÃ¤hlen Sie einen Eintrag.
 4031	Einzelspieler,
 4032	spielen Sie gegen den computer
 4033	Mehrspieler,
@@ -229,13 +231,13 @@
 4042	Beenden Sie das Spiel
 4043	welche art von server?
 4044	einfacher server
-4045	Andere können keine Spiele erstellen
-4046	öffentlicher server
-4047	Andere können Spiele erstellen
-4048	zurück,
-4049	der Server konnte nicht erstellt werden. Bitte überprüfen Sie Ihre Internet-Verbindung.
+4045	Andere kÃ¶nnen keine Spiele erstellen
+4046	Ã¶ffentlicher server
+4047	Andere kÃ¶nnen Spiele erstellen
+4048	zurÃ¼ck,
+4049	der Server konnte nicht erstellt werden. Bitte Ã¼berprÃ¼fen Sie Ihre Internet-Verbindung.
 4051	Auf wiedersehen
-4052	drücken Sie TAB um einen Eintrag auszuwählen und bestätigen Sie ihn mit Eingabe.
+4052	drÃ¼cken Sie TAB um einen Eintrag auszuwÃ¤hlen und bestÃ¤tigen Sie ihn mit Eingabe.
 4053	akzeptieren Sie die einladung von:
 4054	wechsle zu spiel
 4055	Spiel starten
@@ -247,36 +249,36 @@
 4061	verlassen dieses spiels.
 4062	das spiel startet in 5 sekunden...
 4063	das Spiel startet, wenn der Spielleiter bereit ist.
-4064	drücken Sie Eingabe um zu bestädigen.
+4064	drÃ¼cken Sie Eingabe um zu bestÃ¤digen.
 
-4066	drücken sie TAB um zwischen den sichtbaren objekten zu wählen. 
-4067	drücken sie TAB um ein ziel auszuwählen, und Enter um zu bestätigen.
+4066	drÃ¼cken sie TAB um zwischen den sichtbaren objekten zu wÃ¤hlen. 
+4067	drÃ¼cken sie TAB um ein ziel auszuwÃ¤hlen, und Enter um zu bestÃ¤tigen.
 
 4070	Spiel abbrechen
 4071	Spiel fortsetzen
-4072	Die Verbindung zu dem Server konnte nicht hergestellt werden. Bitte überprüfen Sie Ihre Internet-Verbindung.
+4072	Die Verbindung zu dem Server konnte nicht hergestellt werden. Bitte Ã¼berprÃ¼fen Sie Ihre Internet-Verbindung.
 4073	server wird verwaltet von:
-4074	für
-4075	zurück,
-4076	zurück,
-4077	fehler: Der server ist gerade nicht erreichbar, bitte versuchen Sie es später erneut.
+4074	fÃ¼r
+4075	zurÃ¼ck,
+4076	zurÃ¼ck,
+4077	fehler: Der server ist gerade nicht erreichbar, bitte versuchen Sie es spÃ¤ter erneut.
 4078	server von:
-4079	benutzen die gleiche Version des Spiels wie Sie. Bitte wählen Sie einen Server aus und drücken Sie enter um zu verbinden.
+4079	benutzen die gleiche Version des Spiels wie Sie. Bitte wÃ¤hlen Sie einen Server aus und drÃ¼cken Sie enter um zu verbinden.
 4080	fehler: der Server konnte nicht gestartet werden.
-4081	Fehler! Der Server ist nicht erreichbar. Gründe können sein: Der Server ist nicht online, der Server ist hinter einer Firewall oder einem Router.
+4081	Fehler! Der Server ist nicht erreichbar. GrÃ¼nde kÃ¶nnen sein: Der Server ist nicht online, der Server ist hinter einer Firewall oder einem Router.
 4082	Fehler! unbekannte Daten vom Server empfangen. Dies ist kein SoundRTS Server.
 4083	Fehler! Verbindung fehlgeschlagen. Dies ist kein SoundRTS Server
 4084	oder deine Anmeldung ist fehlgeschlagen.
 4085	fehler! Die Verbindung zum Server ist fehlgeschlagen.
-4086	bitte wählen Sie einen Eintrag.
-4087	Zugangsdaten ändern
+4086	bitte wÃ¤hlen Sie einen Eintrag.
+4087	Zugangsdaten Ã¤ndern
 
 4096	speichern,
-4097	Einstellungen werden übernommen
-4098	zurück,
+4097	Einstellungen werden Ã¼bernommen
+4098	zurÃ¼ck,
 4099	Einstellungen werden verworfen
 
-4101	ein neues fenster wird sich öffnen.
+4101	ein neues fenster wird sich Ã¶ffnen.
 4102	die verbindung wurde unterbrochen.
 4103	Langsames Spiel
 4104	Normales Spiel
@@ -287,47 +289,47 @@
 4114	Spiel gegen den Computer.
 4115	Erzeuge einen Fehler im Spiel, und lasse den Computer gegen sich selbst spielen.
 
-4118	zurück,
-4119	wählen Sie einen Server
+4118	zurÃ¼ck,
+4119	wÃ¤hlen Sie einen Server
 4120	geben Sie die IP-Adresse des Servers ein.
 4121	privater server
 4122	Der Server wird nicht in die Liste aufgenommen
 
-4200	die Holz produktion wurde beschläunigt.
+4200	die Holz produktion wurde beschlÃ¤unigt.
 4201	katapult
 4202	erwartet Ihre Befehle
 4203	von
-4204	Ein Gebäude kann hier nicht errichtet werden
+4204	Ein GebÃ¤ude kann hier nicht errichtet werden
 4205	es wird keine Einheit befehligt
 4206	der bbildschirm ist an.
 4207	der bildschirm ist aus.
 4208	unbekannt
 4209	Nebel
-4210	F10 für das öffnen des Menüs.
+4210	F10 fÃ¼r das Ã¶ffnen des MenÃ¼s.
 4211	3D-Modus
 4212	kartenmodus
 4213	Schmiede
 4214	erweitern
 4215	schwerter
 4216	pfeile
-4217	rüstungen
-4218	rüstung für die Bogenschützen
+4217	rÃ¼stungen
+4218	rÃ¼stung fÃ¼r die BogenschÃ¼tzen
 4219	auf
 4220	Bergfried
 4221	schloss
 4222	stall
-4223	das menü von
-4224	 hat sich gerade verändert
+4223	das menÃ¼ von
+4224	 hat sich gerade verÃ¤ndert
 4225	ritter
 4226	werkstatt
-4227	drachenhöhle
+4227	drachenhÃ¶hle
 4228	Turm des Magiers
 4229	Magier
 4230	flugmaschine
 4231	drache
 4232	server fehler
 4233	bogen reichweite
-4234	Eine neue Version ist auf der hersteller webseite verfügbar.
+4234	Eine neue Version ist auf der hersteller webseite verfÃ¼gbar.
 4235	Geben Sie einen Benutzernamen ein.
 4236	Bitte benutzen Sie nur zahlen und buchstaben.
 4237	falsche Zugangsdaten
@@ -336,26 +338,26 @@
 4240	ist angemeldet
 4241	ist dem Spiel beigetreten
 4242	spieler von
-4243	läd Sie ein
-4244	nicht genug spieler für ein spiel, das minimum von spielern ist:
+4243	lÃ¤d Sie ein
+4244	nicht genug spieler fÃ¼r ein spiel, das minimum von spielern ist:
 4245	aktuelle Zugangsdaten
-4246	das Bevölkerungslimit wurde erreicht
+4246	das BevÃ¶lkerungslimit wurde erreicht
 4247	Magiepunkte von
 4248	erforsche
 4249	wunderheilung
 4250	teleportation
 4251	test
-4252	nicht genügend Magie, warten Sie bitte bis sich die einheit erholt hat.
-4253	Prozent der Lautstärke
+4252	nicht genÃ¼gend Magie, warten Sie bitte bis sich die einheit erholt hat.
+4253	Prozent der LautstÃ¤rke
 4254	geschwindigkeit des Pferdes
-4255	lege einen neuen sammelpunkt für alle einheiten fest.
+4255	lege einen neuen sammelpunkt fÃ¼r alle einheiten fest.
 4256	abgebaut,
 4257	aggressivem Computer
 4258	friedlichem computer
 4259	hat sich abgemeldet.
 4260	auf dem server von:
 4261	hat das spiel beendet.
-4262	zusätzliches Sound-pack
+4262	zusÃ¤tzliches Sound-pack
 4263	ist aktiviert.
 4264	ist deaktiviert.
 4265	schummel modus
@@ -376,7 +378,7 @@
 4280	lade ab
 4281	lade alle ab nach
 4282	gehe in
-4283	unsichtbarer schütze
+4283	unsichtbarer schÃ¼tze
 
 5000 a
 5001 b
@@ -418,7 +420,7 @@
 4291 tarnen
 
 4292 herbeirufen von
-4293 die toten aus den Gräbern holen
+4293 die toten aus den GrÃ¤bern holen
 4294 auferstehung
 
 4295 zombie
@@ -439,7 +441,7 @@
 4305 nebel des todes
 4306 meteor
 
-4307 zurückholen
+4307 zurÃ¼ckholen
 
 4308 stein
 4309 steinbruch
@@ -451,19 +453,19 @@
 4314 plateau
 
 4315 Beobachte ein aufgenommenes Spiel.
-4316 Drücke strg+shift+F4, um einen anderen Spieler zu beobachten.
+4316 DrÃ¼cke strg+shift+F4, um einen anderen Spieler zu beobachten.
 
 4317 Gebe einen Befehl ein.
 
 4318 zoom
 
-4319 Die Reihenfolge ändern, in der Mods geladen werden.
-4320 Einen Mod zur Liste hinzufügen
+4319 Die Reihenfolge Ã¤ndern, in der Mods geladen werden.
+4320 Einen Mod zur Liste hinzufÃ¼gen
 4321 die Liste ist leer
 4322 wird geladen
 
 4323 Pakete
-4324 Paketmenü
+4324 PaketmenÃ¼
 4325 Paket installieren
 4326 Paket deinstallieren
 4327 Paket aktualisieren
@@ -475,16 +477,16 @@
 4332 Tor
 4333 blockiere
 
-4334 zufällige Art
+4334 zufÃ¤llige Art
 
-4335 Höchste Anzahl erreicht
+4335 HÃ¶chste Anzahl erreicht
 
-4336 user-Ordner öffnen
+4336 user-Ordner Ã¶ffnen
 4337 Anleitung
 
 4338 massive Mauer
 4339 massives Tor
-4340 Starte ein öffentliches Spiel auf
+4340 Starte ein Ã¶ffentliches Spiel auf
 4341 Mods
 4342 Soundpacks
 4343 Geschwindigkeit
@@ -493,7 +495,7 @@
 4345 See
 4346 Fluss
 4347 Berg
-4348 Brücke
+4348 BrÃ¼cke
 4349 Furt
 4350 Sumpf
 4351 Ozean
@@ -506,7 +508,7 @@
 
 5357 Schiffswerft
 4358 Boot
-4359 Zerstörer
+4359 ZerstÃ¶rer
 4360 Kampfschiff
 4361 U-Boot
 

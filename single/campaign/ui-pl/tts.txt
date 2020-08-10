@@ -1,3 +1,5 @@
+﻿; coding: utf-8
+
 7500 Horda przeciwników przybyła ze wsząd niszcząc co się da, trzeba szybko działać!
 7501 Twój władca wysłał cię, żebyś zbudował granicę blisko bazy. Nie idź za daleko, bo kilku przeciwników grasuje w pobliżu.
 7502 Dobra robota!

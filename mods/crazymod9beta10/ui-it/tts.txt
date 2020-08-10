@@ -1,3 +1,5 @@
+Ôªø; coding: utf-8
+
 ; ; CrazyMod v9
 
 77000 dirigibile bombardiere
@@ -36,7 +38,7 @@
 77033 domare i lupi
 77034 paladino
 77035 seminare l'albero delle tenebre
-77036 seminare l'albero della serenit‡
+77036 seminare l'albero della serenit√†
 77037 albero delle tenebre
 77038 albero della serenita'
 77039 recuperare i cadaveri nelle piante carnivore
@@ -107,7 +109,7 @@
 77104 armeria dei dragoni
 77105 drone
 77106 nave laser
-77107 velocit‡ dei dragoni
+77107 velocit√† dei dragoni
 77108 laser potente
 77109 plasma potente
 77110 immagine del radar
@@ -289,7 +291,7 @@
 77287 vortice
 77288 wvortice di vento
 77289 tecniche di lancio
-77290 velocit‡ delle animazioni
+77290 velocit√† delle animazioni
 77291 Coltellata fatale
 77292 fumo
 77293 chiama le ombre

@@ -1,4 +1,6 @@
-7500 Une horde d'ennemis est arrivée de nulle part et détruit tout sur son passage ! Il faut faire quelque chose !
-7501 Votre seigneur vous a envoyé construire une base près de la frontière. Ne vous éloignez pas trop car des ennemis ont été vus dans les environs.
-7502 Bien joué!
+ï»¿; coding: utf-8
+
+7500 Une horde d'ennemis est arrivÃ©e de nulle part et dÃ©truit tout sur son passage ! Il faut faire quelque chose !
+7501 Votre seigneur vous a envoyÃ© construire une base prÃ¨s de la frontiÃ¨re. Ne vous Ã©loignez pas trop car des ennemis ont Ã©tÃ© vus dans les environs.
+7502 Bien jouÃ©!
 7503 Escortez les catapultes jusqu'en I1.

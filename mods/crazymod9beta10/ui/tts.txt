@@ -1,3 +1,5 @@
+ï»¿; coding: utf-8
+
 ; ; CrazyMod v9
 
 77000 bomber airship
@@ -227,7 +229,7 @@
 77224 water elemental
 77225 air elemental
 77226 earth elemental
-77227 élémental
+77227 Ã©lÃ©mental
 77228 magnetic shooter
 77229 vermin
 77230 stump

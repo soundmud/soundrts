@@ -1,4 +1,4 @@
-; coding: utf-8
+﻿; coding: utf-8
 
 7000 fazenda de porcos
 7001 quartel

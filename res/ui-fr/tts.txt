@@ -1,8 +1,10 @@
+ï»¿; coding: utf-8
+
 0	Rien !
 1	Vous vous trouvez
 
 3	Devant vous,
-4	Dairrière vous,
+4	DairriÃ¨re vous,
 5	Que faites vous ?
 
 23	et
@@ -12,26 +14,26 @@
 40	Niveau
 
 54	a
-55	mètres
+55	mÃ¨tres
 
 59	le joueur
-60	Vous êtes
-61	a tué
+60	Vous Ãªtes
+61	a tuÃ©
 
 65	 minutes
 66	 secondes
 67	nord
 68	sud
-69	èst
+69	Ã¨st
 70	ouest
-71	nord-èst
+71	nord-Ã¨st
 72	nord-ouest
-73	sud-èst
+73	sud-Ã¨st
 74	sud-ouest
-79	dans une prairie entourée d'arbres
+79	dans une prairie entourÃ©e d'arbres
 80	bois
 81	mine d'or
-82	hôtel de ville
+82	hÃ´tel de ville
 83	ferme
 84	un passage
 85	paysan
@@ -50,26 +52,26 @@
 107	en
 108	au
 110	offensif
-111	défensif
+111	dÃ©fensif
 112	tenir position
 113	discret
 114	attaquer
 115	vers
 116	a l'est
 117	a l'ouest
-118	réparer
+118	rÃ©parer
 119	sur
 120	combat
 121	contre
 122	une prairie
 123	recruter
-124	prêt !
+124	prÃªt !
 125	ralliement
-126	terminé
+126	terminÃ©
 127	annuler
 128	construction
-129	nécessite
-130	unités
+129	nÃ©cessite
+130	unitÃ©s
 131	or
 132	bois
 133	rations
@@ -82,71 +84,71 @@
 
 142	production suspendue
 143	file d'attente pleine
-144	épuisé
-145	neutralisé
+144	Ã©puisÃ©
+145	neutralisÃ©
 146	perdu
 147	production
 148	scierie
 149	Victoire!
-150	Défaite
+150	DÃ©faite
 151	une
 152	alerte
 153	un pont
 154	ouverte
-155	Vous êtes parvenu au niveau
+155	Vous Ãªtes parvenu au niveau
 156	au centre
 
-2008	Appuyez sur F5 pour réécouter tout ceci
+2008	Appuyez sur F5 pour rÃ©Ã©couter tout ceci
 2010	appuyez sur
 2011	pour
 2012	Tab
-2013	sélectionner
-2014	Entrée
+2013	sÃ©lectionner
+2014	EntrÃ©e
 2015	confirmer
 2016	A et Q
 2017	donner un ordre
 2018	Z et S
-2019	diriger une autre unité
+2019	diriger une autre unitÃ©
 2020	X ou W
 2021	faire le point des ressources
 2022	1, 2 ou 3
 2023	diriger un groupe
 2024	0
-2025	diriger une seule unité
+2025	diriger une seule unitÃ©
 2026	backspace
-2027	donner un ordre par défaut
+2027	donner un ordre par dÃ©faut
 2028	F5 et F6
 2029	l'historique
 2030	Alt
 2031	interrompre la phrase en cours
-2032	échap
+2032	Ã©chap
 2033	annuler
 2034	maj
-2035	en arrière
-2036	accéder au menu
-2037	flèches de direction
-2038	se déplacer sur la carte
+2035	en arriÃ¨re
+2036	accÃ©der au menu
+2037	flÃ¨ches de direction
+2038	se dÃ©placer sur la carte
 2039	control
 2040	en franchissant les obstacles
 2041	page suivante
-2042	se déplacer vers la case connue suivante
+2042	se dÃ©placer vers la case connue suivante
 2043	espace
-2044	se déplacer vers la case de l'unité dirigée et suivre cette unité
-2045	diriger l'unité locale suivante
-2046	sélectionner la cible suivante
-2047	sélectionner l'ordre suivant
-2048	contrôler toutes les unités de même type et de même zone que l'unité en cours
+2044	se dÃ©placer vers la case de l'unitÃ© dirigÃ©e et suivre cette unitÃ©
+2045	diriger l'unitÃ© locale suivante
+2046	sÃ©lectionner la cible suivante
+2047	sÃ©lectionner l'ordre suivant
+2048	contrÃ´ler toutes les unitÃ©s de mÃªme type et de mÃªme zone que l'unitÃ© en cours
 2049	valider l'ordre en cours
 2050	donner l'ordre le plus logique sur la cible en cours
-2051	connaître l'or, le bois et la nourriture disponibles
-2052	connaître la santé de l'unité dirigée
-2053	contrôler la moitié des unités de même type et de même zone que l'unité en cours
-2054	contrôler une seule unité
+2051	connaÃ®tre l'or, le bois et la nourriture disponibles
+2052	connaÃ®tre la santÃ© de l'unitÃ© dirigÃ©e
+2053	contrÃ´ler la moitiÃ© des unitÃ©s de mÃªme type et de mÃªme zone que l'unitÃ© en cours
+2054	contrÃ´ler une seule unitÃ©
 2055	kku
-2056	contrôler tous les soldats de la case en cours
-2057	contrôler tous les paysans de la case en cours
-2058	contrôler le bâtiment suivant
-2059	contrôler le paysan suivant
+2056	contrÃ´ler tous les soldats de la case en cours
+2057	contrÃ´ler tous les paysans de la case en cours
+2058	contrÃ´ler le bÃ¢timent suivant
+2059	contrÃ´ler le paysan suivant
 3000	0
 3001	1
 3002	2
@@ -186,16 +188,16 @@
 4001	Internet
 4002	local
 4004	en cours
-4005	échec
-4006	Réussite !
+4005	Ã©chec
+4006	RÃ©ussite !
 4007	Que souhaitez-vous ?
-4008	Merci d'envoyer vos suggestions à jlpo@free.fr .
+4008	Merci d'envoyer vos suggestions Ã  jlpo@free.fr .
 4009	Quitter
 4010	Menu
 4011	continuer
 4012	erreur de version
-4014	jeu de stratégie
-4015	scénario
+4014	jeu de stratÃ©gie
+4015	scÃ©nario
 4016	solo
 4017	carte
 4018	multijoueur
@@ -204,8 +206,8 @@
 4021	repousser les attaques ennemies
 4022	produit
 4023	produite
-4024	consommé
-4025	bâtiment
+4024	consommÃ©
+4025	bÃ¢timent
 4026	score
 
 4028	Appuyez sur F1 pour obtenir de l'aide.
@@ -214,23 +216,23 @@
 4031	Un seul joueur,
 4032	jouer seul sur votre ordinateur
 4033	Multijoueur,
-4034	jouer à plusieurs sur Internet
+4034	jouer Ã  plusieurs sur Internet
 4035	Serveur,
-4036	lancer un serveur sur votre ordinateur pour héberger des parties multijoueur
+4036	lancer un serveur sur votre ordinateur pour hÃ©berger des parties multijoueur
 4037	Options,
-4038	modifier vos paramètres
+4038	modifier vos paramÃ¨tres
 
 4041	Quitter,
 4042	quitter ce programme
 4043	Quel type de serveur ?
 4044	serveur simple
-4045	vous seul créez les parties
+4045	vous seul crÃ©ez les parties
 4046	serveur public
-4047	un autre peut créer une partie
+4047	un autre peut crÃ©er une partie
 4048	annuler
-4049	Le serveur n'a probablement pas réussi à s'enregistrer sur le métaserveur. Vérifiez que vous êtes connecté à Internet.
-4051	A bientôt
-4052	Appuyez sur Tab pour sélectionner. Appuyez sur Entrée pour confirmer.
+4049	Le serveur n'a probablement pas rÃ©ussi Ã  s'enregistrer sur le mÃ©taserveur. VÃ©rifiez que vous Ãªtes connectÃ© Ã  Internet.
+4051	A bientÃ´t
+4052	Appuyez sur Tab pour sÃ©lectionner. Appuyez sur EntrÃ©e pour confirmer.
 4053	s'inscrire pour la partie de
 4054	rejoindre en cours de route la partie de
 4055	lancer
@@ -242,26 +244,26 @@
 4061	se retirer de cette partie
 4062	la partie commence dans 5 secondes
 4063	le jeu commencera quand l'organisateur le dira
-4064	appuyez sur entrée pour confirmer
+4064	appuyez sur entrÃ©e pour confirmer
 
-4066	Appuyez plusieurs fois sur Tab pour sélectionner chaque objet visible.
-4067	Appuyez sur Tab pour sélectionner la cible puis sur Entrée pour confirmer la cible.
+4066	Appuyez plusieurs fois sur Tab pour sÃ©lectionner chaque objet visible.
+4067	Appuyez sur Tab pour sÃ©lectionner la cible puis sur EntrÃ©e pour confirmer la cible.
 
 4070	abandonner la partie
 4071	continuer la partie
-4072	Impossible d'accéder à la liste des serveurs. Vous n'êtes peut-être pas connecté à Internet.
-4073	serveur hébergé par
+4072	Impossible d'accÃ©der Ã  la liste des serveurs. Vous n'Ãªtes peut-Ãªtre pas connectÃ© Ã  Internet.
+4073	serveur hÃ©bergÃ© par
 4074	depuis
 4075	Abandonner.
-4076	Retourner au menu précédent.
-4077	aucun serveur n'est enregistré sur Internet en ce moment
+4076	Retourner au menu prÃ©cÃ©dent.
+4077	aucun serveur n'est enregistrÃ© sur Internet en ce moment
 4078	serveurs sur
-4079	utilisent la même version que vous. A quel serveur souhaitez-vous vous connecter ?
-4080	échec: le serveur n'a pas pu démarrer
-4081	échec : serveur inaccessible. Le serveur est soit fermé, soit derrière un pare-feu, soit derrière un routeur.
-4082	échec : réponse du serveur imprévue. Le serveur n'est pas un serveur SoundRTS
-4083	échec : connexion refusée par le serveur. Le serveur n'est pas un serveur SoundRTS
-4084	ou bien votre pseudo a été refusé
+4079	utilisent la mÃªme version que vous. A quel serveur souhaitez-vous vous connecter ?
+4080	Ã©chec: le serveur n'a pas pu dÃ©marrer
+4081	Ã©chec : serveur inaccessible. Le serveur est soit fermÃ©, soit derriÃ¨re un pare-feu, soit derriÃ¨re un routeur.
+4082	Ã©chec : rÃ©ponse du serveur imprÃ©vue. Le serveur n'est pas un serveur SoundRTS
+4083	Ã©chec : connexion refusÃ©e par le serveur. Le serveur n'est pas un serveur SoundRTS
+4084	ou bien votre pseudo a Ã©tÃ© refusÃ©
 4085	erreur durant la connexion au serveur
 4086	menu options
 4087	Modifier votre pseudo.
@@ -271,11 +273,11 @@
 4098	abandonner,
 4099	retourner au menu principal sans sauvegarder les modifications
 
-4101	Une nouvelle fenêtre va s'ouvrir.
+4101	Une nouvelle fenÃªtre va s'ouvrir.
 4102	connexion interrompue
 4103	jeu ralenti
 4104	jeu normal
-4105	jeu accéléré
+4105	jeu accÃ©lÃ©rÃ©
 
 4112	sauvegarder une partie
 4113	restaurer une partie
@@ -285,34 +287,34 @@
 4118	retour
 4119	choisir le serveur dans une liste
 4120	saisir l'adresse I P du serveur
-4121	serveur privé
-4122	Le serveur ne sera pas ajouté à la liste.
+4121	serveur privÃ©
+4122	Le serveur ne sera pas ajoutÃ© Ã  la liste.
 
-4200	La production de bois est améliorée.
+4200	La production de bois est amÃ©liorÃ©e.
 4201	catapulte
-4202	à vos ordres
+4202	Ã  vos ordres
 4203	de
 4204	Impossible de construire ici.
-4205	Vous ne dirigez aucune unité.
-4206	Affichage activé.
-4207	Affichage désactivé.
+4205	Vous ne dirigez aucune unitÃ©.
+4206	Affichage activÃ©.
+4207	Affichage dÃ©sactivÃ©.
 4208	inconnue
 4209	dans le brouillard
-4210	F diss permet d'accéder au menu.
+4210	F diss permet d'accÃ©der au menu.
 4211	mode immersif
 4212	mode carte
 4213	forge
-4214	améliorer
-4215	épées
-4216	flèches
+4214	amÃ©liorer
+4215	Ã©pÃ©es
+4216	flÃ¨ches
 4217	armures des fantassins
 4218	armures des archers
 4219	en
 4220	donjon
-4221	château-fort
-4222	écuries
+4221	chÃ¢teau-fort
+4222	Ã©curies
 4223	Le menu de
-4224	 a changé.
+4224	 a changÃ©.
 4225	chevalier
 4226	atelier
 4227	antre des dragons
@@ -321,12 +323,12 @@
 4230	machine volante
 4231	dragon
 4232	erreur du serveur
-4233	portée des arcs
-4234	Une version plus récente de ce programme est disponible sur Internet.
+4233	portÃ©e des arcs
+4234	Une version plus rÃ©cente de ce programme est disponible sur Internet.
 4235	saisissez votre nouveau pseudo
-4236	vous pouvez utiliser les lettres non accentuées et les chiffres
+4236	vous pouvez utiliser les lettres non accentuÃ©es et les chiffres
 4237	pseudo incorrect
-4238	pseudo actuel conservé
+4238	pseudo actuel conservÃ©
 4239	nouveau pseudo
 4240	vient de se connecter
 4241	vient de s'inscrire
@@ -337,39 +339,39 @@
 4246	limite de population atteinte
 4247	points de mana sur
 4248	rechercher
-4249	supèr soigneur
-4250	téléportation
+4249	supÃ¨r soigneur
+4250	tÃ©lÃ©portation
 4251	vers
 4252	pas assez de mana
 4253	pour cent du volume
 4254	vitesse des chevaux
-4255	définir le point de ralliement pour les nouvelles unités
-4256	récolté
+4255	dÃ©finir le point de ralliement pour les nouvelles unitÃ©s
+4256	rÃ©coltÃ©
 4257	ordinateur agressif
 4258	ordinateur calme
-4259	vient de se déconnecter
+4259	vient de se dÃ©connecter
 4260	sur le serveur de
-4261	a quitté la partie
+4261	a quittÃ© la partie
 4262	pack sonore
-4263	activé
-4264	désactivé
+4263	activÃ©
+4264	dÃ©sactivÃ©
 4265	mode triche
 4266	recommencer
 4267	campagne
 4268	nouvel objectif
-4269	objectif terminé
+4269	objectif terminÃ©
 4270	mission accomplie
 4271	chapitre
 4272	prologue
-4273	épilogue
+4273	Ã©pilogue
 4274	conversion
 4275	tour de guet
 4276	tour de garde
 4277	tour canon
 4278	charger
 4279	charger tout depuis
-4280	décharger
-4281	décharger tout vers
+4280	dÃ©charger
+4281	dÃ©charger tout vers
 4282	entrer dans
 4283	archer sombre
 
@@ -402,62 +404,62 @@
 
 5026	point
 
-4284 déplacer
+4284 dÃ©placer
 4285 vers alliance
-4286 allié
+4286 alliÃ©
 4287 dit
 4288 entrez votre message
 
 4289 invisible
-4290 détecteur
+4290 dÃ©tecteur
 4291 camoufleur
 
 4292 invoquer
-4293 réveiller les morts
-4294 résurrection
+4293 rÃ©veiller les morts
+4294 rÃ©surrection
 
 4295 zombi
 4296 squelette
 
-4297 prêtre
+4297 prÃªtre
 4298 temple
 
-4299 vision sacrée
+4299 vision sacrÃ©e
 4300 exorcisme
 
 4301 humain
 4302 orc
 
-4303 nécromancien
-4304 nécropole
+4303 nÃ©cromancien
+4304 nÃ©cropole
 4305 nuage mortel
-4306 météores
+4306 mÃ©tÃ©ores
 
 4307 rappel
 
 4308 pierre
-4309 carrière
+4309 carriÃ¨re
 
-4311 a été vaincu
+4311 a Ã©tÃ© vaincu
 4312 Vous avez perdu.
-4313 Vous êtes à présent en mode observateur.
+4313 Vous Ãªtes Ã  prÃ©sent en mode observateur.
 
-4315 observer une partie enregistrée
+4315 observer une partie enregistrÃ©e
 4316 Appuyez sur Control Maj F4 pour observer un autre joueur.
 
 4317 Entrez une commande.
 
 4319 modifier l'ordre de chargement des mods
-4320 ajouter un mod à la liste
+4320 ajouter un mod Ã  la liste
 4321 la liste est vide
 4322 Chargement...
 
 4323 paquets
 4324 menu des paquets
 4325 installer un paquet
-4326 désinstaller un paquet
-4327 mettre à jour un paquet
-4328 Téléchargement...
+4326 dÃ©sinstaller un paquet
+4327 mettre Ã  jour un paquet
+4328 TÃ©lÃ©chargement...
 4329 Extraction...
 4330 Mod introuvable:
 
@@ -465,39 +467,39 @@
 4332 porte
 4333 bloquer
 
-4334 faction aléatoire
+4334 faction alÃ©atoire
 
 4336 ouvrir le dossier utilisateur
 4337 documentation
 
 4338 mur massif
 4339 porte massive
-4340 créer une partie publique avec la carte
+4340 crÃ©er une partie publique avec la carte
 4341 mods
 4342 soundpacks
 4343 vitesse
 
 4344 mer
 4345 lac
-4346 rivière
+4346 riviÃ¨re
 4347 montagne
 4348 pont
-4349 gué
+4349 guÃ©
 4350 marais
-4351 océan
+4351 ocÃ©an
 4352 col de montagne
 
-4353 activer réparation automatique
-4354 désactiver réparation automatique
+4353 activer rÃ©paration automatique
+4354 dÃ©sactiver rÃ©paration automatique
 4355 activer exploitation automatique
-4356 désactiver exploitation automatique
+4356 dÃ©sactiver exploitation automatique
 
 4357 chantier naval
 4358 bateau
 4359 destroyer
-4360 cuirassé
+4360 cuirassÃ©
 4361 sous-marin
 
 4362 prairies
-4363 forêt
-4364 forêt épaisse
+4363 forÃªt
+4364 forÃªt Ã©paisse

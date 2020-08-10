@@ -1,3 +1,5 @@
+﻿; coding: utf-8
+
 7000 allevamento di maiali
 7001 caserme
 7002 sala grande

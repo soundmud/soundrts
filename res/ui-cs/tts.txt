@@ -1,4 +1,4 @@
-; coding: utf_8
+﻿; coding: utf-8
 
 0	nic!
 1	jste

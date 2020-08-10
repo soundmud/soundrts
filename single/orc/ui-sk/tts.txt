@@ -1,7 +1,7 @@
-; coding: Windows-1250
+ï»¿; coding: utf-8
 
-7000 ošipáreò
-7001 kasáreò
-7002 ve¾ká sála
+7000 oÅ¡ipÃ¡reÅˆ
+7001 kasÃ¡reÅˆ
+7002 veÄ¾kÃ¡ sÃ¡la
 7003 otrok
-7004 reváè
+7004 revÃ¡Ä

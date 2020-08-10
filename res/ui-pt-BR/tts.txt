@@ -1,4 +1,4 @@
-; coding: utf_8
+﻿; coding: utf-8
 
 0        Nada!
 1        está

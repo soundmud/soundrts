@@ -1,8 +1,10 @@
+Ôªø; coding: utf-8
+
 ; CrazyMod v8.3
 
 4307 reagrupar
-77000 aviÛn bombardero
-77001 polvorÌn
+77000 avi√≥n bombardero
+77001 polvor√≠n
 77002 explosivos de alta calidad
 77003 estallar!
 77004 vida de los dragones
@@ -13,116 +15,116 @@
 77009 arboleda de los ladrones
 77010 bosque de los bandidos
 77011 hospital
-77012 salud p˙blica
-77013 vÌvack de entrenamiento
+77012 salud p√∫blica
+77013 v√≠vack de entrenamiento
 77014 mosquetero
 77015 extractor de magnesita
-77016 trampa elÈctrica
+77016 trampa el√©ctrica
 77017 jaula de leones
-77018 tormenta magnÈtica
-77019 onda hipnÛtica
-77020 torre magnÈtica
+77018 tormenta magn√©tica
+77019 onda hipn√≥tica
+77020 torre magn√©tica
 77021 choza de los sortilegios
 77022 cazadora
 77023 lobo
-77024 ·rbol de vigilancia
-77025 sembrar ·rbol de vigilancia
+77024 √°rbol de vigilancia
+77025 sembrar √°rbol de vigilancia
 77026 hechizar
 77027 ectoplasma
 77028 llamar ectoplasma
-77029 bruma malÈfica
+77029 bruma mal√©fica
 77030 torre espectral
-77031 demonio necrÛfago
+77031 demonio necr√≥fago
 77032 cementerio
 77033 domar lobos
-77034 paladÌn
-77035 sembrar ·rboles de las tinieblas
-77036 sembrar ·rboles de la serenidad
-77037 ·rbol de las tinieblas
-77038 ·rbol de la serenidad
-77039 reciclar cad·veres en plantas carnÌvoras
-77040 reciclar cad·veres en plantas medicinales
-77041 planta carnÌvora
+77034 palad√≠n
+77035 sembrar √°rboles de las tinieblas
+77036 sembrar √°rboles de la serenidad
+77037 √°rbol de las tinieblas
+77038 √°rbol de la serenidad
+77039 reciclar cad√°veres en plantas carn√≠voras
+77040 reciclar cad√°veres en plantas medicinales
+77041 planta carn√≠vora
 77042 planta medicinal
 77043 magnesita de alta calidad
 77044 magnesita de muy alta calidad
-77045 explosiÛn
+77045 explosi√≥n
 77046 rayo
-77047 aviÛn de transporte
-77048 leÛn
+77047 avi√≥n de transporte
+77048 le√≥n
 77049 domar leones
 77050 ballestero
-77051 gases lacrimÛgenos
+77051 gases lacrim√≥genos
 77052 lanza-granadas
 77053 punto de inicio
-77054 visiÛn
-77055 fortÌn
+77054 visi√≥n
+77055 fort√≠n
 77056 siervo
-77057 g·rgola maldita
+77057 g√°rgola maldita
 77058 planta espinosa
 77059 ayuntamiento
 77060 sede del governador
 77061 palacio del canciller
-77062 baterÌa antiaÈrea
+77062 bater√≠a antia√©rea
 77063 campo militar
-77064 bola de energÌa
-77065 generar bola de energÌa
+77064 bola de energ√≠a
+77065 generar bola de energ√≠a
 77066 trabajador
 77067 erudito
 77068 tormenta de nuves
 77069 ataque de los dragones
-77070 f·brica de aviones
-77071 clonaciÛn
-77072 bribÛn
+77070 f√°brica de aviones
+77071 clonaci√≥n
+77072 brib√≥n
 77073 arquerito clonado
-77074 aviÛn de vigilancia
-77075 s˙per armadura
-77076 s˙per ataque
-77077 s˙per vida
-77078 s˙per velocidad
-77079 s˙per exorcismo
-77080 caÒÛn de plasma sobrecalentado
+77074 avi√≥n de vigilancia
+77075 s√∫per armadura
+77076 s√∫per ataque
+77077 s√∫per vida
+77078 s√∫per velocidad
+77079 s√∫per exorcismo
+77080 ca√±√≥n de plasma sobrecalentado
 77081 granja de animales
-77082 aviÛn de caza
+77082 avi√≥n de caza
 77083 pocilga
 77084 garage
 77085 computador personal
 77086 computador
-77087 s˙per computador
-77088 granja hidropÛnica
-77089 f·brica robÛtica
-77090 laboratorio Ûptico
-77091 crÌa de carroÒeros
-77092 modulador de seÒal
-77093 ascelerador de partÌculas
-77094 torre l·ser
+77087 s√∫per computador
+77088 granja hidrop√≥nica
+77089 f√°brica rob√≥tica
+77090 laboratorio √≥ptico
+77091 cr√≠a de carro√±eros
+77092 modulador de se√±al
+77093 ascelerador de part√≠culas
+77094 torre l√°ser
 77095 torre radar
 77096 operario
-77097 granja de energÌa
-77098 tirador l·ser
+77097 granja de energ√≠a
+77098 tirador l√°ser
 77099 campo de caza
-77100 caÒÛn magnÈtico
-77101 caÒÛn de plasma
+77100 ca√±√≥n magn√©tico
+77101 ca√±√≥n de plasma
 77102 alcance de los dragones
-77103 captador mÛvil
+77103 captador m√≥vil
 77104 armadura de los dragones
-77105 nave espÌa
-77106 nave l·ser
+77105 nave esp√≠a
+77106 nave l√°ser
 77107 velocidad de los dragones
-77108 potencia de l·seres
+77108 potencia de l√°seres
 77109 potencia de plasma
 77110 escaneo
 77111 biblioteca solar
 77112 golem de carne
 77113 mausoleo
-77114 panteÛn
-77115 dragÛn esqueleto
+77114 pante√≥n
+77115 drag√≥n esqueleto
 77116 aliento de la muerte
 77117 cripta
 77118 laberinto
 77119 trampa de ueso
 77120 Esclavo no muerto
-77121 poder m·gico
+77121 poder m√°gico
 77122 fantasma
 77123 espectro con armadura
 77124 pegaso
@@ -134,8 +136,8 @@
 77130 pasamurallas
 77131 fuego fatuo
 77132 llamar fuegos fatuos
-77133 t˙nel de aprovisamiento
-77134 Cabar t˙nel de Aprobisamiento
+77133 t√∫nel de aprovisamiento
+77134 Cabar t√∫nel de Aprobisamiento
 77135 Llamarada
 77136 portal inestable
 77137 portal estable
@@ -144,12 +146,12 @@
 77140 Torre defensiva
 
 77141 claro
-77142 ciudad arbÛrea
+77142 ciudad arb√≥rea
 77143 domanio
 77144 arena arbolada
-77145 jardÌn frondoso
+77145 jard√≠n frondoso
 77148 bosque encantado
-77149 trampa de raÌces
+77149 trampa de ra√≠ces
 77150 recolector
 77151 Campanario
 77152 arquerito
@@ -157,23 +159,23 @@
 77154 centauro
 77155 Tenacidad de combate
 77156 Ardor de combate
-77157 Puesto de observaciÛn
-77158 BaterÌa de misiles antiaÈreos
+77157 Puesto de observaci√≥n
+77158 Bater√≠a de misiles antia√©reos
 77159 druida
 77160 bruja
 77161 hada
-77162 Torre sombrÌa
+77162 Torre sombr√≠a
 77163 Torre brumosa
 77164 Torre Tormentosa
 77165 enjambre
-77166 Torre terrorÌfica
+77166 Torre terror√≠fica
 77167 tormenta verde
-77168 Transformar los cad·beres en fantasmas
-77169 raÌces penetrantes
-77170 Transformar los cad·beres en zombis
-77171 Transformar los cad·beres en gÛlems de carne
-77172 Campo magnÈtico
-77173 PerturbaciÛn magnÈtica descontrolada
+77168 Transformar los cad√°beres en fantasmas
+77169 ra√≠ces penetrantes
+77170 Transformar los cad√°beres en zombis
+77171 Transformar los cad√°beres en g√≥lems de carne
+77172 Campo magn√©tico
+77173 Perturbaci√≥n magn√©tica descontrolada
 77174 Torre de vigilancia
 77175 campamento
 77176 campamento fortificado
@@ -184,7 +186,7 @@
 77181 nido
 77182 tipi
 77183 Trampa de picas
-77184 peÛn
+77184 pe√≥n
 77185 bruto
 77186 troll
 77185 Troll buscapleitos
@@ -196,21 +198,21 @@
 77191 Torre de los espejos
 77192 serpiente alada
 77193 hipogrifo
-77194 sacerdote vud˙
+77194 sacerdote vud√∫
 77195 Torre solar
 77196 kamikaze
 77197 bola transportadora
 77198 explosivos de muy alta calidad
-77199 posesiÛn
+77199 posesi√≥n
 77200 tradicionales
-77201 tÈcnicos
+77201 t√©cnicos
 77202 robots
 77203 oscuros
 77204 Elfos
 77205 orcos
 77206 Rayo solar
 77207 Promontorio
-77208 ilusiÛn forestal
+77208 ilusi√≥n forestal
 77209 Torre de metralla
 77210 Torre de bombardeo
 77211 Screes
@@ -220,7 +222,7 @@
 77215 Torreta de reserva
 77216 bomba camuflada
 77217 estructura reforzada
-77218 cÌrculo de los elementos
+77218 c√≠rculo de los elementos
 77219 torre del fuego
 77220 torre del agua
 77221 torre del aire
@@ -230,26 +232,26 @@
 77225 elemental de aire
 77226 elemental de tierra
 77227 elementales
-77228 tirador magnÈtico
+77228 tirador magn√©tico
 77229 bichos
 77230 cepa
 77231 Criadero
-77232 GuarderÌa
+77232 Guarder√≠a
 77233 laboratorio de larvas
-77234 fecundador transgÈnico
+77234 fecundador transg√©nico
 77235 incubadora multiplicador
-77236 ·rbol frutal
+77236 √°rbol frutal
 77237 termitero
-77238 ·rbol de miel
+77238 √°rbol de miel
 77239 sala de barro
-77240 galerÌa de setas
-77241 ·rbol chispeante
-77242 ·rbol devorador
-77243 termita guardi·na
+77240 galer√≠a de setas
+77241 √°rbol chispeante
+77242 √°rbol devorador
+77243 termita guardi√°na
 77244 termita conquistadora
 77245 trabajador real
 77246 termita blindada
-77247 avispa colÈrica
+77247 avispa col√©rica
 77248 Abispa lanzadora de aguijones
 77249 Abispa de  miles de aguijones
 77250 Mosquito insaciable
@@ -259,29 +261,29 @@
 77254 Cangrejo lanzador de caparazones
 77255 Cangrejo de asedio
 77256 Ceta luchadora
-77257 Ceta tÛxica
+77257 Ceta t√≥xica
 77258 Ceta debastadora
-77259 LuciÈrnaga exploradora
-77260 LuciÈrnaga deslumbrante
-77261 LuciÈrnaga llameante
+77259 Luci√©rnaga exploradora
+77260 Luci√©rnaga deslumbrante
+77261 Luci√©rnaga llameante
 77262 Generar sepa
 77263 Generar larbas
 77264 Larba
 77265 Feromona de supervivencia
-77266 Esporas tÛxicas
-77267 Esporas alucinÛgenas
-77268 Esporas de recuperaciÛn
+77266 Esporas t√≥xicas
+77267 Esporas alucin√≥genas
+77268 Esporas de recuperaci√≥n
 77269 Obrero
 77270 Obrero alado
 77271 Elfos oscuros
-77272 CabaÒa
+77272 Caba√±a
 77273 villa
-77274 SeÒorÌo
-77275 CuchillerÌa
+77274 Se√±or√≠o
+77275 Cuchiller√≠a
 77276 Escenario
-77277 Cen·culo
+77277 Cen√°culo
 77278 Torre ventosa
-77279 LadrÛn
+77279 Ladr√≥n
 77280 Merodeador
 77281 Asesino
 77282 Maestro asesino
@@ -289,23 +291,23 @@
 77284 Marioneta
 77285 Conjurador
 77286 Shuriken volador
-77287 vÛrtex
+77287 v√≥rtex
 77288 Torvellino
-77289 TÈcnica de lanzamiento
-77290 Velocidad de animaciÛn
+77289 T√©cnica de lanzamiento
+77290 Velocidad de animaci√≥n
 77291 Cuchilla fatal
 77292 Humo
 77293 Llamar a las sombras
-77294 PlantaciÛn carnÌbora
+77294 Plantaci√≥n carn√≠bora
 77295 Pajarera
 77296 Paloma
 77297 Llubia de flechas
 77298 Torreta de envoscada
 77299 Alta torre de envoscada
 77300 Torre de perca
-77301 ·rbol carnÌboro
-77302 ·rbol boraz
-77303 Red de raÌces
+77301 √°rbol carn√≠boro
+77302 √°rbol boraz
+77303 Red de ra√≠ces
 77304 Enloquecer
 77305 Troll enloquecido
 77306 Hoja de acero
@@ -313,31 +315,31 @@
 77308 Animar marioneta
 77309 elefante
 77310 Domesticar elefantes
-77311 VIÒedo pacÌfico
-77312 ViÒedo invasor
-77313 Cembrar un viÒedo pacÌfico
+77311 VI√±edo pac√≠fico
+77312 Vi√±edo invasor
+77313 Cembrar un vi√±edo pac√≠fico
 77314 Poner trampas de flechas
 77315 Terremoto
-77316 ExplosiÛn
-77317 RecuperaciÛn
-77318 r·faga de viento
+77316 Explosi√≥n
+77317 Recuperaci√≥n
+77318 r√°faga de viento
 77319 Mar de laba
-77320 GÛlem de barro
+77320 G√≥lem de barro
 77321 Tormenta de arena
 77322 Nube de bapor
 77323 Cielo helado
 77324 cornac
 77325 Elefante con torre
-77326 ABsorvsiÛn de almas
+77326 ABsorvsi√≥n de almas
 77327 Campo de nigromancia
-77328 ExplosiÛn de cad·beres
-77329 Cad·ber infectado
-77330 Infectar cad·beres
+77328 Explosi√≥n de cad√°beres
+77329 Cad√°ber infectado
+77330 Infectar cad√°beres
 77331 Sombra
 77332 Ajente secreto
 77333 Poner bomba oculta
-77334 Poner trampa elÈctrica
+77334 Poner trampa el√©ctrica
 77335 Poner trampa de huesos
-77336 Poner trampa de raÌces
+77336 Poner trampa de ra√≠ces
 77337 Poner trampa de picas
 77338 Enviar agente secreto

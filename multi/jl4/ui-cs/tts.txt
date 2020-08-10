@@ -1,3 +1,3 @@
-; coding: Windows-1250
+﻿; coding: utf-8
 
-9000	kamenn� golem
+9000	kamenný golem

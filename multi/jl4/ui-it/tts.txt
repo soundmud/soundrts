@@ -1,1 +1,3 @@
+﻿; coding: utf-8
+
 9000 golem in pietra

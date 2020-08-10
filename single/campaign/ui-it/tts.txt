@@ -1,3 +1,5 @@
-7500 Un'orda di nemici � arrivata dal nulla e distruggera' tutto! Bisognera' fare qualcosa...
+﻿; coding: utf-8
+
+7500 Un'orda di nemici è arrivata dal nulla e distruggera' tutto! Bisognera' fare qualcosa...
 7501 Il tuo signore ti ha mandato a costruire una base vicino alla frontiera. Non allontanarti troppo, i nemici sono nei paraggi.
 7502 Ben fatto!
