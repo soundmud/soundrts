@@ -160,6 +160,7 @@ class GameInterface:
     def __getstate__(self):
         odict = self.__dict__.copy()
         del odict["_srv_queue"]
+        odict["_terrain_loop"] = None
         return odict
 
     def __setstate__(self, dictionary):
