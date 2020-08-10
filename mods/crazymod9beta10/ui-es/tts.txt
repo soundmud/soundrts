@@ -11,7 +11,7 @@
 77007 Granja de Frutas
 77008 escondite
 77009 arboleda de los ladrones
-77010 bosque de los filibusteros
+77010 bosque de los bandidos
 77011 hospital
 77012 salud pública
 77013 vívack de entrenamiento
@@ -121,21 +121,27 @@
 77117 cripta
 77118 laberinto
 77119 trampa de ueso
-77120 esclavo de no-muertos
+77120 Esclavo no muerto
 77121 poder mágico
 77122 fantasma
 77123 espectro con armadura
 77124 pegaso
 77125 domar pegaso
 77126 thestral
+77127 Torre de vigilancia
 77128 lich
 77129 trampa de flechas '
 77130 pasamurallas
 77131 fuego fatuo
 77132 llamar fuegos fatuos
-
+77133 túnel de aprovisamiento
+77134 Cabar túnel de Aprobisamiento
+77135 Llamarada
 77136 portal inestable
 77137 portal estable
+77138 Tirador de coetes
+77139 Troll de guerra
+77140 Torre defensiva
 
 77141 claro
 77142 ciudad arbórea
@@ -144,64 +150,76 @@
 77145 jardín frondoso
 77148 bosque encantado
 77149 trampa de raíces
-
 77150 recolector
+77151 Campanario
 77152 arquerito
 77153 arquero del bosque
 77154 centauro
+77155 Tenacidad de combate
+77156 Ardor de combate
+77157 Puesto de observación
+77158 Batería de misiles antiaéreos
 77159 druida
 77160 bruja
 77161 hada
-
+77162 Torre sombría
+77163 Torre brumosa
+77164 Torre Tormentosa
 77165 enjambre
-
+77166 Torre terrorífica
 77167 tormenta verde
-
+77168 Transformar los cadáberes en fantasmas
 77169 raíces penetrantes
-
+77170 Transformar los cadáberes en zombis
+77171 Transformar los cadáberes en gólems de carne
+77172 Campo magnético
+77173 Perturbación magnética descontrolada
+77174 Torre de vigilancia
 77175 campamento
 77176 campamento fortificado
 77177 fortaleza
 77178 fosa
 77179 cercado
-
+77180 Gran torre de guardia
 77181 nido
 77182 tipi
-77183 trampa puntiaguda
-
+77183 Trampa de picas
 77184 peón
 77185 bruto
-77186 trol
-
-77189 ogro lanzarroca
-
+77186 troll
+77185 Troll buscapleitos
+77186 Troll masacrador
+77187 Torre frondosa
+77188 Torre con hojas afiladas
+77189 ogro lanzador de rocas
 77190 serpiente
-
+77191 Torre de los espejos
 77192 serpiente alada
 77193 hipogrifo
 77194 sacerdote vudú
-
+77195 Torre solar
 77196 kamikaze
 77197 bola transportadora
 77198 explosivos de muy alta calidad
-
 77199 posesión
-
 77200 tradicionales
 77201 técnicos
 77202 robots
 77203 oscuros
-77204 élficos
+77204 Elfos
 77205 orcos
-
-77208 ilusión arbolada
-
+77206 Rayo solar
+77207 Promontorio
+77208 ilusión forestal
+77209 Torre de metralla
+77210 Torre de bombardeo
+77211 Screes
+77212 Torre Colosal
 77213 domar serpientes
-77212 alta agresividad
-
+77214 alta agresividad
+77215 Torreta de reserva
 77216 bomba camuflada
 77217 estructura reforzada
-
 77218 círculo de los elementos
 77219 torre del fuego
 77220 torre del agua
@@ -215,8 +233,8 @@
 77228 tirador magnético
 77229 bichos
 77230 cepa
-77231 chocadeira
-77232 vivero
+77231 Criadero
+77232 Guardería
 77233 laboratorio de larvas
 77234 fecundador transgénico
 77235 incubadora multiplicador
@@ -229,89 +247,97 @@
 77242 árbol devorador
 77243 termita guardiána
 77244 termita conquistadora
-77245 trabajo real
+77245 trabajador real
 77246 termita blindada
 77247 avispa colérica
-77248 guèpe lanceuse de dard
-77249 guèpe aux mille dards
-77250 moustique insatiable
-77251 moustique terrible
-77252 moustique sanguinaire
-77253 crabe pinceur
-77254 crabe lanceur de coquille
-77255 crabe de siège
-77256 champignon bagarreur
-77257 champignon toxique
-77258 champignon dévastateur
-77259 luciole éclaireuse
-77260 luciole éblouissante
-77261 luciole enflammée
-77262 générer souche
-77263 générer larves
-77264 larve
-77265 phéromone de survie
-77266 spores toxiques
-77267 spores hallucinogènes
-77268 spores de soin
-77269 ouvrière marcheuse
-77270 ouvrière ailée
-77271 elfe noir
-77272 cabane
+77248 Abispa lanzadora de aguijones
+77249 Abispa de  miles de aguijones
+77250 Mosquito insaciable
+77251 Mosquito terrible
+77252 Mosquito sanguinario
+77253 Cangrejo
+77254 Cangrejo lanzador de caparazones
+77255 Cangrejo de asedio
+77256 Ceta luchadora
+77257 Ceta tóxica
+77258 Ceta debastadora
+77259 Luciérnaga exploradora
+77260 Luciérnaga deslumbrante
+77261 Luciérnaga llameante
+77262 Generar sepa
+77263 Generar larbas
+77264 Larba
+77265 Feromona de supervivencia
+77266 Esporas tóxicas
+77267 Esporas alucinógenas
+77268 Esporas de recuperación
+77269 Obrero
+77270 Obrero alado
+77271 Elfos oscuros
+77272 Cabaña
 77273 villa
-77274 manoir
-77275 coutellerie
-77276 scène
-77277 cénacle
-77278 tour venteuse
-77279 voleur
-77280 rodeur
-77281 assassin
-77282 maître assassin
-77283 illusionniste
-77284 pantin
-77285 doctoresse
-77286 shuriken volant
-77287 vortex
-77288 tourbillon
-77289 technique de lancer
-77290 vitesse d'animation
-77291 lame fatale
-77292 fumigène
-77293 faux vortex
-77294 plantation carnivore
-77295 volière
-77296 pigeon
-77297 pluie de flêches
-77298 tourelle des embusqués
-77299 haute tour des embusqués
-77300 tour à perchoir
-77301 arbre carnivore
-77302 arbre vorace
-77303 réseau racinaire
-77304 berserk
-77305 troll berserker
-77306 feuille d'acier
-77307 apprivoiser pigeons
-77308 animer pantin
-77309 éléphant
-77310 apprivoiser éléphant
-77311 vigne paisible
-77312 vigne envahissante
-77313 semer vigne paisible
-77314 poser piège à flêches
-77315 séisme
-77316 déflagration
-77317 soin
-77318 coup de vent
-77319 mer de lave
-77320 golem de boue
-77321 tempête de sable
-77322 nuage de vapeur
-77323 ciel de glace
+77274 Señorío
+77275 Cuchillería
+77276 Escenario
+77277 Cenáculo
+77278 Torre ventosa
+77279 Ladrón
+77280 Merodeador
+77281 Asesino
+77282 Maestro asesino
+77283 Ilusionista
+77284 Marioneta
+77285 Conjurador
+77286 Shuriken volador
+77287 vórtex
+77288 Torvellino
+77289 Técnica de lanzamiento
+77290 Velocidad de animación
+77291 Cuchilla fatal
+77292 Humo
+77293 Llamar a las sombras
+77294 Plantación carníbora
+77295 Pajarera
+77296 Paloma
+77297 Llubia de flechas
+77298 Torreta de envoscada
+77299 Alta torre de envoscada
+77300 Torre de perca
+77301 árbol carníboro
+77302 árbol boraz
+77303 Red de raíces
+77304 Enloquecer
+77305 Troll enloquecido
+77306 Hoja de acero
+77307 Domesticar palomas
+77308 Animar marioneta
+77309 elefante
+77310 Domesticar elefantes
+77311 VIñedo pacífico
+77312 Viñedo invasor
+77313 Cembrar un viñedo pacífico
+77314 Poner trampas de flechas
+77315 Terremoto
+77316 Explosión
+77317 Recuperación
+77318 ráfaga de viento
+77319 Mar de laba
+77320 Gólem de barro
+77321 Tormenta de arena
+77322 Nube de bapor
+77323 Cielo helado
 77324 cornac
-77325 éléphant à tourelle
-77326 absorption des âmes
-77327 champ de nécromancie
-77328 explosion de cadavre
-77329 cadavre pestiféré
-77330 pestifération de cadavre
+77325 Elefante con torre
+77326 ABsorvsión de almas
+77327 Campo de nigromancia
+77328 Explosión de cadáberes
+77329 Cadáber infectado
+77330 Infectar cadáberes
+77331 Sombra
+77332 Ajente secreto
+77333 Poner bomba oculta
+77334 Poner trampa eléctrica
+77335 Poner trampa de huesos
+77336 Poner trampa de raíces
+77337 Poner trampa de picas
+77338 Enviar agente secreto

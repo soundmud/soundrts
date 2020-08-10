@@ -434,3 +434,81 @@
 4301 humano
 4302 orco
 
+4303 Nigromante
+4304 Necrópolis
+
+4305 Niebla mortal
+4306 Meteoros
+
+4307 Reagrupar
+
+4308 Piedra
+4309 Cantera
+
+4311 fue derrotado
+4312 fuiste derrotado
+4313 Ahora estás en modo observador
+
+4314 Meseta
+
+4315 Ver un juego grabado
+4316 Presiona shift +F4 para ovserbar a otro jugador.
+
+4317 Ingresa un comando
+
+4318 zoom
+
+4319 Modificar el orden de carga de los mods
+4320 Añadir un modd a la lista
+4321 La lista está vacía
+4322 Cargando
+
+4323 Paquetes
+4324 Menú de paquetes
+4325 Instalar un paquete
+4326 Desinstalar un paquete
+4327 Actualizar un paquete
+4328 Descargando...
+4329 Extrayendo...
+4330 No se pudo encontrar el mod
+
+4331 Muro
+4333 Bloque
+
+4334 Facción aleatoria
+
+4335 Límite de conteo alcanzado
+
+4336 Abrir carpeta de usuario
+4337 Documentación
+4338 Muro gigante
+4339 Puerta gigante
+4340	Iniciar una partida pública
+4341	Mods 
+4342	Packs de sonido
+4343 Velocidad
+
+4344 mar
+4345 lago
+4346 río
+4347 montaña
+4348 puente
+4349 bado
+4350 pantano
+4351 océano
+4352 Paso de montaña
+
+4353 Activar reparación automática
+4354 Desactivar reparación automática
+4355 Actibar recolección automática
+4356 Desactivar recolección automática
+
+4357 Astillero
+4358 bote
+4359 destructor
+4360 acorazado
+4361 submarino
+
+4362 prados
+4363 bosque
+4364 bosque espeso
