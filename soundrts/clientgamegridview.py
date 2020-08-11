@@ -1,12 +1,11 @@
-from math import sin, cos, radians
+from math import cos, radians, sin
 
 import pygame
 
-from .lib.screen import get_screen, draw_line, draw_rect
-from .lib.log import warning
-from .lib.nofloat import square_of_distance, PRECISION
-
 from .definitions import style
+from .lib.log import warning
+from .lib.nofloat import PRECISION, square_of_distance
+from .lib.screen import draw_line, draw_rect, get_screen
 from .worldentity import COLLISION_RADIUS
 
 

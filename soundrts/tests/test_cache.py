@@ -1,9 +1,9 @@
 import pygame
 import pytest
 
-from soundrts.lib.sound_cache import sounds
-from soundrts.lib.resource import ResourceLoader
 from soundrts import clientmedia
+from soundrts.lib.resource import ResourceLoader
+from soundrts.lib.sound_cache import sounds
 
 
 @pytest.fixture(scope="module")
@@ -90,7 +90,7 @@ def test_get_style_with_locale(test):
 
 def test_get_rules_and_ai(test):
     res = test
-    from soundrts.definitions import rules, load_ai, get_ai
+    from soundrts.definitions import get_ai, load_ai, rules
     rules.load(res.get_text_file("rules", append=True))
     load_ai(res.get_text_file("ai", append=True))
     assert rules.get("peasant", "cost") == [0, 0]
@@ -100,8 +100,8 @@ def test_get_rules_and_ai(test):
 
 def test_folder_map(test):
     res = test
+    from soundrts.definitions import get_ai, rules, style
     from soundrts.mapfile import Map
-    from soundrts.definitions import rules, get_ai, style
     map1 = Map("soundrts/tests/single/map1")
     map1.load_resources()
     map1.load_rules_and_ai(res)
@@ -125,7 +125,7 @@ def test_campaign(test):
 def test_campaign_map(test):
     res = test
     from soundrts.campaign import Campaign
-    from soundrts.definitions import rules, get_ai, style
+    from soundrts.definitions import get_ai, rules, style
     c = Campaign("soundrts/tests/single/campaign1")
     c.load_resources()
     map0 = c.chapters[0]
@@ -144,7 +144,7 @@ def test_campaign_map(test):
 def test_campaign_map_with_special_rules(test):
     res = test
     from soundrts.campaign import Campaign
-    from soundrts.definitions import rules, get_ai, style
+    from soundrts.definitions import get_ai, rules, style
     c = Campaign("soundrts/tests/single/campaign1")
     c.load_resources()
     map1 = c.chapters[1]
@@ -184,8 +184,8 @@ def test_unpacked_folder_map_redefines_sound(test):
 
 def test_unpacked_folder_map_redefines_rules_ai_and_style(test):
     res = test
+    from soundrts.definitions import get_ai, rules, style
     from soundrts.mapfile import Map
-    from soundrts.definitions import rules, get_ai, style
     m = Map(unpack=Map("soundrts/tests/single/map1").pack())
     m.load_rules_and_ai(res)
     m.load_style(res)

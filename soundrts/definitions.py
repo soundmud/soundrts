@@ -1,9 +1,9 @@
 import re
 from typing import Set
 
-from .lib.nofloat import to_int
-from .lib.log import debug, info, warning
 from .lib.defs import preprocess
+from .lib.log import debug, info, warning
+from .lib.nofloat import to_int
 
 VIRTUAL_TIME_INTERVAL = 300 # milliseconds
 MAX_NB_OF_RESOURCE_TYPES = 10
@@ -115,7 +115,6 @@ class _Definitions:
         return o[attr]
 
     def get(self, obj, attr):
-        d = self._dict
         v = self._val(obj, attr)
         if v is None and attr[-8:-1] == "_level_":
             v = self._val(obj, attr[:-8])

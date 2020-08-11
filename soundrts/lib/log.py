@@ -1,10 +1,10 @@
 import logging
 import logging.handlers
-import os
 import platform
 import sys
-import urllib.request, urllib.parse, urllib.error
-
+import urllib.error
+import urllib.parse
+import urllib.request
 
 FULL_FORMAT = "%(asctime)s %(levelname)s: %(message)s"
 SHORT_FORMAT = "%(levelname)s: %(message)s"

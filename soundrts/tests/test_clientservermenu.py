@@ -1,7 +1,5 @@
-from soundrts import clientservermenu as csm
-from soundrts.mapfile import Map
 import soundrts.msgparts as mp
-
+from soundrts import clientservermenu as csm
 
 #def test_start_game_args():
 #    m = csm._BeforeGameMenu(None)

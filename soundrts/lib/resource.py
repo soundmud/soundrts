@@ -9,11 +9,10 @@ import locale
 import os
 import re
 import zipfile
-from typing import Optional, Dict, Union, List
+from typing import Dict, List, Optional, Union
 
 from soundrts.lib import encoding
 from soundrts.lib.log import warning
-
 
 TXT_FILE = "ui/tts"
 

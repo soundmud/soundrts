@@ -1,16 +1,15 @@
-import re
 import time
 from typing import List
 
-from .clientmedia import voice, sounds, play_sequence
+from . import mapfile
+from . import msgparts as mp
+from . import res
+from .clientmedia import play_sequence, voice
 from .clientmenu import Menu
 from .definitions import style
 from .game import MultiplayerGame
 from .lib.log import info, warning
-from . import mapfile
-from . import msgparts as mp
-from .lib.msgs import nb2msg, eval_msg_and_volume
-from . import res
+from .lib.msgs import eval_msg_and_volume, nb2msg
 
 
 def insert_silences(msg):

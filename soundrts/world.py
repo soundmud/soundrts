@@ -1,31 +1,31 @@
 import copy
-from soundrts.lib.nofloat import square_of_distance
-from hashlib import md5
 import os.path
 import queue
 import random
 import re
 import string
 import time
+from hashlib import md5
 
+from soundrts.lib.nofloat import square_of_distance
+
+from . import res
+from .definitions import VIRTUAL_TIME_INTERVAL, get_ai_names, load_ai, rules
 from .lib import chronometer as chrono
 from .lib import collision
-from .definitions import rules, get_ai_names, load_ai, VIRTUAL_TIME_INTERVAL
-from .lib.log import warning, exception, info
-from .lib.nofloat import to_int, int_distance, PRECISION
+from .lib.log import exception, info, warning
+from .lib.nofloat import PRECISION, int_distance, to_int
 from .paths import MAPERROR_PATH
-from . import res
 from .worldability import Ability
 from .worldclient import DummyClient
 from .worldentity import COLLISION_RADIUS
 from .worldexit import passage
 from .worldorders import ORDERS_DICT
-from .worldplayerbase import Player, normalize_cost_or_resources, A
+from .worldplayerbase import A, Player, normalize_cost_or_resources
 from .worldresource import Deposit, Meadow
 from .worldroom import Square
-from .worldunit import Unit, Worker, Soldier, Building, Effect, ground_or_air
+from .worldunit import Building, Effect, Soldier, Unit, Worker, ground_or_air
 from .worldupgrade import Upgrade
-
 
 GLOBAL_FOOD_LIMIT = 80
 PROFILE = False

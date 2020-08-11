@@ -1,11 +1,24 @@
 from typing import List, Optional, Set, Tuple
 
-from .definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
-from .lib.log import debug, warning, exception
-from .lib.nofloat import PRECISION, square_of_distance, int_cos_1000, int_sin_1000, int_angle, int_distance
+from .definitions import MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL, rules
+from .lib.log import debug, warning
+from .lib.nofloat import (
+    PRECISION,
+    int_angle,
+    int_cos_1000,
+    int_distance,
+    int_sin_1000,
+    square_of_distance,
+)
 from .worldaction import Action, AttackAction, MoveAction, MoveXYAction
 from .worldentity import Entity
-from .worldorders import ORDERS_DICT, GoOrder, RallyingPointOrder, BuildPhaseTwoOrder, UpgradeToOrder
+from .worldorders import (
+    ORDERS_DICT,
+    BuildPhaseTwoOrder,
+    GoOrder,
+    RallyingPointOrder,
+    UpgradeToOrder,
+)
 from .worldresource import Corpse, Deposit
 from .worldroom import Square
 

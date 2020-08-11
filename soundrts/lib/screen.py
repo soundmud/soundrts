@@ -3,8 +3,8 @@ import ctypes
 import pygame
 from pygame.locals import FULLSCREEN
 
-from .log import warning
 from .. import version
+from .log import warning
 
 pygame.font.init()
 _font = pygame.font.SysFont("arial", 12, bold=True)

@@ -1,13 +1,13 @@
 from __future__ import annotations
-from typing import Callable, List, Tuple
 
-from queue import Queue
 import threading
 import time
+from queue import Queue
+from typing import Callable, List, Tuple
 
 import accessible_output2.outputs.auto
 
-from .log import warning, exception
+from .log import exception
 
 
 class _TTS:

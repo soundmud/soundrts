@@ -1,12 +1,14 @@
 try:
-    from ctypes import create_string_buffer, sizeof, windll, c_ulong, byref
+    from ctypes import byref, c_ulong, create_string_buffer, sizeof, windll
 except:
     pass
 import os
-import urllib.request, urllib.parse, urllib.error
+import urllib.error
+import urllib.parse
+import urllib.request
 
-from .metaserver import METASERVER_URL
 from .lib.log import debug
+from .metaserver import METASERVER_URL
 from .paths import STATS_PATH
 
 

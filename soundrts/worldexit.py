@@ -1,4 +1,3 @@
-from .lib.nofloat import int_cos_1000, int_sin_1000
 from .worldentity import Entity
 
 

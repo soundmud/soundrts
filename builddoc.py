@@ -1,12 +1,11 @@
 #! .venv\Scripts\python.exe
 import os
-from os.path import join
 import shutil
+from os.path import join
 
 from docutils import core
 
 import rules2doc
-
 
 SRC = "doc_src/src"
 

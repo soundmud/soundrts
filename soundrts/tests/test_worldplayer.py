@@ -1,11 +1,11 @@
 import unittest
 
-from soundrts.mapfile import Map
-from soundrts.lib.nofloat import PRECISION
-from soundrts.world import World
 from soundrts import worldclient
+from soundrts.lib.nofloat import PRECISION
+from soundrts.mapfile import Map
+from soundrts.world import World
 from soundrts.worldorders import BuildOrder, TrainOrder
-from soundrts.worldplayerbase import Objective 
+from soundrts.worldplayerbase import Objective
 from soundrts.worldresource import Corpse
 
 

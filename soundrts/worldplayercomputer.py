@@ -1,13 +1,14 @@
 import re
 
+from soundrts.lib.nofloat import square_of_distance
+from soundrts.worldorders import UseOrder
+
 from .definitions import get_ai, rules
-from .lib.log import info, warning, exception
+from .lib.log import exception, info, warning
 from .version import IS_DEV_VERSION
 from .worldplayerbase import Player
-from .worldresource import Meadow, Deposit, Corpse
-from .worldunit import Worker, BuildingSite, Soldier
-from soundrts.lib.nofloat import PRECISION, square_of_distance
-from soundrts.worldorders import UseOrder
+from .worldresource import Deposit, Meadow
+from .worldunit import BuildingSite, Soldier, Worker
 
 
 def value_as_an_explorer(u):

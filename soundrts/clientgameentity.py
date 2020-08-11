@@ -4,18 +4,17 @@ from typing import List
 
 import pygame
 
+from . import config
+from . import msgparts as mp
 from .clientgamenews import must_be_said
 from .clientgameorder import get_orders_list, substitute_args
-from .clientmedia import voice, sounds
-from . import config
+from .clientmedia import sounds, voice
 from .definitions import style
-from .lib.log import warning, exception
+from .lib.log import exception, warning
 from .lib.msgs import nb2msg
 from .lib.nofloat import PRECISION
+from .lib.sound import distance, psounds
 from .worldunit import BuildingSite
-from .lib.sound import psounds, distance
-from . import msgparts as mp
-
 
 # minimal interval (in seconds) between 2 sounds
 FOOTSTEP_LIMIT = .1

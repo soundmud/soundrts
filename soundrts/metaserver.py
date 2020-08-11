@@ -3,8 +3,8 @@ import urllib.parse
 import urllib.request
 from typing import List
 
-from .lib.log import warning
 from . import msgparts as mp
+from .lib.log import warning
 from .paths import TMP_PATH
 from .version import SERVER_COMPATIBILITY
 

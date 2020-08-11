@@ -1,11 +1,13 @@
 import threading
-import urllib.request, urllib.parse, urllib.error
+import urllib.error
+import urllib.parse
+import urllib.request
 
+from . import msgparts as mp
+from . import stats
 from .clientmedia import voice
 from .metaserver import METASERVER_URL
-from . import msgparts as mp
-from .paths import STATS_PATH, OLD_STATS_PATH
-from . import stats
+from .paths import OLD_STATS_PATH, STATS_PATH
 from .version import VERSION
 
 

@@ -1,10 +1,7 @@
 import time
 
-import pytest
-
-from soundrts.definitions import VIRTUAL_TIME_INTERVAL
 from soundrts.mapfile import Map
-from soundrts.serverroom import same, time_string, Game, Orders
+from soundrts.serverroom import Game, Orders, same, time_string
 
 
 class Client:
@@ -19,7 +16,7 @@ class Client:
 clients = [Client(str(i)) for i in range(10)]
 
 
-class Game(Game):
+class Game(Game):  # type: ignore
 
     def __init__(self, n):
         self.players = clients[:n]

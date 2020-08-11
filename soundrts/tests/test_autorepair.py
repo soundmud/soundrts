@@ -1,8 +1,8 @@
 import pytest
 
+from soundrts import worldclient
 from soundrts.mapfile import Map
 from soundrts.world import World
-from soundrts import worldclient
 from soundrts.worldplayerhuman import Human
 
 

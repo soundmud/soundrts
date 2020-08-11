@@ -1,8 +1,8 @@
 #! .venv\Scripts\python.exe
-import sys
-from multiprocessing import Process
 import os
+import sys
 import time
+from multiprocessing import Process
 
 try:
     import win32gui
@@ -10,6 +10,7 @@ except ModuleNotFoundError:
     pass
 
 from soundrts import config
+
 config.debug_mode = 1
 config.mods = "crazymod9beta10"
 
@@ -32,11 +33,9 @@ class Computer2ForTests(wpc2.Computer2):
 
 wpc2.Computer2 = Computer2ForTests  # type: ignore
 
-from soundrts.lib.voice import voice
-from soundrts import clientmain
+from soundrts import clientmain, servermain, world
 from soundrts.game import MultiplayerGame
-from soundrts import servermain
-from soundrts import world
+from soundrts.lib.voice import voice
 
 
 def do_nothing(*a, **k):

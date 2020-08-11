@@ -4,7 +4,6 @@ import math
 
 from .log import warning
 
-
 PRECISION = 1000
 
 # tables used to make sure that every computer gives the same results

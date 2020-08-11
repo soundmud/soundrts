@@ -1,17 +1,15 @@
-import socket
 import sys
 import telnetlib
 import threading
 import time
 
+from . import config
+from . import msgparts as mp
+from . import options, servermain
 from .clientmedia import voice
 from .clientservermenu import ServerMenu
 from .clientversion import revision_checker
-from . import config
-from . import options
-from .lib.log import info, exception
-from . import msgparts as mp
-from . import servermain
+from .lib.log import exception, info
 from .version import compatibility_version
 
 

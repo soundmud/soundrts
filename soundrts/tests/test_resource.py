@@ -1,4 +1,4 @@
-from soundrts.lib.resource import localize_path, best_language_match
+from soundrts.lib.resource import best_language_match, localize_path
 
 
 def test_localize_path():

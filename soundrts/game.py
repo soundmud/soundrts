@@ -1,5 +1,6 @@
 import os.path
 import pickle
+import random
 import threading
 import time
 from typing import List, Tuple
@@ -7,24 +8,27 @@ from typing import List, Tuple
 import pygame
 from pygame.locals import KEYDOWN
 
-from .clientmedia import voice, play_sequence
-from . import clientgame
+from . import clientgame, config, definitions
+from . import msgparts as mp
+from . import res, stats
 from .clientgameorder import update_orders_list
-from . import definitions
-from . import config
-from .definitions import style, rules
-from .lib.log import warning, exception
+from .clientmedia import play_sequence, voice
+from .definitions import rules, style
+from .lib.log import exception, warning
 from .lib.msgs import nb2msg
 from .mapfile import Map
-from . import msgparts as mp
 from .paths import CUSTOM_BINDINGS_PATH, REPLAYS_PATH, SAVE_PATH
-import random
-from . import res
-from . import stats
 from .version import VERSION, compatibility_version
 from .world import World
-from .worldclient import DirectClient, Coordinator, ReplayClient, DummyClient, RemoteClient, \
-    send_platform_version_to_metaserver, _Controller
+from .worldclient import (
+    Coordinator,
+    DirectClient,
+    DummyClient,
+    RemoteClient,
+    ReplayClient,
+    _Controller,
+    send_platform_version_to_metaserver,
+)
 
 PROFILE = False
 

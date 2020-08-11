@@ -1,18 +1,19 @@
-from hashlib import md5
 import platform
 import sys
 import time
+import urllib.error
+import urllib.parse
+import urllib.request
+from hashlib import md5
 from typing import Optional
-import urllib.request, urllib.parse, urllib.error
 
-from .version import VERSION, IS_DEV_VERSION
-from .metaserver import METASERVER_URL
 from .lib import chronometer as chrono
-from .lib.log import info, warning, exception
+from .lib.log import exception, info, warning
+from .metaserver import METASERVER_URL
+from .version import IS_DEV_VERSION, VERSION
 from .worldplayercomputer import Computer
 from .worldplayercomputer2 import Computer2
 from .worldplayerhuman import Human
-
 
 FIRST_FPCT = 1
 

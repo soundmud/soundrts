@@ -3,14 +3,13 @@ Loaded from resources (depending on the active language,
 packages, mods, campaign, map)."""
 import os
 import re
-from typing import Optional, Union, Dict
 import zipfile
+from typing import Dict, Optional, Union
 
 import pygame
 
 from soundrts.lib.log import warning
 from soundrts.lib.msgs import NB_ENCODE_SHIFT
-
 
 SHORT_SILENCE = "9998"  # 0.01 s
 SILENCE = "9999"  # 0.2 s

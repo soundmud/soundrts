@@ -4,7 +4,6 @@ import optparse
 
 from .lib.log import warning
 
-
 ip = None
 mods = None
 port = 2500

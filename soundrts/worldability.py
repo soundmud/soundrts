@@ -1,5 +1,6 @@
-from .definitions import MAX_NB_OF_RESOURCE_TYPES
 from soundrts.lib.nofloat import PRECISION
+
+from .definitions import MAX_NB_OF_RESOURCE_TYPES
 
 
 class Ability: # or UnitOption or UnitMenuItem or ActiveAbility or SpecialAbility

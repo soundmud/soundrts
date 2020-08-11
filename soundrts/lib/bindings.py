@@ -1,8 +1,17 @@
 import re
 
 import pygame
-from pygame import KMOD_CTRL, KMOD_ALT, KMOD_SHIFT
-from pygame import K_LCTRL, K_LALT, K_LSHIFT, K_RCTRL, K_RALT, K_RSHIFT
+from pygame import (
+    K_LALT,
+    K_LCTRL,
+    K_LSHIFT,
+    K_RALT,
+    K_RCTRL,
+    K_RSHIFT,
+    KMOD_ALT,
+    KMOD_CTRL,
+    KMOD_SHIFT,
+)
 
 from .log import warning
 

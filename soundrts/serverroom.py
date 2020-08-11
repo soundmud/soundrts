@@ -1,13 +1,15 @@
 import random
 import time
-from typing import List, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, List, Union
 
 from . import config
 from .definitions import VIRTUAL_TIME_INTERVAL
 from .lib.log import info, warning
 from .mapfile import Map
+
 if TYPE_CHECKING:
     from .serverclient import ConnectionToClient
+
 from .version import IS_DEV_VERSION
 
 

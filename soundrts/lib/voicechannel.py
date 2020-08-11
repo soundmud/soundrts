@@ -3,11 +3,9 @@ from typing import Any, List, Tuple
 
 import pygame
 
-from soundrts.lib import sound
-from soundrts.lib.message import is_text
-from soundrts.lib import tts
-
 from soundrts import version
+from soundrts.lib import sound, tts
+from soundrts.lib.message import is_text
 
 DEBUG_MODE = version.IS_DEV_VERSION
 

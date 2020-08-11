@@ -1,4 +1,5 @@
-from threading import Event as _Event, Thread as _Thread
+from threading import Event as _Event
+from threading import Thread as _Thread
 
 
 class Ticker(_Thread):

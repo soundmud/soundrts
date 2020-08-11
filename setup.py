@@ -10,15 +10,14 @@ Warning: the py launcher ignores the virtual environment if a "#!" line is speci
 import os
 import platform
 import shutil
-from subprocess import Popen, check_output
 import sys
+from subprocess import Popen, check_output
 
-from cx_Freeze import setup, Executable
+from cx_Freeze import Executable, setup
 
 import builddoc
 import buildmultimapslist
 from soundrts.version import VERSION
-
 
 if platform.system() == "Windows" and ".venv" not in sys.executable:
     print(f"WARNING: {sys.executable} (not a virtual environment?)")

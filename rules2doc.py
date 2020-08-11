@@ -2,6 +2,7 @@
 from typing import Set
 
 from soundrts.lib import log
+
 log.add_console_handler()
 
 from soundrts.definitions import Rules

@@ -3,20 +3,19 @@ import inspect
 import re
 from typing import Dict, List, Union
 
-from .definitions import rules, style, MAX_NB_OF_RESOURCE_TYPES
-from .lib import group
-from .lib.log import info, warning, exception
-from .lib.msgs import encode_msg, nb2msg
-from .lib.nofloat import square_of_distance, to_int, PRECISION
 from . import msgparts as mp
+from .definitions import MAX_NB_OF_RESOURCE_TYPES, rules, style
+from .lib import group
+from .lib.log import exception, info, warning
+from .lib.msgs import encode_msg, nb2msg
+from .lib.nofloat import PRECISION, square_of_distance, to_int
 from .worldability import Ability
-from .worldentity import NotEnoughSpaceError, Entity
+from .worldentity import NotEnoughSpaceError
 from .worldexit import Exit
 from .worldresource import Corpse, Deposit
 from .worldroom import Square
 from .worldunit import BuildingSite, Soldier, Unit
 from .worldupgrade import Upgrade
-
 
 A = 12 * PRECISION # bucket side length
 VERY_SLOW = int(.01 * PRECISION)

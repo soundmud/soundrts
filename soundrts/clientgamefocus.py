@@ -1,8 +1,7 @@
-from .lib.voice import voice
+from . import msgparts as mp
 from .lib.log import warning
 from .lib.nofloat import PRECISION
-from . import msgparts as mp
-
+from .lib.voice import voice
 
 _subzone_name = {
     (0, 0): mp.AT_THE_CENTER,

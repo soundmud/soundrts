@@ -2,14 +2,14 @@ import configparser
 import os
 import re
 
-from .clientmedia import voice, sounds, play_sequence
+from . import msgparts as mp
+from . import res
+from .clientmedia import play_sequence, sounds, voice
 from .clientmenu import Menu
 from .game import MissionGame
-from .mapfile import Map
 from .lib.msgs import nb2msg
-from . import msgparts as mp
+from .mapfile import Map
 from .paths import CAMPAIGNS_CONFIG_PATH
-from . import res
 from .res import get_all_packages_paths
 
 

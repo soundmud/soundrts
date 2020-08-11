@@ -5,31 +5,51 @@ import sys
 import time
 
 import pygame
-from pygame.locals import KEYDOWN, QUIT, USEREVENT, KMOD_ALT, MOUSEBUTTONDOWN, KMOD_SHIFT, KMOD_CTRL, MOUSEBUTTONUP, MOUSEMOTION
+from pygame.locals import (
+    KEYDOWN,
+    KMOD_CTRL,
+    KMOD_SHIFT,
+    MOUSEBUTTONDOWN,
+    MOUSEBUTTONUP,
+    MOUSEMOTION,
+    QUIT,
+    USEREVENT,
+)
 
-from .clientgamegridview import GridView 
-from .clientgamefocus import Zoom
-from .clienthelp import help_msg
-from .clientmedia import voice, sounds, sound_stop, modify_volume, get_fullscreen, toggle_fullscreen, play_sequence
-from .lib.mouse import set_cursor
-from .clientmenu import Menu, input_string
+from . import config
+from . import msgparts as mp
 from .clientgameentity import EntityView
+from .clientgamefocus import Zoom
+from .clientgamegridview import GridView
 from .clientgamenews import must_be_said
 from .clientgameorder import OrderTypeView, nb2msg_f
-from . import config
-from .definitions import style, VIRTUAL_TIME_INTERVAL
+from .clienthelp import help_msg
+from .clientmedia import (
+    get_fullscreen,
+    modify_volume,
+    play_sequence,
+    sound_stop,
+    sounds,
+    toggle_fullscreen,
+    voice,
+)
+from .clientmenu import Menu, input_string
+from .definitions import VIRTUAL_TIME_INTERVAL, style
 from .lib import chronometer as chrono
 from .lib import group
 from .lib.bindings import Bindings
-from .lib.log import debug, warning, exception
-from .lib.msgs import nb2msg, eval_msg_and_volume
+from .lib.log import exception, warning
+from .lib.mouse import set_cursor
+from .lib.msgs import eval_msg_and_volume, nb2msg
 from .lib.nofloat import PRECISION
+from .lib.screen import (
+    get_screen,
+    screen_render,
+    screen_render_subtitle,
+    set_game_mode,
+)
+from .lib.sound import angle, distance, psounds, stereo, vision_stereo
 from .version import IS_DEV_VERSION
-from .lib.sound import psounds, distance, angle, vision_stereo, stereo
-from .lib.screen import set_game_mode, screen_render, get_screen,\
-    screen_render_subtitle
-from . import msgparts as mp
-
 
 # minimal interval (in seconds) between 2 sounds
 ALERT_LIMIT = .5

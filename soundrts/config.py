@@ -9,7 +9,6 @@ import sys
 from .lib.log import info, warning
 from .paths import CONFIG_FILE_PATH
 
-
 debug_mode: int
 mods: str
 soundpacks: str

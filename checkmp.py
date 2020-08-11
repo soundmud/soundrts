@@ -1,7 +1,6 @@
 import glob
 import re
 
-
 r = set()
 for n in glob.glob("soundrts/*.py") + glob.glob("soundrts/lib/*.py"):
     s = open(n).read()

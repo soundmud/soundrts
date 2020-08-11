@@ -2,13 +2,13 @@
 import traceback
 
 from soundrts import config
+
 config.debug_mode = 1
 from soundrts.mapfile import Map
 
 config.mods = ""
 
 from soundrts import clientmain
-
 
 if __name__ == "__main__":
     clientmain.init_media()

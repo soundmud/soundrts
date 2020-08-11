@@ -1,4 +1,5 @@
 from . import config
+
 config.load()
 
 # hide the pygame support prompt from players
@@ -8,14 +9,16 @@ if not config.debug_mode:
 
 from .lib import log
 from .lib.log import exception, warning
-from .version import VERSION_FOR_BUG_REPORTS
 from .paths import CLIENT_LOG_PATH
+from .version import VERSION_FOR_BUG_REPORTS
+
 log.set_version(VERSION_FOR_BUG_REPORTS)
 log.add_secure_file_handler(CLIENT_LOG_PATH, "w")
 log.add_http_handler("http://jlpo.free.fr/soundrts/metaserver")
 log.add_console_handler()
 
 import locale
+
 try:
     locale.setlocale(locale.LC_ALL, '')
 except:
@@ -27,21 +30,24 @@ import sys
 import time
 import webbrowser
 
+from . import msgparts as mp
+from . import res, stats
 from .campaign import campaigns
-from .clientmedia import voice, init_media, close_media
-from .clientmenu import Menu, input_string, CLOSE_MENU
-from .clientserver import connect_and_play, start_server_and_connect, server_delay
+from .clientmedia import close_media, init_media, voice
+from .clientmenu import CLOSE_MENU, Menu, input_string
+from .clientserver import (
+    connect_and_play,
+    server_delay,
+    start_server_and_connect,
+)
 from .clientversion import revision_checker
 from .definitions import style
-from .game import TrainingGame, ReplayGame
+from .game import ReplayGame, TrainingGame
 from .lib.msgs import nb2msg
 from .lib.resource import best_language_match, preferred_language
 from .mapfile import worlds_multi
 from .metaserver import servers_list
-from . import msgparts as mp
 from .paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
-from . import res
-from . import stats
 from .version import VERSION, server_is_compatible
 
 

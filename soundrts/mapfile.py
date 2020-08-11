@@ -1,18 +1,17 @@
 import base64
 import io
-import zipfile
-from hashlib import md5
 import os.path
 import re
 import shutil
-from typing import Optional, List
+import zipfile
+from hashlib import md5
+from typing import List, Optional
 
+from . import res, world
 from .definitions import Style
-from . import res
-from .lib.log import debug, exception
 from .lib import zipdir
+from .lib.log import debug, exception
 from .paths import TMP_PATH
-from . import world
 
 
 class Map:
@@ -30,7 +29,7 @@ class Map:
             self._load_header()
 
     def load_resources(self):
-        from .clientmedia import sounds, res
+        from .clientmedia import res, sounds
         if self._zip is not None:
             path = self._zip
         else:
@@ -46,7 +45,7 @@ class Map:
         sounds.unload(path)
 
     def load_rules_and_ai(self, res):
-        from .definitions import rules, load_ai
+        from .definitions import load_ai, rules
         rules.load(res.get_text_file("rules", append=True), self.campaign_rules, self.additional_rules)
         load_ai(res.get_text_file("ai", append=True), self.campaign_ai, self.additional_ai)
 

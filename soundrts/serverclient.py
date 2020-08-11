@@ -2,15 +2,23 @@ import asynchat
 import re
 import sys
 import time
-
 from typing import TYPE_CHECKING
 
-from .lib.log import info, warning, exception, debug
+from .lib.log import debug, exception, info, warning
 from .lib.msgs import encode_msg
 from .mapfile import worlds_multi
+
 if TYPE_CHECKING:
     from .servermain import Server
-from .serverroom import Anonymous, InTheLobby, OrganizingAGame, WaitingForTheGameToStart, Game, _State
+
+from .serverroom import (
+    Anonymous,
+    Game,
+    InTheLobby,
+    OrganizingAGame,
+    WaitingForTheGameToStart,
+    _State,
+)
 
 
 class ConnectionToClient(asynchat.async_chat):

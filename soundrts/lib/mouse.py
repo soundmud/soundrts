@@ -1,6 +1,5 @@
 import pygame
 
-
 my_cursors = {}
 
 def record_cursor(name, center, strings):

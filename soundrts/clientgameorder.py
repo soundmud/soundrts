@@ -1,10 +1,10 @@
 from typing import List
 
-from .definitions import style, rules
+from . import msgparts as mp
+from .definitions import style
 from .lib.log import warning
 from .lib.msgs import nb2msg
 from .lib.nofloat import PRECISION
-from . import msgparts as mp
 from .worldorders import ORDERS_DICT
 
 

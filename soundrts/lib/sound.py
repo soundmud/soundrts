@@ -5,9 +5,9 @@ from typing import Dict, List
 
 import pygame
 
-from .log import warning
 from soundrts.lib import tts
 
+from .log import warning
 
 DEFAULT_VOLUME = math.sin(math.pi / 4.0) # (about .7) volume for each speaker for a "in front of you" message
 

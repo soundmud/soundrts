@@ -5,16 +5,15 @@ import platform
 
 import pygame
 
-from .lib.msgs import nb2msg
-from .lib.screen import set_screen
-from .lib.sound import init_sound, sound_stop, get_volume, set_volume
-from .lib.sound_cache import sounds
-from .lib.voice import voice
 from . import config
 from . import msgparts as mp
 from . import res
+from .lib.msgs import nb2msg
+from .lib.screen import set_screen
+from .lib.sound import get_volume, init_sound, set_volume, sound_stop
+from .lib.sound_cache import sounds
+from .lib.voice import voice
 from .version import VERSION
-
 
 if platform.system() == "Windows":
     # problem with F10 and DirectX, so use windib

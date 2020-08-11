@@ -2,7 +2,6 @@ from .lib.nofloat import PRECISION
 from .worldorders import ORDERS_DICT
 from .worldplayerbase import Player
 
-
 orders = sorted(ORDERS_DICT.keys()) # sort to avoid desync
 orders.remove("enter") # later
 orders.remove("stop")

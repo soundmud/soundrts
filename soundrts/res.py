@@ -2,9 +2,8 @@
 
 import os
 
+from . import config, options
 from .lib.resource import ResourceLoader
-from . import config
-from . import options
 from .paths import MAPS_PATHS
 
 

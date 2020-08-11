@@ -1,12 +1,11 @@
 import string
 
 from .lib.msgs import nb2msg
-from .lib.nofloat import int_distance, int_angle, int_cos_1000, int_sin_1000
+from .lib.nofloat import int_angle, int_cos_1000, int_distance, int_sin_1000
 from .lib.priodict import priorityDictionary
 from .worldentity import COLLISION_RADIUS
 from .worldexit import passage
 from .worldresource import Deposit, Meadow
-
 
 SPACE_LIMIT = 144
 

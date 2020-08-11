@@ -1,7 +1,6 @@
 from hashlib import md5
 
-from . import res, config
-
+from . import config, res
 
 VERSION = "1.3.4"
 IS_DEV_VERSION = config.debug_mode

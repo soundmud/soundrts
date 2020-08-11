@@ -1,20 +1,24 @@
 import asyncore
 import re
-import sys
 import socket
-import urllib.request, urllib.parse, urllib.error
-import urllib.request, urllib.error, urllib.parse
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
 
-from .metaserver import MAIN_METASERVER_URL
-from .lib.log import debug, info, warning, exception
-from .serverclient import ConnectionToClient
-from .serverroom import InTheLobby, OrganizingAGame, Playing, WaitingForTheGameToStart, Game
+from . import config, options
+from .lib.log import debug, exception, info, warning
 from .lib.ticker import Ticker
+from .metaserver import MAIN_METASERVER_URL
+from .serverclient import ConnectionToClient
+from .serverroom import (
+    Game,
+    InTheLobby,
+    OrganizingAGame,
+    Playing,
+    WaitingForTheGameToStart,
+)
 from .version import SERVER_COMPATIBILITY
-
-from . import config
-from . import options
-
 
 REGISTER_INTERVAL = 10 * 60 # register server every 10 minutes
 REGISTER_URL = MAIN_METASERVER_URL + "servers_register.php"

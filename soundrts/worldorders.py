@@ -1,11 +1,10 @@
-from .definitions import rules, MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL
-from .lib.log import info
-from .lib.nofloat import to_int, PRECISION
-from .worldaction import AttackAction, MoveXYAction
-from .worldresource import Meadow, Deposit, Corpse
-from .worldroom import Square
 from soundrts.lib.nofloat import square_of_distance
 
+from .definitions import MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL, rules
+from .lib.nofloat import to_int
+from .worldaction import AttackAction
+from .worldresource import Corpse, Deposit, Meadow
+from .worldroom import Square
 
 ORDERS_QUEUE_LIMIT = 10
 

@@ -1,12 +1,12 @@
 #! .venv\Scripts\python.exe
 from soundrts.lib import log
+
 log.add_console_handler()
 
 import os
 import os.path
 
 from soundrts.mapfile import Map
-
 
 DIR = "multi"
 

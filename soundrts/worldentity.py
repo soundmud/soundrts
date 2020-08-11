@@ -1,6 +1,5 @@
-from .lib.log import exception, warning, info
+from .lib.log import warning
 from .lib.nofloat import PRECISION
-
 
 COLLISION_RADIUS = 175 # millimeters # 350 / 2
 
