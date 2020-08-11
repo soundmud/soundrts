@@ -1,5 +1,6 @@
 pygame
 git+https://github.com/soundmud/accessible_output2
+chardet
 
 docutils
 cx_Freeze

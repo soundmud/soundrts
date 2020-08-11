@@ -145,7 +145,7 @@ class ResourceLoader:
                 for text_file_path in self._localized_paths(name, localize):
                     if text_file_path in root.namelist():
                         with root.open(text_file_path) as b:
-                            e = encoding.encoding(b.read())
+                            e = encoding.encoding(b.read(), text_file_path)
                         with root.open(text_file_path) as b:
                             w = io.TextIOWrapper(b, encoding=e, errors='replace')  # type: ignore
                             result.append(w.read())
@@ -153,7 +153,7 @@ class ResourceLoader:
                 for text_file_path in self._localized_paths(os.path.join(root, name), localize):
                     if os.path.isfile(text_file_path):
                         with open(text_file_path, "rb") as b:
-                            e = encoding.encoding(b.read())
+                            e = encoding.encoding(b.read(), text_file_path)
                         with open(text_file_path, encoding=e, errors='replace') as t:
                             result.append(t.read())
         return result
