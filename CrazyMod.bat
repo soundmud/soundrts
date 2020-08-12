@@ -1,1 +1,1 @@
-soundrts.py --mods=soundpack,crazymod
+py soundrts.py --mods=soundpack,crazymod9beta10
