@@ -9,7 +9,7 @@ from .paths import MAPS_PATHS
 
 def get_all_packages_paths():
     """return the default "maps and mods" paths followed by the paths of the active packages"""
-    return MAPS_PATHS # + package_manager.get_packages_paths()
+    return MAPS_PATHS  # + package_manager.get_packages_paths()
 
 
 if options.mods is not None:
@@ -27,6 +27,7 @@ get_sound_paths = _r.get_sound_paths
 def reload_all():
     global mods, soundpacks
     from .clientmedia import sounds, update_display_caption
+
     _r.update_mods_list(mods, soundpacks, get_all_packages_paths())
     mods = _r.mods
     soundpacks = _r.soundpacks
@@ -68,9 +69,7 @@ def available_mods(check_mod_type=is_a_mod):
         mods_path = os.path.join(path, "mods")
         for mod in os.listdir(mods_path):
             path = os.path.join(mods_path, mod)
-            if os.path.isdir(path) \
-               and check_mod_type(path) \
-               and mod not in result:
+            if os.path.isdir(path) and check_mod_type(path) and mod not in result:
                 result.append(mod)
     return result
 

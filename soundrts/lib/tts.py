@@ -64,9 +64,9 @@ def _stop():
             try:
                 _tts.Stop()
             except:
-                pass # speak() will have a similar error and fall back to sounds
-    
-    
+                pass  # speak() will have a similar error and fall back to sounds
+
+
 def stop():
     global _is_speaking
     _queue.put((_stop, []))
@@ -74,10 +74,10 @@ def stop():
 
 
 def _loop():
-    while(True):
+    while True:
         cmd, args = _queue.get()
         if not _queue.empty():
-            #print("skipped!", cmd, args)
+            # print("skipped!", cmd, args)
             continue
         try:
             cmd(*args)
@@ -87,13 +87,13 @@ def _loop():
 
 def _loop2():
     global _is_speaking
-    while(True):
+    while True:
         if _is_speaking:
-            time.sleep(.1)
+            time.sleep(0.1)
             with _lock:
                 if not _tts.IsSpeaking():
                     _is_speaking = False
-        time.sleep(.1)
+        time.sleep(0.1)
 
 
 def init(wait_delay_per_character):

@@ -16,23 +16,24 @@ from .version import IS_DEV_VERSION
 def same(strings):
     return len(set(strings)) == 1
 
+
 def time_string(check_string):
     if check_string is not None:
         return check_string.split("-", 1)[0]
+
 
 def pack(p):
     return ",".join((p.login, str(p.alliance), p.faction))
 
 
 class _State:
-
     def send_menu(self, client):
         pass
 
 
 class Anonymous(_State):
 
-    allowed_commands = ("login", )
+    allowed_commands = ("login",)
 
 
 class InTheLobby(_State):
@@ -47,16 +48,27 @@ class InTheLobby(_State):
 
 class OrganizingAGame(_State):
 
-    allowed_commands = ("invite", "invite_easy", "invite_aggressive", "invite_ai2",
-                        "move_to_alliance",
-                        "start", "cancel_game", "say",
-                        "faction")
+    allowed_commands = (
+        "invite",
+        "invite_easy",
+        "invite_aggressive",
+        "invite_ai2",
+        "move_to_alliance",
+        "start",
+        "cancel_game",
+        "say",
+        "faction",
+    )
 
     def send_menu(self, client):
         client.notify(
             "available_players",
-            *[p.login for p in client.server.available_players(client)
-              if p not in client.game.guests])
+            *[
+                p.login
+                for p in client.server.available_players(client)
+                if p not in client.game.guests
+            ],
+        )
         client.notify("registered_players", *[pack(p) for p in client.game.players])
         client.notify("update_menu")
 
@@ -76,7 +88,6 @@ class Playing(_State):
 
 
 class _Computer:
-
     def __init__(self, level):
         self.level = level
 
@@ -86,7 +97,6 @@ class _Computer:
 
 
 class Orders:
-
     def __init__(self, game):
         self.all_orders = {}
         for client in game.human_players:
@@ -131,8 +141,8 @@ class Game:
         self.server = server
         self.admin = admin
         self.is_public = is_public
-        self.players: List[Union['ConnectionToClient', _Computer]] = []
-        self.guests: List[Union['ConnectionToClient', _Computer]] = []
+        self.players: List[Union["ConnectionToClient", _Computer]] = []
+        self.guests: List[Union["ConnectionToClient", _Computer]] = []
         self.register(admin)
         if self.is_public:
             self._process_public_game()
@@ -147,35 +157,42 @@ class Game:
             self.invite(client)
 
     @property
-    def human_players(self) -> List['ConnectionToClient']:
+    def human_players(self) -> List["ConnectionToClient"]:
         return [p for p in self.players if not isinstance(p, _Computer)]
 
     def _start(self):
-        info("start game %s on map %s with players %s",
-             self.id,
-             self.scenario.get_name(),
-             " ".join(p.login for p in self.players))
+        info(
+            "start game %s on map %s with players %s",
+            self.id,
+            self.scenario.get_name(),
+            " ".join(p.login for p in self.players),
+        )
         self.guests = []
         self.started = True
         self.time = 0
         random.seed()
         seed = random.randint(0, 10000)
         self._orders = Orders(self)
-##        # guess first ping from the connection delays
-##        self.ping = max([p.delay for p in self.human_players])
+        ##        # guess first ping from the connection delays
+        ##        self.ping = max([p.delay for p in self.human_players])
         for client in self.human_players:
             client.notify(
                 "start_game",
                 ";".join(pack(p) for p in self.players),
-                 client.login,
-                 seed,
-                 self.speed)
+                client.login,
+                seed,
+                self.speed,
+            )
             client.state = Playing()
         self.server.log_status()
         self._start_time = time.time()
 
     def start(self):
-        if self.scenario.nb_players_min <= len(self.players) <= self.scenario.nb_players_max:
+        if (
+            self.scenario.nb_players_min
+            <= len(self.players)
+            <= self.scenario.nb_players_max
+        ):
             self._start()
         else:
             warning("couldn't start game: bad number of players")
@@ -194,8 +211,12 @@ class Game:
         return int((time.time() - self._start_time) / 60)
 
     def close(self):
-        info("closed game %s after %s turns (played for %s minutes)", self.id,
-             self.time, self.nb_minutes)
+        info(
+            "closed game %s after %s turns (played for %s minutes)",
+            self.id,
+            self.time,
+            self.nb_minutes,
+        )
         self.cancel()
         self.server.log_status()
 
@@ -205,25 +226,32 @@ class Game:
         if not same(check_strings) and self._nb_allowed_alerts > 0:
             if not same(time_string(cs) for cs in check_strings):
                 if IS_DEV_VERSION and None not in check_strings:
-                    info("time mismatch in game %s at turn %s: %s",
-                         self.id, self.time, check_strings)
+                    info(
+                        "time mismatch in game %s at turn %s: %s",
+                        self.id,
+                        self.time,
+                        check_strings,
+                    )
                 return
-            warning("mismatch in game %s at turn %s: %s",
-                    self.id, self.time, check_strings)
+            warning(
+                "mismatch in game %s at turn %s: %s", self.id, self.time, check_strings
+            )
             self._nb_allowed_alerts -= 1
             self.notify("synchronization_error")
 
     ping = 0
     delay = 0
 
-    def orders(self, client, orders, check=None, ping=0, update=0, delay=0, real_speed=0):
+    def orders(
+        self, client, orders, check=None, ping=0, update=0, delay=0, real_speed=0
+    ):
         self.ping = max(self.ping, float(ping))
         self.delay = max(self.delay, float(delay))
         self.real_speed = min(self.real_speed, float(real_speed))
         self._orders.add(client, [orders, check])
         self._dispatch_orders_if_needed()
 
-    max_ping = .5 # seconds
+    max_ping = 0.5  # seconds
 
     def fpct(self):
         """number of simulation frames per communication turn"""
@@ -248,12 +276,16 @@ class Game:
 
     def invite(self, client):
         self.guests.append(client)
-        client.notify("invitation", self.admin.login, self.scenario.get_name(short=True))
+        client.notify(
+            "invitation", self.admin.login, self.scenario.get_name(short=True)
+        )
 
     def invite_computer(self, level):
-        if not config.require_humans or \
-           "admin_only" in self.server.parameters or \
-           len(self.players) > 1:
+        if (
+            not config.require_humans
+            or "admin_only" in self.server.parameters
+            or len(self.players) > 1
+        ):
             self.register(_Computer(level))
         else:
             self.admin.notify("invite_computer_error")
@@ -288,13 +320,17 @@ class Game:
             client.game = self
             client.alliance = n
             client.faction = "random_faction"
-            self.notify("registered", client.login, ",".join([c.login for c in self.players]))
+            self.notify(
+                "registered", client.login, ",".join([c.login for c in self.players])
+            )
 
     @property
     def short_status(self):
-        return (self.scenario.get_name(short=True),
-                ",".join([c.login for c in self.players]),
-                self.nb_minutes)
+        return (
+            self.scenario.get_name(short=True),
+            ",".join([c.login for c in self.players]),
+            self.nb_minutes,
+        )
 
     def unregister(self, client):
         self.players.remove(client)
@@ -316,5 +352,5 @@ class Game:
         elif time.time() > self._timeout_reference + config.timeout:
             for player in self._orders.players_without_orders():
                 warning("timeout %s", player.login)
-                player.handle_close() # disconnect player
-                break # don't continue! (might disconnect more players)
+                player.handle_close()  # disconnect player
+                break  # don't continue! (might disconnect more players)

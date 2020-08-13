@@ -30,12 +30,16 @@ class Order:
         self.unit = unit
         self.args = args
 
-    def __eq__(self, other): return False
-    def __ne__(self, other): return not self.__eq__(other)
+    def __eq__(self, other):
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     __first_update = True
 
-    def execute(self): pass
+    def execute(self):
+        pass
 
     def update(self):
         if self.__first_update:
@@ -51,7 +55,8 @@ class Order:
     def world(self):
         return self.unit.world
 
-    def cancel(self, unpay=True): pass
+    def cancel(self, unpay=True):
+        pass
 
     def mark_as_impossible(self, reason=None):
         self.is_impossible = True
@@ -66,19 +71,25 @@ class Order:
     def update_target(self):
         t = self.target
         p = self.unit.player
-        if t is not None and \
-           type(t).__name__ != "ZoomTarget" and \
-           t not in p.world.squares and \
-           t not in p.perception and \
-           t not in p.memory:
+        if (
+            t is not None
+            and type(t).__name__ != "ZoomTarget"
+            and t not in p.world.squares
+            and t not in p.perception
+            and t not in p.memory
+        ):
             self.target = p.get_object_by_id(t.id)
         if hasattr(self.target, "place") and self.target.place is None:
             self.target = None
 
     def _group_is_ready(self):
         for u in self.player.units:
-            if u is not self.unit and u.orders and u.orders[0] == self \
-               and u.place is not self.unit.place:
+            if (
+                u is not self.unit
+                and u.orders
+                and u.orders[0] == self
+                and u.place is not self.unit.place
+            ):
                 return False
         return True
 
@@ -92,20 +103,22 @@ class Order:
 
     def _default_move_to_or_fail(self, target):
         self.unit.start_moving_to(target)
-        if self.unit.is_idle: # target is unreachable
+        if self.unit.is_idle:  # target is unreachable
             self.mark_as_impossible()
-            self.unit.deploy() # do not block the path
+            self.unit.deploy()  # do not block the path
 
     def _smart_move_to_or_fail(self, target):
         self.unit.start_moving_to(target, avoid=True)
-        if self.unit.is_idle and isinstance(self, (GoOrder, PatrolOrder)):    
+        if self.unit.is_idle and isinstance(self, (GoOrder, PatrolOrder)):
             # eventually attack the obstacle
             next_square = self.unit.next_square(target)
-            if self.player.enemy_menace(next_square) == 0: # no obstacle yet
+            if self.player.enemy_menace(next_square) == 0:  # no obstacle yet
                 self.unit.start_moving_to(next_square)
             elif next_square is target:
-                if self.player.balance(next_square, self.unit.place) > 1.1 \
-                   or self._group_is_ready():
+                if (
+                    self.player.balance(next_square, self.unit.place) > 1.1
+                    or self._group_is_ready()
+                ):
                     self._grouped_attack(next_square)
                     return
                 else:
@@ -116,9 +129,9 @@ class Order:
             else:
                 self.unit.deploy()
                 return
-        if self.unit.is_idle: # target is unreachable
+        if self.unit.is_idle:  # target is unreachable
             self.mark_as_impossible()
-            self.unit.deploy() # do not block the path
+            self.unit.deploy()  # do not block the path
 
     def move_to_or_fail(self, target):
         if self.unit.speed == 0:
@@ -133,8 +146,12 @@ class Order:
         if len(self.unit.orders) >= ORDERS_QUEUE_LIMIT:
             self.unit.notify("order_impossible,the_queue_is_full")
         # check food requirement only if the queue is empty
-        elif not self.unit.orders and self.food_cost != 0 \
-             and self.unit.player.available_food < self.unit.player.used_food + self.food_cost:
+        elif (
+            not self.unit.orders
+            and self.food_cost != 0
+            and self.unit.player.available_food
+            < self.unit.player.used_food + self.food_cost
+        ):
             self.unit.notify("order_impossible,not_enough_food")
         else:
             self.unit.orders.append(self)
@@ -176,7 +193,6 @@ class StopOrder(ImmediateOrder):
 
 
 class ImmediateCancelOrder(ImmediateOrder):
-
     @classmethod
     def is_allowed(cls, unit, *unused_args):
         return unit.orders and unit.orders[-1].cancel_order == cls.keyword
@@ -344,14 +360,14 @@ class ComplexOrder(Order):
             and type_name not in unit.player.forbidden_techs
             and (not unit.orders or unit.orders[-1].can_be_followed)
             and cls.additional_condition(unit, type_name)
-            and unit.player.check_count_limit(type_name))
+            and unit.player.check_count_limit(type_name)
+        )
 
     @classmethod
     def is_allowed(cls, unit, type_name, *unused_args):
-        return (
-            cls._is_almost_allowed(unit, type_name)
-            and unit.player.has_all(
-                unit.player.world.unit_class(type_name).requirements))
+        return cls._is_almost_allowed(unit, type_name) and unit.player.has_all(
+            unit.player.world.unit_class(type_name).requirements
+        )
 
     @classmethod
     def menu(cls, unit, strict=False):
@@ -383,7 +399,7 @@ class ProductionOrder(ComplexOrder):
             return
         if self.time < 0:
             t = 0
-        elif self.time > self.time_cost: # can happen when training archers
+        elif self.time > self.time_cost:  # can happen when training archers
             t = self.time_cost
         else:
             t = self.time
@@ -395,19 +411,23 @@ class ProductionOrder(ComplexOrder):
     _has_started = False
 
     def _can_start(self):
-        return self.food_cost == 0 or self.player.available_food >= self.player.used_food + self.food_cost
+        return (
+            self.food_cost == 0
+            or self.player.available_food >= self.player.used_food + self.food_cost
+        )
 
     def _start(self):
         self._has_started = True
         self.is_deferred = False
-        self.player.used_food += self.food_cost # food reservation
+        self.player.used_food += self.food_cost  # food reservation
         self._notify_completeness()
 
     def _defer(self):
         self.is_deferred = True
         self.unit.notify("production_deferred")
 
-    def complete(self): pass
+    def complete(self):
+        pass
 
     def execute(self):
         if not self._has_started:
@@ -426,7 +446,7 @@ class ProductionOrder(ComplexOrder):
         if unpay:
             self.player.unpay(self.cost)
         if self._has_started:
-            self.player.used_food -= self.food_cost # end food reservation
+            self.player.used_food -= self.food_cost  # end food reservation
         self.unit.notify("order_ok")
 
 
@@ -437,27 +457,28 @@ class TrainOrder(ProductionOrder):
     cancel_order = "cancel_training"
 
     def complete(self):
-        if self.type.airground_type == "water" and self.unit.is_buildable_near_water_only:
+        if (
+            self.type.airground_type == "water"
+            and self.unit.is_buildable_near_water_only
+        ):
             place = self.unit.nearest_water()
             if place is None:
                 self.cancel()
                 self.mark_as_impossible("not_enough_space")
                 return
             x, y = place.find_free_space(
-                self.type.airground_type,
-                place.x, place.y,
-                player=self.player)
+                self.type.airground_type, place.x, place.y, player=self.player
+            )
         else:
             place = self.unit.place
             x, y = place.find_free_space(
-                self.type.airground_type,
-                self.unit.x, self.unit.y,
-                player=self.player)
+                self.type.airground_type, self.unit.x, self.unit.y, player=self.player
+            )
         if x is None:
             self.cancel()
             self.mark_as_impossible("not_enough_space")
             return
-        self.player.used_food -= self.food_cost # end food reservation
+        self.player.used_food -= self.food_cost  # end food reservation
         u = self.type(self.player, place, x, y)
         u.notify("complete")
         u.take_default_order(self.unit.rallying_point)
@@ -504,9 +525,20 @@ class UpgradeToOrder(ProductionOrder):
         return self.type.time_cost - self.unit.time_cost
 
     def complete(self):
-        player, place, x, y, hp, hp_max = self.player, self.unit.place, self.unit.x, self.unit.y, self.unit.hp, self.unit.hp_max
-        leave_meadow = not self.unit.is_buildable_anywhere and self.type.is_buildable_anywhere
-        consume_meadow = self.unit.is_buildable_anywhere and not self.type.is_buildable_anywhere
+        player, place, x, y, hp, hp_max = (
+            self.player,
+            self.unit.place,
+            self.unit.x,
+            self.unit.y,
+            self.unit.hp,
+            self.unit.hp_max,
+        )
+        leave_meadow = (
+            not self.unit.is_buildable_anywhere and self.type.is_buildable_anywhere
+        )
+        consume_meadow = (
+            self.unit.is_buildable_anywhere and not self.type.is_buildable_anywhere
+        )
         blocked_exit = self.unit.blocked_exit
         if consume_meadow:
             meadow = place.find_nearest_meadow(self.unit)
@@ -526,7 +558,6 @@ class UpgradeToOrder(ProductionOrder):
         if leave_meadow:
             Meadow(place, x, y)
 
-
     @staticmethod
     def additional_condition(unit, unused_type_name):
         return not unit.orders
@@ -545,9 +576,11 @@ class GoOrder(BasicOrder):
     def __eq__(self, other):
         # smart units with the same "go" order will behave as a group
         # (cf move_to_or_fail)
-        return self.__class__ == other.__class__ and \
-            getattr(self.target, "id", None) == getattr(other.target, "id", None) and \
-            self._creation_time == other._creation_time
+        return (
+            self.__class__ == other.__class__
+            and getattr(self.target, "id", None) == getattr(other.target, "id", None)
+            and self._creation_time == other._creation_time
+        )
 
     def on_queued(self):
         self._creation_time = self.world.time
@@ -555,7 +588,7 @@ class GoOrder(BasicOrder):
         if self.target is None:
             self.mark_as_impossible()
             return
-        if hasattr(self.target, "other_side"): # target is an exit
+        if hasattr(self.target, "other_side"):  # target is an exit
             # the new target is the square on the other side
             self.target = self.target.other_side.place
         self.unit.notify("order_ok")
@@ -564,7 +597,7 @@ class GoOrder(BasicOrder):
         self.update_target()
         if self.target is None:
             self.mark_as_impossible()
-        elif self.unit.is_in_position(self.target): # square or subsquare
+        elif self.unit.is_in_position(self.target):  # square or subsquare
             self.unit.hold(self.target)
             self.mark_as_complete()
         elif self.unit._near_enough(self.target):
@@ -603,7 +636,7 @@ class PatrolOrder(BasicOrder):
 
     def on_queued(self):
         self.target = self.player.get_object_by_id(self.args[0])
-        if not isinstance(self.target, Square): # patrol to an object
+        if not isinstance(self.target, Square):  # patrol to an object
             # patrol to its square instead
             try:
                 self.target = self.player.get_object_by_id(self.target.place.id)
@@ -611,8 +644,11 @@ class PatrolOrder(BasicOrder):
                 self.mark_as_impossible()
                 return
         self.unit.notify("order_ok")
-        if self.unit.orders and self.unit.orders[0].keyword == "patrol" \
-           and hasattr(self.unit.orders[0], "targets"):
+        if (
+            self.unit.orders
+            and self.unit.orders[0].keyword == "patrol"
+            and hasattr(self.unit.orders[0], "targets")
+        ):
             self.unit.orders[0].targets.append(self.target)
             self.mark_as_complete()
         else:
@@ -653,15 +689,16 @@ class GatherOrder(BasicOrder):
 
     def execute(self):
         if self.mode is None:
-            if self.unit.cargo is not None: # cargo from previous orders
+            if self.unit.cargo is not None:  # cargo from previous orders
                 self.mode = "bring_back"
             else:
                 self.mode = "go_gather"
         self.update_target()
         if self.mode == "bring_back":
             if self.storage is None:
-                self.storage = self.player.nearest_warehouse(self.unit.place,
-                                                             self.unit.cargo[0])
+                self.storage = self.player.nearest_warehouse(
+                    self.unit.place, self.unit.cargo[0]
+                )
                 if self.storage is None:
                     self.unit.cargo = None
                     self.mark_as_impossible()
@@ -670,18 +707,18 @@ class GatherOrder(BasicOrder):
             elif self.unit._near_enough(self.storage):
                 self.mode = "store"
                 self.unit.notify("store,%s" % self.unit.cargo[0])
-                self.delay = self.unit.place.world.time + 1000 # 1 second
+                self.delay = self.unit.place.world.time + 1000  # 1 second
                 self.unit.stop()
             elif self.unit.is_idle:
                 self.unit.start_moving_to(self.storage)
                 if self.unit.is_idle:
-                    self.storage = None # find a new storage
+                    self.storage = None  # find a new storage
         elif self.mode == "store":
             if self.unit.place.world.time > self.delay:
                 self._store_cargo()
                 self.mode = "go_gather"
         elif self.mode == "go_gather":
-            if self.target is None: # resource exhausted
+            if self.target is None:  # resource exhausted
                 self.mark_as_impossible()
                 self.unit.deploy()
             elif self.unit._near_enough(self.target):
@@ -691,7 +728,7 @@ class GatherOrder(BasicOrder):
             elif self.unit.is_idle:
                 self.move_to_or_fail(self.target)
         elif self.mode == "gather":
-            if self.target is None: # resource exhausted
+            if self.target is None:  # resource exhausted
                 self.mark_as_impossible()
             elif not self.unit._near_enough(self.target):
                 self.mode = "go_gather"
@@ -703,7 +740,6 @@ class GatherOrder(BasicOrder):
 
 
 class ComputerOnlyOrder(Order):
-
     @classmethod
     def is_allowed(cls, unit, *unused_args):
         return not unit.player.is_human
@@ -731,8 +767,9 @@ class AutoExploreOrder(ComputerOnlyOrder):
         player = self.unit.player
         world = player.world
         if getattr(player, "_places_to_explore", None) is None:
-            player._places_to_explore = [world.grid[name]
-                                         for name in world.starting_squares]
+            player._places_to_explore = [
+                world.grid[name] for name in world.starting_squares
+            ]
             world.random.shuffle(player._places_to_explore)
             player._already_explored = set()
 
@@ -800,8 +837,9 @@ class RepairOrder(BasicOrder):
 
     def execute(self):
         self.update_target()
-        if self.target is None \
-           or self.target.is_fully_repaired: # destroyed, cancelled or fully repaired
+        if (
+            self.target is None or self.target.is_fully_repaired
+        ):  # destroyed, cancelled or fully repaired
             self.mark_as_complete()
             self.unit.stop()
         elif self.mode == "go_build":
@@ -834,9 +872,12 @@ class BuildOrder(ComplexOrder):
         # "no meadow needed" building projects on the same square. Orders
         # given for the same group and at the same "time" (same cmd_order call)
         # have the same id.
-        return self.__class__ == other.__class__ and self.type == other.type \
-               and getattr(self.target, "id", None) == getattr(other.target, "id", None) \
-               and self.id == other.id
+        return (
+            self.__class__ == other.__class__
+            and self.type == other.type
+            and getattr(self.target, "id", None) == getattr(other.target, "id", None)
+            and self.id == other.id
+        )
 
     def on_queued(self):
         self.target = self.player.get_object_by_id(self.args[0])
@@ -849,7 +890,9 @@ class BuildOrder(ComplexOrder):
             if self.target.is_blocked():
                 self.mark_as_impossible("cannot_build_here")
                 return
-        elif self.type.is_buildable_near_water_only and not getattr(self.target, "is_near_water", False):
+        elif self.type.is_buildable_near_water_only and not getattr(
+            self.target, "is_near_water", False
+        ):
             self.mark_as_impossible("cannot_build_here")
             return
         elif self.type.is_buildable_anywhere:
@@ -868,7 +911,10 @@ class BuildOrder(ComplexOrder):
             if result is not None:
                 self.mark_as_impossible(result)
                 return
-        if self.unit.next_stage(self.target) is None and self.target is not self.unit.place: # target must be reachable
+        if (
+            self.unit.next_stage(self.target) is None
+            and self.target is not self.unit.place
+        ):  # target must be reachable
             self.mark_as_impossible()
             return
         self.unit.notify("order_ok")
@@ -876,14 +922,17 @@ class BuildOrder(ComplexOrder):
 
     def execute(self):
         self.update_target()
-        if self.target is None: # meadow already used
+        if self.target is None:  # meadow already used
             self.mark_as_impossible()
             return
         if self.target is self.unit.place or self.target.place is self.unit.place:
             self.player.free_resources(self)
-            x, _ = self.unit.place.find_free_space(self.type.airground_type,
-                                                   self.target.x, self.target.y,
-                                                   player=self.player)
+            x, _ = self.unit.place.find_free_space(
+                self.type.airground_type,
+                self.target.x,
+                self.target.y,
+                player=self.player,
+            )
             if x is None:
                 self.cancel()
                 self.mark_as_impossible("not_enough_space")
@@ -944,7 +993,7 @@ class UseOrder(ComplexOrder):
             self.target = self.unit
         if self.unit.mana < self.type.mana_cost:
             if self._group_has_enough_mana(self.type.mana_cost):
-                self.mark_as_complete() # ignore silently
+                self.mark_as_complete()  # ignore silently
             else:
                 self.mark_as_impossible("not_enough_mana")
             return
@@ -952,16 +1001,18 @@ class UseOrder(ComplexOrder):
 
     def execute(self):
         self.update_target()
-        if self.target is None: # target has disappeared
+        if self.target is None:  # target has disappeared
             self.mark_as_impossible()
             return
         if getattr(self, "%s_is_not_necessary" % self.type.effect[0])():
             # ignore silently (to save mana when giving the same order to many casters)
             self.mark_as_complete()
             return
-        if square_of_distance(self.target.x, self.target.y, self.unit.x, self.unit.y) \
-           > self.type.effect_range * self.type.effect_range:
-            self.move_to_or_fail(self.target) # move closer
+        if (
+            square_of_distance(self.target.x, self.target.y, self.unit.x, self.unit.y)
+            > self.type.effect_range * self.type.effect_range
+        ):
+            self.move_to_or_fail(self.target)  # move closer
             return
         self.unit.stop()
         if self.type.effect[0] == "conversion" and self.target.is_memory:
@@ -972,14 +1023,19 @@ class UseOrder(ComplexOrder):
             return
         getattr(self, "execute_%s" % self.type.effect[0])()
         self.unit.mana -= self.type.mana_cost
-        self.unit.notify("use_complete,%s" % self.type.type_name,
-                         universal=self.type.universal_notification)
+        self.unit.notify(
+            "use_complete,%s" % self.type.type_name,
+            universal=self.type.universal_notification,
+        )
         self.mark_as_complete()
 
     def teleportation_targets(self):
-        return self.unit.world.get_objects(self.unit.x, self.unit.y,
-                                           self.type.effect_radius,
-                    filter=lambda x: x.player is self.player and x.is_teleportable)
+        return self.unit.world.get_objects(
+            self.unit.x,
+            self.unit.y,
+            self.type.effect_radius,
+            filter=lambda x: x.player is self.player and x.is_teleportable,
+        )
 
     def teleportation_is_not_necessary(self):
         units = self.teleportation_targets()
@@ -1000,9 +1056,12 @@ class UseOrder(ComplexOrder):
                 u.move_to(self.target, None, None)
 
     def recall_targets(self):
-        return self.unit.world.get_objects(self.target.x, self.target.y,
-                                           self.type.effect_radius,
-                    filter=lambda x: x.player is self.player and x.is_teleportable)
+        return self.unit.world.get_objects(
+            self.target.x,
+            self.target.y,
+            self.type.effect_radius,
+            filter=lambda x: x.player is self.player and x.is_teleportable,
+        )
 
     def recall_is_not_necessary(self):
         units = self.recall_targets()
@@ -1036,12 +1095,16 @@ class UseOrder(ComplexOrder):
             self.type.effect[2:],
             target=self.target,
             decay=to_int(self.type.effect[1]),
-            notify=False)
+            notify=False,
+        )
 
     def raise_dead_targets(self):
-        return self.unit.world.get_objects(self.target.x, self.target.y,
-                                           self.type.effect_radius,
-                                           filter=lambda x: isinstance(x, Corpse))
+        return self.unit.world.get_objects(
+            self.target.x,
+            self.target.y,
+            self.type.effect_radius,
+            filter=lambda x: isinstance(x, Corpse),
+        )
 
     def raise_dead_is_not_necessary(self):
         return not self.raise_dead_targets()
@@ -1049,18 +1112,24 @@ class UseOrder(ComplexOrder):
     def execute_raise_dead(self):
         corpses = sorted(
             self.raise_dead_targets(),
-            key=lambda o: square_of_distance(self.target.x, self.target.y, o.x, o.y))
+            key=lambda o: square_of_distance(self.target.x, self.target.y, o.x, o.y),
+        )
         self.unit.player.lang_add_units(
             self.type.effect[2:],
             decay=to_int(self.type.effect[1]),
             from_corpse=True,
             corpses=corpses,
-            notify=False)
+            notify=False,
+        )
 
     def resurrection_targets(self):
         return self.unit.world.get_objects(
-            self.target.x, self.target.y, self.type.effect_radius,
-            filter=lambda x: isinstance(x, Corpse) and x.unit.player is self.unit.player)
+            self.target.x,
+            self.target.y,
+            self.type.effect_radius,
+            filter=lambda x: isinstance(x, Corpse)
+            and x.unit.player is self.unit.player,
+        )
 
     def resurrection_is_not_necessary(self):
         return not self.resurrection_targets()
@@ -1068,7 +1137,8 @@ class UseOrder(ComplexOrder):
     def execute_resurrection(self):
         corpses = sorted(
             self.resurrection_targets(),
-            key=lambda o: square_of_distance(self.target.x, self.target.y, o.x, o.y))
+            key=lambda o: square_of_distance(self.target.x, self.target.y, o.x, o.y),
+        )
         for _ in range(int(self.type.effect[1])):
             if corpses:
                 c = corpses.pop(0)
@@ -1077,7 +1147,7 @@ class UseOrder(ComplexOrder):
                     continue
                 u.player = None
                 u.place = None
-                u.id = None # so the unit will be added to world.active_objects
+                u.id = None  # so the unit will be added to world.active_objects
                 u.hp = u.hp_max // 3
                 u.set_player(self.unit.player)
                 u.move_to(c.place, c.x, c.y)
@@ -1094,7 +1164,6 @@ class UseOrder(ComplexOrder):
 
 
 class TransportOrder(Order):
-
     @classmethod
     def is_allowed(cls, unit, *unused_args):
         return unit.transport_capacity > 0
@@ -1107,8 +1176,9 @@ class LoadOrder(TransportOrder):
 
     def on_queued(self):
         self.target = self.player.get_object_by_id(self.args[0])
-        if self.target is None or \
-           self.unit.player is not getattr(self.target, "player", None):
+        if self.target is None or self.unit.player is not getattr(
+            self.target, "player", None
+        ):
             self.mark_as_impossible()
             return
         self.unit.notify("order_ok")
@@ -1118,7 +1188,10 @@ class LoadOrder(TransportOrder):
         if self.target is None or not self.unit.have_enough_space(self.target):
             self.mark_as_impossible()
         elif self.unit.airground_type == "water":
-            if self.target.place in self.unit.place.strict_neighbors and not self.target.place.high_ground:
+            if (
+                self.target.place in self.unit.place.strict_neighbors
+                and not self.target.place.high_ground
+            ):
                 self.mark_as_complete()
                 self.unit.load(self.target)
             else:
@@ -1142,8 +1215,10 @@ class EnterOrder(ImmediateOrder):
     def immediate_action(self):
         self.target = self.player.get_object_by_id(self.args[0])
         self.target.take_order(["load", self.unit.id], forget_previous=False)
-        if not (self.unit.airground_type == "ground"
-                and self.target.airground_type == "water"):
+        if not (
+            self.unit.airground_type == "ground"
+            and self.target.airground_type == "water"
+        ):
             self.unit.take_order(["go", self.target.id])
 
 
@@ -1166,7 +1241,10 @@ class LoadAllOrder(TransportOrder):
         if self.target is None:
             self.mark_as_impossible()
         elif self.unit.airground_type == "water":
-            if self.target in self.unit.place.strict_neighbors and not self.target.high_ground:
+            if (
+                self.target in self.unit.place.strict_neighbors
+                and not self.target.high_ground
+            ):
                 self.mark_as_complete()
                 self.unit.load_all(self.target)
             else:
@@ -1197,8 +1275,11 @@ class UnloadAllOrder(TransportOrder):
         if self.target is None:
             self.mark_as_impossible()
         elif self.unit.airground_type == "water":
-            if self.target in self.unit.place.strict_neighbors \
-               and self.target.is_ground and not self.target.high_ground:
+            if (
+                self.target in self.unit.place.strict_neighbors
+                and self.target.is_ground
+                and not self.target.high_ground
+            ):
                 self.mark_as_complete()
                 self.unit.unload_all(self.target)
             else:
@@ -1212,5 +1293,8 @@ class UnloadAllOrder(TransportOrder):
 
 # build a dictionary containing order classes
 # for example: ORDERS_DICT["go"] == GoOrder
-ORDERS_DICT = {_v.keyword: _v for _v in list(locals().values())
-                    if hasattr(_v, "keyword") and issubclass(_v, Order)}
+ORDERS_DICT = {
+    _v.keyword: _v
+    for _v in list(locals().values())
+    if hasattr(_v, "keyword") and issubclass(_v, Order)
+}

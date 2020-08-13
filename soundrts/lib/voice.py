@@ -11,14 +11,16 @@ from soundrts.lib.voicechannel import VoiceChannel
 
 
 class _Voice:
-    
-    msgs: List[Message] = [] # said and unsaid messages
-    active = False # currently talking (not just self.item())
-    history = False # in "history" mode
-    current = 0 # index of the message currently said
-                # == len(self.msgs) if no message
 
-    def get_unsaid(self): # index of the first never said message (== len(self.msgs) if no unsaid message)
+    msgs: List[Message] = []  # said and unsaid messages
+    active = False  # currently talking (not just self.item())
+    history = False  # in "history" mode
+    current = 0  # index of the message currently said
+    # == len(self.msgs) if no message
+
+    def get_unsaid(
+        self,
+    ):  # index of the first never said message (== len(self.msgs) if no unsaid message)
         for i, m in enumerate(self.msgs):
             if not m.said:
                 return i
@@ -48,7 +50,7 @@ class _Voice:
         if self.active:
             if self._current_message_is_unsaid():
                 if not history_only:
-                    self._mark_current_as_said() # give up current message
+                    self._mark_current_as_said()  # give up current message
                     self.current += 1
                 else:
                     return
@@ -79,8 +81,15 @@ class _Voice:
         if list_of_sound_numbers:
             self.msgs.append(Message(list_of_sound_numbers, *args, **keywords))
             self.update()
-        
-    def _say_now(self, list_of_sound_numbers, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME, interruptible=True, keep_key=False):
+
+    def _say_now(
+        self,
+        list_of_sound_numbers,
+        lv=DEFAULT_VOLUME,
+        rv=DEFAULT_VOLUME,
+        interruptible=True,
+        keep_key=False,
+    ):
         """Say now (give up saying sentences not said yet) until the end or a keypress."""
         if list_of_sound_numbers:
             with self.lock:
@@ -89,14 +98,15 @@ class _Voice:
                 while self.channel.get_busy():
                     if interruptible and self._key_hit(keep_key=keep_key):
                         break
-                    time.sleep(.1)
+                    time.sleep(0.1)
                     self.channel.update()
                 if not interruptible:
                     pygame.event.get([KEYDOWN])
                 self.msgs.append(Message(list_of_sound_numbers, lv, rv, said=True))
-                self._go_to_next_unsaid() # or next_current?
+                self._go_to_next_unsaid()  # or next_current?
                 self.active = False
-#                self.update()
+
+    #                self.update()
 
     def _mark_current_as_said(self):
         self.msgs[self.current].said = True
@@ -107,7 +117,7 @@ class _Voice:
     def _go_to_next_unsaid(self):
         self.current = self.unsaid
 
-    def _give_up_current_if_partially_said(self): # to avoid to many repetitions
+    def _give_up_current_if_partially_said(self):  # to avoid to many repetitions
         if self._current_message_is_unsaid() and self.channel.is_almost_done():
             self._mark_current_as_said()
 
@@ -127,11 +137,11 @@ class _Voice:
             return True
         # look for a more recent message of the same type
         if msg.update_type is not None:
-            for m in self.msgs[index + 1:]:
+            for m in self.msgs[index + 1 :]:
                 if m.update_type == msg.update_type:
                     return True
         # look for a more recent, identical message
-        for m in self.msgs[index + 1:]:
+        for m in self.msgs[index + 1 :]:
             if msg.list_of_sound_numbers == m.list_of_sound_numbers:
                 return True
         return False
@@ -152,7 +162,7 @@ class _Voice:
             self.channel.update()
         else:
             self._mark_expired_messages_as_said()
-            if self.active: # one message from the queue has just finished
+            if self.active:  # one message from the queue has just finished
                 self._mark_current_as_said()
                 self.current += 1
             if not self.history:
@@ -176,21 +186,23 @@ class _Voice:
             self.update()
             if not (self._unsaid_exists() or self.channel.get_busy()):
                 break
-            elif interruptible and self._key_hit(): # keep_key=False? (and remove next line?)
+            elif (
+                interruptible and self._key_hit()
+            ):  # keep_key=False? (and remove next line?)
                 if self._unsaid_exists():
                     self.say_next()
-                    pygame.event.get([KEYDOWN]) # consequence: _key_hit() == False
+                    pygame.event.get([KEYDOWN])  # consequence: _key_hit() == False
                 else:
                     break
-            time.sleep(.1)
+            time.sleep(0.1)
         if not interruptible:
             pygame.event.get([KEYDOWN])
 
     def _key_hit(self, keep_key=True):
         l = pygame.event.get([KEYDOWN])
         if keep_key:
-            for e in l: # put events back in queue
-                pygame.event.post(e) # will the order be preserved?
+            for e in l:  # put events back in queue
+                pygame.event.post(e)  # will the order be preserved?
         return len(l) != 0
 
 

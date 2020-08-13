@@ -2,7 +2,6 @@ from soundrts.serverclient import ConnectionToClient
 
 
 class Client(ConnectionToClient):
-
     def __init__(self):
         self.inbuffer = b""
 
@@ -12,7 +11,7 @@ class Client(ConnectionToClient):
 
 class Server:
 
-    clients = []
+    clients = []  # type: ignore
 
 
 def test_found_terminator():
@@ -20,6 +19,7 @@ def test_found_terminator():
     c.collect_incoming_data(b"0")
     c.found_terminator()
     assert c.cmd == b"0"
+
 
 def test_unique_login():
     c = Client()

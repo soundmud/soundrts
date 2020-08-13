@@ -13,7 +13,6 @@ from .paths import STATS_PATH
 
 
 class Stats:
-
     def __init__(self, filepath, server):
         self.filepath = filepath
         self.server = server
@@ -38,7 +37,10 @@ class Stats:
                 f = open(self.filepath, "w")
                 for game_type in list(stats.keys()):
                     nb_games, total_duration = stats[game_type]
-                    f.write(" ".join((game_type, repr(nb_games), repr(total_duration))) + "\n")
+                    f.write(
+                        " ".join((game_type, repr(nb_games), repr(total_duration)))
+                        + "\n"
+                    )
                 f.close()
             except:
                 debug("stats lost")
@@ -61,7 +63,7 @@ class Stats:
         except:
             debug("error adding stats")
 
-    def get(self, game_type): # used for unit test
+    def get(self, game_type):  # used for unit test
         stats = self._read_file()
         if game_type in stats:
             return tuple(stats[game_type])
@@ -75,16 +77,22 @@ class Stats:
             for game_type in list(stats.keys()):
                 nb_games, total_duration = stats[game_type]
                 try:
-                    s = urllib.request.urlopen(self.server + f"stats.php?method=add&game_type={game_type}&nb_games={nb_games}&total_duration={total_duration}&weak_id={weak_id}").read()
+                    s = urllib.request.urlopen(
+                        self.server
+                        + f"stats.php?method=add&game_type={game_type}&nb_games={nb_games}&total_duration={total_duration}&weak_id={weak_id}"
+                    ).read()
                 except:
                     debug("stats server didn't reply")
-                    break # don't try next stats
-                if  s == "":
+                    break  # don't try next stats
+                if s == "":
                     del stats[game_type]
                     self._write_file(stats)
                 else:
-                    debug("wrong reply from the stats server (stats will be sent again next time): %s", s)
-            self._write_file(stats) # remove file if empty
+                    debug(
+                        "wrong reply from the stats server (stats will be sent again next time): %s",
+                        s,
+                    )
+            self._write_file(stats)  # remove file if empty
         except:
             debug("error sending stats")
 
@@ -93,7 +101,7 @@ class Stats:
         # used to approximate the number of users, not more
         thing_to_hash = self._get_volume_serial_number()
         user_id = "%s" % abs(hash(thing_to_hash))
-        user_id = user_id[:4] # collisions are probable
+        user_id = user_id[:4]  # collisions are probable
         debug("user id = %s" % user_id)
         return user_id
 
@@ -108,16 +116,19 @@ class Stats:
             lpFileSystemFlags = c_ulong()
             lpFileSystemNameBuffer = create_string_buffer(1024)
             nFileSystemNameSize = sizeof(lpFileSystemNameBuffer)
-            windll.kernel32.GetVolumeInformationA( # @UndefinedVariable
+            windll.kernel32.GetVolumeInformationA(  # @UndefinedVariable
                 lpRootPathName,
-                lpVolumeNameBuffer, nVolumeNameSize,
+                lpVolumeNameBuffer,
+                nVolumeNameSize,
                 byref(lpVolumeSerialNumber),
                 byref(lpMaximumComponentLength),
                 byref(lpFileSystemFlags),
-                lpFileSystemNameBuffer, nFileSystemNameSize)
+                lpFileSystemNameBuffer,
+                nFileSystemNameSize,
+            )
             return lpVolumeSerialNumber.value
         except:
-            debug("can't get volume serial number") # Mac, Linux
+            debug("can't get volume serial number")  # Mac, Linux
             return 0
 
 

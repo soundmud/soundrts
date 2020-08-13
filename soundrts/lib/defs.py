@@ -10,8 +10,10 @@ def _remove_comments(s):
     """
     return re.sub("(?m);.*$", "", s)
 
+
 def _remove_empty_lines(s):
     return re.sub("(?m)^[ \t]*$\n", "", s)
+
 
 def _join_lines(s):
     r"""Joins lines ending with an antislash.
@@ -25,6 +27,7 @@ def _join_lines(s):
     'a a'
     """
     return re.sub(r"(?m)\\[ \t]*$\n", " ", s)
+
 
 def preprocess(s):
     r"""
@@ -40,6 +43,7 @@ def preprocess(s):
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
     if "idlelib" not in dir():
         input("press ENTER to exit")

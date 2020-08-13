@@ -13,9 +13,11 @@ class Deposit(Entity):
 
     def __init__(self, prototype, square, qty):
         prototype.init_dict(self)
-        self.qty = to_int(qty) # does the value come from the map? (already done in rules)
+        self.qty = to_int(
+            qty
+        )  # does the value come from the map? (already done in rules)
         self.qty_max = self.qty
-        if self.resource_type == 1: # wood
+        if self.resource_type == 1:  # wood
             self.resource_regen = to_int(".01")
         Entity.__init__(self, square)
 
@@ -31,7 +33,8 @@ class Deposit(Entity):
         if self.building_land:
             self.building_land.move_to(place, x, y)
 
-    def update(self): pass # necessary to allow slow update
+    def update(self):
+        pass  # necessary to allow slow update
 
     def slow_update(self):
         if self.resource_regen and self.qty < self.qty_max:
@@ -53,13 +56,14 @@ class Corpse(Entity):
 
     type_name = "corpse"
     collision = 0
-    
+
     def __init__(self, unit):
         self.unit = copy.copy(unit)
         Entity.__init__(self, unit.place, unit.x, unit.y)
         self.time_limit = self.place.world.time + 300 * PRECISION
 
-    def update(self): pass # necessary to allow slow update
+    def update(self):
+        pass  # necessary to allow slow update
 
     def slow_update(self):
         if self.place.world.time >= self.time_limit:

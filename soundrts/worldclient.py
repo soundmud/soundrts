@@ -21,11 +21,18 @@ FIRST_FPCT = 1
 NEWLINE_REPLACEMENT = ";"
 SPACE_REPLACEMENT = ","
 
+
 def _pack(player_orders):
-    return player_orders.replace("\n", NEWLINE_REPLACEMENT).replace(" ", SPACE_REPLACEMENT)
+    return player_orders.replace("\n", NEWLINE_REPLACEMENT).replace(
+        " ", SPACE_REPLACEMENT
+    )
+
 
 def _unpack(player_orders):
-    return player_orders.replace(NEWLINE_REPLACEMENT, "\n").replace(SPACE_REPLACEMENT, " ")
+    return player_orders.replace(NEWLINE_REPLACEMENT, "\n").replace(
+        SPACE_REPLACEMENT, " "
+    )
+
 
 def send_error_to_metaserver(error_msg):
     try:
@@ -33,6 +40,7 @@ def send_error_to_metaserver(error_msg):
         urllib.request.urlopen(METASERVER_URL + "errors.php?%s" % params).read()
     except:
         exception("could not send error message to web server")
+
 
 def send_platform_version_to_metaserver(game, nb):
     error_msg = "not_an_error time={} soundrts={} map={} players={} platform={} python={}".format(
@@ -42,15 +50,15 @@ def send_platform_version_to_metaserver(game, nb):
         nb,
         platform.platform(),
         sys.version.replace("\n", " "),
-        )
+    )
     send_error_to_metaserver(error_msg)
 
 
 class _Controller:
-
     @property
     def name(self):
         from .clientservermenu import name
+
         return name(self.login)
 
     def __repr__(self):
@@ -63,7 +71,6 @@ class _Controller:
 
 
 class _Client(_Controller):
-
     @property
     def allow_cheatmode(self):
         return self.game_session.allow_cheatmode
@@ -85,7 +92,9 @@ class _Client(_Controller):
             return
         if self.game_session.record_replay:
             player_index = self.player.world.players.index(player)
-            self.game_session.replay_write(" ".join(map(str, (self.player.world.time, player_index, s))))
+            self.game_session.replay_write(
+                " ".join(map(str, (self.player.world.time, player_index, s)))
+            )
         if not hasattr(self, "_orders"):
             self._orders = []
         self._orders.append((player, s))
@@ -94,9 +103,9 @@ class _Client(_Controller):
         pass
 
 
-class DummyClient(_Controller): # AI
+class DummyClient(_Controller):  # AI
 
-    alliance = "ai" # computer players are allied by default
+    alliance = "ai"  # computer players are allied by default
 
     def __init__(self, AI_type="timers", neutral=False):
         self.AI_type = AI_type
@@ -115,7 +124,6 @@ class DummyClient(_Controller): # AI
 
 
 class RemoteClient(_Controller):
-
     def __init__(self, login):
         self.login = login
 
@@ -123,7 +131,7 @@ class RemoteClient(_Controller):
         pass
 
 
-class DirectClient(_Client): # client for single player games
+class DirectClient(_Client):  # client for single player games
 
     player = None
     data = ""
@@ -176,11 +184,11 @@ class ReplayClient(DirectClient):
                 break
 
 
-class Coordinator(_Client): # client coordinator for multiplayer games
+class Coordinator(_Client):  # client coordinator for multiplayer games
 
     data = ""
     world = None
-    
+
     def __init__(self, login, main_server, game_session):
         self.login = login
         self.main_server = main_server
@@ -189,8 +197,8 @@ class Coordinator(_Client): # client coordinator for multiplayer games
         self._previous_update = time.time()
         self.game_session = game_session
         self.all_orders = [[FIRST_FPCT]]
-        self.turn = 0 # com turn
-        self.sub_turn = 0 # simulation frame
+        self.turn = 0  # com turn
+        self.sub_turn = 0  # simulation frame
 
     @property
     def clients(self):
@@ -219,16 +227,21 @@ class Coordinator(_Client): # client coordinator for multiplayer games
             self.world = self.clients[0].player.world
         if self.com_turn():
             self.main_server.write_line(
-                 " ".join(map(str,
-                    ("orders",
-                    _pack(self.orders),
-                    self.get_digest(),
-                    chrono.value("ping"),
-                    chrono.value("update"),
-                    self.delay,
-                    self.interface.real_speed)
-                 ))
+                " ".join(
+                    map(
+                        str,
+                        (
+                            "orders",
+                            _pack(self.orders),
+                            self.get_digest(),
+                            chrono.value("ping"),
+                            chrono.value("update"),
+                            self.delay,
+                            self.interface.real_speed,
+                        ),
+                    )
                 )
+            )
             self.orders = ""
             chrono.start("ping")
             self._give_all_orders()
@@ -239,20 +252,27 @@ class Coordinator(_Client): # client coordinator for multiplayer games
     # communications with the world
 
     def get_digest(self):
-        return "{}-{}.{}-{}".format(self.world.time,
-                                self.turn, self.sub_turn,
-                                md5(self.world.previous_state[1]).hexdigest())
+        return "{}-{}.{}-{}".format(
+            self.world.time,
+            self.turn,
+            self.sub_turn,
+            md5(self.world.previous_state[1]).hexdigest(),
+        )
 
     def get_sync_debug_msg_1(self):
         return "out_of_sync_error: map={} version={} platform={} python={} md5={} time={}".format(
-            self.world.map.get_name(), VERSION, platform.platform(), sys.version.replace("\n", " "),
-            self.get_digest(), self.world.previous_state[0])
+            self.world.map.get_name(),
+            VERSION,
+            platform.platform(),
+            sys.version.replace("\n", " "),
+            self.get_digest(),
+            self.world.previous_state[0],
+        )
 
     def get_sync_debug_msg_2(self):
         return "out_of_sync_error:debug_info orders={} objects={}".format(
-               self._all_orders,
-               self.world.previous_state[1][-150:],
-               )
+            self._all_orders, self.world.previous_state[1][-150:],
+        )
 
     def _give_all_orders(self):
         self._previous_update = time.time()
@@ -284,14 +304,20 @@ class Coordinator(_Client): # client coordinator for multiplayer games
                 self.delay = time.time() - self.interface.next_update
             elif args[0] == "synchronization_error":
                 if IS_DEV_VERSION:
-                    open("user/tmp/{}-{}.txt".format(
-                        self.world.previous_state[0],
-                        md5(self.world.previous_state[1]).hexdigest()),
-                         "bw").write(self.world.previous_state[1])
-                    open("user/tmp/{}-{}.txt".format(
-                        self.world.previous_previous_state[0],
-                        md5(self.world.previous_previous_state[1]).hexdigest()),
-                         "bw").write(self.world.previous_previous_state[1])
+                    open(
+                        "user/tmp/{}-{}.txt".format(
+                            self.world.previous_state[0],
+                            md5(self.world.previous_state[1]).hexdigest(),
+                        ),
+                        "bw",
+                    ).write(self.world.previous_state[1])
+                    open(
+                        "user/tmp/{}-{}.txt".format(
+                            self.world.previous_previous_state[0],
+                            md5(self.world.previous_previous_state[1]).hexdigest(),
+                        ),
+                        "bw",
+                    ).write(self.world.previous_previous_state[1])
                 else:
                     try:
                         send_error_to_metaserver(self.get_sync_debug_msg_1())

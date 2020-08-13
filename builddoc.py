@@ -9,6 +9,7 @@ import rules2doc
 
 SRC = "doc_src/src"
 
+
 def build(dest="."):
     DEST = join(dest, "doc")
     try:
@@ -36,13 +37,15 @@ def build(dest="."):
             pass
         for n in os.listdir(p):
             if n.endswith(".rst"):
-                core.publish_file(source_path=join(p, n), writer_name="html",
-                                  destination_path=join(dp, n[:-3] + "htm"))
+                core.publish_file(
+                    source_path=join(p, n),
+                    writer_name="html",
+                    destination_path=join(dp, n[:-3] + "htm"),
+                )
 
     shutil.copyfile(join(DEST, "en/units.htm"), join(DEST, "it/units.htm"))
     for n in ("mapmaking", "modding", "aimaking"):
-        shutil.copyfile(join(DEST, "en/%s.htm" % n),
-                        join(DEST, "pt-BR/%s.htm" % n))
+        shutil.copyfile(join(DEST, "en/%s.htm" % n), join(DEST, "pt-BR/%s.htm" % n))
 
 
 if __name__ == "__main__":

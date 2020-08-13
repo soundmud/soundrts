@@ -14,8 +14,10 @@ mods: str
 soundpacks: str
 wait_delay_per_character: float
 
+
 def login_is_valid(login):
     return re.match("^[a-zA-Z0-9]{1,20}$", login) is not None
+
 
 def login_type(s):
     assert isinstance(s, str)
@@ -23,30 +25,38 @@ def login_type(s):
         raise ValueError
     return s
 
+
 _options = [
     ("general", "login", "player", login_type),
     ("general", "mods", ""),
     ("general", "soundpacks", ""),
     ("general", "num_channels", 16),
     ("general", "speed", 1),
-    ("general", "verbosity", "menu_changed,unit_added,unit_complete,scout_info,food,resources,resource_exhausted"),
+    (
+        "general",
+        "verbosity",
+        "menu_changed,unit_added,unit_complete,scout_info,food,resources,resource_exhausted",
+    ),
     ("general", "debug_mode", 0),
     ("server", "timeout", 60.0),
     # fpct must be as small as possible while respecting test_fpct()
     ("server", "fpct_coef", 2.3),
     ("server", "fpct_max", 3),
     ("server", "require_humans", 0),
-    ("tts", "wait_delay_per_character", .1),
+    ("tts", "wait_delay_per_character", 0.1),
 ]
+
 
 def add_converter(option):
     if len(option) == 4:
         return option
-    return option + (type(option[2]), )
+    return option + (type(option[2]),)
+
 
 _options = [add_converter(o) for o in _options]
 
 _module = sys.modules[__name__]
+
 
 def save(name=CONFIG_FILE_PATH):
     c = configparser.ConfigParser()
@@ -56,12 +66,14 @@ def save(name=CONFIG_FILE_PATH):
         c.set(section, option, str(getattr(_module, option)))
     c.write(open(name, "w"))
 
+
 def make_a_copy(name):
     try:
         shutil.copy(name, name + ".old")
         warning("made a copy of the old config file")
     except:
         warning("could not make a copy of the old config file")
+
 
 def _copy_to_module(c):
     error = False
@@ -82,6 +94,7 @@ def _copy_to_module(c):
         setattr(_module, option, value)
     return error
 
+
 def load(name=CONFIG_FILE_PATH):
     if os.path.isfile(name):
         c = configparser.ConfigParser()
@@ -96,8 +109,10 @@ def load(name=CONFIG_FILE_PATH):
         init()
         save(name)
 
+
 def init():
     for _, option, default, _ in _options:
         setattr(_module, option, default)
+
 
 init()

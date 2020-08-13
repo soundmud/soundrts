@@ -53,8 +53,12 @@ class VoiceChannel:
             self._play(s, lv, rv)
 
     def get_busy(self):
-        return self.c.get_busy() or self._queue or (self.c.get_queue() is not None) \
-               or tts.is_speaking()
+        return (
+            self.c.get_busy()
+            or self._queue
+            or (self.c.get_queue() is not None)
+            or tts.is_speaking()
+        )
 
     def _play(self, s, lv, rv):
         # note: set_volume() doesn't seem to work with queued sounds

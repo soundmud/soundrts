@@ -22,6 +22,7 @@ class _Error(Exception):
 
 _allowed_mods = ("CTRL", "ALT", "SHIFT")
 
+
 def _normalized_key(s):
     words = s.split()
     mods = words[:-1]
@@ -35,8 +36,10 @@ def _normalized_key(s):
         raise _Error("'%s' is not a key" % words[-1])
     return normalized_mods, key
 
+
 _mod_masks = (KMOD_CTRL, KMOD_ALT, KMOD_SHIFT)
 _modifiers_as_keys = (K_LCTRL, K_LALT, K_LSHIFT, K_RCTRL, K_RALT, K_RSHIFT)
+
 
 def _normalized_event(e):
     if e.key in _modifiers_as_keys:
@@ -46,15 +49,15 @@ def _normalized_event(e):
         normalized_mods = tuple(1 if e.mod & m else 0 for m in _mod_masks)
     return normalized_mods, e.key
 
+
 def _preprocess(s):
-    s = re.sub("(?m);.*$", "", s) # remove comments
-    s = re.sub("(?m)^[ \t]*$\n", "", s) # remove empty lines
-    s = re.sub(r"(?m)\\[ \t]*$\n", " ", s) # join lines ending with "\"
+    s = re.sub("(?m);.*$", "", s)  # remove comments
+    s = re.sub("(?m)^[ \t]*$\n", "", s)  # remove empty lines
+    s = re.sub(r"(?m)\\[ \t]*$\n", " ", s)  # join lines ending with "\"
     return s
 
 
 class Bindings:
-
     def __init__(self):
         self._bindings = {}
         self._definitions = dict()
@@ -103,6 +106,7 @@ class Bindings:
                 return getattr(client, prefix + "_" + name)
             except AttributeError:
                 raise _Error("'%s' is not a command" % name)
+
         for line in _preprocess(s).split("\n"):
             try:
                 line = self._apply_definitions(line)

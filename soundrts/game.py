@@ -43,7 +43,9 @@ class _Game:
     players: List[_Controller]
 
     def create_replay(self):
-        self._replay_file = open(os.path.join(REPLAYS_PATH, "%s.txt" % int(time.time())), "w")
+        self._replay_file = open(
+            os.path.join(REPLAYS_PATH, "%s.txt" % int(time.time())), "w"
+        )
         self.replay_write(self.game_type_name)
         players = " ".join([p.login for p in self.players])
         self.replay_write(self.map.get_name() + " " + players)
@@ -64,11 +66,13 @@ class _Game:
 
     def replay_write(self, s):
         self._replay_file.write(s + "\n")
-      
+
     def _game_type(self):
-        return "{}/{}/{}".format(VERSION,
-                             self.game_type_name + "-" + self.map.get_name(),
-                             self.nb_human_players)
+        return "{}/{}/{}".format(
+            VERSION,
+            self.game_type_name + "-" + self.map.get_name(),
+            self.nb_human_players,
+        )
 
     def _record_stats(self, world):
         stats.add(self._game_type(), int(world.time / 1000))
@@ -76,12 +80,16 @@ class _Game:
     def run(self, speed=config.speed):
         if self.record_replay:
             self.create_replay()
-        self.world = World(self.default_triggers, self.seed, must_apply_equivalent_type=self.must_apply_equivalent_type)
+        self.world = World(
+            self.default_triggers,
+            self.seed,
+            must_apply_equivalent_type=self.must_apply_equivalent_type,
+        )
         if self.world.load_and_build_map(self.map):
             self.map.load_style(res)
             try:
                 self.map.load_resources()
-                update_orders_list() # when style has changed
+                update_orders_list()  # when style has changed
                 self.pre_run()
                 if self.world.objective:
                     voice.confirmation(mp.OBJECTIVE + self.world.objective)
@@ -101,15 +109,22 @@ class _Game:
                 t.start()
                 if PROFILE:
                     import cProfile
-                    cProfile.runctx("self.interface.loop()", globals(), locals(), "interface_profile.tmp")
+
+                    cProfile.runctx(
+                        "self.interface.loop()",
+                        globals(),
+                        locals(),
+                        "interface_profile.tmp",
+                    )
                     import pstats
-                    for n in ("interface_profile.tmp", ):
+
+                    for n in ("interface_profile.tmp",):
                         p = pstats.Stats(n)
                         p.strip_dirs()
-                        p.sort_stats('time', 'cumulative').print_stats(30)
+                        p.sort_stats("time", "cumulative").print_stats(30)
                         p.print_callers(30)
                         p.print_callees(20)
-                        p.sort_stats('cumulative').print_stats(50)
+                        p.sort_stats("cumulative").print_stats(50)
                 else:
                     self.interface.loop()
                 self._record_stats(self.world)
@@ -140,7 +155,7 @@ class _MultiplayerGame(_Game):
         ("players", ["no_enemy_player_left"], ["victory"]),
         ("players", ["no_building_left"], ["defeat"]),
         ("computers", ["no_unit_left"], ["defeat"]),
-        ]
+    ]
     must_apply_equivalent_type = True
 
 
@@ -201,23 +216,22 @@ class MultiplayerGame(_MultiplayerGame):
 
 
 class _Savable:
-
     def __getstate__(self):
         odict = self.__dict__.copy()
-        odict.pop('_replay_file', None)
+        odict.pop("_replay_file", None)
         return odict
 
     def save(self):
         f = open(SAVE_PATH, "wb")
         i = stats.Stats(None, None)._get_weak_user_id()
-        f.write(("%s\n" % i).encode(encoding='ascii'))
+        f.write(("%s\n" % i).encode(encoding="ascii"))
         self.world.remove_links_for_savegame()
         self._rules = rules
         self._ai = definitions._ai
         self._style = style
         if self.record_replay:
             self._replay_file.flush()
-            os.fsync(self._replay_file.fileno()) # just to be sure
+            os.fsync(self._replay_file.fileno())  # just to be sure
             self._replay_file_content = open(self._replay_file.name).read()
         try:
             pickle.dump(self, f)
@@ -229,7 +243,9 @@ class _Savable:
 
     def run_on(self):
         if self.record_replay:
-            self._replay_file = open(os.path.join(REPLAYS_PATH, "%s.txt" % int(time.time())), "w")
+            self._replay_file = open(
+                os.path.join(REPLAYS_PATH, "%s.txt" % int(time.time())), "w"
+            )
             self._replay_file.write(self._replay_file_content)
         try:
             self.map.load_resources()
@@ -237,7 +253,7 @@ class _Savable:
             rules.copy(self._rules)
             definitions._ai = self._ai
             style.copy(self._style)
-            update_orders_list() # when style has changed
+            update_orders_list()  # when style has changed
             self.interface.set_self_as_listener()
             t = threading.Thread(target=self.world.loop)
             t.daemon = True
@@ -298,7 +314,7 @@ class MissionGame(_Game, _Savable):
 
 class ReplayGame(_Game):
 
-    game_type_name = "replay" # probably useless (or maybe for stats)
+    game_type_name = "replay"  # probably useless (or maybe for stats)
     record_replay = False
 
     def __init__(self, replay: str) -> None:
@@ -315,12 +331,18 @@ class ReplayGame(_Game):
         _compatibility_version = self.replay_read()
         if _compatibility_version != compatibility_version():
             voice.alert(mp.BEEP + mp.VERSION_ERROR)
-            warning("Version mismatch. Version should be: %s. Mods should be: %s.",
-                    version, mods)
+            warning(
+                "Version mismatch. Version should be: %s. Mods should be: %s.",
+                version,
+                mods,
+            )
         campaign_path_or_packed_map = self.replay_read()
         if game_type_name == "mission" and "***" not in campaign_path_or_packed_map:
             from .campaign import Campaign
-            self.map = Campaign(campaign_path_or_packed_map)._get(int(self.replay_read()))
+
+            self.map = Campaign(campaign_path_or_packed_map)._get(
+                int(self.replay_read())
+            )
         else:
             self.map = Map(unpack=campaign_path_or_packed_map.encode())
         players = self.replay_read().split()

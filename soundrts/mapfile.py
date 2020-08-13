@@ -19,7 +19,13 @@ class Map:
     map_string = None
     path: str
 
-    def __init__(self, p: Optional[str] = None, digest="no_digest", official=False, unpack: Optional[bytes] = None):
+    def __init__(
+        self,
+        p: Optional[str] = None,
+        digest="no_digest",
+        official=False,
+        unpack: Optional[bytes] = None,
+    ):
         self.digest = digest
         self.official = official
         if unpack is not None:
@@ -30,6 +36,7 @@ class Map:
 
     def load_resources(self):
         from .clientmedia import res, sounds
+
         if self._zip is not None:
             path = self._zip
         else:
@@ -38,6 +45,7 @@ class Map:
 
     def unload_resources(self):
         from .clientmedia import sounds
+
         if self._zip is not None:
             path = self._zip
         else:
@@ -46,17 +54,29 @@ class Map:
 
     def load_rules_and_ai(self, res):
         from .definitions import load_ai, rules
-        rules.load(res.get_text_file("rules", append=True), self.campaign_rules, self.additional_rules)
-        load_ai(res.get_text_file("ai", append=True), self.campaign_ai, self.additional_ai)
+
+        rules.load(
+            res.get_text_file("rules", append=True),
+            self.campaign_rules,
+            self.additional_rules,
+        )
+        load_ai(
+            res.get_text_file("ai", append=True), self.campaign_ai, self.additional_ai
+        )
 
     def load_style(self, res):
         from .definitions import style
-        style.load(res.get_text_file("ui/style", append=True, localize=True), self.campaign_style, self.additional_style)
+
+        style.load(
+            res.get_text_file("ui/style", append=True, localize=True),
+            self.campaign_style,
+            self.additional_style,
+        )
 
     def _read_additional_file(self, n):
         p = os.path.join(self.path, n)
         if os.path.isfile(p):
-            with open(p, encoding='utf-8', errors='replace') as t:
+            with open(p, encoding="utf-8", errors="replace") as t:
                 return t.read()
         else:
             return ""
@@ -66,11 +86,11 @@ class Map:
             return ""
         p = os.path.join(self.campaign.path, n)
         if os.path.isfile(p):
-            with open(p, encoding='utf-8', errors='replace') as t:
+            with open(p, encoding="utf-8", errors="replace") as t:
                 return t.read()
         else:
             return ""
-        
+
     @property
     def additional_rules(self):
         return self._read_additional_file("rules.txt")
@@ -100,7 +120,7 @@ class Map:
 
     def get_campaign(self, n):
         return self._read_campaign_file(n)
-        
+
     def get_name(self, short=False) -> str:
         name = os.path.basename(self.path)
         if short:
@@ -117,7 +137,7 @@ class Map:
             p = os.path.join(self.path, "map.txt")
         else:
             p = self.path
-        with open(p, encoding='utf-8', errors='replace') as t:
+        with open(p, encoding="utf-8", errors="replace") as t:
             return t.read()
 
     def _extract_title(self, s):
@@ -144,9 +164,9 @@ class Map:
 
     def _check_digest(self):
         if self.digest is None:
-            self.title.insert(0, 1097) # heal sound to alert player
+            self.title.insert(0, 1097)  # heal sound to alert player
         elif self.digest != "no_digest" and self.get_digest() != self.digest:
-            self.title.insert(0, 1029) # hostile sound to alert player
+            self.title.insert(0, 1029)  # hostile sound to alert player
             debug("%s\n>>>%s<<<", self.path, self.get_digest())
 
     def _extract_nb_players(self, s):
@@ -177,9 +197,13 @@ class Map:
             return self._original_map_bytes
         if os.path.isfile(self.path):
             map_name = os.path.split(self.path)[-1]
-            with open(self.path, encoding='utf-8', errors='replace') as t:
-                content = base64.b64encode(t.read().encode(encoding='utf-8', errors='replace'))
-            return map_name.encode(encoding='utf-8', errors='replace') + b"***" + content
+            with open(self.path, encoding="utf-8", errors="replace") as t:
+                content = base64.b64encode(
+                    t.read().encode(encoding="utf-8", errors="replace")
+                )
+            return (
+                map_name.encode(encoding="utf-8", errors="replace") + b"***" + content
+            )
         else:
             b = io.BytesIO()
             zipdir.zipdir(self.path, b)
@@ -192,10 +216,17 @@ class Map:
         self._original_map_bytes = map_bytes
         try:
             path, content = map_bytes.split(b"***", 1)
-            self.path = path.decode(encoding='utf-8', errors='replace')
+            self.path = path.decode(encoding="utf-8", errors="replace")
             if self.path != "zip":
-                self.map_string = base64.b64decode(content).decode(encoding='utf-8', errors='replace')
-                with open(os.path.join(TMP_PATH, "recent_map.txt"), "w", encoding='utf-8', errors='replace') as t:
+                self.map_string = base64.b64decode(content).decode(
+                    encoding="utf-8", errors="replace"
+                )
+                with open(
+                    os.path.join(TMP_PATH, "recent_map.txt"),
+                    "w",
+                    encoding="utf-8",
+                    errors="replace",
+                ) as t:
                     t.write(self.map_string)
             else:
                 zd = os.path.join(TMP_PATH, "recent_map")
@@ -222,7 +253,7 @@ class Map:
 
     _factions = None
     _mods = None
-    
+
     @property
     def factions(self):
         if self._factions is None and self._mods != res.mods:
@@ -239,6 +270,7 @@ def _add_official_multi(w):
         p = os.path.join("multi", n)
         w.append(Map(p, digest, official=True))
 
+
 def _add_custom_multi(w):
     for pp in res.get_all_packages_paths():
         d = os.path.join(pp, "multi")
@@ -248,14 +280,16 @@ def _add_custom_multi(w):
                 if os.path.normpath(p) not in (os.path.normpath(x.path) for x in w):
                     w.append(Map(p, None))
 
+
 def _move_recommended_maps(w):
     style = Style()
     style.load(res.get_text_file("ui/style", append=True, localize=True))
     for n in reversed(style.get("parameters", "recommended_maps")):
-        for m in reversed(w[:]): # reversed so the custom map is after the official map
+        for m in reversed(w[:]):  # reversed so the custom map is after the official map
             if m.get_name(short=True) == n:
                 w.remove(m)
                 w.insert(0, m)
+
 
 def _get_worlds_multi():
     w = []
@@ -264,8 +298,10 @@ def _get_worlds_multi():
     _move_recommended_maps(w)
     return w
 
+
 _multi_maps = None
 _mods_at_the_previous_multi_maps_update = None
+
 
 def worlds_multi() -> List[Map]:
     global _multi_maps, _mods_at_the_previous_multi_maps_update

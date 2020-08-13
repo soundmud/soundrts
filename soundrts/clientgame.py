@@ -52,13 +52,14 @@ from .lib.sound import angle, distance, psounds, stereo, vision_stereo
 from .version import IS_DEV_VERSION
 
 # minimal interval (in seconds) between 2 sounds
-ALERT_LIMIT = .5
+ALERT_LIMIT = 0.5
 
 # don't play events after this limit (in seconds)
 EVENT_LIMIT = 3
 
 BEEP_SOUND = mp.BEEP[0]
 POSITIONAL_BEEP_SOUND = mp.POSITIONAL_BEEP[0]
+
 
 def direction_to_msgpart(o):
     o = round(o / 45) * 45
@@ -83,15 +84,25 @@ def direction_to_msgpart(o):
     elif o == 315:
         return mp.SOUTHEAST
 
+
 def _get_relevant_menu(menu):
     _m = menu[:]
-    for x in ["stop",
-              "cancel_training", "cancel_upgrading", "cancel_building",
-              "mode_offensive", "mode_defensive",
-              "load", "load_all", "unload", "unload_all"]:
+    for x in [
+        "stop",
+        "cancel_training",
+        "cancel_upgrading",
+        "cancel_building",
+        "mode_offensive",
+        "mode_defensive",
+        "load",
+        "load_all",
+        "unload",
+        "unload_all",
+    ]:
         if x in _m:
             _m.remove(x)
     return _m
+
 
 def _remove_duplicates(l):
     m = []
@@ -99,6 +110,7 @@ def _remove_duplicates(l):
         if i not in m:
             m.append(i)
     return m
+
 
 def load_palette():
     p = []
@@ -138,6 +150,7 @@ def load_palette():
                         v = tuple([int(float(x) * 100) for x in v[:2]])
                     t[k] = v
     return p
+
 
 ##for k, v in load_palette():
 ##    print k
@@ -206,7 +219,7 @@ class GameInterface:
         return self.server.player.world
 
     _square_width = None
-    
+
     @property
     def square_width(self):
         if self._square_width is None:
@@ -223,18 +236,19 @@ class GameInterface:
 
     def srv_event(self, o, e):
         try:
-            if hasattr(self, "next_update") and \
-               time.time() > self.next_update + EVENT_LIMIT:
+            if (
+                hasattr(self, "next_update")
+                and time.time() > self.next_update + EVENT_LIMIT
+            ):
                 return
             EntityView(self, o).notify(e)
         except:
             exception("problem during srv_event")
 
-
     def cmd_say(self):
-        msg = input_string(msg=mp.ENTER_MESSAGE,
-                           pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$",
-                           spell=False)
+        msg = input_string(
+            msg=mp.ENTER_MESSAGE, pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$", spell=False
+        )
         if not msg:
             return
         voice.confirmation([self.player.client.login] + mp.SAYS + [msg])
@@ -250,7 +264,7 @@ class GameInterface:
         voice.info(*eval_msg_and_volume(s))
 
     def srv_voice_important(self, s):
-        voice.confirmation(*eval_msg_and_volume(s)) # remember the pressed key
+        voice.confirmation(*eval_msg_and_volume(s))  # remember the pressed key
 
     def srv_speed(self, s):
         self.speed = float(s)
@@ -275,14 +289,14 @@ class GameInterface:
         if self.an_order_requiring_a_target_is_selected:
             if self.order.cls.keyword == "build" and o.is_a_building_land:
                 if o.is_an_exit:
-                    p = .5
+                    p = 0.5
                 else:
                     p = 0
         else:
             if self.player.is_an_enemy(o):
-                p = .5
+                p = 0.5
             elif o.qty > 0:
-                p = 1 + o.resource_type / 100.0 # less than 100 resource types
+                p = 1 + o.resource_type / 100.0  # less than 100 resource types
             elif o.is_repairable and o.hp < o.hp_max:
                 p = 2
             elif o.is_a_building_land:
@@ -314,8 +328,11 @@ class GameInterface:
         choices = []
         for o in list(self.dobjets.values()):
             if self.is_selectable(o) and (
-                not types or getattr(o, "type_name", None) in types
-                or "useful" in types and o.is_a_useful_target()):
+                not types
+                or getattr(o, "type_name", None) in types
+                or "useful" in types
+                and o.is_a_useful_target()
+            ):
                 choices.append(o)
         choices.sort(key=self._priority)
         if inc == -1:
@@ -332,14 +349,25 @@ class GameInterface:
     def get_description_of(self, o):
         if self.immersion:
             vg, vd = vision_stereo(self.x, self.y, o.x, o.y, self.o)
-            return mp.POSITIONAL_BEEP + o.title \
-                   + mp.AT2 + nb2msg(self.distance(o)) + mp.METERS \
-                   + self.direction_to_msg(o) + o.description, vg, vd
+            return (
+                mp.POSITIONAL_BEEP
+                + o.title
+                + mp.AT2
+                + nb2msg(self.distance(o))
+                + mp.METERS
+                + self.direction_to_msg(o)
+                + o.description,
+                vg,
+                vd,
+            )
         else:
             self.o = 90
             vg, vd = vision_stereo(self.x, self.y, o.x, o.y, self.o)
-            return mp.POSITIONAL_BEEP + o.title \
-                   + self.direction_to_msg(o) + o.description, vg, vd
+            return (
+                mp.POSITIONAL_BEEP + o.title + self.direction_to_msg(o) + o.description,
+                vg,
+                vd,
+            )
 
     def cmd_examine(self):
         if self.target is not None:
@@ -407,9 +435,15 @@ class GameInterface:
             for u in self.player.units:
                 u.mana_regen *= 1000
         elif cmd == "h":
-            voice.item(["p: pause/unpause, s: set speed, r: get 1000 resources, t: get all techs, m: infinite mana, a: add units, v: instant victory"])
+            voice.item(
+                [
+                    "p: pause/unpause, s: set speed, r: get 1000 resources, t: get all techs, m: infinite mana, a: add units, v: instant victory"
+                ]
+            )
         elif cmd == "r":
-            self.player.resources = [n + 1000 * PRECISION for n in self.player.resources]
+            self.player.resources = [
+                n + 1000 * PRECISION for n in self.player.resources
+            ]
         elif cmd == "t":
             self.player.has = lambda x: True
         elif cmd == "edit":
@@ -424,12 +458,15 @@ class GameInterface:
             else:
                 voice.item(mp.BEEP)
         elif cmd == "sm":
+
             def next_available_filename(name):
                 import os.path
+
                 n = 0
                 while os.path.exists(name % n):
                     n += 1
                 return name % n
+
             self.world.save_map(next_available_filename("user/multi/editor%s.txt"))
         elif cmd.startswith("te "):
             delta = list(map(int, cmd.split(" ")[1:3]))
@@ -463,7 +500,7 @@ class GameInterface:
                 return
             p = self.place
             p.type_name = d["style"]
-            self._terrain_loop_square = None # must update terrain audio background
+            self._terrain_loop_square = None  # must update terrain audio background
             p.is_water = d["water"]
             p.is_ground = d["ground"]
             p.is_air = d["air"]
@@ -496,9 +533,11 @@ class GameInterface:
 
     def cmd_console(self):
         if self.server.allow_cheatmode:
-            cmd = input_string(msg=mp.ENTER_COMMAND,
-                               pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+-=?!]$",
-                               spell=False)
+            cmd = input_string(
+                msg=mp.ENTER_COMMAND,
+                pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+-=?!]$",
+                spell=False,
+            )
             if cmd is None:
                 return
             self._execute_command(cmd)
@@ -511,7 +550,10 @@ class GameInterface:
         return players[index]
 
     def _change_player(self, new_player):
-        new_player.client.login, self.server.player.client.login = self.server.player.client.login, new_player.client.login
+        new_player.client.login, self.server.player.client.login = (
+            self.server.player.client.login,
+            new_player.client.login,
+        )
         self.server.player.client = new_player.client
         self.server.player = new_player
         self.server.player.client = self.server
@@ -523,7 +565,7 @@ class GameInterface:
             voice.item(mp.YOU_ARE + self.player.name)
         else:
             voice.item(mp.BEEP)
-        
+
     def cmd_volume(self, inc=1):
         modify_volume(int(inc))
 
@@ -539,13 +581,16 @@ class GameInterface:
     def cmd_gamemenu(self):
         voice.silent_flush()
         sound_stop()
-        menu = Menu(mp.MENU, [
-            (mp.CANCEL_GAME, self.gm_quit),
-            (mp.SET_SPEED_TO_SLOW, self.gm_slow_speed),
-            (mp.SET_SPEED_TO_NORMAL, self.gm_normal_speed),
-            (mp.SET_SPEED_TO_FAST, self.gm_fast_speed),
-            (mp.SET_SPEED_TO_FAST + nb2msg(4), self.gm_very_fast_speed),
-            ])
+        menu = Menu(
+            mp.MENU,
+            [
+                (mp.CANCEL_GAME, self.gm_quit),
+                (mp.SET_SPEED_TO_SLOW, self.gm_slow_speed),
+                (mp.SET_SPEED_TO_NORMAL, self.gm_normal_speed),
+                (mp.SET_SPEED_TO_FAST, self.gm_fast_speed),
+                (mp.SET_SPEED_TO_FAST + nb2msg(4), self.gm_very_fast_speed),
+            ],
+        )
         if self.can_save():
             menu.append(mp.SAVE, self.gm_save)
         menu.append(mp.CONTINUE_GAME, None)
@@ -559,15 +604,15 @@ class GameInterface:
     def gm_quit(self):
         if self._editor:
             self.world.save_map("user/multi/editor_autosave.txt")
-            self.srv_quit() # forced quit
+            self.srv_quit()  # forced quit
             self.forced_quit = True
         elif not self.already_asked_to_quit:
-            self.next_update = time.time() # useful if the game is paused
+            self.next_update = time.time()  # useful if the game is paused
             self.server.write_line("quit")
             pygame.event.clear()
             self.already_asked_to_quit = True
         else:
-            self.srv_quit() # forced quit
+            self.srv_quit()  # forced quit
             self.forced_quit = True
 
     def _set_speed(self, speed):
@@ -575,7 +620,7 @@ class GameInterface:
         self.speed = speed
 
     def gm_slow_speed(self):
-        self._set_speed(.5)
+        self._set_speed(0.5)
 
     def gm_normal_speed(self):
         self._set_speed(1.0)
@@ -590,14 +635,14 @@ class GameInterface:
         return hasattr(self.server, "save_game")
 
     def gm_save(self):
-            self.server.save_game()
+        self.server.save_game()
 
     # clock
 
     _bell_enabled = False
     _previous_nb_minutes = 0
 
-    def cmd_toggle_talking_clock(self): # bell, in fact
+    def cmd_toggle_talking_clock(self):  # bell, in fact
         self._bell_enabled = not self._bell_enabled
         if self._bell_enabled:
             voice.item(mp.BELL + mp.IS_NOW_ON)
@@ -613,9 +658,15 @@ class GameInterface:
 
     def cmd_say_time(self):
         m, s = divmod(int(self.last_virtual_time), 60)
-        voice.item(nb2msg(m) + mp.MINUTES + nb2msg(s) + mp.SECONDS \
-                   + mp.COMMA \
-                   + mp.SPEED + ["%.1f" % self._get_relative_speed()])
+        voice.item(
+            nb2msg(m)
+            + mp.MINUTES
+            + nb2msg(s)
+            + mp.SECONDS
+            + mp.COMMA
+            + mp.SPEED
+            + ["%.1f" % self._get_relative_speed()]
+        )
 
     _must_play_tick = False
 
@@ -623,7 +674,7 @@ class GameInterface:
     _previous_update_time = None
 
     def _play_tick(self):
-        psounds.play_stereo(sounds.get_sound(POSITIONAL_BEEP_SOUND), vol=.1)
+        psounds.play_stereo(sounds.get_sound(POSITIONAL_BEEP_SOUND), vol=0.1)
 
     def _record_update_time(self):
         interval = VIRTUAL_TIME_INTERVAL / 1000.0 / min(10.0, self.speed)
@@ -632,7 +683,9 @@ class GameInterface:
             turn_duration = interval
         else:
             turn_duration = time.time() - self._previous_update_time
-        self._average_turn_duration = (self._average_turn_duration * (nb_samples - 1) + turn_duration) / nb_samples
+        self._average_turn_duration = (
+            self._average_turn_duration * (nb_samples - 1) + turn_duration
+        ) / nb_samples
         self._previous_update_time = time.time()
 
     def _get_tps(self):
@@ -654,7 +707,15 @@ class GameInterface:
 
     # loop
 
-    def srv_voila(self, t, memory, perception, scouted_squares, scouted_before_squares, collision_debug):
+    def srv_voila(
+        self,
+        t,
+        memory,
+        perception,
+        scouted_squares,
+        scouted_before_squares,
+        collision_debug,
+    ):
         self.last_virtual_time = float(t) / 1000.0
         self.waiting_for_world_update = False
 
@@ -666,7 +727,7 @@ class GameInterface:
 
         self.send_resource_alerts_if_needed()
         if self.previous_menus == {}:
-            self.send_menu_alerts_if_needed() # init
+            self.send_menu_alerts_if_needed()  # init
         self.units_alert_if_needed()
         self.squares_alert_if_needed()
         self.scout_info_if_needed()
@@ -713,13 +774,19 @@ class GameInterface:
                             volume = float(st[2])
                         except:
                             volume = 1
-                        self._terrain_loop = psounds.play_loop(sounds.get_sound(st[1]), volume, sq.x / 1000.0, sq.y / 1000.0, -10)
+                        self._terrain_loop = psounds.play_loop(
+                            sounds.get_sound(st[1]),
+                            volume,
+                            sq.x / 1000.0,
+                            sq.y / 1000.0,
+                            -10,
+                        )
             self._terrain_loop_square = sq
 
     previous_animation = 0
 
     def _animate_objects(self):
-        if time.time() >= self.previous_animation + .1:
+        if time.time() >= self.previous_animation + 0.1:
             chrono.start("animate")
             try:
                 self.set_obs_pos()
@@ -765,7 +832,7 @@ class GameInterface:
                     else:
                         set_cursor("tri_left")
         elif e.type == MOUSEBUTTONDOWN:
-            if e.button == 1: # left mouse button
+            if e.button == 1:  # left mouse button
                 if self.an_order_requiring_a_target_is_selected:
                     mods = pygame.key.get_mods()
                     args = []
@@ -776,7 +843,7 @@ class GameInterface:
                     self.cmd_validate(*args)
                 else:
                     self.mouse_select_origin = e.pos
-            elif e.button == 3: # right mouse button
+            elif e.button == 3:  # right mouse button
                 # do nothing if the mouse is pointing on nothing
                 if self.grid_view.square_from_mousepos(e.pos) is not None:
                     mods = pygame.key.get_mods()
@@ -787,12 +854,14 @@ class GameInterface:
                         args += ["imperative"]
                     self.cmd_default(*args)
         elif e.type == MOUSEBUTTONUP:
-            if e.button == 1: # left mouse button
+            if e.button == 1:  # left mouse button
                 if self.mouse_select_origin == e.pos:
                     if self.grid_view.object_from_mousepos(e.pos):
                         self.cmd_command_unit()
                 elif self.mouse_select_origin:
-                    self.group = self.grid_view.units_from_mouserect(self.mouse_select_origin, e.pos)
+                    self.group = self.grid_view.units_from_mouserect(
+                        self.mouse_select_origin, e.pos
+                    )
                     self.say_group()
                 self.mouse_select_origin = None
 
@@ -841,6 +910,7 @@ class GameInterface:
 
     def loop(self):
         from .clientserver import ConnectionAbortedError
+
         set_game_mode(True)
         pygame.event.clear()
         self.next_update = time.time()
@@ -851,14 +921,16 @@ class GameInterface:
                     # updated often (for total delay)
                     self.display()
                 self.server.update()
-                if self._time_to_ask_for_next_update() \
-                   and self.server.orders_are_ready():
+                if (
+                    self._time_to_ask_for_next_update()
+                    and self.server.orders_are_ready()
+                ):
                     self._ask_for_update()
                 self._animate_objects()
                 self._process_events()
                 self._process_srv_events()
-                voice.update() # useful for SAPI
-                time.sleep(.001)
+                voice.update()  # useful for SAPI
+                time.sleep(0.001)
             except SystemExit:
                 raise
             except ConnectionAbortedError:
@@ -903,21 +975,23 @@ class GameInterface:
             self.group.remove(_id)
 
     def _must_report_resource(self, m):
-        if getattr(m, "resource_type", None) is not None \
-           and m.place not in self._known_resource_places:
+        if (
+            getattr(m, "resource_type", None) is not None
+            and m.place not in self._known_resource_places
+        ):
             self._known_resource_places.add(m.place)
             return True
 
     def update_fog_of_war(self):
         # updates dobjets (the dictionary of view objects)
-        
+
         # add or update objects
         for m in self.memory:
             if m.id in self.dobjets and not self.dobjets[m.id].is_memory:
-                self._delete_object(m.id) # memory will replace perception
+                self._delete_object(m.id)  # memory will replace perception
             if m.id not in self.dobjets:
                 self.dobjets[m.id] = EntityView(self, m)
-                if self.target and m.id == self.target.id: # keep target
+                if self.target and m.id == self.target.id:  # keep target
                     self.target = self.dobjets[m.id]
                 if self._must_report_resource(m):
                     self.scout_info.add(m.place)
@@ -926,14 +1000,16 @@ class GameInterface:
         for m in self.perception:
             if m.id not in self.dobjets:
                 if self.player.is_an_enemy(m):
-                    self.new_enemy_units.append([EntityView(self, m).short_title, m.place])
+                    self.new_enemy_units.append(
+                        [EntityView(self, m).short_title, m.place]
+                    )
                 if self._must_report_resource(m):
                     self.scout_info.add(m.place)
             elif self.dobjets[m.id].is_memory:
-                self._delete_object(m.id) # perception will replace memory
+                self._delete_object(m.id)  # perception will replace memory
             if m.id not in self.dobjets:
                 self.dobjets[m.id] = EntityView(self, m)
-                if self.target and m.id == self.target.id: # keep target
+                if self.target and m.id == self.target.id:  # keep target
                     self.target = self.dobjets[m.id]
             else:
                 self.dobjets[m.id].model = m
@@ -950,8 +1026,11 @@ class GameInterface:
         if IS_DEV_VERSION:
             for m in self.perception.union(self.memory):
                 if m.place is None:
-                    warning("%s.model is in memory or perception "
-                            "and yet its place is None", m.type_name)
+                    warning(
+                        "%s.model is in memory or perception "
+                        "and yet its place is None",
+                        m.type_name,
+                    )
 
     def direction_to_msg(self, o):
         x, y = self.place_xy
@@ -961,9 +1040,9 @@ class GameInterface:
         direction = math.degrees(angle(x, y, o.x, o.y, 0))
         mp_direction = direction_to_msgpart(direction)
         if mp_direction == mp.EAST:
-            return mp.TO_THE_EAST # special case in French
+            return mp.TO_THE_EAST  # special case in French
         if mp_direction == mp.WEST:
-            return mp.TO_THE_WEST # special case in French
+            return mp.TO_THE_WEST  # special case in French
         return mp.TO_THE + mp_direction
 
     # immersive mode
@@ -1011,16 +1090,19 @@ class GameInterface:
         self._remember_menu(type_name, menu)
 
     def send_menu_alerts_if_needed(self):
-        if "menu_changed" not in config.verbosity: return
+        if "menu_changed" not in config.verbosity:
+            return
         done = []
         for u in self.player.units:
             u = EntityView(self, u)
             if u.type_name not in done:
-                self._send_menu_alert_if_needed(u.type_name, u.strict_menu, u.short_title)
+                self._send_menu_alert_if_needed(
+                    u.type_name, u.strict_menu, u.short_title
+                )
                 done.append(u.type_name)
 
     def summary(self, group, brief=False):
-        types = _remove_duplicates(group) # set() would lose the order
+        types = _remove_duplicates(group)  # set() would lose the order
         if brief and len(types) > 2:
             return nb2msg(len(group))
         result = []
@@ -1046,7 +1128,10 @@ class GameInterface:
                 continue
             if self.player.is_an_enemy(obj.model):
                 enemies.append(obj.short_title)
-            if obj.model.player in self.player.allied and obj.model.player is not self.player:
+            if (
+                obj.model.player in self.player.allied
+                and obj.model.player is not self.player
+            ):
                 allies.append(obj.short_title)
             if obj.model.player is self.player:
                 units.append(obj.short_title)
@@ -1069,24 +1154,41 @@ class GameInterface:
             u = self.dobjets[self.group[0]]
             voice.item(prefix + mp.YOU_CONTROL + u.ext_title + u.orders_txt)
         elif len(self.group) > 1:
-            orders = [self.dobjets[x].orders_txt for x in self.group if x in self.dobjets]
+            orders = [
+                self.dobjets[x].orders_txt for x in self.group if x in self.dobjets
+            ]
             if len(_remove_duplicates(orders)) == 1:
-                group = [self.dobjets[x].short_title
-                         for x in self.group if x in self.dobjets]
-                voice.item(prefix + mp.COMMA + mp.YOU_CONTROL + self.summary(group)
-                           + mp.COMMA + orders[0])
+                group = [
+                    self.dobjets[x].short_title for x in self.group if x in self.dobjets
+                ]
+                voice.item(
+                    prefix
+                    + mp.COMMA
+                    + mp.YOU_CONTROL
+                    + self.summary(group)
+                    + mp.COMMA
+                    + orders[0]
+                )
             else:
-                group = [self.dobjets[x].short_title + mp.COMMA + self.dobjets[x].orders_txt
-                         for x in self.group if x in self.dobjets]
+                group = [
+                    self.dobjets[x].short_title + mp.COMMA + self.dobjets[x].orders_txt
+                    for x in self.group
+                    if x in self.dobjets
+                ]
                 voice.item(prefix + mp.COMMA + mp.YOU_CONTROL + self.summary(group))
         else:
             voice.item(prefix + mp.COMMA + mp.NO_UNIT_CONTROLLED)
 
     def tell_enemies_in_square(self, place):
-        enemies = [x.short_title for x in list(self.dobjets.values())
-                   if x.is_in(place) and self.player.is_an_enemy(x.model)]
+        enemies = [
+            x.short_title
+            for x in list(self.dobjets.values())
+            if x.is_in(place) and self.player.is_an_enemy(x.model)
+        ]
         if enemies:
-            voice.info(self.summary(enemies, brief=True) + mp.ENEMY + mp.AT + place.title)
+            voice.info(
+                self.summary(enemies, brief=True) + mp.ENEMY + mp.AT + place.title
+            )
 
     def units_alert(self, units, msg_end, brief=True):
         places = {x[1] for x in units if x[1] is not None}
@@ -1103,9 +1205,12 @@ class GameInterface:
     previous_scout_info = None
 
     def scout_info_if_needed(self):
-        if "scout_info" not in config.verbosity: return
-        if self.scout_info and (self.previous_scout_info is None or
-                time.time() > self.previous_scout_info + 10):
+        if "scout_info" not in config.verbosity:
+            return
+        if self.scout_info and (
+            self.previous_scout_info is None
+            or time.time() > self.previous_scout_info + 10
+        ):
             for place in self.scout_info:
                 s = self.place_summary(place, me=False, brief=True)
                 if s:
@@ -1116,23 +1221,31 @@ class GameInterface:
     previous_units_alert = None
 
     def units_alert_if_needed(self, place=None):
-        if (self.neutralized_units or self.lost_units or self.new_enemy_units) and \
-           (self.previous_units_alert is None
-                or time.time() > self.previous_units_alert + 10):
+        if (self.neutralized_units or self.lost_units or self.new_enemy_units) and (
+            self.previous_units_alert is None
+            or time.time() > self.previous_units_alert + 10
+        ):
             self.units_alert(self.neutralized_units, mp.NEUTRALIZED, brief=False)
             self.units_alert(self.lost_units, mp.LOST)
             self.units_alert(self.new_enemy_units, mp.ENEMY)
             if place:
-                self.tell_enemies_in_square(place) # if lost fight
+                self.tell_enemies_in_square(place)  # if lost fight
             self.previous_units_alert = time.time()
 
     previous_squares_alert = None
 
     def squares_alert_if_needed(self):
-        if self.alert_squares and (self.previous_squares_alert is None or
-           time.time() > self.previous_squares_alert + 10):
-            titles = sorted([sq.title for sq, t in list(self.alert_squares.items())
-                             if time.time() < t + 5]) # recent attacks only
+        if self.alert_squares and (
+            self.previous_squares_alert is None
+            or time.time() > self.previous_squares_alert + 10
+        ):
+            titles = sorted(
+                [
+                    sq.title
+                    for sq, t in list(self.alert_squares.items())
+                    if time.time() < t + 5
+                ]
+            )  # recent attacks only
             if len(titles) > 1:
                 titles.insert(-1, mp.AND)
             if titles:
@@ -1155,14 +1268,13 @@ class GameInterface:
             g = self.group
         else:
             g = [uid for uid in self.group if order in self.dobjets[uid].menu]
-        if g != self.previous_group: # to save bandwidth
+        if g != self.previous_group:  # to save bandwidth
             self.server.write_line("control " + group.encode(g))
             # make a copy to make sure that it is not modified later
             self.previous_group = g[:]
         if target is not None:
             order = f"{order} {target}"
-        self.server.write_line("order %s %s %s" %
-                               (queue_order, imperative, order))
+        self.server.write_line("order {} {} {}".format(queue_order, imperative, order))
 
     @property
     def ui_target(self):
@@ -1179,11 +1291,11 @@ class GameInterface:
     def cmd_validate(self, *args):
         if not self.group:
             voice.item(mp.NO_UNIT_CONTROLLED)
-        elif self.order is None: # nothing to validate
+        elif self.order is None:  # nothing to validate
             self.cmd_command_unit()
         elif self.an_order_not_requiring_a_target_is_selected:
             self.send_order(self.order.encode, None, args)
-            voice.item(self.order.title) # confirmation
+            voice.item(self.order.title)  # confirmation
             self._previous_order = self.order
         elif self.an_order_requiring_a_target_is_selected:
             if self.order not in self.orders():
@@ -1250,7 +1362,9 @@ class GameInterface:
         return stereo(0, 0, dx, dy, 90)
 
     def launch_alert(self, place, sound):
-        psounds.play_stereo(sounds.get_sound(sound), vol=self._minimap_stereo(place), limit=ALERT_LIMIT)
+        psounds.play_stereo(
+            sounds.get_sound(sound), vol=self._minimap_stereo(place), limit=ALERT_LIMIT
+        )
 
     def srv_alert(self, s):
         id_place, sound = s.split(",")
@@ -1266,30 +1380,42 @@ class GameInterface:
 
     def _follow_if_needed(self):
         self.update_group()
-        if self.follow_mode and self.group and not self.an_order_requiring_a_target_is_selected:
+        if (
+            self.follow_mode
+            and self.group
+            and not self.an_order_requiring_a_target_is_selected
+        ):
             if self.zoom_mode:
                 if not self.zoom.contains(self.dobjets[self.group[0]]):
                     self.zoom.move_to(self.dobjets[self.group[0]])
-                    if not voice.channel.get_busy(): # low priority: don't interrupt
+                    if not voice.channel.get_busy():  # low priority: don't interrupt
                         self.zoom.say()
             elif not self.dobjets[self.group[0]].is_in(self.place):
                 self.move_to_square(self.dobjets[self.group[0]].place)
-                if not voice.channel.get_busy(): # low priority: don't interrupt
+                if not voice.channel.get_busy():  # low priority: don't interrupt
                     voice.item(self.place.title)
                 if self.immersion:
-                    self.target = None # unselect current object
+                    self.target = None  # unselect current object
 
     def units(self, even_if_no_menu=True, sort=False):
         def short_title_and_number(o):
             return (o.short_title, o.number)
-        result = [self.dobjets[u.id] for u in self.player.allied_control_units if
-             (even_if_no_menu or
-              u.can_train or u.can_upgrade_to or
-              u.orders or
-              u.basic_abilities or
-              u.id in self.dobjets and self.dobjets[u.id].menu)
-             and not getattr(u, "is_inside", False)
-             and u.id in self.dobjets]
+
+        result = [
+            self.dobjets[u.id]
+            for u in self.player.allied_control_units
+            if (
+                even_if_no_menu
+                or u.can_train
+                or u.can_upgrade_to
+                or u.orders
+                or u.basic_abilities
+                or u.id in self.dobjets
+                and self.dobjets[u.id].menu
+            )
+            and not getattr(u, "is_inside", False)
+            and u.id in self.dobjets
+        ]
         if sort:
             result.sort(key=short_title_and_number)
         return result
@@ -1297,9 +1423,15 @@ class GameInterface:
     # select unit
 
     def update_group(self):
-        self.group = [u for u in self.group if u in self.dobjets
-                      and (self.dobjets[u].player is self.player
-                           or self.dobjets[u].player in self.player.allied_control)]
+        self.group = [
+            u
+            for u in self.group
+            if u in self.dobjets
+            and (
+                self.dobjets[u].player is self.player
+                or self.dobjets[u].player in self.player.allied_control
+            )
+        ]
 
     def _regroup(self, portion, types, local, idle, unused__even_if_no_menu):
         self.update_group()
@@ -1317,13 +1449,21 @@ class GameInterface:
             self.group = []
             units = self.units()
             for t in types:
-                m = [x.id for x in units if x.type_name == t and \
-                     (not local or self.zoom_mode and self.zoom.contains(x)
-                      or not self.zoom_mode and x.is_in(local_place)) and \
-                     (not idle or not x.orders)]
+                m = [
+                    x.id
+                    for x in units
+                    if x.type_name == t
+                    and (
+                        not local
+                        or self.zoom_mode
+                        and self.zoom.contains(x)
+                        or not self.zoom_mode
+                        and x.is_in(local_place)
+                    )
+                    and (not idle or not x.orders)
+                ]
                 self.group += m[: len(m) // portion]
-            if initial_unit.id not in self.group \
-               and initial_unit.type_name in types:
+            if initial_unit.id not in self.group and initial_unit.type_name in types:
                 if self.group:
                     self.group.pop()
                 self.group.append(initial_unit.id)
@@ -1361,7 +1501,7 @@ class GameInterface:
         if not units:
             self.group = []
             return
-        sel = -1 # if next (+1) => 0, if previous (-1) => -2 < 0 => last
+        sel = -1  # if next (+1) => 0, if previous (-1) => -2 < 0 => last
         for i, u in enumerate(units):
             if u.id in self.group:
                 sel = i
@@ -1378,12 +1518,19 @@ class GameInterface:
         local = "local" in args
         idle = "idle" in args
         even_if_no_menu = "even_if_no_menu" in args
-        keyboard_types = [x for x in args if x not in ("local", "idle", "even_if_no_menu")]
-        types = [x for x in style.classnames()
-                 if style.has(x, "keyboard")
-                 and style.get(x, "keyboard")[0] in keyboard_types]
-        if keyboard_types and not types: # no keyboard type actually exists in the style
-            types = [None] # will select nothing
+        keyboard_types = [
+            x for x in args if x not in ("local", "idle", "even_if_no_menu")
+        ]
+        types = [
+            x
+            for x in style.classnames()
+            if style.has(x, "keyboard")
+            and style.get(x, "keyboard")[0] in keyboard_types
+        ]
+        if (
+            keyboard_types and not types
+        ):  # no keyboard type actually exists in the style
+            types = [None]  # will select nothing
         return types, local, idle, even_if_no_menu
 
     def cmd_select_unit(self, inc, *args):
@@ -1459,8 +1606,10 @@ class GameInterface:
     def cmd_select_order(self, inc, *args):
         inc = int(inc)
         # call self.orders() once (can take a long time)
-        orders = self.orders(inactive_only="inactive_only" in args,
-                             inactive_included="inactive_included" in args)
+        orders = self.orders(
+            inactive_only="inactive_only" in args,
+            inactive_included="inactive_included" in args,
+        )
         # if no menu then do nothing
         if not orders:
             voice.item(mp.NOTHING)
@@ -1472,7 +1621,7 @@ class GameInterface:
         else:
             try:
                 index = orders.index(self.order)
-            except ValueError: # order not found
+            except ValueError:  # order not found
                 index = -1
         index += inc
         if index < 0:
@@ -1532,7 +1681,7 @@ class GameInterface:
         for o in list(self.dobjets.values()):
             if not o.is_in(self.place):
                 o.stop()
-        sound_stop(stop_voice_too=False) # cut the long nonlooping environment sounds
+        sound_stop(stop_voice_too=False)  # cut the long nonlooping environment sounds
 
     def _square_terrain(self, place):
         result = []
@@ -1541,9 +1690,10 @@ class GameInterface:
             title = style.get(t, "title")
             if title:
                 result += mp.COMMA + title
-        if place.high_ground: result += mp.COMMA + mp.PLATEAU
+        if place.high_ground:
+            result += mp.COMMA + mp.PLATEAU
         return result
-        
+
     def square_postfix(self, place):
         postfix = []
         if place in self.scouted_squares:
@@ -1554,7 +1704,7 @@ class GameInterface:
         else:
             postfix += mp.COMMA + mp.UNKNOWN
         return postfix
-        
+
     def say_square(self, place, prefix=[]):
         if place is None:
             return
@@ -1592,23 +1742,36 @@ class GameInterface:
     def _get_prefix_and_collision(self, new_square, dxc, dyc):
         if new_square is self.place:
             return style.get("parameters", "no_path_in_this_direction"), True
-        if (self.place not in self.scouted_before_squares
-                or (self.place.is_water or new_square.is_water) and self.place.height == new_square.height
-                or self._shouldnt_collide):
+        if (
+            self.place not in self.scouted_before_squares
+            or (self.place.is_water or new_square.is_water)
+            and self.place.height == new_square.height
+            or self._shouldnt_collide
+        ):
             return [], False
-        exits = [o for o in list(self.dobjets.values()) if o.is_in(self.place)
-                 and self.is_selectable(o)
-                 and o.is_an_exit
-                 and not o.is_blocked(self.player)]
+        exits = [
+            o
+            for o in list(self.dobjets.values())
+            if o.is_in(self.place)
+            and self.is_selectable(o)
+            and o.is_an_exit
+            and not o.is_blocked(self.player)
+        ]
         prefix = style.get("parameters", "no_path_in_this_direction")
         collision = True
         xc, yc = self.coords_in_map(self.place)
-        x, y = (xc + .5) * self.square_width, (yc + .5) * self.square_width
+        x, y = (xc + 0.5) * self.square_width, (yc + 0.5) * self.square_width
         for o in exits:
-            if dxc == 1 and o.x > x or \
-               dxc == -1 and o.x < x or \
-               dyc == 1 and o.y > y or \
-               dyc == -1 and o.y < y:
+            if (
+                dxc == 1
+                and o.x > x
+                or dxc == -1
+                and o.x < x
+                or dyc == 1
+                and o.y > y
+                or dyc == -1
+                and o.y < y
+            ):
                 prefix = o.when_moving_through
                 collision = False
                 break
@@ -1628,7 +1791,7 @@ class GameInterface:
             self.zoom.select()
             self.zoom.say()
         elif self.place is not None:
-            if int(math.copysign(dxc + dyc, 1)) > 1: # several squares at a time
+            if int(math.copysign(dxc + dyc, 1)) > 1:  # several squares at a time
                 # assertion: dxc == 0 or dyc == 0
                 if dxc:
                     step = int(math.copysign(1, dxc)), 0
@@ -1637,7 +1800,9 @@ class GameInterface:
                 prefixes = []
                 for _ in range(int(math.copysign(dxc + dyc, 1))):
                     new_square = self._compute_move(*step)
-                    prefix, collision = self._get_prefix_and_collision(new_square, *step)
+                    prefix, collision = self._get_prefix_and_collision(
+                        new_square, *step
+                    )
                     if not no_collision:
                         prefixes += prefix
                     if not collision or no_collision:
@@ -1645,11 +1810,11 @@ class GameInterface:
                     else:
                         break
                 self._select_and_say_square(self.place, prefixes)
-            elif no_collision: # one square at a time without collision
+            elif no_collision:  # one square at a time without collision
                 new_square = self._compute_move(dxc, dyc)
                 self.move_to_square(new_square)
                 self._select_and_say_square(self.place)
-            else: # one square at a time with collision
+            else:  # one square at a time with collision
                 new_square = self._compute_move(dxc, dyc)
                 prefix, collision = self._get_prefix_and_collision(new_square, dxc, dyc)
                 if not collision:
@@ -1662,7 +1827,7 @@ class GameInterface:
                 self.toggle_immersion()
             if self.zoom_mode:
                 self.cmd_toggle_zoom()
-            _squares = list(squares) # make a copy
+            _squares = list(squares)  # make a copy
             if self.place not in _squares:
                 _squares.append(self.place)
             if self.player.units:
@@ -1681,8 +1846,11 @@ class GameInterface:
         self._select_square_from_list(increment, self.scouted_squares)
 
     def cmd_select_conflict_square(self, increment):
-        enemy_units = [o for o in list(self.dobjets.values())
-                       if o.player and o.player.player_is_an_enemy(self.player)]
+        enemy_units = [
+            o
+            for o in list(self.dobjets.values())
+            if o.player and o.player.player_is_an_enemy(self.player)
+        ]
         conflict_squares = []
         for u in enemy_units:
             if u.place not in conflict_squares:
@@ -1690,8 +1858,9 @@ class GameInterface:
         self._select_square_from_list(increment, conflict_squares)
 
     def cmd_select_unknown_square(self, increment):
-        unknown_squares = [p for p in self.player.world.squares
-                           if p not in self.scouted_before_squares]
+        unknown_squares = [
+            p for p in self.player.world.squares if p not in self.scouted_before_squares
+        ]
         self._select_square_from_list(increment, unknown_squares)
 
     def cmd_select_resource_square(self, increment):
@@ -1703,7 +1872,7 @@ class GameInterface:
         self._select_square_from_list(increment, resource_squares)
 
     def set_obs_pos(self):
-        if self.place is None: # first position
+        if self.place is None:  # first position
             if self.units():
                 self._select_and_say_square(self.units(sort=True)[0].place)
         self._follow_if_needed()
@@ -1712,13 +1881,13 @@ class GameInterface:
             self.y = self.dobjets[self.group[0]].y
             self.o = self.dobjets[self.group[0]].o
         elif self.zoom_mode:
-            self.x, self.y = self.zoom.obs_pos() 
+            self.x, self.y = self.zoom.obs_pos()
         else:
             xc, yc = self.coords_in_map(self.place)
-            self.x = self.square_width * (xc + .5)
+            self.x = self.square_width * (xc + 0.5)
             self.y = self.square_width * (yc + 1 / 8.0)
             if self.place not in self.scouted_squares:
-                self.y -= self.square_width # lower sounds if fog of war
+                self.y -= self.square_width  # lower sounds if fog of war
         psounds.update()
 
     def cmd_toggle_zoom(self):
@@ -1728,9 +1897,11 @@ class GameInterface:
         if self.zoom_mode:
             self.zoom = Zoom(self)
             self.target = None
-            self.zoom.say(prefix=mp.ZOOM+mp.IS_NOW_ON+mp.COMMA)
+            self.zoom.say(prefix=mp.ZOOM + mp.IS_NOW_ON + mp.COMMA)
         else:
-            self._select_and_say_square(self.place, prefix=mp.ZOOM+mp.IS_NOW_OFF+mp.COMMA)
+            self._select_and_say_square(
+                self.place, prefix=mp.ZOOM + mp.IS_NOW_OFF + mp.COMMA
+            )
 
     # display
 
@@ -1738,26 +1909,40 @@ class GameInterface:
         warn = (255, 0, 0)
         normal = (0, 200, 0)
         if not get_fullscreen():
-            screen_render(f"x{self._get_relative_speed():.1f}", (0,0))
+            screen_render(f"x{self._get_relative_speed():.1f}", (0, 0))
             screen_render(chrono.text("update", label="w"), (-1, 0), right=True)
             screen_render(chrono.text("display", label="d"), (-1, 15), right=True)
             return
-        screen_render("total delay: %sms" % chrono.ms(time.time() - self.next_update),
-                      (0, 30),
-                      color=warn if time.time() > self.next_update else normal)
+        screen_render(
+            "total delay: %sms" % chrono.ms(time.time() - self.next_update),
+            (0, 30),
+            color=warn if time.time() > self.next_update else normal,
+        )
         if hasattr(self.server, "turn"):
-            screen_render("com turn(sim subturn): {}({}/{})".format(self.server.turn, self.server.sub_turn + 1, self.server.fpct),
-                      (0, 45))
-            screen_render("com delay: %sms" % chrono.ms(self.server.delay),
-                      (0, 60),
-                      color=warn if self.server.delay > 0 else normal)
+            screen_render(
+                "com turn(sim subturn): {}({}/{})".format(
+                    self.server.turn, self.server.sub_turn + 1, self.server.fpct
+                ),
+                (0, 45),
+            )
+            screen_render(
+                "com delay: %sms" % chrono.ms(self.server.delay),
+                (0, 60),
+                color=warn if self.server.delay > 0 else normal,
+            )
         screen_render(chrono.text("ping"), (-1, 0), right=True)
         screen_render(chrono.text("update", label="world update"), (-1, 30), right=True)
         screen_render(chrono.text("animate"), (-1, 45), right=True)
         screen_render(chrono.text("display"), (-1, 60), right=True)
         screen_render(f"turn: {self.world.turn}", (0, 0))
-        s = "speed: {:.0f} sim turns per second (normal x{:.1f})".format(self._get_tps(), self._get_relative_speed())
-        screen_render(s, (0, 15), color=warn if self._get_relative_speed() < self.speed * .9 else normal)
+        s = "speed: {:.0f} sim turns per second (normal x{:.1f})".format(
+            self._get_tps(), self._get_relative_speed()
+        )
+        screen_render(
+            s,
+            (0, 15),
+            color=warn if self._get_relative_speed() < self.speed * 0.9 else normal,
+        )
 
     _must_display_target_info = False
 
@@ -1767,7 +1952,12 @@ class GameInterface:
             screen_render("TARGET INFO", (-1, 100 + dy), right=True)
             dy += 15
             try:
-                screen_render(repr(self.target.model), (-1, 100 + dy), color=(255, 255, 255), right=True)
+                screen_render(
+                    repr(self.target.model),
+                    (-1, 100 + dy),
+                    color=(255, 255, 255),
+                    right=True,
+                )
                 dy += 15
                 d = self.target.model.__dict__
                 for k in sorted(d):
@@ -1780,7 +1970,9 @@ class GameInterface:
             screen_render("PLACE INFO", (-1, 100 + dy), right=True)
             dy += 15
             try:
-                screen_render(repr(self.place), (-1, 100 + dy), color=(255, 255, 255), right=True)
+                screen_render(
+                    repr(self.place), (-1, 100 + dy), color=(255, 255, 255), right=True
+                )
                 dy += 15
                 d = self.place.__dict__
                 for k in sorted(d):
@@ -1801,20 +1993,28 @@ class GameInterface:
 
     def display(self):
         if get_screen() is None:
-            return # this might allow some machines to work without any display
+            return  # this might allow some machines to work without any display
         chrono.start("display")
         get_screen().fill((0, 0, 0))
         if self.display_is_active:
             self.grid_view.display()
-            if self.mouse_select_origin and self.mouse_select_origin != pygame.mouse.get_pos():
+            if (
+                self.mouse_select_origin
+                and self.mouse_select_origin != pygame.mouse.get_pos()
+            ):
                 x, y = self.mouse_select_origin
                 x2, y2 = pygame.mouse.get_pos()
-                pygame.draw.rect(get_screen(), (255, 255, 255), (min(x, x2), min(y, y2), abs(x - x2), abs(y - y2)), 1)
+                pygame.draw.rect(
+                    get_screen(),
+                    (255, 255, 255),
+                    (min(x, x2), min(y, y2), abs(x - x2), abs(y - y2)),
+                    1,
+                )
         elif not IS_DEV_VERSION:
             screen_render(
                 "[Ctrl + F2] display",
                 pygame.display.get_surface().get_rect().center,
-                center=True
+                center=True,
             )
         if self._must_play_tick or IS_DEV_VERSION:
             self.display_metrics()
@@ -1844,15 +2044,20 @@ class GameInterface:
     def cmd_resource_status(self, resource_type):
         resource_type = int(resource_type)
         try:
-            voice.item(nb2msg(self.resources[resource_type]) + style.get(
-                "parameters", "resource_%s_title" % resource_type))
+            voice.item(
+                nb2msg(self.resources[resource_type])
+                + style.get("parameters", "resource_%s_title" % resource_type)
+            )
         except IndexError:
             voice.item(mp.BEEP)
 
     def cmd_food_status(self):
-        voice.item(nb2msg_f(self.available_food)
-                   + style.get("parameters", "food_title")
-                   + mp.TO + nb2msg(self.used_food))
+        voice.item(
+            nb2msg_f(self.available_food)
+            + style.get("parameters", "food_title")
+            + mp.TO
+            + nb2msg(self.used_food)
+        )
 
     def send_msg_if_playing(self, msg, update_type=None):
         # say only if game started
@@ -1871,20 +2076,30 @@ class GameInterface:
             if r != self._previous_resources[i]:
                 self._previous_resources[i] = r
                 if "resources" in config.verbosity and must_be_said(r):
-                    self.send_msg_if_playing(nb2msg(r) + style.get(
-                        "parameters", "resource_%s_title" % i),
-                        update_type="resource_%s" % i)
-        if self.available_food != self._previous_available_food or \
-           self.used_food > self._previous_used_food or \
-           (self.used_food < self._previous_used_food and
-            self._previous_used_food == self.available_food):
-            if "food" in config.verbosity and \
-               0 <= self.available_food - self.used_food <= \
-               self.available_food * .20:
+                    self.send_msg_if_playing(
+                        nb2msg(r) + style.get("parameters", "resource_%s_title" % i),
+                        update_type="resource_%s" % i,
+                    )
+        if (
+            self.available_food != self._previous_available_food
+            or self.used_food > self._previous_used_food
+            or (
+                self.used_food < self._previous_used_food
+                and self._previous_used_food == self.available_food
+            )
+        ):
+            if (
+                "food" in config.verbosity
+                and 0
+                <= self.available_food - self.used_food
+                <= self.available_food * 0.20
+            ):
                 self.send_msg_if_playing(
                     nb2msg_f(self.available_food)
                     + style.get("parameters", "food_title")
-                    + mp.TO + nb2msg(self.used_food),
-                    update_type="food")
+                    + mp.TO
+                    + nb2msg(self.used_food),
+                    update_type="food",
+                )
             self._previous_available_food = self.available_food
             self._previous_used_food = self.used_food

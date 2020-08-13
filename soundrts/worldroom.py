@@ -9,6 +9,7 @@ from .worldresource import Deposit, Meadow
 
 SPACE_LIMIT = 144
 
+
 def square_spiral(x, y, step=COLLISION_RADIUS * 25 // 10):
     yield x, y
     sign = 1
@@ -36,8 +37,9 @@ def cache(f):
             _cache_time = args[0].world.time
         k = (args, tuple(sorted(kargs.items())))
         if k not in _cache:
-            _cache[k] = f(*args, **kargs)   
+            _cache[k] = f(*args, **kargs)
         return _cache[k]
+
     return decorated_f
 
 
@@ -88,12 +90,19 @@ class Square:
             if s is not None:
                 result.append(s)
         return result
- 
 
     def set_neighbors(self):
         result = []
-        for dc, dr in ((0, 1), (0, -1), (1, 0), (-1, 0),
-                       (1, 1), (1, -1), (-1, 1), (-1, -1)):
+        for dc, dr in (
+            (0, 1),
+            (0, -1),
+            (1, 0),
+            (-1, 0),
+            (1, 1),
+            (1, -1),
+            (-1, 1),
+            (-1, -1),
+        ):
             s = self.world.grid.get((self.col + dc, self.row + dr))
             if s is not None:
                 result.append(s)
@@ -114,6 +123,7 @@ class Square:
     @property
     def subsquares(self):
         from soundrts.worldplayerbase import ZoomTarget
+
         k = (self.xmax - self.xmin) // 3
         for dx in [0, 1, -1]:
             for dy in [0, 1, -1]:
@@ -135,10 +145,10 @@ class Square:
 
     def __getstate__(self):
         d = self.__dict__.copy()
-        if 'spiral' in d:
-            del d['spiral']
-        if 'neighbors' in d:
-            del d['neighbors']
+        if "spiral" in d:
+            del d["spiral"]
+        if "neighbors" in d:
+            del d["neighbors"]
         return d
 
     def __setstate__(self, d):
@@ -146,8 +156,12 @@ class Square:
 
     def is_near(self, square):
         try:
-            return (abs(self.col - square.col), abs(self.row - square.row)) in ((0, 1), (1, 0), (1, 1))
-        except AttributeError: # not a square
+            return (abs(self.col - square.col), abs(self.row - square.row)) in (
+                (0, 1),
+                (1, 0),
+                (1, 1),
+            )
+        except AttributeError:  # not a square
             return False
 
     def clean(self):
@@ -156,10 +170,11 @@ class Square:
         self.__dict__ = {}
 
     def contains(self, x, y):
-        return self.xmin <= x < self.xmax and \
-               self.ymin <= y < self.ymax
+        return self.xmin <= x < self.xmax and self.ymin <= y < self.ymax
 
-    def shortest_path_to(self, dest, player=None, plane="ground", places=False, avoid=False):
+    def shortest_path_to(
+        self, dest, player=None, plane="ground", places=False, avoid=False
+    ):
         if places:
             return self._shortest_path_to(dest, plane, player, places=True, avoid=avoid)
         else:
@@ -179,8 +194,8 @@ class Square:
             avoid = lambda x: False
         if dest is self:
             return [self] if places else (None, 0)
-##        if not dest.exits: # small optimization
-##            return None, None # no path exists
+        ##        if not dest.exits: # small optimization
+        ##            return None, None # no path exists
 
         # add start and end to the graph
         G = self.world.g[plane]
@@ -193,25 +208,37 @@ class Square:
         end = dest
 
         # apply Dijkstra's algorithm (with priority list)
-        D = {}        # dictionary of final distances
-        P = {}        # dictionary of predecessors
-        Q = priorityDictionary()   # est.dist. of non-final vert.
-        Q[start] = (0, )
+        D = {}  # dictionary of final distances
+        P = {}  # dictionary of predecessors
+        Q = priorityDictionary()  # est.dist. of non-final vert.
+        Q[start] = (0,)
 
         for v in Q:
-            if hasattr(v, "is_blocked") and v.is_blocked(player, ignore_enemy_walls=True) or avoid(v):
+            if (
+                hasattr(v, "is_blocked")
+                and v.is_blocked(player, ignore_enemy_walls=True)
+                or avoid(v)
+            ):
                 continue
             D[v] = Q[v][0]
-            if v == end: break
-            
+            if v == end:
+                break
+
             for w in G[v]:
-                if hasattr(w, "is_blocked") and w.is_blocked(player, ignore_enemy_walls=True) or avoid(w):
+                if (
+                    hasattr(w, "is_blocked")
+                    and w.is_blocked(player, ignore_enemy_walls=True)
+                    or avoid(w)
+                ):
                     continue
                 vwLength = D[v] + G[v][w]
                 if w in D:
                     pass
                 elif w not in Q or vwLength < Q[w][0]:
-                    Q[w] = (vwLength, int(w.id),) # the additional value makes the result "cross-machine deterministic"
+                    Q[w] = (
+                        vwLength,
+                        int(w.id),
+                    )  # the additional value makes the result "cross-machine deterministic"
                     P[w] = v
 
         # restore the graph
@@ -228,7 +255,8 @@ class Square:
         Path = []
         while 1:
             Path.append(end)
-            if end == start: break
+            if end == start:
+                break
             end = P[end]
         Path.reverse()
         if places:
@@ -240,10 +268,11 @@ class Square:
         def _d(o):
             # o.id to make sure that the result is the same on any computer
             return int_distance(o.x, o.y, unit.x, unit.y), o.id
+
         meadows = sorted([o for o in self.objects if isinstance(o, Meadow)], key=_d)
         if meadows:
             return meadows[0]
-        
+
     def find_and_remove_meadow(self, item_type):
         if item_type.is_buildable_anywhere:
             return self.x, self.y, None
@@ -259,7 +288,7 @@ class Square:
             if player.is_an_enemy(o):
                 return True
         return False
-        
+
     def north_side(self):
         return self, self.x, self.ymax - 1, -90
 
@@ -298,16 +327,24 @@ class Square:
             f = player.is_an_enemy
         else:
             f = lambda x: False
-        return len([u for u in self.objects if u.collision
-                    and u.airground_type == airground_type
-                    and not f(u)]) < SPACE_LIMIT
+        return (
+            len(
+                [
+                    u
+                    for u in self.objects
+                    if u.collision and u.airground_type == airground_type and not f(u)
+                ]
+            )
+            < SPACE_LIMIT
+        )
 
     def find_free_space(self, airground_type, x, y, same_place=False, player=None):
         # assertion: object has collision
-##        if not same_place and not self.can_receive(airground_type, player):
-##            return None, None
-        if self.contains(x, y) and \
-           not self.world.collision[airground_type].would_collide(x, y):
+        ##        if not same_place and not self.can_receive(airground_type, player):
+        ##            return None, None
+        if self.contains(x, y) and not self.world.collision[
+            airground_type
+        ].would_collide(x, y):
             return x, y
         if self.world.time == 0 and (x, y) == (self.x, self.y):
             if not hasattr(self, "spiral"):
@@ -315,12 +352,15 @@ class Square:
                 self.spiral["ground"] = square_spiral(x, y)
                 self.spiral["air"] = square_spiral(x, y)
                 self.spiral["water"] = square_spiral(x, y)
-            spiral = self.spiral[airground_type] # reuse spiral (don't retry used places: much faster!)
+            spiral = self.spiral[
+                airground_type
+            ]  # reuse spiral (don't retry used places: much faster!)
         else:
             spiral = square_spiral(x, y)
         for x, y in spiral:
-            if self.contains(x, y) and \
-               not self.world.collision[airground_type].would_collide(x, y):
+            if self.contains(x, y) and not self.world.collision[
+                airground_type
+            ].would_collide(x, y):
                 return x, y
         return None, None
 
@@ -348,7 +388,7 @@ class Square:
 
     def toggle_path(self, dc, dr):
         other = self.world.grid.get((self.col + dc, self.row + dr))
-        if not other: # border
+        if not other:  # border
             return
         if other in [e.other_side.place for e in self.exits]:
             self.ensure_nopath(other)
@@ -375,7 +415,16 @@ class Square:
 
     @property
     def nb_meadows(self):
-        return len([o for o in self.objects if o.is_a_building_land and not getattr(o, "is_an_exit", False) or o.building_land and not getattr(o, "qty", 0)])
+        return len(
+            [
+                o
+                for o in self.objects
+                if o.is_a_building_land
+                and not getattr(o, "is_an_exit", False)
+                or o.building_land
+                and not getattr(o, "qty", 0)
+            ]
+        )
 
     def update_terrain(self):
         meadows = len([o for o in self.objects if o.type_name == "meadow"])

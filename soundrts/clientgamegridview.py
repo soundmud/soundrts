@@ -10,7 +10,6 @@ from .worldentity import COLLISION_RADIUS
 
 
 class GridView:
-
     def __init__(self, interface):
         self.interface = interface
 
@@ -21,11 +20,16 @@ class GridView:
 
     def _display(self):
         # map borders
-        draw_rect((100, 100 ,100),
-                  (0, 0,
-                   self.square_view_width * (self.interface.xcmax + 1),
-                   self.square_view_height * (self.interface.ycmax + 1)),
-                  1)
+        draw_rect(
+            (100, 100, 100),
+            (
+                0,
+                0,
+                self.square_view_width * (self.interface.xcmax + 1),
+                self.square_view_height * (self.interface.ycmax + 1),
+            ),
+            1,
+        )
         # backgrounds
         squares_to_view = []
         for xc in range(0, self.interface.xcmax + 1):
@@ -37,10 +41,12 @@ class GridView:
                 except:
                     color = (0, 25, 0)
                 if sq.high_ground:
-                    color = (color[0]*2, color[1]*2, color[2]*2)
-                if sq in self.interface.server.player.observed_before_squares \
-                   and sq not in self.interface.server.player.observed_squares:
-                    color = (color[0]/10 + 15, color[1]/10 + 15, color[2]/10 + 15)
+                    color = (color[0] * 2, color[1] * 2, color[2] * 2)
+                if (
+                    sq in self.interface.server.player.observed_before_squares
+                    and sq not in self.interface.server.player.observed_squares
+                ):
+                    color = (color[0] / 10 + 15, color[1] / 10 + 15, color[2] / 10 + 15)
                 elif sq not in self.interface.server.player.observed_squares:
                     color = (0, 0, 0)
                     continue
@@ -55,10 +61,10 @@ class GridView:
             for color, borders in (((100, 100, 100), walls), ((0, 0, 0), exits)):
                 for o in borders:
                     dx = cos(radians(o)) * self.square_view_width / 2
-                    dy = - sin(radians(o)) * self.square_view_width / 2
-                    draw_line(color,
-                              (x - dx - dy, y - dy - dx),
-                              (x - dx + dy, y - dy + dx))
+                    dy = -sin(radians(o)) * self.square_view_width / 2
+                    draw_line(
+                        color, (x - dx - dy, y - dy - dx), (x - dx + dy, y - dy + dx)
+                    )
 
     def _get_view_coords_from_world_coords(self, ox, oy):
         x = int(ox / self.interface.square_width * self.square_view_width)
@@ -75,12 +81,12 @@ class GridView:
         if getattr(o, "is_inside", False):
             return
         if self.interface.target is not None and self.interface.target is o:
-            width = 0 # fill circle
+            width = 0  # fill circle
         else:
             width = 1
         x, y = self._object_coords(o)
         if o.shape() == "square":
-            rect = x-R, y-R, R*2, R*2
+            rect = x - R, y - R, R * 2, R * 2
             draw_rect(o.corrected_color(), rect, width)
         else:
             if o.collision:
@@ -91,50 +97,69 @@ class GridView:
                 get_screen().set_at((x, y), o.corrected_color())
         if getattr(o.model, "player", None) is not None:
             if o.id in self.interface.group:
-                color = (0,255,0)
+                color = (0, 255, 0)
             elif o.player is self.interface.player:
-                color = (0,55,0)
+                color = (0, 55, 0)
             elif o.player in self.interface.player.allied:
-                color = (0,0,155)
+                color = (0, 0, 155)
             elif o.player.player_is_an_enemy(self.interface.player):
-                color = (155,0,0)
+                color = (155, 0, 0)
             else:
                 color = (0, 0, 0)
             pygame.draw.circle(get_screen(), color, (x, y), R // 2, 0)
-            if getattr(o, "hp", None) is not None and \
-               o.hp != o.hp_max:
+            if getattr(o, "hp", None) is not None and o.hp != o.hp_max:
                 hp_prop = 100 * o.hp // o.hp_max
                 if hp_prop > 80:
                     color = (0, 255, 0)
-##                elif hp_prop > 50:
-##                    color = (0, 255, 0)
+                ##                elif hp_prop > 50:
+                ##                    color = (0, 255, 0)
                 else:
                     color = (255, 0, 0)
                 W = R - 2
                 if color != (0, 255, 0):
-                    pygame.draw.line(get_screen(), (0, 55, 0),
-                                 (x - W, y - R - 2),
-                                 (x - W + 2 * W, y - R - 2))
-                pygame.draw.line(get_screen(), color,
-                                 (x - W, y - R - 2),
-                                 (x - W + hp_prop * (2 * W) // 100, y - R - 2))
+                    pygame.draw.line(
+                        get_screen(),
+                        (0, 55, 0),
+                        (x - W, y - R - 2),
+                        (x - W + 2 * W, y - R - 2),
+                    )
+                pygame.draw.line(
+                    get_screen(),
+                    color,
+                    (x - W, y - R - 2),
+                    (x - W + hp_prop * (2 * W) // 100, y - R - 2),
+                )
 
     def display_objects(self):
         for o in list(self.interface.dobjets.values()):
             self.display_object(o)
-            if o.place is None and not o.is_inside \
-               and not (self.interface.already_asked_to_quit or
-                        self.interface.end_loop):
+            if (
+                o.place is None
+                and not o.is_inside
+                and not (
+                    self.interface.already_asked_to_quit or self.interface.end_loop
+                )
+            ):
                 warning("%s.place is None", o.type_name)
                 if o.is_memory:
                     warning("(memory)")
 
     def _update_coefs(self):
         global R, R2
-        self.square_view_width = self.square_view_height = min(get_screen().get_width() // (self.interface.xcmax + 1),
-            get_screen().get_height() // (self.interface.ycmax + 1))
+        self.square_view_width = self.square_view_height = min(
+            get_screen().get_width() // (self.interface.xcmax + 1),
+            get_screen().get_height() // (self.interface.ycmax + 1),
+        )
         self.ymax = self.square_view_height * (self.interface.ycmax + 1)
-        R = max(1, int(COLLISION_RADIUS / PRECISION / self.interface.square_width * self.square_view_width))
+        R = max(
+            1,
+            int(
+                COLLISION_RADIUS
+                / PRECISION
+                / self.interface.square_width
+                * self.square_view_width
+            ),
+        )
         R2 = R * R
 
     def _collision_display(self):
@@ -149,7 +174,9 @@ class GridView:
             xmax, ymax = self._xy_coords(zoom.xmax, zoom.ymax)
             rect = xmin, ymin, xmax - xmin, ymax - ymin
         else:
-            rect = self._get_rect_from_map_coords(*self.interface.coords_in_map(self.interface.place))
+            rect = self._get_rect_from_map_coords(
+                *self.interface.coords_in_map(self.interface.place)
+            )
             rect = list(rect)
         if self.interface.target is None:
             color = (255, 255, 255)
@@ -178,16 +205,18 @@ class GridView:
         x, y = pos
         for o in list(self.interface.dobjets.values()):
             xo, yo = self._object_coords(o)
-            if square_of_distance(x, y, xo, yo) <= R2 + 1: # is + 1 necessary?
+            if square_of_distance(x, y, xo, yo) <= R2 + 1:  # is + 1 necessary?
                 return o
 
     def units_from_mouserect(self, pos, pos2):
-        result= []
+        result = []
         self._update_coefs()
         x, y = pos
         x2, y2 = pos2
-        if x > x2: x, x2 = x2, x
-        if y > y2: y, y2 = y2, y
+        if x > x2:
+            x, x2 = x2, x
+        if y > y2:
+            y, y2 = y2, y
         for o in self.interface.units():
             xo, yo = self._object_coords(o)
             if x < xo < x2 and y < yo < y2:
@@ -201,9 +230,17 @@ class GridView:
             color = (255, 0, 0)
         else:
             color = (0, 255, 0)
-        r1 = pygame.draw.line(get_screen(), color,
-                         self.interface.grid_view._object_coords(target),
-                         self.interface.grid_view._object_coords(a))
-        r2 = pygame.draw.circle(get_screen(), (100, 100, 100),
-                           self.interface.grid_view._object_coords(target), R * 3 // 2, 0)
+        r1 = pygame.draw.line(
+            get_screen(),
+            color,
+            self.interface.grid_view._object_coords(target),
+            self.interface.grid_view._object_coords(a),
+        )
+        r2 = pygame.draw.circle(
+            get_screen(),
+            (100, 100, 100),
+            self.interface.grid_view._object_coords(target),
+            R * 3 // 2,
+            0,
+        )
         pygame.display.update(r1.union(r2))

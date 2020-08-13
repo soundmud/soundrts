@@ -5,6 +5,7 @@ def encode_range(r):
     else:
         return f"{i}-{j}"
 
+
 def encode(g):
     result = [[int(i), int(i)] for i in g]
     changed = True
@@ -21,6 +22,7 @@ def encode(g):
                 prev = r
     return " ".join([encode_range(r) for r in result])
 
+
 def decode(s):
     if s == "":
         return []
@@ -28,12 +30,12 @@ def decode(s):
     for r in s.split(" "):
         if "-" in r:
             a, b = r.split("-")
-            result.extend(list(range(int(a),int(b)+1)))
+            result.extend(list(range(int(a), int(b) + 1)))
         else:
             result.append(int(r))
     return [str(i) for i in result]
 
-            
+
 if __name__ == "__main__":
 
     def test(a, b):

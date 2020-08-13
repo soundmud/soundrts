@@ -16,7 +16,7 @@ def nb2msg_f(n):
     return nb2msg(n)
 
 
-class OrderTypeView: # future order
+class OrderTypeView:  # future order
 
     type = None
     requirements: List[str] = []
@@ -27,13 +27,16 @@ class OrderTypeView: # future order
         self.cls = ORDERS_DICT[o[0]]
         if len(o) > 1:
             self.type = o[1]
-            self.requirements = self.unit.player.world.unit_class(self.type).requirements
+            self.requirements = self.unit.player.world.unit_class(
+                self.type
+            ).requirements
         self.title = self._get_title()
         self.shortcut = self._get_shortcut()
         self.index = _ord_index(self.cls.keyword)
 
         self.comment = style.get(self.cls.keyword, "comment", False)
-        if self.comment is None: self.comment = []
+        if self.comment is None:
+            self.comment = []
 
         order = self.cls(unit, [self.type])
         self.cost = order.cost
@@ -42,7 +45,10 @@ class OrderTypeView: # future order
 
     @property
     def target_shouldnt_collide(self):
-        return self.cls.keyword == "use" and self.cls(self.unit, [self.type]).type.effect_range > 12 * PRECISION
+        return (
+            self.cls.keyword == "use"
+            and self.cls(self.unit, [self.type]).type.effect_range > 12 * PRECISION
+        )
 
     def __eq__(self, other):
         return self.cls.keyword == other.cls.keyword and self.type == other.type
@@ -81,7 +87,9 @@ class OrderTypeView: # future order
                 for i, c in enumerate(self.cost):
                     if c:
                         and_index = len(msg)
-                        msg += nb2msg(c / PRECISION) + style.get("parameters", "resource_%s_title" % i)
+                        msg += nb2msg(c / PRECISION) + style.get(
+                            "parameters", "resource_%s_title" % i
+                        )
             if self.food_cost:
                 and_index = len(msg)
                 msg += nb2msg_f(self.food_cost) + style.get("parameters", "food_title")
@@ -101,7 +109,7 @@ class OrderTypeView: # future order
         result = self.cls.keyword
         if self.type:
             result += " " + self.type
-        return result        
+        return result
 
 
 def _ord_index(keyword):
@@ -109,22 +117,28 @@ def _ord_index(keyword):
         return float(style.get(keyword, "index")[0])
     except:
         warning("%s.index should be a number (check style.txt)", keyword)
-        return 9999 # end of the list
+        return 9999  # end of the list
+
 
 def _has_ord_index(keyword):
     return style.has(keyword, "index")
 
+
 _orders_list = ()
+
 
 def update_orders_list():
     global _orders_list
     # this sorted list of order classes is used when generating the menu
-    _orders_list = sorted([_x for _x in list(ORDERS_DICT.values())
-                          if _has_ord_index(_x.keyword)],
-                         key=lambda x:_ord_index(x.keyword))
+    _orders_list = sorted(
+        [_x for _x in list(ORDERS_DICT.values()) if _has_ord_index(_x.keyword)],
+        key=lambda x: _ord_index(x.keyword),
+    )
+
 
 def get_orders_list():
     return _orders_list
+
 
 def substitute_args(t, args):
     if t is not None:

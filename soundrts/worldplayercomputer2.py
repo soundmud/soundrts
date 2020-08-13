@@ -2,8 +2,8 @@ from .lib.nofloat import PRECISION
 from .worldorders import ORDERS_DICT
 from .worldplayerbase import Player
 
-orders = sorted(ORDERS_DICT.keys()) # sort to avoid desync
-orders.remove("enter") # later
+orders = sorted(ORDERS_DICT.keys())  # sort to avoid desync
+orders.remove("enter")  # later
 orders.remove("stop")
 orders.remove("attack")
 orders.remove("patrol")
@@ -16,6 +16,7 @@ orders.remove("cancel_building")
 orders.remove("cancel_training")
 orders.remove("cancel_upgrading")
 orders.remove("rallying_point")
+
 
 def _id(x):
     return x.id

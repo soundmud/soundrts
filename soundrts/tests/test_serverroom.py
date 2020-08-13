@@ -5,7 +5,6 @@ from soundrts.serverroom import Game, Orders, same, time_string
 
 
 class Client:
-
     def __init__(self, login):
         self.login = login
 
@@ -17,7 +16,6 @@ clients = [Client(str(i)) for i in range(10)]
 
 
 class Game(Game):  # type: ignore
-
     def __init__(self, n):
         self.players = clients[:n]
 
@@ -25,9 +23,11 @@ class Game(Game):  # type: ignore
 def sorted_by_player(all_orders):
     return " ".join(sorted(all_orders.split()))
 
+
 def test_same():
     assert same(["aaa", "aaa", "aaa"])
     assert not same(["aaa", "bbb", "aaa"])
+
 
 def test_time_string():
     assert time_string("900-aaaaa") == "900"
@@ -35,6 +35,7 @@ def test_time_string():
     assert time_string("9500-aaaaa") == "9500"
     assert time_string("950aaaaa") == "950aaaaa"
     assert time_string(None) == None
+
 
 def test_orders_are_ready():
     o = Orders(Game(2))
@@ -49,7 +50,10 @@ def test_orders_are_ready():
     assert not o.are_ready()
     o.add(clients[1], ("control,24-25;order,0,0,default,7", "300-aaa"))
     assert o.are_ready()
-    assert sorted_by_player(o.pop_and_pack()) == "0/ 1/control,24-25;order,0,0,default,7"
+    assert (
+        sorted_by_player(o.pop_and_pack()) == "0/ 1/control,24-25;order,0,0,default,7"
+    )
+
 
 def test_orders_ignore_chronology():
     # TCP guarantees chronology.
@@ -62,14 +66,15 @@ def test_orders_ignore_chronology():
     o.pop_and_pack()
     assert not o.are_ready()
 
+
 def test_fpct():
-    return # no test (fpct == 1)
+    return  # no test (fpct == 1)
     # The following values were found while using
     # localhost with Clumsy to create lag. Perhaps
     # fpct would be smaller in a real network.
     g = Game(2)
     g.real_speed = 1
-    g.max_ping = 2 # instead of .3 for example
+    g.max_ping = 2  # instead of .3 for example
     g.ping = 0.001
     assert g.fpct() == 1
     g.ping = 0.250
@@ -81,10 +86,11 @@ def test_fpct():
     g.ping = 1.090
     assert g.fpct() >= 8
 
+
 def test_short_status():
     g = Game(2)
     g.scenario = Map("soundrts/tests/jl1.txt")
-    g._start_time = time.time() - 60 # 1 minute ago
+    g._start_time = time.time() - 60  # 1 minute ago
     assert g.short_status == ("jl1", "0,1", 1)
-    g._start_time = time.time() - .1 # a fraction of a second
-    assert g.short_status[2] == 0 # not a float
+    g._start_time = time.time() - 0.1  # a fraction of a second
+    assert g.short_status[2] == 0  # not a float

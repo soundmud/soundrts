@@ -17,8 +17,8 @@ from .worldroom import Square
 from .worldunit import BuildingSite, Soldier, Unit
 from .worldupgrade import Upgrade
 
-A = 12 * PRECISION # bucket side length
-VERY_SLOW = int(.01 * PRECISION)
+A = 12 * PRECISION  # bucket side length
+VERY_SLOW = int(0.01 * PRECISION)
 
 
 class ZoomTarget:
@@ -31,13 +31,14 @@ class ZoomTarget:
         self.x = x
         self.y = y
         self.id = id
-        self.title = self.place.title # TODO: full zoom title
+        self.title = self.place.title  # TODO: full zoom title
 
     def __eq__(self, other):
         if isinstance(other, ZoomTarget):
             return self.x, self.y == other.x, other.y
 
-    def __ne__(self, other): return not self.__eq__(other)
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     @property
     def building_land(self):
@@ -64,7 +65,6 @@ class ZoomTarget:
 
 
 class Objective:
-
     def __init__(self, number, description):
         self.number = number
         self.description = description
@@ -87,10 +87,10 @@ class Player:
     has_victory = False
     has_been_defeated = False
     faction = "human_faction"
-    memory_duration = 3 * 60 * 1000 # 3 minutes of world time
+    memory_duration = 3 * 60 * 1000  # 3 minutes of world time
 
     group = ()
-    group_had_enough_mana = False # used to warn if not enough mana
+    group_had_enough_mana = False  # used to warn if not enough mana
 
     is_cpu_intensive = False
     smart_units = False
@@ -99,9 +99,11 @@ class Player:
 
     def __init__(self, world, client):
         self.neutral = client.neutral
-        self.faction = world.random.choice(world.factions) \
-                       if client.faction  == "random_faction" \
-                       else client.faction
+        self.faction = (
+            world.random.choice(world.factions)
+            if client.faction == "random_faction"
+            else client.faction
+        )
         self.allied = [self]
         if not self.neutral:
             self.number = world.get_next_player_number()
@@ -125,7 +127,7 @@ class Player:
         self.observed_squares = set()
         self.observed_objects = {}
         self.detected_units = set()
-        self.allied_control = (self, )
+        self.allied_control = (self,)
         self._known_enemies = {}
         self._known_enemies_time = {}
         self._enemy_menace = {}
@@ -160,8 +162,10 @@ class Player:
         y = place.y * 3 // self.world.square_width
         candidates = list((x + dx, y + dy) for dx in (0, 1, -1) for dy in (0, 1, -1))
         sub = sorted(candidates, key=self._get_threat)[0]
-        return (sub[0] * self.world.square_width // 3 + self.world.square_width // 6,
-                sub[1] * self.world.square_width // 3 + self.world.square_width // 6)
+        return (
+            sub[0] * self.world.square_width // 3 + self.world.square_width // 6,
+            sub[1] * self.world.square_width // 3 + self.world.square_width // 6,
+        )
 
     def known_enemies(self, place):
         # assert: "memory is not included"
@@ -171,13 +175,19 @@ class Player:
             for e in self.world.players:
                 if e.player_is_an_enemy(self):
                     enemy_units.extend(e.units)
-            self._known_enemies[place] = [u for u in
-                set(self.perception).intersection(enemy_units).intersection(place.objects)
-                if u.is_vulnerable and not u.is_inside]
+            self._known_enemies[place] = [
+                u
+                for u in set(self.perception)
+                .intersection(enemy_units)
+                .intersection(place.objects)
+                if u.is_vulnerable and not u.is_inside
+            ]
             self._known_enemies_time[place] = self.world.time
         else:
             # eventually remove deleted units
-            self._known_enemies[place] = [u for u in self._known_enemies[place] if u.place]
+            self._known_enemies[place] = [
+                u for u in self._known_enemies[place] if u.place
+            ]
         return self._known_enemies[place]
 
     @property
@@ -225,8 +235,10 @@ class Player:
         for avp in self.allied_vision:
             for avu in avp._potential_neighbors(x, y):
                 radius2 = avu.sight_range * avu.sight_range
-                if (square_of_distance(avu.x, avu.y, x, y) < radius2
-                        and u.place in avu.get_observed_squares()):
+                if (
+                    square_of_distance(avu.x, avu.y, x, y) < radius2
+                    and u.place in avu.get_observed_squares()
+                ):
                     return True
 
     def _team_has_lost(self):
@@ -250,8 +262,14 @@ class Player:
         for p in self.allied_vision:
             done = []
             for u in p.units:
-                k = (u.is_inside, u.sight_range  < self.world.square_width, u.height, u.place)
-                if k in done: continue
+                k = (
+                    u.is_inside,
+                    u.sight_range < self.world.square_width,
+                    u.height,
+                    u.place,
+                )
+                if k in done:
+                    continue
                 self.observed_squares.update(u.get_observed_squares(strict=True))
                 partially_observed_squares.update(u.get_observed_squares())
                 done.append(k)
@@ -300,16 +318,21 @@ class Player:
             # forget deleted units
             # forget old memories of mobile units
             # forget memories that should be seen if they were there
-            if (m.initial_model in self.perception
-                    or m.initial_model.place is None  # ideally: and self.have_an_observer_in_sight_range(m)
-                    or m.initial_model.speed and m.time_stamp + self.memory_duration < self.world.time
-                    or self._should_be_seeing(m)):
+            if (
+                m.initial_model in self.perception
+                or m.initial_model.place
+                is None  # ideally: and self.have_an_observer_in_sight_range(m)
+                or m.initial_model.speed
+                and m.time_stamp + self.memory_duration < self.world.time
+                or self._should_be_seeing(m)
+            ):
                 self._forget(m)
         # memorize disappeared units
         # don't memorize deleted units
         # don't memorize invisible or cloaked units (confusing)
         for o in previous_perception - self.perception:
-            if o.is_invisible or o.is_cloaked: continue
+            if o.is_invisible or o.is_cloaked:
+                continue
             if o.place is not None:
                 self._memorize(o)
 
@@ -319,7 +342,9 @@ class Player:
         self._update_memory(previous_perception)
 
     def _update_menace(self):
-        self._menace = sum(u.menace for u in self.units if u.speed > 0 and isinstance(u, Soldier))
+        self._menace = sum(
+            u.menace for u in self.units if u.speed > 0 and isinstance(u, Soldier)
+        )
 
     def _update_enemy_menace_and_presence_and_corpses(self):
         self._enemy_menace = {}
@@ -328,7 +353,7 @@ class Player:
         self._places_with_friends = set()
         self._cataclysmic_places = set()
         for l in (self.perception, self.memory):
-            for o in sorted(l, key=lambda x: x.id): # sort to avoid desync error
+            for o in sorted(l, key=lambda x: x.id):  # sort to avoid desync error
                 place = o.place
                 if not hasattr(place, "exits"):
                     continue
@@ -360,12 +385,16 @@ class Player:
 
     def is_very_dangerous(self, square_or_exit: Union[Square, Exit]) -> bool:
         if isinstance(square_or_exit, Square):
-            return (self.square_is_dangerous(square_or_exit)
-                    and square_or_exit in self._enemy_presence)
+            return (
+                self.square_is_dangerous(square_or_exit)
+                and square_or_exit in self._enemy_presence
+            )
         else:
-            return (square_or_exit.other_side is not None
-                    and self.exit_is_dangerous(square_or_exit)
-                    and square_or_exit.other_side.place in self._enemy_presence)
+            return (
+                square_or_exit.other_side is not None
+                and self.exit_is_dangerous(square_or_exit)
+                and square_or_exit.other_side.place in self._enemy_presence
+            )
 
     def square_is_dangerous(self, s: Square) -> bool:
         return s in self._enemy_menace
@@ -376,12 +405,20 @@ class Player:
     @property
     def unknown_starting_squares(self) -> List[Square]:
         starting_squares = [self.world.grid[n] for n in self.world.starting_squares]
-        result = [s for s in starting_squares if s not in self.strictly_observed_before_squares]
+        result = [
+            s
+            for s in starting_squares
+            if s not in self.strictly_observed_before_squares
+        ]
         return self.world.random.sample(result, len(result))
 
     @property
     def unknown_squares(self) -> List[Square]:
-        result = [p for p in self.world.squares if p not in self.strictly_observed_before_squares]
+        result = [
+            p
+            for p in self.world.squares
+            if p not in self.strictly_observed_before_squares
+        ]
         return self.world.random.sample(result, len(result))
 
     @property
@@ -417,13 +454,23 @@ class Player:
         for u in self.units:
             try:
                 if u.place.type_name in u.speed_on_terrain:
-                    u.actual_speed = to_int(u.speed_on_terrain[u.speed_on_terrain.index(u.place.type_name) + 1])
+                    u.actual_speed = to_int(
+                        u.speed_on_terrain[
+                            u.speed_on_terrain.index(u.place.type_name) + 1
+                        ]
+                    )
                 elif u.airground_type == "water":
                     u.actual_speed = u.speed
                 else:
-                    u.actual_speed = u.speed * u.place.terrain_speed[0 if u.airground_type == "ground" else 1] // 100
+                    u.actual_speed = (
+                        u.speed
+                        * u.place.terrain_speed[
+                            0 if u.airground_type == "ground" else 1
+                        ]
+                        // 100
+                    )
                 if u.speed:
-                    u.actual_speed = max(u.actual_speed , VERY_SLOW) # never stuck
+                    u.actual_speed = max(u.actual_speed, VERY_SLOW)  # never stuck
             except:
                 u.actual_speed = u.speed
         for g in list(self.groups.values()):
@@ -434,8 +481,11 @@ class Player:
 
     def _update_drowning(self):
         for u in self.units[:]:
-            if u.is_vulnerable and u.airground_type == "ground" \
-               and not getattr(u.place, "is_ground", True):
+            if (
+                u.is_vulnerable
+                and u.airground_type == "ground"
+                and not getattr(u.place, "is_ground", True)
+            ):
                 u.die()
 
     def update(self):
@@ -486,7 +536,8 @@ class Player:
     def observe(self, o):
         # for example: a catapult firing from an unknown place
         # doesn't work for invisible units (hints are given in Starcraft though)
-        if o.is_invisible or o.is_cloaked: return # don't observe dark archers
+        if o.is_invisible or o.is_cloaked:
+            return  # don't observe dark archers
         self.observed_objects[o] = self.world.time + 3000
 
     def _memorize(self, o):
@@ -499,13 +550,13 @@ class Player:
             self.memory.add(remembrance)
             self._memory_index[o] = remembrance
 
-    def _forget(self, o): # o is a memory object
+    def _forget(self, o):  # o is a memory object
         self.memory.remove(o)
         try:
             del self._memory_index[o.initial_model]
-        except KeyError: # a test requires this to pass
+        except KeyError:  # a test requires this to pass
             pass
-        o.place = None # make sure this object is not reused
+        o.place = None  # make sure this object is not reused
 
     def remembers(self, actual_object):
         for remembrance in self.memory:
@@ -554,7 +605,7 @@ class Player:
         self.push("alert", square.id, sound)
 
     def play(self):
-        pass # play() is defined for computers
+        pass  # play() is defined for computers
 
     def has_quit(self):
         return self not in self.world.players
@@ -602,13 +653,13 @@ class Player:
         return tn
 
     def init_alliance(self):
-        if self.client.alliance in [None, "None"]: return
+        if self.client.alliance in [None, "None"]:
+            return
         for p in self.world.players:
             if self.client.alliance == p.client.alliance:
                 self.allied.append(p)
 
     def init_position(self):
-
         def equivalent_type(t):
             tn = getattr(t, "type_name", "")
             if rules.get(self.faction, tn):
@@ -624,7 +675,9 @@ class Player:
             if isinstance(type_, str) and type_[0:1] == "-":
                 self.forbidden_techs.append(type_[1:])
             elif isinstance(type_, Upgrade):
-                self.upgrades.append(type_.type_name) # type_.upgrade_player(self) would require the units already there
+                self.upgrades.append(
+                    type_.type_name
+                )  # type_.upgrade_player(self) would require the units already there
             elif not type_:
                 warning("couldn't create an initial unit")
             else:
@@ -652,7 +705,7 @@ class Player:
             condition, action = t
             if self.my_eval(condition):
                 self.my_eval(action)
-                if not self.is_playing: # after victory or defeat
+                if not self.is_playing:  # after victory or defeat
                     break
                 else:
                     self.triggers.remove(t)
@@ -738,7 +791,9 @@ class Player:
         if notify:
             u.notify("added")
 
-    def lang_add_units(self, items, target=None, decay=0, from_corpse=False, corpses=[], notify=True):
+    def lang_add_units(
+        self, items, target=None, decay=0, from_corpse=False, corpses=[], notify=True
+    ):
         square = self.world.grid["a1"]
         nb = 1
         for i in items:
@@ -760,7 +815,9 @@ class Player:
                         if not self.check_count_limit(i):
                             break
                         try:
-                            self._add_unit(cls, square, target, decay, from_corpse, corpses, notify)
+                            self._add_unit(
+                                cls, square, target, decay, from_corpse, corpses, notify
+                            )
                         except NotEnoughSpaceError:
                             warning("not enough space")
                             self.units[-1].delete()
@@ -771,12 +828,16 @@ class Player:
                 nb = 1
 
     def lang_no_enemy_left(self, unused_args):
-        return not [p for p in self.world.players if self.player_is_an_enemy(p)
-                    and p.is_playing]
+        return not [
+            p for p in self.world.players if self.player_is_an_enemy(p) and p.is_playing
+        ]
 
     def lang_no_enemy_player_left(self, unused_args):
-        return not [p for p in self.world.true_players() if self.player_is_an_enemy(p)
-                    and p.is_playing]
+        return not [
+            p
+            for p in self.world.true_players()
+            if self.player_is_an_enemy(p) and p.is_playing
+        ]
 
     def lang_no_unit_left(self, unused_args):
         return not self.units
@@ -788,12 +849,24 @@ class Player:
         return True
 
     def consumed_resources(self):
-        return [self.gathered_resources[i] - self.resources[i] for i, c in enumerate(self.resources)]
+        return [
+            self.gathered_resources[i] - self.resources[i]
+            for i, c in enumerate(self.resources)
+        ]
 
     def _get_score(self):
-        score = self.nb_units_produced - self.nb_units_lost + self.nb_units_killed + self.nb_buildings_produced - self.nb_buildings_lost + self.nb_buildings_killed
+        score = (
+            self.nb_units_produced
+            - self.nb_units_lost
+            + self.nb_units_killed
+            + self.nb_buildings_produced
+            - self.nb_buildings_lost
+            + self.nb_buildings_killed
+        )
         for i, _ in enumerate(self.resources):
-            score += (self.gathered_resources[i] + self.consumed_resources()[i]) // PRECISION
+            score += (
+                self.gathered_resources[i] + self.consumed_resources()[i]
+            ) // PRECISION
         return score
 
     def _get_score_msgs(self):
@@ -805,29 +878,44 @@ class Player:
         m = int(t // 60)
         s = int(t - m * 60)
         msgs = []
-        msgs.append(victory_or_defeat + mp.AT
-                    + nb2msg(m) + mp.MINUTES
-                    + nb2msg(s) + mp.SECONDS)
-        msgs.append(nb2msg(self.nb_units_produced) + mp.UNITS + mp.PRODUCED_F
-                    + mp.COMMA
-                    + nb2msg(self.nb_units_lost) + mp.LOST
-                    + mp.COMMA
-                    + nb2msg(self.nb_units_killed) + mp.NEUTRALIZED)
-        msgs.append(nb2msg(self.nb_buildings_produced) + mp.BUILDINGS + mp.PRODUCED_M
-                    + mp.COMMA
-                    + nb2msg(self.nb_buildings_lost) + mp.LOST
-                    + mp.COMMA
-                    + nb2msg(self.nb_buildings_killed) + mp.NEUTRALIZED)
+        msgs.append(
+            victory_or_defeat + mp.AT + nb2msg(m) + mp.MINUTES + nb2msg(s) + mp.SECONDS
+        )
+        msgs.append(
+            nb2msg(self.nb_units_produced)
+            + mp.UNITS
+            + mp.PRODUCED_F
+            + mp.COMMA
+            + nb2msg(self.nb_units_lost)
+            + mp.LOST
+            + mp.COMMA
+            + nb2msg(self.nb_units_killed)
+            + mp.NEUTRALIZED
+        )
+        msgs.append(
+            nb2msg(self.nb_buildings_produced)
+            + mp.BUILDINGS
+            + mp.PRODUCED_M
+            + mp.COMMA
+            + nb2msg(self.nb_buildings_lost)
+            + mp.LOST
+            + mp.COMMA
+            + nb2msg(self.nb_buildings_killed)
+            + mp.NEUTRALIZED
+        )
         res_msg = []
         for i, _ in enumerate(self.resources):
-            res_msg += nb2msg(self.gathered_resources[i] // PRECISION) \
-                       + style.get("parameters", "resource_%s_title" % i) \
-                       + mp.GATHERED + mp.COMMA \
-                       + nb2msg(self.consumed_resources()[i] // PRECISION) \
-                       + mp.CONSUMED + mp.PERIOD
+            res_msg += (
+                nb2msg(self.gathered_resources[i] // PRECISION)
+                + style.get("parameters", "resource_%s_title" % i)
+                + mp.GATHERED
+                + mp.COMMA
+                + nb2msg(self.consumed_resources()[i] // PRECISION)
+                + mp.CONSUMED
+                + mp.PERIOD
+            )
         msgs.append(res_msg[:-1])
-        msgs.append(mp.SCORE + nb2msg(self._get_score())
-                    + mp.HISTORY_EXPLANATION)
+        msgs.append(mp.SCORE + nb2msg(self._get_score()) + mp.HISTORY_EXPLANATION)
         return msgs
 
     score_msgs = ()
@@ -861,8 +949,9 @@ class Player:
                     the_game_will_probably_continue = True
                     break
             if the_game_will_probably_continue:
-                self.send_voice_important(mp.YOU_HAVE_BEEN_DEFEATED
-                                          + mp.YOU_ARE_NOW_IN_OBSERVER_MODE)
+                self.send_voice_important(
+                    mp.YOU_HAVE_BEEN_DEFEATED + mp.YOU_ARE_NOW_IN_OBSERVER_MODE
+                )
             else:
                 self.send_voice_important(mp.YOU_HAVE_BEEN_DEFEATED)
         else:
@@ -887,8 +976,9 @@ class Player:
     def lang_objective_complete(self, args):
         n = args[0]
         if n in self.objectives:
-            self.send_voice_important(mp.OBJECTIVE_COMPLETE
-                                      + self.objectives[n].description)
+            self.send_voice_important(
+                mp.OBJECTIVE_COMPLETE + self.objectives[n].description
+            )
             del self.objectives[n]
             if self.objectives == {}:
                 self.send_voice_important(mp.MISSION_COMPLETE)
@@ -921,12 +1011,12 @@ class Player:
             if p is not self:
                 p.send_voice_important(msg)
 
-    def check_type(self, o, t): # move method to Entity.check_type(t)?
+    def check_type(self, o, t):  # move method to Entity.check_type(t)?
         if isinstance(t, list):
             for _ in t:
                 if self.check_type(o, _):
                     return True
-        elif inspect.isclass(t): # Deposit, BuildingSite, Worker, Meadow...
+        elif inspect.isclass(t):  # Deposit, BuildingSite, Worker, Meadow...
             return isinstance(o, t)
         elif hasattr(t, "type_name"):
             return o.type_name == t.type_name
@@ -936,12 +1026,18 @@ class Player:
     def future_count(self, type_name):
         result = 0
         for u in self.units:
-            if u.type_name == type_name or \
-                u.type_name == "buildingsite" and u.type.type_name == type_name:
+            if (
+                u.type_name == type_name
+                or u.type_name == "buildingsite"
+                and u.type.type_name == type_name
+            ):
                 result += 1
             for o in u.orders:
                 # don't count the "build" orders because they might concern the same building
-                if o.keyword in ("train", "upgrade_to") and o.type.type_name == type_name:
+                if (
+                    o.keyword in ("train", "upgrade_to")
+                    and o.type.type_name == type_name
+                ):
                     result += 1
         return result
 
@@ -960,15 +1056,17 @@ class Player:
         warehouses = []
         for p in self.allied:
             for u in p.units:
-                if (resource_type in u.storable_resource_types
+                if (
+                    resource_type in u.storable_resource_types
                     or include_building_sites
-                       and isinstance(u, BuildingSite)
-                       and resource_type in u.type.storable_resource_types):
+                    and isinstance(u, BuildingSite)
+                    and resource_type in u.type.storable_resource_types
+                ):
                     d = place.shortest_path_distance_to(u.place, self)
                     if d == 0:
                         return u
                     if d is not None:
-                        warehouses.append(((d, u.id), u)) # is u.id useful?
+                        warehouses.append(((d, u.id), u))  # is u.id useful?
         warehouses.sort()
         if warehouses:
             return warehouses[0][1]
@@ -1019,7 +1117,9 @@ class Player:
     def cmd_order(self, args):
         self.group_had_enough_mana = False
         try:
-            order_id = self.world.get_next_order_id() # used when several workers must create the same construction site
+            order_id = (
+                self.world.get_next_order_id()
+            )  # used when several workers must create the same construction site
             forget_previous = args[0] == "0"
             del args[0]
             imperative = args[0] == "1"
@@ -1029,12 +1129,17 @@ class Player:
                 return
             for u in self.group:
                 if u.group and u.group != self.group:
-                    if u in u.group: u.group.remove(u)
+                    if u in u.group:
+                        u.group.remove(u)
                     u.group = None
-                if u.player in self.allied_control: # in case the unit has died or has been converted
+                if (
+                    u.player in self.allied_control
+                ):  # in case the unit has died or has been converted
                     try:
                         if args[0] == "default":
-                            u.take_default_order(args[1], forget_previous, imperative, order_id)
+                            u.take_default_order(
+                                args[1], forget_previous, imperative, order_id
+                            )
                         else:
                             u.take_order(args, forget_previous, imperative, order_id)
                     except:

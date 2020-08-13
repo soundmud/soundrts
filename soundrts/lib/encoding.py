@@ -23,11 +23,14 @@ def encoding(text, filename="test/tts.txt"):
     e = _get_encoding_from_first_or_second_line(text, filename)
     if text.startswith(b"\xef\xbb\xbf"):  # UTF-8 with BOM signature
         if e and e.lower() not in ["utf8", "utf-8", "utf_8"]:
-            warning(f"{filename} starts with an UTF-8 BOM signature but specifies a {e} encoding! using utf-8-sig")
+            warning(
+                f"{filename} starts with an UTF-8 BOM signature but specifies a {e} encoding! using utf-8-sig"
+            )
         return "utf-8-sig"  # the signature will be skipped
     if e is None:
         try:
             import chardet
+
             e = chardet.detect(text)["encoding"]
         except ImportError:
             e = locale.getpreferredencoding()
@@ -42,7 +45,9 @@ if __name__ == "__main__":
     assert encoding(b"; coding: latin_1\n") == "iso8859-1"
     assert encoding(b"; coding: latin-1\n") == "iso8859-1"
     assert encoding(b"; test\n; coding: big5\n") == "big5"
-    assert encoding(b";\n; test\n; coding: big5\n") in GUESS_OR_DEFAULT  # specified on third line
+    assert (
+        encoding(b";\n; test\n; coding: big5\n") in GUESS_OR_DEFAULT
+    )  # specified on third line
     assert encoding(b"; coding: big5\n") == "big5"
     assert encoding(b"; encoding: big5\n") == "big5"
     assert encoding(b"# -*- coding: big5 -*-") == "big5"

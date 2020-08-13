@@ -9,7 +9,9 @@ from soundrts.lib import tts
 
 from .log import warning
 
-DEFAULT_VOLUME = math.sin(math.pi / 4.0) # (about .7) volume for each speaker for a "in front of you" message
+DEFAULT_VOLUME = math.sin(
+    math.pi / 4.0
+)  # (about .7) volume for each speaker for a "in front of you" message
 
 
 def distance(x1, y1, x2, y2):
@@ -17,23 +19,26 @@ def distance(x1, y1, x2, y2):
     dy = y2 - y1
     return math.sqrt(dx * dx + dy * dy)
 
+
 def angle(x1, y1, x2, y2, o=0):
     """angle of x2,y2 related to player x1,y1,o"""
     d = distance(x1, y1, x2, y2)
     if d == 0:
-        return 0 # object too close => in front of player
+        return 0  # object too close => in front of player
     ac = math.acos((x2 - x1) / d)
     if y2 - y1 > 0:
         a = ac
     else:
-        a = - ac
+        a = -ac
     return a - math.radians(o)
 
-def vision_stereo(x, y, xo, yo, o, volume=1): # no distance
+
+def vision_stereo(x, y, xo, yo, o, volume=1):  # no distance
     vg, vd = stereo(x, y, xo, yo, o, volume, True)
-    if max(vg, vd) < .2: # never silent
-        vg, vd = .2, .2
+    if max(vg, vd) < 0.2:  # never silent
+        vg, vd = 0.2, 0.2
     return vg, vd
+
 
 def stereo(x, y, xo, yo, o, volume=1, vision=False):
     a = angle(x, y, xo, yo, o)
@@ -42,11 +47,11 @@ def stereo(x, y, xo, yo, o, volume=1, vision=False):
     vd = 1 - vg
     vg = math.sin(vg * math.pi / 2.0)
     vd = math.sin(vd * math.pi / 2.0)
-    if math.cos(a) < 0: # behind
+    if math.cos(a) < 0:  # behind
         if vision:
             k = 1.3
         else:
-            k = 2.0 # TODO: attenuate less? (especially in overhead view)
+            k = 2.0  # TODO: attenuate less? (especially in overhead view)
         vg /= k
         vd /= k
     if d < 1 or vision:
@@ -55,35 +60,39 @@ def stereo(x, y, xo, yo, o, volume=1, vision=False):
     vd = min(vd * volume / d, 1)
     return vg, vd
 
+
 def find_idle_channel():
     # because pygame.mixer.find_channel() doesn't work
     # (it can return the reserved channel 0)
-    for n in range(1, pygame.mixer.get_num_channels()): # avoid channel 0
+    for n in range(1, pygame.mixer.get_num_channels()):  # avoid channel 0
         if not pygame.mixer.Channel(n).get_busy():
             return pygame.mixer.Channel(n)
 
 
 class SoundManager:
 
-    soundsources: List['SoundSource'] = []
-    soundtime: Dict['SoundSource', float] = {}
+    soundsources: List["SoundSource"] = []
+    soundtime: Dict["SoundSource", float] = {}
 
     def remember_starttime(self, sound):
         self.soundtime[sound] = time.time()
 
     def should_be_played(self, sound, limit):
         return self.soundtime.get(sound, 0) + limit < time.time()
-#        return self.soundtime.get(sound, 0) + sound.get_length() * .1 \
-#                                                               < time.time()
+
+    #        return self.soundtime.get(sound, 0) + sound.get_length() * .1 \
+    #                                                               < time.time()
 
     def find_a_channel(self, priority):
         c = find_idle_channel()
         if c is None:
-            playing = [s for s in self.soundsources
-                       if s.is_playing() and s.priority < priority]
+            playing = [
+                s for s in self.soundsources if s.is_playing() and s.priority < priority
+            ]
             if playing:
-                playing = sorted(playing, key=lambda x: (x.priority,
-                                                         max(x.previous_vol)))
+                playing = sorted(
+                    playing, key=lambda x: (x.priority, max(x.previous_vol))
+                )
                 c = playing[0].channel
                 c.stop()
                 return c
@@ -99,11 +108,16 @@ class SoundManager:
         if self.listener.immersion:
             flattening_factor = 1.0
         else:
-            flattening_factor = 2.0 # TODO: calc this
+            flattening_factor = 2.0  # TODO: calc this
             self.listener.o = 90
-        return stereo(self.listener.x, self.listener.y / flattening_factor,
-                      source.x, source.y / flattening_factor,
-                      self.listener.o, source.v)
+        return stereo(
+            self.listener.x,
+            self.listener.y / flattening_factor,
+            source.x,
+            source.y / flattening_factor,
+            self.listener.o,
+            source.v,
+        )
 
     def play(self, *args, **keywords):
         s = SoundSource(*args, **keywords)
@@ -123,9 +137,9 @@ class SoundManager:
             if not self.should_be_played(s, limit):
                 return
             c = self.find_a_channel(priority=10)
-#            if c is None:
-#                warning("couldn't find a sound channel with priority<10")
-##                pygame.mixer.find_channel(True).stop()
+            #            if c is None:
+            #                warning("couldn't find a sound channel with priority<10")
+            ##                pygame.mixer.find_channel(True).stop()
             if c is not None:
                 c.play(s)
                 if isinstance(vol, tuple):
@@ -145,7 +159,7 @@ class SoundManager:
             s.stop()
 
 
-psounds = SoundManager() # psounds = positional sounds (3D)
+psounds = SoundManager()  # psounds = positional sounds (3D)
 
 
 class _SoundSource:
@@ -177,11 +191,14 @@ class _SoundSource:
             psounds.remember_starttime(self.sound)
 
     def is_playing(self):
-        return self.channel is not None and self.channel.get_busy() and \
-               self.channel.get_sound() == self.sound
+        return (
+            self.channel is not None
+            and self.channel.get_busy()
+            and self.channel.get_sound() == self.sound
+        )
 
     def _volume_too_low(self):
-        return max(psounds.get_stereo_volume(self)) < .02
+        return max(psounds.get_stereo_volume(self)) < 0.02
 
     def _update_volume(self, force=False):
         if self._volume_too_low():
@@ -224,8 +241,8 @@ class SoundSource(_SoundSource):
             self.stop()
 
     def ambient_volume(self):
-##                r = random.random()
-##                vol = (r, 1 - r)
+        ##                r = random.random()
+        ##                vol = (r, 1 - r)
         return random.random(), random.random()
 
 
@@ -250,12 +267,12 @@ def sound_stop(stop_voice_too=True):
     if stop_voice_too:
         pygame.mixer.stop()
         tts.stop()
-    else: # stop every channel except channel 0 (voice channel)
+    else:  # stop every channel except channel 0 (voice channel)
         for _id in range(1, pygame.mixer.get_num_channels()):
             pygame.mixer.Channel(_id).stop()
-        
 
-volume = .5
+
+volume = 0.5
 
 
 def get_volume():

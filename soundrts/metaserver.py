@@ -24,8 +24,11 @@ def _add_time_and_version(line):
 
 def _default_servers():
     lines = open(DEFAULT_SERVERS_PATH).readlines()
-    return [_add_time_and_version(line) for line in lines
-            if line.strip() and not line.startswith(";")]
+    return [
+        _add_time_and_version(line)
+        for line in lines
+        if line.strip() and not line.startswith(";")
+    ]
 
 
 def servers_list(voice) -> List[str]:

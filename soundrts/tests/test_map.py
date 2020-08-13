@@ -6,7 +6,6 @@ from soundrts.worldclient import Coordinator
 
 
 class CoordinatorTestCase(unittest.TestCase):
-
     def testSyncError(self):
         c = Coordinator(None, None, None)
         c.world = World([])
@@ -17,9 +16,11 @@ class CoordinatorTestCase(unittest.TestCase):
         c.world.update()
         c.get_sync_debug_msg_1()
         c.get_sync_debug_msg_2()
+
+
 #        print c.get_sync_debug_msg_1()
 #        print c.get_sync_debug_msg_2()
-        
+
 
 def test_nb_players_after_unpack():
     for n in ["jl1.txt", "jl4"]:

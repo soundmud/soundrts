@@ -13,19 +13,32 @@ from .lib.log import exception, info
 from .version import compatibility_version
 
 
-class _Error(Exception): pass
-class UnreachableServerError(_Error): pass
-class WrongServerError(_Error): pass
-class CompatibilityOrLoginError(_Error): pass
-class ConnectionAbortedError(_Error): pass
+class _Error(Exception):
+    pass
+
+
+class UnreachableServerError(_Error):
+    pass
+
+
+class WrongServerError(_Error):
+    pass
+
+
+class CompatibilityOrLoginError(_Error):
+    pass
+
+
+class ConnectionAbortedError(_Error):
+    pass
 
 
 def server_delay(host, port):
     t = time.time()
     try:
-        with telnetlib.Telnet(host, port, .5) as tn:
+        with telnetlib.Telnet(host, port, 0.5) as tn:
             try:
-                if tn.read_until(b":", .5) != b":":
+                if tn.read_until(b":", 0.5) != b":":
                     return
                 else:
                     return time.time() - t
@@ -50,17 +63,18 @@ class ServerInAThread(threading.Thread):
 def start_server_and_connect(parameters):
     info("active threads: %s", threading.enumerate())
     ServerInAThread(parameters).start()
-    time.sleep(.01) # Linux needs a small delay (at least on the Eee PC 4G)
+    time.sleep(0.01)  # Linux needs a small delay (at least on the Eee PC 4G)
     revision_checker.start_if_needed()
     connect_and_play()
     info("active threads: %s", threading.enumerate())
     sys.exit()
 
+
 def connect_and_play(host="127.0.0.1", port=options.port, auto=False):
     try:
         server = ConnectionToServer(host, port)
         ServerMenu(server, auto=auto).loop()
-        server.close() # without this, the server isn't closed after a game
+        server.close()  # without this, the server isn't closed after a game
     except UnreachableServerError:
         voice.alert(mp.SERVER_UNREACHABLE)
     except WrongServerError:
@@ -95,7 +109,9 @@ class ConnectionToServer:
         try:
             if self.tn.read_until(b":", 1) != b":":
                 raise WrongServerError
-            self.tn.write(("login " + compatibility_version() + " %s\n" % config.login).encode())
+            self.tn.write(
+                ("login " + compatibility_version() + " %s\n" % config.login).encode()
+            )
         except (EOFError, OSError):
             raise WrongServerError
         try:
@@ -110,7 +126,7 @@ class ConnectionToServer:
     def read_line(self):
         try:
             self.data += self.tn.read_very_eager()
-        except: # EOFError or (10054, 'Connection reset by peer')
+        except:  # EOFError or (10054, 'Connection reset by peer')
             raise ConnectionAbortedError
         if b"\n" in self.data:
             line, self.data = self.data.split(b"\n", 1)
@@ -119,5 +135,5 @@ class ConnectionToServer:
     def write_line(self, s):
         try:
             self.tn.write(s.encode("ascii") + b"\n")
-        except OSError: # connection aborted
+        except OSError:  # connection aborted
             raise ConnectionAbortedError

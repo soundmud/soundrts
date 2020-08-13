@@ -31,17 +31,17 @@ except FileNotFoundError:
 TMP = os.environ["TMP"]
 destination = rf"{TMP}\soundrts-{VERSION}-windows"
 build_exe_options = {
-    'build_exe': destination,
-    'optimize': 1,
-    'silent': True,
-    'packages': [],
-    'excludes': ["Cython", "scipy", "numpy", "tkinter"],
-    'include_files': ["res", "single", "multi", "mods", "cfg", "doc"],
-    'replace_paths': [("*", f"{full_version}:")],
+    "build_exe": destination,
+    "optimize": 1,
+    "silent": True,
+    "packages": [],
+    "excludes": ["Cython", "scipy", "numpy", "tkinter"],
+    "include_files": ["res", "single", "multi", "mods", "cfg", "doc"],
+    "replace_paths": [("*", f"{full_version}:")],
 }
 executables = [
-    Executable('soundrts.py', base="Win32GUI"),
-    Executable('server.py', base=None)
+    Executable("soundrts.py", base="Win32GUI"),
+    Executable("server.py", base=None),
 ]
 
 buildmultimapslist.build()
@@ -49,10 +49,12 @@ builddoc.build()
 if os.path.exists(destination):
     print(f"{destination} already exists. Deleting...")
     shutil.rmtree(destination)
-setup(options={'build_exe': build_exe_options},
-      executables=executables,
-      name="SoundRTS",
-      version=VERSION.replace("-dev", ".9999"))
+setup(
+    options={"build_exe": build_exe_options},
+    executables=executables,
+    name="SoundRTS",
+    version=VERSION.replace("-dev", ".9999"),
+)
 print("Creating empty user folder...")
 os.mkdir(rf"{destination}\user")
 print(r"Resetting cfg\language.txt ...")

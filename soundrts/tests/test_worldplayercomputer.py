@@ -5,14 +5,12 @@ from soundrts.worldresource import Deposit
 from soundrts.worldroom import Square
 
 
-class Deposit(Deposit):
-
+class Deposit(Deposit):  # type: ignore
     def __init__(self, type_):
         self.resource_type = type_
 
 
 class Warehouse:
-
     def __init__(self, types):
         self.storable_resource_types = types
 

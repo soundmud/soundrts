@@ -59,9 +59,11 @@ else:
         preferred_language = locale.getdefaultlocale()[0]
     except ValueError:
         preferred_language = "en"
-        warning("Couldn't get the system language. "
-                "To use another language, edit 'cfg/language.txt' "
-                "and write 'pl' for example.")
+        warning(
+            "Couldn't get the system language. "
+            "To use another language, edit 'cfg/language.txt' "
+            "and write 'pl' for example."
+        )
 
 
 class ResourceLoader:
@@ -69,6 +71,7 @@ class ResourceLoader:
     Depends on language, active packages, loading order of the mods.
     Ideally, it should only care about folders and files.
     """
+
     def __init__(self, mods, soundpacks, all_packages_paths, base_path="res"):
         self._paths = []
         self.base_path = base_path
@@ -88,8 +91,7 @@ class ResourceLoader:
 
     def _get_language(self):
         """guess and return the best language for this situation"""
-        return best_language_match(preferred_language,
-                                   self._available_languages())
+        return best_language_match(preferred_language, self._available_languages())
 
     def _update_paths(self, all_packages_paths, mods):
         actual_mods = []
@@ -121,7 +123,9 @@ class ResourceLoader:
         self._paths = []
         self._paths.append(self.base_path)  # vanilla path
         self.mods, self.unavailable_mods = self._update_paths(all_packages_paths, mods)
-        self.soundpacks, self.unavailable_soundpacks = self._update_paths(all_packages_paths, soundpacks)
+        self.soundpacks, self.unavailable_soundpacks = self._update_paths(
+            all_packages_paths, soundpacks
+        )
 
     def _localized_paths(self, path, localize):
         """Return the paths according to the preferred language.
@@ -146,14 +150,16 @@ class ResourceLoader:
                         with root.open(text_file_path) as b:
                             e = encoding.encoding(b.read(), text_file_path)
                         with root.open(text_file_path) as b:
-                            w = io.TextIOWrapper(b, encoding=e, errors='replace')  # type: ignore
+                            w = io.TextIOWrapper(b, encoding=e, errors="replace")  # type: ignore
                             result.append(w.read())
             else:
-                for text_file_path in self._localized_paths(os.path.join(root, name), localize):
+                for text_file_path in self._localized_paths(
+                    os.path.join(root, name), localize
+                ):
                     if os.path.isfile(text_file_path):
                         with open(text_file_path, "rb") as b:
                             e = encoding.encoding(b.read(), text_file_path)
-                        with open(text_file_path, encoding=e, errors='replace') as t:
+                        with open(text_file_path, encoding=e, errors="replace") as t:
                             result.append(t.read())
         return result
 
@@ -166,7 +172,9 @@ class ResourceLoader:
         else:
             return self._get_text_files(name, localize, root)[-1]
 
-    def load_texts(self, root: Optional[Union[str, zipfile.ZipFile]] = None) -> Dict[str, str]:
+    def load_texts(
+        self, root: Optional[Union[str, zipfile.ZipFile]] = None
+    ) -> Dict[str, str]:
         result = {}
         for txt in self._get_text_files(TXT_FILE, localize=True, root=root):
             lines = txt.split("\n")

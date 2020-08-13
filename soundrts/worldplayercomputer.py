@@ -20,7 +20,7 @@ class Computer(Player):
 
     AI_type = None
     # the AI might need a longer memory than the player
-    memory_duration = 36000000 # 36000 seconds of world time
+    memory_duration = 36000000  # 36000 seconds of world time
     _sensible_building = None
 
     def __init__(self, world, client):
@@ -44,18 +44,19 @@ class Computer(Player):
 
     def set_ai(self, ai):
         self.AI_type = ai
-        if self.AI_type == "timers": return
+        if self.AI_type == "timers":
+            return
         self._plan = get_ai(ai)
         # set or reset default values
         self._line_nb = 0
         self.watchdog = 0
         self.constant_attacks = 0
         self.research = 0
-        self._update_effect_users_and_workers() # required by some tests
+        self._update_effect_users_and_workers()  # required by some tests
 
     _previous_linechange = 0
     __line_nb = 0
-##    _prev_line_nb = None
+    ##    _prev_line_nb = None
 
     def get_line_nb(self):
         return self.__line_nb
@@ -67,9 +68,12 @@ class Computer(Player):
     _line_nb = property(get_line_nb, set_line_nb)
 
     def _follow_plan(self):
-        if not self._plan: return
-        if self.watchdog and self.world.time > \
-           self._previous_linechange + self.watchdog * 1000:
+        if not self._plan:
+            return
+        if (
+            self.watchdog
+            and self.world.time > self._previous_linechange + self.watchdog * 1000
+        ):
             self._line_nb += 1
         self._line_nb %= len(self._plan)
         line = self._plan[self._line_nb]
@@ -98,8 +102,7 @@ class Computer(Player):
             elif cmd[0] == "attack":
                 self.constant_attacks = 1
                 self._line_nb += 1
-            elif cmd[0] in ("watchdog", "constant_attacks",
-                            "research"):
+            elif cmd[0] in ("watchdog", "constant_attacks", "research"):
                 setattr(self, cmd[0], int(cmd[1]))
                 self._line_nb += 1
             elif cmd[0] == "get":
@@ -127,50 +130,82 @@ class Computer(Player):
 
     def _build_a_warehouse_for(self, deposit):
         def nearby_workers():
-            return [v for v in self._workers if
-                    (v.place is deposit.place
-                     or v.orders and v.orders[0].keyword == "gather"
-                        and (v.orders[0].target is None
-                             or v.orders[0].target.place is deposit.place))]
+            return [
+                v
+                for v in self._workers
+                if (
+                    v.place is deposit.place
+                    or v.orders
+                    and v.orders[0].keyword == "gather"
+                    and (
+                        v.orders[0].target is None
+                        or v.orders[0].target.place is deposit.place
+                    )
+                )
+            ]
+
         nearby_workers = nearby_workers()
         if not nearby_workers:
             return
-        wh = self.nearest_warehouse(deposit.place, deposit.resource_type, include_building_sites=True)
+        wh = self.nearest_warehouse(
+            deposit.place, deposit.resource_type, include_building_sites=True
+        )
         if isinstance(wh, BuildingSite):
             for v in nearby_workers:
                 v.take_order(["repair", wh.id])
-        elif (wh is None
+        elif (
+            wh is None
             or deposit.place.shortest_path_distance_to(wh.place, self, avoid=True)
-               > self.world.square_width):
+            > self.world.square_width
+        ):
             meadow = self.choose(Meadow, starting_place=deposit.place)
             if meadow:
                 for v in nearby_workers:
-                    v.take_order(["build", self._best_warehouse(deposit.place).type_name, meadow.id])
+                    v.take_order(
+                        [
+                            "build",
+                            self._best_warehouse(deposit.place).type_name,
+                            meadow.id,
+                        ]
+                    )
 
     def _build_a_warehouse_if_useful(self):
         if self.missing_resources(self._best_warehouse().cost):
             return
-        for deposit in [o.target for u in self._workers for o in u.orders
-                    if o.keyword == "gather" and o.target is not None and o.target.place is not None]:
+        for deposit in [
+            o.target
+            for u in self._workers
+            for o in u.orders
+            if o.keyword == "gather"
+            and o.target is not None
+            and o.target.place is not None
+        ]:
             self._build_a_warehouse_for(deposit)
 
     def idle_buildings_research(self):
         for u in self.units:
             if not u.orders:
                 for t in u.can_research:
-                    if not self.future_nb([t]) \
-                       and not self.missing_resources(self.unit_class(t).cost) \
-                       and self.potential(self.unit_class(t).cost) > 3:
+                    if (
+                        not self.future_nb([t])
+                        and not self.missing_resources(self.unit_class(t).cost)
+                        and self.potential(self.unit_class(t).cost) > 3
+                    ):
                         u.take_order(["research", t])
 
     def _is_powerful_enough(self, units, place):
         # sometimes food limit prevents units with more than 1 food cost
         ratio = 180 if self.used_food < self.world.food_limit - 5 else 100
-        return sum(u.menace for u in units if u.speed > 0 and isinstance(u, Soldier)) > self.enemy_menace(place) * ratio // 100
+        return (
+            sum(u.menace for u in units if u.speed > 0 and isinstance(u, Soldier))
+            > self.enemy_menace(place) * ratio // 100
+        )
 
     def _send_workers_to_forgotten_building_sites(self):
         for site in self._building_sites:
-            if not [u for u in self._workers if u.orders and u.orders[0].target == site]:
+            if not [
+                u for u in self._workers if u.orders and u.orders[0].target == site
+            ]:
                 self.order(4, Worker, ["repair", site.id], requisition=True, near=site)
                 break
 
@@ -212,19 +247,25 @@ class Computer(Player):
         # build static defenses
         gate = self.world.unit_class("gate")
         if self._sensible_building is not None and gate is not None:
+
             def nearest_exit(u):
-                result = sorted(u.place.exits, key=lambda e: square_of_distance(u.x, u.y, e.x, e.y))
+                result = sorted(
+                    u.place.exits, key=lambda e: square_of_distance(u.x, u.y, e.x, e.y)
+                )
                 if result:
                     return result[0]
+
             e = nearest_exit(self._sensible_building)
             if e is not None and not e.is_blocked() and self.gather(gate.cost, 0):
                 for w in self._workers:
                     w.take_order(["build", "gate", e.id])
 
     def play(self):
-        if self.AI_type == "timers": return
-        if not self._should_play_this_turn(): return
-        #print self.number, "plays turn", self.world.turn
+        if self.AI_type == "timers":
+            return
+        if not self._should_play_this_turn():
+            return
+        # print self.number, "plays turn", self.world.turn
         self._update_effect_users_and_workers()
         self._update_time_has_come()
         self._send_workers_to_forgotten_building_sites()
@@ -245,11 +286,14 @@ class Computer(Player):
         try:
             self._follow_plan()
         except RuntimeError:
-            warning("recursion error with %s; current ai.txt line is: %s",
-                    self.AI_type, self._plan[self._line_nb])
+            warning(
+                "recursion error with %s; current ai.txt line is: %s",
+                self.AI_type,
+                self._plan[self._line_nb],
+            )
             if IS_DEV_VERSION:
                 exception("")
-            self._line_nb += 1 # go to next step
+            self._line_nb += 1  # go to next step
 
     def _deposit_priority(self, deposit):
         if deposit is None:
@@ -259,7 +303,11 @@ class Computer(Player):
         except:
             workers = 0
         # The resources difference is taken into account only if the difference is significant.
-        return -self.resources[deposit.resource_type] // 10, -workers, deposit.id # deterministic (avoid sync errors)
+        return (
+            -self.resources[deposit.resource_type] // 10,
+            -workers,
+            deposit.id,
+        )  # deterministic (avoid sync errors)
 
     def _update_effect_users_and_workers(self):
         self._workers = []
@@ -302,10 +350,12 @@ class Computer(Player):
     def _raise_dead(self):
         for u, a in self._raise_dead_users:
             if u.place in self._places_with_corpses:
-                u.take_order(["use", a, u.place.id]) # optional target will be eventually ignored
+                u.take_order(
+                    ["use", a, u.place.id]
+                )  # optional target will be eventually ignored
 
     def missing_resources(self, cost):
-        result= []
+        result = []
         for i, c in enumerate(cost):
             if c > self.resources[i]:
                 result.append(i)
@@ -315,23 +365,35 @@ class Computer(Player):
         return self.world.unit_class(name)
 
     def best_explorers(self):
-        return sorted([u for u in self.units if u.speed > 0
-                       and not (u.orders and u.orders[0].keyword == "upgrade_to")],
-                      key=value_as_an_explorer, reverse=True)
+        return sorted(
+            [
+                u
+                for u in self.units
+                if u.speed > 0
+                and not (u.orders and u.orders[0].keyword == "upgrade_to")
+            ],
+            key=value_as_an_explorer,
+            reverse=True,
+        )
 
     def _send_explorer(self):
         candidates = self.best_explorers()
         if candidates:
             best_explorer = candidates[0]
-            if not (best_explorer.orders
-                    and best_explorer.orders[0].keyword == "auto_explore"):
+            if not (
+                best_explorer.orders
+                and best_explorer.orders[0].keyword == "auto_explore"
+            ):
                 explorer = None
                 for u in self.units:
                     if u.orders and u.orders[0].keyword == "auto_explore":
                         explorer = u
-                        break 
+                        break
                 if explorer:
-                    if value_as_an_explorer(explorer)[0] == value_as_an_explorer(best_explorer)[0]:
+                    if (
+                        value_as_an_explorer(explorer)[0]
+                        == value_as_an_explorer(best_explorer)[0]
+                    ):
                         return
                     explorer.take_order(["go", self.units[0].place.id])
                 best_explorer.take_order(["auto_explore"])
@@ -372,41 +434,67 @@ class Computer(Player):
     def choose(self, c, resource_type=None, starting_place=None, random=False):
         if not self.units:
             return
+
         def is_ok(o):
-            return o.place is not None \
-               and (resource_type is None or self.is_ok_for_warehouse(o.place, resource_type)) \
-               and not self.square_is_dangerous(o.place)
+            return (
+                o.place is not None
+                and (
+                    resource_type is None
+                    or self.is_ok_for_warehouse(o.place, resource_type)
+                )
+                and not self.square_is_dangerous(o.place)
+            )
+
         k = f"{c} {resource_type} {starting_place}"
         if k in self._previous_choose and not random:
             o = self._previous_choose[k]
             if (o in self.perception or o in self.memory) and is_ok(o):
-#                warning("useful cache %s %s", c, resource_type)
+                #                warning("useful cache %s %s", c, resource_type)
                 return o
             else:
                 del self._previous_choose[k]
         if starting_place is None:
             starting_place = self.units[0].place
-        candidates = [o for o in self.perception.union(self.memory)
-                      if self.check_type(o, c) and is_ok(o)]
-        candidates = sorted(candidates, key=lambda x: x.id) # avoid synchronization errors
+        candidates = [
+            o
+            for o in self.perception.union(self.memory)
+            if self.check_type(o, c) and is_ok(o)
+        ]
+        candidates = sorted(
+            candidates, key=lambda x: x.id
+        )  # avoid synchronization errors
         if len(candidates) > 10:
             candidates = self._remove_far_candidates(candidates, starting_place, 10)
         else:
-            candidates.sort(key=lambda x: starting_place.shortest_path_distance_to(x.place, self, avoid=True))
-            while candidates and starting_place.shortest_path_distance_to(candidates[-1].place, self, avoid=True) is float("inf"):
-                del candidates[-1] # no path
+            candidates.sort(
+                key=lambda x: starting_place.shortest_path_distance_to(
+                    x.place, self, avoid=True
+                )
+            )
+            while candidates and starting_place.shortest_path_distance_to(
+                candidates[-1].place, self, avoid=True
+            ) is float("inf"):
+                del candidates[-1]  # no path
         if random:
             if candidates:
                 p = candidates[0].place
-                candidates = sorted([o for o in candidates if o.place is p],
-                                    key=self._deposit_priority, reverse=True)
+                candidates = sorted(
+                    [o for o in candidates if o.place is p],
+                    key=self._deposit_priority,
+                    reverse=True,
+                )
         for o in candidates:
             if not random:
                 self._previous_choose[k] = o
             return o
 
     def nb(self, types):
-        if types and isinstance(types, list) and isinstance(types[0], str) and types[0] in self.upgrades:
+        if (
+            types
+            and isinstance(types, list)
+            and isinstance(types[0], str)
+            and types[0] in self.upgrades
+        ):
             return 1
         n = 0
         for u in self.units:
@@ -421,7 +509,12 @@ class Computer(Player):
                 n += 1
                 continue
             for o in u.orders:
-                if o.keyword in ("build", "train", "upgrade_to", "research") and self.check_type(o.type, types):
+                if o.keyword in (
+                    "build",
+                    "train",
+                    "upgrade_to",
+                    "research",
+                ) and self.check_type(o.type, types):
                     # the result might be temporarily too high because of build orders
                     # but that's not a big problem for order()
                     n += 1
@@ -432,10 +525,10 @@ class Computer(Player):
 
     def _worker_orders_priority(self, u):
         if not u.orders:
-            return (0, )
+            return (0,)
         if u.orders[0].keyword == "gather":
             return (1, self._deposit_priority(u.orders[0].target))
-        return (2, )
+        return (2,)
 
     def order(self, nb, types, order, near=None, requisition=False):
         order_id = repr((types, order))
@@ -443,7 +536,10 @@ class Computer(Player):
             for unit_order in list(self._orders[order_id]):
                 if unit_order.is_complete:
                     self._orders[order_id].remove(unit_order)
-                elif unit_order.unit.place is None or unit_order not in unit_order.unit.orders:
+                elif (
+                    unit_order.unit.place is None
+                    or unit_order not in unit_order.unit.orders
+                ):
                     self._orders[order_id].remove(unit_order)
         else:
             self._orders[order_id] = []
@@ -454,7 +550,11 @@ class Computer(Player):
             if requisition:
                 units.sort(key=self._worker_orders_priority)
             u = units.pop(0)
-            if order[0] == "upgrade_to" and u.orders and u.orders[0].keyword == "auto_explore":
+            if (
+                order[0] == "upgrade_to"
+                and u.orders
+                and u.orders[0].keyword == "auto_explore"
+            ):
                 u.take_order(["stop"])
             if requisition or not u.orders:
                 if u.orders and u.orders[0].keyword in ("build", "repair"):
@@ -496,7 +596,9 @@ class Computer(Player):
                 continue
             makers = self.world.get_makers(type)
             if self.nb(makers) > 0:
-                self.build_or_train_or_upgradeto_or_summon(type, nb - self.future_nb(types))
+                self.build_or_train_or_upgradeto_or_summon(
+                    type, nb - self.future_nb(types)
+                )
                 break
             elif makers:
                 self._get(1, makers[0])
@@ -516,15 +618,17 @@ class Computer(Player):
 
     def _get_requirements(self, t):
         for r in t.requirements:
-            if not self.has(r): # requirement (eventually is_a)
-                return self._get(1, r) # exact type
+            if not self.has(r):  # requirement (eventually is_a)
+                return self._get(1, r)  # exact type
         return True
 
     def _builders_place(self):
         starts = {}
         for u in self._workers:
-            if u.place not in starts: starts[u.place] = 1
-            else: starts[u.place] += 1
+            if u.place not in starts:
+                starts[u.place] = 1
+            else:
+                starts[u.place] += 1
         if starts:
             return sorted(list(starts.items()), key=lambda x: (x[1], x[0].id))[-1][0]
 
@@ -541,8 +645,10 @@ class Computer(Player):
             if type in self.world.unit_class(maker).can_upgrade_to:
                 if self.nb(maker) >= nb:
                     m = self.world.unit_class(maker)
-                    if self.gather([t.cost[i] - m.cost[i] for i in range(len(t.cost))],
-                                   t.food_cost - m.food_cost):
+                    if self.gather(
+                        [t.cost[i] - m.cost[i] for i in range(len(t.cost))],
+                        t.food_cost - m.food_cost,
+                    ):
                         self.order(nb, maker, ["upgrade_to", type])
                 else:
                     self._get(nb, maker)
@@ -550,20 +656,38 @@ class Computer(Player):
                 if not self.gather(t.cost, t.food_cost):
                     return
                 if t.storable_resource_types:
-                    meadow = self.choose(Meadow, resource_type=t.storable_resource_types[0])
-                    if meadow is None or meadow.place.shortest_path_distance_to(self._builders_place()) > self.world.square_width * 3:
+                    meadow = self.choose(
+                        Meadow, resource_type=t.storable_resource_types[0]
+                    )
+                    if (
+                        meadow is None
+                        or meadow.place.shortest_path_distance_to(
+                            self._builders_place()
+                        )
+                        > self.world.square_width * 3
+                    ):
                         if self.nb(t):
                             return
                         else:
-                            meadow = self.choose(Meadow, starting_place=self._builders_place())
+                            meadow = self.choose(
+                                Meadow, starting_place=self._builders_place()
+                            )
                 else:
                     meadow = self.choose(Meadow, starting_place=self._builders_place())
                 if meadow:
-                    self.order(4, maker, ["build", type, meadow.id], requisition=True, near=meadow)
+                    self.order(
+                        4,
+                        maker,
+                        ["build", type, meadow.id],
+                        requisition=True,
+                        near=meadow,
+                    )
             elif type in self.world.unit_class(maker).can_train:
-                if (self.nb(Worker)
+                if (
+                    self.nb(Worker)
                     and nb > self.nb(maker) * 3
-                    and self.potential(t.cost) > self.nb(maker) * 100):
+                    and self.potential(t.cost) > self.nb(maker) * 100
+                ):
                     # additional production sites
                     self.build_or_train_or_upgradeto_or_summon(maker)
                 if self.gather(t.cost, t.food_cost):
@@ -608,8 +732,12 @@ class Computer(Player):
                 self._send_units(temp_units, place)
             place = places[-1]
             if not self._friendly_presence(place):
-                enemies = (u for l in (self.perception, self.memory)
-                                 for u in l if u.place is place and self.is_an_enemy(u))
+                enemies = (
+                    u
+                    for l in (self.perception, self.memory)
+                    for u in l
+                    if u.place is place and self.is_an_enemy(u)
+                )
                 for u, a in self._cataclysm_users:
                     if u.orders or not self._cataclysm_is_efficient(a, enemies):
                         continue
@@ -622,11 +750,17 @@ class Computer(Player):
 
     @property
     def _idle_fighters(self):
-        return [u for u in self.units if isinstance(u, Soldier)
-                and (not u.orders
-                     or len(u.orders) == 1
-                        and u.orders[0].keyword == "go"
-                        and u.orders[0].target not in self._enemy_presence)]
+        return [
+            u
+            for u in self.units
+            if isinstance(u, Soldier)
+            and (
+                not u.orders
+                or len(u.orders) == 1
+                and u.orders[0].keyword == "go"
+                and u.orders[0].target not in self._enemy_presence
+            )
+        ]
 
     def _update_time_has_come(self):
         self._waiting_menace = {}
@@ -642,7 +776,9 @@ class Computer(Player):
                         self._waiting_units[o.target] = [u]
         self._time_has_come = {}
         for place in self._waiting_units:
-            self._time_has_come[place] = self._is_powerful_enough(self._waiting_units.get(place, ()), place)
+            self._time_has_come[place] = self._is_powerful_enough(
+                self._waiting_units.get(place, ()), place
+            )
         cancel = set()
         for place in self._waiting_menace:
             if not self._is_powerful_enough(self.units, place):
@@ -675,8 +811,12 @@ class Computer(Player):
             u.take_order(["use", a, place.id])
             if u.orders and not u.orders[0].is_impossible:
                 used_teleportation = True
-        enemies = (u for l in (self.perception, self.memory)
-                   for u in l if u.place is place and self.is_an_enemy(u))
+        enemies = (
+            u
+            for l in (self.perception, self.memory)
+            for u in l
+            if u.place is place and self.is_an_enemy(u)
+        )
         for u in units:
             path = u.place.shortest_path_to(place, places=True)
             if not used_teleportation and len(path) > 2:
@@ -685,7 +825,7 @@ class Computer(Player):
                     for u_, a in self._cataclysm_users:
                         if u_ is u and self._cataclysm_is_efficient(a, enemies):
                             u.take_order(["use", a, place.id], forget_previous=False)
-            #u.take_order(["wait", place.id], forget_previous=False)
+            # u.take_order(["wait", place.id], forget_previous=False)
             for u_, a in self._summon_users:
                 if u_ is u:
                     u.take_order(["use", a, place.id], forget_previous=False)
@@ -708,7 +848,8 @@ class Computer(Player):
             return start.shortest_path_to(path[-2], player=self, avoid=True)
 
     def on_unit_attacked(self, unit, attacker):
-        if attacker.player in self.allied or not attacker.is_vulnerable: return
+        if attacker.player in self.allied or not attacker.is_vulnerable:
+            return
         if unit.orders and unit.orders[0].keyword == "auto_explore":
             # Don't react now. Constant attacks will do the job if active.
             # And the easy computer AI shouldn't be aggressive.
@@ -719,6 +860,6 @@ class Computer(Player):
             place = attacker.place
         else:
             # undetected attacker
-            place = unit.place # neighbors?
+            place = unit.place  # neighbors?
         if place not in self._attacked_places:
             self._attacked_places.append(place)

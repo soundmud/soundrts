@@ -2,7 +2,6 @@ from .lib.nofloat import square_of_distance
 
 
 class Action:
-    
     def __init__(self, unit, target):
         self.unit = unit
         self.target = target
@@ -16,7 +15,6 @@ class Action:
 
 
 class MoveAction(Action):
-    
     def update(self):
         if getattr(self.target, "other_side", None) is not None:
             if self.target.is_a_portal:
@@ -29,7 +27,9 @@ class MoveAction(Action):
                     self.target = os.place.x, os.place.y
             else:
                 # move towards the center of the next square
-                self.unit.go_to_xy(self.target.other_side.place.x, self.target.other_side.place.y)
+                self.unit.go_to_xy(
+                    self.target.other_side.place.x, self.target.other_side.place.y
+                )
         elif getattr(self.target, "place", None) is self.unit.place:
             self.unit.action_reach_and_stop()
         elif self.unit.airground_type in ["air", "water"]:
@@ -39,7 +39,6 @@ class MoveAction(Action):
 
 
 class MoveXYAction(Action):
-
     def update(self):
         x, y = self.target
         u = self.unit
@@ -55,8 +54,7 @@ class MoveXYAction(Action):
 
 
 class AttackAction(Action):
-
-    def update(self): # without moving to another square
+    def update(self):  # without moving to another square
         if self.unit.speed and self.target in self.unit.place.objects:
             self.unit.action_reach_and_aim()
         elif self.unit.can_attack(self.target):

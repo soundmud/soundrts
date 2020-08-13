@@ -22,12 +22,13 @@ from .worldorders import (
 from .worldresource import Corpse, Deposit
 from .worldroom import Square
 
-DISTANCE_MARGIN = 175 # millimeters
+DISTANCE_MARGIN = 175  # millimeters
+
 
 def ground_or_air(t):
     return "ground" if t == "water" else t
 
-    
+
 class Creature(Entity):
 
     type_name: Optional[str] = None
@@ -117,7 +118,11 @@ class Creature(Entity):
     group = None
 
     def next_free_number(self):
-        numbers = [u.number for u in self.player.units if u.type_name == self.type_name and u is not self]
+        numbers = [
+            u.number
+            for u in self.player.units
+            if u.type_name == self.type_name and u is not self
+        ]
         n = 1
         while n in numbers:
             n += 1
@@ -148,7 +153,7 @@ class Creature(Entity):
             # (now that perception isn't strictly limited to squares)
             # It doesn't take time though.
             for p in player.allied_vision:
-                p.perception.add(self) # necessary for example for new building sites
+                p.perception.add(self)  # necessary for example for new building sites
         # if transporting units, set player for them too
         for o in self.objects:
             o.set_player(player)
@@ -176,11 +181,11 @@ class Creature(Entity):
         # stat defined for the whole game
         self.minimal_damage = rules.get("parameters", "minimal_damage")
         if self.minimal_damage is None:
-            self.minimal_damage = int(.17 * PRECISION)
+            self.minimal_damage = int(0.17 * PRECISION)
 
         # move to initial place
         Entity.__init__(self, place, x, y, o)
-        self.position_to_hold = place # defend the creation place
+        self.position_to_hold = place  # defend the creation place
 
         if self.decay:
             self.time_limit = self.world.time + self.decay
@@ -208,7 +213,9 @@ class Creature(Entity):
     def nearest_water(self):
         places = [sq for sq in self.place.strict_neighbors if sq.is_water]
         if places:
-            return min(places, key=lambda sq: square_of_distance(sq.x, sq.y, self.x, self.y))
+            return min(
+                places, key=lambda sq: square_of_distance(sq.x, sq.y, self.x, self.y)
+            )
 
     def get_observed_squares(self, strict=False):
         if self.is_inside or self.place is None:
@@ -217,11 +224,15 @@ class Creature(Entity):
         if strict and self.sight_range < self.world.square_width:
             return result
         for sq in self.place.neighbors:
-            if (self.height > sq.height
-                or self.height == sq.height and (
+            if (
+                self.height > sq.height
+                or self.height == sq.height
+                and (
                     self._can_go(sq, ignore_forests=True)
                     or sq.is_water
-                    or self.place.is_water)):
+                    or self.place.is_water
+                )
+            ):
                 result.append(sq)
         return result
 
@@ -253,7 +264,7 @@ class Creature(Entity):
     def _future_coords(self, rotation, target_d):
         d = self.actual_speed * VIRTUAL_TIME_INTERVAL // 1000
         if rotation == 0:
-            d = min(d, target_d) # stop before colliding target
+            d = min(d, target_d)  # stop before colliding target
         a = self.o + rotation
         x = self.x + d * int_cos_1000(a) // 1000
         y = self.y + d * int_sin_1000(a) // 1000
@@ -264,7 +275,8 @@ class Creature(Entity):
         return abs(rotation) + self._already_walked(x, y) * 200
 
     def _can_go(self, new_place, ignore_blockers=False, ignore_forests=False):
-        if new_place is None: return False # out of the map
+        if new_place is None:
+            return False  # out of the map
         if self.airground_type != "ground":
             return True
         if new_place is self.place:
@@ -281,16 +293,20 @@ class Creature(Entity):
             else:
                 for e2 in e.other_side.place.exits:
                     if e2.other_side.place is new_place:
-                        if ignore_blockers or not e2.is_blocked(self, ignore_forests=ignore_forests):
+                        if ignore_blockers or not e2.is_blocked(
+                            self, ignore_forests=ignore_forests
+                        ):
                             return True
 
     def _mark_the_dead_end(self) -> None:
         self.walked.append((self.place, self.x, self.y, 5))
 
     def _must_hold(self):
-        return (not self.orders or self.orders[0].is_complete) and \
-           self.position_to_hold is not None and \
-           self.position_to_hold.contains(self.x, self.y)
+        return (
+            (not self.orders or self.orders[0].is_complete)
+            and self.position_to_hold is not None
+            and self.position_to_hold.contains(self.x, self.y)
+        )
 
     def _must_not_go_to(self, x, y):
         return self._must_hold() and not self.position_to_hold.contains(x, y)
@@ -301,7 +317,8 @@ class Creature(Entity):
         if self._must_not_go_to(x, y):
             return False
         if self._can_go(new_place) and not self.would_collide_if(x, y):
-            if abs(rotation) >= 90: self._mark_the_dead_end()
+            if abs(rotation) >= 90:
+                self._mark_the_dead_end()
             self.move_to(new_place, x, y, self.o + rotation)
             self.unblock()
             return True
@@ -310,19 +327,22 @@ class Creature(Entity):
     _smooth_rotations = None
 
     def _reach(self, target_d):
-        if self._smooth_rotations: # "smooth rotation" mode
+        if self._smooth_rotations:  # "smooth rotation" mode
             rotation = self._smooth_rotations.pop(0)
             if self._try(rotation, target_d) or self._try(-rotation, target_d):
                 self._smooth_rotations = []
         else:
             if not self._rotations:
                 # update memory of dead ends
-                self.walked = [x[0:3] + (x[3] - 1, ) for x in self.walked if x[3] > 1]
+                self.walked = [x[0:3] + (x[3] - 1,) for x in self.walked if x[3] > 1]
                 # "go straight" mode
-                if not self.walked and self._try(0, target_d): return
+                if not self.walked and self._try(0, target_d):
+                    return
                 # enter "rotation mode"
-                self._rotations = [(self._heuristic_value(x, target_d), x) for x in
-                          (0, 45, -45, 90, -90, 135, -135, 180)]
+                self._rotations = [
+                    (self._heuristic_value(x, target_d), x)
+                    for x in (0, 45, -45, 90, -90, 135, -135, 180)
+                ]
                 self._rotations.sort()
             # "rotation" mode
             for _ in range(min(4, len(self._rotations))):
@@ -348,7 +368,8 @@ class Creature(Entity):
             self.action_target = self.place.x, self.place.y
 
     def is_in_position(self, target):
-        if self.place is target: return True
+        if self.place is target:
+            return True
         if type(target).__name__ == "ZoomTarget":
             return target.contains(self.x, self.y)
 
@@ -366,7 +387,11 @@ class Creature(Entity):
         # Melee units shouldn't attack units on the other side of a wall.
         if self.is_melee and not self._can_go(target.place) and not target.blocked_exit:
             return False
-        if self.minimal_range and square_of_distance(self.x, self.y, target.x, target.y) < self.minimal_range * self.minimal_range:
+        if (
+            self.minimal_range
+            and square_of_distance(self.x, self.y, target.x, target.y)
+            < self.minimal_range * self.minimal_range
+        ):
             return False
         actual_range = self.range
         if self.is_ballistic and self.height > target.height:
@@ -382,8 +407,11 @@ class Creature(Entity):
             return square_of_distance(self.x, self.y, target.x, target.y) < d * d
 
     def _collision_range(self, other):
-        if self.collision and other.collision and \
-           other.airground_type == self.airground_type:
+        if (
+            self.collision
+            and other.collision
+            and other.airground_type == self.airground_type
+        ):
             return self.radius + other.radius
         else:
             return 0
@@ -392,7 +420,9 @@ class Creature(Entity):
         target = self.action_target
         if not self._near_enough(target):
             d = int_distance(self.x, self.y, target.x, target.y)
-            self.o = int_angle(self.x, self.y, target.x, target.y) # turn toward the goal
+            self.o = int_angle(
+                self.x, self.y, target.x, target.y
+            )  # turn toward the goal
             self._reach(d - self._collision_range(target))
         else:
             self.walked = []
@@ -402,7 +432,9 @@ class Creature(Entity):
         target = self.action_target
         if not self._near_enough_to_aim(target):
             d = int_distance(self.x, self.y, target.x, target.y)
-            self.o = int_angle(self.x, self.y, target.x, target.y) # turn toward the goal
+            self.o = int_angle(
+                self.x, self.y, target.x, target.y
+            )  # turn toward the goal
             self._reach(d - self._collision_range(target))
         else:
             self.walked = []
@@ -411,7 +443,7 @@ class Creature(Entity):
     def go_to_xy(self, x, y):
         d = int_distance(self.x, self.y, x, y)
         if d > self.radius:
-            self.o = int_angle(self.x, self.y, x, y) # turn toward the goal
+            self.o = int_angle(self.x, self.y, x, y)  # turn toward the goal
             self._reach(d)
         else:
             return True
@@ -492,8 +524,11 @@ class Creature(Entity):
         self.player.observe(attacker)
         self._raise_subsquare_threat(damage)
         if notify:
-            self.notify("wounded,{},{},{}".format(
-                attacker.type_name, attacker.id, attacker.damage_level))
+            self.notify(
+                "wounded,{},{},{}".format(
+                    attacker.type_name, attacker.id, attacker.damage_level
+                )
+            )
         self.hp -= damage
         if self.hp < 0:
             self.die(attacker)
@@ -508,7 +543,7 @@ class Creature(Entity):
         # remove transported units
         for o in self.objects[:]:
             o.move_to(self.place, self.x, self.y)
-            if o.place is self: # not enough space
+            if o.place is self:  # not enough space
                 o.collision = 0
                 o.move_to(self.place, self.x, self.y)
             if self.airground_type != "ground":
@@ -525,9 +560,13 @@ class Creature(Entity):
         # level 1 of healing: 1 hp every 7.5 seconds
         hp = self.heal_level * PRECISION // 25
         allies = self.player.allied
-        units = self.world.get_objects2(self.x, self.y, 6 * PRECISION,
-                filter=lambda x: x.is_healable and x.hp < x.hp_max,
-                players=allies)
+        units = self.world.get_objects2(
+            self.x,
+            self.y,
+            6 * PRECISION,
+            filter=lambda x: x.is_healable and x.hp < x.hp_max,
+            players=allies,
+        )
         for u in units:
             u.hp = min(u.hp_max, u.hp + hp)
 
@@ -539,16 +578,22 @@ class Creature(Entity):
     def harm_nearby_units(self):
         # level 1: 1 hp every 7.5 seconds
         hp = self.harm_level * PRECISION // 25
-        units = self.world.get_objects2(self.x, self.y, 6 * PRECISION,
-                filter=lambda x: x.is_vulnerable and self._can_harm(x))
+        units = self.world.get_objects2(
+            self.x,
+            self.y,
+            6 * PRECISION,
+            filter=lambda x: x.is_vulnerable and self._can_harm(x),
+        )
         for u in units:
             u.receive_hit(hp, self, notify=False)
 
     def is_an_enemy(self, c):
         if isinstance(c, Creature):
-            if self.has_imperative_orders() and \
-               self.orders[0].__class__ == GoOrder and \
-               self.orders[0].target is c:
+            if (
+                self.has_imperative_orders()
+                and self.orders[0].__class__ == GoOrder
+                and self.orders[0].target is c
+            ):
                 return True
             else:
                 return self.player.player_is_an_enemy(c.player)
@@ -560,16 +605,19 @@ class Creature(Entity):
             return False
         if other not in self.player.perception:
             return False
-        if other is None \
-           or other.place is None \
-           or getattr(other, "hp", 0) < 0 \
-           or ground_or_air(getattr(other, "airground_type", None)) not in self.target_types:
+        if (
+            other is None
+            or other.place is None
+            or getattr(other, "hp", 0) < 0
+            or ground_or_air(getattr(other, "airground_type", None))
+            not in self.target_types
+        ):
             return False
         if not other.is_vulnerable:
             return False
         return True
 
-    def can_attack(self, other): # without moving to another square
+    def can_attack(self, other):  # without moving to another square
         if not self.can_attack_if_in_range(other):
             return False
         if self.speed and other.place is self.place:
@@ -580,21 +628,32 @@ class Creature(Entity):
         known = self.player.known_enemies(place)
         reachable_enemies = [x for x in known if self.can_attack(x)]
         if reachable_enemies:
-            reachable_enemies.sort(key=lambda x: (- x.menace, square_of_distance(self.x, self.y, x.x, x.y), x.id))
+            reachable_enemies.sort(
+                key=lambda x: (
+                    -x.menace,
+                    square_of_distance(self.x, self.y, x.x, x.y),
+                    x.id,
+                )
+            )
             self.action = AttackAction(self, reachable_enemies[0])
             return True
 
     def flee(self):
-        if self._previous_square is not None \
-           and self.player.balance(self._previous_square) > .5:
+        if (
+            self._previous_square is not None
+            and self.player.balance(self._previous_square) > 0.5
+        ):
             if self.action_target != self.next_stage(self._previous_square):
                 self.notify("flee")
                 self.take_order(["go", self._previous_square.id], imperative=True)
-            
+
     def decide(self):
-        if (self.player.smart_units or self.ai_mode == "defensive") \
-           and self.speed > 0 and not self._must_hold() \
-           and self.player.balance(self.place, self._previous_square) < .5:
+        if (
+            (self.player.smart_units or self.ai_mode == "defensive")
+            and self.speed > 0
+            and not self._must_hold()
+            and self.player.balance(self.place, self._previous_square) < 0.5
+        ):
             self.flee()
             return
         if not self.damage or getattr(self.action_target, "menace", 0):
@@ -622,19 +681,33 @@ class Creature(Entity):
         for o in target.place.objects[:]:
             if not self.is_an_enemy(o) and o is not target:
                 pass  # no friendly fire (unless o is the target)
-            elif isinstance(o, Creature) \
-               and square_of_distance(o.x, o.y, target.x, target.y) <= damage_radius_2 \
-               and self.can_attack_if_in_range(o):
+            elif (
+                isinstance(o, Creature)
+                and square_of_distance(o.x, o.y, target.x, target.y) <= damage_radius_2
+                and self.can_attack_if_in_range(o)
+            ):
                 self._hit_or_miss(o)
 
     def chance_to_hit(self, target):
-        high_ground = not self.place.high_ground and target.place.high_ground \
-                      and target.airground_type == "ground" \
-                      and not self.is_melee \
-                      and self.height < target.height
+        high_ground = (
+            not self.place.high_ground
+            and target.place.high_ground
+            and target.airground_type == "ground"
+            and not self.is_melee
+            and self.height < target.height
+        )
         result = 50 if high_ground else 100
         if not self.is_melee:
-            result = result * (100 - target.place.terrain_cover[0 if target.airground_type != "air" else 1]) // 100
+            result = (
+                result
+                * (
+                    100
+                    - target.place.terrain_cover[
+                        0 if target.airground_type != "air" else 1
+                    ]
+                )
+                // 100
+            )
         return result
 
     def has_hit(self, target):
@@ -684,22 +757,33 @@ class Creature(Entity):
             return
         elif getattr(target, "is_an_exit", False):
             return "block"
-        elif getattr(target, "player", None) is self.player and self.have_enough_space(target):
+        elif getattr(target, "player", None) is self.player and self.have_enough_space(
+            target
+        ):
             return "load"
-        elif getattr(target, "player", None) is self.player and target.have_enough_space(self):
+        elif getattr(
+            target, "player", None
+        ) is self.player and target.have_enough_space(self):
             return "enter"
         elif "gather" in self.basic_abilities and isinstance(target, Deposit):
             return "gather"
-        elif (isinstance(target, BuildingSite) and target.type.__name__ in self.can_build or
-             hasattr(target, "is_repairable") and target.is_repairable and target.hp < target.hp_max and self.can_build) \
-             and not self.is_an_enemy(target):
+        elif (
+            isinstance(target, BuildingSite)
+            and target.type.__name__ in self.can_build
+            or hasattr(target, "is_repairable")
+            and target.is_repairable
+            and target.hp < target.hp_max
+            and self.can_build
+        ) and not self.is_an_enemy(target):
             return "repair"
         elif RallyingPointOrder.is_allowed(self):
             return "rallying_point"
         elif GoOrder.is_allowed(self):
             return "go"
 
-    def take_default_order(self, target_id, forget_previous=True, imperative=False, order_id=None):
+    def take_default_order(
+        self, target_id, forget_previous=True, imperative=False, order_id=None
+    ):
         order = self.get_default_order(target_id)
         if order:
             self.take_order([order, target_id], forget_previous, imperative, order_id)
@@ -708,7 +792,11 @@ class Creature(Entity):
         for i, c in enumerate(cost):
             if self.player.resources[i] < c:
                 return "not_enough_resource_%s" % i
-        if not self.orders and food > 0 and self.player.available_food < self.player.used_food + food:
+        if (
+            not self.orders
+            and food > 0
+            and self.player.available_food < self.player.used_food + food
+        ):
             if self.player.available_food < self.world.food_limit:
                 return "not_enough_food"
             else:
@@ -725,14 +813,14 @@ class Creature(Entity):
 
     def _put_building_site(self, type, target):
         # if the target is a memory, get the true object instead
-        if getattr(target, "is_memory", False): target = target.initial_model
+        if getattr(target, "is_memory", False):
+            target = target.initial_model
         # remember before deletion
         place, x, y, _id = target.place, target.x, target.y, target.id
-        if not hasattr(place, "place"): # target is a square
+        if not hasattr(place, "place"):  # target is a square
             place = target
-        if not (getattr(target, "is_an_exit", False)
-                or type.is_buildable_anywhere):
-            target.delete() # remove the meadow replaced by the building
+        if not (getattr(target, "is_an_exit", False) or type.is_buildable_anywhere):
+            target.delete()  # remove the meadow replaced by the building
             remember_land = True
         else:
             remember_land = False
@@ -759,7 +847,9 @@ class Creature(Entity):
         # Initial formula (reordered for a better precision):
         # delta = (percentage / 100) * total / (self.time_cost / VIRTUAL_TIME_INTERVAL)
         try:
-            delta = int(total * percentage * VIRTUAL_TIME_INTERVAL // self.time_cost // 100)
+            delta = int(
+                total * percentage * VIRTUAL_TIME_INTERVAL // self.time_cost // 100
+            )
         except ZeroDivisionError:
             delta = int(total * percentage * VIRTUAL_TIME_INTERVAL // 100)
         if delta == 0 and total != 0:
@@ -771,7 +861,7 @@ class Creature(Entity):
         return self._delta(self.hp_max, 70)
 
     @property
-    def repair_cost(self): # per turn
+    def repair_cost(self):  # per turn
         return (self._delta(c, 30) for c in self.cost)
 
     def be_built(self, actor):
@@ -804,7 +894,9 @@ class Creature(Entity):
     def load_all(self, place=None):
         if place is None:
             place = self.place
-        for u in sorted(self.player.units, key=lambda x: x.transport_volume, reverse=True):
+        for u in sorted(
+            self.player.units, key=lambda x: x.transport_volume, reverse=True
+        ):
             if u.place is place and self.have_enough_space(u):
                 self.load(u)
 
@@ -870,17 +962,19 @@ class Unit(Creature):
     def next_stage(self, target, avoid=False):
         if target is None or target.place is None:
             return None
-        if not hasattr(target, "exits"): # target is not a square
+        if not hasattr(target, "exits"):  # target is not a square
             if self.place == target.place:
                 return target
             place = target.place
-        else: # target is a square
+        else:  # target is a square
             if self.place == target:
                 return None
             place = target
-        if not hasattr(place, "exits"): # not a square
+        if not hasattr(place, "exits"):  # not a square
             return None
-        return self.place.shortest_path_to(place, player=self.player, plane=self.airground_type, avoid=avoid)
+        return self.place.shortest_path_to(
+            place, player=self.player, plane=self.airground_type, avoid=avoid
+        )
 
     def start_moving_to(self, target, avoid=False):
         # note: it can be an attack
@@ -930,8 +1024,9 @@ class Unit(Creature):
             if not self.player.is_very_dangerous(self.place):
                 self.action_target = None
         elif self.player.is_very_dangerous(self.place):
-            if (self._previous_square is not None
-                    and not self.player.is_very_dangerous(self._previous_square)):
+            if self._previous_square is not None and not self.player.is_very_dangerous(
+                self._previous_square
+            ):
                 self.start_moving_to(self._previous_square)
 
     def move_on_border(self, e):
@@ -951,7 +1046,7 @@ class Worker(Unit):
     can_switch_ai_mode = True
     _basic_abilities = {"go", "attack", "gather", "repair", "block", "join_group"}
     is_teleportable = True
-    cargo = None # gathered resource
+    cargo = None  # gathered resource
 
     def decide(self):
         Unit.decide(self)
@@ -962,9 +1057,13 @@ class Worker(Unit):
         if self.auto_repair:
             for p in self.player.allied:
                 for u in p.units:
-                    if u.place is self.place and u.is_repairable and u.hp < u.hp_max \
-                       and not isinstance(u, BuildingSite) \
-                       and self.check_if_enough_resources(u.repair_cost) is None:
+                    if (
+                        u.place is self.place
+                        and u.is_repairable
+                        and u.hp < u.hp_max
+                        and not isinstance(u, BuildingSite)
+                        and self.check_if_enough_resources(u.repair_cost) is None
+                    ):
                         self.take_order(["repair", u.id])
                         return
         if self.orders:
@@ -975,10 +1074,17 @@ class Worker(Unit):
                 if w.player in self.player.allied:
                     local_warehouses_resource_types.update(w.storable_resource_types)
             if local_warehouses_resource_types:
-                deposits = [o for o in self.place.objects if isinstance(o, Deposit)
-                            and o.resource_type in local_warehouses_resource_types]
+                deposits = [
+                    o
+                    for o in self.place.objects
+                    if isinstance(o, Deposit)
+                    and o.resource_type in local_warehouses_resource_types
+                ]
                 if deposits:
-                    if self.cargo and self.cargo[0] not in local_warehouses_resource_types:
+                    if (
+                        self.cargo
+                        and self.cargo[0] not in local_warehouses_resource_types
+                    ):
                         self.cargo = None
                     o = self.world.random.choice(deposits)
                     self.take_order(["gather", o.id])
@@ -1007,9 +1113,9 @@ class Effect(Unit):
 class _Building(Creature):
 
     ai_mode = "offensive"
-    can_switch_ai_mode = False # never flee
+    can_switch_ai_mode = False  # never flee
 
-    is_repairable = True # or buildable (in the case of a BuildingSite)
+    is_repairable = True  # or buildable (in the case of a BuildingSite)
     is_healable = False
     is_a_building = True
 

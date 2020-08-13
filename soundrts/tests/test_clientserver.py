@@ -21,4 +21,3 @@ def test_read_line_chronological():
     assert c.read_line() == "2"
     assert c.read_line() is None
     assert c.read_line() is None
-    

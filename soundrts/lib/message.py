@@ -10,8 +10,15 @@ def is_text(o):
 
 
 class Message:
-
-    def __init__(self, list_of_sound_numbers, lv=DEFAULT_VOLUME, rv=DEFAULT_VOLUME, said=False, expiration_delay=45, update_type=None):
+    def __init__(
+        self,
+        list_of_sound_numbers,
+        lv=DEFAULT_VOLUME,
+        rv=DEFAULT_VOLUME,
+        said=False,
+        expiration_delay=45,
+        update_type=None,
+    ):
         self.list_of_sound_numbers = list_of_sound_numbers
         self.lv = lv
         self.rv = rv
@@ -36,7 +43,7 @@ class Message:
             if p is not None:
                 result.append(p)
         return result
-    
+
     def display(self):
         txt = self.translate_and_collapse(remove_sounds=True)
         if txt:

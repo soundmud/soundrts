@@ -18,17 +18,23 @@ def insert_silences(msg):
         result += mp.PERIOD + [sound]
     return result
 
+
 def game_short_status(map_title, clients, minutes):
     clients = clients.split(",")
     players = insert_silences(sum([name(c) for c in clients], []))
-    msg = mp.MULTIPLAYER + [map_title] + mp.PERIOD \
-           + players + mp.PERIOD \
-           + nb2msg(minutes) + mp.MINUTES
+    msg = (
+        mp.MULTIPLAYER
+        + [map_title]
+        + mp.PERIOD
+        + players
+        + mp.PERIOD
+        + nb2msg(minutes)
+        + mp.MINUTES
+    )
     return msg
 
 
 class _ServerMenu(Menu):
-
     def __init__(self, server, auto=False):
         self.server = server
         self.auto = auto
@@ -49,22 +55,23 @@ class _ServerMenu(Menu):
     def _process_available_server_lines(self):
         while True:
             s = self.server.read_line()
-            if s is None: return
+            if s is None:
+                return
             self._process_server_event(s)
-            if self.end_loop: # received "quit"
+            if self.end_loop:  # received "quit"
                 # stop reading
                 return
 
     def loop(self):
         self.end_loop = False
         while not self.end_loop:
-            self._process_available_server_lines() # to avoid empty menus
+            self._process_available_server_lines()  # to avoid empty menus
             self.step()
             if self.auto:
                 if self.auto[0].run(self):
                     del self.auto[0]
-            voice.update() # for voice.info()
-            time.sleep(.01)
+            voice.update()  # for voice.info()
+            time.sleep(0.01)
 
     def push(self, line):
         self.server.write_line(line)
@@ -86,12 +93,12 @@ class _ServerMenu(Menu):
         play_sequence(args)
 
     def srv_logged_in(self, args):
-        login, = args
+        (login,) = args
         if login != self.server.login:
             voice.info([login] + mp.HAS_JUST_LOGGED_IN)
 
     def srv_logged_out(self, args):
-        login, = args
+        (login,) = args
         voice.info([login] + mp.HAS_JUST_LOGGED_OUT)
 
     def srv_msg(self, args):
@@ -143,7 +150,7 @@ class _ServerMenu(Menu):
 
     def srv_faction(self, args):
         player_login, faction = args
-        faction_name = style.get(faction, 'title')
+        faction_name = style.get(faction, "title")
         voice.info(name(player_login) + faction_name)
 
 
@@ -153,17 +160,22 @@ class ServerMenu(_ServerMenu):
 
     def _get_speed_submenu(self, args):
         n, title, is_public = args
+
         def create_with_speed(speed):
             s = f"create {n} {speed} {is_public}"
             return (self.server.write_line, s)
-        Menu(title,
-             [(mp.SET_SPEED_TO_SLOW, create_with_speed("0.5")),
-              (mp.SET_SPEED_TO_NORMAL, create_with_speed("1.0")),
-              (mp.SET_SPEED_TO_FAST + nb2msg(2), create_with_speed("2.0")),
-              (mp.SET_SPEED_TO_FAST + nb2msg(4), create_with_speed("4.0")),
-              (mp.CANCEL, None),
-              ],
-             default_choice_index=1).run()
+
+        Menu(
+            title,
+            [
+                (mp.SET_SPEED_TO_SLOW, create_with_speed("0.5")),
+                (mp.SET_SPEED_TO_NORMAL, create_with_speed("1.0")),
+                (mp.SET_SPEED_TO_FAST + nb2msg(2), create_with_speed("2.0")),
+                (mp.SET_SPEED_TO_FAST + nb2msg(4), create_with_speed("4.0")),
+                (mp.CANCEL, None),
+            ],
+            default_choice_index=1,
+        ).run()
 
     def _get_creation_submenu(self, is_public=""):
         if is_public == "public":
@@ -179,18 +191,20 @@ class ServerMenu(_ServerMenu):
     def make_menu(self):
         menu = Menu()
         for g in self.invitations:
-            menu.append(mp.ACCEPT_INVITATION_FROM + g[1:],
-                        (self.server.write_line, "register %s" % g[0]))
+            menu.append(
+                mp.ACCEPT_INVITATION_FROM + g[1:],
+                (self.server.write_line, "register %s" % g[0]),
+            )
         menu.append(mp.START_A_GAME_ON, self._get_creation_submenu())
-        menu.append(mp.START_A_PUBLIC_GAME_ON,
-                    self._get_creation_submenu("public"))
+        menu.append(mp.START_A_PUBLIC_GAME_ON, self._get_creation_submenu("public"))
         menu.append(mp.QUIT2, (self.server.write_line, "quit"))
         return menu
 
     def srv_welcome(self, args):
         self.server.login, server_login = args
-        voice.important(mp.WELCOME + [self.server.login]
-                        + mp.ON_THE_SERVER_OF + [server_login])
+        voice.important(
+            mp.WELCOME + [self.server.login] + mp.ON_THE_SERVER_OF + [server_login]
+        )
 
     def srv_invitations(self, args):
         self.invitations = [x.split(",") for x in args]
@@ -212,6 +226,7 @@ def name(login):
         return mp.AGGRESSIVE_COMPUTER
     return [login]
 
+
 ##    @property
 ##    def name(self):
 ##        if self.level == "easy":
@@ -226,7 +241,9 @@ class _BeforeGameMenu(_ServerMenu):
     registered_players = ()
 
     def srv_map(self, args: List[str]) -> None:
-        self.map = mapfile.Map(unpack=" ".join(args).encode())  # warning: args is split from a stripped string
+        self.map = mapfile.Map(
+            unpack=" ".join(args).encode()
+        )  # warning: args is split from a stripped string
         self.map.load_style(res)
 
     def srv_registered_players(self, args):
@@ -236,9 +253,10 @@ class _BeforeGameMenu(_ServerMenu):
         if len(self.map.factions) > 1:
             for r in ["random_faction"] + self.map.factions:
                 if r != pr:
-                    menu.append(name(p) + style.get(r, "title"),
-                                (self.server.write_line,
-                                 f"faction {pn} {r}"))
+                    menu.append(
+                        name(p) + style.get(r, "title"),
+                        (self.server.write_line, f"faction {pn} {r}"),
+                    )
 
     def srv_start_game(self, args):
         players, local_login, seed, speed = args
@@ -258,27 +276,33 @@ class GameAdminMenu(_BeforeGameMenu):
         menu = Menu(self.map.title)
         if len(self.registered_players) < self.map.nb_players_max:
             for p in self.available_players:
-                menu.append(mp.INVITE + [p],
-                            (self.server.write_line, "invite %s" % p))
-            menu.append(mp.INVITE + mp.QUIET_COMPUTER,
-                        (self.server.write_line, "invite_easy"))
-            menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER,
-                        (self.server.write_line, "invite_aggressive"))
-            menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER + nb2msg(2),
-                        (self.server.write_line, "invite_ai2"))
+                menu.append(mp.INVITE + [p], (self.server.write_line, "invite %s" % p))
+            menu.append(
+                mp.INVITE + mp.QUIET_COMPUTER, (self.server.write_line, "invite_easy")
+            )
+            menu.append(
+                mp.INVITE + mp.AGGRESSIVE_COMPUTER,
+                (self.server.write_line, "invite_aggressive"),
+            )
+            menu.append(
+                mp.INVITE + mp.AGGRESSIVE_COMPUTER + nb2msg(2),
+                (self.server.write_line, "invite_ai2"),
+            )
         if len(self.registered_players) >= self.map.nb_players_min:
             menu.append(mp.START, (self.server.write_line, "start"))
         for pn, (login, pa, pr) in enumerate(self.registered_players):
             pa = int(pa)
             for a in range(1, len(self.registered_players) + 1):
                 if a != pa:
-                    menu.append(mp.MOVE + name(login) + mp.TO_ALLIANCE + nb2msg(a),
-                                (self.server.write_line,
-                                 f"move_to_alliance {pn} {a}"))
+                    menu.append(
+                        mp.MOVE + name(login) + mp.TO_ALLIANCE + nb2msg(a),
+                        (self.server.write_line, f"move_to_alliance {pn} {a}"),
+                    )
             if login == self.server.login or login.startswith("ai_"):
                 self._add_faction_menu(menu, pn, login, pr)
-        menu.append(mp.CANCEL + mp.CANCEL_THIS_GAME,
-                    (self.server.write_line, "cancel_game"))
+        menu.append(
+            mp.CANCEL + mp.CANCEL_THIS_GAME, (self.server.write_line, "cancel_game")
+        )
         return menu
 
     def srv_available_players(self, args):
@@ -286,7 +310,6 @@ class GameAdminMenu(_BeforeGameMenu):
 
 
 class GameGuestMenu(_BeforeGameMenu):
-
     def _get_player(self):
         for pn, (login, pa, pr) in enumerate(self.registered_players):
             if login == self.server.login:
@@ -295,6 +318,7 @@ class GameGuestMenu(_BeforeGameMenu):
     def make_menu(self):
         menu = Menu(self.map.title)
         self._add_faction_menu(menu, *self._get_player())
-        menu.append(mp.QUIT2 + mp.LEAVE_THIS_GAME,
-                    (self.server.write_line, "unregister"))
+        menu.append(
+            mp.QUIT2 + mp.LEAVE_THIS_GAME, (self.server.write_line, "unregister")
+        )
         return menu

@@ -13,7 +13,7 @@ _subzone_name = {
     (-1, 1): mp.NORTHWEST,
     (1, -1): mp.SOUTHEAST,
     (-1, -1): mp.SOUTHWEST,
-    }
+}
 
 
 class Zoom:
@@ -40,7 +40,7 @@ class Zoom:
         return self.parent.place.title + _subzone_name[(self.sub_x, self.sub_y)]
 
     def move(self, dx, dy):
-        self.parent.follow_mode = False # or set_obs_pos() will cause trouble
+        self.parent.follow_mode = False  # or set_obs_pos() will cause trouble
         self.sub_x += dx
         self.sub_y += dy
         if self.sub_x >= 2:
@@ -67,7 +67,7 @@ class Zoom:
                 break
         if not self.contains(o):
             warning("zoom: couldn't move to object")
-        
+
     def select(self):
         self.parent.target = None
         self.parent.follow_mode = False
@@ -85,11 +85,14 @@ class Zoom:
         self.ymax = self.ymin + self.ystep
 
     def contains(self, obj):
-        return self.xmin <= obj.model.x < self.xmax and self.ymin <= obj.model.y < self.ymax
+        return (
+            self.xmin <= obj.model.x < self.xmax
+            and self.ymin <= obj.model.y < self.ymax
+        )
 
     def obs_pos(self):
         x = (self.xmin + self.xmax) / 2.0
         y = self.ymin + (self.ymax - self.ymin) / 8.0
         if self.parent.place not in self.parent.scouted_squares:
-            y -= self.ymax - self.ymin # lower sounds if fog of war
+            y -= self.ymax - self.ymin  # lower sounds if fog of war
         return x / PRECISION, y / PRECISION

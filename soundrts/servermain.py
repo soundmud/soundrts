@@ -20,14 +20,13 @@ from .serverroom import (
 )
 from .version import SERVER_COMPATIBILITY
 
-REGISTER_INTERVAL = 10 * 60 # register server every 10 minutes
+REGISTER_INTERVAL = 10 * 60  # register server every 10 minutes
 REGISTER_URL = MAIN_METASERVER_URL + "servers_register.php"
 UNREGISTER_URL = MAIN_METASERVER_URL + "servers_unregister.php"
 WHATISMYIP_URL = open("cfg/whatismyip.txt").read().strip()
 
 
 class Server(asyncore.dispatcher):
-
     def __init__(self, parameters, is_standalone):
         self.parameters = parameters
         self.is_standalone = is_standalone
@@ -73,9 +72,12 @@ class Server(asyncore.dispatcher):
 
     def log_status(self):
         self._cleanup()
-        info("%s players (%s not playing), %s games", len(self.clients),
-             len(self.players_not_playing()),
-             len([g for g in self.games if g.started]))
+        info(
+            "%s players (%s not playing), %s games",
+            len(self.clients),
+            len(self.players_not_playing()),
+            len([g for g in self.games if g.started]),
+        )
 
     def _is_admin(self, client):
         return client.address[0] == "127.0.0.1" and client.login == self.login
@@ -160,9 +162,11 @@ class Server(asyncore.dispatcher):
 
     def _register(self):
         try:
-            s = urllib.request.urlopen(REGISTER_URL + "?version=%s&login=%s&ip=%s&port=%s" %
-                               (SERVER_COMPATIBILITY, self.login, self.ip,
-                                options.port)).read()
+            s = urllib.request.urlopen(
+                REGISTER_URL
+                + "?version=%s&login=%s&ip=%s&port=%s"
+                % (SERVER_COMPATIBILITY, self.login, self.ip, options.port)
+            ).read()
         except:
             s = "couldn't access to the metaserver"
         if s:
@@ -236,6 +240,7 @@ def start_server(parameters=sys.argv, is_standalone=True):
             server.close()
         except:
             exception("couldn't close the server")
+
 
 def main():
     start_server()

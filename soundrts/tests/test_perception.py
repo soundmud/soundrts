@@ -7,7 +7,6 @@ from soundrts.worldplayerhuman import Human
 
 
 class DummyClient(worldclient.DummyClient):
-
     def push(self, *args):
         print(args)
 
@@ -18,6 +17,7 @@ def world():
     w.load_and_build_map(Map("soundrts/tests/height.txt"))
     return w
 
+
 def test_must_not_see_plateau_from_below_even_if_path_exists(world):
     g = world.grid
     a1 = g["a1"]  # plateau
@@ -25,6 +25,7 @@ def test_must_not_see_plateau_from_below_even_if_path_exists(world):
     player = Human(world, DummyClient())
     p = world.unit_class("peasant")(player, b1, b1.x, b1.y)
     assert a1 not in p.get_observed_squares()
+
 
 def test_must_see_diagonal_if_path_exists(world):
     g = world.grid

@@ -1,10 +1,11 @@
 from .lib.log import warning
 from .lib.nofloat import PRECISION
 
-COLLISION_RADIUS = 175 # millimeters # 350 / 2
+COLLISION_RADIUS = 175  # millimeters # 350 / 2
 
 
-class NotEnoughSpaceError(Exception): pass
+class NotEnoughSpaceError(Exception):
+    pass
 
 
 class Entity:
@@ -28,11 +29,11 @@ class Entity:
     is_undead = False
     is_teleportable = False
 
-    is_a_building_land =False
+    is_a_building_land = False
 
     transport_capacity = 0
     transport_volume = 99
-    
+
     is_invisible = False
     is_cloakable = False
     is_cloaked = False
@@ -76,7 +77,9 @@ class Entity:
         if new_place is not None and self.collision:
             if self.place is not None and not self.is_inside:
                 self.world.collision[self.airground_type].remove(self.x, self.y)
-            x, y = new_place.find_free_space(self.airground_type, x, y, new_place is self.place, self.player)
+            x, y = new_place.find_free_space(
+                self.airground_type, x, y, new_place is self.place, self.player
+            )
             if self.place is not None and not self.is_inside:
                 self.world.collision[self.airground_type].add(self.x, self.y)
             if x is None:
@@ -102,7 +105,7 @@ class Entity:
             if new_place is not None:
                 # enter the new place
                 new_place.objects.append(self)
-                if self.id is None: # new in the world
+                if self.id is None:  # new in the world
                     # enter the world
                     self.id = new_place.world.get_next_id()
                     new_place.world.objects[self.id] = self
@@ -164,7 +167,7 @@ class Entity:
         return True
 
     def find_free_space(self, airground_type, x, y, *args, **kargs):
-        if self.transport_capacity: # the entity is a transport
+        if self.transport_capacity:  # the entity is a transport
             return x, y
         else:
             return None, None

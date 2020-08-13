@@ -3,7 +3,7 @@ from .worldentity import Entity
 
 class Exit(Entity):
 
-    other_side: 'Exit'
+    other_side: "Exit"
     collision = 0
     is_a_building_land = False
     is_an_exit = True

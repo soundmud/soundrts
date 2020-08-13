@@ -9,11 +9,14 @@ from .log import warning
 pygame.font.init()
 _font = pygame.font.SysFont("arial", 12, bold=True)
 
+
 def draw_line(color, xy1, xy2):
     pygame.draw.line(_screen, color, xy1, xy2)
 
+
 def draw_rect(color, rect, width2=0):
     pygame.draw.rect(_screen, color, pygame.Rect(*rect), width2)
+
 
 def _get_desktop_screen_mode():
     try:
@@ -29,8 +32,10 @@ def _get_desktop_screen_mode():
         except:
             return 640, 480
 
+
 def get_desktop_screen_mode():
     return _x, _y
+
 
 def screen_render(text, dest, right=False, center=False, color=(200, 200, 200)):
     try:
@@ -49,11 +54,13 @@ def screen_render(text, dest, right=False, center=False, color=(200, 200, 200)):
         r = dest
     _screen.blit(surface, r)
 
+
 def screen_render_subtitle():
     ren = _font.render(_subtitle, True, (200, 200, 200), (0, 0, 0))
     x = (_screen.get_width() - ren.get_width()) // 2
     y = _screen.get_height() - ren.get_height()
     _screen.blit(ren, (x, y))
+
 
 def screen_subtitle_set(txt):
     global _subtitle
@@ -65,9 +72,11 @@ def screen_subtitle_set(txt):
         screen_render(txt, (0, 0))
         pygame.display.flip()
 
+
 def set_game_mode(m):
     global _game_mode
     _game_mode = m
+
 
 def set_screen(fullscreen):
     global _screen
@@ -85,8 +94,10 @@ def set_screen(fullscreen):
     except:
         _screen = pygame.display.set_mode((640, 480))
 
+
 def get_screen():
     return _screen
+
 
 _x, _y = _get_desktop_screen_mode()
 _screen = None

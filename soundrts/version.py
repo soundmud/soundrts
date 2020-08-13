@@ -15,16 +15,18 @@ def server_is_compatible(version):
 
 
 def compatibility_version():
-# Includes a hash of rules.txt.
-# (about the choice of MD5, check the comments in mapfile.py, line 45)
-# Don't check *.pyc (or library.zip, soundrts.exe and server.exe)
-# because it would require to add an internal version for every file.
-# (a bit complicated for the moment, and not as useful as checking rules.txt)
+    # Includes a hash of rules.txt.
+    # (about the choice of MD5, check the comments in mapfile.py, line 45)
+    # Don't check *.pyc (or library.zip, soundrts.exe and server.exe)
+    # because it would require to add an internal version for every file.
+    # (a bit complicated for the moment, and not as useful as checking rules.txt)
     return CLIENT_COMPATIBILITY + "-" + rules_hash()
 
 
 def rules_hash():
-    rules_and_ai = res.get_text_file("rules", append=True) + res.get_text_file("ai", append=True)
+    rules_and_ai = res.get_text_file("rules", append=True) + res.get_text_file(
+        "ai", append=True
+    )
     return md5(rules_and_ai.encode()).hexdigest()
 
 

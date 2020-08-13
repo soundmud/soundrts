@@ -11,6 +11,7 @@ SHORT_FORMAT = "%(levelname)s: %(message)s"
 
 _version = "unknown version"
 
+
 def set_version(version):
     global _version
     _version = version
@@ -41,10 +42,11 @@ class SecureFileHandler(logging.FileHandler):
     Avoids an infinite loop creating a huge log file. It happens.
     Useful for a client who resets the log file.
     """
+
     _nb_records = 0
     _too_many_records = False
 
-    def __init__(self, filename, mode='a', limit=1000000):
+    def __init__(self, filename, mode="a", limit=1000000):
         self._records_limit = limit
         logging.FileHandler.__init__(self, filename, mode)
 
@@ -63,6 +65,7 @@ class _NeverCrash:
     """
     Prevents crash with pythonw.exe (problems with stdout or stderr).
     """
+
     def __init__(self, f):
         self._f = f
 
@@ -79,21 +82,30 @@ def _configure_handler(h, format, level):
     logging.getLogger().addHandler(h)
     h.setLevel(level)
 
-def add_secure_file_handler(name, mode, limit=1000000, level=logging.WARNING, format=FULL_FORMAT):
+
+def add_secure_file_handler(
+    name, mode, limit=1000000, level=logging.WARNING, format=FULL_FORMAT
+):
     h = SecureFileHandler(name, mode, limit)
     _configure_handler(h, format, level)
 
-def add_rotating_file_handler(name, mode, max_size, nb, level=logging.INFO, format=FULL_FORMAT):
+
+def add_rotating_file_handler(
+    name, mode, max_size, nb, level=logging.INFO, format=FULL_FORMAT
+):
     h = logging.handlers.RotatingFileHandler(name, mode, max_size, nb)
     _configure_handler(h, format, level)
+
 
 def add_http_handler(url, level=logging.ERROR, format=FULL_FORMAT):
     h = HTTPHandler(url)
     _configure_handler(h, format, level)
 
+
 def add_console_handler(level=logging.INFO, format=SHORT_FORMAT):
     h = logging.StreamHandler(sys.stdout)
     _configure_handler(h, format, level)
+
 
 debug = _NeverCrash(logging.debug)
 info = _NeverCrash(logging.info)

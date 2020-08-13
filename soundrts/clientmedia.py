@@ -35,7 +35,7 @@ def minimal_init():
     update_display_caption()
     pygame.key.set_repeat(500, 100)
 
-    
+
 def init_media():
     """initialize sound, voice, screen, window title, keyboard,
     and sound cache"""
@@ -45,7 +45,7 @@ def init_media():
 
 def modify_volume(incr):
     """increase or decrease the main volume, and say it"""
-    set_volume(min(1, max(0, get_volume() + .1 * incr)))
+    set_volume(min(1, max(0, get_volume() + 0.1 * incr)))
     sound_stop()
     voice.item(nb2msg(round(get_volume() * 100)) + mp.PERCENT_VOLUME)
 
@@ -76,4 +76,4 @@ def play_sequence(names):
     """play a sequence of sounds or texts, each one interruptible"""
     sound_stop()
     for name in names:
-        voice.important([name]) # each element is interruptible
+        voice.important([name])  # each element is interruptible

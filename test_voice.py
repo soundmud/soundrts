@@ -6,6 +6,7 @@ from soundrts.lib.voice import voice
 def say(txt):
     voice.important([txt])
 
+
 init_media()
 for i in range(10):
     i += 1

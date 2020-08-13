@@ -28,14 +28,14 @@ class ConnectionToClient(asynchat.async_chat):
     version = None
     game = None
 
-    def __init__(self, server: 'Server', connection_and_address) -> None:
+    def __init__(self, server: "Server", connection_and_address) -> None:
         (connection, address) = connection_and_address
         debug("Connected: %s:%s" % address)
         asynchat.async_chat.__init__(self, connection)
         self.id = server.get_next_id()
-        self.set_terminator(b'\n')
+        self.set_terminator(b"\n")
         self.server = server
-        self.inbuffer = b''
+        self.inbuffer = b""
         self.address = address
         self.state: _State = Anonymous()
         self.push(":")
@@ -64,7 +64,7 @@ class ConnectionToClient(asynchat.async_chat):
 
     def found_terminator(self):
         data = self.inbuffer.replace(b"\r", b"")
-        self.inbuffer = b''
+        self.inbuffer = b""
         try:
             self._execute_command(data)
         except SystemExit:
@@ -91,10 +91,16 @@ class ConnectionToClient(asynchat.async_chat):
             self.handle_close()
 
     def send_invitations(self):
-        self.push("invitations %s\n" %
-            " ".join([
-            ",".join([str(x) for x in [g.id, g.admin.login] + g.scenario.title])
-            for g in self.server.games if self in g.guests]))
+        self.push(
+            "invitations %s\n"
+            % " ".join(
+                [
+                    ",".join([str(x) for x in [g.id, g.admin.login] + g.scenario.title])
+                    for g in self.server.games
+                    if self in g.guests
+                ]
+            )
+        )
 
     def notify(self, *args):
         if not self.is_disconnected:
@@ -102,9 +108,12 @@ class ConnectionToClient(asynchat.async_chat):
 
     def send_maps(self):
         if self.server.can_create(self):
-            self.push("maps %s\n" %
-                      " ".join([",".join([str(y) for y in x.title])
-                                for x in worlds_multi()]))
+            self.push(
+                "maps %s\n"
+                % " ".join(
+                    [",".join([str(y) for y in x.title]) for x in worlds_multi()]
+                )
+            )
         else:
             self.push("maps \n")
 
@@ -149,8 +158,10 @@ class ConnectionToClient(asynchat.async_chat):
 
     def _accept_client_after_login(self):
         self.delay = time.time() - self.t1
-        info("new player: IP=%s login=%s version=%s delay=%s" %
-             (self.address[0], self.login, self.version, self.delay))
+        info(
+            "new player: IP=%s login=%s version=%s delay=%s"
+            % (self.address[0], self.login, self.version, self.delay)
+        )
         # welcome client to server
         self.push("ok!\n")
         self.push(f"welcome {self.login} {self.server.login}\n")
@@ -173,7 +184,7 @@ class ConnectionToClient(asynchat.async_chat):
             self.server.update_menus()
         else:
             info("incorrect login")
-            self.handle_close() # disconnect client
+            self.handle_close()  # disconnect client
 
     # "in the lobby" commands
 
@@ -191,8 +202,9 @@ class ConnectionToClient(asynchat.async_chat):
             self.push("map %s\n" % scenario.pack().decode())
             speed = float(args[1])
             is_public = len(args) >= 3 and args[2] == "public"
-            self.server.games.append(Game(scenario, speed, self.server,
-                    self, is_public))
+            self.server.games.append(
+                Game(scenario, speed, self.server, self, is_public)
+            )
             self.server.update_menus()
         else:
             warning("game not created (max number reached)")
@@ -225,7 +237,11 @@ class ConnectionToClient(asynchat.async_chat):
 
     def cmd_invite(self, args):
         guest = self.server.get_client_by_login(args[0])
-        if guest and guest in self.server.available_players() and guest.is_compatible(self):
+        if (
+            guest
+            and guest in self.server.available_players()
+            and guest.is_compatible(self)
+        ):
             self.game.invite(guest)
             self.server.update_menus()
         else:
@@ -233,22 +249,22 @@ class ConnectionToClient(asynchat.async_chat):
 
     def cmd_invite_easy(self, unused_args):
         self.game.invite_computer("easy")
-        self.send_menu() # only the admin
+        self.send_menu()  # only the admin
 
     def cmd_invite_aggressive(self, unused_args):
         self.game.invite_computer("aggressive")
-        self.send_menu() # only the admin
+        self.send_menu()  # only the admin
 
     def cmd_invite_ai2(self, unused_args):
         self.game.invite_computer("ai2")
-        self.send_menu() # only the admin
+        self.send_menu()  # only the admin
 
     def cmd_move_to_alliance(self, args):
         self.game.move_to_alliance(args[0], args[1])
-        self.send_menu() # only the admin
+        self.send_menu()  # only the admin
 
     def cmd_start(self, unused_args):
-        self.game.start() # create chosen world
+        self.game.start()  # create chosen world
         self.server.update_menus()
 
     def cmd_faction(self, args):

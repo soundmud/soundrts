@@ -14,7 +14,6 @@ from .res import get_all_packages_paths
 
 
 class MissionChapter(Map):
-
     def __init__(self, p, campaign, id):
         Map.__init__(self, p)
         self.campaign = campaign
@@ -28,7 +27,7 @@ class MissionChapter(Map):
         menu.append(mp.CONTINUE, self._get_next())
         menu.append(mp.QUIT, None)
         menu.run()
-        
+
     def _defeat(self):
         menu = Menu([], [])
         menu.append(mp.RESTART, self)
@@ -51,7 +50,6 @@ class MissionChapter(Map):
 
 
 class CutSceneChapter:
-
     def __init__(self, path, campaign=None, id=None):
         self.path = path
         self.campaign = campaign
@@ -94,7 +92,6 @@ def _is_a_cutscene(path):
 
 
 class Campaign:
-
     def __init__(self, path, title=None):
         self.path = path
         if title:
@@ -143,7 +140,7 @@ class Campaign:
             return 0
 
     def _available_chapters(self):
-        return self.chapters[:self._get_bookmark() + 1]
+        return self.chapters[: self._get_bookmark() + 1]
 
     def _set_bookmark(self, number):
         c = configparser.SafeConfigParser()
@@ -176,7 +173,7 @@ class Campaign:
                 ch = self._available_chapters()[-1]
                 menu.append(mp.CONTINUE + ch.title, ch)
             for ch in self._available_chapters():
-                prefix = nb2msg(ch.id) if ch.id > 0 else []  
+                prefix = nb2msg(ch.id) if ch.id > 0 else []
                 menu.append(prefix + ch.title, ch)
             menu.append(mp.BACK, None)
             menu.run()
@@ -198,8 +195,10 @@ def _get_campaigns():
                         w.append(Campaign(p))
     return w
 
+
 _campaigns = None
 _mods_at_the_previous_campaigns_update = None
+
 
 def campaigns():
     global _campaigns, _mods_at_the_previous_campaigns_update

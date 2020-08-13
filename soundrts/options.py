@@ -8,6 +8,7 @@ ip = None
 mods = None
 port = 2500
 
+
 def _parse_options():
     global ip, mods, port
     default_port = port
@@ -24,5 +25,6 @@ def _parse_options():
         warning("using IP %s", ip)
     if port != default_port:
         warning("using port %s (instead of %s)", port, default_port)
+
 
 _parse_options()

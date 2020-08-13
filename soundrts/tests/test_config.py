@@ -15,11 +15,13 @@ def test_login_is_valid():
     assert login_is_valid("a2")
     assert not login_is_valid("wrong-login")
 
+
 @pytest.fixture
 def cfg():
     config.login = None
     config.num_channels = None
     config.timeout = None
+
 
 def test_load_defaults_if_file_doesnt_exist(cfg):
     n = "soundrts/tests/not_a_file.ini"
@@ -33,6 +35,7 @@ def test_load_defaults_if_file_doesnt_exist(cfg):
     assert config.timeout == 60.0
     os.unlink(n)
 
+
 def test_load_file_with_changes(cfg):
     config.load("soundrts/tests/config_with_changes.ini")
     assert config.login == "test"
@@ -42,6 +45,7 @@ def test_load_file_with_changes(cfg):
     assert config.login == "test"
     assert config.num_channels == 32
     assert config.timeout == 200.0
+
 
 def test_load_defaults_if_file_with_errors(cfg):
     n = "soundrts/tests/config_with_errors.ini"
@@ -62,6 +66,7 @@ def test_load_defaults_if_file_with_errors(cfg):
     assert config.timeout == 60.0
     assert config.mods == ""
     os.unlink(o)
+
 
 def test_load_and_save(cfg):
     n2 = "soundrts/tests/config_with_changes2.ini"

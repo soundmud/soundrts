@@ -7,7 +7,6 @@ from soundrts.worldplayerhuman import Human
 
 
 class DummyClient(worldclient.DummyClient):
-
     def push(self, *args):
         print(args)
 
@@ -17,6 +16,7 @@ def world():
     w = World([])
     w.load_and_build_map(Map("soundrts/tests/jl1_cyclic.txt"))
     return w
+
 
 def test_decide_repair(world):
     g = world.grid
@@ -29,6 +29,7 @@ def test_decide_repair(world):
     p.decide()
     assert p.orders[0].keyword == "repair"
 
+
 def test_decide_no_repair_if_no_resource(world):
     g = world.grid
     place = g["a2"]
@@ -39,6 +40,7 @@ def test_decide_no_repair_if_no_resource(world):
     player.resources = [0, 0]
     p.decide()
     assert not p.orders
+
 
 def test_decide_gather_if_no_repair(world):
     g = world.grid
@@ -52,7 +54,8 @@ def test_decide_gather_if_no_repair(world):
     th.hp = th.hp // 2
     p.decide()
     assert p.orders[0].keyword == "repair"
-    
+
+
 def test_repair_unit(world):
     g = world.grid
     place = g["a2"]
@@ -68,6 +71,7 @@ def test_repair_unit(world):
         p.update()
     assert c.hp == c.hp_max
 
+
 def test_high_ground_hit_chance(world):
     g = world.grid
     place = g["a1"]
@@ -82,4 +86,4 @@ def test_high_ground_hit_chance(world):
     assert a.chance_to_hit(a2) == 50
     assert 450 < sum(1 for i in range(1000) if a.has_hit(a2)) < 550
     f = world.unit_class("footman")(player, place, place.x, place.y)
-    assert f.chance_to_hit(a2) == 100 # melee
+    assert f.chance_to_hit(a2) == 100  # melee

@@ -59,6 +59,7 @@ def string_to_msg(s, spell=True):
             l.extend(c)
     return l
 
+
 def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
     voice.menu(msg)
     s = default
@@ -82,9 +83,7 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
                 try:
                     c = e.unicode
                     s += c
-                    voice.item(string_to_msg(c)
-                               + mp.PERIOD
-                               + string_to_msg(s, spell))
+                    voice.item(string_to_msg(c) + mp.PERIOD + string_to_msg(s, spell))
                 except:
                     warning("error reading character from keyboard")
                     voice.item(mp.BEEP + mp.PERIOD + string_to_msg(s, spell))
@@ -92,10 +91,12 @@ def input_string(msg=[], pattern="^[a-zA-Z0-9]$", default="", spell=True):
                 voice.item(mp.BEEP + mp.PERIOD + string_to_msg(s, spell))
         elif e.type == USEREVENT:
             voice.update()
-        voice.update() # useful for SAPI
+        voice.update()  # useful for SAPI
+
 
 def _remember_path(menu_name):
     return os.path.join(TMP_PATH, menu_name + ".txt")
+
 
 CLOSE_MENU = 1
 
@@ -134,11 +135,13 @@ class Menu:
         choice = self.choices[self.choice_index]
         msg = list(choice[0])
         if len(choice) > 2:
-            msg +=  mp.COMMA + choice[2]
+            msg += mp.COMMA + choice[2]
         voice.item(msg)
 
     def _choice_exists(self):
-        return self.choice_index is not None and 0 <= self.choice_index < len(self.choices)
+        return self.choice_index is not None and 0 <= self.choice_index < len(
+            self.choices
+        )
 
     def _select_next_choice(self, first_letter=None, inc=1):
         if self.choices:
@@ -161,7 +164,7 @@ class Menu:
                 if not found:
                     self.choice_index -= inc
                     self.choice_index %= len(self.choices)
-                    return 
+                    return
             self._say_choice()
 
     def _confirm_choice(self):
@@ -188,7 +191,7 @@ class Menu:
             voice.item(help_msg("menu"))
         elif e.key == K_F5:
             voice.previous()
-        elif e.key in [K_LALT,K_RALT]:
+        elif e.key in [K_LALT, K_RALT]:
             voice.say_next()
         elif e.key == K_F6:
             voice.say_next(history_only=True)
@@ -200,16 +203,18 @@ class Menu:
             if self.server is None:
                 voice.item(mp.BEEP)
             else:
-                msg = input_string(msg=mp.ENTER_MESSAGE,
-                                   pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$",
-                                   spell=False)
+                msg = input_string(
+                    msg=mp.ENTER_MESSAGE,
+                    pattern="^[a-zA-Z0-9 .,'@#$%^&*()_+=?!]$",
+                    spell=False,
+                )
                 if msg:
                     self.server.write_line("say %s" % msg)
         elif e.unicode and e.mod & KMOD_SHIFT:
             self._select_next_choice(e.unicode, -1)
         elif e.unicode:
             self._select_next_choice(e.unicode)
-        elif e.key not in [K_LSHIFT,K_RSHIFT]:
+        elif e.key not in [K_LSHIFT, K_RSHIFT]:
             voice.item(mp.SELECT_AND_CONFIRM_EXPLANATION)
 
     def append(self, label, action, explanation=None):
@@ -236,7 +241,10 @@ class Menu:
 
     def _execute_choice(self):
         label, action = self.choices[self.choice_index][:2]
-        def cmd(): pass
+
+        def cmd():
+            pass
+
         args = ()
         if hasattr(action, "run"):
             cmd = action.run
@@ -246,7 +254,10 @@ class Menu:
             cmd = action[0]
             args = action[1:]
         elif action == CLOSE_MENU:
-            def cmd(): return CLOSE_MENU
+
+            def cmd():
+                return CLOSE_MENU
+
         if cmd(*args) == CLOSE_MENU:
             self.end_loop = True
         if self.remember is not None and action is not None:
@@ -265,20 +276,20 @@ class Menu:
             voice.update()
         elif e.type == KEYDOWN:
             self._process_keydown(e)
-        voice.update() # useful for SAPI
+        voice.update()  # useful for SAPI
 
     def _get_choice_from_static_menu(self):
         self.choice_done = False
         while not self.choice_done:
             self._try_to_get_choice(pygame.event.poll())
-            time.sleep(.01)
+            time.sleep(0.01)
 
     def step(self):
         self.choice_done = False
         self._try_to_get_choice(pygame.event.poll())
         if self.choice_done:
             self._execute_choice()
-    
+
     def run(self):
         if self.title:
             voice.menu(self.title)

@@ -19,7 +19,6 @@ from soundrts.lib.nofloat import PRECISION
 
 
 class Computer2ForTests(wpc2.Computer2):
-
     def cheat(self):
         self.has = lambda x: True
         self.resources = [1000 * PRECISION for _ in self.resources]
@@ -41,24 +40,29 @@ from soundrts.lib.voice import voice
 def do_nothing(*a, **k):
     pass
 
+
 def remove_voice():
     voice._say_now = do_nothing
     voice.item = do_nothing
     voice.info = do_nothing
 
-MultiplayerGame._countdown = do_nothing   # type: ignore
+
+MultiplayerGame._countdown = do_nothing  # type: ignore
+
 
 def set_position(x, y):
-    os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x},{y}"
+    os.environ["SDL_VIDEO_WINDOW_POS"] = f"{x},{y}"
+
 
 def run_client(n, auto):
-    if 0:#n == 0:
+    if 0:  # n == 0:
         world.PROFILE = True
-    if 1:#n != 0:
+    if 1:  # n != 0:
         remove_voice()
     set_position(0, n * 235 + 50)
     clientmain.init_media()
     clientmain.connect_and_play(auto=auto)
+
 
 def run_server():
     if "win32gui" in sys.modules:
@@ -68,7 +72,6 @@ def run_server():
 
 
 class Create:
-
     def __init__(self, map_index, speed, public=""):
         self.map_index = map_index
         self.speed = speed
@@ -80,7 +83,6 @@ class Create:
 
 
 class Invite:
-
     def __init__(self, nb):
         self.nb = nb
 
@@ -93,7 +95,6 @@ class Invite:
 
 
 class InviteAI:
-
     def __init__(self, easy=0, aggressive=0, ai2=0):
         self.easy = easy
         self.aggressive = aggressive
@@ -102,18 +103,17 @@ class InviteAI:
     def run(self, menu):
         for _ in range(self.easy):
             menu.push("invite_easy")
-            time.sleep(.1)
+            time.sleep(0.1)
         for _ in range(self.aggressive):
             menu.push("invite_aggressive")
-            time.sleep(.1)
+            time.sleep(0.1)
         for _ in range(self.ai2):
             menu.push("invite_ai2")
-            time.sleep(.1)
+            time.sleep(0.1)
         return True
 
 
 class Register:
-
     def run(self, menu):
         if menu.invitations:
             menu.push("register %s" % menu.invitations[0][0])
@@ -121,7 +121,6 @@ class Register:
 
 
 class Start:
-
     def run(self, menu):
         if len(menu.registered_players) >= menu.map.nb_players_min:
             menu.push("start")
@@ -135,6 +134,9 @@ if __name__ == "__main__":
     # ais = (1, 1, 10)
     map_index = 10
     # map_index = "jl4"
-    Process(target=run_client, args=(0, [Create(map_index, 20), Invite(n), InviteAI(*ais), Start()], )).start()
+    Process(
+        target=run_client,
+        args=(0, [Create(map_index, 20), Invite(n), InviteAI(*ais), Start()],),
+    ).start()
     for i in range(n):
-        Process(target=run_client, args=(i + 1, [Register()], )).start()
+        Process(target=run_client, args=(i + 1, [Register()],)).start()

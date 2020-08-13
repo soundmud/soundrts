@@ -19,7 +19,11 @@ if __name__ == "__main__":
 
     # players = ["test", "easy"], ["random_faction", "random_faction"], ["1", "2"]
     # players = ["test", "aggressive"], ["random_faction", "random_faction"], ["1", "2"]
-    players = ["test", "aggressive", "easy"], ["random_faction", "random_faction", "random_faction"], ["1", "1", "2"]
+    players = (
+        ["test", "aggressive", "easy"],
+        ["random_faction", "random_faction", "random_faction"],
+        ["1", "1", "2"],
+    )
 
     try:
         clientmain.TrainingGame(Map(map), *players).run(speed=20)

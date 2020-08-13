@@ -5,7 +5,8 @@ config.load()
 # hide the pygame support prompt from players
 if not config.debug_mode:
     import os
-    os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+
+    os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 
 from .lib import log
 from .lib.log import exception, warning
@@ -20,7 +21,7 @@ log.add_console_handler()
 import locale
 
 try:
-    locale.setlocale(locale.LC_ALL, '')
+    locale.setlocale(locale.LC_ALL, "")
 except:
     warning("couldn't set locale")
 
@@ -72,11 +73,13 @@ def choose_server_ip_in_a_list():
                     menu.append(
                         [login],
                         (connect_and_play, ip, port),
-                        [f"{int(delay * 1000)}ms", ","] + mp.SERVER_HOSTED_BY + [login])
+                        [f"{int(delay * 1000)}ms", ","] + mp.SERVER_HOSTED_BY + [login],
+                    )
     menu.choices.sort(key=lambda x: int(x[2][0][:-2]))
     menu.title = nb2msg(compatible) + mp.SERVERS_ON + nb2msg(total)
     menu.append(mp.CANCEL2, None, mp.GO_BACK_TO_PREVIOUS_MENU)
     menu.run()
+
 
 def enter_server_ip():
     host = input_string([], r"^[A-Za-z0-9\.]$")
@@ -85,32 +88,39 @@ def enter_server_ip():
     if host:
         connect_and_play(host)
 
+
 def multiplayer_menu():
     if config.login == "player":
         voice.alert(mp.ENTER_NEW_LOGIN)
         modify_login()
-    menu = Menu(mp.MAKE_A_SELECTION, [
-        (mp.CHOOSE_SERVER_IN_LIST, choose_server_ip_in_a_list),
-        (mp.ENTER_SERVER_IP, enter_server_ip),
-        (mp.CANCEL, None),
-         ])
+    menu = Menu(
+        mp.MAKE_A_SELECTION,
+        [
+            (mp.CHOOSE_SERVER_IN_LIST, choose_server_ip_in_a_list),
+            (mp.ENTER_SERVER_IP, enter_server_ip),
+            (mp.CANCEL, None),
+        ],
+    )
     menu.run()
+
 
 def replay(n):
     ReplayGame(os.path.join(REPLAYS_PATH, n)).run()
+
 
 def replay_menu():
     menu = Menu(mp.OBSERVE_RECORDED_GAME)
     for n in sorted(os.listdir(REPLAYS_PATH), reverse=True):
         if n.endswith(".txt"):
-            menu.append([time.strftime("%c", time.localtime(int(n[:-4])))],
-                        (replay, n))
+            menu.append([time.strftime("%c", time.localtime(int(n[:-4])))], (replay, n))
     menu.append(mp.QUIT2, None)
     menu.run()
 
+
 def modify_login():
-    login = input_string(mp.ENTER_NEW_LOGIN + mp.USE_LETTERS_AND_NUMBERS_ONLY,
-                         "^[a-zA-Z0-9]$")
+    login = input_string(
+        mp.ENTER_NEW_LOGIN + mp.USE_LETTERS_AND_NUMBERS_ONLY, "^[a-zA-Z0-9]$"
+    )
     if login == None:
         voice.alert(mp.CURRENT_LOGIN_KEPT)
     elif (len(login) < 1) or (len(login) > 20):
@@ -119,6 +129,7 @@ def modify_login():
         voice.alert(mp.NEW_LOGIN + [login])
         config.login = login
         config.save()
+
 
 def restore_game():
     n = SAVE_PATH
@@ -144,12 +155,12 @@ def restore_game():
         warning("savegame file is not from this machine")
         voice.alert(mp.BEEP)
 
+
 def open_user_folder():
     webbrowser.open(CONFIG_DIR_PATH)
 
 
 class TrainingMenu:
-
     def _add_ai(self, ai_type):
         self._players.append(ai_type)
         self._factions.append("random_faction")
@@ -168,17 +179,20 @@ class TrainingMenu:
         for pn, (p, pr) in enumerate(zip(self._players, self._factions)):
             for r in ["random_faction"] + self._map.factions:
                 if r != pr:
-                    menu.append([p,] + style.get(r, "title"),
-                                (self._set_faction, pn, r))
+                    menu.append(
+                        [p,] + style.get(r, "title"), (self._set_faction, pn, r)
+                    )
 
     def _build_players_menu(self):
         menu = Menu()
         if len(self._players) < self._map.nb_players_max:
             menu.append(mp.INVITE + mp.QUIET_COMPUTER, (self._add_ai, "easy"))
-            menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER,
-                        (self._add_ai, "aggressive"))
-            menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER + nb2msg(2),
-                        (self._add_ai, "ai2"))
+            menu.append(
+                mp.INVITE + mp.AGGRESSIVE_COMPUTER, (self._add_ai, "aggressive")
+            )
+            menu.append(
+                mp.INVITE + mp.AGGRESSIVE_COMPUTER + nb2msg(2), (self._add_ai, "ai2")
+            )
         if len(self._players) >= self._map.nb_players_min:
             menu.append(mp.START, self._run_game)
         if len(self._map.factions) > 1:
@@ -206,30 +220,46 @@ class TrainingMenu:
 def single_player_menu():
     Menu(
         mp.MAKE_A_SELECTION,
-        [(c.title, c) for c in campaigns()] + [
+        [(c.title, c) for c in campaigns()]
+        + [
             (mp.START_A_GAME_ON, TrainingMenu().run),
             (mp.RESTORE, restore_game),
             (mp.BACK, CLOSE_MENU),
-        ]).loop()
+        ],
+    ).loop()
+
 
 def server_menu():
-    Menu(mp.WHAT_KIND_OF_SERVER, [
-        (mp.SIMPLE_SERVER, (start_server_and_connect, "admin_only"),
-         mp.SIMPLE_SERVER_EXPLANATION),
-        (mp.PUBLIC_SERVER, (start_server_and_connect, ""),
-         mp.PUBLIC_SERVER_EXPLANATION),
-        (mp.PRIVATE_SERVER,
-         (start_server_and_connect, "admin_only no_metaserver"),
-         mp.PRIVATE_SERVER_EXPLANATION),
-        (mp.CANCEL, None),
-        ]).run()
+    Menu(
+        mp.WHAT_KIND_OF_SERVER,
+        [
+            (
+                mp.SIMPLE_SERVER,
+                (start_server_and_connect, "admin_only"),
+                mp.SIMPLE_SERVER_EXPLANATION,
+            ),
+            (
+                mp.PUBLIC_SERVER,
+                (start_server_and_connect, ""),
+                mp.PUBLIC_SERVER_EXPLANATION,
+            ),
+            (
+                mp.PRIVATE_SERVER,
+                (start_server_and_connect, "admin_only no_metaserver"),
+                mp.PRIVATE_SERVER_EXPLANATION,
+            ),
+            (mp.CANCEL, None),
+        ],
+    ).run()
+
 
 def set_and_launch_mod(mods):
     config.mods = mods
     config.save()
     res.set_mods(config.mods)
-    main_menu() # update the menu title
+    main_menu()  # update the menu title
     raise SystemExit
+
 
 def mods_menu():
     mods_menu = Menu(mp.MODS)
@@ -240,36 +270,41 @@ def mods_menu():
     mods_menu.run()
     return CLOSE_MENU
 
+
 def set_and_launch_soundpack(soundpacks):
     config.soundpacks = soundpacks
     config.save()
     res.set_soundpacks(config.soundpacks)
-    main_menu() # update the menu title
+    main_menu()  # update the menu title
     raise SystemExit
+
 
 def soundpacks_menu():
     soundpacks_menu = Menu(mp.SOUNDPACKS)
     soundpacks_menu.append(mp.NOTHING, (set_and_launch_soundpack, ""))
     for soundpack in res.available_soundpacks():
-        soundpacks_menu.append([soundpack],
-                               (set_and_launch_soundpack, soundpack))
+        soundpacks_menu.append([soundpack], (set_and_launch_soundpack, soundpack))
     soundpacks_menu.append(mp.BACK, CLOSE_MENU)
     soundpacks_menu.run()
     return CLOSE_MENU
 
+
 def options_menu():
-    Menu(mp.OPTIONS_MENU, [
-        (mp.MODIFY_LOGIN, modify_login),
-        (mp.MODS, mods_menu),
-        (mp.SOUNDPACKS, soundpacks_menu),
-        (mp.OPEN_USER_FOLDER, open_user_folder),
-        (mp.BACK, CLOSE_MENU),
-        ]).loop()
+    Menu(
+        mp.OPTIONS_MENU,
+        [
+            (mp.MODIFY_LOGIN, modify_login),
+            (mp.MODS, mods_menu),
+            (mp.SOUNDPACKS, soundpacks_menu),
+            (mp.OPEN_USER_FOLDER, open_user_folder),
+            (mp.BACK, CLOSE_MENU),
+        ],
+    ).loop()
+
 
 def main_menu():
     Menu(
-        [f"SoundRTS {VERSION} {res.mods} {res.soundpacks},"]
-        + mp.MAKE_A_SELECTION,
+        [f"SoundRTS {VERSION} {res.mods} {res.soundpacks},"] + mp.MAKE_A_SELECTION,
         [
             [mp.SINGLE_PLAYER, single_player_menu, mp.SINGLE_PLAYER_EXPLANATION],
             [mp.MULTIPLAYER2, multiplayer_menu, mp.MULTIPLAYER2_EXPLANATION],
@@ -278,7 +313,9 @@ def main_menu():
             [mp.OPTIONS, options_menu, mp.OPTIONS_EXPLANATION],
             [mp.DOCUMENTATION, launch_manual],
             [mp.QUIT2, CLOSE_MENU, mp.QUIT2_EXPLANATION],
-        ]).loop()
+        ],
+    ).loop()
+
 
 def launch_manual():
     p = "doc"
@@ -288,6 +325,7 @@ def launch_manual():
         voice.alert(mp.BEEP)
     else:
         webbrowser.open(os.path.join(p, lang, "help-index.htm"))
+
 
 def main():
     try:

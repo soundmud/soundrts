@@ -10,12 +10,15 @@ from soundrts.mapfile import Map
 
 DIR = "multi"
 
+
 def size(m):
     return Map(os.path.join(DIR, m)).size()
+
 
 def add_digest(m):
     p = os.path.join(DIR, m)
     return "{} {}".format(m, Map(p).get_digest())
+
 
 def build():
     print("Updating list of official maps...")
