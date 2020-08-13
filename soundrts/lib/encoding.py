@@ -17,7 +17,9 @@ def _get_encoding_from_first_or_second_line(text, filename):
                 warning(f"unknown encoding in {filename}: {e}")
 
 
-def encoding(text, filename="test.txt"):
+def encoding(text, filename="test/tts.txt"):
+    if not filename.endswith("/tts.txt"):
+        return "utf-8"
     e = _get_encoding_from_first_or_second_line(text, filename)
     if text.startswith(b"\xef\xbb\xbf"):  # UTF-8 with BOM signature
         if e and e.lower() not in ["utf8", "utf-8", "utf_8"]:
