@@ -68,3 +68,6 @@ class Corpse(Entity):
     def slow_update(self):
         if self.place.world.time >= self.time_limit:
             self.delete()
+
+    def die(self, attacker):
+        pass
