@@ -3,6 +3,27 @@ Release notes
 
 .. contents::
 
+1.3.5
+-----
+
+For multiplayer games, this version requires:
+
+- client: 1.3.5 or later
+- server: 1.2-c12 or later
+
+Changes from 1.3.4:
+
+- bug fixed: couldn't save a game with terrain
+- fixed: the hit sound wasn't emitted if it killed the target
+- fixed: the game would freeze if there wasn't enough space in a square to create a unit
+
+Internationalization:
+
+- converted all the tts.txt files to UTF-8 with BOM signature. The encoding is still explicitly defined in the first line as UTF-8. The BOM signature might help some text editors to select UTF-8 automatically.
+- will always use UTF-8 (or ASCII) for text files other than tts.txt (rules.txt, style.txt, etc)
+- updated Spanish translation (thanks to Oscar Corona)
+
+
 1.3.4
 -----
 
