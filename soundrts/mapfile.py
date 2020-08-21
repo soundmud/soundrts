@@ -271,14 +271,21 @@ def _add_official_multi(w):
         w.append(Map(p, digest, official=True))
 
 
+def _add_if_not_there(w, p):
+    if os.path.normpath(p) not in (os.path.normpath(x.path) for x in w):
+        w.append(Map(p, None))
+
+
 def _add_custom_multi(w):
     for pp in res.get_all_packages_paths():
-        d = os.path.join(pp, "multi")
-        if os.path.isdir(d):
-            for n in os.listdir(d):
-                p = os.path.join(d, n)
-                if os.path.normpath(p) not in (os.path.normpath(x.path) for x in w):
-                    w.append(Map(p, None))
+        for dirpath, dirnames, filenames in os.walk(os.path.join(pp, "multi")):
+            for n in filenames:
+                if n != "map.txt":
+                    _add_if_not_there(w, os.path.join(dirpath, n))
+            for n in dirnames[:]:
+                if os.path.isfile(os.path.join(dirpath, n, "map.txt")):
+                    _add_if_not_there(w, os.path.join(dirpath, n))
+                    dirnames.remove(n)
 
 
 def _move_recommended_maps(w):
