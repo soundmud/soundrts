@@ -1,6 +1,7 @@
 # similar to http://www.python.org/dev/peps/pep-0263/
 import codecs
 import locale
+import os
 import re
 
 from soundrts.lib.log import warning
@@ -18,7 +19,7 @@ def _get_encoding_from_first_or_second_line(text, filename):
 
 
 def encoding(text, filename="test/tts.txt"):
-    if not filename.endswith("/tts.txt"):
+    if os.path.basename(filename) != "tts.txt":
         return "utf-8"
     e = _get_encoding_from_first_or_second_line(text, filename)
     if text.startswith(b"\xef\xbb\xbf"):  # UTF-8 with BOM signature
