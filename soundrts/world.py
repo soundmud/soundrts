@@ -1039,6 +1039,7 @@ class World:
             f.write("starting_squares %s\n" % " ".join(_sorted(self.starting_squares)))
             f.write("starting_units %s\n" % " ".join(self.starting_units))
             f.write("starting_resources %s\n" % self.starting_resources)
+            f.write("global_food_limit %s\n" % self.global_food_limit)
             for line in self.specific_starts:
                 f.write(line + "\n")
             f.write("\n")
