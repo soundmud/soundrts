@@ -491,3 +491,29 @@
 4340 iniciar uma partida pública em
 4341 Mods
 4342 Pacotes de som
+4343 velocidade
+
+4344 mar
+4345 lago
+4346 rio
+4347 montanha
+4348 ponte
+4349 vale
+4350 pântano
+4351 oceano
+4352 passagem montanhosa
+
+4353 ativar auto-reparar
+4354 desativar auto-reparar
+4355 ativar auto-explorar
+4356 desativar auto-explorar
+
+4357 estaleiro
+4358 barco
+4359 destruidor
+4360 barco de batalha
+4361 submarino
+
+4362 terra
+4363 floresta
+4364 floresta densa

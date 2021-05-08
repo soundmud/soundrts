@@ -18,11 +18,6 @@ selecionar todos os objetos sem a necessidade de se virar.
 Você pode, todavia, jogar no modo em primeira pessoa, útil para
 exploração e ataque.
 
-No Windows, você precisará de um leitor de tela ou de uma voz SAPI 5.
-No Linux o jogo usa o Speech Dispatcher.
-Mac OS X usa NS Speech Synthesis.
-A fala gravada foi totalmente removida no SoundRTS 1.2-alpha9.
-
 2. Tutorial
 -----------
 
@@ -118,12 +113,13 @@ Movendo-se pelo mapa
 
 As setas fazem você se mover de um quadrado a outro pelo mapa. Se um
 caminho direto existir entre o quadrado que você estiver e o novo, você
-ouvirá um som
-dependendo do tipo do caminho (caminho ou ponte). Se não existir um
+ouvirá um som dependendo do tipo do caminho (caminho ou ponte). Se não existir um
 caminho direto, você ouvirá um som de colisão e permanecerá no mesmo
 quadrado (pressione control + setas para passar por cima do obstáculo).
 Se você não conhecer ainda se um caminho existe (quadrado desconhecido)
 então nenhum som será ouvido.
+
+Pressione shift + setas para se mover vários quadrados de uma vez.
 
 Outra forma de se mover pelo mapa é pressionar Page Up, que levará você ao
 próximo quadrado interessante sem passar por quadrados vazios. Desde o SoundRTS 1.1 alpha
@@ -463,26 +459,16 @@ SoundRTS vem com um mod chamado "soundpack" contendo sons alternativos.
 Para ativar esse mod, no SoundRTS.ini_ substitua a linha "mods =" com "mods = soundpack".
 Então, reinicie o jogo para que as alterações tenham efeito.
 
-SAPI 5 (Windows)
-^^^^^^^^^^^^^^^^
-
-No `Soundrts.ini`_, se "srapi = 0", a voz padrão SAPI 5 será usada diretamente.
-
-Parâmetro srapi para Windows
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-No `Soundrts.ini`_, coloque "srapi = 1" para usar um leitor de tela (através de ScreenReaderAPI).
-
-Parâmetro srapi_wait para Windows
+wait_delay_per_character
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Como eu não consegui achar uma maneira de saber quando um leitor de
-tela para de falar no Windows, eu tive que calcular a duração de cada mensagem.
-Um parâmetro adicional chamado "srapi_wait" determina quanto tempo SoundRTS vai esperar até que ele envie outra mensagem ao leitor.
-Com "srapi_wait = .1" e uma mensagem de 10 caracteres, SoundRTS vai esperar por .1 * 10 = 1 segundo.
+Como algumas vezes é difícil identificar quando um leitor de tela para de falar, uma solução
+melhor-do-que-nada é calcular a duração de cada mensagem.
+Então, um parâmetro adicional chamado "wait_delay_per_character" determina quanto tempo SoundRTS vai esperar até que ele envie outra mensagem ao leitor.
+Com "wait_delay_per_character = .1" e uma mensagem de 10 caracteres, SoundRTS vai esperar por .1 * 10 = 1 segundo.
 
-Aumente o valor de "srapi_wait" se algumas mensagens estão sendo interrompidas pela próxima.
-Diminua o valor de "srapi_wait" se o jogo está silenciando muito entre uma mensagem e outra.
+Aumente o valor de "wait_delay_per_character" se algumas mensagens estão sendo interrompidas pela próxima.
+Diminua o valor de "wait_delay_per_character" se o jogo está silenciando muito entre uma mensagem e outra.
 
 Pasta temporária
 ^^^^^^^^^^^^^^^^
@@ -496,8 +482,7 @@ Pasta do usuário
 
 A pasta do usuário contém as configurações do jogo, os mapas
 personalizados e mods, e a pasta temporária.
-Uma forma fácil de achar a pasta do usuário é abrí-la pelo menu de
-opções.
+Uma forma fácil de achar a pasta do usuário é abrí-la pelo menu de opções.
 
 Se a pasta principal do jogo tiver uma pasta denominada "user", então essa pasta vai ser a pasta do usuário.
 Se a pasta "user" não existir, a pasta do usuário vai ser localizada dependendo do sistema operacional:
@@ -520,7 +505,6 @@ as instruções de como proceder para fazer isso:
   ser uma cópia de uma `pasta do usuário`_ existente (porém a versão tem que ser a mesma).
 
 - Windows: para jogar, execute "soundrts.exe".
-
 
 Como mudar a velocidade padrão de jogos offline
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
