@@ -1,0 +1,627 @@
+def messages
+not_enough_resource_0 135 10026
+not_enough_resource_1 135 10027
+def parameters
+resource_0_title 10026
+resource_1_title 10027
+def housing
+is_a building
+title 10001
+
+def farm
+is_a building
+title 10002
+
+
+def library
+is_a building
+title 10003
+
+def troopfactory
+is_a building
+title 10028
+
+def tankfactory
+is_a building
+title 10004
+
+def droidfactory
+is_a building
+title 10005
+
+def transportfactory
+is_a building
+title 10006
+
+def walkerfactory
+is_a building
+title 10007
+
+def airfactory
+is_a building
+title 10008
+
+def sithtemple
+is_a building
+title 10009
+
+
+def deathstarfactory
+is_a building
+title 10010
+
+
+def sith
+is_a unit
+title 10011
+launch_attack 10102
+order_ok 10111
+move 1053 1054
+move_on_grass 1053 1054
+move_on_leaves 1069 1070
+move_on_gravel 1068 1068
+move_on_wood 1067 1067
+keyboard soldier1
+
+def sithlord
+is_a unit
+title 10012
+launch_attack 10102
+order_ok 10111
+move 1053 1054
+move_on_grass 1053 1054
+move_on_leaves 1069 1070
+move_on_gravel 1068 1068
+move_on_wood 1067 1067
+keyboard soldier1
+
+def aat
+is_a unit
+title 10013
+launch_attack 10104
+move 10100
+order_ok 10111
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+death 10105
+keyboard soldier2
+
+def catd
+is_a unit
+title 10014
+launch_attack 10104
+order_ok 10111
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+death 10105
+keyboard soldier3
+
+def stardestroyer
+is_a unit
+title 10030
+launch_attack 10106
+order_ok 10111
+move 10101
+move_on_grass 10101
+move_on_leaves 10101
+move_on_gravel 10101
+move_on_wood 10100
+death 10105
+keyboard soldier7
+
+def starcruzer
+is_a unit
+title 10031
+launch_attack 10106
+order_ok 10111
+move 10101
+move_on_grass 10101
+move_on_leaves 10101
+move_on_gravel 10101
+move_on_wood 10101
+keyboard soldier7
+
+def troop
+is_a unit
+title 10032
+launch_attack 10104
+order_ok 10111
+move 10103
+move_on_grass 10103
+move_on_leaves 10103
+move_on_gravel 10103
+move_on_wood 10103
+keyboard soldier1
+
+def droidgunship
+is_a unit
+title 10015
+launch_attack 10106
+order_ok 10111
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+death 10105
+keyboard soldier4
+
+def dsd
+is_a unit
+title 10016
+launch_attack 10104
+order_ok 10111
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+death 10105
+keyboard soldier5
+
+def hfs
+is_a unit
+title 10017
+launch_attack 10104
+order_ok 10111
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+death 10105
+keyboard soldier6
+
+def mtt
+is_a unit
+title 10018
+launch_attack 10106
+order_ok 10111
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+death 10105
+keyboard soldier7
+
+def walker
+is_a unit
+title 10019
+launch_attack 10104
+order_ok 10111
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+death 10105
+keyboard soldier7
+
+def tiefighter
+is_a unit
+title 10020
+launch_attack 10104
+order_ok 10111
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+death 10105
+keyboard soldier7
+
+def deathstar
+is_a unit
+title 10021
+launch_attack 10106
+order_ok 10111
+move 10101
+move_on_grass 10101
+move_on_leaves 10101
+move_on_gravel 10101
+move_on_wood 10101
+death 10105
+keyboard soldier7
+
+def armour
+class upgrade
+title 10022
+
+
+def thing
+title
+noise
+missed 1012
+attack_hit
+death
+proportion_0 if_me 6100 else 6000
+proportion_1 if_me 6101 else 6001
+proportion_2 if_me 6102 else 6002
+proportion_3 if_me 6103 else 6003
+proportion_4 if_me 6104 else 6004
+proportion_5 if_me 6105 else 6005
+proportion_6 if_me 6106 else 6006
+proportion_7 if_me 6107 else 6007
+proportion_8 if_me 6108 else 6008
+proportion_9 if_me 6109 else 6009
+proportion_10 if_me 6110 else 6010
+ground
+lose_fight 1324
+order_ok if_me 10109
+order_impossible 1029
+research_complete_msg 4248 126
+added 1329
+added_msg $1 
+enter 1330
+exit 1331
+
+
+def ething
+title
+noise
+missed 1012
+attack_hit
+death
+proportion_0 if_me 6100 else 6000
+proportion_1 if_me 6101 else 6001
+proportion_2 if_me 6102 else 6002
+proportion_3 if_me 6103 else 6003
+proportion_4 if_me 6104 else 6004
+proportion_5 if_me 6105 else 6005
+proportion_6 if_me 6106 else 6006
+proportion_7 if_me 6107 else 6007
+proportion_8 if_me 6108 else 6008
+proportion_9 if_me 6109 else 6009
+proportion_10 if_me 6110 else 6010
+ground
+lose_fight 1324
+order_ok if_me 10108 else 10108
+order_impossible 1029
+research_complete_msg 4248 126
+added 1329
+added_msg $1 
+enter 1330
+exit 1331
+
+
+def unit
+is_a thing
+complete
+complete_msg $1 124
+launch_attack
+death if_me 1310 else 1309 1051
+alert 1078 ; horn
+production 1327 ; research, train or upgrade_to
+win_fight if_me 1326 else 1325
+attack if_me 1130 else 1030
+flee if_me 1174 else 1074
+healed 1097
+blocked 1027
+noise_if_damaged if_me repeat 12 1172 else repeat 12 1072
+noise_when_building repeat 4 1046 1048 1049
+noise_if_very_damaged if_me repeat 12 1173 else repeat 12 1073
+
+def eunit
+is_a ething
+complete
+complete_msg $1 124
+launch_attack
+death if_me 1310 else 1309 1051
+alert 1078 ; horn
+production 1327 ; research, train or upgrade_to
+win_fight if_me 1326 else 1325
+attack if_me 1130 else 1030
+flee if_me 1174 else 1074
+healed 1097
+blocked 1027
+noise_if_damaged if_me repeat 12 1172 else repeat 12 1072
+noise_when_building repeat 4 1046 1048 1049
+noise_if_very_damaged if_me repeat 12 1173 else repeat 12 1073
+
+def building
+is_a unit
+complete if_me 1200 else 1100
+complete_msg $1 126
+death 1047
+alert 1079 ; bell
+noise_if_damaged loop 1016 .5 ; half volume
+noise_if_very_damaged loop 1016
+ground grass
+keyboard building
+
+def alien
+is_a unit
+title 10023
+noise_when_exploiting_goldmine repeat 1.6 1038
+noise_when_exploiting_wood repeat 1.6 1038
+store_resource_0 10110
+store_resource_1 10110
+move 1053 1054
+move_on_grass 1053 1054
+move_on_leaves 1069 1070
+move_on_gravel 1068 1068
+move_on_wood 1067 1067
+order_ok 10111
+keyboard worker
+
+
+def goldmine
+is_a resource_deposit
+title 10029
+exhausted 1047
+ground gravel
+
+
+def wood
+is_a resource_deposit
+title 10024
+exhausted 1047
+ground wood
+
+def empire
+title 10025
+
+def greatsupplieshouse
+is_a building
+title 10034
+
+def greatmetalshouse
+is_a building
+title 10035
+
+def duplicator
+class upgrade
+title 10033
+
+def clonetrooperfactory
+is_a building
+title 10036
+
+def atankfactory
+is_a building
+title 10004
+
+def gunshipfactory
+is_a building
+title 10037
+
+def atransportfactory
+is_a building
+title 10006
+
+def bongofactory
+is_a building
+title 10038
+
+def aairfactory
+is_a building
+title 10008
+
+def spafactory
+is_a building
+title 10039
+
+def aalien
+is_a unit
+title 10023
+noise_when_exploiting_goldmine repeat 1.6 1038
+noise_when_exploiting_wood repeat 1.6 1038
+store_resource_0 10110
+store_resource_1 10110
+move 1053 1054
+move_on_grass 1053 1054
+move_on_leaves 1069 1070
+move_on_gravel 1068 1068
+move_on_wood 1067 1067
+keyboard worker
+
+def barcspeeder
+is_a unit
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+title 10040
+launch_attack 10104
+keyboard soldier7
+
+def bongo
+is_a unit
+move 10101
+move_on_grass 10101
+move_on_leaves 10101
+move_on_gravel 10101
+move_on_wood 10101
+title 10041
+launch_attack 10106
+death 10105
+keyboard soldier6
+
+def tt
+is_a unit
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+title 10042
+launch_attack 10104
+death 10105
+keyboard soldier3
+
+def landspeeder
+is_a unit
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+title 10043 
+launch_attack 10104
+keyboard soldier7
+
+def agb
+is_a unit
+move 10101
+move_on_grass 10101
+move_on_leaves 10101
+move_on_gravel 10101
+move_on_wood 10101
+title 10044
+launch_attack 10104
+death 10105
+keyboard soldier3
+
+def ags
+is_a unit
+move 10101
+move_on_grass 10101
+move_on_leaves 10101
+move_on_gravel 10101
+move_on_wood 10101
+title 10045
+launch_attack 10106
+death 10105
+keyboard soldier3
+
+def spa
+is_a unit
+move 10101
+move_on_grass 10101
+move_on_leaves 10101
+move_on_gravel 10101
+move_on_wood 10101
+title 10046
+launch_attack 10106
+death 10106
+keyboard soldier6
+
+def vwf
+is_a unit
+title 10047
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+launch_attack 10104
+death 10105
+keyboard soldier5
+
+def xwf
+is_a unit
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+launch_attack 10104
+death 10105
+title 10048
+keyboard soldier5
+
+def ywf
+is_a unit
+move 10100
+move_on_grass 10100
+move_on_leaves 10100
+move_on_gravel 10100
+move_on_wood 10100
+launch_attack 10104
+death 10105
+title 10049
+keyboard soldier5
+
+def rbc
+is_a unit
+move 10101
+move_on_grass 10101
+move_on_leaves 10101
+move_on_gravel 10101
+move_on_wood 10101
+launch_attack 10106
+death 10105
+title 10050
+keyboard soldier6
+
+def jedi
+is_a unit
+move 1053 1054
+move_on_grass 1053 1054
+move_on_leaves 1069 1070
+move_on_gravel 1068 1068
+move_on_wood 1067 1067
+title 10051
+launch_attack 10102
+keyboard soldier1
+
+def jediknight
+is_a unit
+move 1053 1054
+move_on_grass 1053 1054
+move_on_leaves 1069 1070
+move_on_gravel 1068 1068
+move_on_wood 1067 1067
+title 10052
+launch_attack 10102
+keyboard soldier1
+
+def jedimaster
+is_a unit
+move 1053 1054
+move_on_grass 1053 1054
+move_on_leaves 1069 1070
+move_on_gravel 1068 1068
+move_on_wood 1067 1067
+title 10053
+launch_attack 10102
+keyboard soldier1
+
+def clonetrooper
+is_a unit
+move 10103
+move_on_grass 10103
+move_on_leaves 10103
+move_on_gravel 10103
+move_on_wood 10103
+title 10054
+launch_attack 10104
+keyboard soldier1
+
+def rebbles
+title 10055
+
+def jeditemple
+is_a building
+title 10056
+
+def ahousing
+is_a building
+title 10001
+
+def agreatsupplieshouse
+is_a building
+title 10034
+
+def agreatmetalshouse
+is_a building
+title 10035
+
+
+def path
+title 10108
+
+def artilaryresearch
+class upgrade
+title 10058
+
+def alibrary
+is_a building
+title 10057

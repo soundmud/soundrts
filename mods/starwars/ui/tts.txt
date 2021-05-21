@@ -1,0 +1,69 @@
+10001 resource factory
+10002 farm
+10003 library
+10004 tank factory
+10005 droid factory
+10006 transport factory
+10007 walker factory
+10008 air factory
+10009 sith temple
+10010 death star factory
+10011 sith
+10012 sith lord
+10013 armoured asult tank
+10014 corporal alliance tank droid
+10015 droid gunship
+10016 dwarf spider droid
+10017 hell fire droid
+10018 multi troop transport
+10019 walker
+10020 tie fighter
+10021 death star
+10022 armour
+10023 alien
+10024 metals
+10025 empire alliance
+10026 supplies
+10027 metals
+10028 troop factory
+10029 supplies mine
+10030 star destroyer
+10031 star battle cruzer
+10032 storm trooper
+10033 duplification
+10034 great supplies factory
+10035 great metals factory
+10036 clone trooper factory
+10037 gunship factory
+10038 bongo factory
+10039 artillery factory
+10040 barc speeder
+10041 bongo
+10042 turbo tank
+10043 land speeder
+10044 asult gunboat
+10045 attack gunship
+10046 Self-propelled heavy artillery
+10047 V wing fighter
+10048 X wing fighter
+10049 Y wing fighter
+10050 rebble battle cruzer
+10051 jedi
+10052 jedi knight
+10053 jedi master
+10054 clone trooper
+10055 rebbles
+10056 jedi temple
+10057 library
+10058 artillery research
+20001 Use the directional arrow keys, left, right, up, down to explore the map
+20002 E and Shift E to go to the next and previous worker
+20003 letters r to p to navigate to the next soldier or unit
+20004 shift and the letters r to p to go to the previous unit or soldier
+20005 w to navigate to the next building
+20006 shift w to navigate to the previous building
+20007 starwars mod.
+20008 created by NathanTech
+20009 on the web at nathantech.podserver.info
+20010 all donations or suggestions apreciated.
+10108 passage

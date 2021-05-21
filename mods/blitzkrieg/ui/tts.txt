@@ -1,0 +1,66 @@
+; replacement strings for things we're renaming
+; or is it better to add new ones and style.txt them up?
+81	supply stash
+131	credits
+133	oil
+137	oil
+
+; our own new stuff
+7000	Allies
+7001	German
+7002	Soviet
+7003	Command Center
+7004	Workman
+7005	Rifleman
+7006	Allied
+7007	Supply Center
+7008	Oil Depot
+7009	factory
+7010	air
+7011	tech center
+7012	infantry
+7013	P I A T
+7014	Panzerfaust
+7015	Partisan
+7016	light tank
+7017	Stuart
+7018	T70
+7019	Panzer 38
+7020	medium tank
+7021	Sherman
+7022	T34
+7023	Panther
+7024	Labourer
+7025	artillery
+7026	Bishop	
+7027	Katiusha
+7028	Hummel
+7029	heavy tank
+7030	Churchill
+7031	KV 1
+7032	Tiger
+7033	scout vehicle
+7034	Jeep
+7035	BA 64
+7036	Stummel
+7037	Pershing
+7038	I S 2
+7039	Royal Tiger
+7040	Call in support bombers
+7041	Typhoon
+7042	I L 2
+7043	Stuka
+7044	Bomber Command
+7045	Flak cannon
+7046	Flak trak
+7047	M16 Halftrack
+7048	Call in fighter planes
+7049	Spitfire
+7050	Yak Attack Plane
+7051	FW 1 0 9
+7052	Nuclear command bunker
+7053	Nuclear strike
+7054	Grenadier
+7055	V2 Rocket Launcher
+7056	Fire V2 Rocket
+7057	Advanced barracks

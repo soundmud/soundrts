@@ -1,0 +1,362 @@
+; Allies
+; an easy AI
+def allies_easy
+get 2 labourer 2 allies_workman
+get supply_center
+get 4 labourer 2 allies_workman 5 allies_rifleman
+get 6 labourer 2 allies_workman 15 allies_rifleman
+get 2 supply_center
+get 6 labourer 2 allies_workman 15 allies_rifleman
+get 2 allies_light_tank
+get 3 allies_flak_trak
+goto -1
+
+; an agressive AI, attacking when each wave is ready (sometimes earlier if the strength is sufficient)
+def allies_aggressive
+
+watchdog 600 ; never stay on the same line for more than 10 minutes
+constant_attacks 1 ; constantly attack if powerful enough
+
+label beginning
+get 2 labourer 1 allies_workman
+get supply_center
+goto_random rifle_rush early_game
+
+label rifle_rush
+get 2 labourer 1 allies_workman 1 allies_rifleman
+attack
+goto_random rifles_rush early_game
+
+label early_game
+get 4 labourer 2 allies_workman
+get 2 supply_center
+goto_random rifles_rush big_rifles_rush small_mixed_infantry_rush mixed_infantry_rush get_defences scout scout_rush light_tank mid_game
+
+label rifles_rush
+get 10 allies_rifleman
+attack
+goto early_game
+
+label big_rifle_rush
+get 20 allies_rifleman
+attack
+goto_random early_game mid_game
+
+label small_mixed_infantry_rush
+get 5 allies_rifleman 3 allies_rocket_infantry
+attack
+goto early_game
+
+label mixed_infantry_rush
+get 10 allies_rifleman 5 allies_rocket_infantry
+attack
+goto_random early_game mid_game
+
+label get_defences
+get 3 allies_workman 10 allies_rifleman
+get 2 guardtower 1 cannontower
+goto mid_game
+
+label scout
+get 1 allies_scout
+attack
+goto_random early_game mid_game
+
+label scout_rush
+get 3 allies_scout
+attack
+goto_random early_game mid_game
+
+label light_tank
+get 1 allies_light_tank
+attack
+goto mid_game
+
+label mid_game
+get 7 labourer 3 allies_workman
+goto_random light_tank_rush light_tank_division medium_tank_rush get_more_defences late_game
+
+label light_tank_rush
+get 3 allies_light_tank
+attack
+goto mid_game
+
+label light_tank_division
+get 6 allies_light_tank
+attack
+goto_random mid_game late_game
+
+label medium_tank_rush
+get 3 allies_medium_tank
+attack
+goto mid_game
+
+label get_more_defences
+get 5 guardtower 3 cannontower 4 flak_cannon
+goto_random mid_game late_game
+
+label late_game
+get 8 labourer 4 allies_workman
+goto_random mid_game medium_tank_division heavy_tank supported_heavy_tank artillery
+
+label medium_tank_division
+get 5 allies_medium_tank
+attack
+goto late_game
+
+label heavy_tank
+get 1 allies_heavy_tank
+attack
+goto_late_game
+
+label supported_heavy_tank
+get 1 allies_heavy_tank 5 allies_rifleman 3 allies_rocket_infantry 2 allies_light_tank
+attack
+goto late_game
+
+label artillery
+get 1 allies_artillery
+attack
+goto late_game
+
+; german
+; an easy AI
+def german_easy
+get 2 labourer 2 german_workman
+get supply_center
+get 4 labourer 2 german_workman 5 german_rifleman
+get 6 labourer 2 german_workman 15 german_rifleman
+get 2 supply_center
+get 6 labourer 2 german_workman 15 german_rifleman
+get 2 german_light_tank
+get 3 german_flak_trak
+goto -1
+
+; an agressive AI, attacking when each wave is ready (sometimes earlier if the strength is sufficient)
+def german_aggressive
+
+watchdog 600 ; never stay on the same line for more than 10 minutes
+constant_attacks 1 ; constantly attack if powerful enough
+
+label beginning
+get 2 labourer 1 german_workman
+get supply_center
+goto_random rifle_rush early_game
+
+label rifle_rush
+get 2 labourer 1 german_workman 1 german_rifleman
+attack
+goto_random rifles_rush early_game
+
+label early_game
+get 4 labourer 2 german_workman
+get 2 supply_center
+goto_random rifles_rush big_rifles_rush small_mixed_infantry_rush mixed_infantry_rush get_defences scout scout_rush light_tank mid_game
+
+label rifles_rush
+get 10 german_rifleman
+attack
+goto early_game
+
+label big_rifle_rush
+get 20 german_rifleman
+attack
+goto_random early_game mid_game
+
+label small_mixed_infantry_rush
+get 5 german_rifleman 3 german_rocket_infantry
+attack
+goto early_game
+
+label mixed_infantry_rush
+get 10 german_rifleman 5 german_rocket_infantry
+attack
+goto_random early_game mid_game
+
+label get_defences
+get 3 german_workman 10 german_rifleman
+get 2 german_guardtower 1 cannontower
+goto mid_game
+
+label scout
+get 1 german_scout
+attack
+goto_random early_game mid_game
+
+label scout_rush
+get 3 german_scout
+attack
+goto_random early_game mid_game
+
+label light_tank
+get 1 german_light_tank
+attack
+goto mid_game
+
+label mid_game
+get 7 labourer 3 german_workman
+goto_random light_tank_rush light_tank_division medium_tank_rush get_more_defences late_game
+
+label light_tank_rush
+get 3 german_light_tank
+attack
+goto mid_game
+
+label light_tank_division
+get 6 german_light_tank
+attack
+goto_random mid_game late_game
+
+label medium_tank_rush
+get 3 german_medium_tank
+attack
+goto mid_game
+
+label get_more_defences
+get 5 german_guardtower 3 cannontower 4 flak_cannon
+goto_random mid_game late_game
+
+label late_game
+get 8 labourer 4 german_workman
+goto_random mid_game medium_tank_division heavy_tank supported_heavy_tank artillery
+
+label medium_tank_division
+get 5 german_medium_tank
+attack
+goto late_game
+
+label heavy_tank
+get 1 german_heavy_tank
+attack
+goto_late_game
+
+label supported_heavy_tank
+get 1 german_heavy_tank 5 german_rifleman 3 german_rocket_infantry 2 german_light_tank
+attack
+goto late_game
+
+label artillery
+get 1 german_artillery
+attack
+goto late_game
+
+; soviet
+; an easy AI
+def soviet_easy
+get 2 labourer 2 soviet_workman
+get supply_center
+get 4 labourer 2 soviet_workman 5 soviet_rifleman
+get 6 labourer 2 soviet_workman 15 soviet_rifleman
+get 2 supply_center
+get 6 labourer 2 soviet_workman 15 soviet_rifleman
+get 2 soviet_light_tank
+get 3 soviet_flak_trak
+goto -1
+
+; an agressive AI, attacking when each wave is ready (sometimes earlier if the strength is sufficient)
+def soviet_aggressive
+
+watchdog 600 ; never stay on the same line for more than 10 minutes
+constant_attacks 1 ; constantly attack if powerful enough
+
+label beginning
+get 2 labourer 1 soviet_workman
+get supply_center
+goto_random rifle_rush early_game
+
+label rifle_rush
+get 2 labourer 1 soviet_workman 1 soviet_rifleman
+attack
+goto_random rifles_rush early_game
+
+label early_game
+get 4 labourer 2 soviet_workman
+get 2 supply_center
+goto_random rifles_rush big_rifles_rush small_mixed_infantry_rush mixed_infantry_rush get_defences scout scout_rush light_tank mid_game
+
+label rifles_rush
+get 10 soviet_rifleman
+attack
+goto early_game
+
+label big_rifle_rush
+get 20 soviet_rifleman
+attack
+goto_random early_game mid_game
+
+label small_mixed_infantry_rush
+get 5 soviet_rifleman 3 partisan
+attack
+goto early_game
+
+label mixed_infantry_rush
+get 10 soviet_rifleman 5 partisan
+attack
+goto_random early_game mid_game
+
+label get_defences
+get 3 soviet_workman 10 soviet_rifleman
+get 2 guardtower 1 cannontower
+goto mid_game
+
+label scout
+get 1 soviet_scout
+attack
+goto_random early_game mid_game
+
+label scout_rush
+get 3 soviet_scout
+attack
+goto_random early_game mid_game
+
+label light_tank
+get 1 soviet_light_tank
+attack
+goto mid_game
+
+label mid_game
+get 7 labourer 3 soviet_workman
+goto_random light_tank_rush light_tank_division medium_tank_rush get_more_defences late_game
+
+label light_tank_rush
+get 3 soviet_light_tank
+attack
+goto mid_game
+
+label light_tank_division
+get 6 soviet_light_tank
+attack
+goto_random mid_game late_game
+
+label medium_tank_rush
+get 3 soviet_medium_tank
+attack
+goto mid_game
+
+label get_more_defences
+get 5 guardtower 3 cannontower 4 flak_cannon
+goto_random mid_game late_game
+
+label late_game
+get 8 labourer 4 soviet_workman
+goto_random mid_game medium_tank_division heavy_tank supported_heavy_tank artillery
+
+label medium_tank_division
+get 7 soviet_medium_tank
+attack
+goto late_game
+
+label heavy_tank
+get 1 soviet_heavy_tank
+attack
+goto_late_game
+
+label supported_heavy_tank
+get 1 soviet_heavy_tank 5 soviet_rifleman 3 partisan 2 soviet_light_tank
+attack
+goto late_game
+
+label artillery
+get 1 soviet_artillery
+attack
+goto late_game

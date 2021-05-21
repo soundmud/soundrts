@@ -1,0 +1,11 @@
+; Crazy Ambience
+
+; "abstract" classes (not used directly)
+
+def thing
+lose_fight 76640 76645 76646 76541 76542 76699 ;1324
+order_impossible 76642 ;1029
+
+def unit
+alert 76647 76648 76649 76650 76651 76652 ; 1078 horn
+win_fight if_me 1326 76637 76638 76639 76643 76644 76538 76543 else 1325

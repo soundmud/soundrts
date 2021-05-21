@@ -1,0 +1,1511 @@
+; Mod cinglés v9
+
+clear
+
+
+; IA défensives
+
+
+def c_traditionnel
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label c_traditionnel1
+get chatelet 10 serf
+get 12 arbaletrier 3 tour_de_surveillance
+get keep
+get 5 priest 1 campanile
+get blacksmith
+get 15 knight 3 campanile 2 tour_de_surveillance
+get 12 catapult
+get 16 serf
+get 20 paladin 3 beffroi
+get 2 barracks
+get 26 arbaletrier
+get 15 priest 6 campanile
+get 2 keep
+get 32 arbaletrier 6 beffroi
+get 18 catapult
+get 28 paladin
+get 3 barracks 14 campanile
+get 24 serf
+get 40 arbaletrier
+get 2 temple 10 beffroi
+get 25 priest
+get castle
+get 20 dragon
+get 2 workshop
+get 33 catapult 15 beffroi
+get 32 serf
+get 4 barracks
+get 50 paladin
+get 70 arbaletrier 20 campanile
+get 3 workshop
+get 55 catapult
+get 44 serf
+get 3 temple
+get 50 priest
+get 4 keep
+get 2 dragonslair
+get 44 dragon 24 beffroi
+get 80 arbaletrier
+get 80 paladin
+get 80 catapult
+get 3 dragonslair
+get 90 dragon
+get 5 castle
+goto c_traditionnel1
+
+
+def c_technique
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label c_technique1
+get mairie 10 travailleur
+get 8 mousquetaire
+get 10 lance_grenade
+get 7 chasseur_dirigeable
+get 5 dirigeable_d_observation 4 dca
+get 16 mousquetaire
+get palais_du_chancelier
+get 18 travailleur
+get 12 dca 8 sam
+get 7 bombardier_dirigeable
+get 12 dirigeable_d_observation
+get 2 siege_du_gouverneur
+get 25 dca 15 sam
+get 20 bombardier_dirigeable
+get 20 lance_grenade
+get 30 mousquetaire
+get 28 travailleur
+get palais_du_chancelier
+get hopital
+get 2 camp_militaire 30 dca 24 sam
+get 44 mousquetaire
+get 50 lance_grenade
+get 3 hopital
+get 45 dca 35 sam
+get 2 chantier_aeronaval
+get 24 dirigeable_d_observation
+get 45 chasseur_dirigeable
+get 40 travailleur
+get 68 dca 45 sam
+get 3 camp_militaire
+get 70 lance_grenade
+get 7 hopital
+get 80 mousquetaire
+get 3 chantier_aeronaval
+get 40 dirigeable_d_observation
+get 60 chasseur_dirigeable
+get 60 bombardier_dirigeable
+get 50 travailleur
+get 100 dca 80 sam
+get 3 palais_du_chancelier
+goto c_technique1
+
+
+def c_robotique
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label c_robotique1
+get garage 10 geek
+get 4 tour_magnetique
+get 10 tireur_magnetique
+get 8 canon_magnetique
+get 15 geek
+;get 5 piege_electrique
+get calculateur
+get 5 drone
+get 12 tireur_laser
+get 10 vaisseau_laser
+get 5 capteur_mobile
+get 15 tour_magnetique
+get 20 vaisseau_laser
+get 20 geek
+;get 15 piege_electrique
+get 15 capteur_mobile
+get 15 drone
+get 20 canon_magnetique
+get 25 geek
+;get 30 piege_electrique
+get supercalculateur
+get 2 usine_robotique
+get 20 canon_plasma
+get 25 tireur_laser
+get 10 tour_laser
+get 30 canon_plasma
+get 10 tour_radar
+get 30 geek
+;get 50 piege_electrique
+get 3 usine_robotique
+get 50 vaisseau_laser
+get 30 tour_laser
+get 15 tour_radar
+get 35 capteur_mobile
+get 60 canon_plasma
+get 40 geek
+;get 70 piege_electrique
+get 50 tour_laser
+get 4 usine_robotique
+get 85 canon_plasma
+get 40 drone
+get 90 vaisseau_laser
+goto c_robotique1
+
+
+def c_tenebre
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label c_tenebre1
+get cimetiere 11 esclave_mort_vivant
+get 1 tour_sombre 18 skeleton
+get 3 liche 3 tour_des_tourments
+get 2 caveau
+get 18 goule
+get 8 tour_des_tourments
+get 10 necromancer
+get 2 crypte
+get 10 liche
+get 18 esclave_mort_vivant 3 tour_des_terreurs
+get 18 sombral
+get 8 tour_des_terreurs
+get 2 labyrinthe
+get 28 sombral
+get 3 caveau
+get 36 skeleton
+get 25 goule
+get 2 necropolis
+get 30 esclave_mort_vivant
+get 20 necromancer
+get 20 liche
+get 3 labyrinthe
+get 65 sombral 15 tour_des_terreurs
+;get 25 piege_d_os
+get 40 esclave_mort_vivant
+get 3 crypte
+get 45 necromancer
+get 28 liche
+get 4 labyrinthe
+get 110 sombral 40 tour_des_terreurs
+;get 50 piege_d_os
+goto c_tenebre1
+
+
+def c_elfique
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label c_elfique1
+get clairiere 10 recolteur
+get 14 archerot 6 guardtower
+;get 6 piege_de_racines
+get 2 jardin_feuillu 1 bibliotheque_ensoleillee 4 tour_feuillue
+get 14 centaure 2 tour_des_miroirs
+get 10 erudit
+get 16 recolteur
+get 10 grande_tour_de_garde 10 tour_aux_feuilles_tranchantes 5 tour_solaire
+get 25 archer_des_forets
+get 2 domaine
+get 18 tour_aux_feuilles_tranchantes
+get 36 grande_tour_de_garde 10 tour_solaire
+get 25 erudit
+get 10 druide
+get 2 arene_boisee
+get 26 recolteur
+get 40 archer_des_forets 36 tour_aux_feuilles_tranchantes
+get 3 jardin_feuillu 2 bibliotheque_ensoleillee
+get 36 centaure 15 tour_solaire
+;get 36 piege_de_racines
+get 2 bois_enchante
+get 40 erudit
+get 35 recolteur
+get 50 grande_tour_de_garde
+get 3 arene_boisee
+get 70 archer_des_forets 50 tour_aux_feuilles_tranchantes
+;get 50 piege_de_racines
+get 60 centaure
+get 45 recolteur
+get 80 grande_tour_de_garde
+get 4 jardin_feuillu 3 bibliotheque_ensoleillee
+get 100 centaure
+get 60 erudit 36 tour_solaire
+get 90 archer_des_forets
+;get 75 piege_de_racines
+get 4 bois_enchante
+get 30 druide
+get 100 grande_tour_de_garde
+goto c_elfique1
+
+
+def c_orc
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label c_orc1
+get campement 11 peon
+get 10 troll_cogneur 10 tireur_de_fusee
+get 5 cannontower
+get 8 serpent_aile 5 ogre_lanceur_de_roche
+get 15 troll_massacreur 15 tireur_de_fusee
+get 22 peon 1 forteresse 20 troll_cogneur
+get 10 tour_de_bombarde 10 tour_de_mitraille
+get 15 hippogriffe 15 troll_de_guerre
+get 15 tour_de_bombarde 15 tour_de_mitraille 4 tour_massive
+get 3 enclos 25 ogre_lanceur_de_roche
+get 35 troll_de_guerre
+get 29 peon 30 tireur_de_fusee
+get 10 tour_massive
+get 3 nid 30 serpent_aile 45 hippogriffe
+get 40 troll_de_guerre
+get 38 peon 50 tireur_de_fusee
+get 30 tour_de_mitraille 30 tour_de_bombarde
+get 40 ogre_lanceur_de_roche
+get 4 nid 65 hippogriffe 40 serpent_aile
+get 50 peon 60 tireur_de_fusee
+get 20 tour_massive
+get 4 enclos 70 ogre_lanceur_de_roche
+get 60 troll_de_guerre
+get 5 nid 50 serpent_aile 90 hippogriffe
+get 60 tour_de_mitraille 60 tour_de_bombarde
+get 60 peon 80 tireur_de_fusee
+get 95 ogre_lanceur_de_roche
+get 40 tour_massive
+get 70 troll_de_guerre
+goto c_orc1
+
+
+def c_elementale
+
+watchdog 1800
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label c_elementale1
+get cercle_des_elements 25 fee
+get tour_de_la_terre
+get elemental_de_terre
+get tour_du_feu
+get 2 elemental_de_feu
+get tour_de_l_air
+get 3 elemental_d_air
+get tour_de_l_eau
+get 4 elemental_d_eau
+get 4 elemental_de_feu
+get 8 elemental_d_eau
+get 6 elemental_d_air
+get 6 elemental_de_terre
+get 11 elemental_d_eau
+get 11 elemental_d_air
+get 50 fee
+get 2 tour_du_feu
+get 18 elemental_de_feu
+get 2 tour_de_la_terre
+get 15 elemental_de_terre
+get 2 tour_d_l_eau
+get 20 elemental_d_eau
+get 2 tour_de_l_air
+get 20 elemental_d_air
+get 56 fee
+get 36 elemental_de_feu
+get 36 elemental_d_air
+get 36 elemental_d_eau
+get 36 elemental_de_terre
+goto c_elementale1
+
+
+def c_sauvage
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label c_sauvage1
+get planque 11 gredin
+get 8 chasseresse
+get 18 archer
+get 10 ensorceleuse
+get 16 gredin
+get 18 chasseresse
+get 18 ensorceleuse
+get 28 archer
+get 25 chasseresse
+get 24 gredin
+get 2 bivouac_d_entrainement
+get 36 archer
+get 2 hutte_des_sortileges
+get 30 ensorceleuse
+get 40 chasseresse
+get 54 archer
+get 40 ensorceleuse
+get 38 gredin
+get 4 bivouac_d_entrainement
+get 85 archer
+get 4 hutte_des_sortileges
+get 75 ensorceleuse
+get 50 gredin
+get 195 archer
+get 100 ensorceleuse
+goto c_sauvage1
+
+
+
+
+def c_vermine
+
+
+
+
+def c_elfe_noir
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label c_elfe_noir1
+get cabane 10 voleur
+get 10 rodeur 1 villa
+get 20 assassin 2 scene 10 illusionniste 10 darkarcher
+get  8 tourelle_des_embusques 1 manoir 1 cenacle
+get 12 doctoresse 12 haute_tour_des_embusques 25 voleur 30 maitre_assassin
+get 3 scene 35 darkarcher 25 illusionniste
+get 22 haute_tour_des_embusques 3 coutellerie 50 maitre_assassin
+get 70 darkarcher 25 doctoresse 35 voleur
+get 40 illusionniste 35 haute_tour_des_embusques 4 coutellerie 4 scene 3 cenacle
+get 90 darkarcher 60 maitre_assassin 50 haute_tour_des_embusques 60 illusionniste 40 doctoresse
+goto c_elfe_noir1
+
+
+
+
+
+; changement de branche pour calme
+
+;label c_change
+;goto_random c_traditionnel1 c_technique1 c_robotique1 c_tenebre1 c_elfique1 c_orc1 c_elementale1 c_sauvage1
+
+
+
+; IA agressives
+
+def traditionnel
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label traditionnel0
+get 10 serf
+goto_random traditionnel0a traditionnel0b traditionnel0c traditionnel0d traditionnel0e
+
+label traditionnel0a
+get 1 lumbermill 8 arbaletrier 1 priest
+goto traditionnel1
+
+label traditionnel0b
+get 1 keep 6 catapult
+goto traditionnel1
+
+label traditionnel0c
+get 1 lumbermill 1 blacksmith
+goto traditionnel1
+
+label traditionnel0d
+get 1 blacksmith 1 campanile
+goto traditionnel1
+
+label traditionnel0e
+get 3 barracks
+goto traditionnel1
+
+label traditionnel1
+goto_random traditionnel1a traditionnel1b traditionnel1c traditionnel1d traditionnel1e traditionnel2
+
+label traditionnel1a
+get 12 serf
+get 12 arbaletrier
+goto traditionnel_attack
+
+label traditionnel1b
+get 15 serf
+get 15 paladin
+goto traditionnel_attack
+
+label traditionnel1c
+get 16 serf 1 castle
+get 16 dragon 4 beffroi
+goto traditionnel_attack
+
+label traditionnel1d
+get 10 catapult 12 tour_a_baliste
+goto traditionnel_attack
+
+label traditionnel1e
+get 15 arbaletrier 1 beffroi 16 tour_a_baliste 8 catapult
+goto_random traditionnel2 traditionnel_attack
+
+label traditionnel2
+goto_random traditionnel2a traditionnel2b traditionnel2c traditionnel2d traditionnel2e traditionnel2f
+
+label traditionnel2a
+get 18 serf
+get 2 barracks 28 arbaletrier
+goto_random traditionnel3 traditionnel_attack
+
+label traditionnel2b
+get 20 serf
+get 2 dragonslair 25 dragon
+goto_random traditionnel3 traditionnel_attack
+
+label traditionnel2c
+get 22 serf
+get 2 workshop 20 catapult 15 tour_a_baliste
+goto_random traditionnel3 traditionnel_attack
+
+label traditionnel2d
+get 20 serf
+get 2 barracks 1 priest 30 paladin 8 beffroi
+goto_random traditionnel3 traditionnel_attack
+
+label traditionnel2e
+get 18 serf 24 arbaletrier 6 priest 35 tour_a_baliste 5 beffroi
+goto_random traditionnel3 traditionnel_attack
+
+label traditionnel2f
+get 12 serf 16 priest 15 paladin
+goto_random traditionnel3 traditionnel_attack
+
+label traditionnel3
+get 40 serf
+get 10 priest
+get 3 workshop
+get 38 catapult
+get 25 tour_a_baliste
+get 4 barracks
+get 50 arbaletrier
+get 45 paladin
+goto_random traditionnel4 traditionnel_attack
+
+label traditionnel4
+get 2 temple
+get 30 priest
+get 65 arbaletrier
+get 60 paladin
+get 8 beffroi 2 dragonslair
+get 40 dragon
+goto_random traditionnel5 traditionnel_attack
+
+label traditionnel5
+get 50 serf
+get 5 barracks
+get 80 arbaletrier
+get 45 priest
+get 80 dragon
+get 60 catapult
+get 90 paladin
+goto traditionnel_attack
+
+label traditionnel_attack
+attack
+goto_random traditionnel0 traditionnel1
+
+
+
+def technique
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+
+label technique0
+get 10 travailleur 
+goto_random technique0a technique0b technique0c technique0d technique0e
+
+label technique0a
+get 10 mousquetaire
+goto technique1
+
+label technique0b
+get 12 travailleur 5 dca 5 lance_grenade
+goto technique1
+
+label technique0c
+get 13 travailleur 1 siege_du_gouverneur 1 dirigeable_d_observation 3 chasseur_dirigeable 3 bombardier_dirigeable
+goto technique1
+
+label technique0d
+get 1 poudriere
+goto technique1
+
+label technique0e
+get 1 blacksmith 3 camp_militaire
+goto technique1
+
+label technique1
+get 15 travailleur
+goto_random technique1a technique1b technique1c technique1d technique1e technique2
+
+label technique1a
+get 15 mousquetaire
+goto technique_attack
+
+label technique1b
+get 10 lance_grenade
+goto technique_attack
+
+label technique1c
+get 3 dirigeable_d_observation 10 chasseur_dirigeable 6 bombardier_dirigeable
+goto technique_attack
+
+label technique1d
+get 1 hopital 6 mousquetaire 6 lance_grenade
+goto technique_attack
+
+label technique1e
+get 2 chantier_aeronaval 16 travailleur 15 dca 15 sam
+goto_randum technique2 technique_attack
+
+label technique2
+goto_random technique2a technique2b technique2c technique2d technique2e technique3
+
+label technique2a
+get 18 travailleur
+get 5 dirigeable_d_observation 15 chasseur_dirigeable
+goto_random technique3 technique_attack
+
+label technique2b
+get 16 travailleur 22 mousquetaire
+goto_random technique3 technique_attack
+
+label technique2c
+get 20 travailleur 14 dca 8 sam 12 lance_grenade
+goto_random technique3 technique_attack
+
+label technique2d
+get 22 travailleur
+get 2 hopital 25 lance_grenade
+goto_random technique3 technique_attack
+
+label technique2e
+get 3 hopital 30 sam 30 dca
+goto_random technique3 technique_attack
+
+label technique3
+get 25 travailleur
+get palais_du_chancelier
+get 2 hopital
+get 3 camp_militaire
+get 36 mousquetaire
+get 36 lance_grenade
+get 2 chantier_aeronaval
+get 12 dirigeable_d_observation
+get 36 travailleur
+get 28 sam
+get 38 chasseur_dirigeable
+get 29 bombardier_dirigeable
+get 16 dirigeable_d_observation
+get 35 dca
+get 4 hopital
+goto_random technique4 technique_attack
+
+label technique4
+get 45 travailleur
+get 4 camp_militaire
+get 65 mousquetaire
+get 60 lance_grenade
+get 28 dirigeable_d_observation
+get 60 dca 40 sam
+goto_random technique5 technique_attack
+
+label technique5
+get 35 dirigeable_d_observation
+get 80 lance_grenade
+get 80 dca 60 sam
+get 7 hopital
+goto technique_attack
+
+label technique_attack
+attack
+goto_random technique0 technique1
+
+
+
+def robotique
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+
+label robotique0
+goto_random robotique0a robotique0b robotique0c robotique0d
+
+label robotique0a
+get 12 geek 8 tireur_magnetique
+goto robotique1
+
+label robotique0b
+get 15 geek
+get 9 tireur_magnetique 2 tour_magnetique
+goto robotique1
+
+label robotique0c
+get 10 geek
+get 3 tour_magnetique 12 canon_magnetique
+goto robotique1
+
+label robotique0d
+get 25 geek 2 usine_robotique
+goto robotique1
+
+label robotique1
+goto_random robotique1a robotique1b robotique1c robotique1d robotique1e robotique2
+
+label robotique1a
+get 15 tireur_magnetique
+goto robotique_attack
+
+label robotique1b
+get 18 geek 1 calculateur
+get 20 tireur_laser
+goto robotique_attack
+
+label robotique1c
+get 20 geek 1 calculateur
+get 3 drone 18 vaisseau_laser
+goto robotique_attack
+
+label robotique1d
+get 18 canon_magnetique
+goto robotique_attack
+
+label robotique1e
+get 30 geek 1 calculateur
+get 3 tour_radar 35 tour_laser
+goto_random  robotique2 robotique_attack
+
+label robotique2
+goto_random robotique2a robotique2b robotique2c robotique2d robotique3
+
+label robotique2a
+get 1 calculateur 16 geek
+get 2 tour_radar 26 canon_magnetique
+goto_random robotique3 robotique_attack
+
+label robotique2b
+get 20 geek
+get 40 tireur_laser
+goto_random robotique3 robotique_attack
+
+label robotique2c
+get 22 geek
+get 6 drone 28 vaisseau_laser
+goto_random robotique3 robotique_attack
+
+label robotique2d
+get 40 geek 1 supercalculateur
+get 28 canon_plasma
+goto_random robotique3 robotique_attack
+
+label robotique3
+get 18 geek
+get calculateur
+get 14 tour_laser
+get 20 vaisseau_laser
+get 6 drone
+get 3 usine_robotique
+get 6 capteur_mobile
+get 22 canon_magnetique
+get supercalculateur
+get 28 geek
+get 28 canon_plasma
+get 35 vaisseau_laser
+get 15 capteur_mobile
+get 22 tour_laser
+goto_random robotique4 robotique_attack
+
+label robotique4
+get 34 geek
+get 4 usine_robotique
+get 55 vaisseau_laser
+get 25 drone
+get 60 canon_plasma
+goto_random robotique5 robotique_attack
+
+label robotique5
+get 40 geek
+get 85 canon_plasma
+get 70 vaisseau_laser
+get 40 drone
+get 38 tour_laser
+get 30 capteur_mobile
+get 2 calculateur
+goto robotique_attack
+
+label robotique_attack
+attack
+goto_random robotique0 robotique1
+
+
+
+
+def tenebre
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label tenebre0
+get 10 esclave_mort_vivant
+goto_random tenebre0a tenebre0b tenebre0c tenebre0d tenebre0e
+
+label tenebre0a
+get 1 tour_sombre 10 skeleton
+goto tenebre1
+
+label tenebre0b
+get 12 esclave_mort_vivant 2 tour_sombre 16 goule
+goto tenebre1
+
+label tenebre0c
+get 12 esclave_mort_vivant
+get 11 skeleton 1 crypte 3 liche
+goto tenebre1
+
+label tenebre0d
+get 25 esclave_mort_vivant
+goto tenebre1
+
+label tenebre0e
+get 15 esclave_mort_vivant 3 caveau
+goto tenebre1
+
+label tenebre1
+goto_random tenebre1a tenebre1b tenebre1c tenebre1d tenebre1e tenebre1f tenebre2
+
+label tenebre1a
+get 25 skeleton
+goto tenebre_attack
+
+label tenebre1b
+get 6 liche 6 necromancer
+goto tenebre_attack
+
+label tenebre1c
+get 8 necromancer 8 sombral
+goto tenebre_attack
+
+label tenebre1d
+get 15 sombral
+goto tenebre_attack
+
+label tenebre1e
+get 30 goule
+goto tenebre_attack
+
+label tenebre1f
+get 20 tour_des_terreurs
+goto_random tenebre2 tenebre_attack
+
+label tenebre2
+get 15 esclave_mort_vivant
+goto_random tenebre2a tenebre2b tenebre2c tenebre2d tenebre2e tenebre3
+
+label tenebre2a
+get 18 skeleton 9 liche
+goto_random tenebre3 tenebre_attack
+
+label tenebre2b
+get 18 esclave_mort_vivant
+get 10 liche 10 necromancer 10 tour_des_terreurs
+goto_random tenebre3 tenebre_attack
+
+label tenebre2c
+get 8 necromancer 12 sombral
+goto_random tenebre3 tenebre_attack
+
+label tenebre2d
+get 2 labyrinthe 35 sombral
+goto_random tenebre3 tenebre_attack
+
+label tenebre2e
+get 3 crypte 30 liche 20 necromancer
+goto_random tenebre3 tenebre_attack
+
+label tenebre3
+get necropolis 32 esclave_mort_vivant 3 crypte
+get 22 liche
+get 14 necromancer
+get 2 labyrinthe
+get 40 sombral 25 tour_des_terreurs
+get 3 caveau
+get 60 skeleton
+get 45 esclave_mort_vivant
+get 35 necromancer
+get 65 sombral
+get 80 skeleton
+goto_random tenebre4 tenebre_attack
+
+label tenebre4
+get 50 esclave_mort_vivant
+;get 60 piege_d_os
+get 5 crypte
+get 80 liche
+get 5 labyrinthe 40 tour_des_terreurs
+get 75 sombral
+get 90 skeleton
+goto_random tenebre4 tenebre_attack
+
+label tenebre5
+;get 110 piege_d_os
+get 50 tour_des_terreurs 10 tour_brumeuse
+get 115 sombral
+get 120 skeleton
+goto tenebre_attack
+
+label tenebre_attack
+attack
+goto_random tenebre0 tenebre1
+
+
+
+def elfique
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+
+label elfique0
+get 10 recolteur
+goto_random elfique0a elfique0b elfique0c elfique0d elfique0e
+
+label elfique0a
+get 8 archerot
+goto elfique1
+
+label elfique0b
+get 12 recolteur 6 guardtower
+goto elfique1
+
+label elfique0c
+get 12 recolteur 3 tour_de_vigilance 8 archerot
+goto elfique1
+
+label elfique0d
+get 13 recolteur 8 centaure
+goto elfique1
+
+label elfique0e
+get 2 arene_boisee
+goto elfique1
+
+label elfique1
+goto_random elfique1a elfique1b elfique1c elfique1d elfique1e elfique2
+
+label elfique1a
+get 14 centaure
+goto elfique_attack
+
+label elfique1b
+get 8 erudit
+goto elfique_attack
+
+label elfique1c
+get 12 archerot 5 erudit
+goto elfique_attack
+
+label elfique1d
+get 15 archer_des_forets
+goto elfique_attack
+
+label elfique1e
+get 18 recolteur 3 tour_des_miroirs
+get 25 grande_tour_de_garde
+goto_random elfique2 elfique_attack
+
+label elfique2
+get 20 recolteur
+goto_random elfique2a elfique2b elfique2c elfique2d elfique2e elfique3
+
+label elfique2a
+get 14 erudit 3 tour_des_miroirs
+goto_random elfique3 elfique_attack
+
+label elfique2b
+get 20 archer_des_forets 10 grande_tour_de_garde
+goto_random elfique3 elfique_attack
+
+label elfique2c
+get 18 centaure 5 tour_aux_feuilles_tranchantes
+goto_random elfique3 elfique_attack
+
+label elfique2d
+get 5 erudit 18 archer_des_forets
+goto_random elfique3 elfique_attack
+
+label elfique2e
+get 15 tour_aux_feuilles_tranchantes 5 tour_solaire
+goto_random elfique3 elfique_attack
+
+label elfique3
+get 36 recolteur
+get 18 grande_tour_de_garde
+get 3 arene_boisee
+get 45 archer_des_forets
+;get 28 piege_de_racines
+get 56 archer_des_forets
+get 3 jardin_feuillu 2 bibliotheque_ensoleillee 
+get 50 centaure 12 tour_aux_feuilles_tranchantes 4 tour_solaire
+get 40 erudit
+get 3 bois_enchante
+get 25 druide
+goto_random elfique4 elfique_attack
+
+label elfique4
+get 48 recolteur
+get 2 domaine
+get 4 arene_boisee
+get 90 archer_des_forets
+get 40 grande_tour_de_garde
+;get 50 piege_de_racines
+goto_random elfique5 elfique_attack
+
+label elfique5
+get 55 recolteur
+get 110 archer_des_forets
+get 90 grande_tour_de_garde
+;get 70 piege_de_racines
+get 80 centaure
+goto elfique_attack
+
+label elfique_attack
+attack
+goto_random elfique0 elfique1
+
+
+def orc
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+
+label orc0
+get 10 peon
+goto_random orc0a orc0b orc0c orc0d orc0e
+
+label orc0a
+get 1 promontoire 10 tireur_de_fusee
+goto orc1
+
+label orc0b
+get 5 promontoire
+goto orc1
+
+label orc0c
+get 8 troll_cogneur
+goto orc1
+
+label orc0d
+get 3 serpent_aile
+goto orc1
+
+label orc0e
+get 2 fosse 2 nid
+goto orc1
+
+label orc1
+goto_random orc1a orc1b orc1c orc1d orc2
+
+label orc1a
+get 10 troll_cogneur
+goto orc_attack
+
+label orc1b
+get 10 ogre_lanceur_de_roche
+goto orc_attack
+
+label orc1c
+get 10 serpent_aile
+goto orc_attack
+
+label orc1d
+get 10 hippogriffe
+goto orc_attack
+
+label orc1e
+get 15 peon 10 ogre_lanceur_de_roche 10 tour_de_mitraille 10 tour_de_bombarde
+goto_randum orc2 orc_attack
+
+label orc2
+goto_random orc2a orc2b orc2c orc2d orc2e orc3
+
+label orc2a
+get 16 peon 12 troll_de_guerre 8 tireur_de_fusee
+goto_random orc3 orc_attack
+
+label orc2b
+get 14 peon 8 serpent_aile 15 hippogriffe
+goto_random orc3 orc_attack
+
+label orc2c
+get 15 peon 6 serpent_aile 18 ogre_lanceur_de_roche
+goto_random orc3 orc_attack
+
+label orc2d
+get 18 peon 14 ogre_lanceur_de_roche 10 tireur_de_fusee
+goto_random orc3 orc_attack
+
+label orc2e
+get 20 peon 20 tour_de_bombarde 20 tour_de_mitraille 10 tour_massive 8 ogre_lanceur_de_roche
+goto_random orc3 orc_attack
+
+label orc3
+get 32 peon
+get forteresse
+get 3 nid
+get 40 serpent_aile 35 tireur_de_fusee
+get 3 enclos
+get 45 troll_de_guerre
+get 60 hippogriffe
+get 30 tour_de_mitraille 30 tour_de_bombarde
+get 46 peon
+get 48 ogre_lanceur_de_roche
+get 60 troll_de_guerre
+get 60 serpent_aile
+goto_random orc4 orc_attack
+
+label orc4
+get 54 peon
+get 3 tipi
+get 4 nid
+get 76 hippogriffe
+get 80 troll__de_guerre 45 tireur_de_fusee
+;get 40 piege_a_pointes
+goto_random orc5 orc_attack
+
+label orc5
+get 50 tour_de_mitraille 50 tour_de_bombarde 25 tour_massive
+get 110 hippogriffe
+get 70 serpent_aile 55 tireur_de_fusee
+get 100 troll_de_guerre
+goto orc_attack
+
+label orc_attack
+attack
+goto_random orc0 orc1
+
+
+
+def elementale
+
+watchdog 1800
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+label elementale0
+goto_random elementale0a elementale0b elementale0c elementale0d
+
+label elementale0a
+get 20 fee
+get 2 elemental_d_eau
+goto elementale1
+
+label elementale0b
+get 25 fee
+get 2 elemental_de_feu
+goto elementale1
+
+label elementale0c
+get 20 fee
+get 2 elemental_de_terre
+goto elementale1
+
+label elementale0d
+get 28 fee
+goto elementale1
+
+label elementale1
+goto_random elementale1a elementale1b elementale1c elementale1d elementale2
+
+label elementale1a
+get 4 elemental_de_terre
+goto elementale_attack
+
+label elementale1b
+get 5 elemental_d_air
+goto elementale_attack
+
+label elementale1c
+get 5 elemental_de_feu
+goto elementale_attack
+
+label elementale1d
+get 4 elemental_d_eau
+goto elementale_attack
+
+label elementale2
+goto_random elementale2a elementale2b elementale2c elementale2d elementale3
+
+label elementale2a
+get 6 elemental_de_feu 4 elemental_de_terre
+goto_random elementale3 elementale_attack
+
+label elementale2b
+get 4 elemental_d_air 5 elemental_d_eau
+goto_random elementale3 elementale_attack
+
+label elementale2c
+get 7 elemental_de_terre
+goto_random elementale3 elementale_attack
+
+label elementale2d
+get 7 elemental_de_feu
+goto_random elementale3 elementale_attack
+
+label elementale3
+get 42 fee
+get tour_du_feu
+get 16 elemental_de_feu
+get tour_de_la_terre
+get 8 elemental_de_terre
+get 50 fee
+get 3 tour_de_l_eau
+get 30 elemental_d_eau
+get 3 tour_de_l_air
+get 16 elemental_d_air
+goto_random elementale4 elementale_attack
+
+label elementale4
+get 40 elemental_de_feu
+get 40 elemental_d_air
+get 40 elemental_d_eau
+get 3 tour_de_la_terre
+get 40 elemental_de_terre
+goto_random elementale5 elementale_attack
+
+label elementale5
+get 65 fee
+get 46 elemental_de_terre
+get 48 elemental_de_feu
+get 48 elemental_d_air
+get 48 elemental_d_eau
+goto_random elementale6 elementale_attack
+
+label elementale6
+get 72 fee
+get 62 elemental_d_air
+get 62 elemental_d_eau
+get 66 elemental_de_feu
+get 66 elemental_de_terre
+goto elementale_attack
+
+label elementale_attack
+attack
+goto_random elementale0 elementale1
+
+
+
+def sauvage
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+
+label sauvage0
+goto_random sauvage0a sauvage0b sauvage0c sauvage0d
+
+label sauvage0a
+get 10 gredin 10 archer
+goto sauvage1
+
+label sauvage0b
+get 8 gredin 8 archer
+goto sauvage1
+
+label sauvage0c
+get 10 gredin 10 chasseresse
+goto sauvage1
+
+label sauvage0d
+get 10 gredin 1 lumbermill
+goto sauvage1
+
+label sauvage1
+goto_random sauvage1a sauvage1b sauvage1c sauvage1d sauvage2
+
+label sauvage1a
+get 12 chasseresse
+goto sauvage_attack
+
+label sauvage1b
+get 15 archer
+goto sauvage_attack
+
+label sauvage1c
+get 18 ensorceleuse
+goto sauvage_attack
+
+label sauvage1d
+get 8 chasseresse 14 archer 12 ensorceleuse
+goto sauvage_attack
+
+label sauvage2
+goto_random sauvage2a sauvage2b sauvage2c sauvage2d sauvage3
+
+label sauvage2a
+get 25 archer
+goto_random sauvage3 sauvage_attack
+
+label sauvage2b
+get 22 ensorceleuse
+goto_random sauvage3 sauvage_attack
+
+label sauvage2c
+get 12 ensorceleuse 14 archer
+goto_random sauvage3 sauvage_attack
+
+label sauvage2d
+get 10 chasseresse 10 archer 10 ensorceleuse
+goto_random sauvage3 sauvage_attack
+
+label sauvage3
+get 18 gredin
+get 3 bivouac_d_entrainement
+get 65 archer
+get 40 chasseresse
+get 2 hutte_des_sortileges
+get 50 ensorceleuse
+get 2 bois_des_flibustiers
+get 50 chasseresse
+get 70 archer
+get 68 ensorceleuse
+get 28 gredin
+get 80 ensorceleuse
+get 60 chasseresse
+get 85 archer
+goto_random sauvage4 sauvage_attack
+
+label sauvage4
+get 40 gredin
+get 95 ensorceleuse
+get 100 archer
+goto_random sauvage5 sauvage_attack
+
+label sauvage5
+get 4 bois_des_flibustiers
+get 65 chasseresse
+get 110 archer
+get 100 ensorceleuse
+goto sauvage_attack
+
+label sauvage_attack
+attack
+goto_random sauvage0 sauvage1
+
+
+
+def vermine
+
+
+
+def elfe_noir
+
+watchdog 600
+constant_attacks 0
+research 1
+teleportation 1
+send_soldiers_to_base 1
+raise_dead 1
+retaliate 1
+
+
+label elfe_noir0
+goto_random elfe_noir0a elfe_noir0b elfe_noir0c elfe_noir0d
+
+label elfe_noir0a
+get 10 voleur 10 rodeur
+goto elfe_noir1
+
+label elfe_noir0b
+get 8 voleur 1 villa
+goto elfe_noir1
+
+label elfe_noir0c
+get 10 voleur 6 tourelle_des_embusques
+goto elfe_noir1
+
+label elfe_noir0d
+get 10 gredin 1 lumbermill 1 blacksmith 10 tourelle_des_embusques
+goto elfe_noir1
+
+label elfe_noir1
+goto_random elfe_noir1a elfe_noir1b elfe_noir1c elfe_noir1d elfe_noir2
+
+label elfe_noir1a
+get 12 darkarcher
+goto elfe_noir_attack
+
+label elfe_noir1b
+get 15 assassin
+goto elfe_noir_attack
+
+label elfe_noir1c
+get 12 assassin 12 darkarcher 5 illusionniste
+goto elfe_noir_attack
+
+label elfe_noir1d
+get 15 darkarcher 6 illusionniste 5 doctoresse
+goto elfe_noir_attack
+
+label elfe_noir2
+goto_random elfe_noir2a elfe_noir2b elfe_noir2c elfe_noir2d elfe_noir3
+
+label elfe_noir2a
+get 25 darkarcher
+goto_random elfe_noir3 elfe_noir_attack
+
+label elfe_noir2b
+get 22 maitre_assassin
+goto_random elfe_noir3 elfe_noir_attack
+
+label elfe_noir2c
+get 12 doctoresse 14 darkarcher
+goto_random elfe_noir3 elfe_noir_attack
+
+label elfe_noir2d
+get 10 assassin 10 darkarcher 10 haute_tour_des_embusques
+goto_random elfe_noir3 elfe_noir_attack
+
+label elfe_noir3
+get 18 voleur
+get 3 scene
+get 65 darkarcher
+get 40 maitre_assassin
+get 2 cenacle
+get 35 doctoresse
+get 2 manoir
+get 45 maitre_assassin
+get 30 haute_tour_des_embusques
+get 70 darkarcher
+get 50 illusionniste 50 doctoresse
+get 28 voleur
+get 80 darkarcher
+get 60 maitre_assassin
+get 95 darkarcher
+goto_random elfe_noir4 elfe_noir_attack
+
+label elfe_noir4
+get 40 voleur 45 haute_tour_des_embusques
+get 80 doctoresse
+get 110 darkarcher
+goto_random elfe_noir5 elfe_noir_attack
+
+label elfe_noir5
+get 4 manoir
+get 70 maitre_assassin
+get 125 darkarcher
+get 90 illusionniste
+goto elfe_noir_attack
+
+label elfe_noir_attack
+attack
+goto_random elfe_noir0 elfe_noir1
+
+
+
+; changement de branche pour agressif
+
+;label change
+;goto_random traditionnel1 technique1 robotique1 tenebre1 elfique1 orc1 elementale1 sauvage1
+
+
+
+; a passive AI, useful for heavily scripted maps (using triggers with timers)
+def timers
+retaliate 0 ; don't retaliate if a unit is attacked or flees

@@ -1,0 +1,41 @@
+def empire_easy
+research 1
+get 8 alien 5 sith 5 aat 5 troop
+get 15 aat 15 catd 15 droidgunship 15 sith 15 sithlord 15 troop
+get 20 troop 15 dsd 15 hfs 5 mtt
+get 20 tiefighter 20 stardestroyer 20 starcruzer
+get 50 sith 50 sithlord 50 alien 50 aat 50 catd 50 droidgunship 50 dsd 50 hfs 50 mtt 50 walker 50 tiefighter 5 deathstar
+goto -1
+
+def empire_hard
+research 1
+watchdog 600 
+constant_attacks 1 
+get 20 alien 2 deathstar
+attack
+get 50 sith 50 sithlord 50 alien 50 aat 50 catd 50 droidgunship 50 dsd 50 hfs 50 mtt 50 walker 50 tiefighter 5 deathstar
+attack
+
+def rebble_easy
+research 1
+get 5 aalien 5 clonetrooper
+get 8 aalien 5 barcspeeder 5 landspeeder
+get 10 aalien 10 agb
+get 10 tt 10 jedi 10 jediknight 10 jedimaster
+get 5 agb 5 ags 10 clonetrooper
+get 10 vwf 10 ywf 10 xwf 10 rbc 10 spa
+get 50 barcspeeder 50 tt 50 bongo 50 landspeeder 50 aalien 50 agb 50 ags 50 vwf 50 ywf 50 xwf 50 spa 50 jedi 50 jediknight 50 jedimaster 50 rbc 100 clonetrooper
+goto -1
+
+def rebble_hard
+watchdog 600 
+constant_attacks 1 
+research 1
+get 20 aalien 20 jedi 20 jediknight
+attack
+get 20 aalien 20 jedi 20 jediknight 20 jedimaster 20 tt 20 bongo
+attack
+get 30 bongo 30 tt 30 vwf 30 ywf 30 xwf 30 agb 30 ags
+attack
+get 50 barcspeeder 50 tt 50 bongo 50 landspeeder 50 aalien 50 agb 50 ags 50 vwf 50 ywf 50 xwf 50 spa 50 jedi 50 jediknight 50 jedimaster 50 rbc 100 clonetrooper
+attack
