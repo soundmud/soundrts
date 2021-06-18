@@ -4,7 +4,7 @@ from . import config, res
 
 VERSION = "1.3.5"
 IS_DEV_VERSION = config.debug_mode
-CLIENT_COMPATIBILITY = "8"
+CLIENT_COMPATIBILITY = "9"
 SERVER_COMPATIBILITY = "0"
 
 

@@ -1075,9 +1075,15 @@ class UseOrder(ComplexOrder):
             return True
 
     def execute_recall(self):
+        nearest_water = self.unit.nearest_water()
         for u in self.recall_targets():
-            if self.unit.place.can_receive(u.airground_type):
-                u.move_to(self.unit.place, None, None)
+            place = self.unit.place
+            if u.airground_type == "water" and not place.is_water:
+                place = nearest_water
+                if place is None:
+                    continue
+            if place.can_receive(u.airground_type):
+                u.move_to(place, None, None)
 
     conversion_target_type = "unit"
 
