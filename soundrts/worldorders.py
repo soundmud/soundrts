@@ -64,9 +64,11 @@ class Order:
         if reason is not None:
             n += "," + reason
         self.unit.notify(n)
+        self.unit.distance_to_goal = float("inf")
 
     def mark_as_complete(self):
         self.is_complete = True
+        self.unit.distance_to_goal = 0
 
     def update_target(self):
         t = self.target

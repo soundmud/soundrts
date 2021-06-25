@@ -1378,6 +1378,10 @@ class GameInterface:
 
     follow_mode = False
 
+    @property
+    def _group_head(self):
+        return min(self.group, key=lambda u: self.dobjets[u].distance_to_goal)
+
     def _follow_if_needed(self):
         self.update_group()
         if (
@@ -1386,12 +1390,12 @@ class GameInterface:
             and not self.an_order_requiring_a_target_is_selected
         ):
             if self.zoom_mode:
-                if not self.zoom.contains(self.dobjets[self.group[0]]):
-                    self.zoom.move_to(self.dobjets[self.group[0]])
+                if not self.zoom.contains(self.dobjets[self._group_head]):
+                    self.zoom.move_to(self.dobjets[self._group_head])
                     if not voice.channel.get_busy():  # low priority: don't interrupt
                         self.zoom.say()
-            elif not self.dobjets[self.group[0]].is_in(self.place):
-                self.move_to_square(self.dobjets[self.group[0]].place)
+            elif not self.dobjets[self._group_head].is_in(self.place):
+                self.move_to_square(self.dobjets[self._group_head].place)
                 if not voice.channel.get_busy():  # low priority: don't interrupt
                     voice.item(self.place.title)
                 if self.immersion:

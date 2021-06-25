@@ -52,6 +52,7 @@ class Creature(Entity):
             self.action = Action(self, value)
 
     action_target = property(get_action_target, set_action_target)
+    distance_to_goal = float("inf")
 
     hp_max = 0
     hp_regen = 0
@@ -972,6 +973,9 @@ class Unit(Creature):
             place = target
         if not hasattr(place, "exits"):  # not a square
             return None
+        self.distance_to_goal = self.place.shortest_path_distance_to(
+            place, player=self.player, plane=self.airground_type, avoid=avoid
+        )
         return self.place.shortest_path_to(
             place, player=self.player, plane=self.airground_type, avoid=avoid
         )
