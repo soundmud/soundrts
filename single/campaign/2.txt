@@ -1,14 +1,3 @@
-; solo map 2
-;
-;  *******
-; 5* + + *
-;  ***+***
-; 3* + + *
-;  *+***+*
-; 1* + + *
-;  *******
-;   A B C
-
 title 4271 3002
 trigger player1 (timer 0) (add_objective 1 4021)
 
@@ -28,6 +17,7 @@ terrain mountain_pass b4
 high_grounds b4
 terrain ford a2 c2
 terrain river b2
+water b2
 terrain marsh b3
 speed .5 1 a2 c2 b3 b4; half speed in the ford, the marsh and the mountain pass
 
