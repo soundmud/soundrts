@@ -379,12 +379,12 @@ class EntityView:
             if st:
                 return st
         if hasattr(self, "hp"):
-            if self.hp < self.hp_max * 2 / 3:
-                st = self.get_style("noise_if_damaged")
-                if st:
-                    return st
             if self.hp < self.hp_max / 3:
                 st = self.get_style("noise_if_very_damaged")
+                if st:
+                    return st
+            if self.hp < self.hp_max * 2 / 3:
+                st = self.get_style("noise_if_damaged")
                 if st:
                     return st
         return self.get_style("noise")
