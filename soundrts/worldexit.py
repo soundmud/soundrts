@@ -1,3 +1,4 @@
+from .lib.log import warning
 from .worldentity import Entity
 
 
@@ -53,6 +54,9 @@ class Exit(Entity):
 
 def passage(places, exit_type):
     place1, place2, is_a_portal = places
+    if place1[0].is_water != place2[0].is_water:
+        warning(f"removed amphibious path between {place1[0]} and {place2[0]}")
+        return
     exit1 = Exit(place1, exit_type, is_a_portal)
     exit2 = Exit(place2, exit_type, is_a_portal)
     exit1.other_side = exit2
