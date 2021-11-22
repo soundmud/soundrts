@@ -73,7 +73,17 @@ def stop():
     _is_speaking = False
 
 
+def _init_com_for_this_thread():
+    try:
+        import pythoncom
+    except ImportError:
+        pass
+    else:
+        pythoncom.CoInitialize()
+
+
 def _loop():
+    _init_com_for_this_thread()
     while True:
         cmd, args = _queue.get()
         if not _queue.empty():
@@ -86,6 +96,8 @@ def _loop():
 
 
 def _loop2():
+    # assertion: this thread never uses COM
+    # no need to call _init_com_for_this_thread()
     global _is_speaking
     while True:
         if _is_speaking:
