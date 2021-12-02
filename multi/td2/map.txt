@@ -1,0 +1,105 @@
+objective 145 88
+
+; map size
+square_width 12
+nb_columns 15
+nb_lines 3
+
+west_east_paths a1 b1 c1 d1 e1 f1 g1  h1  i1 j1 k1 l1 m1 n1
+west_east_paths       c2 d2 e2 f2 g2  h2  i2 j2 k2 l2
+south_north_paths        d1    f1     h1     j1    l1
+south_north_paths                     h2                
+
+terrain ford h1 h2
+terrain marsh h3
+speed .5 1 h1 h2 h3
+woods 75 c2 e2 g2 i2 k2 m2
+
+i_armor a1 o1
+i_sword a1 o1
+
+nb_meadows_by_square 0
+
+; typically 1v1 or 2v2 (1v2 is possible)
+nb_players_min 2
+nb_players_max 4
+
+; the players starts must NOT be shuffled
+random_starts 0
+
+; the human players (heroes)
+player 0 0
+player 0 0
+player 0 0
+player 0 0
+
+; add the heroes after the start because the teams are not set yet
+trigger player1 (timer 0) (add_units a1 peasant)
+trigger player2 (timer 0) (add_units o1 peasant)
+trigger player3 (timer 0) (add_units a1 peasant)
+trigger player4 (timer 0) (add_units o1 peasant)
+
+; the allied computers (base, towers and creep)
+computer_only 0 0 a1 farm b1 townhall 2 cannontower c1 barracks lumbermill cannontower e1 guardtower g1 scouttower
+computer_only 0 0 o1 farm n1 townhall 2 cannontower m1 barracks lumbermill cannontower k1 guardtower i1 scouttower
+
+; the monsters (jungle)
+computer_only 0 0
+trigger computer3 (timer 10 300) (add_units c2 skeleton m2 skeleton)
+trigger computer3 (timer 300 600) (add_units h3 dragon)
+
+; set the teams
+trigger computer1 (timer 0) (alliance 1)
+trigger player1 (timer 0) (alliance 1)
+trigger player3 (timer 0) (alliance 1)
+
+trigger computer2 (timer 0) (alliance 2)
+trigger player2 (timer 0) (alliance 2)
+trigger player4 (timer 0) (alliance 2)
+
+;signal beginning
+trigger players (timer 57) (play 6003)
+trigger players (timer 58) (play 6002)
+trigger players (timer 59) (play 6001)
+trigger players (timer 57) (play 6103)
+trigger players (timer 58) (play 6102)
+trigger players (timer 59) (play 6101)
+trigger players (timer 60) (play 1078)
+trigger players (timer 57) (play 6003)
+trigger players (timer 58) (play 6002)
+trigger players (timer 59) (play 6001)
+trigger players (timer 57) (play 6103)
+trigger players (timer 58) (play 6102)
+trigger players (timer 59) (play 6101)
+trigger players (timer 60) (play 1078)
+
+; chained invulnerabilities (and the first 60 seconds)
+trigger computer1 (timer 0) (protect 60 (g1 scouttower))
+trigger computer1 (timer 0 5) (if (find g1 scouttower) (protect 6 (e1 guardtower)))
+trigger computer1 (timer 0 5) (if (find e1 guardtower) (protect 6 (c1 cannontower)))
+trigger computer1 (timer 0 5) (if (find c1 cannontower) (protect 6 (b1 2 cannontower)))
+; with 3 lanes: any tower3 missing removes the invulnerability of the 2 tower4
+;trigger computer1 (timer 0 5) (if (find a1 tower b2 tower c3 tower) (protect 6 (b1 2 cannontower)))
+trigger computer1 (timer 0 5) (if (find b1 cannontower) (protect 6 (b1 townhall)))
+trigger computer1 (timer 0) (protect 99999 (a1 farm))
+
+trigger computer2 (timer 0) (protect 60 (i1 scouttower))
+trigger computer2 (timer 0 5) (if (find i1 scouttower) (protect 6 (k1 guardtower)))
+trigger computer2 (timer 0 5) (if (find k1 guardtower) (protect 6 (m1 cannontower)))
+trigger computer2 (timer 0 5) (if (find m1 cannontower) (protect 6 (n1 2 cannontower)))
+trigger computer2 (timer 0 5) (if (find n1 cannontower) (protect 6 (n1 townhall)))
+trigger computer2 (timer 0) (protect 9999 (o1 farm))
+
+; spawn and move creep (stronger creeps if enemy barracks/lumbermill is missing)
+trigger computer1 (timer 60 30) (if (find m1 barracks) (add_units c1 3 footman) (add_units c1 6 footman))
+trigger computer1 (timer 60 30) (if (find m1 lumbermill) (add_units c1 archer) (add_units c1 2 archer))
+trigger computer1 (timer 61 30) (order (c1 99 footman 99 archer) ((go n1)))
+
+trigger computer2 (timer 60 30) (if (find c1 barracks) (add_units m1 3 footman) (add_units m1 6 footman))
+trigger computer2 (timer 60 30) (if (find c1 lumbermill) (add_units m1 archer) (add_units m1 2 archer))
+trigger computer2 (timer 61 30) (order (m1 99 footman 99 archer) ((go b1)))
+
+; victory conditions
+trigger computer1 (not (has townhall)) (team_defeat)
+trigger computer2 (not (has townhall)) (team_defeat)
+trigger players (no_enemy_player_left) (victory)

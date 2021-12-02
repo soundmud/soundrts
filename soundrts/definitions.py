@@ -164,14 +164,17 @@ class _Definitions:
 _precision_properties = {
     "armor",
     "damage",
+    "damage_per_level",
     "minimal_damage",
     "damage_radius",
     "range",
     "minimal_range",
     "decay",
+    "corpse_decay",
     "qty",
     "extraction_qty",
     "hp_max",
+    "hp_max_per_level",
     "mana_cost",
     "mana_max",
     "mana_start",
@@ -179,6 +182,7 @@ _precision_properties = {
     "time_cost",
     "cooldown",
     "hp_regen",
+    "hp_regen_per_level",
     "mana_regen",
     "speed",
     "effect_range",
@@ -186,6 +190,9 @@ _precision_properties = {
     "sight_range",
     "cloaking_range",
     "detection_range",
+    "xp_reward_per_xp",
+    "revival_time",
+    "revival_time_per_level",
 }
 _precision_properties_extended = _precision_properties.union(
     s + "_bonus" for s in _precision_properties
@@ -215,6 +222,7 @@ class Rules(_Definitions):
         "is_a_building_land",
         "is_buildable_anywhere",
         "bonus_height",
+        "inventory_capacity",
         "transport_capacity",
         "transport_volume",
         "is_invisible",
@@ -230,12 +238,18 @@ class Rules(_Definitions):
         "is_buildable_on_exits_only",
         "is_buildable_near_water_only",
         "count_limit",
+        "global_count_limit",
+        "is_revivable",
+        "xp_reward",
+        "xp",
+        "level",
     }
     precision_properties = _precision_properties_extended
     int_list_properties = {
         "storable_resource_types",
+        "xp_thresholds",
     }
-    precision_list_properties = {"cost", "storage_bonus"}
+    precision_list_properties = {"cost", "reward", "storage_bonus"}
 
     def normalize_cost_or_resources(self, lst):
         n = self.get("parameters", "nb_of_resource_types")

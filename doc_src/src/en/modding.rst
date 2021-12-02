@@ -62,6 +62,22 @@ When the limit is active, a unit type which reaches the limit cannot be trained,
 built, summoned, raised, resurrected, or added by a trigger (add_unit).
 Conversion is unaffected though.
 
+debuffs
+=======
+
+`debuffs <buff names>`
+
+List of buffs (usually debuffs) added to a target if the attack is successful.
+
+drop_loot
+=========
+
+`drop_loot 1`
+
+The unit will drop its inventory on death. Only the is_loot_ items.
+
+Default value: 1
+
 is_ballistic
 ============
 
@@ -71,6 +87,13 @@ Modified in SoundRTS 1.2 alpha 10.
 `is_ballistic 1`
 
 The unit have a range bonus if the altitude of the target is lower.
+
+is_revivable
+============
+
+`is_revivable 1`
+
+The unit will be revived after revival_time_ seconds. The unit will reappear where it appeared the first time.
 
 is_teleportable
 ===============
@@ -107,6 +130,16 @@ New in SoundRTS 1.2 alpha 9.
 `provides_survival 1`
 
 Having at least one unit (or building) with "provides_survival" equal to 1 prevents a player from losing in a multiplayer game (not in a single player campaign). The affected trigger is "no_building_left". By default only the buildings have this property set to 1. Construction sites have this property set to 0 and it cannot be changed.
+
+revival_time
+============
+
+How many seconds before the unit is revived after death.
+
+revival_time_per_level
+======================
+
+How many seconds are added or removed to revival_time_ when the unit levels up.
 
 storage_bonus
 =============
@@ -167,6 +200,13 @@ Increases by the indicated value the property of the affected units.
 
 At least the following properties should work: damage, armor, range, heal_level, speed, hp_max (old units won't have their hp updated to hp_max though).
 food_cost and food_provided probably don't work correctly.
+
+buffs
+^^^^^
+
+`effect buffs <buff names list>`
+
+Adds the buffs (or debuffs) to the target.
 
 conversion
 ^^^^^^^^^^
@@ -290,6 +330,159 @@ Determines the radius of the area of effect. The center of the area is the targe
 Default value: 6
 
 Special value: inf (infinite)
+
+buff
+>>>>
+
+A buff is a temporary improvement of a stat of a unit.
+
+A unit gets a buff by carrying an item_ providing buffs,
+or being hit by a unit_ with offensive buffs.
+
+In this game, the concept of buff is extended to buffs with permanent effects (healing),
+negative effects (debuffs), or both (damage over time).
+
+duration
+========
+
+`duration <buff duration (in seconds)>`
+
+How long the buff will last (in seconds).
+
+Special rules apply depending on stack_ size.
+
+Default value: 0
+
+stack
+=====
+
+`stack <max stack size>`
+
+How many buffs of this type can be stacked.
+
+Each time a buff is added, the duration of the whole stack is reset,
+unless max stack size is 0.
+
+Default value: 0
+
+Possible values:
+
+* 0: no stacking; no duration resetting
+* 1: no stacking; duration resetting
+* more than 1: stacking; duration resetting
+
+temporary
+=========
+
+Default value: 0
+
+Possible values:
+
+* 0: healing or damaging buff; the changes won't be undone when the buff is removed
+* 1: typical temporary buff or debuff; the stats will be restored automatically when the buff is removed
+
+negative
+========
+
+Default value: 0
+
+Possible values:
+
+* 0: positive change
+* 1: negative change
+
+stat
+====
+
+Name of the affected stat.
+
+No default value.
+
+Possible values: armor, damage, hp, hp_max, speed, ...
+
+percentage
+==========
+
+Initial variation expressed in percentage of the current value of the stat.
+For example, if negative is 1 and stat is speed,
+a value of 25 means immediately decreasing speed by 25 percent.
+
+Default value: 0
+
+v
+=
+
+Initial variation of the affected stat.
+For example, if stat is hp_max,
+a value of 5 means immediately increasing hp_max by 5.
+
+Default value: 0
+
+dv
+==
+
+Variation applied to the affected stat every time interval dt.
+
+Default value: 0
+
+dt
+==
+
+Time interval (in seconds) used by dv_.
+
+Default value: 1
+
+target_type
+===========
+
+Same syntax as harm_target_type.
+
+Used as a filter to select allowed targets for this buff.
+If several values are given, each value is an additional filter:
+all the constraints must be fulfilled.
+
+Possible values: healable, ground, air, unit, building, undead
+
+Default value: (nothing)
+
+drain_to
+========
+
+drain_to <stats of destination, in priority order>
+
+The buff must be negative.
+
+The opposite variation will be applied to the author of the buff. The destination
+is "hp", "mana", "hp mana", or "mana hp". If 2 stats are mentioned, the first one
+is affected unless it is already at its max.
+
+Default value: (nothing)
+
+item
+>>>>
+
+An item can be picked up by a unit.
+
+abilities
+=========
+
+List of the abilities provided to the carrier of the item.
+
+buffs
+=====
+
+List of the buffs provided to the carrier of the item.
+
+A typical buff designed for items should have "temporary 1" and "duration 9999".
+This way, if a hero dies and drops an item, the stats of the hero will be restored.
+The duration of 9999 is practically forever.
+
+is_loot
+=======
+
+An item with an is_loot value of 1 will be dropped if its carrier dies.
+
+Default value: 0
 
 style
 -----

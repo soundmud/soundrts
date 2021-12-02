@@ -1,0 +1,52 @@
+def parameters
+control_by_default 1
+
+def footman
+
+; the "added" sound is irritating, here are some variants
+
+; attack!
+;added if_me 1130 else 1030
+
+; ok!
+;added if_me 1194 1195 1196 else 1094 1095 1096
+
+; nothing
+added
+
+def archer
+added
+
+def hero_knight
+is_a knight
+title 7000
+
+def a_meteors
+ability_index 6
+
+def b_slow
+title 7001
+add 6122 ;6119
+noise 6121
+del 6122; 6120
+
+def b_poison 
+is_a b_slow
+add 
+;add 1130
+
+def b_poison2
+is_a b_poison
+
+def a_teleportation
+cooldown_end 6122
+
+def i_armor
+title 7002
+
+def i_sword
+title 7003
+
+def a_raise_dead2
+is_a a_raise_dead
+

@@ -59,7 +59,13 @@ class Corpse(Entity):
     def __init__(self, unit):
         self.unit = copy.copy(unit)
         Entity.__init__(self, unit.place, unit.x, unit.y)
-        self.time_limit = self.place.world.time + 300 * PRECISION
+        if self.unit.is_revivable:
+            self.time_limit = float("inf")
+            self._time_of_revival = (
+                self.place.world.time + unit.revival_time + unit.revival_time
+            )
+        else:
+            self.time_limit = self.place.world.time + unit.corpse_decay
 
     def update(self):
         pass  # necessary to allow slow update
@@ -67,6 +73,12 @@ class Corpse(Entity):
     def slow_update(self):
         if self.place.world.time >= self.time_limit:
             self.delete()
+        if self.unit.is_revivable and self.place.world.time >= self._time_of_revival:
+            self.move_to(self.unit.altar)
+            self.unit.resurrect(self)
 
     def die(self, attacker):
         pass
+
+    def resurrect(self):
+        self.unit.resurrect(self)

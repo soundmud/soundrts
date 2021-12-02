@@ -1,0 +1,227 @@
+def farm ; magic fountain
+heal_level 1000
+hp_max 100000
+hp_regen 1000
+range 7
+cooldown .5
+damage 100
+
+def townhall
+hp_max 1000
+hp_regen 0.2
+
+def scouttower
+hp_max 500
+hp_regen 0.05
+reward 100
+range 6
+cooldown 1.5
+damage 5
+debuffs b_slow b_poison
+target_types ground air
+heal_level 1
+
+def guardtower
+hp_max 700
+hp_regen 0.1
+reward 200
+range 6
+cooldown 1.5
+damage 10
+target_types ground air
+heal_level 2
+
+def cannontower
+is_buildable_anywhere 0
+hp_max 800
+hp_regen 0.15
+reward 400
+range 7
+cooldown 1.5
+damage 15
+target_types ground
+damage_radius 1
+splash 1
+heal_level 3
+
+def footman
+cooldown 1
+speed 1.6
+damage 1
+reward 5
+xp_reward 10
+corpse_decay 5
+
+def archer
+cooldown 1
+speed 1.6
+damage 1
+reward 5
+xp_reward 10
+corpse_decay 5
+debuffs b_poison2
+
+def skeleton
+reward 10
+
+def dragon
+airground_type ground
+reward 500
+corpse_decay 5
+
+; heroes
+
+def hero
+class soldier
+global_count_limit 1
+is_revivable 1
+revival_time 10
+revival_time_per_level 2
+xp_thresholds 200 500 900
+requirements
+cost 0 0
+food_cost 0
+time_cost 0
+hp_max 200
+hp_max_per_level 1000
+hp_regen 0.25
+hp_regen_per_level 5
+reward 300
+xp_reward 100
+xp_reward_per_xp 0.13
+inventory_capacity 6
+
+def hero_knight
+is_a hero
+speed 2.5
+armor 1
+armor_bonus 1.5
+range 1
+cooldown 1.5
+damage 1
+damage_per_level 100
+debuffs b_drain b_slow ;b_poison ; b_instant_harm
+can_use a_meteors a_teleportation
+
+def darkarcher
+is_a hero
+
+def mage
+is_a hero
+
+def priest
+is_a hero
+
+def necromancer
+is_a hero
+
+def peasant
+is_a hero
+class building
+global_count_limit 0
+can_build
+can_upgrade_to hero_knight darkarcher mage priest necromancer
+
+def a_teleportation
+requirements
+mana_cost 0
+cooldown 5
+
+def a_recall
+requirements
+
+def a_conversion
+requirements
+
+def a_summon_dragon
+requirements
+
+def a_exorcism
+requirements
+
+def a_deadly_fog
+requirements
+
+def a_meteors
+requirements
+mana_cost 0
+
+def a_resurrection
+requirements
+
+;;;;;;;;;;;;;;;;
+
+def b_slow
+class buff
+duration 2
+temporary 1
+stack 1  ; duration reset
+negative 1
+stat speed
+percentage 25
+target_type healable
+
+def b_slow2
+is_a b_slow
+percentage 85
+
+def b_poison
+class buff
+duration 10
+temporary 0
+stack 5  ; stack of 5 max and duration reset of the whole stack
+negative 1
+stat hp
+v 0
+dv 3
+dt 3
+target_type healable
+
+def b_poison2
+is_a b_poison
+stack 0  ; no duration reset
+dv 1
+dt 5
+
+def b_drain
+is_a b_poison
+drain_to hp mana
+
+def o_vampiric_sword
+attack_buff b_drain
+
+def b_armor
+class buff
+temporary 1
+duration 99999
+stat hp_max ;armor
+v 2
+
+def a_raise_dead2
+is_a a_raise_dead
+requirements
+mana_cost 0
+cooldown 5
+
+def i_armor
+class item
+abilities a_raise_dead2
+buffs b_armor
+
+def b_sword
+class buff
+temporary 1
+duration 99999
+stack 10
+stat damage
+v 7000
+
+def i_sword
+class item
+buffs b_sword
+
+def a_meteors ;  actually: buff damage
+class ability
+mana_cost 0
+effect buffs b_sword
+effect_target ask

@@ -1,0 +1,33 @@
+objective 145 88
+
+square_width 12
+nb_columns 10
+nb_lines 1
+
+west_east_paths a1 b1 c1 d1 e1 f1 g1 h1 i1
+
+nb_meadows_by_square 0
+additional_meadows b1 c1 d1 e1
+additional_meadows b1 c1 d1 e1
+
+nb_players_min 1
+nb_players_max 1
+player 10 0 a1 farm b1 peasant scouttower c1 scouttower d1 scouttower e1 scouttower f1 holy_vision g1 holy_vision h1 holy_vision i1 holy_vision j1 holy_vision
+computer_only 0 0
+
+trigger computer1 (timer 0 60) (add_units j1 1 footman)
+trigger computer1 (timer 60 60) (add_units j1 2 footman)
+trigger computer1 (timer 120 60) (add_units j1 4 footman)
+trigger computer1 (timer 180 60) (add_units j1 8 footman)
+trigger computer1 (timer 240 60) (add_units j1 16 footman)
+trigger computer1 (timer 300 60) (add_units j1 32 footman)
+trigger computer1 (timer 360 60) (add_units j1 64 footman)
+trigger computer1 (timer 420 60) (add_units j1 128 footman)
+trigger computer1 (timer 480 60) (add_units j1 256 footman)
+
+trigger computer1 (timer 90 120) (add_units j1 1 knight)
+trigger computer1 (timer 300 120) (add_units j1 5 knight)
+
+trigger computer1 (timer 5 60) (order (j1 9999 footman 9999 knight) ((imperative go a1)))
+
+trigger players (no_building_left) (defeat)

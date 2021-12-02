@@ -550,6 +550,7 @@ class UpgradeToOrder(ProductionOrder):
             else:
                 self.unit.notify("order_impossible")
                 return
+        self.unit.notify("upgrade_to,%s" % self.world.get_next_id(increment=False))
         self.unit.delete()
         unit = self.type(player, place, x, y)
         if blocked_exit:
@@ -1023,8 +1024,12 @@ class UseOrder(ComplexOrder):
         if self.unit.mana < self.type.mana_cost:
             self.mark_as_impossible("not_enough_mana")
             return
+        if self.unit.has_cooldown(self.type):
+            self.mark_as_impossible("cooldown")
+            return
         getattr(self, "execute_%s" % self.type.effect[0])()
         self.unit.mana -= self.type.mana_cost
+        self.unit.add_cooldown(self.type)
         self.unit.notify(
             "use_complete,%s" % self.type.type_name,
             universal=self.type.universal_notification,
@@ -1095,6 +1100,15 @@ class UseOrder(ComplexOrder):
     def execute_conversion(self):
         self.target.set_player(self.unit.player)
 
+    buffs_target_type = "unit"
+
+    def buffs_is_not_necessary(self):
+        return not hasattr(self.target, "add_buff")
+
+    def execute_buffs(self):
+        for b in self.type.effect[1:]:
+            self.target.add_buff(b, self.unit)
+
     def summon_is_not_necessary(self):
         return False
 
@@ -1149,19 +1163,7 @@ class UseOrder(ComplexOrder):
         )
         for _ in range(int(self.type.effect[1])):
             if corpses:
-                c = corpses.pop(0)
-                u = c.unit
-                if not self.player.check_count_limit(u.type_name):
-                    continue
-                u.player = None
-                u.place = None
-                u.id = None  # so the unit will be added to world.active_objects
-                u.hp = u.hp_max // 3
-                u.set_player(self.unit.player)
-                u.move_to(c.place, c.x, c.y)
-                if u.decay:
-                    u.time_limit = u.world.time + u.decay
-                c.delete()
+                corpses.pop(0).resurrect()
             else:
                 break
 
@@ -1169,6 +1171,33 @@ class UseOrder(ComplexOrder):
     def additional_condition(unused_unit, type_name):
         e = rules.get(type_name, "effect")
         return e and hasattr(UseOrder, "execute_%s" % e[0])
+
+
+class PickupOrder(Order):
+
+    keyword = "pickup"
+    nb_args = 1
+
+    @classmethod
+    def is_allowed(cls, unit, *unused_args):
+        return unit.have_inventory_space
+
+    def on_queued(self):
+        self.target = self.player.get_object_by_id(self.args[0])
+        if self.target is None:
+            self.mark_as_impossible()
+            return
+        self.unit.notify("order_ok")
+
+    def execute(self):
+        self.update_target()
+        if self.target is None or not self.unit.have_inventory_space:
+            self.mark_as_impossible()
+        elif self.unit.place != self.target.place:
+            self.move_to_or_fail(self.target.place)
+        else:
+            self.mark_as_complete()
+            self.unit.pickup(self.target)
 
 
 class TransportOrder(Order):

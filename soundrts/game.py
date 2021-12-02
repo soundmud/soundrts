@@ -35,6 +35,7 @@ PROFILE = False
 
 class _Game:
 
+    map: Map
     default_triggers: List[Tuple[str, List[str], List[str]]] = []
     game_type_name: str
     record_replay = True

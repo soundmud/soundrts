@@ -1,0 +1,4 @@
+7000 Knight
+7001 slow
+7002 armor
+7003 sword

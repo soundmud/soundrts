@@ -26,8 +26,26 @@ from .worldroom import Square
 DISTANCE_MARGIN = 175  # millimeters
 
 
-def ground_or_air(t):
+def _ground_or_air(t):
     return "ground" if t == "water" else t
+
+
+def has_target_type(target, target_type):
+    for t in target_type:
+        if (
+            t == "healable"
+            and not target.is_healable
+            or t == "building"
+            and not target.is_a_building
+            or t in ("air", "ground")
+            and _ground_or_air(target.airground_type) != t
+            or t == "unit"
+            and not target.is_a_unit
+            or t == "undead"
+            and not target.is_undead
+        ):
+            return False
+    return True
 
 
 class Creature(Entity):
@@ -71,14 +89,22 @@ class Creature(Entity):
     action_target = property(get_action_target, set_action_target)
     distance_to_goal = float("inf")
 
-    hp_max = 0
+    hp_max = 1  # or required, or warning if 0
+    hp_max_per_level = 0
     hp_regen = 0
+    hp_regen_per_level = 0
     mana_max = 0
     mana_start = 0
     mana_regen = 0
     walked: List[Tuple[Optional[Square], int, int, int]] = []
 
     cost = (0,) * MAX_NB_OF_RESOURCE_TYPES
+    reward = ()
+    xp_reward = 0
+    xp_reward_per_xp = 0
+    xp_thresholds: List[int] = []
+    xp = 0
+    level = 1
     time_cost = 0
     food_cost = 0
     food_provided = 0
@@ -89,6 +115,7 @@ class Creature(Entity):
 
     is_buildable_anywhere = True
 
+    inventory_capacity = 0
     transport_capacity = 0
     transport_volume = 1
 
@@ -102,6 +129,8 @@ class Creature(Entity):
 
     armor = 0
     damage = 0
+    damage_per_level = 0
+    debuffs: List[str] = []
     damage_level = 0
 
     basic_abilities: Set[str] = set()
@@ -121,6 +150,7 @@ class Creature(Entity):
     splash = False
 
     player = None
+    last_player = None
     number = None
 
     expanded_is_a = ()
@@ -128,6 +158,7 @@ class Creature(Entity):
     rallying_point = None
 
     corpse = 1
+    corpse_decay = 300 * PRECISION
     decay = 0
 
     presence = 1
@@ -135,7 +166,14 @@ class Creature(Entity):
     count_limit = 0
     group = None
 
+    global_count_limit = 0
+    is_revivable = 0
+    revival_time = 0
+    revival_time_per_level = 0
+
     def next_free_number(self):
+        if self.global_count_limit == 1:
+            return -1
         numbers = [
             u.number
             for u in self.player.units
@@ -158,6 +196,7 @@ class Creature(Entity):
         # add to new player
         self.player = player
         if player is not None:
+            self.last_player = player
             self.number = self.next_free_number()
             player.units.append(self)
             self.player.food += self.food_provided
@@ -176,10 +215,25 @@ class Creature(Entity):
         for o in self.objects:
             o.set_player(player)
 
+    def add_cooldown(self, t):
+        self._cooldowns[t] = self.world.time + t.cooldown
+
+    def has_cooldown(self, t):
+        return t in self._cooldowns
+
+    def _update_cooldowns(self):
+        for t, c in list(self._cooldowns.items()):
+            if self.world.time >= c:
+                del self._cooldowns[t]
+                self.notify("cooldown_end,%s" % t.type_name)
+
     def __init__(self, player, place, x, y, o=90):
         self.orders = []
+        self._buffs = []
+        self._cooldowns = {}
 
         # attributes required by transports and shelters (inside)
+        self.inventory = []
         self.objects = []
         self.world = place.world
         self.neighbors = []
@@ -254,6 +308,8 @@ class Creature(Entity):
 
     @property
     def menace(self):
+        if self.is_protected:
+            return 0
         return self.damage
 
     @property
@@ -319,7 +375,8 @@ class Creature(Entity):
 
     def _must_hold(self):
         return (
-            (not self.orders or self.orders[0].is_complete)
+            not (self.player.smart_units or self.ai_mode == "defensive")
+            and (not self.orders or self.orders[0].is_complete)
             and self.position_to_hold is not None
             and self.position_to_hold.contains(self.x, self.y)
         )
@@ -488,22 +545,34 @@ class Creature(Entity):
 
         self.is_moving = False
 
-        if self.is_inside or self.player is None:
+        for i in self.inventory:
+            i.update_in_inventory(self)
+
+        for b in list(self._buffs):
+            if b.should_stop():
+                b.stop(self)
+                self._buffs.remove(b)
+            else:
+                b.update(self)
+                if self.is_dead:
+                    return
+
+        self._update_cooldowns()
+
+        if self.is_inside:
             return
 
         if self.heal_level:
             self.heal_nearby_units()
         if self.harm_level:
             self.harm_nearby_units()
-
-        if self.player is None:
-            return
+            if self.is_dead:
+                return
 
         if self.action:
             self.action.update()
-
-        if self.player is None:
-            return
+            if self.is_dead:
+                return
 
         if self.has_imperative_orders():
             # warning: completing UpgradeToOrder deletes the object
@@ -521,10 +590,14 @@ class Creature(Entity):
         if self.mana_regen and self.mana < self.mana_max:
             self.mana = min(self.mana_max, self.mana + self.mana_regen)
 
+    is_protected = False
+
     def slow_update(self):
         self.regenerate()
         if self.time_limit is not None and self.place.world.time >= self.time_limit:
             self.die()
+        if self.is_protected and self.place.world.time >= self.protection_limit:
+            self.is_protected = False
 
     #
 
@@ -534,8 +607,38 @@ class Creature(Entity):
             if p in self.player.allied:
                 p.raise_threat(subsquare, delta)
 
+    def add_buff(self, name, author):
+        cls = self.world.unit_class(name)
+        if has_target_type(self, cls.target_type):
+            if cls.stack:
+                n = cls.stack
+                for b in self._buffs:
+                    if isinstance(b, cls):
+                        b.renew()
+                        n -= 1
+                        if n == 0:
+                            return
+            else:
+                for b in self._buffs:
+                    if isinstance(b, cls):
+                        return
+            self._buffs.append(cls(author, self))
+
+    @property
+    def is_dead(self):
+        return self.hp <= 0
+
+    def apply_damage(self, damage, attacker):
+        if not self.is_dead:
+            self.hp -= damage
+            if self.is_dead:
+                self.die(attacker)
+
     def receive_hit(self, damage, attacker, notify=True):
-        if self.player is None:
+        if self.is_protected:
+            self.notify("missed")
+            return
+        if self.is_dead:
             return
         self.player.observe(attacker)
         self._raise_subsquare_threat(damage)
@@ -546,16 +649,57 @@ class Creature(Entity):
                 )
             )
         self.hp -= damage
-        if self.hp < 0:
+        if self.is_dead:
             self.die(attacker)
         else:
             self.player.on_unit_attacked(self, attacker)
+            for b in attacker.debuffs:
+                self.add_buff(b, attacker)
 
     def delete(self):
         Entity.delete(self)
         self.set_player(None)
 
+    @property
+    def max_level(self):
+        return len(self.xp_thresholds) + 1
+
+    def increase_xp(self, xp):
+        self.xp += xp
+        self.xp_reward += xp * self.xp_reward_per_xp // PRECISION
+        if (
+            self.level < self.max_level
+            and self.xp >= self.xp_thresholds[self.level - 1]
+        ):
+            self.level += 1
+            self.hp_max += self.hp_max_per_level
+            self.hp += self.hp_max_per_level
+            self.hp_regen += self.hp_regen_per_level
+            self.damage += self.damage_per_level
+            self.revival_time += self.revival_time_per_level
+            self.notify("level_up")
+
+    def claim_rewards(self, target):
+        for resource in enumerate(target.reward):
+            self.last_player.store(*resource)
+        if target.xp_reward:
+            allied = self.last_player.allied
+            units = [
+                o
+                for p in [target.place] + target.place.strict_neighbors
+                for o in p.objects
+                if o.player in allied and o.xp_thresholds
+            ]
+            if units:
+                xp = target.xp_reward / len(units)
+                for u in units:
+                    u.increase_xp(xp)
+
     def die(self, attacker=None):
+        # remove all buffs
+        for b in self._buffs:
+            b.stop(self)
+        self._buffs = []
         # remove transported units
         for o in self.objects[:]:
             o.move_to(self.place, self.x, self.y)
@@ -568,6 +712,7 @@ class Creature(Entity):
         if attacker is not None:
             self.notify("death_by,%s" % attacker.id)
             self.player.on_unit_attacked(self, attacker)
+            attacker.claim_rewards(self)
         self.delete()
 
     heal_level = 0
@@ -625,7 +770,7 @@ class Creature(Entity):
             other is None
             or other.place is None
             or getattr(other, "hp", 0) < 0
-            or ground_or_air(getattr(other, "airground_type", None))
+            or _ground_or_air(getattr(other, "airground_type", None))
             not in self.target_types
         ):
             return False
@@ -655,18 +800,20 @@ class Creature(Entity):
             return True
 
     def flee(self):
-        if (
-            self._previous_square is not None
-            and self.player.balance(self._previous_square) > 0.5
-        ):
-            if self.action_target != self.next_stage(self._previous_square):
+        if self._previous_square:
+            s = self._previous_square
+        elif self.place.exits:
+            s = self.place.exits[0].other_side.place
+        else:
+            return
+        if self.player.balance(s) > 0.5:
+            if self.action_target != self.next_stage(s):
                 self.notify("flee")
-                self.take_order(["go", self._previous_square.id], imperative=True)
+                self.take_order(["go", s.id], imperative=True)
 
     def decide(self):
         if (
-            (self.player.smart_units or self.ai_mode == "defensive")
-            and self.speed > 0
+            self.speed > 0
             and not self._must_hold()
             and self.player.balance(self.place, self._previous_square) < 0.5
         ):
@@ -771,6 +918,8 @@ class Creature(Entity):
         target = self.player.get_object_by_id(target_id)
         if not target:
             return
+        elif hasattr(target, "default_order"):
+            return target.default_order
         elif getattr(target, "is_an_exit", False):
             return "block"
         elif getattr(target, "player", None) is self.player and self.have_enough_space(
@@ -894,6 +1043,22 @@ class Creature(Entity):
     def is_fully_repaired(self):
         return getattr(self, "is_repairable", False) and self.hp == self.hp_max
 
+    # inventory
+
+    @property
+    def have_inventory_space(self):
+        return self.inventory_capacity > len(self.inventory)
+
+    def pickup(self, target):
+        target.move_to(None)
+        self.inventory.append(target)
+        target.equip(self)
+
+    def drop(self, item):
+        item.move_to(self.place, self.x, self.y)
+        self.inventory.remove(item)
+        item.unequip(self)
+
     # transport
 
     def have_enough_space(self, target):
@@ -941,23 +1106,53 @@ class Creature(Entity):
 
 class Unit(Creature):
 
+    drop_loot = 1
     food_cost = 1
 
     is_cloakable = True
     is_a_gate = True
     is_a_unit = True
 
+    @classmethod
+    def interpret(cls, d):
+        super().interpret(d)
+        for k, f in [
+            ("drop_loot", int),
+        ]:
+            if k in d:
+                d[k] = f(d[k][0])
+
     def __init__(self, player, place, x, y, o=90):
         Creature.__init__(self, player, place, x, y, o)
         self.player.nb_units_produced += 1
+        if self.is_revivable:
+            self.altar = self.place
 
     def die(self, attacker=None):
         self.player.nb_units_lost += 1
         if attacker:
-            attacker.player.nb_units_killed += 1
+            attacker.last_player.nb_units_killed += 1
+        if self.drop_loot:
+            for i in self.inventory[:]:
+                if i.is_loot:
+                    self.drop(i)
         if self.corpse:
             Corpse(self)
         Creature.die(self, attacker)
+
+    def resurrect(self, corpse):
+        if not self.player.check_count_limit(self.type_name):
+            return
+        p = self.player
+        self.player = None
+        self.place = None
+        self.id = None  # so the unit will be added to world.active_objects
+        self.hp = self.hp_max // 3
+        self.set_player(p)
+        self.move_to(corpse.place, corpse.x, corpse.y)
+        if self.decay:
+            self.time_limit = self.world.time + self.decay
+        corpse.delete()
 
     @property
     def basic_abilities(self):
@@ -1153,6 +1348,9 @@ class _Building(Creature):
         Creature.die(self, attacker)
         if self.building_land:
             self.building_land.move_to(place, x, y)
+
+    def auto_explore(self) -> None:
+        pass
 
 
 class BuildingSite(_Building):

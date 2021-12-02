@@ -1,0 +1,34 @@
+def farm
+hp_max 10
+
+def scouttower
+hp_max 100
+reward 100
+range 6
+cooldown 1.5
+damage 3
+target_types ground air
+
+def guardtower
+hp_max 200
+reward 200
+range 6
+cooldown 1.5
+damage 6
+target_types ground air
+
+def cannontower
+hp_max 400
+reward 400
+range 7
+cooldown 1.5
+damage 12
+target_types ground
+damage_radius 1
+splash 1
+
+def footman
+cooldown 1
+speed 1.6
+damage 1
+reward 5

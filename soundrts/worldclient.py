@@ -68,6 +68,8 @@ class _Controller:
     alliance: Optional[str] = None
     faction = "random_faction"
     neutral = False
+    player = None
+    login: str
 
 
 class _Client(_Controller):
@@ -133,7 +135,6 @@ class RemoteClient(_Controller):
 
 class DirectClient(_Client):  # client for single player games
 
-    player = None
     data = ""
 
     def __init__(self, login, game_session):

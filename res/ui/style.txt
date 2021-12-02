@@ -9,6 +9,7 @@ population_limit_reached 4246
 production_deferred 142
 cannot_build_here 4204
 not_enough_mana 4252
+cooldown 4365
 not_enough_space 1027
 count_limit_reached 4335
 
@@ -35,6 +36,10 @@ index 1
 
 def attack ; imperative go
 title 114
+; no index (won't appear in the menu)
+
+def pickup
+title 4366
 ; no index (won't appear in the menu)
 
 def patrol
@@ -275,6 +280,7 @@ added 1329
 added_msg $1 
 enter 1330
 exit 1331
+level_up if_me 6117 else 6118
 
 def unit
 is_a thing

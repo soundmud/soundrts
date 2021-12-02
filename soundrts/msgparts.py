@@ -62,6 +62,7 @@ IN_THE_FOG = [4209]
 IS_NOW_ON = [4263]
 IS_NOW_OFF = [4264]
 LEAVE_THIS_GAME = [4061]  # explanation of QUIT2
+LEVEL = [40]
 LOADING = [4322]
 LOST = [146]
 MAKE_A_SELECTION = [4030]  # explanation of MENU

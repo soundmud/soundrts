@@ -54,7 +54,8 @@ class _PlayerBaseTestCase(unittest.TestCase):
         cp = DummyClient(ai[0])
         cp2 = DummyClient(ai[1])
         cp.alliance, cp2.alliance = alliance
-        self.w.populate_map([cp, cp2], random_starts=False)
+        self.w.random_starts = 0
+        self.w.populate_map([cp, cp2])
         self.cp, self.cp2 = self.w.players
         self.cp.is_perceiving = is_perceiving_method(self.cp)
         self.cp2.is_perceiving = is_perceiving_method(self.cp2)
@@ -608,6 +609,13 @@ class ComputerTestCase(_PlayerBaseTestCase):
         self.w.update()
         self.assertTrue(p2.can_attack(p))  # (a bit too late to test this)
         self.assertEqual(p2.action_target, p)  # "peasant should attack peasant"
+
+    def testDefensiveWorkerMustFlee(self):
+        self.set_up(map_name="jl1", ai=("timers", "timers"))
+        p = self.find_player_unit(self.cp, "peasant")
+        self.cp2.lang_add_units([p.place.name, "footman"])
+        self.w.update()
+        self.assertEqual(p.orders[0].keyword, "go")
 
     def testUpgradeTo(self):
         self.set_up(map_name="jl1")

@@ -1,0 +1,23 @@
+title 
+objective 
+
+square_width 12
+nb_columns 8
+nb_lines 8
+
+nb_players_min 2
+nb_players_max 2
+global_food_limit 80
+player 10 10 a1 townhall b1 cannontower d1 cannontower g1 cannontower
+player 10 10 h8 townhall g8 cannontower e8 cannontower b8 cannontower
+
+
+nb_meadows_by_square 0
+
+high_grounds 
+water 
+ground 
+no_air 
+
+west_east path a1 a2 a8 b1 b2 b8 c1 c3 c8 d1 d4 d8 e1 e5 e8 f1 f6 f7 f8 g1 g7 g8
+south_north path a1 a2 a3 a4 a5 a6 a7 b1 c2 d3 e4 f5 f6 g6 g7 h1 h2 h3 h4 h5 h6 h7

@@ -644,12 +644,14 @@ class Player:
             return rules.get(self.faction, tn)[0]
         return tn
 
-    def init_alliance(self):
+    def update_alliance(self):
         if self.client.alliance in [None, "None"]:
-            return
-        for p in self.world.players:
-            if self.client.alliance == p.client.alliance:
-                self.allied.append(p)
+            self.allied = [self]
+        else:
+            self.allied = []
+            for p in self.world.players:
+                if self.client.alliance == p.client.alliance:
+                    self.allied.append(p)
 
     def init_position(self):
         def equivalent_type(t):
@@ -702,6 +704,13 @@ class Player:
                     break
                 else:
                     self.triggers.remove(t)
+                    self._eventually_reschedule(t)
+
+    def _eventually_reschedule(self, t):
+        condition, action = t
+        if len(condition) == 3 and condition[0] == "timer":
+            condition[1] = float(condition[1]) + float(condition[2])
+            self.triggers.append((condition, action))
 
     def my_eval(self, l):
         if hasattr(self, "lang_" + l[0]):
@@ -714,8 +723,8 @@ class Player:
         # And for example: 6 == .1 * 60 (tested in Python 2.4)
         return self.world.time // 1000 >= float(args[0]) * self.world.timer_coefficient
 
-    def lang_order(self, args):
-        select, orders = args
+    def _units(self, select):
+        result = []
         for x in select:
             if x in self.world.grid:
                 default_square = x
@@ -725,12 +734,23 @@ class Player:
             else:
                 for o in self.world.grid[default_square].objects:
                     if self.check_type(o, x) and (o.player == self):
-                        for order in orders:
-                            o.take_order(order, forget_previous=False)
+                        result.append(o)
                         n -= 1
                         if n == 0:
                             break
                 n = 1
+        return result
+
+    def lang_order(self, args):
+        select, orders = args
+        for o in self._units(select):
+            for order in orders:
+                if order[0] == "imperative":
+                    order = order[1:]
+                    imperative = True
+                else:
+                    imperative = False
+                o.take_order(order, forget_previous=False, imperative=imperative)
 
     def lang_has(self, args):
         nb = 1
@@ -754,6 +774,37 @@ class Player:
             for o in self.world.grid[x].objects:
                 if o in player.units and o.presence:
                     return True
+
+    def lang_if(self, args):
+        if self.my_eval(args[0]):
+            self.my_eval(args[1])
+        elif len(args) > 2:
+            self.my_eval(args[2])
+
+    def lang_not(self, args):
+        return not self.my_eval(args[0])
+
+    def lang_find(self, args):
+        for x in args:
+            if x in self.world.grid:
+                default_square = x
+            else:
+                for o in self.world.grid[default_square].objects:
+                    if self.check_type(o, x):
+                        break
+                else:
+                    return False
+        return True
+
+    def lang_protect(self, args):
+        time, select = args
+        for o in self._units(select):
+            o.is_protected = True
+            o.protection_limit = self.world.time + to_int(time)
+
+    def lang_team_defeat(self, args):
+        for p in self.allied:
+            p.defeat()
 
     def _nb_scouts(self, square):
         n = 0
@@ -959,6 +1010,9 @@ class Player:
     def lang_cut_scene(self, args):
         self.push("sequence", args)
 
+    def lang_play(self, args):
+        self.push("play", args)
+
     def lang_add_objective(self, args):
         n = args[0]
         o = Objective(n, [int(x) for x in args[1:]])
@@ -985,6 +1039,10 @@ class Player:
             self.faction = args[0]
         else:
             warning("unknown faction: %s", " ".join(args))
+
+    def lang_alliance(self, args):
+        self.client.alliance = args[0]
+        self.world.update_alliances()
 
     @property
     def available_food(self):
@@ -1034,10 +1092,21 @@ class Player:
                     result += 1
         return result
 
+    def future_global_count(self, type_name):
+        result = 0
+        for p in self.world.players:
+            result += p.future_count(type_name)
+        return result
+
     def check_count_limit(self, type_name):
         t = self.world.unit_class(type_name)
         if t is None:
             info("couldn't check count_limit for %r", type_name)
+            return False
+        if (
+            t.global_count_limit
+            and self.future_global_count(t.type_name) >= t.global_count_limit
+        ):
             return False
         if t.count_limit == 0:
             return True

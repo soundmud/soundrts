@@ -1,0 +1,9 @@
+def b_slow
+title 7001
+add 6122 ;6119
+noise 6121
+del 6122; 6120
+
+def mudtower
+is_a scouttower
+title 7000

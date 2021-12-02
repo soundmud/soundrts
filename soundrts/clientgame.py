@@ -160,6 +160,7 @@ def load_palette():
 
 class GameInterface:
 
+    control_by_default = 0
     last_virtual_time = 0
     x = y = o = 0
     place = None
@@ -170,6 +171,13 @@ class GameInterface:
     zoom = None
 
     def __init__(self, server, speed=config.speed):
+        if style.has("parameters", "control_by_default"):
+            try:
+                self.control_by_default = int(
+                    style.get("parameters", "control_by_default")[0]
+                )
+            except (IndexError, ValueError):
+                warning("in style.txt: control_by_default should be an integer")
         self.server = server
         self.speed = speed
         self.alert_squares = {}
@@ -326,7 +334,13 @@ class GameInterface:
 
     def _object_choices(self, inc, types):
         choices = []
+        no_exit = "no_exit" in types
+        if no_exit:
+            types = list(types)
+            types.remove("no_exit")
         for o in list(self.dobjets.values()):
+            if no_exit and o.is_an_exit:
+                continue
             if self.is_selectable(o) and (
                 not types
                 or getattr(o, "type_name", None) in types
@@ -932,6 +946,10 @@ class GameInterface:
                 self._animate_objects()
                 self._process_events()
                 self._process_srv_events()
+                if self.control_by_default and not self.group:
+                    units = self.units(False)
+                    if units:
+                        self.command_unit(units[0])
                 voice.update()  # useful for SAPI
                 time.sleep(0.001)
             except SystemExit:
@@ -1139,6 +1157,8 @@ class GameInterface:
             if obj.model.player is self.player:
                 units.append(obj.short_title)
             if getattr(obj.model, "resource_type", None) is not None:
+                resources.append(obj.short_title)
+            if getattr(obj.model, "default_order", None) == "pickup":
                 resources.append(obj.short_title)
         result = []
         if enemies:
@@ -1371,6 +1391,9 @@ class GameInterface:
         id_place, sound = s.split(",")
         place = self.player.get_object_by_id(int(id_place))
         self.launch_alert(place, int(sound))
+
+    def srv_play(self, s):
+        psounds.play_stereo(sounds.get_sound(s[0]))
 
     def cmd_unit_hp_status(self):
         if len(self.group) == 1:
@@ -1654,6 +1677,13 @@ class GameInterface:
             if "now" in args and self.order.nb_args == 0:
                 args = [a for a in args if a in ("queue_order", "imperative")]
                 self.cmd_validate(*args)
+
+    def cmd_ability(self, ability):
+        for o in self.orders():
+            if o.is_ability(ability):
+                self._select_order(o)
+                return
+        voice.item(mp.BEEP)
 
     # select square
 

@@ -1,0 +1,12 @@
+TAB: select_target 1 no_exit
+SHIFT TAB: select_target -1 no_exit
+
+F1: select_unit 1
+
+q: ability 1
+w: ability 2
+e: ability 3
+r: ability 6
+t: ability a_teleportation
+d: ability 4
+f: ability 5

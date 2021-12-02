@@ -43,6 +43,11 @@ class OrderTypeView:  # future order
         self.food_cost = order.food_cost
         self.nb_args = order.nb_args
 
+    def is_ability(self, ability: str):
+        return self.type == ability or style.get(self.type, "ability_index", None) == [
+            ability
+        ]
+
     @property
     def target_shouldnt_collide(self):
         return (
@@ -114,9 +119,11 @@ class OrderTypeView:  # future order
 
 def _ord_index(keyword):
     try:
-        return float(style.get(keyword, "index")[0])
-    except:
-        warning("%s.index should be a number (check style.txt)", keyword)
+        return float(style.get(keyword, "index", warn_if_not_found=False)[0])
+    except (TypeError, IndexError):
+        return
+    except ValueError:
+        warning("%s.index should be a number or nothing (check style.txt)", keyword)
         return 9999  # end of the list
 
 

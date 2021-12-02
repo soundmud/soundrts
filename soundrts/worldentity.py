@@ -63,7 +63,7 @@ class Entity:
     _previous_square = None
 
     def move_to(self, new_place, x=None, y=None, o=90, exit1=None, exit2=None):
-        if x is None:
+        if new_place and x is None:
             x = new_place.x
             y = new_place.y
 
@@ -178,8 +178,8 @@ class Entity:
 
     def unblock(self):
         if self.blocked_exit:
-            self.blocked_exit.remove_blocker(self)
             self.blocked_exit = None
+            self.blocked_exit.remove_blocker(self)
 
     @property
     def any_land(self):

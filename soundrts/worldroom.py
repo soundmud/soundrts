@@ -52,6 +52,7 @@ class Square:
     is_ground = True
     is_water = False
     is_air = True
+    high_ground: bool
 
     def __init__(self, world, col, row, width):
         self.col = col

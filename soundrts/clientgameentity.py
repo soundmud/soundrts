@@ -202,6 +202,8 @@ class EntityView:
     def short_title(self):
         if self.type_name == "buildingsite":
             return compute_title(self.type.type_name) + compute_title(self.type_name)
+        elif getattr(self, "level", 0) > 1:
+            return compute_title(self.type_name) + mp.LEVEL + nb2msg(self.level)
         else:
             return compute_title(self.type_name)
 
@@ -414,12 +416,12 @@ class EntityView:
         st = self._get_noise_style()
         self._set_noise(st)
 
-    def launch_event_style(self, attr, alert=False, priority=0):
+    def launch_event_style(self, attr, alert=False, alert_if_far=False, priority=0):
         st = self.get_style(attr)
         if not st:
             return
         s = random.choice(st)
-        if alert and self.place is not self.interface.place:
+        if alert or alert_if_far and self.place is not self.interface.place:
             self.launch_alert(s)
         else:
             self.launch_event(s, priority=priority)
@@ -478,7 +480,7 @@ class EntityView:
             self._repeat_noise()
             self.render_hp()
 
-    def stop(self):  # arreter les sons en boucle
+    def stop(self):
         if self.loop_source is not None:
             self.loop_source.stop()
             self.loop_source = None
@@ -499,7 +501,7 @@ class EntityView:
 
     def render_hp(self):
         if hasattr(self, "hp"):
-            if self.hp < 0:
+            if self.is_dead:
                 return  # TODO: remove this line (isolate the UI or use a deep copy of perception)
             if self.hp != self.previous_hp:
                 self.render_hp_evolution()
@@ -518,10 +520,10 @@ class EntityView:
         self.launch_event_style("blocked")  # "blocked" is more precise than "collision"
 
     def on_attack(self):
-        self.launch_event_style("attack", alert=True)
+        self.launch_event_style("attack", alert_if_far=True)
 
     def on_flee(self):
-        self.launch_event_style("flee", alert=True)
+        self.launch_event_style("flee", alert_if_far=True)
 
     def on_store(self, resource_type):
         self.launch_event_style("store_resource_%s" % resource_type)
@@ -529,12 +531,12 @@ class EntityView:
     def on_order_ok(self):
         if self.player is not self.interface.player:
             return
-        self.launch_event_style("order_ok", alert=True)
+        self.launch_event_style("order_ok", alert_if_far=True)
 
     def on_order_impossible(self, reason=None):
         if self.player is not self.interface.player:
             return
-        self.launch_event_style("order_impossible", alert=True)
+        self.launch_event_style("order_impossible", alert_if_far=True)
         if reason is not None:
             voice.info(style.get("messages", reason))
 
@@ -542,11 +544,11 @@ class EntityView:
         voice.info(style.get("messages", "production_deferred"))
 
     def on_win_fight(self):
-        self.launch_event_style("win_fight", alert=True)
+        self.launch_event_style("win_fight", alert_if_far=True)
         self.interface.units_alert_if_needed()
 
     def on_lose_fight(self):
-        self.launch_event_style("lose_fight", alert=True)
+        self.launch_event_style("lose_fight", alert_if_far=True)
         self.interface.units_alert_if_needed(place=self.place)
 
     def launch_event(self, sound, volume=1, priority=0, limit=0, ambient=False):
@@ -595,7 +597,7 @@ class EntityView:
             self.interface.previous_unit_attacked_alert is None
             or time.time() > self.interface.previous_unit_attacked_alert + 10
         ):
-            self.launch_event_style("alert", alert=True)
+            self.launch_event_style("alert", alert_if_far=True)
             self.interface.previous_unit_attacked_alert = time.time()
 
     def on_wounded(self, attacker_type, attacker_id, level):
@@ -626,7 +628,7 @@ class EntityView:
     def on_complete(self):
         if self.player is not self.interface.player:
             return
-        self.launch_event_style("complete", alert=True)
+        self.launch_event_style("complete", alert_if_far=True)
         if "unit_complete" in config.verbosity and must_be_said(self.number):
             voice.info(substitute_args(self.get_style("complete_msg"), [self.title]))
         self.interface.send_menu_alerts_if_needed()  # not necessary for "on_repair_complete" (if it existed)
@@ -636,6 +638,35 @@ class EntityView:
         self.interface.send_menu_alerts_if_needed()
 
     def on_added(self):
-        self.launch_event_style("added", alert=True)
+        self.launch_event_style("added", alert_if_far=True)
         if "unit_added" in config.verbosity and must_be_said(self.number):
             voice.info(substitute_args(self.get_style("added_msg"), [self.ext_title]))
+
+    def on_level_up(self):
+        if self.player is self.interface.player:
+            self.launch_event_style("level_up", alert_if_far=True, priority=10)
+            if self.id in self.interface.group:
+                self.launch_event_style("level_up", alert=True, priority=10)
+        else:
+            self.launch_event_style("level_up", priority=10)
+
+    def on_upgrade_to(self, new_id):
+        self.on_level_up()
+        if self.id in self.interface.group:
+            self.interface.group.remove(self.id)
+            self.interface.group.append(new_id)
+
+    def on_buff(self, event, buff, msg=None):
+        st = style.get(buff, event)
+        if st:
+            s = random.choice(st)
+            self.launch_event(s)
+        if msg and self.player is self.interface.player:
+            voice.info([msg])
+
+    def on_cooldown_end(self, ability):
+        if self.player is self.interface.player:
+            st = style.get(ability, "cooldown_end")
+            if st:
+                s = random.choice(st)
+                self.launch_event(s)

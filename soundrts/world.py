@@ -17,14 +17,16 @@ from .lib.log import exception, warning
 from .lib.nofloat import PRECISION, int_distance, to_int
 from .paths import MAPERROR_PATH
 from .worldability import Ability
+from .worldbuff import Buff
 from .worldclient import DummyClient
 from .worldentity import COLLISION_RADIUS
 from .worldexit import passage
+from .worlditem import Item
 from .worldorders import ORDERS_DICT
 from .worldplayerbase import A, Player
 from .worldresource import Deposit, Meadow
 from .worldroom import Square
-from .worldunit import Building, Effect, Soldier, Unit, Worker, ground_or_air
+from .worldunit import Building, Effect, Soldier, Unit, Worker, has_target_type
 from .worldupgrade import Upgrade
 
 GLOBAL_FOOD_LIMIT = 80
@@ -39,6 +41,9 @@ def check_squares(line, squares):
 
 
 class World:
+
+    random_starts = 1
+
     def __init__(self, default_triggers, seed=0, must_apply_equivalent_type=False):
         self.default_triggers = default_triggers
         self.seed = seed
@@ -187,22 +192,7 @@ class World:
             if other is None:
                 result = False
             else:
-                result = True
-                for t in unit.harm_target_type:
-                    if (
-                        t == "healable"
-                        and not other.is_healable
-                        or t == "building"
-                        and not other.is_a_building
-                        or t in ("air", "ground")
-                        and ground_or_air(other.airground_type) != t
-                        or t == "unit"
-                        and not other.is_a_unit
-                        or t == "undead"
-                        and not other.is_undead
-                    ):
-                        result = False
-                        break
+                result = has_target_type(other, unit.harm_target_type)
             self.harm_target_types[(unit_type_name, other_type_name)] = result
             return result
 
@@ -387,6 +377,8 @@ class World:
         "deposit": Deposit,
         "upgrade": Upgrade,
         "ability": Ability,
+        "buff": Buff,
+        "item": Item,
     }
 
     def unit_class(self, s):
@@ -480,13 +472,13 @@ class World:
         return m
 
     def _create_resources(self):
-        for z, cls, n in self.map_objects:
+        for z, cls, args in self.map_objects:
             if z not in self.grid:
                 warning(f"{z} is not a valid coordinate")
                 continue
             resource_class = self.unit_class(cls)
             if self.grid[z].can_receive("ground"):  # avoids using the spiral
-                resource = resource_class(self.grid[z], n)
+                resource = resource_class(self.grid[z], *args)
                 resource.building_land = Meadow(self.grid[z])
                 resource.building_land.delete()
         for z in self._meadows():
@@ -728,7 +720,8 @@ class World:
                         and not hasattr(Player, "lang_" + _w)
                         and _w not in rules.classnames()
                         and _w not in get_ai_names()
-                        and _w not in ["(", ")", "all", "players", "computers"]
+                        and _w
+                        not in ["(", ")", "all", "players", "computers", "imperative"]
                         and _w not in ORDERS_DICT
                     ):
                         map_error(line, "unknown: %s" % _w)
@@ -747,6 +740,7 @@ class World:
                 "nb_meadows_by_square",
                 "global_food_limit",
                 "timer_coefficient",
+                "random_starts",
             ]:
                 try:
                     setattr(self, w, int(words[1]))
@@ -773,7 +767,10 @@ class World:
                         map_error(line, "expected an integer but found %s" % c)
             elif rules.get(w, "class") == ["deposit"]:
                 for sq in words[2:]:  # TODO: error msg (squares)
-                    self.map_objects.append([sq, w, words[1]])
+                    self.map_objects.append([sq, w, words[1:2]])
+            elif rules.get(w, "class") == ["item"]:
+                for sq in words[1:]:  # TODO: error msg (squares)
+                    self.map_objects.append([sq, w, []])
             elif w in ["starting_units"]:
                 getattr(self, w).extend(words[1:])  # TODO: error msg (types)
             elif w in ["player", "computer_only", "computer"]:
@@ -885,23 +882,26 @@ class World:
         client.player = player
         self.players.append(player)
 
-    def _create_true_players(self, players, random_starts):
+    def update_alliances(self):
+        for p in self.players:
+            p.update_alliance()
+
+    def _create_true_players(self, players):
         starts = self.players_starts[:]
-        if random_starts:
+        if self.random_starts:
             self.random.shuffle(starts)
         for client in players:
             start = starts.pop(0)
             self._add_player(client, start)
-        for p in self.players:
-            p.init_alliance()
 
     def _create_neutrals(self):
         for start in self.computers_starts:
             self._add_player(DummyClient(neutral=True), start)
 
-    def populate_map(self, players, random_starts=True):
-        self._create_true_players(players, random_starts)
+    def populate_map(self, players):
+        self._create_true_players(players)
         self._create_neutrals()
+        self.update_alliances()
         for player in self.players:
             player.init_position()
 

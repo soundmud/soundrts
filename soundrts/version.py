@@ -2,9 +2,9 @@ from hashlib import md5
 
 from . import config, res
 
-VERSION = "1.3.5"
+VERSION = "1.3.5.2"
 IS_DEV_VERSION = config.debug_mode
-CLIENT_COMPATIBILITY = "10"
+CLIENT_COMPATIBILITY = "12"
 SERVER_COMPATIBILITY = "0"
 
 

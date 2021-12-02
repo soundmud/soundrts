@@ -8,7 +8,8 @@ def is_an_upgrade(o):
 class Upgrade:  # or Tech
 
     cost = (0,) * MAX_NB_OF_RESOURCE_TYPES  # TODO: remove this
-    count_limit = 0
+    count_limit = 0  # ugly but necessary; used by ComplexOrder.is_allowed()
+    global_count_limit = 0  # ugly but necessary; used by ComplexOrder.is_allowed()
     time_cost = 0
     requirements = ()
     food_cost = 0
