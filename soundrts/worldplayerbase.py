@@ -726,18 +726,18 @@ class Player:
         for x in select:
             if x in self.world.grid:
                 default_square = x
-                multiplicator = 1
+                n = 1
             elif re.match("[0-9]+$", x):
-                multiplicator = int(x)
+                n = int(x)
             else:
                 for o in self.world.grid[default_square].objects:
                     if self.check_type(o, x) and (o.player == self):
                         for order in orders:
                             o.take_order(order, forget_previous=False)
-                        multiplicator -= 1
-                        if multiplicator == 0:
-                            multiplicator = 1
+                        n -= 1
+                        if n == 0:
                             break
+                n = 1
 
     def lang_has(self, args):
         nb = 1
