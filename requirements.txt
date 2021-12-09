@@ -1,3 +1,5 @@
+upnpclient
+
 pygame>=2
 git+https://github.com/soundmud/accessible_output2
 chardet

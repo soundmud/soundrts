@@ -5,6 +5,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+from functools import lru_cache
 
 from . import config, options
 from .lib.log import debug, exception, info, warning
@@ -24,6 +25,80 @@ REGISTER_INTERVAL = 10 * 60  # register server every 10 minutes
 REGISTER_URL = MAIN_METASERVER_URL + "servers_register.php"
 UNREGISTER_URL = MAIN_METASERVER_URL + "servers_unregister.php"
 WHATISMYIP_URL = open("cfg/whatismyip.txt").read().strip()
+
+
+@lru_cache()
+def _public_ip():
+    if options.ip:
+        warning(f"using the public IP address specified in the options: {options.ip}")
+        return options.ip
+    try:
+        ip = (
+            urllib.request.urlopen(WHATISMYIP_URL, timeout=3)
+            .read()
+            .decode("ascii")
+            .strip()
+        )
+        if not re.match("^[0-9.]{7,40}$", ip):
+            ip = ""
+    except:
+        ip = ""
+    if not ip:
+        warning("could not get public IP address from %s", WHATISMYIP_URL)
+    else:
+        info(f"public IP address is {ip}")
+    return ip
+
+
+@lru_cache()
+def _local_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 1))
+        return s.getsockname()[0]
+    except:
+        warning("couldn't get the local IP")
+
+
+@lru_cache()
+def _upnp_router():
+    import upnpclient
+
+    for device in upnpclient.discover():
+        if hasattr(device, "WANIPConn1") and hasattr(
+            device.WANIPConn1, "AddPortMapping"
+        ):
+            return device.WANIPConn1
+
+
+_upnp_failed = False
+
+
+def _forward_port():
+    global _upnp_failed
+    if _upnp_failed:
+        return
+    try:
+        _upnp_router().AddPortMapping(
+            NewRemoteHost="",
+            NewExternalPort=options.port,
+            NewProtocol="TCP",
+            NewInternalPort=options.port,
+            NewInternalClient=_local_ip(),
+            NewEnabled="1",
+            NewPortMappingDescription="SoundRTS",
+            NewLeaseDuration=REGISTER_INTERVAL * 2,
+        )
+    except:
+        _upnp_failed = True
+        warning(
+            f"couldn't forward port {options.port} (TCP) to local IP using UPnP IGD"
+        )
+        warning("you might have to configure your router manually")
+    else:
+        info(
+            f"port {options.port} (TCP) forwarded to {_local_ip()}:{options.port} for {REGISTER_INTERVAL * 2} seconds"
+        )
 
 
 class Server(asyncore.dispatcher):
@@ -137,35 +212,18 @@ class Server(asyncore.dispatcher):
     def unregister(self):
         try:
             info("unregistering server...")
-            s = urllib.request.urlopen(UNREGISTER_URL + "?ip=" + self.ip).read()
+            s = urllib.request.urlopen(UNREGISTER_URL + "?ip=" + _public_ip()).read()
         except:
             s = "couldn't access to the metaserver"
         if s:
             warning("couldn't unregister from the metaserver (%s)", s[:80])
-
-    ip = ""
-
-    def _get_ip_address(self):
-        if options.ip:
-            self.ip = options.ip
-            return
-        try:
-            self.ip = urllib.request.urlopen(WHATISMYIP_URL, timeout=3).read().strip()
-            if not re.match("^[0-9.]{7,40}$", self.ip):
-                self.ip = ""
-        except:
-            self.ip = ""
-        if not self.ip:
-            warning("could not get my IP address from %s", WHATISMYIP_URL)
-
-    _first_registration = True
 
     def _register(self):
         try:
             s = urllib.request.urlopen(
                 REGISTER_URL
                 + "?version=%s&login=%s&ip=%s&port=%s"
-                % (SERVER_COMPATIBILITY, self.login, self.ip, options.port)
+                % (SERVER_COMPATIBILITY, self.login, _public_ip(), options.port)
             ).read()
         except:
             s = "couldn't access to the metaserver"
@@ -175,9 +233,7 @@ class Server(asyncore.dispatcher):
             info("server registered")
 
     def register(self):
-        if self._first_registration:
-            self._get_ip_address()
-            self._first_registration = False
+        _forward_port()
         self._register()
 
     def _start_registering(self):
