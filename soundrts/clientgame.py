@@ -578,19 +578,23 @@ class GameInterface:
     def cmd_history_next(self):
         voice.say_next(history_only=True)
 
+    def is_admin(self):
+        try:
+            return self.player.world.players[0] is self.player
+        except:
+            warning("couldn't be sure if this client is the admin of the game")
+            return True
+
     def cmd_gamemenu(self):
         voice.silent_flush()
         sound_stop()
-        menu = Menu(
-            mp.MENU,
-            [
-                (mp.CANCEL_GAME, self.gm_quit),
-                (mp.SET_SPEED_TO_SLOW, self.gm_slow_speed),
-                (mp.SET_SPEED_TO_NORMAL, self.gm_normal_speed),
-                (mp.SET_SPEED_TO_FAST, self.gm_fast_speed),
-                (mp.SET_SPEED_TO_FAST + nb2msg(4), self.gm_very_fast_speed),
-            ],
-        )
+        menu = Menu(mp.MENU)
+        menu.append(mp.CANCEL_GAME, self.gm_quit)
+        if self.is_admin():
+            menu.append(mp.SET_SPEED_TO_SLOW, self.gm_slow_speed)
+            menu.append(mp.SET_SPEED_TO_NORMAL, self.gm_normal_speed)
+            menu.append(mp.SET_SPEED_TO_FAST, self.gm_fast_speed)
+            menu.append(mp.SET_SPEED_TO_FAST + nb2msg(4), self.gm_very_fast_speed)
         if self.can_save():
             menu.append(mp.SAVE, self.gm_save)
         menu.append(mp.CONTINUE_GAME, None)
