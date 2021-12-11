@@ -617,7 +617,6 @@ class GameInterface:
 
     def _set_speed(self, speed):
         self.server.write_line("speed %s" % speed)
-        self.speed = speed
 
     def gm_slow_speed(self):
         self._set_speed(0.5)
