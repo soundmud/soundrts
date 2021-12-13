@@ -2,12 +2,13 @@ import asyncore
 import re
 import socket
 import sys
+import threading
 import urllib.error
 import urllib.parse
 import urllib.request
 from functools import lru_cache
 
-from . import config, options
+from . import config, discovery, options
 from .lib.log import debug, exception, info, warning
 from .lib.ticker import Ticker
 from .metaserver import MAIN_METASERVER_URL
@@ -243,6 +244,11 @@ class Server(asyncore.dispatcher):
     def startup(self):
         if "no_metaserver" not in self.parameters:
             self._start_registering()
+        threading.Thread(
+            target=discovery.server_loop,
+            args=(f"{SERVER_COMPATIBILITY} {options.port} {self.login}",),
+            daemon=True,
+        ).start()
         info("server started")
         asyncore.loop()
 
