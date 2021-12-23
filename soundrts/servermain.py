@@ -9,7 +9,7 @@ import urllib.request
 from functools import lru_cache
 
 from . import config, discovery, options, paths
-from .lib.log import debug, exception, info, warning
+from .lib.log import exception, info, warning
 from .lib.ticker import Ticker
 from .metaserver import MAIN_METASERVER_URL
 from .serverclient import ConnectionToClient
@@ -185,17 +185,9 @@ class Server(asyncore.dispatcher):
         pass
 
     def handle_close(self):
-        try:
-            debug("Server.handle_close")
-        except:
-            pass
         sys.exit()
 
     def handle_error(self):
-        try:
-            debug("Server.handle_error %s", sys.exc_info()[0])
-        except:
-            pass
         if sys.exc_info()[0] in [SystemExit, KeyboardInterrupt]:
             sys.exit()
         else:

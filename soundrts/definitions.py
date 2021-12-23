@@ -2,7 +2,7 @@ import re
 from typing import Set
 
 from .lib.defs import preprocess
-from .lib.log import debug, info, warning
+from .lib.log import info, warning
 from .lib.nofloat import to_int
 
 VIRTUAL_TIME_INTERVAL = 300  # milliseconds
@@ -84,14 +84,12 @@ class _Definitions:
         while modified:
             modified = False
             n += 1
-            debug("*** pass %s ***", n)
             # for every object
             for ko, o in list(d.items()):
                 if "is_a" in o:
                     # init "expanded_is_a" (first pass)
                     if expanded_is_a and "expanded_is_a" not in o:
                         o["expanded_is_a"] = o["is_a"][:]
-                        debug("%s.%s = %s", ko, "expanded_is_a", o["expanded_is_a"])
                         modified = True
                     # for every parent
                     for p in o["is_a"]:
@@ -104,12 +102,10 @@ class _Definitions:
                                     for is_a in v:
                                         if is_a not in o[k]:
                                             o[k] += [is_a]
-                                            debug("%s.%s = %s", ko, k, o[k])
                                             modified = True
                                 elif k in d[p] and k not in o:
                                     # copy attribute from parent
                                     o[k] = v
-                                    debug("%s.%s = %s", ko, k, o[k])
                                     modified = True
                         else:
                             warning("error in %s.is_a: %s doesn't exist", ko, p)

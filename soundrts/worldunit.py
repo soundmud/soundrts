@@ -1,7 +1,7 @@
 from typing import List, Optional, Set, Tuple
 
 from .definitions import MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL, rules
-from .lib.log import debug, warning
+from .lib.log import warning
 from .lib.nofloat import (
     PRECISION,
     int_angle,
@@ -742,7 +742,6 @@ class Creature(Entity):
             return
         if not cls.is_allowed(self, *o[1:]):
             self.notify("order_impossible")
-            debug("wrong order to %s: %s", self.type_name, o)
             return
         if forget_previous and not cls.never_forget_previous:
             self.cancel_all_orders()

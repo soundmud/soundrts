@@ -10,7 +10,7 @@ from typing import List, Optional
 from . import res, world
 from .definitions import Style
 from .lib import zipdir
-from .lib.log import debug, exception
+from .lib.log import exception
 from .paths import TMP_PATH
 
 
@@ -167,7 +167,6 @@ class Map:
             self.title.insert(0, 1097)  # heal sound to alert player
         elif self.digest != "no_digest" and self.get_digest() != self.digest:
             self.title.insert(0, 1029)  # hostile sound to alert player
-            debug("%s\n>>>%s<<<", self.path, self.get_digest())
 
     def _extract_nb_players(self, s):
         search = re.search(r"(?m)^nb_players_min[ \t]+([0-9]+)$", s)
