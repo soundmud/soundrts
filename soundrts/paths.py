@@ -10,20 +10,12 @@ def _mkdir(path):
             print("cannot make dir: %s" % path)
 
 
-def _get_stage():
-    stage = open("cfg/stage.txt").read().strip()
-    if stage == "stable":
-        return ""
-    else:
-        return " " + stage
-
-
 if os.path.exists("user"):
     CONFIG_DIR_PATH = "user"
 elif "APPDATA" in os.environ:  # Windows XP
-    CONFIG_DIR_PATH = os.path.join(os.environ["APPDATA"], "SoundRTS%s" % _get_stage())
+    CONFIG_DIR_PATH = os.path.join(os.environ["APPDATA"], "SoundRTS")
 elif "HOME" in os.environ:  # Linux
-    CONFIG_DIR_PATH = os.path.join(os.environ["HOME"], ".SoundRTS%s" % _get_stage())
+    CONFIG_DIR_PATH = os.path.join(os.environ["HOME"], ".SoundRTS")
 else:  # Windows 95, Windows 98 ?
     CONFIG_DIR_PATH = os.getcwd()
 _mkdir(CONFIG_DIR_PATH)
