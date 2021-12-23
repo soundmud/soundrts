@@ -9,6 +9,8 @@ import sys
 from .lib.log import info, warning
 from .paths import CONFIG_FILE_PATH
 
+DEFAULT_LOGIN = "player"
+
 debug_mode: int
 mods: str
 soundpacks: str
@@ -27,7 +29,7 @@ def login_type(s):
 
 
 _options = [
-    ("general", "login", "player", login_type),
+    ("general", "login", DEFAULT_LOGIN, login_type),
     ("general", "mods", ""),
     ("general", "soundpacks", ""),
     ("general", "num_channels", 16),

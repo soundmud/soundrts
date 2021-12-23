@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 from functools import lru_cache
 
-from . import config, discovery, options
+from . import config, discovery, options, paths
 from .lib.log import debug, exception, info, warning
 from .lib.ticker import Ticker
 from .metaserver import MAIN_METASERVER_URL
@@ -250,6 +250,9 @@ class Server(asyncore.dispatcher):
             daemon=True,
         ).start()
         info("server started")
+        info('user folder is "%s"', paths.CONFIG_DIR_PATH)
+        info('configuration file is "%s"', paths.CONFIG_FILE_PATH)
+        info('from SoundRTS.ini: login is "%s" (server name)', config.login)
         asyncore.loop()
 
     def update_menus(self):
@@ -305,4 +308,13 @@ def start_server(parameters=sys.argv, is_standalone=True):
 
 
 def main():
+    while config.login == config.DEFAULT_LOGIN:
+        login = input("Please enter the name of the server: ")
+        if config.login_is_valid(login):
+            config.login = login
+            config.save()
+        else:
+            print("Please use only ASCII letters and digits (no space).")
+    print("Starting the server in standalone mode...")
+    print("To stop the server, press Ctrl+C on Linux, Ctrl+Break on Windows.")
     start_server()
