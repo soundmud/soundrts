@@ -107,6 +107,13 @@ def add_console_handler(level=logging.INFO, format=SHORT_FORMAT):
     _configure_handler(h, format, level)
 
 
+def clear_handlers():
+    root = logging.getLogger()
+    for h in root.handlers[:]:
+        root.removeHandler(h)
+        h.close()
+
+
 debug = _NeverCrash(logging.debug)
 info = _NeverCrash(logging.info)
 warning = _NeverCrash(logging.warning)
@@ -115,6 +122,3 @@ critical = _NeverCrash(logging.critical)
 exception = _NeverCrash(logging.exception)
 
 logging.getLogger().setLevel(logging.DEBUG)
-
-
-#    def init(self, name, mode, max_size=1000000, http_handler=False):

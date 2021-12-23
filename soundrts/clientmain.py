@@ -14,6 +14,7 @@ from .paths import CLIENT_LOG_PATH
 from .version import VERSION_FOR_BUG_REPORTS
 
 log.set_version(VERSION_FOR_BUG_REPORTS)
+log.clear_handlers()
 log.add_secure_file_handler(CLIENT_LOG_PATH, "w")
 log.add_http_handler("http://jlpo.free.fr/soundrts/metaserver")
 log.add_console_handler()
