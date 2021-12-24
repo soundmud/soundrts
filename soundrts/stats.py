@@ -84,7 +84,7 @@ class Stats:
                 except:
                     debug("stats server didn't reply")
                     break  # don't try next stats
-                if s == "":
+                if s == b"":
                     del stats[game_type]
                     self._write_file(stats)
                 else:
@@ -106,7 +106,6 @@ class Stats:
         return user_id
 
     def _get_volume_serial_number(self):
-        # Reference: http://msdn2.microsoft.com/en-us/library/aa364993.aspx
         try:
             lpRootPathName = "c:\\"
             lpVolumeNameBuffer = create_string_buffer(1024)
@@ -116,7 +115,7 @@ class Stats:
             lpFileSystemFlags = c_ulong()
             lpFileSystemNameBuffer = create_string_buffer(1024)
             nFileSystemNameSize = sizeof(lpFileSystemNameBuffer)
-            windll.kernel32.GetVolumeInformationA(  # @UndefinedVariable
+            windll.kernel32.GetVolumeInformationW(  # @UndefinedVariable
                 lpRootPathName,
                 lpVolumeNameBuffer,
                 nVolumeNameSize,
