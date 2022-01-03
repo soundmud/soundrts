@@ -247,7 +247,8 @@ class Map:
         for sq in w.squares:
             result += len(sq.objects)
         for st in w.players_starts + w.computers_starts:
-            result += len(st[1])
+            for _, _, n in st[1]:
+                result += n
         return result
 
     _factions = None

@@ -676,11 +676,11 @@ class World:
                 sq = x
                 multiplicator = 1
             elif x[0] == "-":
-                start.append([None, x])
+                start.append([None, x, None])
             elif re.match("[0-9]+$", x):
                 multiplicator = int(x)
             else:
-                start.extend([[sq, self.unit_class(x)]] * multiplicator)
+                start.append((sq, self.unit_class(x), multiplicator))
                 multiplicator = 1
         starts.append([resources, start, []])
 

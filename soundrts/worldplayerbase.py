@@ -669,7 +669,7 @@ class Player:
         self.resources = self.start[0][:]
         normalize_cost_or_resources(self.resources)
         self.gathered_resources = self.resources[:]
-        for place, type_ in self.start[1]:
+        for place, type_, n in self.start[1]:
             if self.world.must_apply_equivalent_type:
                 type_ = equivalent_type(type_)
             if isinstance(type_, str) and type_[0:1] == "-":
@@ -682,11 +682,12 @@ class Player:
                 warning("couldn't create an initial unit")
             else:
                 place = self.world.grid[place]
-                x, y, land = place.find_and_remove_meadow(type_)
-                x, y = place.find_free_space(type_.airground_type, x, y)
-                if x is not None:
-                    unit = type_(self, place, x, y)
-                    unit.building_land = land
+                for _ in range(n):
+                    x, y, land = place.find_and_remove_meadow(type_)
+                    x, y = place.find_free_space(type_.airground_type, x, y)
+                    if x is not None:
+                        unit = type_(self, place, x, y)
+                        unit.building_land = land
 
         self.triggers = self.start[2]
 
