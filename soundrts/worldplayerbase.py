@@ -15,7 +15,7 @@ from .worldexit import Exit
 from .worldresource import Corpse, Deposit
 from .worldroom import Square
 from .worldunit import BuildingSite, Soldier, Unit
-from .worldupgrade import Upgrade
+from .worldupgrade import is_an_upgrade
 
 A = 12 * PRECISION  # bucket side length
 VERY_SLOW = int(0.01 * PRECISION)
@@ -68,14 +68,6 @@ class Objective:
     def __init__(self, number, description):
         self.number = number
         self.description = description
-
-
-def normalize_cost_or_resources(lst):
-    n = rules.get("parameters", "nb_of_resource_types")
-    while len(lst) < n:
-        lst += [0]
-    while len(lst) > n:
-        del lst[-1]
 
 
 class Player:
@@ -667,14 +659,14 @@ class Player:
             return t
 
         self.resources = self.start[0][:]
-        normalize_cost_or_resources(self.resources)
+        rules.normalize_cost_or_resources(self.resources)
         self.gathered_resources = self.resources[:]
         for place, type_, n in self.start[1]:
             if self.world.must_apply_equivalent_type:
                 type_ = equivalent_type(type_)
             if isinstance(type_, str) and type_[0:1] == "-":
                 self.forbidden_techs.append(type_[1:])
-            elif isinstance(type_, Upgrade):
+            elif is_an_upgrade(type_):
                 self.upgrades.append(
                     type_.type_name
                 )  # type_.upgrade_player(self) would require the units already there
@@ -805,7 +797,7 @@ class Player:
                 nb = int(i)
             else:
                 cls = self.world.unit_class(i)
-                if isinstance(cls, Upgrade):
+                if is_an_upgrade(cls):
                     self.upgrades.append(i)
                     self.send_voice_important(mp.OK)
                 elif getattr(cls, "cls", None) == Ability:

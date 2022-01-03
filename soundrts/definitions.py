@@ -3,10 +3,30 @@ from typing import Set
 
 from .lib.defs import preprocess
 from .lib.log import info, warning
-from .lib.nofloat import to_int
+from .lib.nofloat import PRECISION, to_int
 
 VIRTUAL_TIME_INTERVAL = 300  # milliseconds
 MAX_NB_OF_RESOURCE_TYPES = 10
+
+
+def _update_old_definitions(d, name):
+    if "sight_range" in d and d["sight_range"] == 1 * PRECISION:
+        d["sight_range"] = 12 * PRECISION
+        d["bonus_height"] = 1
+        info(
+            "in %s: replacing sight_range 1 with sight_range 12 and bonus_height 1",
+            name,
+        )
+    if "special_range" in d:
+        del d["special_range"]
+        d["range"] = 12 * PRECISION
+        d["minimal_range"] = 4 * PRECISION
+        d["is_ballistic"] = 1
+        info(
+            "in %s: replacing special_range 1 with range 12, minimal_range 4 and is_ballistic 1",
+            name,
+        )
+    return d
 
 
 class _Definitions:
@@ -217,12 +237,50 @@ class Rules(_Definitions):
     }
     precision_list_properties = {"cost", "storage_bonus"}
 
-    def load(self, *strings):
+    def normalize_cost_or_resources(self, lst):
+        n = self.get("parameters", "nb_of_resource_types")
+        while len(lst) < n:
+            lst += [0]
+        while len(lst) > n:
+            del lst[-1]
+        return lst
+
+    def interpret(self, d, base, name):
+        if hasattr(base, "interpret"):
+            base.interpret(d)
+        if "cost" not in d and hasattr(base, "cost"):
+            d["cost"] = [0] * self.get("parameters", "nb_of_resource_types")
+        d = _update_old_definitions(d, name)
+        for k, v in list(d.items()):
+            if k == "class":
+                continue
+            if (
+                not hasattr(base, k)
+                and not (k.endswith("_bonus") and hasattr(base, k[:-6]))
+            ) or callable(getattr(base, k, None)):
+                del d[k]
+                warning(
+                    "in %s: %s doesn't have any attribute called '%s'", name, base, k,
+                )
+            elif k == "cost":
+                d[k] = self.normalize_cost_or_resources(v)
+
+    def load(self, *strings, classes=()):
         self._dict = {}
         for s in strings:
             s = re.sub(r"^[ \t]*class +race\b", "class faction", s, flags=re.M)
             self.read(s)
         self.apply_inheritance(expanded_is_a=True)
+        d = {}
+        for k, v in self._dict.items():
+            cls = v.get("class", [None])[0]
+            if cls in classes:
+                base = classes[cls]
+                self.interpret(v, base, k)
+                d[k] = type(k, (base,), v)
+                d[k].type_name = k
+                d[k].cls = base
+        self.classes = d
 
     def classnames(self):
         result = _Definitions.classnames(self)

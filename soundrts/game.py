@@ -1,10 +1,10 @@
 import os.path
-import pickle
 import random
 import threading
 import time
 from typing import List, Tuple
 
+import cloudpickle
 import pygame
 from pygame.locals import KEYDOWN
 
@@ -234,7 +234,7 @@ class _Savable:
             os.fsync(self._replay_file.fileno())  # just to be sure
             self._replay_file_content = open(self._replay_file.name).read()
         try:
-            pickle.dump(self, f)
+            cloudpickle.dump(self, f)
             voice.info(mp.OK)
         except:
             exception("save game failed")

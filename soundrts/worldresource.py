@@ -11,8 +11,7 @@ class Deposit(Entity):
     extraction_qty = None
     resource_regen = 0
 
-    def __init__(self, prototype, square, qty):
-        prototype.init_dict(self)
+    def __init__(self, square, qty):
         self.qty = to_int(
             qty
         )  # does the value come from the map? (already done in rules)

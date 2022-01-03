@@ -21,7 +21,7 @@ from .worldclient import DummyClient
 from .worldentity import COLLISION_RADIUS
 from .worldexit import passage
 from .worldorders import ORDERS_DICT
-from .worldplayerbase import A, Player, normalize_cost_or_resources
+from .worldplayerbase import A, Player
 from .worldresource import Deposit, Meadow
 from .worldroom import Square
 from .worldunit import Building, Effect, Soldier, Unit, Worker, ground_or_air
@@ -35,67 +35,6 @@ def check_squares(line, squares):
     for sq in squares:
         if re.match("^[a-z]+[0-9]+$", sq) is None:
             map_error(line, "%s is not a square" % sq)
-
-
-class Type:
-    def __repr__(self):
-        return "<Type '%s'>" % self.type_name
-
-    def init_dict(self, target):
-        target.type_name = self.type_name
-        for k, v in list(self.dct.items()):
-            if k == "class":
-                continue
-            if (
-                hasattr(self.cls, k)
-                or k.endswith("_bonus")
-                and hasattr(self.cls, k[:-6])
-            ) and not callable(getattr(self.cls, k, None)):
-                if k == "cost":
-                    normalize_cost_or_resources(v)
-                setattr(target, k, v)
-            elif target is self:
-                warning(
-                    "in %s: %s doesn't have any attribute called '%s'",
-                    self.type_name,
-                    self.cls.__name__,
-                    k,
-                )
-
-    def __init__(self, name, bases, dct):
-        self.__name__ = name
-        self.type_name = name
-        self.cls = bases[0]
-        if "cost" not in dct and hasattr(self.cls, "cost"):
-            dct["cost"] = [0] * rules.get("parameters", "nb_of_resource_types")
-        if "sight_range" in dct and dct["sight_range"] == 1 * PRECISION:
-            dct["sight_range"] = 12 * PRECISION
-            dct["bonus_height"] = 1
-            info(
-                "in %s: replacing sight_range 1 with sight_range 12 and bonus_height 1",
-                name,
-            )
-        if "special_range" in dct:
-            del dct["special_range"]
-            dct["range"] = 12 * PRECISION
-            dct["minimal_range"] = 4 * PRECISION
-            dct["is_ballistic"] = 1
-            info(
-                "in %s: replacing special_range 1 with range 12, minimal_range 4 and is_ballistic 1",
-                name,
-            )
-        self.dct = dct
-        self.init_dict(self)
-
-    def __call__(self, *args, **kargs):
-        result = self.cls(self, *args, **kargs)
-        return result
-
-    def __getattr__(self, name):
-        if name[:2] != "__":
-            return getattr(self.cls, name)
-        else:
-            raise AttributeError
 
 
 class World:
@@ -449,31 +388,16 @@ class World:
     }
 
     def unit_class(self, s):
-        """Get a class-like unit generator from its name.
+        """Get a custom unit class from its name.
         
-        Example: unit_class("peasant") to get a peasant generator
+        Example: unit_class("peasant") to get the peasant class
 
         At the moment, unit_classes contains also: upgrades, abilities...
         """
-        if s not in self.unit_classes:
-            try:
-                base = self.unit_base_classes[rules.get(s, "class")[0]]
-            except:
-                if rules.get(s, "class") != ["faction"]:
-                    warning("no class defined for %s", s)
-                self.unit_classes[s] = None
-                return
-            try:
-                dct = rules.get_dict(s)
-                t = Type(s, (base,), dct)
-                if base is Upgrade:
-                    t = base(s, dct)  # factory-prototypes are only for units
-                self.unit_classes[s] = t
-            except:
-                exception("problem with unit_class('%s')", s)
-                self.unit_classes[s] = None
-                return
-        return self.unit_classes[s]
+        try:
+            return rules.classes[s]
+        except KeyError:
+            return
 
     def _get_classnames(self, condition):
         result = []
@@ -906,6 +830,7 @@ class World:
                 res.get_text_file("rules", append=True),
                 map.campaign_rules,
                 map.additional_rules,
+                classes=self.unit_base_classes,
             )
             load_ai(
                 res.get_text_file("ai", append=True), map.campaign_ai, map.additional_ai

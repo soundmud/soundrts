@@ -27,10 +27,11 @@ except:
     warning("couldn't set locale")
 
 import os
-import pickle
 import sys
 import time
 import webbrowser
+
+import cloudpickle
 
 from . import discovery
 from . import msgparts as mp
@@ -156,7 +157,7 @@ def restore_game():
         j = "error"
     if i == j:
         try:
-            game_session = pickle.load(f)
+            game_session = cloudpickle.load(f)
         except:
             exception("cannot load savegame file")
             voice.alert(mp.BEEP)

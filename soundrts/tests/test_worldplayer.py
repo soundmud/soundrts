@@ -50,7 +50,7 @@ class _PlayerBaseTestCase(unittest.TestCase):
         self.w = World([])
         self.w.load_and_build_map(Map("soundrts/tests/%s.txt" % map_name))
         if cloak:
-            self.w.unit_class("new_flyingmachine").dct["is_a_cloaker"] = True
+            self.w.unit_class("new_flyingmachine").is_a_cloaker = True
         cp = DummyClient(ai[0])
         cp2 = DummyClient(ai[1])
         cp.alliance, cp2.alliance = alliance

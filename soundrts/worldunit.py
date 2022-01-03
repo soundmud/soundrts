@@ -159,9 +159,7 @@ class Creature(Entity):
         for o in self.objects:
             o.set_player(player)
 
-    def __init__(self, prototype, player, place, x, y, o=90):
-        if prototype is not None:
-            prototype.init_dict(self)
+    def __init__(self, player, place, x, y, o=90):
         self.orders = []
 
         # attributes required by transports and shelters (inside)
@@ -1126,8 +1124,8 @@ class _Building(Creature):
 
     corpse = 0
 
-    def __init__(self, prototype, player, square, x=0, y=0):
-        Creature.__init__(self, prototype, player, square, x, y)
+    def __init__(self, player, square, x=0, y=0):
+        Creature.__init__(self, player, square, x, y)
 
     def die(self, attacker=None):
         self.player.nb_buildings_lost += 1
@@ -1146,7 +1144,7 @@ class BuildingSite(_Building):
 
     def __init__(self, player, place, x, y, building_type):
         player.pay(building_type.cost)
-        _Building.__init__(self, None, player, place, x, y)
+        _Building.__init__(self, player, place, x, y)
         self.type = building_type
         self.hp_max = building_type.hp_max
         self._starting_hp = building_type.hp_max * 5 // 100
@@ -1208,6 +1206,6 @@ class Building(_Building):
     is_buildable_near_water_only = False
     provides_survival = True
 
-    def __init__(self, prototype, player, place, x, y):
-        _Building.__init__(self, prototype, player, place, x, y)
+    def __init__(self, player, place, x, y):
+        _Building.__init__(self, player, place, x, y)
         self.player.nb_buildings_produced += 1
