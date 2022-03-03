@@ -64,9 +64,11 @@ class Order:
         if reason is not None:
             n += "," + reason
         self.unit.notify(n)
+        self.unit.distance_to_goal = float("inf")
 
     def mark_as_complete(self):
         self.is_complete = True
+        self.unit.distance_to_goal = 0
 
     def update_target(self):
         t = self.target
@@ -1075,9 +1077,15 @@ class UseOrder(ComplexOrder):
             return True
 
     def execute_recall(self):
+        nearest_water = self.unit.nearest_water()
         for u in self.recall_targets():
-            if self.unit.place.can_receive(u.airground_type):
-                u.move_to(self.unit.place, None, None)
+            place = self.unit.place
+            if u.airground_type == "water" and not place.is_water:
+                place = nearest_water
+                if place is None:
+                    continue
+            if place.can_receive(u.airground_type):
+                u.move_to(place, None, None)
 
     conversion_target_type = "unit"
 

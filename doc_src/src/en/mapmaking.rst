@@ -201,16 +201,6 @@ This command can be repeated several times in a multiplayer map.
 "player 5 10 -townhall a1 townhall peasant c1 footman"
 means: "a player will start with 5 gold, 10 wood, won't be allowed to build a town hall, will have a townhall and a peasant at A1, a footman at C1.
 
-computer_only
-.............
-
-The "computer_only" command defines a starting point that will always be played by a computer AI. This AI will be hostile to any other player or AI.
-
-This command can be repeated several times but be careful: too many AI can slow the game.
-So use one AI if these units are not supposed to fight each other (several dragons all over the map for example).
-
-computer_only 0 0 a3 dragon b1 dragon
-means: "add a computer AI with 0 gold, 0 wood, a dragon at A3 and a dragon at B1."
 
 Types list
 ''''''''''
@@ -223,6 +213,74 @@ For a full list, examine the rules.txt file: the name is just after the "def" st
 - abilities: a_teleportation
 - upgrade/research: u_teleportation melee_weapon
 
+
+Adding monsters
+"""""""""""""""
+
+Add a computer_only starting point
+''''''''''''''''''''''''''''''''''
+
+.. _computer_only:
+
+The "computer_only" command defines a starting point that will always be played by a computer AI. This AI will be hostile to any other player or AI.
+
+This command can be repeated several times but be careful: too many AI can slow the game.
+So use one AI if these units are not supposed to fight each other (several dragons all over the map for example).
+
+computer_only 0 0 a3 dragon b1 dragon
+means: "add a computer AI with 0 gold, 0 wood, a dragon at A3 and a dragon at B1."
+
+
+Add triggers to make the monsters move
+''''''''''''''''''''''''''''''''''''''
+
+Important: add the default multiplayer triggers
+...............................................
+
+If a multiplayer map defines at least one trigger, the default multiplayer triggers are ignored. The goal is to allow custom victory conditions.
+
+To keep the default victory conditions, the following triggers must be explicitly added to the map (or the game won't stop automatically)::
+
+    trigger players (no_enemy_player_left) (victory)
+    trigger players (no_building_left) (defeat)
+    trigger computers (no_unit_left) (defeat)
+
+Note: the third trigger is not really needed.
+
+
+Patrol
+......
+
+To order up to 10 dragons from d1 to patrol between d1 and d9::
+
+    trigger computer1 (timer 0) (order (d1 10 dragon) ((patrol d9)))
+
+
+Attack at a specific moment
+...........................
+
+To order up to 10 dragons from e3 to attack b2 after 20 minutes (normal speed)::
+
+    timer_coefficient 60
+    trigger computer1 (timer 20) (order (e3 10 dragon) ((go b2)))
+
+
+Switch to another AI
+....................
+
+The default AI for computer_only is a trigger-only, do-nothing AI. To switch to "easy" (also known as "quiet computer")::
+
+    trigger computer1 (timer 0) (ai easy)
+
+
+Add units
+.........
+
+To add 10 dragons at A1::
+
+    trigger computer1 (timer 0) (add_units a1 10 dragon)
+
+
 #random_choice,  #end_choice and #end_random_choice
 """""""""""""""""""""""""""""""""""""""""""""""""""
 (new in beta 9g)
@@ -230,14 +288,16 @@ This preprocessor directive chooses randomly between 2 or more choices delimited
 Each choice consists in zero or more lines.
 More than one #random_choice directives can be used in a map file, but they cannot be nested.
 
-This can be used for example to place random resources. For example:
-#random_choice
-goldmines 500 e2 c6 b3 f5
-#end_choice
-goldmines 500 d2 d6 b4 f4
-#end_choice
-goldmines 500 c2 e6 b5 f3
-#end_random_choice
+This can be used for example to place random resources. For example::
+
+ #random_choice
+ goldmines 500 e2 c6 b3 f5
+ #end_choice
+ goldmines 500 d2 d6 b4 f4
+ #end_choice
+ goldmines 500 c2 e6 b5 f3
+ #end_random_choice
+
 The preceding lines mean: "add a goldmine at e2, c6, b3 and f5, or at d2, d6, b4 and f4, or at c2, e6, b5 and f3". This way, the resources are balanced (if I didn't make a mistake of course). This is only an example.
 
 The title of the map and the number of players cannot be changed this way because the preprocessor is run when the map is loaded (that is to say: long after the single player menu is loaded).

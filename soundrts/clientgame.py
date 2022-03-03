@@ -578,19 +578,23 @@ class GameInterface:
     def cmd_history_next(self):
         voice.say_next(history_only=True)
 
+    def is_admin(self):
+        try:
+            return self.player.world.players[0] is self.player
+        except:
+            warning("couldn't be sure if this client is the admin of the game")
+            return True
+
     def cmd_gamemenu(self):
         voice.silent_flush()
         sound_stop()
-        menu = Menu(
-            mp.MENU,
-            [
-                (mp.CANCEL_GAME, self.gm_quit),
-                (mp.SET_SPEED_TO_SLOW, self.gm_slow_speed),
-                (mp.SET_SPEED_TO_NORMAL, self.gm_normal_speed),
-                (mp.SET_SPEED_TO_FAST, self.gm_fast_speed),
-                (mp.SET_SPEED_TO_FAST + nb2msg(4), self.gm_very_fast_speed),
-            ],
-        )
+        menu = Menu(mp.MENU)
+        menu.append(mp.CANCEL_GAME, self.gm_quit)
+        if self.is_admin():
+            menu.append(mp.SET_SPEED_TO_SLOW, self.gm_slow_speed)
+            menu.append(mp.SET_SPEED_TO_NORMAL, self.gm_normal_speed)
+            menu.append(mp.SET_SPEED_TO_FAST, self.gm_fast_speed)
+            menu.append(mp.SET_SPEED_TO_FAST + nb2msg(4), self.gm_very_fast_speed)
         if self.can_save():
             menu.append(mp.SAVE, self.gm_save)
         menu.append(mp.CONTINUE_GAME, None)
@@ -617,7 +621,6 @@ class GameInterface:
 
     def _set_speed(self, speed):
         self.server.write_line("speed %s" % speed)
-        self.speed = speed
 
     def gm_slow_speed(self):
         self._set_speed(0.5)
@@ -1378,6 +1381,10 @@ class GameInterface:
 
     follow_mode = False
 
+    @property
+    def _group_head(self):
+        return min(self.group, key=lambda u: self.dobjets[u].distance_to_goal)
+
     def _follow_if_needed(self):
         self.update_group()
         if (
@@ -1386,12 +1393,12 @@ class GameInterface:
             and not self.an_order_requiring_a_target_is_selected
         ):
             if self.zoom_mode:
-                if not self.zoom.contains(self.dobjets[self.group[0]]):
-                    self.zoom.move_to(self.dobjets[self.group[0]])
+                if not self.zoom.contains(self.dobjets[self._group_head]):
+                    self.zoom.move_to(self.dobjets[self._group_head])
                     if not voice.channel.get_busy():  # low priority: don't interrupt
                         self.zoom.say()
-            elif not self.dobjets[self.group[0]].is_in(self.place):
-                self.move_to_square(self.dobjets[self.group[0]].place)
+            elif not self.dobjets[self._group_head].is_in(self.place):
+                self.move_to_square(self.dobjets[self._group_head].place)
                 if not voice.channel.get_busy():  # low priority: don't interrupt
                     voice.item(self.place.title)
                 if self.immersion:

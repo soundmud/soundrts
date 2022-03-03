@@ -12,6 +12,8 @@ pip install -r requirements.txt -U
 
 Running server.py doesn't require any package.
 
+The optional upnpclient package can help for the configuration of your router.
+
 Running soundrts.py requires:
 * pygame
 * accessible_output2

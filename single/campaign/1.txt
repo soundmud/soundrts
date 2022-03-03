@@ -1,14 +1,3 @@
-; solo map 1
-;
-;  *******
-; 5* + + *
-;  *+*****
-; 3* + + *
-;  ***+***
-; 1* + + *
-;  *******
-;   A B C
-
 title 4271 3001
 intro 7501
 
@@ -22,10 +11,11 @@ nb_lines 5
 ; terrain
 
 terrain mountain b4 c4
-terrain bridge b2
+terrain big_bridge b2
 terrain marsh b3
 speed .5 1 b3
 terrain river a2 c2
+water a2 c2
 remove_meadows b2 a2 c2 b4 c4
 
 ; paths (give only the starting square)

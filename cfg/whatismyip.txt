@@ -1,1 +1,1 @@
-http://ipv4.icanhazip.com
+https://api.ipify.org/

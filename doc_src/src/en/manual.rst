@@ -277,6 +277,8 @@ Tip: to play a single player game with a computer as an ally, launch a private s
 4.4 How to make your server accessible to other players
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+If your router has UPnP activated, the server will configure it automatically.
+
 To check if your server is accessible from outside your local network, wait for a player to connect, or ideally ask a friend to connect from outside. As a last resort, you can also use a port forwarding tester website (google "port forwarding tester" for example). Be cautious: I can't guarantee that this kind of website isn't malicious! The web site shouldn't require you to install a tool, for example.
 
 In most cases you will have to configure your router to forward incoming TCP connections through port 2500 to the local IP address of your server.

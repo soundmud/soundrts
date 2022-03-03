@@ -23,6 +23,11 @@ class _Error(Exception):
 _allowed_mods = ("CTRL", "ALT", "SHIFT")
 
 
+# These constants are missing
+pygame.KSCAN_QUOTE = 52
+pygame.KSCAN_BACKQUOTE = 53
+
+
 def _normalized_key(s):
     words = s.split()
     mods = words[:-1]
@@ -30,8 +35,10 @@ def _normalized_key(s):
         if mod not in _allowed_mods:
             raise _Error("'%s' is not an allowed key modifier" % mod)
     normalized_mods = tuple(1 if m in mods else 0 for m in _allowed_mods)
+    if len(words[-1]) == 1:
+        words[-1] = words[-1].upper()
     try:
-        key = getattr(pygame, "K_" + words[-1])
+        key = getattr(pygame, "KSCAN_" + words[-1])
     except AttributeError:
         raise _Error("'%s' is not a key" % words[-1])
     return normalized_mods, key
@@ -47,7 +54,7 @@ def _normalized_event(e):
         normalized_mods = (0, 0, 0)
     else:
         normalized_mods = tuple(1 if e.mod & m else 0 for m in _mod_masks)
-    return normalized_mods, e.key
+    return normalized_mods, e.scancode
 
 
 def _preprocess(s):
