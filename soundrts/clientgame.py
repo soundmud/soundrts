@@ -1160,25 +1160,23 @@ class GameInterface:
             orders = [
                 self.dobjets[x].orders_txt for x in self.group if x in self.dobjets
             ]
+            titles = [
+                self.dobjets[x].short_title for x in self.group if x in self.dobjets
+            ]
             if len(_remove_duplicates(orders)) == 1:
-                group = [
-                    self.dobjets[x].short_title for x in self.group if x in self.dobjets
-                ]
                 voice.item(
                     prefix
                     + mp.COMMA
                     + mp.YOU_CONTROL
-                    + self.summary(group)
+                    + self.summary(titles)
                     + mp.COMMA
                     + orders[0]
                 )
             else:
-                group = [
-                    self.dobjets[x].short_title + mp.COMMA + self.dobjets[x].orders_txt
-                    for x in self.group
-                    if x in self.dobjets
-                ]
-                voice.item(prefix + mp.COMMA + mp.YOU_CONTROL + self.summary(group))
+                msg = prefix + mp.COMMA + mp.YOU_CONTROL + self.summary(titles)
+                if len(_remove_duplicates(titles)) == 1:
+                    msg += mp.COMMA + self.summary(orders)
+                voice.item(msg)
         else:
             voice.item(prefix + mp.COMMA + mp.NO_UNIT_CONTROLLED)
 
