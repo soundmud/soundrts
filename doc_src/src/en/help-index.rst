@@ -9,6 +9,6 @@ Documentation
 - `Game manual <manual.htm>`_
 - `Units guide <units.htm>`_
 - `Map making guide <mapmaking.htm>`_
-- `Modding guide <modding.htm>`_ (work in progress)
+- `Modding guide <modding.htm>`_
 - `Making AIs Tutorial <aimaking.htm>`_
 - `Standalone server guide <server.htm>`_

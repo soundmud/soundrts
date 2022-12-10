@@ -25,7 +25,7 @@ is_a
 >>>>
 
 While in style.txt "is_a" is a way to inherit all the properties of another definition,
-in rules.txt, "is_a" is also used to make sure that a keep or a castle will allow what a townhall would allow.
+in rules.txt, "is_a" is also used to make sure that a keep or a castle will allow what a town hall would allow.
 
 Note: the inheritance trees in style.txt and in rules.txt don't need to match.
 
@@ -34,8 +34,8 @@ the rules
 
 Since SoundRTS 1.1, the rules of the game are stored in a file called rules.txt.
 
-factions
->>>>>>>>
+faction
+>>>>>>>
 
 Each faction is defined in rules.txt . For example::
 
@@ -44,8 +44,8 @@ Each faction is defined in rules.txt . For example::
 
 Note: the "orc_faction" name ends with "_faction" just to avoid name clashes. This "_faction" suffix is not mandatory as long as the name is unique.
 
-unit properties
->>>>>>>>>>>>>>>
+unit
+>>>>
 
 Note: a unit can also be a building.
 
@@ -117,8 +117,8 @@ For example, "storage_bonus 0 1" will cause a +1 bonus for wood (the second reso
 The bonus goes to the owner of the unit.
 The bonus doesn't stack: only the highest bonus will apply for each resource type.
 
-ability properties
->>>>>>>>>>>>>>>>>>
+ability
+>>>>>>>
 
 effect
 ======
@@ -127,7 +127,7 @@ effect
 
 Default value: (none)
 
-An effect is a property of an ability. When an ability is used by a unit, the effect will take place unless no effect type has been mentionned.
+An effect is a property of an ability. When an ability is used by a unit, the effect will take place unless no effect type has been mentioned.
 
 Additional properties can modify an effect: effect_target_ and effect_range_.
 
