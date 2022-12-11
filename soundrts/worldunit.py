@@ -9,6 +9,7 @@ from .lib.nofloat import (
     int_distance,
     int_sin_1000,
     square_of_distance,
+    to_int,
 )
 from .worldaction import Action, AttackAction, MoveAction, MoveXYAction
 from .worldentity import Entity
@@ -30,6 +31,22 @@ def ground_or_air(t):
 
 
 class Creature(Entity):
+
+    damage_vs: dict = dict()
+
+    @classmethod
+    def interpret(cls, d):
+        dmg = d.get("damage_vs", [])
+        d["damage_vs"] = dict()
+        targets = []
+        for s in dmg:
+            try:
+                n = to_int(s)
+                for t in targets:
+                    d["damage_vs"][t] = n
+                targets = []
+            except ValueError:
+                targets.append(s)
 
     type_name: Optional[str] = None
     is_a_unit = False
@@ -666,7 +683,8 @@ class Creature(Entity):
     # attack
 
     def hit(self, target):
-        damage = max(self.minimal_damage, self.damage - target.armor)
+        base_damage = self.damage_vs.get(target.type_name, self.damage)
+        damage = max(self.minimal_damage, base_damage - target.armor)
         target.receive_hit(damage, self)
 
     def _hit_or_miss(self, target):

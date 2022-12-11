@@ -1,3 +1,4 @@
+
 Modding guide
 :::::::::::::
 
@@ -116,6 +117,23 @@ For example, "storage_bonus 0 1" will cause a +1 bonus for wood (the second reso
 
 The bonus goes to the owner of the unit.
 The bonus doesn't stack: only the highest bonus will apply for each resource type.
+
+damage_vs
+=========
+
+(damage versus specific units)
+
+`damage_vs [<list of type names> <damage>] ...`
+
+Defines a specific damage against some unit types.
+The default value is defined in unit.damage.
+
+Example of a type of pike man that would be more efficient against a knight
+ and less efficient against a footman or a peasant:
+
+`damage 2 ; default damage`
+
+`damage_vs knight 7 footman peasant 1`
 
 ability
 >>>>>>>
