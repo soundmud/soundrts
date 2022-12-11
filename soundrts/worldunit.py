@@ -555,7 +555,7 @@ class Creature(Entity):
         Entity.delete(self)
         self.set_player(None)
 
-    def die(self, attacker):
+    def die(self, attacker=None):
         # remove transported units
         for o in self.objects[:]:
             o.move_to(self.place, self.x, self.y)
