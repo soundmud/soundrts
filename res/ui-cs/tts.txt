@@ -10,8 +10,8 @@
 23	a
 
 38	máte
-39	hitpointů z
-40	level
+39	životů z
+40	úroveň
 
 54	na
 55	metrů
@@ -51,8 +51,8 @@
 106	zastavit
 107	na
 108	na
-110	útoční
-111	obranní
+110	útočný
+111	obranný
 112	zůstat na místě
 113	maskovat se
 114	útok
@@ -201,8 +201,8 @@
 4059	začít
 4060	zrušit tuto hru
 4061	opustit tuto hru
-4062	hra začne o 5 sekund
-4063	hra začne, když organizátor bude připraven
+4062	hra začne za 5 sekund
+4063	hra začne, až organizátor bude připraven
 4064	stiskněte enter pro potvrzení
 
 4066	stiskněte opakovaně tab pro okruh všech viditelných objektů
@@ -214,7 +214,7 @@
 4073	server vytvořen uživatelem
 4074	pro
 4075	zrušit
-4076	zpět na předešlé menu
+4076	zpět na předchozí menu
 4077	momentálně není žádný server registrován na metaserveru
 4078	servery na
 4079	použíte kompatibilní verzi
@@ -228,7 +228,7 @@
 4087	změňte vaše přihlašovací jméno
 
 4096	uložit
-4097	uložit vaše nastavení a návrat do hlavního menu
+4097	uložit vaše nastavení a vrátit se do hlavního menu
 4098	zrušit
 4099	vrátit se do hlavního menu bez uložení nastavení
 
@@ -243,7 +243,7 @@
 4114	hrát proti počítači
 4115	počítač verzus počítač
 
-4118	zpět na předcházející menu
+4118	zpět na předchozí menu
 4119	vybrat server ze seznamu
 4120	vložit IP adresu serveru
 4121	soukromý server
@@ -256,7 +256,7 @@
 4205	neovládáte žádnou jednotku
 4206	grafika je nyní zapnutá
 4207	grafika je nyní vypnutá
-4208	neznámý
+4208	neznámo
 4209	v mlze války
 4210	F10 pro přístup do menu
 4211	režim z pohledu první osoby
@@ -288,7 +288,7 @@
 4237	špatné přihlašovací jméno
 4238	vaše předchozí přihlašovací jméno bilo ponecháno
 4239	nové přihlašovací jméno
-4240	sse právě přihlásil
+4240	se právě přihlásil
 4241	se právě připojil
 4242	hráčů
 4243	vás zve
@@ -341,14 +341,14 @@
 4287	řekl
 4288	napiš svou zprávu
 
-4289	neviditelní
+4289	neviditelný
 4290	detektor
 4291	zahalovač
 4292	přivolat
 4293	získat smrt
 4294	oživit
 
-4295	zombi
+4295	nemrtvý
 4296	kostlivec
 
 4297	mnich
@@ -370,3 +370,73 @@
 
 4308	kamene
 4309	kamenolom
+
+4311 byl poražen
+4312 byl jsi poražen
+4313 nyní jste v pozorovacím režimu
+
+4314 náhorní plošina
+
+4315 sledovat zaznamenanou hru
+4316 stiskněte kontrol Shift F4 pro sledování dalšího hráče
+
+4317 zadejte příkaz
+
+4318 přiblížení
+
+4319 upravit pořadí načítání módů
+4320 přidat mód do seznamu
+4321 seznam je prázdný
+4322 načítání
+
+4323 balíčky
+4324 nabídka balíčků
+4325 nainstalovat balíček
+4326 odinstalovat balíček
+4327 aktualizovat balíček
+4328 stahování
+4329 Extrakce...
+4330 nemohu najít mód
+
+4331 zeď
+4332 brána
+4333 blok
+
+4334 náhodná frakce
+
+4335 byl dosažen početní limit
+
+4336 otevřít uživatelskou složku
+4337 dokumentace
+
+4338 masivní zeď
+4339 masivní brána
+4340	začít veřejnou hru
+4341	módy
+4342 zvukové balíčky
+4343 rychlost
+
+4344 moře
+4345 jezero
+4346 řeka
+4347 hora
+4348 most
+4349 brod
+4350 bažina
+4351 oceán
+4352 horský průsmyk
+
+4353 povolit automatické opravy
+4354 zakázat automatické opravy
+4355 povolit automatické těžení
+4356 zakázat automatické těžení
+
+4357 přístav
+4358 člun
+4359 torpédoborec
+4360 bitevník
+4361 ponorka
+
+4362 prérie
+4363 lesy
+4364 hustý les
