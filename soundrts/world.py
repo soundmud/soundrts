@@ -13,7 +13,7 @@ from . import res
 from .definitions import VIRTUAL_TIME_INTERVAL, get_ai_names, load_ai, rules
 from .lib import chronometer as chrono
 from .lib import collision
-from .lib.log import exception, info, warning
+from .lib.log import exception, warning
 from .lib.nofloat import PRECISION, int_distance, to_int
 from .paths import MAPERROR_PATH
 from .worldability import Ability
@@ -32,9 +32,10 @@ PROFILE = False
 
 
 def check_squares(line, squares):
-    for sq in squares:
+    for sq in squares[:]:
         if re.match("^[a-z]+[0-9]+$", sq) is None:
-            map_error(line, "%s is not a square" % sq)
+            map_warning(line, "%s is not a square name" % sq)
+            squares.remove(sq)
 
 
 class World:
@@ -57,6 +58,7 @@ class World:
 
         # "map" properties
 
+        self.title = []
         self.objective = []
         self.intro = []
         self.timer_coefficient = 1
@@ -496,19 +498,23 @@ class World:
         for z in self.squares:
             z.arrange_resources_symmetrically(xc, yc)
 
-    def _we_places(self, i):
+    def _create_we_passage(self, i, exit_type):
         is_a_portal = False
-        t = string.ascii_lowercase
-        col = t.find(i[0]) + 1
+        alphabet = string.ascii_lowercase
+        col = alphabet.find(i[0]) + 1
         if col == self.nb_columns:
             col = 0
             is_a_portal = True
-        j = t[col] + i[1:]
+        j = alphabet[col] + i[1:]
         if j not in self.grid:
-            map_error("", "The west-east passage starting from %s doesn't exist." % i)
-        return self.grid[i].east_side(), self.grid[j].west_side(), is_a_portal
+            map_warning("", f"couldn't create a west-east passage from {i} to {j}")
+        else:
+            passage(
+                (self.grid[i].east_side(), self.grid[j].west_side(), is_a_portal),
+                exit_type,
+            )
 
-    def _sn_places(self, i):
+    def _create_sn_passage(self, i, exit_type):
         is_a_portal = False
         line = int(i[1:]) + 1
         if line == self.nb_lines + 1:
@@ -516,8 +522,12 @@ class World:
             is_a_portal = True
         j = i[0] + str(line)
         if j not in self.grid:
-            map_error("", "The south-north passage starting from %s doesn't exist." % i)
-        return self.grid[i].north_side(), self.grid[j].south_side(), is_a_portal
+            map_warning("", f"couldn't create a south-north passage from {i} to {j}")
+        else:
+            passage(
+                (self.grid[i].north_side(), self.grid[j].south_side(), is_a_portal),
+                exit_type,
+            )
 
     def _ground_graph(self):
         g = {}
@@ -567,10 +577,10 @@ class World:
     def _create_passages(self):
         for t, squares in self.west_east:
             for i in squares:
-                passage(self._we_places(i), t)
+                self._create_we_passage(i, t)
         for t, squares in self.south_north:
             for i in squares:
-                passage(self._sn_places(i), t)
+                self._create_sn_passage(i, t)
 
     def _create_graphs(self):
         self.g = {}
@@ -661,14 +671,14 @@ class World:
                         [condition, action]
                     )
                 except:
-                    map_error("", "error in trigger for %s: unknown owner" % o)
+                    map_warning("trigger " + " ".join(words), "%s is unknown" % o)
             elif o[:-1] == "player":
                 try:
                     self.players_starts[int(o[-1:]) - 1][2].append([condition, action])
                 except:
-                    map_error("", "error in trigger for %s: unknown owner" % o)
+                    map_warning("trigger " + " ".join(words), "%s is unknown" % o)
             else:
-                map_error("", "error in trigger for %s: unknown owner" % o)
+                map_warning("trigger " + " ".join(words), "%s is unknown" % o)
 
     def random_choice_repl(self, matchobj):
         return self.random.choice(matchobj.group(1).split("\n#end_choice\n"))
@@ -802,7 +812,7 @@ class World:
                 check_squares(line, squares)
                 self.no_air_squares.update(squares)
             else:
-                map_error(line, "unknown command: %s" % w)
+                map_warning(line, "unknown command: %s" % w)
         # build self.players_starts
         for sq in self.starting_squares:
             self._add_start_to(
@@ -1066,9 +1076,21 @@ class MapError(Exception):
 
 
 def map_error(line, msg):
-    w = f'error in "{line}": {msg}'
+    msg = f"error: {msg}"
+    if line:
+        msg += f' (in "{line}")'
     try:
-        open(MAPERROR_PATH, "w").write(w)
+        open(MAPERROR_PATH, "w").write(msg)
     except:
         warning("could not write in %s", MAPERROR_PATH)
-    raise MapError(w)
+    raise MapError(msg)
+
+
+def map_warning(line, msg):
+    if line:
+        msg += f' (in "{line}")'
+    warning(msg)
+    try:
+        open(MAPERROR_PATH, "w").write(msg)
+    except:
+        warning("could not write in %s", MAPERROR_PATH)
