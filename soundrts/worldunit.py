@@ -319,7 +319,7 @@ class Creature(Entity):
 
     def _must_hold(self):
         return (
-            (not self.orders or self.orders[0].is_complete)
+            not (self.player.smart_units or self.ai_mode == "defensive")
             and self.position_to_hold is not None
             and self.position_to_hold.contains(self.x, self.y)
         )
@@ -655,13 +655,13 @@ class Creature(Entity):
             return True
 
     def flee(self):
-        if (
-            self._previous_square is not None
-            and self.player.balance(self._previous_square) > 0.5
-        ):
-            if self.action_target != self.next_stage(self._previous_square):
+        sl = [e.other_side.place for e in self.place.exits]
+        if self._previous_square:
+            sl.insert(0, self._previous_square)
+        for s in sl:
+            if self.player.balance(s, add=self) > self.player.balance(self.place):
                 self.notify("flee")
-                self.take_order(["go", self._previous_square.id], imperative=True)
+                self.take_order(["go", s.id], imperative=True)
 
     def decide(self):
         if (

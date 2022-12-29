@@ -8,6 +8,7 @@ class Player:
     food = 0
     nb_units_produced = 0
     used_food = 0
+    smart_units = False
 
     def __init__(self):
         self.allied_vision = [self]

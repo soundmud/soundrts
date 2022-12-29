@@ -429,13 +429,13 @@ class Player:
         result = sorted(squares, key=lambda s: s.name)  # avoid desync
         return self.world.random.sample(result, len(result))
 
-    def balance(self, *squares):
+    def balance(self, *squares, add=None):
         # The first square is where the fight will be.
         # TODO: take into account: versus air, ground
         # TODO: take into account: allies (in first square)
         a = 0
         for u in self.units:
-            if u.place in squares:
+            if u.place in squares or u is add:
                 a += u.menace
         try:
             return a // self.enemy_menace(squares[0])
