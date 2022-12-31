@@ -659,7 +659,9 @@ class Creature(Entity):
         if self._previous_square:
             sl.insert(0, self._previous_square)
         for s in sl:
-            if self.player.balance(s, add=self) > self.player.balance(self.place):
+            if self.player.balance(s, add=self, mult=100) > self.player.balance(
+                self.place, mult=100
+            ):
                 self.notify("flee")
                 self.take_order(["go", s.id], imperative=True)
 
@@ -668,7 +670,7 @@ class Creature(Entity):
             (self.player.smart_units or self.ai_mode == "defensive")
             and self.speed > 0
             and not self._must_hold()
-            and self.player.balance(self.place, self._previous_square) < 0.5
+            and self.player.balance(self.place, self._previous_square, mult=10) < 5
         ):
             self.flee()
             return

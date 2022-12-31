@@ -429,7 +429,7 @@ class Player:
         result = sorted(squares, key=lambda s: s.name)  # avoid desync
         return self.world.random.sample(result, len(result))
 
-    def balance(self, *squares, add=None):
+    def balance(self, *squares, add=None, mult=1):
         # The first square is where the fight will be.
         # TODO: take into account: versus air, ground
         # TODO: take into account: allies (in first square)
@@ -438,7 +438,7 @@ class Player:
             if u.place in squares or u is add:
                 a += u.menace
         try:
-            return a // self.enemy_menace(squares[0])
+            return a * mult // self.enemy_menace(squares[0])
         except ZeroDivisionError:
             return 1000
 

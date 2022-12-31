@@ -118,7 +118,7 @@ class Order:
                 self.unit.start_moving_to(next_square)
             elif next_square is target:
                 if (
-                    self.player.balance(next_square, self.unit.place) > 1.1
+                    self.player.balance(next_square, self.unit.place, mult=10) > 11
                     or self._group_is_ready()
                 ):
                     self._grouped_attack(next_square)
@@ -126,7 +126,7 @@ class Order:
                 else:
                     self.unit.deploy()
                     return
-            elif self.player.balance(next_square, self.unit.place) > 1.1:
+            elif self.player.balance(next_square, self.unit.place, mult=10) > 11:
                 self._grouped_attack(next_square)
             else:
                 self.unit.deploy()
