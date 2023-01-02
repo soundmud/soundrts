@@ -10,6 +10,7 @@ from .lib.log import exception, info, warning
 from .lib.msgs import encode_msg, nb2msg
 from .lib.nofloat import PRECISION, square_of_distance, to_int
 from .worldability import Ability
+from .worldaction import AttackAction
 from .worldentity import NotEnoughSpaceError
 from .worldexit import Exit
 from .worldresource import Corpse, Deposit
@@ -90,6 +91,7 @@ class Player:
     groups: Dict[str, List[Unit]] = {}
 
     def __init__(self, world, client):
+        self._attacker_places = []
         self.neutral = client.neutral
         self.faction = (
             world.random.choice(world.factions)
@@ -489,6 +491,25 @@ class Player:
         self._update_enemy_menace_and_presence_and_corpses()
         self.play()
         self._update_drowning()
+
+        # counter-attack
+        a = dict()
+        for p in self._attacker_places:
+            for n in p.neighbors:
+                a[n] = p
+        self._attacker_places = []
+        for u in self.units:
+            if (
+                u.speed
+                and u.menace
+                and not u.orders
+                and u.action.__class__ != AttackAction
+                and u.place in a
+            ):
+                u.take_order(["go", a[u.place].id])
+                u.take_order(
+                    ["go", f"zoom-{u.place.id}-{u.x}-{u.y}"], forget_previous=False
+                )
 
     def level(self, type_name):
         return self.upgrades.count(type_name)
@@ -991,7 +1012,8 @@ class Player:
         return min(self.food, self.world.food_limit)
 
     def on_unit_attacked(self, unit, attacker):
-        pass
+        if attacker in self.perception and attacker.place not in self._attacker_places:
+            self._attacker_places.append(attacker.place)
 
     def player_is_an_enemy(self, p):
         return p not in self.allied
