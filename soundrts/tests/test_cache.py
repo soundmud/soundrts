@@ -78,7 +78,7 @@ def test_get_style(test):
     from soundrts.definitions import style
 
     style.load(res.get_text_file("ui/style", append=True, localize=True))
-    assert style.get("peasant", "noise") == ["0"]
+    assert style.get("peasant", "test") == ["0"]
 
 
 def test_get_style_with_locale(test):
@@ -87,7 +87,7 @@ def test_get_style_with_locale(test):
     from soundrts.definitions import style
 
     style.load(res.get_text_file("ui/style", append=True, localize=True))
-    assert style.get("peasant", "noise") == ["1"]
+    assert style.get("peasant", "test") == ["1"]
 
 
 def test_get_rules_and_ai(test):
@@ -113,7 +113,7 @@ def test_folder_map(test):
     assert rules.get("test", "cost") == [0, 0]
     assert rules.get("peasant", "cost") == [6000, 0]
     assert get_ai("easy") == ["get 6 peasant", "goto -1"]
-    assert style.get("peasant", "noise") == ["6"]
+    assert style.get("peasant", "test") == ["6"]
     assert sounds.get_text("0") == "map1"
     map1.unload_resources()
 
@@ -141,7 +141,7 @@ def test_campaign_map(test):
     assert rules.get("test", "cost") == [0, 0]
     assert rules.get("peasant", "cost") == [5000, 0]
     assert get_ai("easy") == ["get 5 peasant", "goto -1"]
-    assert style.get("peasant", "noise") == ["5"]
+    assert style.get("peasant", "test") == ["5"]
     assert sounds.get_text("0") == "campaign1"
     map0.unload_resources()
     c.unload_resources()
@@ -161,7 +161,7 @@ def test_campaign_map_with_special_rules(test):
     assert rules.get("test", "cost") == [0, 0]
     assert rules.get("peasant", "cost") == [7000, 0]
     assert get_ai("easy") == ["get 7 peasant", "goto -1"]
-    assert style.get("peasant", "noise") == ["7"]
+    assert style.get("peasant", "test") == ["7"]
     assert sounds.get_text("0") == "campaign1 map1"
     map1.unload_resources()
     c.unload_resources()
@@ -202,4 +202,4 @@ def test_unpacked_folder_map_redefines_rules_ai_and_style(test):
     assert rules.get("test", "cost") == [0, 0]
     assert rules.get("peasant", "cost") == [6000, 0]
     assert get_ai("easy") == ["get 6 peasant", "goto -1"]
-    assert style.get("peasant", "noise") == ["6"]
+    assert style.get("peasant", "test") == ["6"]

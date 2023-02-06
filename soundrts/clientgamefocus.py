@@ -93,6 +93,4 @@ class Zoom:
     def obs_pos(self):
         x = (self.xmin + self.xmax) / 2.0
         y = self.ymin + (self.ymax - self.ymin) / 8.0
-        if self.parent.place not in self.parent.scouted_squares:
-            y -= self.ymax - self.ymin  # lower sounds if fog of war
         return x / PRECISION, y / PRECISION

@@ -1,0 +1,37 @@
+# flattening of the y coordinate of the positional sounds
+# 1.0: no flattening
+# 2.0: the objects will feel closer from each other
+# 0.5: the objects will feel more distant from each other
+# 999999: the objects will feel confounded (only different because of x)
+# 0.0001: most objects will be inaudible (too far from the listener)
+flattening_factor = 2.0
+
+# The volume of "in the fog of war" objects and terrain
+# is multiplied by this factor.
+fog_of_war_factor = 0.5
+
+# time (in seconds) between two animation updates
+animation_delay = 0.1
+
+# play nearby terrain noises
+render_nearby_land = 1
+
+# play nearby noises and events
+render_nearby_objects = 1
+
+# when moving to a nearby square, are the current sounds kept or stopped?
+silence_previous_square = 1
+
+# when moving to a nearby square, play the "when_moving_through" sound
+play_movement_sound = 1
+
+# how fast the observer moves to the required position
+# 1000 is instant, 5 is smooth
+observer_reactivity = 1000
+
+[default_volume]
+res = 1.0
+soundpack = 0.8
+
+[volume]
+1000 = 0.5

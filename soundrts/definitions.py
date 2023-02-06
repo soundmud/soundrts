@@ -177,7 +177,6 @@ class _Definitions:
     def copy(self, other):
         self.__dict__ = other.__dict__
 
-
 _precision_properties = {
     "armor",
     "damage",
@@ -352,6 +351,25 @@ class Rules(_Definitions):
         return self._get_classnames(lambda uc: can_make(uc, t))
 
 
+def parse_noise(st):
+    if st:
+        if st[0] == "if_me":
+            return "if_me", parse_noise(st[1]), parse_noise(st[2])
+        ambient = st[0] == "ambient"
+        if ambient:
+            st = st[1:]
+        t = st[0]
+        if t == "loop":
+            try:
+                v = float(st[2])
+            except IndexError:
+                v = 1
+            return "loop", st[1], v, ambient
+        if t == "repeat":
+            return "repeat", float(st[1]), st[2:], ambient
+    return ()
+
+
 class Style(_Definitions):
     def __init__(self):
         self._style_warnings = []
@@ -360,6 +378,20 @@ class Style(_Definitions):
         self._dict = {}
         for s in strings:
             self.read(s)
+        for d in self._dict.values():
+            for k, v in d.items():
+                if v and v[0] == "if_me":
+                    if "else" in v:
+                        i = v.index("else")
+                        v = "if_me", v[1:i], v[i + 1:]
+                    else:
+                        v = "if_me", v[1:], []
+                if k.startswith("noise"):
+                    try:
+                        v = parse_noise(v)
+                    except:
+                        warning("problem with noise: %s", " ".join(d[k]))
+                d[k] = v
         self.apply_inheritance()
 
     def get(self, obj, attr, warn_if_not_found=True):

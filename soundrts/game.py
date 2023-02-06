@@ -233,11 +233,9 @@ class _Savable:
             definitions._ai = self._ai
             style.copy(self._style)
             update_orders_list()  # when style has changed
-            self.interface.set_self_as_listener()
             t = threading.Thread(target=self.world.loop)
             t.daemon = True
             t.start()
-            self.interface.waiting_for_world_update = False
             self.interface.loop(self)
             self._record_stats(self.world)
             self.post_run()

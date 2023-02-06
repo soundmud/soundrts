@@ -185,7 +185,7 @@ class PressRandomKeys:
         self._next_time = time.time() + dt
 
     def run(self, interface: GameInterface):
-        sound.volume = 0
+        sound.main_volume = 0
         if not isinstance(interface, GameInterface):
             return True
         if self._next_time <= time.time():

@@ -250,3 +250,4 @@ KP_MINUS: volume -1
 CTRL SPACE: immersion
 
 BACKQUOTE: console
+CTRL BACKQUOTE: reload_parameters

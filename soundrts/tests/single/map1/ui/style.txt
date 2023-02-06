@@ -1,2 +1,2 @@
 def peasant
-noise 6
+test 6

@@ -62,7 +62,7 @@ class VoiceChannel:
 
     def _play(self, s, lv, rv):
         # note: set_volume() doesn't seem to work with queued sounds
-        v = sound.volume * sound.voice_volume
+        v = sound.main_volume * sound.voice_volume
         self.c.set_volume(lv * v, rv * v)
         self.c.play(s)
         self.c.set_endevent(pygame.locals.USEREVENT)

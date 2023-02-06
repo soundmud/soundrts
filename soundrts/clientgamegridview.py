@@ -9,6 +9,33 @@ from .lib.screen import draw_line, draw_rect, get_screen
 from .worldentity import COLLISION_RADIUS
 
 
+def terrain_color(terrain: str):
+    color = style.get(terrain, "color", warn_if_not_found=False)
+    try:
+        color = pygame.Color(color[0])
+    except (IndexError, TypeError,):
+        color = (0, 25, 0)
+    return color
+
+
+def intensify(color):
+    color = (color[0] * 2, color[1] * 2, color[2] * 2)
+    color = tuple(min(x, 255) for x in color)
+    return color
+
+
+def square_color(square):
+    color = terrain_color(square.type_name)
+    if square.high_ground:
+        color = intensify(color)
+    return color
+
+
+def fade(color):
+    color = (color[0] / 10 + 15, color[1] / 10 + 15, color[2] / 10 + 15)
+    return color
+
+
 class GridView:
     def __init__(self, interface):
         self.interface = interface
@@ -32,33 +59,22 @@ class GridView:
         )
         # backgrounds
         squares_to_view = []
+        player = self.interface.player
         for xc in range(0, self.interface.xcmax + 1):
             for yc in range(0, self.interface.ycmax + 1):
-                sq = self.interface.server.player.world.grid[(xc, yc)]
-                color = style.get(sq.type_name, "color", warn_if_not_found=False)
-                try:
-                    color = pygame.Color(color[0])
-                except:
-                    color = (0, 25, 0)
-                if sq.high_ground:
-                    color = (color[0] * 2, color[1] * 2, color[2] * 2)
-                if (
-                    sq in self.interface.server.player.observed_before_squares
-                    and sq not in self.interface.server.player.observed_squares
-                ):
-                    color = (color[0] / 10 + 15, color[1] / 10 + 15, color[2] / 10 + 15)
-                elif sq not in self.interface.server.player.observed_squares:
-                    color = (0, 0, 0)
-                    continue
-                color = [min(x, 255) for x in color]
-                draw_rect(color, self._get_rect_from_map_coords(xc, yc))
-                squares_to_view.append(sq)
+                sq = player.world.grid[(xc, yc)]
+                if sq in player.observed_squares or sq in player.observed_before_squares:
+                    color = square_color(sq)
+                    if sq not in player.observed_squares:
+                        color = fade(color)
+                    draw_rect(color, self._get_rect_from_map_coords(xc, yc))
+                    squares_to_view.append(sq)
         # walls
         for sq in squares_to_view:
             exits = {e.o for e in sq.exits if not e.is_blocked()}
             walls = {-90, 90, 180, 0} - exits
             x, y = self._xy_coords(sq.x, sq.y)
-            for color, borders in (((100, 100, 100), walls), ((0, 0, 0), exits)):
+            for color, borders in (((0, 0, 0), walls),):
                 for o in borders:
                     dx = cos(radians(o)) * self.square_view_width / 2
                     dy = -sin(radians(o)) * self.square_view_width / 2
@@ -111,8 +127,6 @@ class GridView:
                 hp_prop = 100 * o.hp // o.hp_max
                 if hp_prop > 80:
                     color = (0, 255, 0)
-                ##                elif hp_prop > 50:
-                ##                    color = (0, 255, 0)
                 else:
                     color = (255, 0, 0)
                 W = R - 2
@@ -170,9 +184,9 @@ class GridView:
     def _display_active_zone_border(self):
         if self.interface.zoom_mode:
             zoom = self.interface.zoom
-            xmin, ymin = self._xy_coords(zoom.xmin, zoom.ymin)
-            xmax, ymax = self._xy_coords(zoom.xmax, zoom.ymax)
-            rect = xmin, ymin, xmax - xmin, ymax - ymin
+            left, bottom = self._xy_coords(zoom.xmin, zoom.ymin)
+            right, top = self._xy_coords(zoom.xmax, zoom.ymax)
+            rect = left, top, right - left, bottom - top
         else:
             rect = self._get_rect_from_map_coords(
                 *self.interface.coords_in_map(self.interface.place)
@@ -183,6 +197,10 @@ class GridView:
         else:
             color = (150, 150, 150)
         draw_rect(color, rect, 1)
+
+        # display the observer
+        observer_coordinates = self._get_view_coords_from_world_coords(self.interface.x, self.interface.y)
+        pygame.draw.circle(get_screen(), color, observer_coordinates, 1, 1)
 
     def display(self):
         self._update_coefs()
@@ -225,7 +243,7 @@ class GridView:
 
     def display_attack(self, attacker_id, target):
         a = self.interface.dobjets[attacker_id]
-        self.interface.grid_view._update_coefs()
+        self._update_coefs()
         if self.interface.player.is_an_enemy(a):
             color = (255, 0, 0)
         else:
@@ -233,13 +251,13 @@ class GridView:
         r1 = pygame.draw.line(
             get_screen(),
             color,
-            self.interface.grid_view._object_coords(target),
-            self.interface.grid_view._object_coords(a),
+            self._object_coords(target),
+            self._object_coords(a),
         )
         r2 = pygame.draw.circle(
             get_screen(),
             (100, 100, 100),
-            self.interface.grid_view._object_coords(target),
+            self._object_coords(target),
             R * 3 // 2,
             0,
         )

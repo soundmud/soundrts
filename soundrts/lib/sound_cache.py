@@ -8,6 +8,7 @@ from typing import Dict, Optional, Union
 
 import pygame
 
+from soundrts import parameters
 from soundrts.lib.log import warning
 from soundrts.lib.msgs import NB_ENCODE_SHIFT
 
@@ -52,6 +53,29 @@ class Layer:
                                 self._load_sound(name[:-4], os.path.join(dirpath, name))
 
 
+def _volume(name, path):
+    d1 = parameters.d.get("volume", {})
+    if d1.get(name) is not None:
+        return d1.get(name)
+    else:
+        d2 = parameters.d.get("default_volume", {})
+        for n2, dv in d2.items():
+            if n2 in os.path.normpath(path).split(os.sep):
+                return dv
+    return 1
+
+
+class Sound(pygame.mixer.Sound):
+    def __init__(self, path, name):
+        super().__init__(file=path)
+        self.name = name
+        self.path = path
+        self.update_volume()
+
+    def update_volume(self):
+        self.set_volume(_volume(self.name, self.path))
+
+
 class SoundCache:
     """The sound cache contains numbered sounds and texts.
     Usually a number will give only one type of value, but strange things
@@ -60,6 +84,15 @@ class SoundCache:
 
     def __init__(self):
         self.layers = []
+
+    @property
+    def cache(self):
+        return [
+            s
+            for layer in self.layers
+            for s in layer.sounds.values()
+            if hasattr(s, "update_volume")
+        ]
 
     def get_sound(self, name, warn=True):
         """return the sound corresponding to the given name"""
@@ -70,7 +103,7 @@ class SoundCache:
                 if isinstance(s, str):  # full path of the sound
                     # load the sound now
                     try:
-                        layer.sounds[key] = pygame.mixer.Sound(s)
+                        layer.sounds[key] = Sound(s, key)
                         return layer.sounds[key]
                     except:
                         warning("couldn't load %s" % s)
@@ -135,6 +168,10 @@ class SoundCache:
         except:
             warning("Unicode error in %s", repr(key))
             return str(key, errors="ignore")
+
+    def update_volumes(self):
+        for s in self.cache:
+            s.update_volume()
 
 
 sounds = SoundCache()

@@ -6,12 +6,14 @@ from typing import Dict, List
 import pygame
 
 from soundrts.lib import tts
+from .sound_cache import Sound
 
+from .. import parameters
 from .log import warning
 
 DEFAULT_VOLUME = math.sin(
     math.pi / 4.0
-)  # (about .7) volume for each speaker for a "in front of you" message
+)  # (about .7) volume for each speaker for an "in front of you" message
 
 
 def distance(x1, y1, x2, y2):
@@ -33,29 +35,25 @@ def angle(x1, y1, x2, y2, o=0):
     return a - math.radians(o)
 
 
-def vision_stereo(x, y, xo, yo, o, volume=1):  # no distance
-    vg, vd = stereo(x, y, xo, yo, o, volume, True)
-    if max(vg, vd) < 0.2:  # never silent
-        vg, vd = 0.2, 0.2
-    return vg, vd
-
-
-def stereo(x, y, xo, yo, o, volume=1, vision=False):
+def stereo(x, y, xo, yo, o, volume=1, no_distance=False):
     a = angle(x, y, xo, yo, o)
-    d = distance(x, y, xo, yo)
+    if no_distance:
+        d = 1
+    else:
+        d = distance(x, y, xo, yo)
+        if d < 1:
+            d = 1
     vg = (math.sin(a) + 1) / 2.0
     vd = 1 - vg
     vg = math.sin(vg * math.pi / 2.0)
     vd = math.sin(vd * math.pi / 2.0)
     if math.cos(a) < 0:  # behind
-        if vision:
+        if no_distance:
             k = 1.3
         else:
             k = 2.0  # TODO: attenuate less? (especially in overhead view)
         vg /= k
         vd /= k
-    if d < 1 or vision:
-        d = 1
     vg = min(vg * volume / d, 1)
     vd = min(vd * volume / d, 1)
     return vg, vd
@@ -69,104 +67,12 @@ def find_idle_channel():
             return pygame.mixer.Channel(n)
 
 
-class SoundManager:
-
-    soundsources: List["SoundSource"] = []
-    soundtime: Dict["SoundSource", float] = {}
-
-    def remember_starttime(self, sound):
-        self.soundtime[sound] = time.time()
-
-    def should_be_played(self, sound, limit):
-        return self.soundtime.get(sound, 0) + limit < time.time()
-
-    #        return self.soundtime.get(sound, 0) + sound.get_length() * .1 \
-    #                                                               < time.time()
-
-    def find_a_channel(self, priority):
-        c = find_idle_channel()
-        if c is None:
-            playing = [
-                s for s in self.soundsources if s.is_playing() and s.priority < priority
-            ]
-            if playing:
-                playing = sorted(
-                    playing, key=lambda x: (x.priority, max(x.previous_vol))
-                )
-                c = playing[0].channel
-                c.stop()
-                return c
-        else:
-            if c.get_endevent() == pygame.locals.USEREVENT:
-                warning("find_channel() have chosen the reserved channel!")
-            return c
-
-    def set_listener(self, listener):
-        self.listener = listener
-
-    def get_stereo_volume(self, source):
-        if self.listener.immersion:
-            flattening_factor = 1.0
-        else:
-            flattening_factor = 2.0  # TODO: calc this
-            self.listener.o = 90
-        return stereo(
-            self.listener.x,
-            self.listener.y / flattening_factor,
-            source.x,
-            source.y / flattening_factor,
-            self.listener.o,
-            source.v,
-        )
-
-    def play(self, *args, **keywords):
-        s = SoundSource(*args, **keywords)
-        if s.is_playing():
-            self.soundsources.append(s)
-            return s
-
-    def play_loop(self, *args, **keywords):
-        s = LoopingSoundSource(*args, **keywords)
-        if not s.has_stopped:
-            self.soundsources.append(s)
-            return s
-
-    def play_stereo(self, s, vol=1, limit=0):
-        """play a stereo sound (not a positional sound)"""
-        if s is not None:
-            if not self.should_be_played(s, limit):
-                return
-            c = self.find_a_channel(priority=10)
-            #            if c is None:
-            #                warning("couldn't find a sound channel with priority<10")
-            ##                pygame.mixer.find_channel(True).stop()
-            if c is not None:
-                c.play(s)
-                if isinstance(vol, tuple):
-                    c.set_volume(vol[0] * volume, vol[1] * volume)
-                else:
-                    c.set_volume(vol * volume)
-                self.remember_starttime(s)
-
-    def update(self):
-        for s in self.soundsources[:]:
-            s.update()
-            if s.has_stopped:
-                self.soundsources.remove(s)
-
-    def stop(self):
-        for s in self.soundsources:
-            s.stop()
-
-
-psounds = SoundManager()  # psounds = positional sounds (3D)
-
-
-class _SoundSource:
+class SoundSource:
 
     channel = None
     previous_vol = (0, 0)
-    has_stopped = False
+    ended = False
+    loop = 0
 
     def __init__(self, s, v, x, y, priority, limit=0, ambient=False):
         self.sound = s
@@ -176,7 +82,7 @@ class _SoundSource:
         self.priority = priority
         self.ambient = ambient
         if self.sound is None:
-            self.has_stopped = True
+            self.ended = True
         elif psounds.should_be_played(self.sound, limit):
             self._start()
 
@@ -188,7 +94,7 @@ class _SoundSource:
                 self.channel.set_endevent(pygame.locals.USEREVENT + 1)
                 self._update_volume(force=True)
         if self.is_playing():
-            psounds.remember_starttime(self.sound)
+            psounds.remember_start_time(self.sound)
 
     def is_playing(self):
         return (
@@ -210,11 +116,19 @@ class _SoundSource:
             else:
                 vol = psounds.get_stereo_volume(self)
             if force or vol != self.previous_vol:
-                self.channel.set_volume(vol[0] * volume, vol[1] * volume)
+                self.channel.set_volume(vol[0] * main_volume, vol[1] * main_volume)
                 self.previous_vol = vol
 
+    def update(self):
+        if self.ended:
+            return
+        if self.is_playing():
+            self._update_volume()
+        else:
+            self.stop()
+
     def move(self, x, y):
-        if self.has_stopped:
+        if self.ended:
             return
         if (x, y) != (self.x, self.y):
             self.x = x
@@ -225,33 +139,18 @@ class _SoundSource:
         if self.is_playing():
             self.channel.stop()
             self.channel = None
-        self.has_stopped = True
-
-
-class SoundSource(_SoundSource):
-
-    loop = 0
-
-    def update(self):
-        if self.has_stopped:
-            return
-        if self.is_playing():
-            self._update_volume()
-        else:
-            self.stop()
+        self.ended = True
 
     def ambient_volume(self):
-        ##                r = random.random()
-        ##                vol = (r, 1 - r)
         return random.random(), random.random()
 
 
-class LoopingSoundSource(_SoundSource):
+class LoopingSoundSource(SoundSource):
 
     loop = -1
 
     def update(self):
-        if self.has_stopped:
+        if self.ended:
             return
         if self.is_playing():
             self._update_volume()
@@ -262,7 +161,7 @@ class LoopingSoundSource(_SoundSource):
         return 1, 1
 
 
-def sound_stop(stop_voice_too=True):
+def stop(stop_voice_too=True):
     psounds.stop()
     if stop_voice_too:
         pygame.mixer.stop()
@@ -272,22 +171,109 @@ def sound_stop(stop_voice_too=True):
             pygame.mixer.Channel(_id).stop()
 
 
-volume = 0.5
+class SoundManager:
+
+    listener = None
+    _sources: List[SoundSource] = []
+    _start_time: Dict[Sound, float] = {}
+
+    def remember_start_time(self, sound):
+        self._start_time[sound] = time.time()
+
+    def should_be_played(self, sound, limit):
+        return self._start_time.get(sound, 0) + limit < time.time()
+
+    def find_a_channel(self, priority):
+        c = find_idle_channel()
+        if c is None:
+            playing = [
+                s for s in self._sources if s.is_playing() and s.priority < priority
+            ]
+            if playing:
+                playing = sorted(
+                    playing, key=lambda x: (x.priority, max(x.previous_vol))
+                )
+                c = playing[0].channel
+                c.stop()
+                return c
+        else:
+            if c.get_endevent() == pygame.locals.USEREVENT:
+                warning("find_channel() have chosen the reserved channel!")
+            return c
+
+    def get_stereo_volume(self, source):
+        if self.listener.immersion:
+            flattening_factor = 1.0
+        else:
+            flattening_factor = parameters.d.get("flattening_factor", 2.0)
+            self.listener.o = 90
+        return stereo(
+            self.listener.x,
+            self.listener.y / flattening_factor,
+            source.x,
+            source.y / flattening_factor,
+            self.listener.o,
+            source.v,
+        )
+
+    def play(self, *args, **keywords):
+        s = SoundSource(*args, **keywords)
+        if s.is_playing():
+            self._sources.append(s)
+            return s
+
+    def play_loop(self, *args, **keywords):
+        s = LoopingSoundSource(*args, **keywords)
+        if not s.ended:
+            self._sources.append(s)
+            return s
+
+    def play_stereo(self, s, vol=1, limit=0):
+        """play a stereo sound (not a positional sound)"""
+        if s is not None:
+            if not self.should_be_played(s, limit):
+                return
+            c = self.find_a_channel(priority=10)
+            if c is not None:
+                c.play(s)
+                if isinstance(vol, tuple):
+                    c.set_volume(vol[0] * main_volume, vol[1] * main_volume)
+                else:
+                    c.set_volume(vol * main_volume)
+                self.remember_start_time(s)
+
+    def update(self):
+        for s in self._sources[:]:
+            s.update()
+            if s.ended:
+                self._sources.remove(s)
+        if parameters.d.get("debug_channels", False):
+            for n, s in sorted(
+                [
+                    (
+                        n,
+                        pygame.mixer.Channel(n).get_sound().name
+                        if pygame.mixer.Channel(n).get_busy()
+                        else "    ",
+                    )
+                    for n in range(pygame.mixer.get_num_channels())
+                ]
+            ):
+                print(f"{n}:{s}", end=" ")
+            print()
+
+    def stop(self):
+        for s in self._sources:
+            s.stop()
 
 
-def get_volume():
-    return volume
+psounds = SoundManager()  # positional sounds (3D)
+
+main_volume = 0.5
+voice_volume = 1.0  # for sounds played on the voice channel (not for the TTS)
 
 
-def set_volume(v):
-    global volume
-    volume = v
-
-
-voice_volume = 1.0
-
-
-def init_sound(num_channels):
+def init(num_channels):
     pygame.mixer.pre_init(44100, -16, 2, 1024)
     pygame.init()
     pygame.mixer.set_reserved(1)

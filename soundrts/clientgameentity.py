@@ -1,11 +1,12 @@
+import math
 import random
 import time
-from typing import List
 
 import pygame
 
-from . import config
+from . import config, parameters
 from . import msgparts as mp
+from .animation import noise
 from .clientgamenews import must_be_said
 from .clientgameorder import get_orders_list, substitute_args
 from .clientmedia import sounds, voice
@@ -13,11 +14,35 @@ from .definitions import style
 from .lib.log import exception, warning
 from .lib.msgs import nb2msg
 from .lib.nofloat import PRECISION
-from .lib.sound import distance, psounds
+from .lib.sound import distance, psounds, angle
 from .worldunit import BuildingSite
 
 # minimal interval (in seconds) between 2 sounds
 FOOTSTEP_LIMIT = 0.1
+
+
+def direction_to_msgpart(o):
+    o = round(o / 45) * 45
+    while o >= 360:
+        o -= 360
+    while o < 0:
+        o += 360
+    if o == 0:
+        return mp.EAST
+    elif o == 45:
+        return mp.NORTHEAST
+    elif o == 90:
+        return mp.NORTH
+    elif o == 135:
+        return mp.NORTHWEST
+    elif o == 180:
+        return mp.WEST
+    elif o == 225:
+        return mp.SOUTHWEST
+    elif o == 270:
+        return mp.SOUTH
+    elif o == 315:
+        return mp.SOUTHEAST
 
 
 def compute_title(type_name):
@@ -50,18 +75,25 @@ def _order_title_msg(order, interface, nb=1):
     return mp.COMMA + result
 
 
+class SquareView:
+    def __init__(self, interface, model):
+        self.interface = interface
+        self.model = model
+
+    def __getattr__(self, name):
+        v = getattr(self.model, name)
+        if name in ["x", "y"]:
+            v /= 1000.0
+        return v
+
+    @property
+    def fow(self):
+        return self.model not in self.interface.scouted_squares
+
+
 class EntityView:
 
     next_step = None
-
-    loop_noise = None
-    loop_volume = 0
-    loop_source = None
-
-    repeat_noises: List[str] = []
-    repeat_interval = -1
-    repeat_source = None
-    next_repeat = None
 
     def __init__(self, interface, model):
         self.interface = interface
@@ -69,6 +101,10 @@ class EntityView:
         self.footstep_random = (
             random.random() * 0.2
         )  # to avoid strange synchronicity of footsteps when several units are walking
+
+    @property
+    def fow(self):
+        return self.is_memory
 
     @property
     def footstep_interval(self):
@@ -101,6 +137,8 @@ class EntityView:
         )
 
     def __getattr__(self, name):
+        if name == "model":
+            return
         v = getattr(self.model, name)
         if name in ["x", "y"]:
             v /= 1000.0
@@ -109,16 +147,11 @@ class EntityView:
         return v
 
     def __getstate__(self):
-        odict = self.__dict__.copy()  # copy the dict since we change it
-        for k in ("loop_source", "repeat_source"):
-            if k in odict:
-                del odict[k]  # remove Sound entry
-        return odict
-
-    def __setstate__(self, dictionary):
-        self.__dict__.update(dictionary)  # update attributes
-        self.loop_source = None
-        self.repeat_source = None
+        if "_noise" in self.__dict__:
+            state = self.__dict__.copy()
+            del state["_noise"]
+            return state
+        return self.__dict__
 
     @property
     def ext_title(self):
@@ -253,6 +286,26 @@ class EntityView:
             pass  # a warning is given by style.get()
         return d
 
+    def _direction_msg(self):
+        x, y = self.interface.place_xy
+        d = distance(x, y, self.x, self.y)
+        if d < self.interface.square_width / 3 / 2:
+            return mp.AT_THE_CENTER
+        direction = math.degrees(angle(x, y, self.x, self.y, 0))
+        mp_direction = direction_to_msgpart(direction)
+        if mp_direction == mp.EAST:
+            return mp.TO_THE_EAST  # special case in French
+        if mp_direction == mp.WEST:
+            return mp.TO_THE_WEST  # special case in French
+        return mp.TO_THE + mp_direction
+
+    @property
+    def positional_description(self):
+        d = self.title
+        if self.interface.immersion:
+            d += mp.AT2 + nb2msg(self.interface.distance(self)) + mp.METERS
+        return d + self._direction_msg() + self.description
+
     def is_a_useful_target(self):
         # (useful for a worker)
         # resource deposits, building lands, damaged repairable units or buildings, blockable exits
@@ -365,15 +418,9 @@ class EntityView:
         st = style.get(self.type_name, attr)
         if st and st[0] == "if_me":
             if self.player in self.interface.player.allied:
-                try:
-                    return st[1 : st.index("else")]
-                except ValueError:
-                    return st[1:]
+                return st[1]
             else:
-                try:
-                    return st[st.index("else") + 1 :]
-                except ValueError:
-                    return []
+                return st[2]
         return st
 
     def _get_noise_style(self):
@@ -392,37 +439,32 @@ class EntityView:
                     return st
         return self.get_style("noise")
 
+    _noise = None
+
     def _set_noise(self, st):
-        self.repeat_noises = []
-        self.repeat_interval = -1
-        self.loop_noise = None
-        self.loop_volume = 0
-        self.ambient_noise = False
-        if not st:
-            return
-        if st[0] == "ambient":
-            self.ambient_noise = True
-            del st[0]
-        if st[0] == "loop" and len(st) >= 2:
-            self.loop_noise = st[1]
-            try:
-                self.loop_volume = float(st[2])
-            except IndexError:
-                self.loop_volume = 1
-        elif st[0] == "repeat" and len(st) >= 3:
-            self.repeat_interval = float(st[1])
-            self.repeat_noises = st[2:]
+        if self._noise:
+            if st is self._noise.style:
+                self._noise.update()
+            else:
+                self._noise.stop()
+                self._noise = noise(self, st)
+        else:
+            self._noise = noise(self, st)
 
     def update_noise(self):
         st = self._get_noise_style()
         self._set_noise(st)
+
+    @property
+    def is_local(self):
+        return self.place is self.interface.place or parameters.d.get("render_nearby_objects", False) and self.interface.place and self.place in self.interface.place.neighbors
 
     def launch_event_style(self, attr, alert=False, priority=0):
         st = self.get_style(attr)
         if not st:
             return
         s = random.choice(st)
-        if alert and self.place is not self.interface.place:
+        if alert and not self.is_local:
             self.launch_alert(s)
         else:
             self.launch_event(s, priority=priority)
@@ -434,57 +476,15 @@ class EntityView:
         s = random.choice(st)
         self.launch_alert(s)
 
-    def _loop_noise(self):
-        if self.loop_noise is not None:
-            if self.loop_source is None:
-                # same priority level as "footstep", to avoid unpleasant interruptions
-                self.loop_source = psounds.play_loop(
-                    sounds.get_sound(self.loop_noise),
-                    self.loop_volume,
-                    self.x,
-                    self.y,
-                    -10,
-                )
-            else:
-                self.loop_source.move(self.x, self.y)
-        else:
-            self.stop()
-
-    def _repeat_noise(self):
-        if self.repeat_noises:
-            if self.next_repeat is None:
-                self.next_repeat = (
-                    time.time() + random.random() * self.repeat_interval
-                )  # to start at different moments
-            # don't start a new "repeat sound" if the previous "repeat sound" hasn't stopped yet
-            elif time.time() > self.next_repeat and getattr(
-                self.repeat_source, "has_stopped", True
-            ):
-                self.repeat_source = self.launch_event(
-                    random.choice(self.repeat_noises),
-                    priority=-20,
-                    ambient=self.ambient_noise,
-                )
-                self.next_repeat = time.time() + self.repeat_interval * (
-                    0.8 + random.random() * 0.4
-                )
-                if time.time() > self.next_repeat:
-                    self.next_repeat = None
-        else:
-            self.next_repeat = None
-
     def animate(self):
-        if self.place is self.interface.place:
+        if self.is_local:
             self.footstep()
             self.update_noise()
-            self._loop_noise()
-            self._repeat_noise()
             self.render_hp()
 
-    def stop(self):  # arreter les sons en boucle
-        if self.loop_source is not None:
-            self.loop_source.stop()
-            self.loop_source = None
+    def stop(self):
+        if self._noise:
+            self._noise.stop()
 
     previous_hp = None
 
@@ -557,12 +557,10 @@ class EntityView:
             pass
         elif self.place in getattr(self.interface.place, "neighbors", []):
             priority -= 1
-            # Diminishing the volume is necessary as long as
-            # "in the fog of war" squares are implemented
-            # by shifting the observer backwards along the y axis.
-            volume /= 4.0
         else:
             return
+        if self.is_memory:
+            volume *= parameters.d.get("fog_of_war_factor", 0.5)
         return psounds.play(
             sounds.get_sound(sound), volume, self.x, self.y, priority, limit, ambient
         )
