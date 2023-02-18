@@ -14,6 +14,7 @@ from .paths import CLIENT_LOG_PATH
 from .version import VERSION_FOR_BUG_REPORTS
 
 log.set_version(VERSION_FOR_BUG_REPORTS)
+log.clear_handlers()
 log.add_secure_file_handler(CLIENT_LOG_PATH, "w")
 log.add_http_handler("http://jlpo.free.fr/soundrts/metaserver")
 log.add_console_handler()
@@ -26,11 +27,13 @@ except:
     warning("couldn't set locale")
 
 import os
-import pickle
 import sys
 import time
 import webbrowser
 
+import cloudpickle
+
+from . import discovery
 from . import msgparts as mp
 from . import res, stats
 from .campaign import campaigns
@@ -54,6 +57,15 @@ from .version import VERSION, server_is_compatible
 
 def choose_server_ip_in_a_list():
     servers = servers_list(voice)
+    try:
+        local = discovery.local_server()
+        if local:
+            version, port, login = local[1].split(" ", 2)
+            servers.insert(
+                0, " ".join(("0", local[0], version, local[0] + "_" + login, port))
+            )
+    except:
+        warning("error while searching for a local server")
     total = 0
     compatible = 0
     menu = Menu()
@@ -145,7 +157,7 @@ def restore_game():
         j = "error"
     if i == j:
         try:
-            game_session = pickle.load(f)
+            game_session = cloudpickle.load(f)
         except:
             exception("cannot load savegame file")
             voice.alert(mp.BEEP)

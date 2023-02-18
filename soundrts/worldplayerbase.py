@@ -10,12 +10,13 @@ from .lib.log import exception, info, warning
 from .lib.msgs import encode_msg, nb2msg
 from .lib.nofloat import PRECISION, square_of_distance, to_int
 from .worldability import Ability
+from .worldaction import AttackAction
 from .worldentity import NotEnoughSpaceError
 from .worldexit import Exit
 from .worldresource import Corpse, Deposit
 from .worldroom import Square
 from .worldunit import BuildingSite, Soldier, Unit
-from .worldupgrade import Upgrade
+from .worldupgrade import is_an_upgrade
 
 A = 12 * PRECISION  # bucket side length
 VERY_SLOW = int(0.01 * PRECISION)
@@ -70,14 +71,6 @@ class Objective:
         self.description = description
 
 
-def normalize_cost_or_resources(lst):
-    n = rules.get("parameters", "nb_of_resource_types")
-    while len(lst) < n:
-        lst += [0]
-    while len(lst) > n:
-        del lst[-1]
-
-
 class Player:
 
     cheatmode = False
@@ -98,6 +91,7 @@ class Player:
     groups: Dict[str, List[Unit]] = {}
 
     def __init__(self, world, client):
+        self._attacker_places = []
         self.neutral = client.neutral
         self.faction = (
             world.random.choice(world.factions)
@@ -437,16 +431,16 @@ class Player:
         result = sorted(squares, key=lambda s: s.name)  # avoid desync
         return self.world.random.sample(result, len(result))
 
-    def balance(self, *squares):
+    def balance(self, *squares, add=None, mult=1):
         # The first square is where the fight will be.
         # TODO: take into account: versus air, ground
         # TODO: take into account: allies (in first square)
         a = 0
         for u in self.units:
-            if u.place in squares:
+            if u.place in squares or u is add:
                 a += u.menace
         try:
-            return a // self.enemy_menace(squares[0])
+            return a * mult // self.enemy_menace(squares[0])
         except ZeroDivisionError:
             return 1000
 
@@ -497,6 +491,25 @@ class Player:
         self._update_enemy_menace_and_presence_and_corpses()
         self.play()
         self._update_drowning()
+
+        # counter-attack
+        a = dict()
+        for p in self._attacker_places:
+            for n in p.neighbors:
+                a[n] = p
+        self._attacker_places = []
+        for u in self.units:
+            if (
+                u.speed
+                and u.menace
+                and not u.orders
+                and u.action.__class__ != AttackAction
+                and u.place in a
+            ):
+                u.take_order(["go", a[u.place].id])
+                u.take_order(
+                    ["go", f"zoom-{u.place.id}-{u.x}-{u.y}"], forget_previous=False
+                )
 
     def level(self, type_name):
         return self.upgrades.count(type_name)
@@ -667,14 +680,14 @@ class Player:
             return t
 
         self.resources = self.start[0][:]
-        normalize_cost_or_resources(self.resources)
+        rules.normalize_cost_or_resources(self.resources)
         self.gathered_resources = self.resources[:]
-        for place, type_ in self.start[1]:
+        for place, type_, n in self.start[1]:
             if self.world.must_apply_equivalent_type:
                 type_ = equivalent_type(type_)
             if isinstance(type_, str) and type_[0:1] == "-":
                 self.forbidden_techs.append(type_[1:])
-            elif isinstance(type_, Upgrade):
+            elif is_an_upgrade(type_):
                 self.upgrades.append(
                     type_.type_name
                 )  # type_.upgrade_player(self) would require the units already there
@@ -682,11 +695,12 @@ class Player:
                 warning("couldn't create an initial unit")
             else:
                 place = self.world.grid[place]
-                x, y, land = place.find_and_remove_meadow(type_)
-                x, y = place.find_free_space(type_.airground_type, x, y)
-                if x is not None:
-                    unit = type_(self, place, x, y)
-                    unit.building_land = land
+                for _ in range(n):
+                    x, y, land = place.find_and_remove_meadow(type_)
+                    x, y = place.find_free_space(type_.airground_type, x, y)
+                    if x is not None:
+                        unit = type_(self, place, x, y)
+                        unit.building_land = land
 
         self.triggers = self.start[2]
 
@@ -804,7 +818,7 @@ class Player:
                 nb = int(i)
             else:
                 cls = self.world.unit_class(i)
-                if isinstance(cls, Upgrade):
+                if is_an_upgrade(cls):
                     self.upgrades.append(i)
                     self.send_voice_important(mp.OK)
                 elif getattr(cls, "cls", None) == Ability:
@@ -998,7 +1012,8 @@ class Player:
         return min(self.food, self.world.food_limit)
 
     def on_unit_attacked(self, unit, attacker):
-        pass
+        if attacker in self.perception and attacker.place not in self._attacker_places:
+            self._attacker_places.append(attacker.place)
 
     def player_is_an_enemy(self, p):
         return p not in self.allied

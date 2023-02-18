@@ -59,18 +59,18 @@ def speak(text: str):
 
 
 def _stop():
+    global _is_speaking
     with _lock:
         if _is_speaking:
             try:
                 _tts.Stop()
+                _is_speaking = False
             except:
                 pass  # speak() will have a similar error and fall back to sounds
 
 
 def stop():
-    global _is_speaking
     _queue.put((_stop, []))
-    _is_speaking = False
 
 
 def _init_com_for_this_thread():

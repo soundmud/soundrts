@@ -4,16 +4,10 @@ from soundrts import worldclient
 from soundrts.lib.nofloat import PRECISION
 from soundrts.mapfile import Map
 from soundrts.world import World
+from soundrts.worldaction import AttackAction
 from soundrts.worldorders import BuildOrder, TrainOrder
 from soundrts.worldplayerbase import Objective
 from soundrts.worldresource import Corpse
-
-
-def disable_ai(player):
-    def do_nothing():
-        pass
-
-    player.play = do_nothing
 
 
 # this inefficient method should only be used in legacy tests
@@ -50,7 +44,7 @@ class _PlayerBaseTestCase(unittest.TestCase):
         self.w = World([])
         self.w.load_and_build_map(Map("soundrts/tests/%s.txt" % map_name))
         if cloak:
-            self.w.unit_class("new_flyingmachine").dct["is_a_cloaker"] = True
+            self.w.unit_class("new_flyingmachine").is_a_cloaker = True
         cp = DummyClient(ai[0])
         cp2 = DummyClient(ai[1])
         cp.alliance, cp2.alliance = alliance
@@ -84,14 +78,12 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
 
     def testNoCountLimit(self):
         self.set_up()
-        disable_ai(self.cp)
         th = self.find_player_unit(self.cp, "townhall")
         th.take_order(["train", "peasant"])
         assert th.orders
 
     def testCountLimit(self):
         self.set_up()
-        disable_ai(self.cp)
         self.w.unit_class("peasant").count_limit = 1
         self.w.update()
         th = self.find_player_unit(self.cp, "townhall")
@@ -105,8 +97,7 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         assert th.orders
 
     def testCountLimitBuild(self):
-        self.set_up()
-        disable_ai(self.cp)
+        self.set_up(ai=("timers", "timers"))
         self.cp.lang_add_units(["b2", "peasant"])
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
         self.w.unit_class("barracks").count_limit = 1
@@ -156,8 +147,7 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         self.assertEqual(self.cp.nb("farm"), 2)
 
     def testCountLimitBuildQueued(self):
-        self.set_up()
-        disable_ai(self.cp)
+        self.set_up(ai=("timers", "timers"))
         self.cp.lang_add_units(["b2", "peasant"])
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
         self.w.unit_class("barracks").count_limit = 1
@@ -178,8 +168,7 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         self.assertEqual(self.cp.nb("barracks"), 1)
 
     def testCountLimitUpgradeTo(self):
-        self.set_up()
-        disable_ai(self.cp)
+        self.set_up(ai=("timers", "timers"))
         self.cp.lang_add_units(["b2", "lumbermill"])
         self.cp.lang_add_units(["b2", "magestower"])
         self.cp.lang_add_units(["b2", "archer"])
@@ -196,7 +185,6 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
 
     def testCountLimitSummon(self):
         self.set_up()
-        disable_ai(self.cp)
         self.assertEqual(self.cp.nb("dragon"), 1)
         self.w.unit_class("dragon").count_limit = 2
         self.cp.lang_add_units(["b2", "mage"])
@@ -209,7 +197,6 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
 
     def testCountLimitRaiseDead(self):
         self.set_up()
-        disable_ai(self.cp)
         self.cp.lang_add_units(["b2", "10", "footman"])
         for _ in range(10):
             f = self.find_player_unit(self.cp, "footman")
@@ -228,7 +215,6 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
     def testCountLimitResurrection(self):
         self.set_up()
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
-        disable_ai(self.cp)
         self.cp.lang_add_units(["b2", "10", "footman"])
         for _ in range(10):
             f = self.find_player_unit(self.cp, "footman")
@@ -248,7 +234,6 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
     def testCountLimitResurrectionWithTrainQueue(self):
         self.set_up()
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
-        disable_ai(self.cp)
         self.cp.lang_add_units(["b2", "10", "footman"])
         for _ in range(10):
             f = self.find_player_unit(self.cp, "footman")
@@ -608,6 +593,62 @@ class ComputerTestCase(_PlayerBaseTestCase):
         self.w.update()
         self.assertTrue(p2.can_attack(p))  # (a bit too late to test this)
         self.assertEqual(p2.action_target, p)  # "peasant should attack peasant"
+
+    def testDefensiveWorkerMustFlee(self):
+        self.set_up(map_name="jl1", ai=("timers", "timers"))
+        p = self.find_player_unit(self.cp, "peasant")
+        self.cp2.lang_add_units([p.place.name, "footman"])
+        self.w.update()
+        self.assertEqual(p.orders[0].keyword, "go")
+
+    def testOffensiveSmartUnitMustSometimesAttack(self):
+        self.set_up(map_name="jl1")  # smart units
+        p = self.find_player_unit(self.cp, "peasant")
+        self.cp2.lang_add_units([p.place.name, "footman"])
+        f = self.find_player_unit(self.cp2, "footman")
+        self.w.update()
+        self.assertEqual(f.orders, [])
+        self.assertIsInstance(f.action, AttackAction)
+
+    def testOffensiveSmartUnitMustSometimesFlee(self):
+        self.set_up(map_name="jl1_extended")  # smart units
+        p = self.find_player_unit(self.cp, "peasant")
+        self.cp2.lang_add_units([p.place.name, "footman"])
+        f = self.find_player_unit(self.cp2, "footman")
+        self.w.update()
+        self.assertEqual(f.orders[0].keyword, "go")
+
+    def testOffensiveNotSmartUnitMustAlwaysAttack(self):
+        self.set_up(map_name="jl1_extended", ai=("timers", "timers"))  # no smart units
+        p = self.find_player_unit(self.cp, "peasant")
+        self.cp2.lang_add_units([p.place.name, "footman"])
+        f = self.find_player_unit(self.cp2, "footman")
+        self.w.update()
+        self.assertEqual(f.orders, [])
+        self.assertIsInstance(f.action, AttackAction)
+
+    def testOffensiveNotSmartUnitMustAlwaysAttack2(self):
+        self.set_up(map_name="jl1_extended", ai=("timers", "timers"))  # no smart units
+        p = self.find_player_unit(self.cp, "peasant")
+        self.cp2.lang_add_units([p.place.neighbors[0].name, "footman"])
+        f = self.find_player_unit(self.cp2, "footman")
+        f.take_order(["go", p.place.id])
+        for _ in range(100):
+            self.w.update()
+            if f.place == p.place:
+                break
+        self.assertEqual(f.place, p.place)
+        for _ in range(100):
+            self.w.update()
+            if isinstance(f.action, AttackAction):
+                break
+        self.assertEqual(f.place, p.place)
+        self.assertIsInstance(f.action, AttackAction)
+        for _ in range(100):
+            self.w.update()
+            if f.hp < f.hp_max:
+                break
+        self.assertTrue(f.hp < f.hp_max)
 
     def testUpgradeTo(self):
         self.set_up(map_name="jl1")

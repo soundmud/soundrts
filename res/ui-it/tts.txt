@@ -35,7 +35,7 @@
 83     fattoria
 84	un sentiero
 85	contadino
-86	fattorino
+86	bracciante
 87	arciere
 88	nemico
 89	amico
@@ -140,7 +140,7 @@ controlla la prossima unita' nella locazione
 2048	controlla tutte le unita' dello stesso tipo, presenti nella medesima locazione dell'unita' corrente
 2049	conferma l'ordine corrente
 2050	impartisce l'ordine più logico da dare alla destinazione scelta
-2051	sapere quanto oro, quanto legname e quanto cibo possiedi
+2051	sapere quanto oro, quanto legno e quanto cibo possiedi
 2052	sapere lo stato di salute dell'unita' corrente
 2053	controlla meta' delle unita' dello stesso tipo e presenti nella locazione dell'unita' corrente
 2054	controllo di una singola unita'
@@ -246,14 +246,14 @@ controlla la prossima unita' nella locazione
 4061	ritirati da questa partita
 4062	la partita iniziera' fra 5 secondi
 4063	La partita partira' quando l'organizzatore sara' pronto
-4064	Premi invio per cnfermare
+4064	Premi invio per confermare
 
 4066	premi molte volte tab per scegliere fra gli oggetti visibili
 4067	premi tab per scegliere la destinazione, quindi invio per confermare
 
 4070	annulla gioco
 4071	continua la partita
-4072	Impossibile accedere alla lista dei servers, potresti non essere connesso alla rete.
+4072	Impossibile accedere alla lista dei server, potresti non essere connesso alla rete.
 4073	server ospitato da:
 4074	per
 4075	cancella
@@ -309,7 +309,7 @@ controlla la prossima unita' nella locazione
 4214	aggiorna
 4215	spade
 4216	frecce
-4217	armature dei fattorini
+4217	armature dei braccianti
 4218	armature degli arcieri
 4219	in
 4220	fortezza
@@ -325,18 +325,18 @@ controlla la prossima unita' nella locazione
 4230	macchina volante
 4231	drago
 4232	errore del server
-4233	bows range
+4233	batteria di archi
 4234	una versione piu' recente di questo programma e' disponibile in rete
 4235	inserisci la tua nuova login
 4236	usa solo lettere e numeri
-4237	login sbagliata
+4237	login errata
 4238	login corrente mantenuta
 4239	nuova login
 4240	e' appena entrato
 4241	si e' appena unito
 4242	giocatori su
 4243	ti invita
-4244	giocatori insufficienti per partire. il minimo e':
+4244	giocatori insufficienti per iniziare. il minimo e':
 4245	login corrente
 4246	limite di popolazione raggiunto
 4247	punti mana su
@@ -357,7 +357,7 @@ controlla la prossima unita' nella locazione
 4262	suoni opzionali aggiuntivi
 4263	e' ora attivato
 4264	e' ora disattivato
-4265	modalita' gioco truccato
+4265	modalita' gioco facilitato
 4266	riavviare
 4267	campagna
 4268	nuovo obiettivo
@@ -419,7 +419,7 @@ controlla la prossima unita' nella locazione
 
 4289 invisibile
 4290 detector
-4291 cloaker
+4291 spia
 
 4292 convocazione
 4293 recuperare i cadaveri
@@ -437,7 +437,7 @@ controlla la prossima unita' nella locazione
 4301 umano
 4302 orco
 
-4303 negromante
+4303 necromante
 4304 necropoli
 
 4305 nebbia mortale

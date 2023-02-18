@@ -328,7 +328,7 @@
 4278	naložiť
 4279	naložiť všetko z
 4280	vyložiť
-4281	vyložiť všetko z
+4281	vyložiť všetko na
 4282	vlož do
 4283	temný lukostrelec
 

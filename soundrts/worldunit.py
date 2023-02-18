@@ -1,7 +1,7 @@
 from typing import List, Optional, Set, Tuple
 
 from .definitions import MAX_NB_OF_RESOURCE_TYPES, VIRTUAL_TIME_INTERVAL, rules
-from .lib.log import debug, warning
+from .lib.log import warning
 from .lib.nofloat import (
     PRECISION,
     int_angle,
@@ -9,6 +9,7 @@ from .lib.nofloat import (
     int_distance,
     int_sin_1000,
     square_of_distance,
+    to_int,
 )
 from .worldaction import Action, AttackAction, MoveAction, MoveXYAction
 from .worldentity import Entity
@@ -30,6 +31,22 @@ def ground_or_air(t):
 
 
 class Creature(Entity):
+
+    damage_vs: dict = dict()
+
+    @classmethod
+    def interpret(cls, d):
+        dmg = d.get("damage_vs", [])
+        d["damage_vs"] = dict()
+        targets = []
+        for s in dmg:
+            try:
+                n = to_int(s)
+                for t in targets:
+                    d["damage_vs"][t] = n
+                targets = []
+            except ValueError:
+                targets.append(s)
 
     type_name: Optional[str] = None
     is_a_unit = False
@@ -159,9 +176,7 @@ class Creature(Entity):
         for o in self.objects:
             o.set_player(player)
 
-    def __init__(self, prototype, player, place, x, y, o=90):
-        if prototype is not None:
-            prototype.init_dict(self)
+    def __init__(self, player, place, x, y, o=90):
         self.orders = []
 
         # attributes required by transports and shelters (inside)
@@ -304,7 +319,7 @@ class Creature(Entity):
 
     def _must_hold(self):
         return (
-            (not self.orders or self.orders[0].is_complete)
+            not (self.player.smart_units or self.ai_mode == "defensive")
             and self.position_to_hold is not None
             and self.position_to_hold.contains(self.x, self.y)
         )
@@ -540,7 +555,7 @@ class Creature(Entity):
         Entity.delete(self)
         self.set_player(None)
 
-    def die(self, attacker):
+    def die(self, attacker=None):
         # remove transported units
         for o in self.objects[:]:
             o.move_to(self.place, self.x, self.y)
@@ -640,20 +655,22 @@ class Creature(Entity):
             return True
 
     def flee(self):
-        if (
-            self._previous_square is not None
-            and self.player.balance(self._previous_square) > 0.5
-        ):
-            if self.action_target != self.next_stage(self._previous_square):
+        sl = [e.other_side.place for e in self.place.exits]
+        if self._previous_square:
+            sl.insert(0, self._previous_square)
+        for s in sl:
+            if self.player.balance(s, add=self, mult=100) > self.player.balance(
+                self.place, mult=100
+            ):
                 self.notify("flee")
-                self.take_order(["go", self._previous_square.id], imperative=True)
+                self.take_order(["go", s.id], imperative=True)
 
     def decide(self):
         if (
             (self.player.smart_units or self.ai_mode == "defensive")
             and self.speed > 0
             and not self._must_hold()
-            and self.player.balance(self.place, self._previous_square) < 0.5
+            and self.player.balance(self.place, self._previous_square, mult=10) < 5
         ):
             self.flee()
             return
@@ -668,7 +685,8 @@ class Creature(Entity):
     # attack
 
     def hit(self, target):
-        damage = max(self.minimal_damage, self.damage - target.armor)
+        base_damage = self.damage_vs.get(target.type_name, self.damage)
+        damage = max(self.minimal_damage, base_damage - target.armor)
         target.receive_hit(damage, self)
 
     def _hit_or_miss(self, target):
@@ -742,7 +760,6 @@ class Creature(Entity):
             return
         if not cls.is_allowed(self, *o[1:]):
             self.notify("order_impossible")
-            debug("wrong order to %s: %s", self.type_name, o)
             return
         if forget_previous and not cls.never_forget_previous:
             self.cancel_all_orders()
@@ -1127,8 +1144,8 @@ class _Building(Creature):
 
     corpse = 0
 
-    def __init__(self, prototype, player, square, x=0, y=0):
-        Creature.__init__(self, prototype, player, square, x, y)
+    def __init__(self, player, square, x=0, y=0):
+        Creature.__init__(self, player, square, x, y)
 
     def die(self, attacker=None):
         self.player.nb_buildings_lost += 1
@@ -1147,7 +1164,7 @@ class BuildingSite(_Building):
 
     def __init__(self, player, place, x, y, building_type):
         player.pay(building_type.cost)
-        _Building.__init__(self, None, player, place, x, y)
+        _Building.__init__(self, player, place, x, y)
         self.type = building_type
         self.hp_max = building_type.hp_max
         self._starting_hp = building_type.hp_max * 5 // 100
@@ -1209,6 +1226,6 @@ class Building(_Building):
     is_buildable_near_water_only = False
     provides_survival = True
 
-    def __init__(self, prototype, player, place, x, y):
-        _Building.__init__(self, prototype, player, place, x, y)
+    def __init__(self, player, place, x, y):
+        _Building.__init__(self, player, place, x, y)
         self.player.nb_buildings_produced += 1

@@ -13,7 +13,7 @@ from . import res
 from .definitions import VIRTUAL_TIME_INTERVAL, get_ai_names, load_ai, rules
 from .lib import chronometer as chrono
 from .lib import collision
-from .lib.log import exception, info, warning
+from .lib.log import exception, warning
 from .lib.nofloat import PRECISION, int_distance, to_int
 from .paths import MAPERROR_PATH
 from .worldability import Ability
@@ -21,7 +21,7 @@ from .worldclient import DummyClient
 from .worldentity import COLLISION_RADIUS
 from .worldexit import passage
 from .worldorders import ORDERS_DICT
-from .worldplayerbase import A, Player, normalize_cost_or_resources
+from .worldplayerbase import A, Player
 from .worldresource import Deposit, Meadow
 from .worldroom import Square
 from .worldunit import Building, Effect, Soldier, Unit, Worker, ground_or_air
@@ -32,70 +32,10 @@ PROFILE = False
 
 
 def check_squares(line, squares):
-    for sq in squares:
+    for sq in squares[:]:
         if re.match("^[a-z]+[0-9]+$", sq) is None:
-            map_error(line, "%s is not a square" % sq)
-
-
-class Type:
-    def __repr__(self):
-        return "<Type '%s'>" % self.type_name
-
-    def init_dict(self, target):
-        target.type_name = self.type_name
-        for k, v in list(self.dct.items()):
-            if k == "class":
-                continue
-            if (
-                hasattr(self.cls, k)
-                or k.endswith("_bonus")
-                and hasattr(self.cls, k[:-6])
-            ) and not callable(getattr(self.cls, k, None)):
-                if k == "cost":
-                    normalize_cost_or_resources(v)
-                setattr(target, k, v)
-            elif target is self:
-                warning(
-                    "in %s: %s doesn't have any attribute called '%s'",
-                    self.type_name,
-                    self.cls.__name__,
-                    k,
-                )
-
-    def __init__(self, name, bases, dct):
-        self.__name__ = name
-        self.type_name = name
-        self.cls = bases[0]
-        if "cost" not in dct and hasattr(self.cls, "cost"):
-            dct["cost"] = [0] * rules.get("parameters", "nb_of_resource_types")
-        if "sight_range" in dct and dct["sight_range"] == 1 * PRECISION:
-            dct["sight_range"] = 12 * PRECISION
-            dct["bonus_height"] = 1
-            info(
-                "in %s: replacing sight_range 1 with sight_range 12 and bonus_height 1",
-                name,
-            )
-        if "special_range" in dct:
-            del dct["special_range"]
-            dct["range"] = 12 * PRECISION
-            dct["minimal_range"] = 4 * PRECISION
-            dct["is_ballistic"] = 1
-            info(
-                "in %s: replacing special_range 1 with range 12, minimal_range 4 and is_ballistic 1",
-                name,
-            )
-        self.dct = dct
-        self.init_dict(self)
-
-    def __call__(self, *args, **kargs):
-        result = self.cls(self, *args, **kargs)
-        return result
-
-    def __getattr__(self, name):
-        if name[:2] != "__":
-            return getattr(self.cls, name)
-        else:
-            raise AttributeError
+            map_warning(line, "%s is not a square name" % sq)
+            squares.remove(sq)
 
 
 class World:
@@ -118,6 +58,7 @@ class World:
 
         # "map" properties
 
+        self.title = []
         self.objective = []
         self.intro = []
         self.timer_coefficient = 1
@@ -449,31 +390,16 @@ class World:
     }
 
     def unit_class(self, s):
-        """Get a class-like unit generator from its name.
+        """Get a custom unit class from its name.
         
-        Example: unit_class("peasant") to get a peasant generator
+        Example: unit_class("peasant") to get the peasant class
 
         At the moment, unit_classes contains also: upgrades, abilities...
         """
-        if s not in self.unit_classes:
-            try:
-                base = self.unit_base_classes[rules.get(s, "class")[0]]
-            except:
-                if rules.get(s, "class") != ["faction"]:
-                    warning("no class defined for %s", s)
-                self.unit_classes[s] = None
-                return
-            try:
-                dct = rules.get_dict(s)
-                t = Type(s, (base,), dct)
-                if base is Upgrade:
-                    t = base(s, dct)  # factory-prototypes are only for units
-                self.unit_classes[s] = t
-            except:
-                exception("problem with unit_class('%s')", s)
-                self.unit_classes[s] = None
-                return
-        return self.unit_classes[s]
+        try:
+            return rules.classes[s]
+        except KeyError:
+            return
 
     def _get_classnames(self, condition):
         result = []
@@ -572,19 +498,23 @@ class World:
         for z in self.squares:
             z.arrange_resources_symmetrically(xc, yc)
 
-    def _we_places(self, i):
+    def _create_we_passage(self, i, exit_type):
         is_a_portal = False
-        t = string.ascii_lowercase
-        col = t.find(i[0]) + 1
+        alphabet = string.ascii_lowercase
+        col = alphabet.find(i[0]) + 1
         if col == self.nb_columns:
             col = 0
             is_a_portal = True
-        j = t[col] + i[1:]
+        j = alphabet[col] + i[1:]
         if j not in self.grid:
-            map_error("", "The west-east passage starting from %s doesn't exist." % i)
-        return self.grid[i].east_side(), self.grid[j].west_side(), is_a_portal
+            map_warning("", f"couldn't create a west-east passage from {i} to {j}")
+        else:
+            passage(
+                (self.grid[i].east_side(), self.grid[j].west_side(), is_a_portal),
+                exit_type,
+            )
 
-    def _sn_places(self, i):
+    def _create_sn_passage(self, i, exit_type):
         is_a_portal = False
         line = int(i[1:]) + 1
         if line == self.nb_lines + 1:
@@ -592,8 +522,12 @@ class World:
             is_a_portal = True
         j = i[0] + str(line)
         if j not in self.grid:
-            map_error("", "The south-north passage starting from %s doesn't exist." % i)
-        return self.grid[i].north_side(), self.grid[j].south_side(), is_a_portal
+            map_warning("", f"couldn't create a south-north passage from {i} to {j}")
+        else:
+            passage(
+                (self.grid[i].north_side(), self.grid[j].south_side(), is_a_portal),
+                exit_type,
+            )
 
     def _ground_graph(self):
         g = {}
@@ -643,10 +577,10 @@ class World:
     def _create_passages(self):
         for t, squares in self.west_east:
             for i in squares:
-                passage(self._we_places(i), t)
+                self._create_we_passage(i, t)
         for t, squares in self.south_north:
             for i in squares:
-                passage(self._sn_places(i), t)
+                self._create_sn_passage(i, t)
 
     def _create_graphs(self):
         self.g = {}
@@ -676,11 +610,11 @@ class World:
                 sq = x
                 multiplicator = 1
             elif x[0] == "-":
-                start.append([None, x])
+                start.append([None, x, None])
             elif re.match("[0-9]+$", x):
                 multiplicator = int(x)
             else:
-                start.extend([[sq, self.unit_class(x)]] * multiplicator)
+                start.append((sq, self.unit_class(x), multiplicator))
                 multiplicator = 1
         starts.append([resources, start, []])
 
@@ -737,14 +671,14 @@ class World:
                         [condition, action]
                     )
                 except:
-                    map_error("", "error in trigger for %s: unknown owner" % o)
+                    map_warning("trigger " + " ".join(words), "%s is unknown" % o)
             elif o[:-1] == "player":
                 try:
                     self.players_starts[int(o[-1:]) - 1][2].append([condition, action])
                 except:
-                    map_error("", "error in trigger for %s: unknown owner" % o)
+                    map_warning("trigger " + " ".join(words), "%s is unknown" % o)
             else:
-                map_error("", "error in trigger for %s: unknown owner" % o)
+                map_warning("trigger " + " ".join(words), "%s is unknown" % o)
 
     def random_choice_repl(self, matchobj):
         return self.random.choice(matchobj.group(1).split("\n#end_choice\n"))
@@ -878,7 +812,7 @@ class World:
                 check_squares(line, squares)
                 self.no_air_squares.update(squares)
             else:
-                map_error(line, "unknown command: %s" % w)
+                map_warning(line, "unknown command: %s" % w)
         # build self.players_starts
         for sq in self.starting_squares:
             self._add_start_to(
@@ -906,6 +840,7 @@ class World:
                 res.get_text_file("rules", append=True),
                 map.campaign_rules,
                 map.additional_rules,
+                classes=self.unit_base_classes,
             )
             load_ai(
                 res.get_text_file("ai", append=True), map.campaign_ai, map.additional_ai
@@ -1141,9 +1076,21 @@ class MapError(Exception):
 
 
 def map_error(line, msg):
-    w = f'error in "{line}": {msg}'
+    msg = f"error: {msg}"
+    if line:
+        msg += f' (in "{line}")'
     try:
-        open(MAPERROR_PATH, "w").write(w)
+        open(MAPERROR_PATH, "w").write(msg)
     except:
         warning("could not write in %s", MAPERROR_PATH)
-    raise MapError(w)
+    raise MapError(msg)
+
+
+def map_warning(line, msg):
+    if line:
+        msg += f' (in "{line}")'
+    warning(msg)
+    try:
+        open(MAPERROR_PATH, "w").write(msg)
+    except:
+        warning("could not write in %s", MAPERROR_PATH)

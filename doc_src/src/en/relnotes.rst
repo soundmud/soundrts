@@ -3,6 +3,50 @@ Release notes
 
 .. contents::
 
+1.3.6
+-----
+
+For multiplayer games, this version requires:
+
+- client: 1.3.6 or later
+- server: 1.2-c12 or later
+
+Changes from 1.3.5:
+
+Unit behavior:
+
+- bug fixed: nearby offensive units will automatically counterattack again (they will move to the attacker's square and then return to their starting positions)
+- bug fixed: defensive units will flee again
+
+Interface:
+
+- the description of controlled units will be less confusing
+- improved group following (space key): the interface will usually follow the front of the group
+- bug fixed: in style.txt, noise_if_very_damaged would never play
+- bug fixed: SAPI wouldn't work
+
+Water:
+
+- from now on, the game won't create amphibious paths (solves the following problem: if the shortest path to destination included a water square, land units would walk into water and die)
+- issue fixed: a mage could recall water units to non-water squares (Now a mage will recall water units to the nearest adjacent water square.)
+
+Multiplayer:
+
+- starting a non-private server will auto-configure the router (works only if UPnP is activated on the router; the configuration is automatically removed by the router after 20 minutes of inactivity)
+- easier configuration of the standalone server
+- local server auto-discovery by UDP broadcast (The local server will appear in the "choose a server in a list" menu.)
+- bug fixed: in multiplayer games, a non-admin player could set a slower speed
+
+Translations:
+
+- updated Brazilian Portuguese, Chinese, Czech, Italian and Slovak translations
+
+Map making:
+
+- when possible, issue a warning instead of a map error
+- bug fixed: in some cases, a trigger selected more units than specified. For example, if there are 3 dragons and many footmen in a1, (a1 10 dragon footman) would select 3 dragons and 7 footmen.
+
+
 1.3.5
 -----
 
