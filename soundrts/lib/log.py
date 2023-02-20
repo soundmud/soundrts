@@ -114,11 +114,18 @@ def clear_handlers():
         h.close()
 
 
+def _reraise_exception(*args, **kargs):
+    raise
+
+
 debug = _NeverCrash(logging.debug)
 info = _NeverCrash(logging.info)
 warning = _NeverCrash(logging.warning)
 error = _NeverCrash(logging.error)
 critical = _NeverCrash(logging.critical)
-exception = _NeverCrash(logging.exception)
+if "pytest" in sys.modules:
+    exception = _reraise_exception
+else:
+    exception = _NeverCrash(logging.exception)
 
 logging.getLogger().setLevel(logging.DEBUG)

@@ -158,7 +158,7 @@ class _Definitions:
         return list(self._dict.keys())
 
     def copy(self, other):
-        self._dict = other._dict
+        self.__dict__ = other.__dict__
 
 
 _precision_properties = {

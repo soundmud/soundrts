@@ -37,6 +37,20 @@ class DummyClient(worldclient.DummyClient):
             print(args)
 
 
+tiny_map_str = """
+square_width 12
+nb_columns 1
+nb_lines 1
+nb_meadows_by_square 9
+
+nb_players_min 1
+nb_players_max 1
+starting_squares a1
+starting_units townhall farm peasant
+starting_resources 10 10
+"""
+
+
 class _PlayerBaseTestCase(unittest.TestCase):
     def set_up(
         self, alliance=(1, 2), cloak=False, map_name="jl1_extended", ai=("easy", "easy")
@@ -54,6 +68,16 @@ class _PlayerBaseTestCase(unittest.TestCase):
         self.cp2.is_perceiving = is_perceiving_method(self.cp2)
         self.w._update_buckets()
 
+    def tiny_set_up(self):
+        self.w = World([])
+        tiny_map = Map()
+        tiny_map.map_string = tiny_map_str
+        tiny_map.path = ""
+        self.w.load_and_build_map(tiny_map)
+        cp = DummyClient()
+        self.w.populate_map([cp])
+        self.cp = self.w.players[0]
+
     def find_player_unit(self, p, cls_name, index=0):
         for u in p.units:
             if u.type_name == cls_name:
@@ -65,25 +89,22 @@ class _PlayerBaseTestCase(unittest.TestCase):
 
 class PlayerBaseTestCase(_PlayerBaseTestCase):
     def testStorageBonus(self):
-        self.set_up()
+        self.tiny_set_up()
         self.w.update()
-        assert sorted((self.cp.storage_bonus[1], self.cp2.storage_bonus[1])) == [0, 0]
+        assert self.cp.storage_bonus[1] == 0
         for _ in range(2):
-            self.cp2.lang_add_units(["b4", "lumbermill"])
+            self.cp.lang_add_units(["a1", "lumbermill"])
             self.w.update()
-            assert sorted((self.cp.storage_bonus[1], self.cp2.storage_bonus[1])) == [
-                0,
-                1 * PRECISION,
-            ]
+            assert self.cp.storage_bonus[1] == 1 * PRECISION
 
     def testNoCountLimit(self):
-        self.set_up()
+        self.tiny_set_up()
         th = self.find_player_unit(self.cp, "townhall")
         th.take_order(["train", "peasant"])
         assert th.orders
 
     def testCountLimit(self):
-        self.set_up()
+        self.tiny_set_up()
         self.w.unit_class("peasant").count_limit = 1
         self.w.update()
         th = self.find_player_unit(self.cp, "townhall")
@@ -97,8 +118,11 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         assert th.orders
 
     def testCountLimitBuild(self):
-        self.set_up(ai=("timers", "timers"))
-        self.cp.lang_add_units(["b2", "peasant"])
+        self.tiny_set_up()
+        self.cp.lang_add_units(["a1", "peasant"])
+        self.w.unit_class("peasant").speed = 10 * PRECISION
+        self.w.unit_class("barracks").time_cost = 1 * PRECISION
+        self.w.unit_class("farm").time_cost = 1 * PRECISION
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
         self.w.unit_class("barracks").count_limit = 1
         self.w.update()
@@ -108,9 +132,9 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
             self.assertEqual(p.orders, [])
         self.assertIn("build barracks", BuildOrder.menu(p1))
         for p in [p1, p2]:
-            p.take_order(["build", "barracks", "a2"])
+            p.take_order(["build", "barracks", "a1"])
             assert p.orders
-        for _ in range(1000):
+        for _ in range(50):
             self.w.update()
             if not (p1.orders or p2.orders):
                 break
@@ -119,18 +143,18 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         self.assertEqual(self.cp.nb("barracks"), 1)
         self.assertNotIn("build barracks", BuildOrder.menu(p1))
         for p in [p1, p2]:
-            p.take_order(["build", "barracks", "a2"])
+            p.take_order(["build", "barracks", "a1"])
             self.assertEqual(p.orders, [])
         self.assertEqual(self.cp.nb("barracks"), 1)
         self.w.unit_class("barracks").count_limit = 2
         self.w.update()
         self.assertEqual(self.cp.future_count("barracks"), 1)
         for p in [p1, p2]:
-            p.take_order(["build", "barracks", "a2"])
+            p.take_order(["build", "barracks", "a1"])
             assert p.orders[0].keyword == "build"
             assert p.orders[0].type.type_name == "barracks"
         self.assertEqual(self.cp.future_count("barracks"), 1)
-        for _ in range(1000):
+        for _ in range(50):
             self.w.update()
             if not (p1.orders or p2.orders):
                 break
@@ -139,16 +163,18 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         self.assertEqual(self.cp.future_count("barracks"), 2)
         self.assertEqual(self.cp.nb("barracks"), 2)
         self.assertEqual(self.cp.nb("farm"), 1)
-        p1.take_order(["build", "farm", "a2"])
-        for _ in range(1000):
+        p1.take_order(["build", "farm", "a1"])
+        for _ in range(50):
             self.w.update()
-            if not p1.orders:
+            if not (p1.orders or p2.orders):
                 break
         self.assertEqual(self.cp.nb("farm"), 2)
 
     def testCountLimitBuildQueued(self):
-        self.set_up(ai=("timers", "timers"))
-        self.cp.lang_add_units(["b2", "peasant"])
+        self.tiny_set_up()
+        self.w.unit_class("peasant").speed = 10 * PRECISION
+        self.w.unit_class("barracks").time_cost = 1 * PRECISION
+        self.cp.lang_add_units(["a1", "peasant"])
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
         self.w.unit_class("barracks").count_limit = 1
         self.w.update()
@@ -156,8 +182,8 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         p2 = self.find_player_unit(self.cp, "peasant", 1)
         for p in [p1, p2]:
             self.assertEqual(p.orders, [])
-            p.take_order(["build", "barracks", "a2"])
-            p.take_order(["build", "barracks", "a2"], forget_previous=False)
+            p.take_order(["build", "barracks", "a1"])
+            p.take_order(["build", "barracks", "a1"], forget_previous=False)
             assert len(p.orders) == 2
         for _ in range(1000):
             self.w.update()
@@ -168,11 +194,11 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         self.assertEqual(self.cp.nb("barracks"), 1)
 
     def testCountLimitUpgradeTo(self):
-        self.set_up(ai=("timers", "timers"))
-        self.cp.lang_add_units(["b2", "lumbermill"])
-        self.cp.lang_add_units(["b2", "magestower"])
-        self.cp.lang_add_units(["b2", "archer"])
-        self.cp.lang_add_units(["b2", "archer"])
+        self.tiny_set_up()
+        self.cp.lang_add_units(["a1", "lumbermill"])
+        self.cp.lang_add_units(["a1", "magestower"])
+        self.cp.lang_add_units(["a1", "archer"])
+        self.cp.lang_add_units(["a1", "archer"])
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
         self.w.unit_class("darkarcher").count_limit = 1
         self.w.update()
@@ -184,72 +210,73 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         self.assertEqual(a2.orders, [])
 
     def testCountLimitSummon(self):
-        self.set_up()
+        self.tiny_set_up()
+        self.cp.lang_add_units(["a1", "dragon"])
         self.assertEqual(self.cp.nb("dragon"), 1)
         self.w.unit_class("dragon").count_limit = 2
-        self.cp.lang_add_units(["b2", "mage"])
+        self.cp.lang_add_units(["a1", "mage"])
         self.cp.upgrades.append("u_summon_dragon")
         self.w.update()
         m = self.find_player_unit(self.cp, "mage")
-        m.take_order(["use", "a_summon_dragon", "b2"])
+        m.take_order(["use", "a_summon_dragon", "a1"])
         self.w.update()
         self.assertEqual(self.cp.nb("dragon"), 2)
 
     def testCountLimitRaiseDead(self):
-        self.set_up()
-        self.cp.lang_add_units(["b2", "10", "footman"])
+        self.tiny_set_up()
+        self.cp.lang_add_units(["a1", "10", "footman"])
         for _ in range(10):
             f = self.find_player_unit(self.cp, "footman")
-            assert f.place.name == "b2"
+            assert f.place.name == "a1"
             f.die()
         self.assertEqual(self.cp.nb("zombie"), 0)
         self.w.unit_class("zombie").count_limit = 1
-        self.cp.lang_add_units(["b2", "necromancer"])
+        self.cp.lang_add_units(["a1", "necromancer"])
         self.cp.upgrades.append("u_raise_dead")
         self.w.update()
         n = self.find_player_unit(self.cp, "necromancer")
-        n.take_order(["use", "a_raise_dead", "b2"])
+        n.take_order(["use", "a_raise_dead", "a1"])
         self.w.update()
         self.assertEqual(self.cp.nb("zombie"), 1)
 
     def testCountLimitResurrection(self):
-        self.set_up()
+        self.tiny_set_up()
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
-        self.cp.lang_add_units(["b2", "10", "footman"])
+        self.cp.lang_add_units(["a1", "10", "footman"])
         for _ in range(10):
             f = self.find_player_unit(self.cp, "footman")
-            assert f.place.name == "b2"
+            assert f.place.name == "a1"
             f.die()
         self.assertEqual(self.cp.nb("footman"), 0)
         self.w.unit_class("footman").count_limit = 2
         self.w.update()
         self.w.update()
-        self.cp.lang_add_units(["b2", "priest"])
+        self.cp.lang_add_units(["a1", "priest"])
         self.cp.upgrades.append("u_resurrection")
         p = self.find_player_unit(self.cp, "priest")
-        p.take_order(["use", "a_resurrection", "b2"])
+        p.take_order(["use", "a_resurrection", "a1"])
         self.w.update()
         self.assertEqual(self.cp.nb("footman"), 2)
 
     def testCountLimitResurrectionWithTrainQueue(self):
-        self.set_up()
+        self.tiny_set_up()
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
-        self.cp.lang_add_units(["b2", "10", "footman"])
+        self.cp.lang_add_units(["a1", "10", "footman"])
         for _ in range(10):
             f = self.find_player_unit(self.cp, "footman")
-            assert f.place.name == "b2"
+            assert f.place.name == "a1"
             f.die()
         self.assertEqual(self.cp.nb("footman"), 0)
         self.w.unit_class("footman").count_limit = 2
-        self.cp.lang_add_units(["b2", "barracks"])
+        self.cp.lang_add_units(["a1", "barracks"])
         self.w.update()
         b = self.find_player_unit(self.cp, "barracks")
         b.take_order(["train", "footman"])
         self.w.update()
-        self.cp.lang_add_units(["b2", "priest"])
+        self.cp.lang_add_units(["a1", "priest"])
         self.cp.upgrades.append("u_resurrection")
         p = self.find_player_unit(self.cp, "priest")
-        p.take_order(["use", "a_resurrection", "b2"])
+        p.take_order(["use", "a_resurrection", "a1"])
         self.w.update()
         self.assertEqual(self.cp.nb("footman"), 1)
 
@@ -629,6 +656,7 @@ class ComputerTestCase(_PlayerBaseTestCase):
 
     def testOffensiveNotSmartUnitMustAlwaysAttack2(self):
         self.set_up(map_name="jl1_extended", ai=("timers", "timers"))  # no smart units
+        self.w.unit_class("footman").speed = 10 * PRECISION
         p = self.find_player_unit(self.cp, "peasant")
         self.cp2.lang_add_units([p.place.neighbors[0].name, "footman"])
         f = self.find_player_unit(self.cp2, "footman")
