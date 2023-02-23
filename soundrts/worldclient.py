@@ -11,6 +11,7 @@ from .lib import chronometer as chrono
 from .lib.log import exception, info, warning
 from .metaserver import METASERVER_URL
 from .version import IS_DEV_VERSION, VERSION
+from .worldplayerbase import Player
 from .worldplayercomputer import Computer
 from .worldplayercomputer2 import Computer2
 from .worldplayerhuman import Human
@@ -65,9 +66,16 @@ class _Controller:
         return f"{self.__class__.__name__}({self.login!r})"
 
     player_class = Human
+    player: Player
     alliance: Optional[str] = None
     faction = "random_faction"
     neutral = False
+
+    def create_player(self, world):
+        player = self.player_class(world, self)
+        self.player = player
+        world.players.append(player)
+
 
 
 class _Client(_Controller):
@@ -133,7 +141,6 @@ class RemoteClient(_Controller):
 
 class DirectClient(_Client):  # client for single player games
 
-    player = None
     data = ""
 
     def __init__(self, login, game_session):
@@ -160,8 +167,6 @@ class DirectClient(_Client):  # client for single player games
 
 
 class ReplayClient(DirectClient):
-
-    nb_humans = 1
 
     def write_line(self, s):
         if s == "quit":

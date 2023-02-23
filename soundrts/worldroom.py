@@ -43,7 +43,20 @@ def cache(f):
     return decorated_f
 
 
-class Square:
+class _Space:
+    def __init__(self):
+        self.objects = []
+
+    def enter(self, o):
+        self.objects.append(o)
+        if o.id is None:
+            self.world.register_entity(o)
+
+    def leave(self, o):
+        self.objects.remove(o)
+
+
+class Square(_Space):
 
     transport_capacity = 0
     type_name = ""
@@ -54,6 +67,7 @@ class Square:
     is_air = True
 
     def __init__(self, world, col, row, width):
+        super().__init__()
         self.col = col
         self.row = row
         self.name = "{}{}".format(string.ascii_lowercase[col], row + 1)
@@ -63,7 +77,6 @@ class Square:
         world.objects[self.id] = self
         self.place = world
         self.title = [5000 + col] + nb2msg(row + 1)
-        self.objects = []
         self.exits = []
         self.xmin = col * width
         self.ymin = row * width
@@ -122,8 +135,6 @@ class Square:
 
     @property
     def subsquares(self):
-        from soundrts.worldplayerbase import ZoomTarget
-
         k = (self.xmax - self.xmin) // 3
         for dx in [0, 1, -1]:
             for dy in [0, 1, -1]:
@@ -153,6 +164,10 @@ class Square:
 
     def __setstate__(self, d):
         self.__dict__.update(d)
+
+    def enter(self, o):
+        super().enter(o)
+        o._previous_square = self
 
     def is_near(self, square):
         try:
@@ -338,10 +353,8 @@ class Square:
             < SPACE_LIMIT
         )
 
-    def find_free_space(self, airground_type, x, y, same_place=False, player=None):
+    def find_free_space(self, airground_type, x, y):
         # assertion: object has collision
-        ##        if not same_place and not self.can_receive(airground_type, player):
-        ##            return None, None
         if self.contains(x, y) and not self.world.collision[
             airground_type
         ].would_collide(x, y):
@@ -363,6 +376,25 @@ class Square:
             ].would_collide(x, y):
                 return x, y
         return None, None
+
+    def find_free_space_for(self, o, x, y):
+        o.free_space()
+        x, y = self.find_free_space(o.airground_type, x, y)
+        o.occupy_space()
+        return x, y
+
+    def add(self, o):
+        self.world.collision[o.airground_type].add(o.x, o.y)
+
+    def remove(self, o):
+        self.world.collision[o.airground_type].remove(o.x, o.y)
+
+    def would_collide(self, o, x, y):
+        space = self.world.collision[o.airground_type]
+        space.remove(o.x, o.y)
+        result = space.would_collide(x, y)
+        space.add(o.x, o.y)
+        return result
 
     def ensure_path(self, other):
         if other not in [e.other_side.place for e in self.exits]:
@@ -447,3 +479,82 @@ class Square:
         else:
             for s in self.strict_neighbors:
                 self.ensure_free_path(s)
+
+
+class Inside(_Space):
+    neighbors = []
+    title = []
+
+    def __init__(self, container):
+        super().__init__()
+        self.container = container
+
+    @property
+    def height(self):
+        return self.container.height
+
+    @property
+    def outside(self):
+        return self.container.place
+
+    @property
+    def world(self):
+        return self.container.world
+
+    def have_enough_space(self, new_object):
+        capacity = self.container.transport_capacity
+        for o in self.objects:
+            capacity -= o.transport_volume
+        return capacity >= new_object.transport_volume
+
+    def find_free_space_for(self, o, x, y):
+        return x, y
+
+    def add(self, o):
+        return
+
+    def remove(self, o):
+        return
+
+
+class ZoomTarget:
+
+    collision = 0
+    radius = 0
+
+    def __init__(self, place, x, y, id=None):
+        self.place = place
+        self.x = x
+        self.y = y
+        self.id = id
+        self.title = self.place.title  # TODO: full zoom title
+
+    def __eq__(self, other):
+        if isinstance(other, ZoomTarget):
+            return self.x, self.y == other.x, other.y
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    @property
+    def building_land(self):
+        for o in self.place.objects:
+            if o.is_a_building_land and self.contains(o.x, o.y):
+                return o
+
+    @property
+    def exit(self):
+        for o in self.place.exits:
+            if not o.is_blocked() and self.contains(o.x, o.y):
+                return o
+
+    @property
+    def any_land(self):
+        for o in self.place.objects:
+            if getattr(o, "is_buildable_anywhere", False) and self.contains(o.x, o.y):
+                return
+        return self
+
+    def contains(self, x, y):
+        subsquare = self.place.world.get_subsquare_id_from_xy
+        return subsquare(self.x, self.y) == subsquare(x, y)

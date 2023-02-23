@@ -12,6 +12,9 @@ class Entity:
 
     collision = 1
     place = None
+    x = 0
+    y = 0
+    o = 0
     player = None
     menace = 0
     airground_type = "ground"
@@ -62,7 +65,7 @@ class Entity:
 
     _previous_square = None
 
-    def move_to(self, new_place, x=None, y=None, o=90, exit1=None, exit2=None):
+    def move_to(self, new_place, x=None, y=None, o=90):
         if x is None:
             x = new_place.x
             y = new_place.y
@@ -70,58 +73,49 @@ class Entity:
         # make sure the object is not a memory
         if self.is_memory:
             warning("Will move the real object instead of its memorized version.")
-            self.initial_model.move_to(new_place, x, y, o, exit1, exit2)
+            self.initial_model.move_to(new_place, x, y, o)
             return
 
         # abort if there isn't enough space
-        if new_place is not None and self.collision:
-            if self.place is not None and not self.is_inside:
-                self.world.collision[self.airground_type].remove(self.x, self.y)
-            x, y = new_place.find_free_space(
-                self.airground_type, x, y, new_place is self.place, self.player
-            )
-            if self.place is not None and not self.is_inside:
-                self.world.collision[self.airground_type].add(self.x, self.y)
+        if new_place and self.collision:
+            x, y = new_place.find_free_space_for(self, x, y)
             if x is None:
-                if self.place is not None:
+                if self.place:
                     return
                 else:
                     raise NotEnoughSpaceError
 
         # move
-        if self.place is not None and not self.is_inside and self.collision:
-            self.world.collision[self.airground_type].remove(self.x, self.y)
+        if self.collision:
+            self.free_space()
         self.x = x
         self.y = y
         self.o = o
         if new_place is not self.place:
-            current_place = self.place
-            if current_place is not None:
-                # quit the current place
-                current_place.objects.remove(self)
-                if current_place.__class__.__name__ == "Square":
-                    self._previous_square = current_place
-            self.place = new_place
-            if new_place is not None:
-                # enter the new place
-                new_place.objects.append(self)
-                if self.id is None:  # new in the world
-                    # enter the world
-                    self.id = new_place.world.get_next_id()
-                    new_place.world.objects[self.id] = self
-                    if hasattr(self, "update"):
-                        self.place.world.active_objects.append(self)
-            else:
-                # quit the world
-                if self in current_place.world.active_objects:
-                    current_place.world.active_objects.remove(self)
-            # reactions
-            if new_place is not None:
-                self.action_target = None
-        if self.place is not None and not self.is_inside and self.collision:
-            self.world.collision[self.airground_type].add(self.x, self.y)
+            self._move_to_new_place(new_place)
+        if self.collision:
+            self.occupy_space()
         if self.speed:
             self.is_moving = True
+
+    def _move_to_new_place(self, new_place):
+        if self.place:
+            self.place.leave(self)
+            if not new_place:
+                self.place.world.unregister_entity(self)
+        self.place = new_place
+        if new_place:
+            new_place.enter(self)
+            # reactions
+            self.action_target = None
+
+    def occupy_space(self):
+        if self.place:
+            self.place.add(self)
+
+    def free_space(self):
+        if self.place:
+            self.place.remove(self)
 
     def delete(self):
         self.unblock()
@@ -133,7 +127,7 @@ class Entity:
 
     @property
     def is_inside(self):
-        return getattr(self.place, "transport_capacity", 0)
+        return self.place.__class__.__name__ == "Inside"
 
     @property
     def radius(self):
@@ -149,28 +143,22 @@ class Entity:
         return False
 
     def notify(self, event, universal=False):
-        if self.place is not None:
-            for player in self.place.world.players:
-                if self in player.perception or universal:
-                    player.send_event(self, event)
+        if self.is_inside:
+            emitter = self.place.container
+        else:
+            emitter = self
+        if emitter.place:
+            for player in emitter.place.world.players:
+                if emitter in player.perception or universal:
+                    player.send_event(emitter, event)
 
     def would_collide_if(self, x, y):
         # optimization: same collision radius for every entity with collision
-        if not self.collision:
-            return False
-        self.world.collision[self.airground_type].remove(self.x, self.y)
-        result = self.world.collision[self.airground_type].would_collide(x, y)
-        self.world.collision[self.airground_type].add(self.x, self.y)
-        return result
+        if self.collision:
+            return self.place.would_collide(self, x, y)
 
     def contains(self, x, y):
         return True
-
-    def find_free_space(self, airground_type, x, y, *args, **kargs):
-        if self.transport_capacity:  # the entity is a transport
-            return x, y
-        else:
-            return None, None
 
     def block(self, e):
         self.blocked_exit = e

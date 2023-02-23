@@ -5,7 +5,7 @@ from .worldplayerbase import Player
 orders = sorted(ORDERS_DICT.keys())  # sort to avoid desync
 orders.remove("enter")  # later
 orders.remove("stop")
-orders.remove("attack")
+# orders.remove("attack")
 orders.remove("patrol")
 orders.remove("wait")
 orders.remove("auto_explore")

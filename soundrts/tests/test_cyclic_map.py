@@ -1,19 +1,10 @@
+from unittest.mock import Mock
+
 import pytest
 
 from soundrts.mapfile import Map
 from soundrts.world import World
-
-
-class Player:
-    food = 0
-    nb_units_produced = 0
-    used_food = 0
-    smart_units = False
-
-    def __init__(self):
-        self.allied_vision = [self]
-        self.perception = set()
-        self.units = []
+from soundrts.worldplayerbase import Player
 
 
 @pytest.fixture()
@@ -21,6 +12,11 @@ def world():
     w = World([])
     w.load_and_build_map(Map("soundrts/tests/jl1_cyclic.txt"))
     return w
+
+
+@pytest.fixture()
+def player(world):
+    return Player(world, Mock())
 
 
 def test_shortest_path(world):
@@ -31,9 +27,9 @@ def test_shortest_path(world):
     assert g["a2"].shortest_path_to(g["c2"]).other_side.place == g["c2"]
 
 
-def test_unit_move(world):
+def test_unit_move(world, player):
     g = world.grid
-    u = world.unit_class("peasant")(Player(), g["b4"], g["b4"].x, g["b4"].y)
+    u = world.unit_class("peasant")(player, g["b4"], g["b4"].x, g["b4"].y)
     u.o = 0
     u.start_moving_to(g["b1"])
     u.actual_speed = u.speed

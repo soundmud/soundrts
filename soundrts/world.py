@@ -6,6 +6,7 @@ import re
 import string
 import time
 from hashlib import md5
+from itertools import chain
 
 from soundrts.lib.nofloat import square_of_distance
 
@@ -133,6 +134,16 @@ class World:
             return str(self._next_id)
         else:
             return str(self._next_id + 1)
+
+    def register_entity(self, o):
+        o.id = self.get_next_id()
+        self.objects[o.id] = o
+        if hasattr(o, "update"):
+            self.active_objects.append(o)
+
+    def unregister_entity(self, o):
+        if o in self.active_objects:
+            self.active_objects.remove(o)
 
     # Why use a different id for orders: get_next_id() would have worked too,
     # but with higher risks of synchronization errors. This way is probably
@@ -876,34 +887,30 @@ class World:
         return [p for p in self.true_players() if p.is_playing]
 
     @property
+    def at_least_two_camps(self):
+        first_camp = self.true_playing_players[0].allied_victory
+        for player in self.true_playing_players:
+            if player not in first_camp:
+                return True
+
+    @property
     def food_limit(self):
         return self.global_food_limit
 
-    def _add_player(self, client, start):
-        player = client.player_class(self, client)
-        player.start = start
-        client.player = player
-        self.players.append(player)
-
-    def _create_true_players(self, players, random_starts):
-        starts = self.players_starts[:]
+    def populate_map(self, clients, random_starts=True):
         if random_starts:
-            self.random.shuffle(starts)
-        for client in players:
-            start = starts.pop(0)
-            self._add_player(client, start)
-        for p in self.players:
-            p.init_alliance()
-
-    def _create_neutrals(self):
-        for start in self.computers_starts:
-            self._add_player(DummyClient(neutral=True), start)
-
-    def populate_map(self, players, random_starts=True):
-        self._create_true_players(players, random_starts)
-        self._create_neutrals()
+            players_starts = self.random.sample(self.players_starts, len(clients))
+        else:
+            players_starts = self.players_starts[:len(clients)]
+        for client in clients:
+            client.create_player(self)
         for player in self.players:
-            player.init_position()
+            player.init_alliance()
+        for _ in self.computers_starts:
+            DummyClient(neutral=True).create_player(self)
+        starts = chain(players_starts, self.computers_starts)
+        for player, start in zip(self.players, starts):
+            player.init_position(start)
 
     def stop(self):
         self._must_loop = False

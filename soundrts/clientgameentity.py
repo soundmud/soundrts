@@ -89,7 +89,7 @@ class EntityView:
     def is_in(self, place):
         # a unit inside a transporter is also inside the place of the transporter
         if getattr(self, "is_inside", False):
-            return self.place.place is place
+            return self.place.outside is place
         # For the interface, a blocker is also on the other side of the exit.
         return (
             self.place is place

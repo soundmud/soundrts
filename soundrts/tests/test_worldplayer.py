@@ -766,23 +766,13 @@ class ComputerTestCase(_PlayerBaseTestCase):
         first_object_of_A2 = self.w.grid["a2"].objects[0]
         self.assertFalse(self.cp.is_perceiving(first_object_of_A2))
         self.assertFalse(self.cp2.is_perceiving(first_object_of_A2))
-        # to avoid an error, disable temporarily store_score
-        # (maybe remove this when store_score() won't rely on style anymore)
-        def do_nothing():
-            pass
 
-        _backup = self.cp2.store_score
-        self.cp2.store_score = do_nothing
         self.cp2.defeat()
-        self.cp2.store_score = _backup
         # no observer mode if the whole team isn't defeated
         self.assertFalse(self.cp.is_perceiving(first_object_of_A2))  # bug #63
         self.assertFalse(self.cp2.is_perceiving(first_object_of_A2))
         # observer mode only if the whole team is defeated
-        _backup = self.cp.store_score
-        self.cp.store_score = do_nothing
         self.cp.defeat()
-        self.cp.store_score = _backup
         # this test would probably require more players to pass
         # self.assertTrue(self.cp.is_perceiving(first_object_of_A2))
         # self.assertTrue(self.cp2.is_perceiving(first_object_of_A2))

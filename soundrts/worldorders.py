@@ -71,18 +71,8 @@ class Order:
         self.unit.distance_to_goal = 0
 
     def update_target(self):
-        t = self.target
-        p = self.unit.player
-        if (
-            t is not None
-            and type(t).__name__ != "ZoomTarget"
-            and t not in p.world.squares
-            and t not in p.perception
-            and t not in p.memory
-        ):
-            self.target = p.get_object_by_id(t.id)
-        if hasattr(self.target, "place") and self.target.place is None:
-            self.target = None
+        if self.target:
+            self.target = self.player.updated_target(self.target)
 
     def _group_is_ready(self):
         for u in self.player.units:
@@ -468,14 +458,10 @@ class TrainOrder(ProductionOrder):
                 self.cancel()
                 self.mark_as_impossible("not_enough_space")
                 return
-            x, y = place.find_free_space(
-                self.type.airground_type, place.x, place.y, player=self.player
-            )
+            x, y = place.find_free_space(self.type.airground_type, place.x, place.y)
         else:
             place = self.unit.place
-            x, y = place.find_free_space(
-                self.type.airground_type, self.unit.x, self.unit.y, player=self.player
-            )
+            x, y = place.find_free_space(self.type.airground_type, self.unit.x, self.unit.y)
         if x is None:
             self.cancel()
             self.mark_as_impossible("not_enough_space")
@@ -929,12 +915,7 @@ class BuildOrder(ComplexOrder):
             return
         if self.target is self.unit.place or self.target.place is self.unit.place:
             self.player.free_resources(self)
-            x, _ = self.unit.place.find_free_space(
-                self.type.airground_type,
-                self.target.x,
-                self.target.y,
-                player=self.player,
-            )
+            x, _ = self.unit.place.find_free_space(self.type.airground_type, self.target.x, self.target.y)
             if x is None:
                 self.cancel()
                 self.mark_as_impossible("not_enough_space")

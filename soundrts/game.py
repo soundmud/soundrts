@@ -2,7 +2,7 @@ import os.path
 import random
 import threading
 import time
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import cloudpickle
 import pygame
@@ -41,6 +41,7 @@ class _Game:
     allow_cheatmode = True
     must_apply_equivalent_type = False
     players: List[_Controller]
+    local_client: Union[DirectClient, Coordinator]
 
     def create_replay(self):
         self._replay_file = open(
@@ -93,7 +94,7 @@ class _Game:
                 self.pre_run()
                 if self.world.objective:
                     voice.confirmation(mp.OBJECTIVE + self.world.objective)
-                self.interface = clientgame.GameInterface(self.me, speed=speed)
+                self.interface = clientgame.GameInterface(self.local_client, speed=speed)
                 b = res.get_text_file("ui/bindings", append=True, localize=True)
                 b += "\n" + self.map.get_campaign("ui/bindings.txt")
                 b += "\n" + self.map.get_additional("ui/bindings.txt")
@@ -144,7 +145,7 @@ class _Game:
         self.say_score()
 
     def say_score(self):
-        for msg in self.me.player.score_msgs:
+        for msg in self.local_client.player.stats.score_msgs():
             voice.info(msg)
         voice.flush()
 
@@ -173,7 +174,7 @@ class MultiplayerGame(_MultiplayerGame):
                     c = RemoteClient(login)
                 else:
                     c = Coordinator(local_login, main_server, self)
-                    self.me = c
+                    self.local_client = c
             c.alliance = a
             c.faction = f
             clients.append(c)
@@ -274,8 +275,8 @@ class TrainingGame(_MultiplayerGame, _Savable):
     def __init__(self, map, players, factions, alliances):
         self.map = map
         self.seed = random.randint(0, 10000)
-        self.me = DirectClient(config.login, self)
-        self.players = [self.me] + [DummyClient(x) for x in players[1:]]
+        self.local_client = DirectClient(config.login, self)
+        self.players = [self.local_client] + [DummyClient(x) for x in players[1:]]
         for p, f, a in zip(self.players, factions, alliances):
             p.faction = f
             p.alliance = a
@@ -289,8 +290,8 @@ class MissionGame(_Game, _Savable):
     def __init__(self, map):
         self.map = map
         self.seed = random.randint(0, 10000)
-        self.me = DirectClient(config.login, self)
-        self.players = [self.me]
+        self.local_client = DirectClient(config.login, self)
+        self.players = [self.local_client]
 
     def pre_run(self):
         if self.world.intro:
@@ -298,7 +299,7 @@ class MissionGame(_Game, _Savable):
 
     def post_run(self):
         _Game.post_run(self)
-        self._has_victory = self.me.has_victory()
+        self._has_victory = self.local_client.has_victory()
 
     def has_victory(self):
         return self._has_victory
@@ -349,7 +350,7 @@ class ReplayGame(_Game):
         alliances = self.replay_read().split()
         factions = self.replay_read().split()
         self.seed = int(self.replay_read())
-        self.me = ReplayClient(players[0], self)
+        self.local_client = ReplayClient(players[0], self)
         self.players = [self.me]
         for x in players[1:]:
             if x.startswith("ai_"):
@@ -358,7 +359,6 @@ class ReplayGame(_Game):
                 self.players += [DummyClient(x)]
             else:
                 self.players += [RemoteClient(x)]
-                self.me.nb_humans += 1
         for p, a, f in zip(self.players, alliances, factions):
             p.alliance = a
             p.faction = f
