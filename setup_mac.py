@@ -1,5 +1,7 @@
 from cx_Freeze import setup, Executable
 
+from soundrts.version import VERSION
+
 # Dependencies are automatically detected, but it might need
 # fine tuning.
 build_options = {'packages': [], 'excludes': []}
@@ -12,7 +14,7 @@ executables = [
 ]
 
 setup(name='soundrts',
-      version = '1.6.0',
+      version = VERSION.replace("-dev", ".9999"),
       description = '',
       options = {'build_exe': build_options},
       executables = executables)
