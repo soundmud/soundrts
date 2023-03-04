@@ -76,7 +76,10 @@ class EntityView:
             s = self.model.actual_speed
         except:
             s = self.model.speed
-        return 1000.0 / s / 2 + self.footstep_random
+        try:
+            return 1000.0 / s / 2 + self.footstep_random
+        except ZeroDivisionError:
+            return 1000.0 * 999
 
     @property
     def when_moving_through(self):
@@ -565,7 +568,11 @@ class EntityView:
         )
 
     def launch_alert(self, sound):
-        self.interface.launch_alert(self.place, sound)
+        if self.is_inside:
+            place = self.place.container.place
+        else:
+            place = self.place
+        self.interface.launch_alert(place, sound)
 
     def on_death_by(self, attacker_id):
         attacker = self.interface.dobjets.get(attacker_id)

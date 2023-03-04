@@ -16,13 +16,13 @@ from pygame.locals import (
     USEREVENT,
 )
 
-from . import config
+from . import config, res
 from . import msgparts as mp
 from .clientgameentity import EntityView
 from .clientgamefocus import Zoom
 from .clientgamegridview import GridView
 from .clientgamenews import must_be_said
-from .clientgameorder import OrderTypeView, nb2msg_f
+from .clientgameorder import OrderTypeView, nb2msg_f, update_orders_list
 from .clienthelp import help_msg
 from .clientmedia import (
     get_fullscreen,
@@ -50,6 +50,7 @@ from .lib.screen import (
 )
 from .lib.sound import angle, distance, psounds, stereo, vision_stereo
 from .version import IS_DEV_VERSION
+from .worldroom import Square
 
 # minimal interval (in seconds) between 2 sounds
 ALERT_LIMIT = 0.5
@@ -638,7 +639,12 @@ class GameInterface:
         return hasattr(self.server, "save_game")
 
     def gm_save(self):
-        self.server.save_game()
+        try:
+            self.server.save_game()
+            voice.info(mp.OK)
+        except:
+            exception("save game failed")
+            voice.alert(mp.BEEP)
 
     # clock
 
@@ -911,7 +917,20 @@ class GameInterface:
             e = self._srv_queue.get()
             self._process_srv_event(*e)
 
-    def loop(self):
+    def loop(self, game):
+        game.map.load_style(res)
+        try:
+            game.map.load_resources()
+            update_orders_list()  # when style has changed
+            game.pre_run()
+            if game.world.objective:
+                voice.confirmation(mp.OBJECTIVE + game.world.objective)
+            self.load_bindings(game.map.get_bindings())
+            self._loop()
+        finally:
+            game.map.unload_resources()
+
+    def _loop(self):
         from .clientserver import ConnectionAbortedError
 
         set_game_mode(True)
@@ -931,6 +950,9 @@ class GameInterface:
                     self._ask_for_update()
                 self._animate_objects()
                 self._process_events()
+                if self.auto:
+                    if self.auto[0].run(self):
+                        del self.auto[0]
                 self._process_srv_events()
                 voice.update()  # useful for SAPI
                 time.sleep(0.001)
@@ -1341,11 +1363,11 @@ class GameInterface:
         self.order = None
 
     def cmd_unit_status(self):
-        try:
-            place = self.dobjets[self.group[0]].place.title
-        except:
-            place = self.place.title
-        self.say_group(place)
+        if self.group:
+            place_title = self.dobjets[self.group[0]].place.title
+        else:
+            place_title = getattr(self.place, "title", [])
+        self.say_group(place_title)
         if self.group:
             self.follow_mode = True
             self._follow_if_needed()
@@ -1827,18 +1849,22 @@ class GameInterface:
                 self._select_and_say_square(self.place, prefix)
 
     def _select_square_from_list(self, increment, squares):
+        squares = [s for s in squares if isinstance(s, Square)]
         if squares:
             if self.immersion:
                 self.toggle_immersion()
             if self.zoom_mode:
                 self.cmd_toggle_zoom()
             _squares = list(squares)  # make a copy
-            if self.place not in _squares:
+            if isinstance(self.place, Square) and self.place not in _squares:
                 _squares.append(self.place)
             if self.player.units:
                 u = self.player.units[0]
                 _squares.sort(key=lambda s: distance(s.x, s.y, u.x, u.y))
-            index = _squares.index(self.place) + int(increment)
+            try:
+                index = _squares.index(self.place) + int(increment)
+            except ValueError:
+                index = 0
             if index < 0:
                 index = len(_squares) - 1
             elif index == len(_squares):

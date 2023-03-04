@@ -29,6 +29,9 @@ class Objective:
 
 
 class Player:
+    resources: List[int]
+    triggers: list
+    _buckets: Dict[tuple, list]
 
     cheatmode = False
     used_food = 0
@@ -42,6 +45,7 @@ class Player:
     group = ()
     group_had_enough_mana = False  # used to warn if not enough mana
 
+    AI_type = ""
     is_cpu_intensive = False
     smart_units = False
 
@@ -52,7 +56,7 @@ class Player:
         self._counterattack_places = []
         self.neutral = client.neutral
         self.faction = (
-            world.random.choice(world.factions)
+            world.random.choice(rules.factions)
             if client.faction == "random_faction"
             else client.faction
         )
@@ -185,7 +189,7 @@ class Player:
         for p in self.allied:
             for upgrade_name in p.upgrades:
                 while self.level(upgrade_name) < p.level(upgrade_name):
-                    self.world.unit_class(upgrade_name).upgrade_player(self)
+                    rules.unit_class(upgrade_name).upgrade_player(self)
 
     def _potential_neighbors(self, x, y):
         result = []
@@ -328,7 +332,7 @@ class Player:
         for l in (self.perception, self.memory):
             for o in sorted(l, key=lambda x: x.id):  # sort to avoid desync error
                 place = o.place
-                if not hasattr(place, "exits"):
+                if not isinstance(place, Square):
                     continue
                 if self.is_an_enemy(o):
                     menace = o.menace
@@ -520,7 +524,7 @@ class Player:
     def updated_target(self, target):
         if (
                 isinstance(target, (ZoomTarget, Square))  # doesn't change
-                or (target.place and (target in self.perception or target in self.memory))
+                or ((target in self.perception or target in self.memory) and target.place)
         ):
             return target
         return self.get_object_by_id(target.id)
@@ -648,40 +652,26 @@ class Player:
                 self.allied.append(p)
 
     def init_position(self, start):
-        def equivalent_type(t):
-            tn = getattr(t, "type_name", "")
-            if rules.get(self.faction, tn):
-                return self.world.unit_class(rules.get(self.faction, tn)[0])
-            return t
+        units, self.upgrades, self.forbidden_techs, resources, triggers = self.world.parse_start(start, self.faction)
 
-        self.resources = start[0][:]
-        rules.normalize_cost_or_resources(self.resources)
+        self.resources = resources
         for index, qty in enumerate(self.resources):
             self.stats.add("gathered", index, qty)
-        for place, type_, n in start[1]:
-            if self.world.must_apply_equivalent_type:
-                type_ = equivalent_type(type_)
-            if isinstance(type_, str) and type_[0:1] == "-":
-                self.forbidden_techs.append(type_[1:])
-            elif is_an_upgrade(type_):
-                self.upgrades.append(
-                    type_.type_name
-                )  # type_.upgrade_player(self) would require the units already there
-            elif not type_:
-                warning("couldn't create an initial unit")
-            else:
-                place = self.world.grid[place]
-                for _ in range(n):
-                    x, y, land = place.find_and_remove_meadow(type_)
-                    x, y = place.find_free_space(type_.airground_type, x, y)
-                    if x is not None:
-                        unit = type_(self, place, x, y)
-                        unit.building_land = land
 
-        self.triggers = start[2]
+        for place, n, type_ in units:
+            for _ in range(n):
+                self.add_unit(type_, place)
+        self.triggers = triggers
 
-        if rules.get(self.faction, getattr(self, "AI_type", "")):
-            self.set_ai(rules.get(self.faction, self.AI_type)[0])
+    def set_ai(self, ai_type):
+        pass
+
+    def add_unit(self, type_, place):
+        x, y, land = place.find_and_remove_meadow(type_)
+        x, y = place.find_free_space(type_.airground_type, x, y)
+        if x is not None:
+            unit = type_(self, place, x, y)
+            unit.building_land = land
 
     def store(self, _type, qty):
         qty += self.storage_bonus[_type]
@@ -712,6 +702,8 @@ class Player:
         return self.world.time // 1000 >= float(args[0]) * self.world.timer_coefficient
 
     def lang_order(self, args):
+        default_square = "a1"
+        n = 1
         select, orders = args
         for x in select:
             if x in self.world.grid:
@@ -782,7 +774,7 @@ class Player:
             u.notify("added")
 
     def lang_add_units(
-        self, items, target=None, decay=0, from_corpse=False, corpses=[], notify=True
+        self, items, target=None, decay=0, from_corpse=False, corpses=None, notify=True
     ):
         square = self.world.grid["a1"]
         nb = 1
@@ -793,7 +785,7 @@ class Player:
             elif re.match("[0-9]+$", i):
                 nb = int(i)
             else:
-                cls = self.world.unit_class(i)
+                cls = rules.unit_class(i)
                 if is_an_upgrade(cls):
                     self.upgrades.append(i)
                     self.send_voice_important(mp.OK)
@@ -897,7 +889,7 @@ class Player:
         self.set_ai(args[0])
 
     def lang_faction(self, args):
-        if args and args[0] in self.world.factions:
+        if args and args[0] in rules.factions:
             self.faction = args[0]
         else:
             warning("unknown faction: %s", " ".join(args))
@@ -952,7 +944,7 @@ class Player:
         return result
 
     def check_count_limit(self, type_name):
-        t = self.world.unit_class(type_name)
+        t = rules.unit_class(type_name)
         if t is None:
             info("couldn't check count_limit for %r", type_name)
             return False
@@ -1038,7 +1030,7 @@ class Player:
                 self._reset_group(args[1])
                 return
             for u in self.group:
-                if u.group and u.group != self.group:
+                if u.group is not None and u.group != self.group:
                     if u in u.group:
                         u.group.remove(u)
                     u.group = None

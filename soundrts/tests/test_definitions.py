@@ -3,7 +3,7 @@ from soundrts.definitions import Rules, Style
 
 def _example_rules():
     rules = Rules()
-    rules.load("def number\nclass int", classes={"int": int})
+    rules.load("def number\nclass int", base_classes={"int": int})
     return rules
 
 

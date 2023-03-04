@@ -2,6 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
+from soundrts.definitions import rules
 from soundrts.mapfile import Map
 from soundrts.world import World
 from soundrts.worldplayerbase import Player
@@ -29,7 +30,7 @@ def test_shortest_path(world):
 
 def test_unit_move(world, player):
     g = world.grid
-    u = world.unit_class("peasant")(player, g["b4"], g["b4"].x, g["b4"].y)
+    u = rules.unit_class("peasant")(player, g["b4"], g["b4"].x, g["b4"].y)
     u.o = 0
     u.start_moving_to(g["b1"])
     u.actual_speed = u.speed

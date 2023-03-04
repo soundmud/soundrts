@@ -17,7 +17,7 @@ from .definitions import rules, style
 from .lib.log import exception, warning
 from .lib.msgs import nb2msg
 from .mapfile import Map
-from .paths import CUSTOM_BINDINGS_PATH, REPLAYS_PATH, SAVE_PATH
+from .paths import REPLAYS_PATH, SAVE_PATH
 from .version import VERSION, compatibility_version
 from .world import World
 from .worldclient import (
@@ -42,6 +42,8 @@ class _Game:
     must_apply_equivalent_type = False
     players: List[_Controller]
     local_client: Union[DirectClient, Coordinator]
+    interface: clientgame.GameInterface
+    auto = None
 
     def create_replay(self):
         self._replay_file = open(
@@ -87,51 +89,35 @@ class _Game:
             must_apply_equivalent_type=self.must_apply_equivalent_type,
         )
         if self.world.load_and_build_map(self.map):
-            self.map.load_style(res)
-            try:
-                self.map.load_resources()
-                update_orders_list()  # when style has changed
-                self.pre_run()
-                if self.world.objective:
-                    voice.confirmation(mp.OBJECTIVE + self.world.objective)
-                self.interface = clientgame.GameInterface(self.local_client, speed=speed)
-                b = res.get_text_file("ui/bindings", append=True, localize=True)
-                b += "\n" + self.map.get_campaign("ui/bindings.txt")
-                b += "\n" + self.map.get_additional("ui/bindings.txt")
-                try:
-                    b += "\n" + open(CUSTOM_BINDINGS_PATH).read()
-                except OSError:
-                    pass
-                self.interface.load_bindings(b)
-                self.world.populate_map(self.players)
-                self.nb_human_players = self.world.current_nb_human_players()
-                t = threading.Thread(target=self.world.loop)
-                t.daemon = True
-                t.start()
-                if PROFILE:
-                    import cProfile
+            self.world.populate_map(self.players)
+            self.nb_human_players = self.world.current_nb_human_players()
+            t = threading.Thread(target=self.world.loop)
+            t.daemon = True
+            t.start()
+            self.interface = clientgame.GameInterface(self.local_client, speed=speed)
+            self.interface.auto = self.auto
+            if PROFILE:
+                import cProfile
 
-                    cProfile.runctx(
-                        "self.interface.loop()",
-                        globals(),
-                        locals(),
-                        "interface_profile.tmp",
-                    )
-                    import pstats
+                cProfile.runctx(
+                    "self.interface.loop(self)",
+                    globals(),
+                    locals(),
+                    "interface_profile.tmp",
+                )
+                import pstats
 
-                    for n in ("interface_profile.tmp",):
-                        p = pstats.Stats(n)
-                        p.strip_dirs()
-                        p.sort_stats("time", "cumulative").print_stats(30)
-                        p.print_callers(30)
-                        p.print_callees(20)
-                        p.sort_stats("cumulative").print_stats(50)
-                else:
-                    self.interface.loop()
-                self._record_stats(self.world)
-                self.post_run()
-            finally:
-                self.map.unload_resources()
+                for n in ("interface_profile.tmp",):
+                    p = pstats.Stats(n)
+                    p.strip_dirs()
+                    p.sort_stats("time", "cumulative").print_stats(30)
+                    p.print_callers(30)
+                    p.print_callees(20)
+                    p.sort_stats("cumulative").print_stats(50)
+            else:
+                self.interface.loop(self)
+            self._record_stats(self.world)
+            self.post_run()
             self.world.stop()
         else:
             voice.alert(mp.BEEP + [self.world.map_error])
@@ -226,7 +212,6 @@ class _Savable:
         f = open(SAVE_PATH, "wb")
         i = stats.Stats(None, None)._get_weak_user_id()
         f.write(("%s\n" % i).encode(encoding="ascii"))
-        self.world.remove_links_for_savegame()
         self._rules = rules
         self._ai = definitions._ai
         self._style = style
@@ -234,13 +219,7 @@ class _Savable:
             self._replay_file.flush()
             os.fsync(self._replay_file.fileno())  # just to be sure
             self._replay_file_content = open(self._replay_file.name).read()
-        try:
-            cloudpickle.dump(self, f)
-            voice.info(mp.OK)
-        except:
-            exception("save game failed")
-            voice.alert(mp.BEEP)
-        self.world.restore_links_for_savegame()
+        cloudpickle.dump(self, f)
 
     def run_on(self):
         if self.record_replay:
@@ -250,7 +229,6 @@ class _Savable:
             self._replay_file.write(self._replay_file_content)
         try:
             self.map.load_resources()
-            self.world.restore_links_for_savegame()
             rules.copy(self._rules)
             definitions._ai = self._ai
             style.copy(self._style)
@@ -260,7 +238,7 @@ class _Savable:
             t.daemon = True
             t.start()
             self.interface.waiting_for_world_update = False
-            self.interface.loop()
+            self.interface.loop(self)
             self._record_stats(self.world)
             self.post_run()
             self.world.stop()

@@ -2,7 +2,7 @@ from unittest.mock import Mock, call
 
 from soundrts.world import World
 from soundrts.worldplayerbase import Player
-from soundrts.worldroom import Square
+from soundrts.worldroom import Square, Inside
 from soundrts.worldunit import Unit
 
 
@@ -14,6 +14,7 @@ class _Unit(Unit):
     def __init__(self):
         self.orders = []
         self.take_order = Mock()
+        self.inside = Inside(self)
 
 
 class _Square(Square):
@@ -38,7 +39,7 @@ def test_next_stage():
     assert unit.next_stage(target) is None
 
     target.place = _Square()
-    unit.place = target
+    unit.place = target.inside
     assert unit.next_stage(target) is None
 
 

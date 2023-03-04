@@ -264,6 +264,7 @@ class _BeforeGameMenu(_ServerMenu):
         seed = int(seed)
         speed = float(speed)
         game = MultiplayerGame(self.map, players, local_login, self.server, seed, speed)
+        game.auto = self.auto
         game.run()
         self.end_loop = True
 

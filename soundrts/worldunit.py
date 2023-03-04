@@ -190,7 +190,7 @@ class Creature(Entity):
     def upgrade_to_player_level(self):
         for upg in self.can_use:
             if upg in self.player.upgrades:
-                self.world.unit_class(upg).upgrade_unit_to_player_level(self)
+                rules.unit_class(upg).upgrade_unit_to_player_level(self)
 
     @property
     def upgrades(self):
@@ -381,9 +381,12 @@ class Creature(Entity):
         return self.range < 2 * PRECISION
 
     def _near_enough_to_aim(self, target):
-        # Melee units shouldn't attack units on the other side of a wall.
-        if self.is_melee and not self._can_go(target.place) and not target.blocked_exit:
-            return False
+        if self.is_melee:
+            if self.is_inside:
+                if self.place.container.airground_type == "air":
+                    return False  # no melee attack from air
+            elif not self._can_go(target.place) and not target.blocked_exit:
+                return False  # no melee attack through a wall
         if (
             self.minimal_range
             and square_of_distance(self.x, self.y, target.x, target.y)
@@ -469,13 +472,15 @@ class Creature(Entity):
 
         self.is_moving = False
 
-        if self.is_inside or self.player is None:
+        if self.player is None:
             return
 
         if self.heal_level:
             self.heal_nearby_units()
         if self.harm_level:
             self.harm_nearby_units()
+        if self.inside:
+            self.inside.update()
 
         if self.player is None:
             return
@@ -518,6 +523,8 @@ class Creature(Entity):
     def receive_hit(self, damage, attacker, notify=True):
         if self.player is None:
             return
+        if attacker.is_inside:
+            attacker = attacker.place.container
         self.player.observe(attacker)
         self._raise_subsquare_threat(damage)
         if notify:
@@ -596,12 +603,12 @@ class Creature(Entity):
             ):
                 return True
             else:
-                return self.player.player_is_an_enemy(c.player)
+                return self.player and self.player.player_is_an_enemy(c.player)
         else:
             return False
 
     def can_attack_if_in_range(self, other):
-        if self.is_inside or not self.damage:
+        if not self.damage:
             return False
         if other not in self.player.perception:
             return False
@@ -626,6 +633,11 @@ class Creature(Entity):
 
     def _choose_enemy(self, place):
         known = self.player.known_enemies(place)
+        if not known:
+            for place in place.strict_neighbors:
+                known = self.player.known_enemies(place)
+                if known:
+                    break
         reachable_enemies = [x for x in known if self.can_attack(x)]
         if reachable_enemies:
             reachable_enemies.sort(
@@ -650,6 +662,9 @@ class Creature(Entity):
                 self.take_order(["go", s.id], imperative=True)
 
     def decide(self):
+        if self.is_inside:
+            self._choose_enemy(self.place.container.place)
+            return
         if (
             (self.player.smart_units or self.ai_mode == "defensive")
             and self.speed > 0
@@ -967,17 +982,19 @@ class Unit(Creature):
             return next_stage
 
     def next_stage(self, target, avoid=False):
+        if self.is_inside:
+            return
         if target is None or target.place is None:
             return None
-        if not hasattr(target, "exits"):  # target is not a square
+        if not isinstance(target, Square):
             if self.place == target.place:
                 return target
             place = target.place
-        else:  # target is a square
+        else:
             if self.place == target:
                 return None
             place = target
-        if not hasattr(place, "exits"):  # not a square
+        if not isinstance(place, Square):
             return None
         self.distance_to_goal = self.place.shortest_path_distance_to(
             place, player=self.player, plane=self.airground_type, avoid=avoid

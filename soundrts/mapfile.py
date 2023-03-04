@@ -8,10 +8,10 @@ from hashlib import md5
 from typing import List, Optional
 
 from . import res, world
-from .definitions import Style
+from .definitions import Style, rules, load_ai
 from .lib import zipdir
 from .lib.log import exception
-from .paths import TMP_PATH
+from .paths import TMP_PATH, CUSTOM_BINDINGS_PATH
 
 
 class Map:
@@ -53,8 +53,6 @@ class Map:
         sounds.unload(path)
 
     def load_rules_and_ai(self, res):
-        from .definitions import load_ai, rules
-
         rules.load(
             res.get_text_file("rules", append=True),
             self.campaign_rules,
@@ -72,6 +70,16 @@ class Map:
             self.campaign_style,
             self.additional_style,
         )
+
+    def get_bindings(self):
+        b = res.get_text_file("ui/bindings", append=True, localize=True)
+        b += "\n" + self.get_campaign("ui/bindings.txt")
+        b += "\n" + self.get_additional("ui/bindings.txt")
+        try:
+            b += "\n" + open(CUSTOM_BINDINGS_PATH).read()
+        except OSError:
+            pass
+        return b
 
     def _read_additional_file(self, n):
         p = os.path.join(self.path, n)
@@ -257,9 +265,8 @@ class Map:
     @property
     def factions(self):
         if self._factions is None and self._mods != res.mods:
-            w = world.World([], 0)
-            w.load_and_build_map(self)
-            self._factions = w.factions
+            self.load_rules_and_ai(res)
+            self._factions = rules.factions
             self._mods = res.mods
         return self._factions
 

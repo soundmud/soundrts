@@ -1,17 +1,17 @@
-repos:
--   repo: https://github.com/pre-commit/mirrors-isort
-    rev: ''  # Use the revision sha / tag you want to point at
-    hooks:
-    -   id: isort
--   repo: https://github.com/psf/black
-    rev: stable
-    hooks:
-    -   id: black
--   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: ''  # Use the sha / tag you want to point at
-    hooks:
-    -   id: mypy
--   repo: https://github.com/asottile/pyupgrade
-    rev: v2.6.1
-    hooks:
-    -   id: pyupgrade
+#repos:
+#-   repo: https://github.com/pre-commit/mirrors-isort
+#    rev: ''  # Use the revision sha / tag you want to point at
+#    hooks:
+#    -   id: isort
+#-   repo: https://github.com/psf/black
+#    rev: stable
+#    hooks:
+#    -   id: black
+#-   repo: https://github.com/pre-commit/mirrors-mypy
+#    rev: ''  # Use the sha / tag you want to point at
+#    hooks:
+#    -   id: mypy
+#-   repo: https://github.com/asottile/pyupgrade
+#    rev: v2.6.1
+#    hooks:
+#    -   id: pyupgrade

@@ -653,6 +653,7 @@ time_cost 60
 bonus_height 1
 can_upgrade_to guardtower cannontower
 is_buildable_anywhere 1
+transport_capacity 4
 provides_survival 0
 
 def guardtower
@@ -670,6 +671,7 @@ target_types ground air
 armor 1 ; armor 20
 can_use archer_weapon archer_range
 is_buildable_anywhere 1
+transport_capacity 8
 provides_survival 0
 
 def cannontower
@@ -688,6 +690,7 @@ damage_radius 1
 splash 1
 armor 1 ; armor 20
 is_buildable_anywhere 1
+transport_capacity 8
 provides_survival 0
 
 def wall
@@ -697,6 +700,7 @@ food_provided 0
 hp_max 500
 time_cost 90
 is_buildable_on_exits_only 1
+transport_capacity 4
 provides_survival 0
 can_upgrade_to massive_wall
 
@@ -707,6 +711,7 @@ food_provided 0
 hp_max 2000
 time_cost 270
 is_buildable_on_exits_only 1
+transport_capacity 8
 provides_survival 0
 requirements keep
 
@@ -719,6 +724,7 @@ time_cost 90
 is_buildable_on_exits_only 1
 is_a_gate 1
 provides_survival 0
+transport_capacity 4
 can_upgrade_to massive_gate
 
 def massive_gate
@@ -730,6 +736,7 @@ time_cost 270
 is_buildable_on_exits_only 1
 is_a_gate 1
 provides_survival 0
+transport_capacity 8
 requirements keep
 
 def shipyard

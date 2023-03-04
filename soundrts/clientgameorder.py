@@ -1,7 +1,7 @@
 from typing import List
 
 from . import msgparts as mp
-from .definitions import style
+from .definitions import style, rules
 from .lib.log import warning
 from .lib.msgs import nb2msg
 from .lib.nofloat import PRECISION
@@ -27,9 +27,7 @@ class OrderTypeView:  # future order
         self.cls = ORDERS_DICT[o[0]]
         if len(o) > 1:
             self.type = o[1]
-            self.requirements = self.unit.player.world.unit_class(
-                self.type
-            ).requirements
+            self.requirements = rules.unit_class(self.type).requirements
         self.title = self._get_title()
         self.shortcut = self._get_shortcut()
         self.index = _ord_index(self.cls.keyword)
@@ -114,10 +112,12 @@ class OrderTypeView:  # future order
 
 def _ord_index(keyword):
     try:
-        return float(style.get(keyword, "index")[0])
-    except:
-        warning("%s.index should be a number (check style.txt)", keyword)
-        return 9999  # end of the list
+        return float(style.get(keyword, "index", False)[0])
+    except ValueError:
+        warning("%s.index should be a number or nothing (check style.txt)", keyword)
+    except IndexError:
+        pass
+    return 9999  # end of the list
 
 
 def _has_ord_index(keyword):

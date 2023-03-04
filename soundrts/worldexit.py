@@ -8,6 +8,7 @@ class Exit(Entity):
     collision = 0
     is_a_building_land = False
     is_an_exit = True
+    _other_side_id = None
 
     def __init__(self, place, type_name, is_a_portal):
         self.type_name = type_name
@@ -20,8 +21,12 @@ class Exit(Entity):
     def __repr__(self):
         try:
             return "<Exit to '%s'>" % self.other_side.place.name
-        except:
+        except AttributeError:
             return "<Exit to nowhere>"
+
+    @property
+    def other_side(self):
+        return self.world.objects[self._other_side_id]
 
     is_blocked_by_forests = False
 
@@ -59,5 +64,5 @@ def passage(places, exit_type):
         return
     exit1 = Exit(place1, exit_type, is_a_portal)
     exit2 = Exit(place2, exit_type, is_a_portal)
-    exit1.other_side = exit2
-    exit2.other_side = exit1
+    exit1._other_side_id = exit2.id
+    exit2._other_side_id = exit1.id

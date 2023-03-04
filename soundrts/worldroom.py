@@ -1,5 +1,8 @@
 import string
+from functools import lru_cache
 
+from .definitions import rules, style
+from .lib.log import warning
 from .lib.msgs import nb2msg
 from .lib.nofloat import int_angle, int_cos_1000, int_distance, int_sin_1000
 from .lib.priodict import priorityDictionary
@@ -96,6 +99,7 @@ class Square(_Space):
             return 0
 
     @property
+    @lru_cache()
     def strict_neighbors(self):
         result = []
         for dc, dr in ((0, 1), (0, -1), (1, 0), (-1, 0)):
@@ -104,7 +108,9 @@ class Square(_Space):
                 result.append(s)
         return result
 
-    def set_neighbors(self):
+    @property
+    @lru_cache()
+    def neighbors(self):
         result = []
         for dc, dr in (
             (0, 1),
@@ -119,7 +125,7 @@ class Square(_Space):
             s = self.world.grid.get((self.col + dc, self.row + dr))
             if s is not None:
                 result.append(s)
-        self.neighbors = result
+        return result
 
     @property
     def building_land(self):
@@ -158,18 +164,13 @@ class Square(_Space):
         d = self.__dict__.copy()
         if "spiral" in d:
             del d["spiral"]
-        if "neighbors" in d:
-            del d["neighbors"]
         return d
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
 
     def enter(self, o):
         super().enter(o)
         o._previous_square = self
 
-    def is_near(self, square):
+    def is_near(self, square):  # FIXME: not used (remove?)
         try:
             return (abs(self.col - square.col), abs(self.row - square.row)) in (
                 (0, 1),
@@ -443,7 +444,7 @@ class Square(_Space):
             if o.type_name == t:
                 o.delete()
         for _ in range(n):
-            self.world.unit_class(t)(self, q)
+            rules.unit_class(t)(self, q)
 
     @property
     def nb_meadows(self):
@@ -482,24 +483,37 @@ class Square(_Space):
 
 
 class Inside(_Space):
+    container = None
     neighbors = []
-    title = []
+    is_ground = True
+    place = None
+    id = None
 
     def __init__(self, container):
         super().__init__()
         self.container = container
 
     @property
+    def title(self):
+        return style.get(self.container.type_name, "title")
+
+    @property
+    def high_ground(self):
+        if self.container.airground_type == "air":
+            return True
+        return self.container.place.high_ground
+
+    @property
     def height(self):
         return self.container.height
 
     @property
-    def outside(self):
-        return self.container.place
-
-    @property
     def world(self):
         return self.container.world
+
+    @property
+    def outside(self):
+        return self.container.place
 
     def have_enough_space(self, new_object):
         capacity = self.container.transport_capacity
@@ -515,6 +529,12 @@ class Inside(_Space):
 
     def remove(self, o):
         return
+
+    def update(self):
+        for o in self.objects:
+            o.x = self.container.x
+            o.y = self.container.y
+            o.update()
 
 
 class ZoomTarget:

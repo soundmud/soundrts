@@ -1,5 +1,6 @@
 import unittest
 
+from soundrts.definitions import rules
 from soundrts import worldclient
 from soundrts.lib.nofloat import PRECISION
 from soundrts.mapfile import Map
@@ -58,7 +59,7 @@ class _PlayerBaseTestCase(unittest.TestCase):
         self.w = World([])
         self.w.load_and_build_map(Map("soundrts/tests/%s.txt" % map_name))
         if cloak:
-            self.w.unit_class("new_flyingmachine").is_a_cloaker = True
+            rules.unit_class("new_flyingmachine").is_a_cloaker = True
         cp = DummyClient(ai[0])
         cp2 = DummyClient(ai[1])
         cp.alliance, cp2.alliance = alliance
@@ -105,13 +106,13 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
 
     def testCountLimit(self):
         self.tiny_set_up()
-        self.w.unit_class("peasant").count_limit = 1
+        rules.unit_class("peasant").count_limit = 1
         self.w.update()
         th = self.find_player_unit(self.cp, "townhall")
         self.assertNotIn("train peasant", TrainOrder.menu(th))
         th.take_order(["train", "peasant"])
         assert not th.orders
-        self.w.unit_class("peasant").count_limit = 2
+        rules.unit_class("peasant").count_limit = 2
         self.w.update()
         self.assertIn("train peasant", TrainOrder.menu(th))
         th.take_order(["train", "peasant"])
@@ -120,11 +121,11 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
     def testCountLimitBuild(self):
         self.tiny_set_up()
         self.cp.lang_add_units(["a1", "peasant"])
-        self.w.unit_class("peasant").speed = 10 * PRECISION
-        self.w.unit_class("barracks").time_cost = 1 * PRECISION
-        self.w.unit_class("farm").time_cost = 1 * PRECISION
+        rules.unit_class("peasant").speed = 10 * PRECISION
+        rules.unit_class("barracks").time_cost = 1 * PRECISION
+        rules.unit_class("farm").time_cost = 1 * PRECISION
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
-        self.w.unit_class("barracks").count_limit = 1
+        rules.unit_class("barracks").count_limit = 1
         self.w.update()
         p1 = self.find_player_unit(self.cp, "peasant")
         p2 = self.find_player_unit(self.cp, "peasant", 1)
@@ -146,7 +147,7 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
             p.take_order(["build", "barracks", "a1"])
             self.assertEqual(p.orders, [])
         self.assertEqual(self.cp.nb("barracks"), 1)
-        self.w.unit_class("barracks").count_limit = 2
+        rules.unit_class("barracks").count_limit = 2
         self.w.update()
         self.assertEqual(self.cp.future_count("barracks"), 1)
         for p in [p1, p2]:
@@ -172,11 +173,11 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
 
     def testCountLimitBuildQueued(self):
         self.tiny_set_up()
-        self.w.unit_class("peasant").speed = 10 * PRECISION
-        self.w.unit_class("barracks").time_cost = 1 * PRECISION
+        rules.unit_class("peasant").speed = 10 * PRECISION
+        rules.unit_class("barracks").time_cost = 1 * PRECISION
         self.cp.lang_add_units(["a1", "peasant"])
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
-        self.w.unit_class("barracks").count_limit = 1
+        rules.unit_class("barracks").count_limit = 1
         self.w.update()
         p1 = self.find_player_unit(self.cp, "peasant")
         p2 = self.find_player_unit(self.cp, "peasant", 1)
@@ -200,7 +201,7 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         self.cp.lang_add_units(["a1", "archer"])
         self.cp.lang_add_units(["a1", "archer"])
         self.cp.resources = [1000 * PRECISION, 1000 * PRECISION]
-        self.w.unit_class("darkarcher").count_limit = 1
+        rules.unit_class("darkarcher").count_limit = 1
         self.w.update()
         a1 = self.find_player_unit(self.cp, "archer")
         a2 = self.find_player_unit(self.cp, "archer", 1)
@@ -213,7 +214,7 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
         self.tiny_set_up()
         self.cp.lang_add_units(["a1", "dragon"])
         self.assertEqual(self.cp.nb("dragon"), 1)
-        self.w.unit_class("dragon").count_limit = 2
+        rules.unit_class("dragon").count_limit = 2
         self.cp.lang_add_units(["a1", "mage"])
         self.cp.upgrades.append("u_summon_dragon")
         self.w.update()
@@ -230,7 +231,7 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
             assert f.place.name == "a1"
             f.die()
         self.assertEqual(self.cp.nb("zombie"), 0)
-        self.w.unit_class("zombie").count_limit = 1
+        rules.unit_class("zombie").count_limit = 1
         self.cp.lang_add_units(["a1", "necromancer"])
         self.cp.upgrades.append("u_raise_dead")
         self.w.update()
@@ -248,7 +249,7 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
             assert f.place.name == "a1"
             f.die()
         self.assertEqual(self.cp.nb("footman"), 0)
-        self.w.unit_class("footman").count_limit = 2
+        rules.unit_class("footman").count_limit = 2
         self.w.update()
         self.w.update()
         self.cp.lang_add_units(["a1", "priest"])
@@ -267,7 +268,7 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
             assert f.place.name == "a1"
             f.die()
         self.assertEqual(self.cp.nb("footman"), 0)
-        self.w.unit_class("footman").count_limit = 2
+        rules.unit_class("footman").count_limit = 2
         self.cp.lang_add_units(["a1", "barracks"])
         self.w.update()
         b = self.find_player_unit(self.cp, "barracks")
@@ -284,9 +285,9 @@ class PlayerBaseTestCase(_PlayerBaseTestCase):
 class ComputerTestCase(_PlayerBaseTestCase):
     def testInitAndGetAPeasant(self):
         self.set_up()
-        assert sorted(self.w.get_makers("peasant")) == ["castle", "keep", "townhall"]
-        assert sorted(self.w.get_makers("footman")) == ["barracks"]
-        assert sorted(self.w.get_makers("barracks")) == ["peasant"]
+        assert sorted(rules.get_makers("peasant")) == ["castle", "keep", "townhall"]
+        assert sorted(rules.get_makers("footman")) == ["barracks"]
+        assert sorted(rules.get_makers("barracks")) == ["peasant"]
         th = self.find_player_unit(self.cp, "townhall")
         assert not th.orders
         assert not self.cp.get(1000, "peasant")
@@ -656,7 +657,7 @@ class ComputerTestCase(_PlayerBaseTestCase):
 
     def testOffensiveNotSmartUnitMustAlwaysAttack2(self):
         self.set_up(map_name="jl1_extended", ai=("timers", "timers"))  # no smart units
-        self.w.unit_class("footman").speed = 10 * PRECISION
+        rules.unit_class("footman").speed = 10 * PRECISION
         p = self.find_player_unit(self.cp, "peasant")
         self.cp2.lang_add_units([p.place.neighbors[0].name, "footman"])
         f = self.find_player_unit(self.cp2, "footman")

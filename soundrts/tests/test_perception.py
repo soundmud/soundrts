@@ -1,6 +1,7 @@
 import pytest
 
 from soundrts import worldclient
+from soundrts.definitions import rules
 from soundrts.mapfile import Map
 from soundrts.world import World
 from soundrts.worldplayerhuman import Human
@@ -23,7 +24,7 @@ def test_must_not_see_plateau_from_below_even_if_path_exists(world):
     a1 = g["a1"]  # plateau
     b1 = g["b1"]
     player = Human(world, DummyClient())
-    p = world.unit_class("peasant")(player, b1, b1.x, b1.y)
+    p = rules.unit_class("peasant")(player, b1, b1.x, b1.y)
     assert a1 not in p.get_observed_squares()
 
 
@@ -32,5 +33,5 @@ def test_must_see_diagonal_if_path_exists(world):
     a2 = g["a2"]
     b1 = g["b1"]
     player = Human(world, DummyClient())
-    p = world.unit_class("peasant")(player, b1, b1.x, b1.y)
+    p = rules.unit_class("peasant")(player, b1, b1.x, b1.y)
     assert a2 in p.get_observed_squares()

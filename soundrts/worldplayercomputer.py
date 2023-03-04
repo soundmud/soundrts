@@ -18,7 +18,6 @@ def value_as_an_explorer(u):
 
 class Computer(Player):
 
-    AI_type = None
     # the AI might need a longer memory than the player
     memory_duration = 36000000  # 36000 seconds of world time
     _sensible_building = None
@@ -42,17 +41,23 @@ class Computer(Player):
     def smart_units(self):
         return self.AI_type != "timers"
 
-    def set_ai(self, ai):
-        self.AI_type = ai
-        if self.AI_type == "timers":
-            return
-        self._plan = get_ai(ai)
-        # set or reset default values
-        self._line_nb = 0
-        self.watchdog = 0
-        self.constant_attacks = 0
-        self.research = 0
-        self._update_effect_users_and_workers()  # required by some tests
+    def faction_ai_type(self, ai_type):
+        if rules.get(self.faction, ai_type):
+            result = rules.get(self.faction, ai_type)[0]
+        else:
+            result = ai_type
+        return result
+
+    def set_ai(self, ai_type):
+        self.AI_type = ai_type
+        if self.AI_type != "timers":
+            self._plan = get_ai(self.faction_ai_type(ai_type))
+            # set or reset default values
+            self._line_nb = 0
+            self.watchdog = 0
+            self.constant_attacks = 0
+            self.research = 0
+            self._update_effect_users_and_workers()  # required by some tests
 
     _previous_linechange = 0
     __line_nb = 0
@@ -126,7 +131,7 @@ class Computer(Player):
                 self._line_nb += 1
 
     def _best_warehouse(self, place=None):
-        return self.world.unit_class(self.equivalent("townhall"))
+        return rules.unit_class(self.equivalent("townhall"))
 
     def _build_a_warehouse_for(self, deposit):
         def nearby_workers():
@@ -245,7 +250,7 @@ class Computer(Player):
         #     self._send_units(ok, self._sensible_building.place)
 
         # build static defenses
-        gate = self.world.unit_class("gate")
+        gate = rules.unit_class("gate")
         if self._sensible_building is not None and gate is not None:
 
             def nearest_exit(u):
@@ -259,6 +264,8 @@ class Computer(Player):
             if e is not None and not e.is_blocked() and self.gather(gate.cost, 0):
                 for w in self._workers:
                     w.take_order(["build", "gate", e.id])
+
+    nb_workers_to_get = 10
 
     def play(self):
         if self.AI_type == "timers":
@@ -282,7 +289,7 @@ class Computer(Player):
             self.idle_buildings_research()
         self._raise_dead()
         self._build_a_warehouse_if_useful()
-        self.get(10, self.equivalent("peasant"))
+        self.get(self.nb_workers_to_get, self.equivalent("peasant"))
         try:
             self._follow_plan()
         except RuntimeError:
@@ -362,7 +369,7 @@ class Computer(Player):
         return result
 
     def unit_class(self, name):
-        return self.world.unit_class(name)
+        return rules.unit_class(name)
 
     def best_explorers(self):
         return sorted(
@@ -591,10 +598,10 @@ class Computer(Player):
             return False
         for type in types:
             if type.__class__ == str:
-                type = self.world.unit_class(type)
+                type = rules.unit_class(type)
             if type is None:
                 continue
-            makers = self.world.get_makers(type)
+            makers = rules.get_makers(type)
             if self.nb(makers) > 0:
                 self.build_or_train_or_upgradeto_or_summon(
                     type, nb - self.future_nb(types)
@@ -634,17 +641,17 @@ class Computer(Player):
 
     def build_or_train_or_upgradeto_or_summon(self, t, nb=1):
         if t.__class__ == str:
-            t = self.world.unit_class(t)
+            t = rules.unit_class(t)
         type = t.__name__
-        makers = self.world.get_makers(type)
+        makers = rules.get_makers(type)
         if self._get(1, makers) and self._get_requirements(t):
             for maker in makers:
                 # TODO: choose one without orders if possible
                 if self.nb(maker):
                     break
-            if type in self.world.unit_class(maker).can_upgrade_to:
+            if type in rules.unit_class(maker).can_upgrade_to:
                 if self.nb(maker) >= nb:
-                    m = self.world.unit_class(maker)
+                    m = rules.unit_class(maker)
                     if self.gather(
                         [t.cost[i] - m.cost[i] for i in range(len(t.cost))],
                         t.food_cost - m.food_cost,
@@ -652,7 +659,7 @@ class Computer(Player):
                         self.order(nb, maker, ["upgrade_to", type])
                 else:
                     self._get(nb, maker)
-            elif type in self.world.unit_class(maker).can_build:
+            elif type in rules.unit_class(maker).can_build:
                 if not self.gather(t.cost, t.food_cost):
                     return
                 if t.storable_resource_types:
@@ -682,7 +689,7 @@ class Computer(Player):
                         requisition=True,
                         near=meadow,
                     )
-            elif type in self.world.unit_class(maker).can_train:
+            elif type in rules.unit_class(maker).can_train:
                 if (
                     self.nb(Worker)
                     and nb > self.nb(maker) * 3
@@ -692,11 +699,11 @@ class Computer(Player):
                     self.build_or_train_or_upgradeto_or_summon(maker)
                 if self.gather(t.cost, t.food_cost):
                     self.order(nb, maker, ["train", type])
-            elif type in self.world.unit_class(maker).can_research:
+            elif type in rules.unit_class(maker).can_research:
                 if self.gather(t.cost, t.food_cost):
                     self.order(1, maker, ["research", type])
             else:
-                for ability in self.world.unit_class(maker).can_use:
+                for ability in rules.unit_class(maker).can_use:
                     effect = rules.get(ability, "effect")
                     if effect and "summon" in effect[:1] and type in effect:
                         if rules.get(ability, "effect_target") == ["ask"]:

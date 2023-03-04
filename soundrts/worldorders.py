@@ -325,7 +325,7 @@ class ComplexOrder(Order):
 
     def __init__(self, unit, args):
         Order.__init__(self, unit, args[1:])
-        self.type = self.player.world.unit_class(args[0])
+        self.type = rules.unit_class(args[0])
 
     @property
     def cost(self):
@@ -358,7 +358,7 @@ class ComplexOrder(Order):
     @classmethod
     def is_allowed(cls, unit, type_name, *unused_args):
         return cls._is_almost_allowed(unit, type_name) and unit.player.has_all(
-            unit.player.world.unit_class(type_name).requirements
+            rules.unit_class(type_name).requirements
         )
 
     @classmethod
@@ -608,7 +608,7 @@ class AttackOrder(BasicOrder):
 
     def execute(self):
         self.update_target()
-        if self.target is None:
+        if not getattr(self.target, "is_vulnerable", False):
             self.mark_as_impossible()
             return
         if self.unit._near_enough_to_aim(self.target):
