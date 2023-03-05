@@ -327,7 +327,7 @@ class ReplayGame(_Game):
         factions = self.replay_read().split()
         self.seed = int(self.replay_read())
         self.local_client = ReplayClient(players[0], self)
-        self.players = [self.me]
+        self.players = [self.local_client]
         for x in players[1:]:
             if x.startswith("ai_"):
                 x = x[3:]

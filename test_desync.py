@@ -22,8 +22,7 @@ from soundrts.lib import sound
 from soundrts.lib.voice import voice
 from soundrts.mapfile import worlds_multi
 from soundrts.clientgame import GameInterface
-from soundrts.clientmain import restore_game
-
+from soundrts.clientmain import restore_game, replay, replay_filenames
 
 version.IS_DEV_VERSION = True
 clientgame.IS_DEV_VERSION = True
@@ -91,6 +90,22 @@ def restore_single(n, auto):
     clientmain.init_media()
     TrainingGame.auto = auto
     restore_game()
+
+
+def _replay(n, auto):
+    import logging
+    from soundrts.lib import log
+    log.clear_handlers()
+    log.add_console_handler(LOGGING_LEVEL)
+
+    remove_voice()
+    set_position(205, n * 235 + 50)
+    clientmain.init_media()
+    TrainingGame.auto = auto
+    replays = replay_filenames(minimal_size=1000)
+    for _ in range(random.randint(10, 20)):
+        next(replays)  # avoid too recent replays
+    replay(next(replays))
 
 
 def run_client(n, auto, mods):
@@ -269,6 +284,11 @@ def game_session():
     p.start()
     lp.append(p)
 
+    # replay
+    p = Process(target=_replay, args=(2, [Wait(8), Save()]))
+    p.start()
+    lp.append(p)
+
     time.sleep(45)
 
     for p in lp:
@@ -280,4 +300,5 @@ if __name__ == "__main__":
     while True:
         game_session()
 
-# TODO: try many game types, replay, languages
+# TODO: test campaigns, languages
+# TODO: specific folder (saves, replays)

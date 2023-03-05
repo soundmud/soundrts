@@ -120,9 +120,15 @@ def replay(n):
     ReplayGame(os.path.join(REPLAYS_PATH, n)).run()
 
 
+def replay_filenames(minimal_size=None):
+    for n in sorted(os.listdir(REPLAYS_PATH), reverse=True):
+        if not minimal_size or len(open(os.path.join(REPLAYS_PATH, n)).read()) >= minimal_size:
+            yield n
+
+
 def replay_menu():
     menu = Menu(mp.OBSERVE_RECORDED_GAME)
-    for n in sorted(os.listdir(REPLAYS_PATH), reverse=True):
+    for n in replay_filenames():
         if n.endswith(".txt"):
             menu.append([time.strftime("%c", time.localtime(int(n[:-4])))], (replay, n))
     menu.append(mp.QUIT2, None)
