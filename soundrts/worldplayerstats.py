@@ -5,14 +5,21 @@ from .lib.msgs import nb2msg
 
 
 class Stats:
-    time: int
+    _game_duration = None
 
     def __init__(self, player):
         self._stats = {}
         self.player = player
 
+    @property
+    def game_duration(self):
+        if self._game_duration is not None:
+            return self._game_duration
+        else:
+            return self.player.world.time
+
     def freeze(self):
-        self.time = self.player.world.time
+        self._game_duration = self.player.world.time
 
     def add(self, event, target, inc=1):
         if target is not None:
@@ -41,7 +48,7 @@ class Stats:
         return score
 
     def game_duration_in_minutes_seconds(self):
-        t = self.time // 1000
+        t = self.game_duration // 1000
         m = int(t // 60)
         s = int(t - m * 60)
         return m, s

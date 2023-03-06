@@ -13,6 +13,7 @@ from pygame import (
     KMOD_SHIFT,
 )
 
+from .defs import preprocess
 from .log import warning
 
 
@@ -55,13 +56,6 @@ def _normalized_event(e):
     else:
         normalized_mods = tuple(1 if e.mod & m else 0 for m in _mod_masks)
     return normalized_mods, e.scancode
-
-
-def _preprocess(s):
-    s = re.sub("(?m);.*$", "", s)  # remove comments
-    s = re.sub("(?m)^[ \t]*$\n", "", s)  # remove empty lines
-    s = re.sub(r"(?m)\\[ \t]*$\n", " ", s)  # join lines ending with "\"
-    return s
 
 
 class Bindings:
@@ -114,7 +108,7 @@ class Bindings:
             except AttributeError:
                 raise _Error("'%s' is not a command" % name)
 
-        for line in _preprocess(s).split("\n"):
+        for line in preprocess(s).split("\n"):
             try:
                 line = self._apply_definitions(line)
                 self._process_line(line, command_from_name)

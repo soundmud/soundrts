@@ -7,7 +7,8 @@ from . import msgparts as mp
 from . import stats
 from .clientmedia import voice
 from .metaserver import METASERVER_URL
-from .paths import OLD_STATS_PATH, STATS_PATH
+from .paths import STATS_PATH
+from .update import update_packages_from_servers
 from .version import VERSION
 
 
@@ -36,10 +37,10 @@ class RevisionChecker(threading.Thread):
         except:
             pass
         try:
-            stats.Stats(OLD_STATS_PATH, METASERVER_URL).send()
             stats.Stats(STATS_PATH, METASERVER_URL).send()
         except:
             pass
+        update_packages_from_servers()
 
     def start_if_needed(self):
         if self.never_started:

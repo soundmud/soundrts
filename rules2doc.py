@@ -2,6 +2,8 @@
 from typing import Set
 
 from soundrts.lib import log
+from soundrts.lib.package import Package
+from soundrts.paths import BASE_PACKAGE_PATH
 
 log.add_console_handler()
 
@@ -147,7 +149,8 @@ def can_use(c, t):
 
 
 rules = RulesForDoc()
-rules.load(open("res/rules.txt").read(), open("res/ui/rules_doc.txt").read())
+base = Package.from_path(BASE_PACKAGE_PATH)
+rules.load(base.open_text("rules.txt").read(), base.open_text("ui/rules_doc.txt").read())
 for cat in (
     ("1. Units", ("worker", "soldier")),
     ("2. Buildings", ("building",)),

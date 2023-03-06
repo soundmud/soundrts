@@ -1,6 +1,5 @@
 import os.path
 import random
-import threading
 import time
 from typing import List, Tuple, Union
 
@@ -10,16 +9,16 @@ from pygame.locals import KEYDOWN
 
 from . import clientgame, config, definitions
 from . import msgparts as mp
-from . import res, stats
+from . import stats
 from .clientgameorder import update_orders_list
 from .clientmedia import play_sequence, voice
 from .definitions import rules, style
-from .lib.log import exception, warning
+from .lib.log import warning
 from .lib.msgs import nb2msg
-from .mapfile import Map
+from .lib.resource import res
 from .paths import REPLAYS_PATH, SAVE_PATH
 from .version import VERSION, compatibility_version
-from .world import World
+from .world import World, MapError
 from .worldclient import (
     Coordinator,
     DirectClient,
@@ -29,8 +28,6 @@ from .worldclient import (
     _Controller,
     send_platform_version_to_metaserver,
 )
-
-PROFILE = False
 
 
 class _Game:
@@ -51,15 +48,11 @@ class _Game:
         )
         self.replay_write(self.game_type_name)
         players = " ".join([p.login for p in self.players])
-        self.replay_write(self.map.get_name() + " " + players)
+        self.replay_write(self.map.name + " " + players)
         self.replay_write(VERSION)
-        self.replay_write(res.mods)
+        self.replay_write(str(res.mods))
         self.replay_write(compatibility_version())
-        if self.game_type_name == "mission":
-            self.replay_write(self.map.campaign.path)
-            self.replay_write(str(self.map.id))
-        else:
-            self.replay_write(self.map.pack().decode())
+        self._replay_write_map()
         self.replay_write(players)
         alliances = [p.alliance for p in self.players]
         self.replay_write(" ".join(map(str, alliances)))
@@ -67,13 +60,16 @@ class _Game:
         self.replay_write(" ".join(factions))
         self.replay_write(str(self.seed))
 
+    def _replay_write_map(self):
+        self.replay_write(self.map.digest())
+
     def replay_write(self, s):
         self._replay_file.write(s + "\n")
 
     def _game_type(self):
         return "{}/{}/{}".format(
             VERSION,
-            self.game_type_name + "-" + self.map.get_name(),
+            self.game_type_name + "-" + self.map.name,
             self.nb_human_players,
         )
 
@@ -83,44 +79,22 @@ class _Game:
     def run(self, speed=config.speed):
         if self.record_replay:
             self.create_replay()
-        self.world = World(
-            self.default_triggers,
-            self.seed,
-            must_apply_equivalent_type=self.must_apply_equivalent_type,
-        )
-        if self.world.load_and_build_map(self.map):
-            self.world.populate_map(self.players)
+
+        self.world = World(self.default_triggers, self.seed)
+
+        try:
+            self.world.load_and_build_map(self.map)
+        except MapError as msg:
+            msg = "map error: %s" % msg
+            warning(msg)
+            voice.alert(mp.BEEP + [msg])
+        else:
+            self.world.populate_map(self.players, equivalents=self.must_apply_equivalent_type)
             self.nb_human_players = self.world.current_nb_human_players()
-            t = threading.Thread(target=self.world.loop)
-            t.daemon = True
-            t.start()
             self.interface = clientgame.GameInterface(self.local_client, speed=speed)
             self.interface.auto = self.auto
-            if PROFILE:
-                import cProfile
+            self.interface.run_game(self)
 
-                cProfile.runctx(
-                    "self.interface.loop(self)",
-                    globals(),
-                    locals(),
-                    "interface_profile.tmp",
-                )
-                import pstats
-
-                for n in ("interface_profile.tmp",):
-                    p = pstats.Stats(n)
-                    p.strip_dirs()
-                    p.sort_stats("time", "cumulative").print_stats(30)
-                    p.print_callers(30)
-                    p.print_callees(20)
-                    p.sort_stats("cumulative").print_stats(50)
-            else:
-                self.interface.loop(self)
-            self._record_stats(self.world)
-            self.post_run()
-            self.world.stop()
-        else:
-            voice.alert(mp.BEEP + [self.world.map_error])
         if self.record_replay:
             self._replay_file.close()
 
@@ -191,7 +165,7 @@ class MultiplayerGame(_MultiplayerGame):
 
     def pre_run(self):
         if len(self.humans) > 1:
-            send_platform_version_to_metaserver(self.map.get_name(), len(self.humans))
+            send_platform_version_to_metaserver(self.map.name, len(self.humans))
             self._countdown()
 
     def post_run(self):
@@ -227,21 +201,11 @@ class _Savable:
                 os.path.join(REPLAYS_PATH, "%s.txt" % int(time.time())), "w"
             )
             self._replay_file.write(self._replay_file_content)
-        try:
-            self.map.load_resources()
-            rules.copy(self._rules)
-            definitions._ai = self._ai
-            style.copy(self._style)
-            update_orders_list()  # when style has changed
-            t = threading.Thread(target=self.world.loop)
-            t.daemon = True
-            t.start()
-            self.interface.loop(self)
-            self._record_stats(self.world)
-            self.post_run()
-            self.world.stop()
-        finally:
-            self.map.unload_resources()
+        rules.copy(self._rules)
+        definitions._ai = self._ai
+        style.copy(self._style)
+        update_orders_list()  # when style has changed
+        self.interface.run_game(self)
 
 
 class TrainingGame(_MultiplayerGame, _Savable):
@@ -263,11 +227,16 @@ class MissionGame(_Game, _Savable):
     game_type_name = "mission"
     _has_victory = False
 
-    def __init__(self, map):
-        self.map = map
+    def __init__(self, chapter):
+        self.chapter = chapter
+        self.map = chapter.map
         self.seed = random.randint(0, 10000)
         self.local_client = DirectClient(config.login, self)
         self.players = [self.local_client]
+
+    def _replay_write_map(self):
+        self.replay_write(self.chapter.campaign.name)
+        self.replay_write(str(self.chapter.number))
 
     def pre_run(self):
         if self.world.intro:
@@ -282,11 +251,13 @@ class MissionGame(_Game, _Savable):
 
     def run_on(self):
         try:
-            self.map.campaign.load_resources()
+            res.set_campaign(self.chapter.campaign)
+            res.set_map(self.map)
             _Savable.run_on(self)
-            self.map.run_next_step(self)
+            self.chapter.run_next_step(self)
         finally:
-            self.map.campaign.unload_resources()
+            res.set_map()
+            res.set_campaign()
 
 
 class ReplayGame(_Game):
@@ -313,15 +284,7 @@ class ReplayGame(_Game):
                 version,
                 mods,
             )
-        campaign_path_or_packed_map = self.replay_read()
-        if game_type_name == "mission" and "***" not in campaign_path_or_packed_map:
-            from .campaign import Campaign
-
-            self.map = Campaign(campaign_path_or_packed_map)._get(
-                int(self.replay_read())
-            )
-        else:
-            self.map = Map(unpack=campaign_path_or_packed_map.encode())
+        self._load_chapter_or_unpack_map(game_type_name)
         players = self.replay_read().split()
         alliances = self.replay_read().split()
         factions = self.replay_read().split()
@@ -339,6 +302,16 @@ class ReplayGame(_Game):
             p.alliance = a
             p.faction = f
 
+    def _load_chapter_or_unpack_map(self, game_type_name):
+        campaign_name_or_map_digest = self.replay_read()
+        if game_type_name == "mission" and "***" not in campaign_name_or_map_digest:
+            campaign = res.find_campaign(campaign_name_or_map_digest)
+            res.set_campaign(campaign)
+            chapter = campaign.chapter(int(self.replay_read()))
+            self.map = chapter.map
+        else:
+            self.map = res.find_multiplayer_map(campaign_name_or_map_digest)
+
     def replay_read(self):
         s = self._file.readline()
         if s and s.endswith("\n"):
@@ -349,11 +322,7 @@ class ReplayGame(_Game):
         voice.info(mp.OBSERVE_ANOTHER_PLAYER_EXPLANATION)
         voice.flush()
 
-    def run(self):
-        if getattr(self.map, "campaign", None):
-            self.map.campaign.load_resources()
-        try:
-            _Game.run(self)
-        finally:
-            if getattr(self.map, "campaign", None):
-                self.map.campaign.unload_resources()
+    def post_run(self):
+        super().post_run()
+        res.set_map()
+        res.set_campaign()

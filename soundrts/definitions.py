@@ -160,12 +160,14 @@ class _Definitions:
             return
         return o[attr]
 
-    def get(self, obj, attr):
+    def get(self, obj, attr, default=None):
         v = self._val(obj, attr)
         if v is None and attr[-8:-1] == "_level_":
             v = self._val(obj, attr[:-8])
         if isinstance(v, list):
             v = v[:]
+        if v is None and default is not None:
+            return default
         return v
 
     def get_dict(self, obj):
@@ -255,7 +257,7 @@ class Rules(_Definitions):
 
     def normalized_cost_or_resources(self, lst):
         lst = lst[:]
-        n = self.get("parameters", "nb_of_resource_types")
+        n = self.get("parameters", "nb_of_resource_types", 2)
         while len(lst) < n:
             lst += [0]
         while len(lst) > n:
@@ -266,7 +268,7 @@ class Rules(_Definitions):
         if hasattr(base, "interpret"):
             base.interpret(d)
         if "cost" not in d and hasattr(base, "cost"):
-            d["cost"] = [0] * self.get("parameters", "nb_of_resource_types")
+            d["cost"] = [0] * self.get("parameters", "nb_of_resource_types", 2)
         d = _update_old_definitions(d, name)
         for k, v in list(d.items()):
             if k == "class":

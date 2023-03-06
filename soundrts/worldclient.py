@@ -266,7 +266,7 @@ class Coordinator(_Client):  # client coordinator for multiplayer games
 
     def get_sync_debug_msg_1(self):
         return "out_of_sync_error: map={} version={} platform={} python={} md5={} time={}".format(
-            self.world.map.get_name(),
+            self.game_session.map.name,
             VERSION,
             platform.platform(),
             sys.version.replace("\n", " "),

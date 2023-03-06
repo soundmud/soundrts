@@ -1,7 +1,9 @@
 from unittest.mock import Mock, call
 
+from soundrts.definitions import rules
+from soundrts.lib.nofloat import PRECISION
 from soundrts.worldroom import Square, Inside
-from soundrts.worldunit import Unit
+from soundrts.worldunit import Unit, Soldier
 
 
 class _Unit(Unit):
@@ -78,3 +80,73 @@ def test_counterattack_if_defensive_mode():
     unit.counterattack(place)
 
     unit.take_order.assert_not_called()
+
+
+_damage_vs_rules = """
+def pikeman
+class soldier
+damage 6
+damage_vs cavalry 12
+
+def cavalry
+class soldier
+
+def light_cavalry
+is_a cavalry
+
+def light_cavalry_subtype
+is_a light_cavalry
+
+def horse_archer
+is_a cavalry archer
+"""
+
+
+def test_damage_vs():
+    rules.load(_damage_vs_rules, base_classes={"soldier": Soldier})
+
+    # basic case
+    a_pikeman = rules.classes["pikeman"].create_from_nowhere()
+    a_cavalry = rules.classes["cavalry"].create_from_nowhere()
+    assert a_pikeman._base_damage_versus(a_pikeman) == 6 * PRECISION
+    assert a_pikeman._base_damage_versus(a_cavalry) == 12 * PRECISION
+
+    # "inheritance"
+    a_light_cavalry = rules.classes["light_cavalry"].create_from_nowhere()
+    assert a_pikeman._base_damage_versus(a_light_cavalry) == 12 * PRECISION
+
+    # second level of "inheritance"
+    a_light_cavalry_subtype = rules.classes["light_cavalry_subtype"].create_from_nowhere()
+    assert a_pikeman._base_damage_versus(a_light_cavalry_subtype) == 12 * PRECISION
+
+    # multiple "inheritance"
+    a_horse_archer = rules.classes["horse_archer"].create_from_nowhere()
+    assert a_pikeman._base_damage_versus(a_horse_archer) == 12 * PRECISION
+
+
+_armor_vs_rules = """
+def archer
+class soldier
+
+def horse_archer
+is_a cavalry archer
+
+def heavy
+class soldier
+armor 1
+armor_vs archer 2
+"""
+
+
+def test_armor_vs():
+    rules.load(_armor_vs_rules, base_classes={"soldier": Soldier})
+
+    # basic case
+    an_archer = rules.classes["archer"].create_from_nowhere()
+    a_heavy = rules.classes["heavy"].create_from_nowhere()
+    assert a_heavy.armor_versus(a_heavy) == 1 * PRECISION
+    assert a_heavy.armor_versus(an_archer) == 2 * PRECISION
+
+    # multiple "inheritance"
+    a_horse_archer = rules.classes["horse_archer"].create_from_nowhere()
+    assert a_heavy.armor_versus(a_horse_archer) == 2 * PRECISION

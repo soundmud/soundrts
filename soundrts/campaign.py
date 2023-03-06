@@ -1,35 +1,45 @@
 import configparser
 import os
 import re
+from pathlib import Path
 
 from . import msgparts as mp
-from . import res
-from .clientmedia import play_sequence, sounds, voice
+from .clientmedia import play_sequence, voice
 from .clientmenu import Menu
 from .game import MissionGame
+from .lib.package import resource_layer
 from .lib.msgs import nb2msg
+from .lib.resource import res
 from .mapfile import Map
 from .paths import CAMPAIGNS_CONFIG_PATH
-from .res import get_all_packages_paths
 
 
-class MissionChapter(Map):
-    def __init__(self, p, campaign, id):
-        Map.__init__(self, p)
+class Chapter:
+    campaign: "Campaign"
+    number: int
+
+    def _next(self):
+        return self.campaign.next(self)
+
+
+class MissionChapter(Chapter):
+    def __init__(self, campaign, number, map_):
         self.campaign = campaign
-        self.id = id
+        self.number = number
+        self.map = map_
 
-    def _get_next(self):
-        return self.campaign.get_next(self)
+    @property
+    def title(self):
+        return self.map.title[1:]
 
-    def _victory(self):
-        menu = Menu([], [])
-        menu.append(mp.CONTINUE, self._get_next())
+    def _run_victory_menu(self):
+        menu = Menu()
+        menu.append(mp.CONTINUE, self._next())
         menu.append(mp.QUIT, None)
         menu.run()
 
-    def _defeat(self):
-        menu = Menu([], [])
+    def _run_defeat_menu(self):
+        menu = Menu()
         menu.append(mp.RESTART, self)
         menu.append(mp.QUIT, None)
         menu.run()
@@ -43,101 +53,116 @@ class MissionChapter(Map):
     def run_next_step(self, game):
         if game.has_victory():
             self.campaign.unlock_next(self)
-            if self._get_next():
-                self._victory()
+            if self._next():
+                self._run_victory_menu()
         else:
-            self._defeat()
+            self._run_defeat_menu()
 
 
-class CutSceneChapter:
-    def __init__(self, path, campaign=None, id=None):
+class CutSceneChapter(Chapter):
+    def __init__(self, campaign, number, path):
         self.path = path
         self.campaign = campaign
-        self.id = id
+        self.number = number
         self._load()
 
     def _load(self):
-        s = open(self.path).read()
+        s = self.campaign.resources.open_text(self.path).read()
         # header
         m = re.search("(?m)^title[ \t]+([0-9 ]+)$", s)
         if m:
-            l = m.group(1).split(" ")
-            l = [int(x) for x in l]
+            title = m.group(1).split(" ")
+            title = [int(x) for x in title]
         else:
-            l = nb2msg(self.id)
-        self.title = l
+            title = nb2msg(self.number)
+        self.title = title
         # content
         m = re.search("(?m)^sequence[ \t]+([0-9 ]+)$", s)
         if m:
-            l = m.group(1).split(" ")
+            sequence = m.group(1).split(" ")
         else:
-            l = []
-        self.sequence = l
-
-    def _get_next(self):
-        return self.campaign.get_next(self)
+            sequence = []
+        self.sequence = sequence
 
     def run(self):
         voice.important(self.title)
         play_sequence(self.sequence)
         self.campaign.unlock_next(self)
-        if self._get_next():
-            self._get_next().run()
-
-
-def _is_a_cutscene(path):
-    if os.path.isfile(path):
-        with open(path) as t:
-            return t.readline() == "cut_scene_chapter\n"
+        if self._next():
+            self._next().run()
 
 
 class Campaign:
-    def __init__(self, path, title=None):
-        self.path = path
-        if title:
-            self.title = title
+    def _id(self):
+        return re.sub("[^a-zA-Z0-9]", "_", self.name)
+
+    def __init__(self, package, path):
+        self.name = Path(path).stem
+        self.resources = resource_layer(package, self.name)
+        self._set_title_and_mods()
+        self._set_mods_from_mods_txt()
+        self._set_chapters()
+
+    def _set_title_and_mods(self):
+        if self.resources.isfile("campaign.txt"):
+            s = self.resources.open_text("campaign.txt").read()
         else:
-            self.title = [os.path.split(path)[1]]
-        self.chapters = []
-        i = 0
-        while True:
-            cp = os.path.join(self.path, "%s.txt" % i)
-            if not os.path.isfile(cp):
-                cp = os.path.join(self.path, "%s" % i)
-                if not os.path.isdir(cp):
-                    break
-            if _is_a_cutscene(cp):
-                c = CutSceneChapter(cp, campaign=self, id=i)
-            else:
-                c = MissionChapter(cp, campaign=self, id=i)
-            self.chapters.append(c)
-            i += 1
-        p = os.path.join(self.path, "mods.txt")
-        if os.path.isfile(p):
-            self.mods = open(p).read()
+            s = ""
+        m = re.search("(?m)^title[ \t]+([A-Za-z0-9 ]+)$", s)
+        if m:
+            self.title = m.group(1).split(" ")
+        else:
+            self.title = [self.name]
+        m = re.search("(?m)^mods[ \t]+([A-Za-z0-9 ]+)$", s)
+        if m:
+            self.mods = m.group(1)
+        elif re.search("(?m)^mods$", s):
+            self.mods = ""
         else:
             self.mods = None
 
-    def _get(self, id):
-        if id < len(self.chapters):
-            return self.chapters[id]
+    def _set_mods_from_mods_txt(self):
+        if self.resources.isfile("mods.txt"):
+            self.mods = self.resources.open_text("mods.txt").read()
+
+    def _set_chapters(self):
+        self.chapters = []
+        number = 0
+        while True:
+            filename = f"{number}.txt"
+            if not self.resources.isfile(filename):
+                filename = f"{number}.zip"
+                if not self.resources.isfile(filename):
+                    break
+            if self._is_a_cutscene(filename):
+                c = CutSceneChapter(self, number, filename)
+            else:
+                file = self.resources.open_binary(filename)
+                map_ = Map.load(file, filename)
+                map_.name = self.name + "/" + str(number)
+                c = MissionChapter(self, number, map_)
+            self.chapters.append(c)
+            number += 1
+
+    def _is_a_cutscene(self, path):
+        if path.endswith(".txt"):
+            with self.resources.open_text(path) as t:
+                return t.readline() == "cut_scene_chapter\n"
+
+    def chapter(self, number):
+        if number < len(self.chapters):
+            return self.chapters[number]
         else:
             return None
 
-    def get_next(self, chapter):
-        return self._get(chapter.id + 1)
-
-    def _get_id(self):
-        return re.sub("[^a-zA-Z0-9]", "_", self.path)
+    def next(self, chapter):
+        return self.chapter(chapter.number + 1)
 
     def _get_bookmark(self):
         c = configparser.SafeConfigParser()
         if os.path.isfile(CAMPAIGNS_CONFIG_PATH):
-            c.readfp(open(CAMPAIGNS_CONFIG_PATH))
-        try:
-            return c.getint(self._get_id(), "chapter")
-        except:
-            return 0
+            c.read_file(open(CAMPAIGNS_CONFIG_PATH))
+        return c.getint(self._id(), "chapter", fallback=0)
 
     def _available_chapters(self):
         return self.chapters[: self._get_bookmark() + 1]
@@ -145,64 +170,34 @@ class Campaign:
     def _set_bookmark(self, number):
         c = configparser.SafeConfigParser()
         if os.path.isfile(CAMPAIGNS_CONFIG_PATH):
-            c.readfp(open(CAMPAIGNS_CONFIG_PATH))
-        if self._get_id() not in c.sections():
-            c.add_section(self._get_id())
-        c.set(self._get_id(), "chapter", repr(number))
+            c.read_file(open(CAMPAIGNS_CONFIG_PATH))
+        if self._id() not in c.sections():
+            c.add_section(self._id())
+        c.set(self._id(), "chapter", repr(number))
         c.write(open(CAMPAIGNS_CONFIG_PATH, "w"))
 
     def unlock_next(self, chapter):
-        if self._get_bookmark() == chapter.id:
-            next_chapter = self.get_next(chapter)
+        if self._get_bookmark() == chapter.number:
+            next_chapter = self.next(chapter)
             if next_chapter:
-                self._set_bookmark(next_chapter.id)
-
-    def load_resources(self):
-        sounds.load(res, self.path)
-
-    def unload_resources(self):
-        sounds.unload(self.path)
+                self._set_bookmark(next_chapter.number)
 
     def run(self):
         if self.mods is not None:
             res.set_mods(self.mods)
         try:
-            self.load_resources()
-            menu = Menu(self.title, [])
-            if len(self._available_chapters()) > 1:
-                ch = self._available_chapters()[-1]
-                menu.append(mp.CONTINUE + ch.title, ch)
-            for ch in self._available_chapters():
-                prefix = nb2msg(ch.id) if ch.id > 0 else []
-                menu.append(prefix + ch.title, ch)
-            menu.append(mp.BACK, None)
-            menu.run()
+            res.set_campaign(self)
+            self.menu().run()
         finally:
-            self.unload_resources()
+            res.set_campaign()
 
-
-def _get_campaigns():
-    w = []
-    for pp in get_all_packages_paths():
-        d = os.path.join(pp, "single")
-        if os.path.isdir(d):
-            for n in os.listdir(d):
-                p = os.path.join(d, n)
-                if os.path.isdir(p):
-                    if n == "campaign":
-                        w.append(Campaign(p, mp.CAMPAIGN))
-                    else:
-                        w.append(Campaign(p))
-    return w
-
-
-_campaigns = None
-_mods_at_the_previous_campaigns_update = None
-
-
-def campaigns():
-    global _campaigns, _mods_at_the_previous_campaigns_update
-    if _campaigns is None or _mods_at_the_previous_campaigns_update != res.mods:
-        _campaigns = _get_campaigns()
-        _mods_at_the_previous_campaigns_update = res.mods
-    return _campaigns
+    def menu(self):
+        menu = Menu(self.title)
+        if len(self._available_chapters()) > 1:
+            chapter = self._available_chapters()[-1]
+            menu.append(mp.CONTINUE + chapter.title, chapter)
+        for chapter in self._available_chapters():
+            prefix = nb2msg(chapter.number) if chapter.number > 0 else []
+            menu.append(prefix + chapter.title, chapter)
+        menu.append(mp.BACK, None)
+        return menu

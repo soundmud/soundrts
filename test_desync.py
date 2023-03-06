@@ -2,6 +2,8 @@
 import logging
 import os
 
+from soundrts.lib.resource import res, official_multiplayer_maps
+
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 
 import random
@@ -16,14 +18,14 @@ except ModuleNotFoundError:
 
 from soundrts import worldplayercomputer2 as wpc2, clientgame, version
 from soundrts.lib.nofloat import PRECISION
-from soundrts import clientmain, res, servermain, world
+from soundrts import clientmain, servermain, world
 from soundrts.game import MultiplayerGame, TrainingGame
 from soundrts.lib import sound
 from soundrts.lib.voice import voice
-from soundrts.mapfile import worlds_multi
 from soundrts.clientgame import GameInterface
 from soundrts.clientmain import restore_game, replay, replay_filenames
 
+res.language = random.choice(list(res._available_languages()))
 version.IS_DEV_VERSION = True
 clientgame.IS_DEV_VERSION = True
 import pytest  # exceptions will be reraised by log.exception()
@@ -128,7 +130,7 @@ def run_server():
     import logging
     from soundrts.lib import log
     log.clear_handlers()
-    log.add_console_handler(logging.CRITICAL)
+    log.add_console_handler(logging.ERROR)
 
     if "win32gui" in sys.modules and "PYCHARM_HOSTED" not in os.environ:
         hwnd = win32gui.GetForegroundWindow()
@@ -200,7 +202,7 @@ class PressRandomKeys:
         self._next_time = time.time() + dt
 
     def run(self, interface: GameInterface):
-        sound.main_volume = 0
+        sound.main_volume = 0.1
         if not isinstance(interface, GameInterface):
             return True
         if self._next_time <= time.time():
@@ -244,7 +246,7 @@ def game_session():
     _mods = random.choice(["", "crazymod9beta10", "aoe", "starwars", "blitzkrieg", "modern"])
     res.set_mods(_mods)
 
-    maps = [m for m in worlds_multi() if m.official]
+    maps = official_multiplayer_maps()
     m = random.choice(maps)
 
     n_guests_max = random.randint(0, 2)
@@ -253,7 +255,7 @@ def game_session():
     ais = random.choice([(0, 1, 10), (1, 1, 10), (1, 0, 10), (0, 0, 10)])
 
     print("mod(s):", _mods)
-    print("map:", m.path, "for", m.nb_players_max, "players max")
+    print("map:", m.name, "for", m.nb_players_max, "players max")
     print("clients:", n + 1)
     print("local AIs:", m.nb_players_max - n - 1, "from", ais)
     print()
@@ -263,7 +265,7 @@ def game_session():
     # game creator
     p = Process(
         target=run_client,
-        args=(0, [Create(m.path, 20), Invite(n), InviteAI(*ais), Start(), PressRandomKeys(.1)], _mods),
+        args=(0, [Create(m.name, 20), Invite(n), InviteAI(*ais), Start(), PressRandomKeys(.1)], _mods),
     )
     p.start()
     lp.append(p)
@@ -286,8 +288,8 @@ def game_session():
 
     # replay
     p = Process(target=_replay, args=(2, [Wait(8), Save()]))
-    p.start()
-    lp.append(p)
+#    p.start()
+#    lp.append(p)
 
     time.sleep(45)
 
@@ -300,5 +302,5 @@ if __name__ == "__main__":
     while True:
         game_session()
 
-# TODO: test campaigns, languages
+# TODO: test campaigns (orc campaign: resources (or unittest?))
 # TODO: specific folder (saves, replays)

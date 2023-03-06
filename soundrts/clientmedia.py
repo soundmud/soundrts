@@ -1,5 +1,3 @@
-"""This ugly module is fighting with res.py to make some useful job."""
-
 import os
 import platform
 
@@ -7,9 +5,9 @@ import pygame
 
 from . import config
 from . import msgparts as mp
-from . import res
 from .lib import sound
 from .lib.msgs import nb2msg
+from .lib.resource import res
 from .lib.screen import set_screen
 from .lib.sound_cache import sounds
 from .lib.voice import voice
@@ -22,9 +20,13 @@ if platform.system() == "Windows":
 fullscreen = False
 
 
+def app_title():
+    return f"SoundRTS {VERSION} {res.mods} {res.soundpacks}"
+
+
 def update_display_caption():
     """set the window title"""
-    pygame.display.set_caption(f"SoundRTS {VERSION} {res.mods} {res.soundpacks}")
+    pygame.display.set_caption(app_title())
 
 
 def minimal_init():
@@ -32,7 +34,7 @@ def minimal_init():
     sound.init(config.num_channels)
     voice.init(config)
     set_screen(fullscreen)
-    update_display_caption()
+    res.register(update_display_caption)
     pygame.key.set_repeat(500, 100)
 
 

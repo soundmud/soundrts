@@ -19,7 +19,7 @@ then you can store your first multiplayer map in the "multi" folder.
 
 If you are not allowed to write in the program files folder because you work in non-admin mode, you can store your working map file in the "multi"
 folder in "C:\\Documents and Settings\\Your Login\\Application Data\\SoundRTS". This folder is created the first time you start SoundRTS, unless a "user" folder exists near soundrts.exe.
-Another solution is to install SoundRTS in a folder where you are allowed to write, and to work in the folder mentionned in the previous paragraph.
+Another solution is to install SoundRTS in a folder where you are allowed to write, and to work in the folder mentioned in the previous paragraph.
 
 How to edit a map
 """""""""""""""""
@@ -37,9 +37,7 @@ A useful key combination is Control Shift F2: if you are the only human on the m
 How to find and remove an error
 """""""""""""""""""""""""""""""
 
-If, when you start the map, you get the message: "server error" and go back to the server menu, then the details of the error are in a file called "maperror.txt". This file is in your default temporary folder (for example "C:\\Documents and Settings\\Your Login\\Local Settings\\Temp\\soundrts") or in the SoundRTS folder.
-
-In the same directory you may find additional (but cryptic) information in "server.log" or in "client.log".
+If, when you start the map, you get a "map error" message and go back to the menu, then you may sometimes find additional (but cryptic) information in "client.log" or in "server.log", usually in the "user/tmp" folder.
 
 If you still don't understand where the error is, feel free to contact me, directly or at the soundRTSChat list.
 
@@ -324,7 +322,7 @@ If you are allowed to write in the folder where SoundRTS (or SoundRTS test) is i
 
 If you are not allowed to write in the program files folder because you work in non-admin mode, you can store your working map file in the "single"
 folder in "C:\\Documents and Settings\\Your Login\\Application Data\\SoundRTS". This folder is created the first time you start SoundRTS.
-Another solution is to install SoundRTS in a folder where you are allowed to write, and to work in the folder mentionned in the previous paragraph.
+Another solution is to install SoundRTS in a folder where you are allowed to write, and to work in the folder mentioned in the previous paragraph.
 
 Structure of the campaign folder
 """"""""""""""""""""""""""""""""
@@ -496,7 +494,7 @@ Press PageUp or PageDown to select a terrain. The meaning of each terrain is sto
 Apply a terrain to a square
 """""""""""""""""""""""""""
 
-Press Enter to apply the terrain to the current square. Neighboring squares with the same caracteristics (ground and same height) will be linked automatically by a path. Different squares will have their path removed.
+Press Enter to apply the terrain to the current square. Neighboring squares with the same characteristics (ground and same height) will be linked automatically by a path. Different squares will have their path removed.
 
 Toggle path to a neighbor
 """""""""""""""""""""""""
@@ -516,4 +514,4 @@ Press F10 and quit the game to leave the editor. An autosave of the map will be 
 Add units
 """""""""
 
-Open the file in a text editor. Use commands mentionned in `Defining the starting resources of the players`_.
+Open the file in a text editor. Use commands mentioned in `Defining the starting resources of the players`_.

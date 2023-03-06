@@ -8,7 +8,7 @@ if not config.debug_mode:
 
     os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 
-from .lib import log
+from .lib import log, resource
 from .lib.log import exception, warning
 from .paths import CLIENT_LOG_PATH
 from .version import VERSION_FOR_BUG_REPORTS
@@ -35,9 +35,8 @@ import cloudpickle
 
 from . import discovery
 from . import msgparts as mp
-from . import res, stats
-from .campaign import campaigns
-from .clientmedia import close_media, init_media, voice
+from . import stats
+from .clientmedia import close_media, init_media, voice, app_title
 from .clientmenu import CLOSE_MENU, Menu, input_string
 from .clientserver import (
     connect_and_play,
@@ -45,14 +44,13 @@ from .clientserver import (
     start_server_and_connect,
 )
 from .clientversion import revision_checker
-from .definitions import style
+from .definitions import style, rules
 from .game import ReplayGame, TrainingGame
 from .lib.msgs import nb2msg
-from .lib.resource import best_language_match, preferred_language
-from .mapfile import worlds_multi
+from .lib.resource import best_language_match, preferred_language, res
 from .metaserver import servers_list
 from .paths import CONFIG_DIR_PATH, REPLAYS_PATH, SAVE_PATH
-from .version import VERSION, server_is_compatible
+from .version import server_is_compatible
 
 
 def choose_server_ip_in_a_list():
@@ -195,7 +193,7 @@ class TrainingMenu:
 
     def _add_faction_menus(self, menu):
         for pn, (p, pr) in enumerate(zip(self._players, self._factions)):
-            for r in ["random_faction"] + self._map.factions:
+            for r in ["random_faction"] + rules.factions:
                 if r != pr:
                     menu.append(
                         [p,] + style.get(r, "title"), (self._set_faction, pn, r)
@@ -204,32 +202,33 @@ class TrainingMenu:
     def _build_players_menu(self):
         menu = Menu()
         if len(self._players) < self._map.nb_players_max:
-            menu.append(mp.INVITE + mp.QUIET_COMPUTER, (self._add_ai, "easy"))
-            menu.append(
-                mp.INVITE + mp.AGGRESSIVE_COMPUTER, (self._add_ai, "aggressive")
-            )
-            menu.append(
-                mp.INVITE + mp.AGGRESSIVE_COMPUTER + nb2msg(2), (self._add_ai, "ai2")
-            )
+            self._add_ai_invite_menu(menu)
         if len(self._players) >= self._map.nb_players_min:
             menu.append(mp.START, self._run_game)
-        if len(self._map.factions) > 1:
+        if len(rules.factions) > 1:
             self._add_faction_menus(menu)
         menu.append(mp.CANCEL, CLOSE_MENU, mp.CANCEL_THIS_GAME)
         return menu
 
+    def _add_ai_invite_menu(self, menu):
+        menu.append(mp.INVITE + mp.QUIET_COMPUTER, (self._add_ai, "easy"))
+        menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER, (self._add_ai, "aggressive"))
+        menu.append(mp.INVITE + mp.AGGRESSIVE_COMPUTER + nb2msg(2), (self._add_ai, "ai2"))
+
     def _open_players_menu(self, m):
-        # note: won't work with factions defined in the map
-        style.load(res.get_text_file("ui/style", append=True, localize=True))
         self._players = [config.login]
         self._factions = ["random_faction"]
         self._map = m
-        self._players_menu = self._build_players_menu()
-        self._players_menu.loop()
+        res.set_map(m)
+        try:
+            self._players_menu = self._build_players_menu()
+            self._players_menu.loop()
+        finally:
+            res.set_map()
 
     def run(self):
         menu = Menu(mp.START_A_GAME_ON, remember="mapmenu")
-        for m in worlds_multi():
+        for m in res.multiplayer_maps():
             menu.append(m.title, (self._open_players_menu, m))
         menu.append(mp.QUIT2, None)
         menu.run()
@@ -238,7 +237,7 @@ class TrainingMenu:
 def single_player_menu():
     Menu(
         mp.MAKE_A_SELECTION,
-        [(c.title, c) for c in campaigns()]
+        [(c.title, c) for c in res.campaigns()]
         + [
             (mp.START_A_GAME_ON, TrainingMenu().run),
             (mp.RESTORE, restore_game),
@@ -280,6 +279,7 @@ def set_and_launch_mod(mods):
 
 
 def mods_menu():
+    res.update_packages()
     mods_menu = Menu(mp.MODS)
     mods_menu.append([0], (set_and_launch_mod, ""))
     for mod in res.available_mods():
@@ -298,6 +298,7 @@ def set_and_launch_soundpack(soundpacks):
 
 
 def soundpacks_menu():
+    res.update_packages()
     soundpacks_menu = Menu(mp.SOUNDPACKS)
     soundpacks_menu.append(mp.NOTHING, (set_and_launch_soundpack, ""))
     for soundpack in res.available_soundpacks():
@@ -322,7 +323,7 @@ def options_menu():
 
 def main_menu():
     Menu(
-        [f"SoundRTS {VERSION} {res.mods} {res.soundpacks},"] + mp.MAKE_A_SELECTION,
+        [app_title() + ","] + mp.MAKE_A_SELECTION,
         [
             [mp.SINGLE_PLAYER, single_player_menu, mp.SINGLE_PLAYER_EXPLANATION],
             [mp.MULTIPLAYER2, multiplayer_menu, mp.MULTIPLAYER2_EXPLANATION],

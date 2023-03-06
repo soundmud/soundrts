@@ -35,3 +35,8 @@ soundpack = 0.8
 
 [volume]
 1000 = 0.5
+
+[packages]
+# A package is a folder or a zip file.
+base = "res"
+additional = ["", "user", "user/downloaded"]

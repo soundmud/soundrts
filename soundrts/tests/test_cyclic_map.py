@@ -10,7 +10,7 @@ from soundrts.worldplayerbase import Player
 
 @pytest.fixture()
 def world():
-    w = World([])
+    w = World()
     w.load_and_build_map(Map("soundrts/tests/jl1_cyclic.txt"))
     return w
 

@@ -1,9 +1,11 @@
 upnpclient
 
-pygame>=2
+pygame
 git+https://github.com/soundmud/accessible_output2
 chardet
 cloudpickle
+requests
+tomli
 
 docutils
 cx_Freeze

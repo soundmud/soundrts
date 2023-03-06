@@ -1,2 +1,0 @@
-def peasant
-cost 7 0

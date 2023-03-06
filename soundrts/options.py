@@ -6,20 +6,23 @@ from .lib.log import warning
 
 ip = None
 mods = None
+soundpacks = None
 port = 2500
 
 
 def _parse_options():
-    global ip, mods, port
+    global ip, mods, soundpacks, port
     default_port = port
     parser = optparse.OptionParser()
     parser.add_option("-i", "--ip", type="string")
     parser.add_option("-m", "--mods", type="string")
+    parser.add_option("-s", "--soundpacks", type="string")
     parser.add_option("-p", type="int", help=optparse.SUPPRESS_HELP)
     parser.set_defaults(ip=None, mods=None, p=default_port, g=False)
     options, _ = parser.parse_args()
     ip = options.ip
     mods = options.mods
+    soundpacks = options.soundpacks
     port = options.p
     if ip:
         warning("using IP %s", ip)

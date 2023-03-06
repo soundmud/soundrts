@@ -1,2 +1,10 @@
 def peasant
 cost 6 0
+
+def faction1
+class faction
+
+def faction2
+class faction
+
+def parameters

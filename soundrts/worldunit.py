@@ -33,20 +33,22 @@ def ground_or_air(t):
 class Creature(Entity):
 
     damage_vs: dict = dict()
+    armor_vs: dict = dict()
 
     @classmethod
     def interpret(cls, d):
-        dmg = d.get("damage_vs", [])
-        d["damage_vs"] = dict()
-        targets = []
-        for s in dmg:
-            try:
-                n = to_int(s)
-                for t in targets:
-                    d["damage_vs"][t] = n
-                targets = []
-            except ValueError:
-                targets.append(s)
+        for vs_attr in ["damage_vs", "armor_vs"]:
+            dmg = d.get(vs_attr, [])
+            d[vs_attr] = dict()
+            targets = []
+            for s in dmg:
+                try:
+                    n = to_int(s)
+                    for t in targets:
+                        d[vs_attr][t] = n
+                    targets = []
+                except ValueError:
+                    targets.append(s)
 
     type_name: Optional[str] = None
     is_a_unit = False
@@ -161,6 +163,10 @@ class Creature(Entity):
         if self.inside:
             for o in self.inside.objects:
                 o.set_player(player)
+
+    @classmethod
+    def create_from_nowhere(cls):
+        return cls.__new__(cls)
 
     def __init__(self, player, place, x, y, o=90):
         super().__init__(place, x, y, o)
@@ -647,8 +653,15 @@ class Creature(Entity):
                     x.id,
                 )
             )
-            self.action = AttackAction(self, reachable_enemies[0])
+            self._attack(reachable_enemies[0])
             return True
+
+    def _attack(self, target):
+        # don't notify or attack if already attacking the same target
+        # (at the moment, this test is necessary if the target is not a menace, for example a farm)
+        if not isinstance(self.action, AttackAction) or self.action.target != target:
+            self.action = AttackAction(self, target)
+            self.notify("attack")
 
     def flee(self):
         sl = [e.other_side.place for e in self.place.exits]
@@ -684,9 +697,27 @@ class Creature(Entity):
     # attack
 
     def hit(self, target):
-        base_damage = self.damage_vs.get(target.type_name, self.damage)
-        damage = max(self.minimal_damage, base_damage - target.armor)
+        base_damage = self._base_damage_versus(target)
+        damage = max(self.minimal_damage, base_damage - target.armor_versus(self))
         target.receive_hit(damage, self)
+
+    def armor_versus(self, attacker):
+        d = self.armor_vs
+        if attacker.type_name in d:
+            return d[attacker.type_name]
+        for t in attacker.expanded_is_a:
+            if t in d:
+                return d[t]
+        return self.armor
+
+    def _base_damage_versus(self, target):
+        d = self.damage_vs
+        if target.type_name in d:
+            return d[target.type_name]
+        for t in target.expanded_is_a:
+            if t in d:
+                return d[t]
+        return self.damage
 
     def _hit_or_miss(self, target):
         if self.has_hit(target):

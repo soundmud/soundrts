@@ -1,7 +1,9 @@
+import cProfile
 import math
 import queue
 import re
 import sys
+import threading
 import time
 
 import pygame
@@ -16,7 +18,7 @@ from pygame.locals import (
     USEREVENT,
 )
 
-from . import config, res
+from . import config
 from . import msgparts as mp
 from . import parameters
 from .animation import noise
@@ -43,6 +45,7 @@ from .lib.log import exception, warning
 from .lib.mouse import set_cursor
 from .lib.msgs import eval_msg_and_volume, nb2msg
 from .lib.nofloat import PRECISION
+from .lib.resource import res
 from .lib.screen import (
     get_screen,
     screen_render,
@@ -50,8 +53,11 @@ from .lib.screen import (
     set_game_mode,
 )
 from .lib.sound import angle, distance, psounds, stereo
+from .paths import CUSTOM_BINDINGS_PATH
 from .version import IS_DEV_VERSION
 from .worldroom import Square
+
+PROFILE = False
 
 # minimal interval (in seconds) between 2 sounds
 ALERT_LIMIT = 0.5
@@ -940,18 +946,31 @@ class GameInterface:
             e = self._srv_queue.get()
             self._process_srv_event(*e)
 
-    def loop(self, game):
-        game.map.load_style(res)
+    def get_bindings(self):
+        b = res.text("ui/bindings", append=True, localize=True)
         try:
-            game.map.load_resources()
-            update_orders_list()  # when style has changed
-            game.pre_run()
-            if game.world.objective:
-                voice.confirmation(mp.OBJECTIVE + game.world.objective)
-            self.load_bindings(game.map.get_bindings())
+            b += "\n" + open(CUSTOM_BINDINGS_PATH).read()
+        except OSError:
+            pass
+        return b
+
+    def run_game(self, game):
+        t = threading.Thread(target=game.world.loop)
+        t.daemon = True
+        t.start()
+
+        update_orders_list()  # when style has changed
+        game.pre_run()
+        if game.world.objective:
+            voice.confirmation(mp.OBJECTIVE + game.world.objective)
+        self.load_bindings(self.get_bindings())
+        if PROFILE:
+            cProfile.runctx("self._loop()", globals(), locals(), "interface_profile.tmp")
+        else:
             self._loop()
-        finally:
-            game.map.unload_resources()
+        game._record_stats(game.world)
+        game.post_run()
+        game.world.stop()
 
     def _loop(self):
         from .clientserver import ConnectionAbortedError

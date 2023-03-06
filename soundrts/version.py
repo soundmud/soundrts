@@ -1,6 +1,7 @@
 from hashlib import md5
 
-from . import config, res
+from . import config
+from .lib.resource import res
 
 VERSION = "1.3.6"
 IS_DEV_VERSION = config.debug_mode
@@ -24,9 +25,7 @@ def compatibility_version():
 
 
 def rules_hash():
-    rules_and_ai = res.get_text_file("rules", append=True) + res.get_text_file(
-        "ai", append=True
-    )
+    rules_and_ai = res.text("rules", append=True) + res.text("ai", append=True)
     return md5(rules_and_ai.encode()).hexdigest()
 
 

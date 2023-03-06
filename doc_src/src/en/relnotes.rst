@@ -3,6 +3,12 @@ Release notes
 
 .. contents::
 
+1.3.7 (to be released)
+-----
+
+- removed the "maperror.txt" file (the information is already in the in-game error message).
+
+
 1.3.6
 -----
 

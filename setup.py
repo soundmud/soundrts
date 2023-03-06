@@ -16,7 +16,6 @@ from subprocess import Popen, check_output
 from cx_Freeze import Executable, setup
 
 import builddoc
-import buildmultimapslist
 from soundrts.version import VERSION
 
 if platform.system() == "Windows" and ".venv" not in sys.executable:
@@ -36,7 +35,7 @@ build_exe_options = {
     "silent": True,
     "packages": [],
     "excludes": ["Cython", "scipy", "numpy", "tkinter"],
-    "include_files": ["res", "single", "multi", "mods", "cfg", "doc"],
+    "include_files": ["res", "single", "mods", "cfg", "doc"],
     "replace_paths": [("*", f"{full_version}:")],
 }
 executables = [
@@ -44,7 +43,6 @@ executables = [
     Executable("server.py", base=None),
 ]
 
-buildmultimapslist.build()
 builddoc.build()
 if os.path.exists(destination):
     print(f"{destination} already exists. Deleting...")

@@ -2,14 +2,30 @@ import pygame
 import pytest
 
 from soundrts import clientmedia
-from soundrts.lib.resource import ResourceLoader
+from soundrts.campaign import Campaign
+from soundrts.definitions import get_ai, rules, style, load_ai
+from soundrts.lib import resource
+from soundrts.lib.package import Package
+from soundrts.lib.resource import ResourceStack
 from soundrts.lib.sound_cache import sounds
+from soundrts.mapfile import Map
+from soundrts.pack import pack_file_or_folder
+from soundrts.paths import BASE_PACKAGE_PATH
+
+maps_paths = ["soundrts/tests/single/map1", "soundrts/tests/single/map1.zip"]
+maps = [Map(path) for path in maps_paths]
+campaigns = [
+    Campaign(Package.from_path("soundrts/tests/single/campaign1"), "campaign1"),
+    Campaign(Package.from_path("soundrts/tests/single/campaign1.zip"), "campaign1"),
+]
+
+resource.preferred_language = "en"
 
 
 @pytest.fixture(scope="module")
 def default(request):
     clientmedia.minimal_init()
-    res = ResourceLoader("", "", [])
+    res = ResourceStack([BASE_PACKAGE_PATH])
     request.addfinalizer(pygame.display.quit)
     return res
 
@@ -17,7 +33,7 @@ def default(request):
 @pytest.fixture(scope="module")
 def test(request):
     clientmedia.minimal_init()
-    res = ResourceLoader("", "", [], base_path="soundrts/tests/res")
+    res = ResourceStack(["soundrts/tests/res"])
     request.addfinalizer(pygame.display.quit)
     return res
 
@@ -50,52 +66,49 @@ def test_get_sound_with_locale(test):
     assert sounds.get_sound("fdsgedtgf") is None
     assert sounds.get_sound("9998") is not None
     assert sounds.get_sound("9999") is not None
-    # a sound can be stored in a sub directory
+    # a sound can be stored in a subdirectory
     assert sounds.get_sound("1028") is not None
 
 
-def test_get_text(test):
+def test_text(test):
     res = test
     res.language = "en"
     sounds.load_default(res)
-    assert sounds.get_text("0") == "yes"
-    assert sounds.get_text("1") == "no"
-    assert sounds.get_text("2") is None
+    assert sounds.text("0") == "yes"
+    assert sounds.text("1") == "no"
+    assert sounds.text("2") is None
 
 
-def test_get_text_with_locale(test):
+def test_text_with_locale(test):
     res = test
     res.language = "fr"
     sounds.load_default(res)
-    assert sounds.get_text("0") == "oui"
-    assert sounds.get_text("1") == "no"
-    assert sounds.get_text("2") is None
+    assert sounds.text("0") == "oui"
+    assert sounds.text("1") == "no"
+    assert sounds.text("2") is None
 
 
 def test_get_style(test):
     res = test
     res.language = "en"
-    from soundrts.definitions import style
 
-    style.load(res.get_text_file("ui/style", append=True, localize=True))
+    style.load(res.text("ui/style", append=True, localize=True))
     assert style.get("peasant", "test") == ["0"]
 
 
 def test_get_style_with_locale(test):
     res = test
     res.language = "fr"
-    from soundrts.definitions import style
 
-    style.load(res.get_text_file("ui/style", append=True, localize=True))
+    style.load(res.text("ui/style", append=True, localize=True))
     assert style.get("peasant", "test") == ["1"]
 
 
 def test_get_rules_and_ai(test):
     res = test
-    from soundrts.definitions import get_ai, load_ai, rules
 
-    rules.load(res.get_text_file("rules", append=True))
-    load_ai(res.get_text_file("ai", append=True))
+    rules.load(res.text("rules", append=True))
+    load_ai(res.text("ai", append=True))
     assert rules.get("peasant", "cost") == [0, 0]
     assert rules.get("test", "cost") == [0, 0]
     assert get_ai("easy") == ["get 1 peasant", "goto -1"]
@@ -103,103 +116,103 @@ def test_get_rules_and_ai(test):
 
 def test_folder_map(test):
     res = test
-    from soundrts.definitions import get_ai, rules, style
-    from soundrts.mapfile import Map
+    res.language = "en"
 
-    map1 = Map("soundrts/tests/single/map1")
-    map1.load_resources()
-    map1.load_rules_and_ai(res)
-    map1.load_style(res)
-    assert rules.get("test", "cost") == [0, 0]
-    assert rules.get("peasant", "cost") == [6000, 0]
-    assert get_ai("easy") == ["get 6 peasant", "goto -1"]
-    assert style.get("peasant", "test") == ["6"]
-    assert sounds.get_text("0") == "map1"
-    map1.unload_resources()
+    for m in maps:
+        assert m.name == "map1"
+        assert m.definition == "title 11 22\n"
+        assert sounds.text("0") != "map1"
+        res.set_map(m)
+        try:
+            assert rules.get("test", "cost") == [0, 0]
+            assert rules.get("peasant", "cost") == [6000, 0]
+            assert get_ai("easy") == ["get 6 peasant", "goto -1"]
+            assert style.get("peasant", "test") == ["6"]
+            assert sounds.text("0") == "map1"
+            assert set(rules.factions) == {"faction1", "faction2"}
+        finally:
+            res.set_map()
+        assert rules.get("test", "cost") == [0, 0]
+        assert rules.get("peasant", "cost") == [0, 0]
+        assert get_ai("easy") == ["get 1 peasant", "goto -1"]
+        assert style.get("peasant", "test") == ["0"]
+        assert sounds.text("0") == "yes"
 
 
 def test_campaign(test):
-    from soundrts.campaign import Campaign
+    for c in campaigns:
+        assert sounds.text("0") == "yes"
+        test.set_campaign(c)
+        assert sounds.text("0") == "campaign1"
+        test.set_campaign()
+        assert sounds.text("0") == "yes"
 
-    c = Campaign("soundrts/tests/single/campaign1")
-    c.load_resources()
-    assert sounds.get_text("0") == "campaign1"
-    c.unload_resources()
+
+def test_campaign_cutscene(test):
+    res = test
+    for c in campaigns:
+        res.set_campaign(c)
+        m = c.chapters[0]
+        assert sounds.text("0") == "campaign1"
+        res.set_campaign()
 
 
 def test_campaign_map(test):
     res = test
-    from soundrts.campaign import Campaign
-    from soundrts.definitions import get_ai, rules, style
-
-    c = Campaign("soundrts/tests/single/campaign1")
-    c.load_resources()
-    map0 = c.chapters[0]
-    map0.load_resources()
-    map0.load_rules_and_ai(res)
-    map0.load_style(res)
-    assert rules.get("test", "cost") == [0, 0]
-    assert rules.get("peasant", "cost") == [5000, 0]
-    assert get_ai("easy") == ["get 5 peasant", "goto -1"]
-    assert style.get("peasant", "test") == ["5"]
-    assert sounds.get_text("0") == "campaign1"
-    map0.unload_resources()
-    c.unload_resources()
+    for campaign in campaigns:
+        res.set_campaign(campaign)
+        try:
+            chapter = campaign.chapters[2]
+            assert chapter.map.name == "campaign1/2"
+            assert chapter.title == [11, 22]
+            assert chapter.map.resources is None
+            res.set_map(chapter.map)
+            try:
+                assert rules.get("test", "cost") == [0, 0]
+                assert rules.get("peasant", "cost") == [5000, 0]
+                assert get_ai("easy") == ["get 5 peasant", "goto -1"]
+                assert style.get("peasant", "test") == ["5"]
+                assert sounds.text("0") == "campaign1"
+            finally:
+                res.set_map()
+        finally:
+            res.set_campaign()
 
 
 def test_campaign_map_with_special_rules(test):
     res = test
-    from soundrts.campaign import Campaign
-    from soundrts.definitions import get_ai, rules, style
-
-    c = Campaign("soundrts/tests/single/campaign1")
-    c.load_resources()
-    map1 = c.chapters[1]
-    map1.load_resources()
-    map1.load_rules_and_ai(res)
-    map1.load_style(res)
-    assert rules.get("test", "cost") == [0, 0]
-    assert rules.get("peasant", "cost") == [7000, 0]
-    assert get_ai("easy") == ["get 7 peasant", "goto -1"]
-    assert style.get("peasant", "test") == ["7"]
-    assert sounds.get_text("0") == "campaign1 map1"
-    map1.unload_resources()
-    c.unload_resources()
+    for campaign in campaigns:
+        res.set_campaign(campaign)
+        chapter = campaign.chapters[1]
+        assert chapter.map.name == "campaign1/1"
+        res.set_map(chapter.map)
+        assert rules.get("test", "cost") == [0, 0]
+        assert rules.get("peasant", "cost") == [7000, 0]
+        assert get_ai("easy") == ["get 7 peasant", "goto -1"]
+        assert style.get("peasant", "test") == ["7"]
+        assert sounds.text("0") == "campaign1 map1"
+        res.set_map()
+        res.set_campaign()
 
 
-def test_unpacked_folder_map_redefines_text(test):
-    from soundrts.mapfile import Map
+def test_unpacked_folder_map_redefines_resources(test):
+    for path in maps_paths:
+        default_text = sounds.text("0")
+        default_sound = sounds.get_sound("9998")
 
-    default_text = sounds.get_text("0")
-    m = Map(unpack=Map("soundrts/tests/single/map1").pack())
-    m.load_resources()
-    assert sounds.get_text("0") == "map1"
-    assert sounds.get_text("0") != default_text
-    m.unload_resources()
-    assert sounds.get_text("0") == default_text
+        m = test.unpack_map(pack_file_or_folder(path))
+        test.set_map(m)
 
+        assert sounds.text("0") == "map1"
+        assert sounds.text("0") != default_text
+        assert isinstance(sounds.get_sound("9998"), pygame.mixer.Sound)
+        assert sounds.get_sound("9998").mod_name != default_sound.mod_name
+        assert rules.get("test", "cost") == [0, 0]
+        assert rules.get("peasant", "cost") == [6000, 0]
+        assert get_ai("easy") == ["get 6 peasant", "goto -1"]
+        assert style.get("peasant", "test") == ["6"]
 
-def test_unpacked_folder_map_redefines_sound(test):
-    from soundrts.mapfile import Map
+        test.set_map()
 
-    default_sound = sounds.get_sound("9998")
-    m = Map(unpack=Map("soundrts/tests/single/map1").pack())
-    m.load_resources()
-    assert isinstance(sounds.get_sound("9998"), pygame.mixer.Sound)
-    assert sounds.get_sound("9998") is not default_sound
-    m.unload_resources()
-    assert sounds.get_sound("9998") is default_sound
-
-
-def test_unpacked_folder_map_redefines_rules_ai_and_style(test):
-    res = test
-    from soundrts.definitions import get_ai, rules, style
-    from soundrts.mapfile import Map
-
-    m = Map(unpack=Map("soundrts/tests/single/map1").pack())
-    m.load_rules_and_ai(res)
-    m.load_style(res)
-    assert rules.get("test", "cost") == [0, 0]
-    assert rules.get("peasant", "cost") == [6000, 0]
-    assert get_ai("easy") == ["get 6 peasant", "goto -1"]
-    assert style.get("peasant", "test") == ["6"]
+        assert sounds.text("0") == default_text
+        assert sounds.get_sound("9998").mod_name == default_sound.mod_name

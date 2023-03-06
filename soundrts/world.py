@@ -1,5 +1,4 @@
 import copy
-import os.path
 import queue
 import random
 import re
@@ -9,14 +8,13 @@ from hashlib import md5
 from itertools import chain
 
 from soundrts.lib.nofloat import square_of_distance
-
-from . import res
 from .definitions import VIRTUAL_TIME_INTERVAL, get_ai_names, rules
 from .lib import chronometer as chrono
 from .lib import collision
+from .lib.defs import preprocess
 from .lib.log import exception, warning
 from .lib.nofloat import PRECISION, int_distance, to_int
-from .paths import MAPERROR_PATH
+from .lib.resource import res
 from .worldclient import DummyClient
 from .worldentity import COLLISION_RADIUS
 from .worldexit import passage
@@ -50,10 +48,11 @@ def convert_and_split_first_numbers(words):
 
 
 class World:
-    def __init__(self, default_triggers, seed=0, must_apply_equivalent_type=False):
+    def __init__(self, default_triggers=None, seed=0):
+        if default_triggers is None:
+            default_triggers = []
         self.default_triggers = default_triggers
         self.seed = seed
-        self.must_apply_equivalent_type = must_apply_equivalent_type
         self.id = self.get_next_id()
         self.random = random.Random()
         self.random.seed(int(seed))
@@ -567,7 +566,7 @@ class World:
 
     @property
     def nb_res(self):
-        return rules.get("parameters", "nb_of_resource_types")
+        return rules.get("parameters", "nb_of_resource_types", 2)
 
     def _add_start(self, w, words):
         if w == "player":
@@ -623,7 +622,7 @@ class World:
     def random_choice_repl(self, matchobj):
         return self.random.choice(matchobj.group(1).split("\n#end_choice\n"))
 
-    def _load_map(self, map):
+    def _parse_map(self, map_definition):
         triggers = []
         starting_resources = [0 for _ in range(self.nb_res)]
 
@@ -634,10 +633,8 @@ class World:
             "high_grounds",
         ]
 
-        s = map.read()  # "universal newlines"
-        s = re.sub("(?m);.*$", "", s)  # remove comments
-        s = re.sub("(?m)^[ \t]*$\n", "", s)  # remove empty lines
-        s = re.sub(r"(?m)\\[ \t]*$\n", " ", s)  # join lines ending with "\"
+        s = map_definition  # "universal newlines"
+        s = preprocess(s)
         s = s.replace("(", " ( ")
         s = s.replace(")", " ) ")
         s = re.sub(r"\s*\n\s*", r"\n", s)  # strip lines
@@ -770,22 +767,13 @@ class World:
             self._add_trigger(t)
 
     def load_and_build_map(self, map):
-        if os.path.exists(MAPERROR_PATH):
-            try:
-                os.remove(MAPERROR_PATH)
-            except:
-                warning("cannot remove map error file")
-        try:
-            map.load_rules_and_ai(res)
-            self._load_map(map)
-            self.map = map
-            self.square_width = int(self.square_width * PRECISION)
-            self._build_map()
-        except MapError as msg:
-            warning("map error: %s", msg)
-            self.map_error = "map error: %s" % msg
-            return False
-        return True
+        res.set_map(map)
+        res.load_rules_and_ai()  # TODO: remove this line when tests don't require it
+
+        self._parse_map(map.definition)
+
+        self.square_width = int(self.square_width * PRECISION)
+        self._build_map()
 
     # move this to Game?
 
@@ -814,7 +802,7 @@ class World:
     def food_limit(self):
         return self.global_food_limit
 
-    def populate_map(self, clients, random_starts=True):
+    def populate_map(self, clients, random_starts=True, equivalents=False):
         if random_starts:
             players_starts = self.random.sample(self.players_starts, len(clients))
         else:
@@ -827,20 +815,21 @@ class World:
             DummyClient(neutral=True).create_player(self)
         starts = chain(players_starts, self.computers_starts)
         for player, start in zip(self.players, starts):
-            player.init_position(start)
+            parsed_start = self.parse_start(start, player.faction, equivalents)
+            player.init_position(parsed_start)
 
-    def parse_start(self, start, faction):
+    def parse_start(self, start, faction, must_apply_equivalent_type):
         resources = rules.normalized_cost_or_resources(start[0])
-        units, upgrades, forbidden_techs = self.parse_assets(start, faction)
+        units, upgrades, forbidden_techs = self.parse_assets(start, faction, must_apply_equivalent_type)
         triggers = start[2]
         return units, upgrades, forbidden_techs, resources, triggers
 
-    def parse_assets(self, start, faction):
+    def parse_assets(self, start, faction, must_apply_equivalent_type):
         units = []
         upgrades = []
         forbidden_techs = []
         for place, type_, n in start[1]:
-            if self.must_apply_equivalent_type:
+            if must_apply_equivalent_type:
                 type_ = rules.equivalent_type(type_, faction)
             if isinstance(type_, str) and type_[0:1] == "-":
                 forbidden_techs.append(type_[1:])
@@ -1025,21 +1014,14 @@ class MapError(Exception):
 
 
 def map_error(line, msg):
-    msg = f"error: {msg}"
-    if line:
-        msg += f' (in "{line}")'
-    try:
-        open(MAPERROR_PATH, "w").write(msg)
-    except:
-        warning("could not write in %s", MAPERROR_PATH)
-    raise MapError(msg)
+    raise MapError(_formatted_msg(line, msg))
 
 
 def map_warning(line, msg):
+    warning(_formatted_msg(line, msg))
+
+
+def _formatted_msg(line, msg):
     if line:
         msg += f' (in "{line}")'
-    warning(msg)
-    try:
-        open(MAPERROR_PATH, "w").write(msg)
-    except:
-        warning("could not write in %s", MAPERROR_PATH)
+    return msg

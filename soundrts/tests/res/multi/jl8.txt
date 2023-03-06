@@ -1,0 +1,44 @@
+title 3008
+objective 145 88
+
+square_width 12
+nb_columns 3
+nb_lines 6
+
+nb_players_min 2
+nb_players_max 2
+starting_squares b1 b6
+starting_units townhall 2 farm 4 peasant
+starting_resources 10 10
+
+goldmine 300 a5 c2
+goldmine 100 b6
+goldmine 100 b1
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 100 a3 a4 b3 b4 c3 c4
+wood 75 a5 a5 a6 c1 c2 c2
+
+nb_meadows_by_square 0
+; 2 meadows
+additional_meadows a1 a2 a5 a6 b2 b5 c1 c2 c5 c6
+additional_meadows a1 a2 a5 a6 b2 b5 c1 c2 c5 c6
+; 3 meadows
+additional_meadows b1 b6
+additional_meadows b1 b6
+additional_meadows b1 b6
+
+terrain _forest a5 a6 c1 c2
+terrain _meadows a1 a2 b1 b2 b5 b6 c5 c6
+high_grounds a5 c2
+water 
+ground 
+no_air 
+cover 0.1 0.0 a3 a4 b3 b4 c3 c4
+
+west_east path a1 a2 a3 a4 a5 a6 b1 b2 b3 b4 b5 b6
+south_north path a1 a2 a3 a5 b2 b3 b4 c1 c3 c4 c5

@@ -651,8 +651,8 @@ class Player:
             if self.client.alliance == p.client.alliance:
                 self.allied.append(p)
 
-    def init_position(self, start):
-        units, self.upgrades, self.forbidden_techs, resources, triggers = self.world.parse_start(start, self.faction)
+    def init_position(self, parsed_start):
+        units, self.upgrades, self.forbidden_techs, resources, triggers = parsed_start
 
         self.resources = resources
         for index, qty in enumerate(self.resources):

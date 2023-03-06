@@ -115,10 +115,10 @@ class Menu:
     server = None
 
     def __init__(self, title=None, choices=None, default_choice_index=0, remember=None):
-        if not title:
+        if title is None:
             title = []
         self.title = title
-        if not choices:
+        if choices is None:
             choices = []
         self.choices = choices
         self.choice_index = None

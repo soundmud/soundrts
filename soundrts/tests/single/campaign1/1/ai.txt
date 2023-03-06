@@ -1,3 +1,0 @@
-def easy
-get 7 peasant
-goto -1

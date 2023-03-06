@@ -2,7 +2,7 @@ from soundrts.mapfile import Map
 from soundrts.world import World
 from soundrts.worldclient import DummyClient
 
-tiny_map_str = """
+tiny_map = b"""
 square_width 12
 nb_columns 2
 nb_lines 1
@@ -18,7 +18,7 @@ player 10 10 a1 guardtower b1 peasant
 
 def test_enter_building_from_another_square():
     w = World()
-    w.load_and_build_map(Map.from_string(tiny_map_str))
+    w.load_and_build_map(Map.loads(tiny_map, "tiny.txt"))
     w.populate_map([DummyClient()])
     p = w.players[0]
     tower, unit = p.units

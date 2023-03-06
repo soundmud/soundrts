@@ -1,0 +1,49 @@
+; multiplayer map 2
+;
+;      *******
+; 7    *     *
+;      * *** *
+; 6    *     *
+;  ******* *******
+; 5*   *     *   *
+;  * * * *** * * *
+; 4* *   * *   * * 
+;  * * * *** * * *
+; 3*   *     *   *
+;  ******* *******
+; 2    *     *
+;      * *** *
+; 1    *     *
+;      *******
+;   A B C D E F G
+
+title 3002
+objective 145 88
+
+; map size
+square_width 12
+nb_columns 7
+nb_lines 7
+
+; paths (give only the starting square)
+west_east_paths c1 d1 c2 d2 c3 d3 b4 e4 c5 d5 c6 d6 c7 d7
+west_east_bridges a3 f3 a5 f5
+south_north_paths a3 a4 b3 b4 c3 c4 d2 d5 e3 e4 f3 f4 g3 g4
+south_north_bridges c1 c6 e1 e6
+
+; resources
+;goldmines 75 d1 d7 a4 g4
+goldmines 75 c1 e7 a5 g3
+goldmines 150 e2 c6 b3 f5
+woods 75 e1 c7 a3 g5
+woods 75 e2 c6 b3 f5
+woods 75 e2 c6 b3 f5
+nb_meadows_by_square 2
+additional_meadows
+
+; players
+nb_players_min 2
+nb_players_max 4
+starting_squares d1 d7 a4 g4
+starting_units townhall farm peasant
+starting_resources 10 10

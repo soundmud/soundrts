@@ -16,7 +16,7 @@ class Warehouse:
 
 
 def test_is_ok_for_warehouse():
-    w = World([])
+    w = World()
     c = Computer(w, DummyClient())
     a1 = Square(w, 0, 0, 12)
     assert a1.name == "a1"

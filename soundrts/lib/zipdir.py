@@ -10,8 +10,8 @@ import zipfile
 from .log import warning
 
 
-def zipdir(target_dir, dest_file):
-    z = zipfile.ZipFile(dest_file, "w", zipfile.ZIP_DEFLATED)
+def zipdir(target_dir, dest_file, compression=zipfile.ZIP_DEFLATED):
+    z = zipfile.ZipFile(dest_file, "w", compression=compression)
     rootlen = len(target_dir) + 1
     for base, _, filenames in os.walk(target_dir):
         for n in filenames:

@@ -38,7 +38,7 @@ class DummyClient(worldclient.DummyClient):
             print(args)
 
 
-tiny_map_str = """
+tiny_map = b"""
 square_width 12
 nb_columns 1
 nb_lines 1
@@ -56,7 +56,7 @@ class _PlayerBaseTestCase(unittest.TestCase):
     def set_up(
         self, alliance=(1, 2), cloak=False, map_name="jl1_extended", ai=("easy", "easy")
     ):
-        self.w = World([])
+        self.w = World()
         self.w.load_and_build_map(Map("soundrts/tests/%s.txt" % map_name))
         if cloak:
             rules.unit_class("new_flyingmachine").is_a_cloaker = True
@@ -70,11 +70,9 @@ class _PlayerBaseTestCase(unittest.TestCase):
         self.w._update_buckets()
 
     def tiny_set_up(self):
-        self.w = World([])
-        tiny_map = Map()
-        tiny_map.map_string = tiny_map_str
-        tiny_map.path = ""
-        self.w.load_and_build_map(tiny_map)
+        self.w = World()
+        map_ = Map.loads(tiny_map, "tiny.txt")
+        self.w.load_and_build_map(map_)
         cp = DummyClient()
         self.w.populate_map([cp])
         self.cp = self.w.players[0]

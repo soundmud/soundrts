@@ -27,6 +27,8 @@ def pack(p):
 
 
 class _State:
+    allowed_commands: tuple
+
     def send_menu(self, client):
         pass
 
@@ -164,7 +166,7 @@ class Game:
         info(
             "start game %s on map %s with players %s",
             self.id,
-            self.scenario.get_name(),
+            self.scenario.name,
             " ".join(p.login for p in self.players),
         )
         self.guests = []
@@ -277,7 +279,7 @@ class Game:
     def invite(self, client):
         self.guests.append(client)
         client.notify(
-            "invitation", self.admin.login, self.scenario.get_name(short=True)
+            "invitation", self.admin.login, self.scenario.name
         )
 
     def invite_computer(self, level):
@@ -327,7 +329,7 @@ class Game:
     @property
     def short_status(self):
         return (
-            self.scenario.get_name(short=True),
+            self.scenario.name,
             ",".join([c.login for c in self.players]),
             self.nb_minutes,
         )

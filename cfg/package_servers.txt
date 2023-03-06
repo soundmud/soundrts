@@ -1,0 +1,2 @@
+;uncomment a package server to activate it
+;http://jlpo.free.fr/soundrts/packages/

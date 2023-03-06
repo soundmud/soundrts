@@ -1,15 +1,14 @@
 import time
 from typing import List
 
-from . import mapfile
 from . import msgparts as mp
-from . import res
 from .clientmedia import play_sequence, voice
 from .clientmenu import Menu
-from .definitions import style
+from .definitions import style, rules
 from .game import MultiplayerGame
 from .lib.log import info, warning
 from .lib.msgs import eval_msg_and_volume, nb2msg
+from .lib.resource import res
 
 
 def insert_silences(msg):
@@ -241,17 +240,16 @@ class _BeforeGameMenu(_ServerMenu):
     registered_players = ()
 
     def srv_map(self, args: List[str]) -> None:
-        self.map = mapfile.Map(
-            unpack=" ".join(args).encode()
-        )  # warning: args is split from a stripped string
-        self.map.load_style(res)
+        # warning: args is split from a stripped string
+        self.map = res.unpack_map(" ".join(args).encode(), save=True)
+        res.set_map(self.map)
 
     def srv_registered_players(self, args):
         self.registered_players = [p.split(",") for p in args]
 
     def _add_faction_menu(self, menu, pn, p, pr):
-        if len(self.map.factions) > 1:
-            for r in ["random_faction"] + self.map.factions:
+        if len(rules.factions) > 1:
+            for r in ["random_faction"] + rules.factions:
                 if r != pr:
                     menu.append(
                         name(p) + style.get(r, "title"),

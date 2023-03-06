@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING
 
 from .lib.log import exception, info, warning
 from .lib.msgs import encode_msg
-from .mapfile import worlds_multi
+from .lib.resource import res
+from .pack import pack_buffer
 
 if TYPE_CHECKING:
     from .servermain import Server
@@ -19,6 +20,16 @@ from .serverroom import (
     WaitingForTheGameToStart,
     _State,
 )
+
+
+def _map(map_index_or_name):
+    maps = res.multiplayer_maps()
+    try:
+        return maps[int(map_index_or_name)]
+    except ValueError:
+        for scenario in maps:
+            if map_index_or_name in scenario.name:
+                return scenario
 
 
 class ConnectionToClient(asynchat.async_chat):
@@ -110,7 +121,7 @@ class ConnectionToClient(asynchat.async_chat):
             self.push(
                 "maps %s\n"
                 % " ".join(
-                    [",".join([str(y) for y in x.title]) for x in worlds_multi()]
+                    [",".join([str(y) for y in x.title]) for x in res.multiplayer_maps()]
                 )
             )
         else:
@@ -136,14 +147,14 @@ class ConnectionToClient(asynchat.async_chat):
             version, login = data.split(" ", 1)
         except:
             warning("can't extract version and login: %s" % data)
-            return (None, None)
-        if re.match("^[a-zA-Z0-9]{1,20}$", login) == None:
+            return None, None
+        if re.match("^[a-zA-Z0-9]{1,20}$", login) is None:
             warning("bad login: %s" % login)
-            return (version, None)
+            return version, None
         if len(self.server.clients) >= self.server.nb_clients_max:
             warning("refused client %s: too many clients." % login)
-            return (version, None)
-        return (version, self._unique_login(login))
+            return version, None
+        return version, self._unique_login(login)
 
     @property
     def compatible_clients(self):
@@ -188,33 +199,32 @@ class ConnectionToClient(asynchat.async_chat):
     # "in the lobby" commands
 
     def cmd_create(self, args: str) -> None:
+        map_index_or_name = args[0]
+        speed = float(args[1])
+        is_public = len(args) >= 3 and args[2] == "public"
         if self.server.can_create(self):
-            self.state = OrganizingAGame()
-            self.push("game_admin_menu\n")
-            scs = worlds_multi()
-            try:
-                scenario = scs[int(args[0])]
-            except ValueError:
-                for scenario in scs:
-                    if args[0] in scenario.path:
-                        break
-            self.push("map %s\n" % scenario.pack().decode())
-            speed = float(args[1])
-            is_public = len(args) >= 3 and args[2] == "public"
-            self.server.games.append(
-                Game(scenario, speed, self.server, self, is_public)
-            )
-            self.server.update_menus()
+            map_ = _map(map_index_or_name)
+            if map_:
+                self._create_game(map_, speed, is_public)
         else:
             warning("game not created (max number reached)")
             self.notify("too_many_games")
+
+    def _create_game(self, map_, speed, is_public):
+        self.state = OrganizingAGame()
+        self.push("game_admin_menu\n")
+        self.push("map %s\n" % pack_buffer(map_.buffer, map_.buffer_name).decode())
+        self.server.games.append(
+            Game(map_, speed, self.server, self, is_public)
+        )
+        self.server.update_menus()
 
     def cmd_register(self, args: str) -> None:
         game = self.server.get_game_by_id(args[0])
         if game is not None and game.can_register():
             self.state = WaitingForTheGameToStart()
             self.push("game_guest_menu\n")
-            self.push("map %s\n" % game.scenario.pack().decode())
+            self.push("map %s\n" % pack_buffer(game.scenario.buffer, game.scenario.buffer_name).decode())
             game.register(self)
             self.server.update_menus()
         else:
@@ -222,7 +232,7 @@ class ConnectionToClient(asynchat.async_chat):
 
     def cmd_quit(self, unused_args):
         # When the client wants to quit, he first sends "quit" to the server.
-        # Then the server knows he musn't send commands anymore. He warns the
+        # Then the server knows he mustn't send commands anymore. He warns the
         # client: "ok, you can quit". Then the client closes the connection
         # and then, and only then, the server forgets the client.
         self.push("quit\n")

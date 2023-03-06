@@ -47,6 +47,8 @@ def cache(f):
 
 
 class _Space:
+    high_ground = False
+
     def __init__(self):
         self.objects = []
 
