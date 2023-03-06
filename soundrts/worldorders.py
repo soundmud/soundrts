@@ -589,6 +589,11 @@ class GoOrder(BasicOrder):
             self.unit.hold(self.target)
             self.mark_as_complete()
         elif self.unit._near_enough(self.target):
+            try:
+                if self.target.have_enough_space(self.unit):
+                    self.target.load(self.unit)
+            except AttributeError:
+                pass
             self.mark_as_complete()
         elif self.unit.is_idle:
             self.move_to_or_fail(self.target)
@@ -1186,7 +1191,10 @@ class LoadOrder(TransportOrder):
             else:
                 self.mark_as_impossible()
         elif self.unit.place != self.target.place:
-            self.move_to_or_fail(self.target.place)
+            if self.unit.speed:
+                self.move_to_or_fail(self.target.place)
+            else:
+                self.mark_as_complete()
         else:
             self.mark_as_complete()
             self.unit.load(self.target)

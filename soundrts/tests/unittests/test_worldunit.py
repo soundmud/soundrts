@@ -1,7 +1,5 @@
 from unittest.mock import Mock, call
 
-from soundrts.world import World
-from soundrts.worldplayerbase import Player
 from soundrts.worldroom import Square, Inside
 from soundrts.worldunit import Unit
 
@@ -80,12 +78,3 @@ def test_counterattack_if_defensive_mode():
     unit.counterattack(place)
 
     unit.take_order.assert_not_called()
-
-
-# def test_load():
-#     world = World([])
-#     player = Player(world, Mock())
-#     square = Square(world, 1, 1, 12)
-#     unit = Unit(player, square, 0, 0)
-#     transport = Unit(player, square, 0, 0)
-#     transport.load(unit)
