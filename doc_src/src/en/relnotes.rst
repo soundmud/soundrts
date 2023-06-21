@@ -1,12 +1,54 @@
+
 Release notes
 =============
 
 .. contents::
 
-1.3.7 (to be released)
+1.3.7
 -----
 
+For multiplayer games, this version requires:
+
+- client: 1.3.7 or later
+- server: 1.2-c12 or later
+
+Changes from 1.3.6:
+
+Now units can attack from inside vehicles or buildings:
+
+- ranged units can attack as usual
+- melee units can attack only from ground and without any additional range
+- melee units cannot attack from air vehicles
+- in the default game: units can enter in walls, gates and towers
+
+Fixed issues with counterattacks to a nearby square:
+
+- units who cannot counterattack will stay silent
+- defensive units won't counterattack
+
+Other:
+
+- restored the "attack!" notification
+- bugfix: a unit would not enter a building if the order was given from another square
+- fixed: restore game
+- inter-square attacks might work better
+
+Modding:
+
+- added armor_vs
+- now "damage_vs" works with "is_a" (including several levels of "inheritance" and multiple "inheritance")
+
+Map making:
+
+- official "multi" maps moved to res/multi
+- multiplayer "folder maps" must be zipped to be played online
 - removed the "maperror.txt" file (the information is already in the in-game error message).
+
+Changes to campaign format:
+
+- mods.txt replaced with "mods" keyword in campaign.txt
+- "title" keyword in campaign.txt
+- new constraint: a complex mission map must be stored as a zip file
 
 
 1.3.6
