@@ -1,0 +1,109 @@
+def zombie_faction
+class faction
+townhall graveyard
+farm farm_of_brains
+barracks zombie_training_grounds
+archer zombie_archer
+knight zombie_fighter
+peasant mindless_slave
+easy zombie_easy
+aggressive zombie_aggressive
+def mindless_slave
+class worker
+cost 4 0
+food_cost 1
+time_cost 10
+hp_max 1
+speed 2
+can_build farm_of_brains zombie_training_grounds graveyard
+range 0.8
+cooldown 1
+damage 1.5
+def zombie_footman
+class soldier
+cost 6 0
+food_cost 1
+time_cost 12
+hp_max 20
+speed 1
+armor 0.5
+range 1
+cooldown 1.5
+damage 3
+damage_bonus 1.5
+
+def farm_of_brains
+class building
+cost 5 5
+food_provided 8
+hp_max 400
+time_cost 45
+requirements graveyard
+def zombie_training_grounds
+class building
+cost 9 9
+food_provided 0
+hp_max 200
+time_cost 30
+requirements graveyard
+can_train zombie_footman zombie_archer 
+can_upgrade_to zombie_barracks
+def graveyard
+class building
+cost 10 16
+food_provided 1
+hp_max 800
+time_cost 135
+heal_level 1
+storable_resource_types 0 1
+can_train mindless_slave
+
+def zombie_archer
+class soldier
+hp_max 20
+range 8
+cooldown 1
+damage 5
+damage_bonus 1.2
+food_cost 1
+cost 10
+speed 0.6
+time_cost 23
+target_types ground air
+is_ballistic 1
+can_upgrade_to great_zombie_archer
+def zombie_barracks
+class building
+cost 20 20
+time_cost 60
+hp_max 600
+can_train zombie_footman zombie_archer zombie_fighter zombie_defender
+def zombie_fighter
+class soldier
+cost 15 0
+food_cost 3
+time_cost 30
+range 15
+damage 10
+cooldown 3
+hp_max 40
+armor 4.8
+speed 1.6
+def great_zombie_archer
+class soldier
+hp_max 40
+armor 5.10
+damage 10
+cooldown 0.5
+requirements zombie_barracks
+cost 30 30
+time_cost 50
+speed 0.5
+def zombie_defender
+class soldier
+hp_max 1000
+damage 20
+cooldown 2
+cost 500 0
+food_cost 10
+range 10

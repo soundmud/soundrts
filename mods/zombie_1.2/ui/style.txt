@@ -1,0 +1,55 @@
+def farm_of_brains
+is_a farm
+title 11
+
+def zombie_training_grounds
+is_a barracks
+title 1
+
+def graveyard
+is_a townhall
+title 2
+def mindless_slave
+is_a peasant
+title 3
+noise repeat 9 9
+attack_hit 12
+hit 15
+def zombie_footman
+is_a footman
+title 4
+attack_hit 12
+noise repeat 9
+def zombie_fighter
+is_a footman
+title 16
+noise repeat 9 9
+attack_hit 12
+
+def zombie_faction
+title 5
+def zombie_archer
+is_a archer
+title 6
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+keyboard soldier2
+shortcut a
+noise repeat 9 9
+def zombie_barracks
+Class building
+is_a zombie_training_grounds
+title 7
+def great_zombie_archer
+is_a zombie_archer
+title 17
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+noise repeat 9
+def zombie_defender
+title 18
+is_a zombie_fighter
+noise repeat 9
+attack_hit 12
