@@ -8,7 +8,8 @@ The license for the rest is unclear at the moment.
 Tested with Python 3.8.
 
 To install the requirements:
-pip install -r requirements.txt -U
+pip install -r requirements.txt -U --break-system-packages
+--break-system-packages is required on linux since accessible_output2 will attempt to use speech-dispatcher bindings for speech output. These bindings are, to the best of my knowledge, not installable through pip, which appears to be the only obstacle to running in a venv. Yes, you read that right, never run that pip invocation under sudo, which will essentially eat your system for lunch!
 
 Running server.py doesn't require any package.
 
