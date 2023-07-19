@@ -1,0 +1,1657 @@
+def thing
+title
+noise
+missed 1012
+attack_hit
+death
+proportion_0 if_me 6100 else 6000
+proportion_1 if_me 6101 else 6001
+proportion_2 if_me 6102 else 6002
+proportion_3 if_me 6103 else 6003
+proportion_4 if_me 6104 else 6004
+proportion_5 if_me 6105 else 6005
+proportion_6 if_me 6106 else 6006
+proportion_7 if_me 6107 else 6007
+proportion_8 if_me 6108 else 6008
+proportion_9 if_me 6109 else 6009
+proportion_10 if_me 76710 else 6010
+ground
+lose_fight 1324
+order_ok if_me 1194 1195 1196 else 1094 1095 1096
+order_impossible 1029
+research_complete_msg 4248 126
+added 1329
+added_msg $1 
+enter 1330
+exit 1331
+
+
+def parameters
+recommended_maps jl1 jl2 jl3 jl4 jl5 jl6 jl7 jl8 js1 js2 js3 js4 js5 js6 js7 js8 js9 js10 js11 js12 js13 js14 js15 kel1 kel2 kel3 kel4 kel5 kel6 b1 b2 bs1 bs2 ce1 ce2 ce3 ce4 ce5 can1 can2 can3 can4 can5 can5b m1 m2 m3 m4 m5 m6 m7 m8 mb1 mb2 mb3 mb4 mb5 mb6 mb7 mb8 mb9 onj1 onj2 pm1 pm2 pm3 pm4 pm5 pm6  pra1 pra2 pra3 pra4 pra5 pra6 pra7 pra8 pra9 pra10 pra11 pra12 qc1 qc2 qc3 sg1 sg2 sg3 sg4 swk1 swk2a swk2b swk2c z1 z2 z3 z4 z5
+
+; messages
+
+def building
+is_a unit
+shape square
+complete if_me 76709 else 1100
+complete_msg $1 126
+death 76734
+alert 1079 ; bell
+noise_if_damaged loop 1016 .5 ; half volume
+noise_if_very_damaged loop 1016
+ground grass
+keyboard building
+
+def load
+title 4278
+index 3
+
+def load_all
+title 4279
+index 3
+shortcut l
+
+def unload
+title 4280 $1 115
+index 3
+
+def unload_all
+title 4281
+index 3
+shortcut u
+
+def stop
+title 106
+index 12
+shortcut s
+
+; upgrades
+
+def horizontal_knife
+title 4405
+
+def mo_knife
+title 4374
+
+def saber
+title 4375
+
+def saber
+title 4375
+
+def footman_armor
+title 4376
+
+def improvement
+title 4365
+
+def tang_improvement
+is_a improvement
+
+def b_improvement
+is_a improvement
+
+def improve_your_diet
+title 4491
+
+def add_speed
+title 4488
+
+def minus_speed
+title 4489 
+
+def improvement2
+title 4490
+
+def tang_improvement2
+is_a improvement2
+
+def b_improvement2
+is_a improvement2
+
+def bright_light_armor
+title 4367
+
+def mysterious_armor
+title 4368
+
+
+def horselance
+title 4402
+
+def archer_weapon
+title 4216
+
+def archer_armor
+title 4218
+
+def archer_range
+title 4233
+
+def ridingbow
+title 4407
+
+def ridingbow_range
+title 4408
+
+def crossbow
+title 4403
+
+def horse_speed
+title 4254
+
+; research
+
+def a_teleportation
+title 4250 4251
+alert 1328
+shortcut t
+
+def a_protection_law
+title 4371
+alert 1328
+shortcut r
+
+def a_eyesight
+title 4377
+alert 1339
+shortcut v
+
+def a_lobby
+title 4378
+alert 76711
+shortcut c
+
+def a_come_back_to_life
+title 4385
+alert 76735
+shortcut r
+
+def a_thunder
+title 4372
+alert 76714
+shortcut m
+
+def summon_servant_army
+title 4562
+alert 76842
+
+def summon_servant_army2
+is_a summon_servant_army
+
+def summon_servant_army3
+is_a summon_servant_army
+
+def a_summon_golden_dragon
+title 4381
+alert 1338
+shortcut d
+
+
+def u_thunder
+title 4379
+
+def thunder
+title 4372
+noise 76714
+
+def rocks
+title 4414
+attack_hit 1085
+death 76719
+
+def projectile_rocks
+title 4415
+alert 1084
+
+def arrows
+title 4418
+attack_hit 1043
+attack_hit_level_1 1301
+death 76719
+
+def shoot_arrows
+title 4417
+alert 1042
+
+
+
+def village
+is_a building
+title 4387
+noise repeat 100 78566
+shortcut f
+
+def tang_lumbermill
+is_a building
+title 148
+noise repeat 15 1052
+shortcut l
+
+def drillground
+is_a building
+title 4400
+noise repeat 30 76741
+color violetred
+shortcut b
+
+def base
+is_a building
+shortcut h
+
+def county_government
+is_a base
+title 4392
+noise repeat 6 1064
+noise_if_damaged loop 1018 .5; half volume
+noise_if_very_damaged loop 1018
+shortcut h
+
+def government_office
+is_a county_government
+title 4393
+noise repeat 6 1307
+
+def governor's_house
+is_a government_office
+title 4394
+noise repeat 6 1308
+
+def foundry_bureau
+is_a building
+title 4428
+noise repeat 20 76733
+shortcut k
+
+def stables
+is_a building
+title 4222
+noise repeat 15 1305 1306
+shortcut s
+
+def tang_stables
+is_a stables
+title 4475
+
+def b_stables
+is_a stables
+title 4558
+
+def carriage_shop
+is_a building
+title 4461
+noise repeat 30 76740
+shortcut m
+
+def ordnance_supervisor
+is_a building
+title 4388
+noise repeat 15 1321
+shortcut w
+
+def taoist_temple
+is_a building
+title 4386
+noise repeat 46 76712 76713
+shortcut d
+
+
+def necropolis
+is_a building
+title 4304
+shortcut n
+
+def scouttower
+is_a building
+title 4275
+noise repeat 6 6111
+
+def tang_scouttower
+is_a scouttower
+shortcut t
+
+def turk_scouttower
+is_a scouttower
+shortcut t
+
+def ambush_circle
+is_a building
+title 4597
+
+def watchtower
+is_a building
+title 4430
+noise repeat 6 6112
+
+def crossbowtower
+is_a building
+title 4429
+noise repeat 20 76700
+launch_attack 76701
+attack_hit 76702
+
+def tang_wall
+is_a building
+title 4569
+shortcut a
+
+def tang_massive_wall
+is_a building
+title 4570
+
+def tang_gate
+is_a building
+title 4571
+shortcut g
+
+def tang_massive_gate
+is_a building
+title 4572
+
+def turk_wall
+is_a building
+title 4331
+shortcut a
+
+def turk_massive_wall
+is_a building
+title 4338
+
+def turk_gate
+is_a building
+title 4332
+shortcut g
+
+def turk_massive_gate
+is_a building
+title 4339
+
+def tang_shipyard
+is_a building
+title 4479
+
+def turk_shipyard
+is_a building
+title 4478
+
+; units
+
+def peasant
+is_a walking_unit
+title 4399
+noise_when_exploiting_goldmine repeat 1.6 1038 ; 1081
+noise_when_exploiting_wood repeat 1.5 1034 1035 1036 1037 10371
+noise_when_building repeat 4 1046 1048 1049
+attack_hit 1008
+store_resource_0 1099
+store_resource_1 1098
+death if_me 13111 else 13112
+keyboard worker
+shortcut p
+
+def villagers
+is_a peasant
+title 4399
+order_ok if_me 76856 76861 else 1094 1095 1096
+death if_me 76853 76854 else 1309
+keyboard worker
+shortcut p
+
+def tang_archer
+is_a walking_unit
+title 4459
+complete 76723
+noise repeat 300 76723
+order_ok if_me 76844 76845 else 1094 1095 1096
+death if_me 76849 76850 else 1309
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+keyboard soldier1
+shortcut a
+
+def tang_skirmisher
+is_a walking_unit
+title 4583
+order_ok if_me 76844 76845 else 1094 1095 1096
+complete 76729
+launch_attack 76867
+attack_hit 76745
+death if_me 76849 76850 else 1309
+keyboard soldier1
+shortcut a
+
+def tang_elite_skirmisher
+is_a tang_skirmisher
+title 4584
+
+def tang_imperial_skirmisher
+is_a tang_skirmisher
+title 4585
+
+def wangman_spearmen
+is_a walking_unit
+title 4564
+complete 76729
+noise repeat 300 76729
+launch_attack 76744
+attack_hit 1040 1041 76745
+attack_hit_level_1 1040 1041 76745
+death 76843 76806
+keyboard soldier1
+shortcut f
+
+def xi_archer
+is_a walking_unit
+title 4568
+complete 76742
+noise repeat 300 76742
+launch_attack 76743
+attack_hit 1043
+attack_hit_level_1 1301
+death 76843 76806
+keyboard soldier1
+shortcut a
+
+def horizontal_knife_footman
+is_a walking_unit
+title 4404
+complete 76726
+noise repeat 300 76726
+order_ok if_me 76844 76845 else 1094 1095 1096
+death if_me 76849 76850 else 1309
+launch_attack 76728
+attack_hit 1040 1041 76737	
+attack_hit_level_1 1040 1041 76737
+keyboard soldier1
+shortcut a
+
+def tang_pikemen
+is_a b_pikemen
+title 4599
+
+
+def modao_footman
+is_a walking_unit
+title 4373
+order_ok if_me 76846 76847 else 1094 1095 1096
+complete 76727
+noise repeat 300 76727
+death if_me 76851 76852 else 1309
+launch_attack 76725
+attack_hit 1040 1041 10401
+attack_hit_level_1 1040 1041 10401
+keyboard soldier2
+shortcut a
+
+
+def tang_archer2
+is_a walking_unit
+title 4459
+complete 76723
+noise repeat 300 76723
+death if_me 76851 76852 else 1309
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+keyboard soldier2
+shortcut a
+
+def nanshao_footman
+is_a walking_unit
+title 4563
+noise repeat 300 76813
+complete 76813
+launch_attack 76863
+attack_hit 1040 1041 76832
+attack_hit_level_1 1040 1041 1302 76832
+death 76843 76806
+keyboard soldier2
+shortcut a
+
+def tang_crossbowman
+is_a tang_archer
+title 4384
+complete 76724
+launch_attack 76721
+attack_hit 76722
+death if_me 13111 else 13112
+shortcut d
+
+def tang_arbalester
+is_a tang_crossbowman
+title 4576
+
+def tang_light_cavalry
+is_a unit
+title 4401
+order_ok if_me 76862 else 1094 1095 1096
+complete 76739
+noise repeat 300 76747 76748 76749
+launch_attack 12349
+attack_hit 1040 1041 10391
+attack_hit_level_1 1040 1041 10391
+death if_me 131101 else 13093
+move 76751
+keyboard soldier3
+shortcut k
+
+def tang_cavalry_archer
+is_a light_cavalry
+title 4406
+complete 76723
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+keyboard soldier3
+shortcut k
+
+def shatuo_cavalry
+is_a unit
+title 4565
+complete 76739
+noise repeat 300 76747 76748 76749
+launch_attack 12349
+attack_hit 1040 1041 10391 10394
+attack_hit_level_1 1040 1041 10391 10394
+death 76843 76806
+move 76751
+keyboard soldier3
+shortcut k
+
+def shatuo_cavalry_archer
+is_a unit
+title 4566
+complete 76742
+noise repeat 300 76747 76748 76749
+launch_attack 76743
+attack_hit 1043
+attack_hit_level_1 1301
+death 76843 76806
+move 76751
+keyboard soldier3
+shortcut a
+
+def black_cavalry
+is_a unit
+title 4369
+complete 76730
+noise repeat 300 76705
+order_ok if_me 76855 else 1094 1095 1096
+launch_attack 76731
+attack_hit 1040 1041 76706 76707
+attack_hit_level_1 1040 1041 76706 76707
+death if_me 131101 else 13093
+move 76708
+keyboard soldier3
+shortcut k
+
+def horsecrossbowmen
+is_a black_cavalry
+title 4427
+complete 76724
+launch_attack 76721
+attack_hit 76722
+keyboard soldier3
+shortcut k
+
+def nanzhao_heavy_cavalry
+is_a unit
+title 4567
+noise repeat 300 76705
+complete 76729
+launch_attack 76744
+attack_hit 1040 1041 76745
+attack_hit_level_1 1040 1041 76745
+death 76843 76806
+move 76708
+keyboard soldier5
+shortcut k
+
+def marching_vehicle
+is_a unit
+title 4422
+noise repeat 30 76732
+move 76720
+death 76704
+keyboard soldier4
+shortcut f
+
+def tang_siege_vehicle
+is_a unit
+title 4457
+noise repeat 9 1311 1312 1313 ; 1082 1083 ?
+launch_attack 1084
+attack_hit 1085
+move 1082 1083
+death 76837
+keyboard soldier4
+shortcut c
+
+def ballista
+is_a unit
+title 4370
+noise repeat 9 76700
+launch_attack 76701
+attack_hit 76702
+move 76703
+death 76704
+keyboard soldier4
+
+def golden_dragon
+is_a unit
+title 4382
+noise repeat 6 1314
+launch_attack 12346
+attack_hit 12345
+death 1316
+move 1317 1318
+keyboard soldier5
+shortcut d
+
+def taoist_priest
+is_a walking_unit
+title 4389
+order_ok if_me 76857 else 1094 1095 1096
+death if_me 76859 76860 else 1309
+launch_attack 1322
+attack_hit 1323
+death if_me 13111 else 13112
+keyboard soldier6
+shortcut m
+
+
+def yacht
+is_a unit
+title 4409
+move 76715 
+death 76821
+keyboard soldier7
+shortcut f
+
+def fightingship
+is_a unit
+title 4410
+complete 76839
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+move 76716
+death 76821
+keyboard soldier7
+
+def walkship
+is_a unit
+title 4411
+move 76717
+death 76821
+keyboard soldier7
+
+def buildingship
+is_a unit
+title 4412
+noise repeat 9 76700
+launch_attack 76701
+attack_hit 76702
+move 76715
+death 76821
+keyboard soldier7
+
+def dash
+is_a unit
+title 4413
+move 76717
+death 76821
+keyboard soldier7
+
+def stickship
+is_a unit
+title 4416
+complete 76838
+move 76716
+attack_hit 76718
+death 76821
+keyboard soldier7
+
+
+
+def tang_empire
+title 4398
+
+def byzantine_empire
+title 4534
+
+def turkic_hanate
+title 4431
+
+
+
+
+; turk
+
+def turk_herdsmen
+is_a peasant
+title 4439
+attack_hit 1041
+keyboard worker
+shortcut p
+
+def turk_archer
+is_a walking_unit
+title 4460
+complete 76742
+noise repeat 300 76742
+launch_attack 76743
+attack_hit 1043
+attack_hit_level_1 1301
+death if_me 13111 else 13112
+keyboard soldier1
+shortcut a
+
+def turk_skirmisher
+is_a tang_skirmisher
+title 4586
+order_ok if_me 1194 1195 1196 else 1094 1095 1096
+
+def turk_elite_skirmisher
+is_a tang_skirmisher
+title 4587
+order_ok if_me 1194 1195 1196 else 1094 1095 1096
+
+
+
+def turk_spearmen
+is_a walking_unit
+title 4440
+complete 76729
+noise repeat 300 76729
+launch_attack 76744
+attack_hit 1040 1041 76745
+attack_hit_level_1 1040 1041 76745
+death if_me 1310 else 1309
+keyboard soldier1
+shortcut f
+
+def turk_whistlinger
+is_a walking_unit
+title 4441
+complete 76742
+noise repeat 300 76742
+launch_attack 76756 76757 76758
+attack_hit 76759
+attack_hit_level_1 76759
+death if_me 13111 else 13112
+keyboard soldier1
+shortcut t
+
+def turk_archer_cavalry
+is_a unit
+title 4442
+complete 76742
+noise repeat 300 76747 76748 76749
+launch_attack 76743
+attack_hit 1043
+attack_hit_level_1 1301
+death if_me 131101 else 13093
+move 76751
+keyboard soldier2
+shortcut k
+
+def turk_sword_cavalry
+is_a unit
+title 4443
+complete 76746
+noise repeat 300 76747 76748 76749
+launch_attack 76750
+attack_hit 1039 1040 1041 
+attack_hit_level_1 1039 1040 1041
+death if_me 131101 else 13093
+move 76751
+keyboard soldier2
+shortcut k
+
+def saber_cavalry
+is_a unit
+title 4444
+complete 76739
+noise repeat 300 76747 76748 76749
+launch_attack 12349
+attack_hit 1040 1041 10391 10394
+attack_hit_level_1 1040 1041 10391 10394
+death if_me 131101 else 13093
+move 76751
+keyboard soldier3
+shortcut k
+
+def turk_archer_cavalry2
+is_a unit
+title 4442
+complete 76742
+noise repeat 300 76747 76748 76749
+launch_attack 76743
+attack_hit 1043
+attack_hit_level_1 1301
+death if_me 131101 else 13093
+move 76751
+keyboard soldier3
+shortcut a
+
+def turk_blade_cavalry
+is_a unit
+title 4445
+complete 76752
+noise repeat 300 76747 76748 76749
+launch_attack 76753 76754 76755
+attack_hit 1040 1041 10392
+attack_hit_level_1 1302 1040 1041 10392
+death if_me 131101 else 13093
+move 76751
+keyboard soldier4
+shortcut k
+
+def turk_archer_cavalry3
+is_a unit
+title 4442
+complete 76742
+noise repeat 300 76747 76748 76749
+launch_attack 76743
+attack_hit 1043
+attack_hit_level_1 1301
+death if_me 131101 else 13093
+move 76751
+keyboard soldier4
+shortcut a
+
+def turk_middle_cavalry
+is_a middle_cavalry
+title 4595
+complete 76739
+launch_attack 12349
+attack_hit 1040 1041 10391 10394
+attack_hit_level_1 1040 1041 10391 10394
+keyboard soldier5
+shortcut k
+
+def turk_middle_archer_cavalry
+is_a turk_archer_cavalry
+title 4596
+noise repeat 300 1305 1306
+move 1303
+
+
+def turk_spear_cavalry
+is_a unit
+title 4446
+noise repeat 300 76705
+complete 76729
+launch_attack 76744
+attack_hit 1040 1041 76745
+attack_hit_level_1 1040 1041 76745
+death if_me 131101 else 13093
+move 76708
+keyboard soldier5
+shortcut k
+
+def turk_whistlinger_cavalry
+is_a unit
+title 4447
+complete 76742
+noise repeat 300 76705
+launch_attack 76756 76757 76758
+attack_hit 76759
+attack_hit_level_1 76759
+death if_me 131101 else 13093
+move 76708
+keyboard soldier5
+shortcut a
+
+def turk_trebuchet
+is_a unit
+title 4458
+noise repeat 9 1311 1312 1313 ; 1082 1083 ?
+launch_attack 1084
+attack_hit 1085
+move 1082 1083
+death 76837
+keyboard soldier5
+shortcut c
+
+def medium_trebuchet
+is_a turk_trebuchet
+title 4579
+
+def set_stumbling_blocks
+title 4480
+alert 76792
+shortcut s
+
+def ambush
+title 4598
+
+
+def turkic_finch
+is_a unit
+title 4448
+noise repeat 30 76760 76761 76762 76763 76764
+attack_hit 76766 76767 76768
+move 76769 76770 76771
+death 76765
+keyboard soldier7
+
+def golden_wolf
+is_a unit
+title 4449
+noise repeat 30 76772 76773 76774 76775
+move 76784 76785
+launch_attack 76776
+attack_hit 76777 76778 76779 76780
+death 76781 76782 76783
+keyboard soldier7
+
+def turk_shaman
+is_a walking_unit
+title 4450
+launch_attack 76786
+attack_hit 76787 76788
+death if_me 13111 else 13112
+keyboard soldier6
+shortcut m
+
+def u_rain
+title 4574
+
+def a_rain
+title 4453
+alert 76789
+shortcut r
+
+def rain
+title 4462
+noise repeat 120 76790
+death 76719
+
+def bewitched
+title 4575
+alert 76794
+
+def trip_lock
+is_a building
+title 4426
+death 76704
+
+def summon_sirius
+title 4452
+alert 76774
+shortcut w
+
+def summon_turkic_finch
+title 4477
+alert 76804 76805
+shortcut f
+
+
+def bewitched
+title 4455
+alert 76794
+
+def archim_tent
+is_a base
+title 4432
+noise repeat 40 76795
+noise_if_damaged loop 76796 .5; half volume
+noise_if_very_damaged loop 76796
+shortcut a
+
+def movearchim_tent
+is_a archim_tent
+title 4468
+move 76802
+
+def movearchim_tent2
+is_a movearchim_tent
+
+def movearchim_tent3
+is_a movearchim_tent
+
+def hakemu_tent
+is_a archim_tent
+title 4433
+noise repeat 28 76797
+
+def pasha_tent
+is_a hakemu_tent
+title 4434
+noise repeat 40 76798
+
+def turk_pasture
+is_a building
+title 4435
+noise repeat 20 76799
+shortcut t
+
+def turk_barracks
+is_a building
+title 4469
+noise repeat 110 76803
+
+def turk_lumbermill
+is_a building
+title 148
+noise repeat 15 1052
+
+def turk_blacksmith
+is_a building
+title 4559
+noise repeat 15 1300
+
+def turk_stables
+is_a stables
+title 4557
+shortcut s
+
+def leathershop
+is_a building
+title 4436
+noise repeat 60 76800
+
+def turk_leathershop
+is_a leathershop
+shortcut l
+
+def tang_leathershop
+is_a leathershop
+title 4487
+shortcut l
+
+def turk_arms_workshop
+is_a building
+title 4465
+noise repeat 6 76801
+shortcut w
+
+def turk_shaman_temple
+is_a building
+title 4437
+noise repeat 15 1319
+
+def birdhouse
+is_a building
+title 4438
+noise repeat 30 76738
+
+def sword
+title 4425
+
+def blade
+title 4424
+
+def spear
+title 4423
+
+
+
+def whistling
+title 4420
+
+def leather_armor
+title 4466
+
+def ring_armor
+title 4467
+
+
+
+def raft
+is_a unit
+title 4481
+move 1088 1088
+death 76821
+keyboard soldier7
+
+def fishingship
+is_a unit
+title 4482
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+move 1088 1088
+death 76821
+keyboard soldier7
+
+def riprapship
+is_a unit
+title 4483
+noise repeat 9 1311 1312 1313 ; 1082 1083 ?
+launch_attack 1084
+attack_hit 1085
+move 1088 1088
+death 76821
+keyboard soldier7
+
+;byzantine_empire
+
+;buildings
+
+def town_center
+is_a base
+title 4494
+
+def governor's_palace
+is_a townhall
+title 4495
+
+def constantinople
+is_a governor's_palace
+title 4496
+
+def fruit_estate
+is_a building
+title 4497
+noise repeat 101 76807
+shortcut f
+
+def b_barracks
+is_a building
+title 4498
+noise repeat 9 76808
+
+def mine
+is_a building
+title 4500
+noise repeat 6 76809
+
+def b_blacksmith
+is_a building
+title 4560
+noise repeat 15 1300
+
+def armament_institute
+is_a building
+title 4503
+noise repedit 10 76810
+
+def b_leathershop
+is_a leathershop
+
+def church
+is_a building
+title 4501
+noise repeat 40 76811
+
+def dock
+is_a building
+title 4505
+noise repeat 40 76812
+
+def guard_tower
+is_a scouttower
+title 4506
+shortcut g
+
+def fortress
+is_a guard_tower
+title 4532
+
+def catapulttower
+is_a guard_tower
+title 4533
+
+def b_wall
+title 4569
+
+def b_massive_wall
+is_a building
+title 4570
+
+def b_gate
+is_a building
+title 4571
+shortcut g
+
+def b_massive_gate
+is_a building
+title 4572
+
+;units
+
+def serf
+is_a peasant
+title 4515
+
+def b_pikemen
+is_a walking_unit
+title 4516
+complete 76729
+noise repeat 300 76729
+launch_attack 76744 76814
+attack_hit 1040 1041 76829
+attack_hit_level_1 1040 1041 76829
+death if_me 1310 else 1309
+keyboard soldier1
+shortcut f
+
+def b_archer
+is_a walking_unit
+title 4537
+complete 76723
+noise repeat 300 76723
+launch_attack 1042 76814
+attack_hit 1043
+attack_hit_level_1 1301
+death if_me 13111 else 13112
+keyboard soldier2
+shortcut a
+
+def b_skirmisher
+is_a tang_skirmisher
+title 4588
+order_ok if_me 1194 1195 1196 else 1094 1095 1096
+
+def b_elite_skirmisher
+is_a tang_skirmisher
+title 4589
+order_ok if_me 1194 1195 1196 else 1094 1095 1096
+
+def b_imperial_skirmisher
+is_a tang_skirmisher
+title 4590
+order_ok if_me 1194 1195 1196 else 1094 1095 1096
+
+def b_crossbowman
+is_a tang_crossbowman
+title 4577
+order_ok if_me 1194 1195 1196 else 1094 1095 1096
+
+def b_arbalester
+is_a tang_crossbowman
+title 4578
+
+def axemen
+is_a walking_unit
+title 4530
+noise repeat 300 76813
+complete 76813
+launch_attack 76815 76814
+attack_hit 1040 1041 76832
+attack_hit_level_1 1040 1041 1302 76832
+keyboard soldier2
+shortcut a
+
+def sword_shield_men
+is_a walking_unit
+title 4517
+complete 76746
+noise repeat 300 76746
+launch_attack 76750 76816
+attack_hit 1039 1040 1041 
+attack_hit_level_1 1039 1040 1041
+keyboard soldier3
+shortcut s
+
+def sword_shield_men_acceleration_mode
+is_a walking_unit
+title 4561
+complete 76835
+keyboard soldier3
+shortcut s
+
+def middle_cavalry
+is_a unit
+noise repeat 300 1305 1306
+move 1303
+death if_me 131101 else 13093
+
+def pike_cavalry
+is_a middle_cavalry
+title 4518
+noise repeat 300 1305 1306
+complete 76729
+launch_attack 76744 76816
+attack_hit 1040 1041 76829
+attack_hit_level_1 1040 1041 76745
+move 1303
+death if_me 131101 else 13093
+keyboard soldier4
+shortcut k
+
+def b_cavalry_archer
+is_a unit
+title 4519
+noise repeat 300 1305 1306
+complete 76723
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+move 1303 1304
+death if_me 131101 else 13093
+keyboard soldier4
+shortcut k
+
+def iron_paladin
+is_a unit
+title 4520
+noise repeat 300 76705
+launch_attack 76750 76817
+attack_hit 1039 1040 1041 
+attack_hit_level_1 1039 1040 1041
+move 76708
+death if_me 131101 else 13093
+keyboard soldier5
+shortcut k
+
+def heavy_pike_cavalry
+is_a unit
+title 4573
+complete 76729
+noise repeat 300 76705
+launch_attack 76744 76817
+attack_hit 1040 1041 76829
+attack_hit_level_1 1040 1041 76745
+move 76708
+death 76719
+keyboard soldier5
+shortcut k
+
+def b_priest
+is_a walking_unit
+title 4297
+keyboard soldier6
+shortcut p
+
+def b_catapult
+is_a unit
+title 4542
+noise repeat 9 1311 1312 1313 ; 1082 1083 ?
+launch_attack 1084
+attack_hit 1085
+move 1082 1083
+death 76837
+keyboard soldier4
+shortcut c
+
+def medium_catapult
+is_a b_catapult
+title 4580
+
+def heavy_catapult
+is_a b_catapult
+title 4581
+attack_hit 76864
+
+def siege_ram
+is_a unit
+title 4582
+noise repeat 9 1311 1312 1313
+move 76866 76866
+attack_hit 76865
+death 76837
+keyboard soldier4
+shortcut c
+
+def double_headed_eagle
+is_a unit
+title 4521
+noise repeat 10 76818
+move 76819
+attack_hit 76777 76778 76779 76780
+death 76833
+keyboard soldier7
+
+def dromon
+is_a unit
+title 4525
+move 76820
+launch_attack 1042
+attack_hit 1043
+attack_hit_level_1 1301
+death 76821
+keyboard soldier7
+
+def heavy_dromon
+is_a unit
+title 4526
+move 76822
+launch_attack 1084
+attack_hit 1085
+death 76821
+keyboard soldier7
+
+def royal_dromon
+is_a unit
+title 4527
+move 76823
+attack_hit 76824
+death 76821
+keyboard soldier7
+
+def dromon_melee_mode
+is_a unit
+title 4535
+complete 76840
+move 76823
+attack_hit  76824
+death 76821
+keyboard soldier7
+
+def dromon_remote_mode
+is_a unit
+title 4536
+complete 76841
+launch_attack 1084
+attack_hit 1085
+move 76823
+death 76821
+keyboard soldier7
+
+;research upgrade
+
+def pike
+title 4512
+
+
+def axe
+title 4531
+
+def light_shield
+title 4507
+
+def heavy_sword
+title 4513
+
+def heavy_shield
+title 4508
+
+def buckler
+title 4509
+
+def scale_armor
+title 4510
+
+def chain_mail
+title 4511
+
+def traction_power
+title 4514
+
+def javelin
+title 4523
+attack_hit 76826
+death 76719
+
+def a_javelin
+title 4538
+
+def throwing_javelin
+title 4524
+alert 76825
+
+def greek_fire
+title 4528
+noise loop 76828
+
+def fire_greek_fire
+title 4529
+alert 76827
+
+def b_resurrection
+title 4294
+alert 76830
+shortcut r
+
+def b_conversion
+title 4274
+alert 76831
+shortcut c
+
+
+
+def summon_double_headed_eagle
+title 4522
+alert 76818
+
+def c_resurrection
+title 4539
+
+
+def summon_mercenaries
+title 4543
+alert 76742 76729 76813
+
+def summon_mercenaries2
+is_a summon_mercenaries
+
+def summon_mercenaries3
+is_a summon_mercenaries
+
+def native_hussars
+is_a unit
+title 4544
+complete 76729
+noise repeat 30 76747 76748 76749
+launch_attack 76744 76817
+attack_hit 1040 1041 76829
+attack_hit_level_1 1040 1041 76829
+death 76719
+move 76751
+keyboard soldier5
+shortcut k
+
+def turkic_mercenary_cavalry
+is_a unit
+title 4545
+complete 76742
+noise repeat 30 76747 76748 76749
+launch_attack 76743 76817
+attack_hit 1043
+attack_hit_level_1 1301
+death 76719
+move 76751
+keyboard soldier2
+shortcut k
+
+def turkic_cavalry_melee_mode
+is_a turkic_mercenary_cavalry
+title 4546
+complete 76729
+noise repeat 30 76729
+launch_attack 76744 76817
+attack_hit 1040 1041 76829
+attack_hit_level_1 1040 1041 76829
+death 76719
+move 76751
+keyboard soldier2
+shortcut k
+
+def varangian_guard
+is_a unit
+title 4547
+complete 76813
+noise repeat 10 76813
+launch_attack 76815 76817
+attack_hit 1040 1041 76832
+attack_hit_level_1 1040 1041 1302 76832
+death 76719
+keyboard soldier2
+shortcut a
+
+def speed_up_slash
+title 4548
+
+def slow_slash
+title 4549
+
+def lv1sightrange
+title 4550
+
+def lv2sightrange
+title 4551
+
+def lv3sightrange
+title 4552
+
+def tang_lv1sightrange
+is_a lv1sightrange
+
+def tang_lv2sightrange
+is_a lv2sightrange
+
+def tang_lv3sightrange
+is_a lv3sightrange
+
+def b_lv1sightrange
+is_a lv1sightrange
+
+def b_lv2sightrange
+is_a lv2sightrange
+
+def b_lv3sightrange
+is_a lv3sightrange
+
+def tk_lv1sightrange
+is_a lv1sightrange
+
+def tk_lv2sightrange
+is_a lv2sightrange
+
+def tk_lv3sightrange
+is_a lv3sightrange
+
+
+def lv1attackspeed
+title 4553
+
+def lv2attackspeed
+title 4554
+
+def lv3attackspeed
+title 4555
+
+def tang_lv1attackspeed
+is_a lv1attackspeed 
+
+def tang_lv2attackspeed
+is_a lv2attackspeed
+
+def tang_lv3attackspeed
+is_a lv3attackspeed
+
+def tk_lv1attackspeed
+is_a lv1attackspeed 
+
+def tk_lv2attackspeed
+is_a lv2attackspeed
+
+def tk_lv3attackspeed
+is_a lv3attackspeed
+
+
+def b_lv1attackspeed
+is_a lv1attackspeed 
+
+def b_lv2attackspeed
+is_a lv2attackspeed
+
+def b_lv3attackspeed
+is_a lv3attackspeed
+

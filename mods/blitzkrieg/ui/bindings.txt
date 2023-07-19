@@ -1,0 +1,201 @@
+; Copied over but with the key difference that we don't have a resource 1
+
+; definitions used in this file
+
+#define SOLDIER soldier1 soldier2 soldier3 soldier4 soldier5 soldier6 soldier7
+
+
+; examine the situation
+
+z: resource_status 0
+c: food_status
+v: unit_hp_status
+
+LCTRL: examine
+RCTRL: examine
+
+SPACE: unit_status
+
+
+; explore the map
+
+UP: select_square 0 1
+DOWN: select_square 0 -1
+LEFT: select_square -1 0
+RIGHT: select_square 1 0
+
+CTRL UP: select_square 0 1 no_collision
+CTRL DOWN: select_square 0 -1 no_collision
+CTRL LEFT: select_square -1 0 no_collision
+CTRL RIGHT: select_square 1 0 no_collision
+
+PAGEDOWN: select_scouted_square 1
+PAGEUP: select_scouted_square -1
+
+CTRL PAGEDOWN: select_conflict_square 1
+CTRL PAGEUP: select_conflict_square -1
+
+ALT PAGEDOWN: select_unknown_square 1
+ALT PAGEUP: select_unknown_square -1
+
+SHIFT PAGEDOWN: select_resource_square 1
+SHIFT PAGEUP: select_resource_square -1
+
+; select a target
+
+TAB: select_target 1 
+SHIFT TAB: select_target -1 
+
+CTRL TAB: select_target 1 useful
+CTRL SHIFT TAB: select_target -1 useful
+
+
+; give an order
+
+a: select_order 1
+SHIFT a: select_order -1
+
+RETURN: validate
+SHIFT RETURN: validate queue_order
+CTRL RETURN: validate imperative
+CTRL SHIFT RETURN: validate imperative queue_order
+
+BACKSPACE: default
+SHIFT BACKSPACE: default queue_order
+CTRL BACKSPACE: default imperative
+CTRL SHIFT BACKSPACE: default imperative queue_order
+
+ALT r: do_again ; reselect the previously validated order
+ALT g: do_again now ; if no target is required, validate the order
+ALT a: do_again now ; if no target is required, validate the order
+SHIFT ALT g: do_again now queue_order ; if no target is required, validate the order
+SHIFT ALT a: do_again now queue_order ; if no target is required, validate the order
+
+; select one or several units for orders
+
+q: select_unit 1 local
+SHIFT q: select_unit -1 local
+
+CTRL q: select_unit 1
+CTRL SHIFT q: select_unit -1
+
+BACKSLASH: command_unit
+
+w: select_unit 1 building
+ALT w: select_unit 1 building idle
+CTRL w: select_unit 1 building even_if_no_menu ; include buildings without a menu (farms for example)
+e: select_unit 1 worker
+
+ALT e: select_unit 1 worker idle
+CTRL ALT e: select_units worker idle
+QUOTE: select_unit 1 worker idle
+CTRL QUOTE: select_units worker idle
+
+r: select_unit 1 soldier1
+t: select_unit 1 soldier2
+y: select_unit 1 soldier3
+u: select_unit 1 soldier4
+i: select_unit 1 soldier5
+o: select_unit 1 soldier6
+p: select_unit 1 soldier7
+
+SHIFT w: select_unit -1 building
+SHIFT e: select_unit -1 worker
+ALT SHIFT e: select_unit -1 worker idle
+SHIFT r: select_unit -1 soldier1
+SHIFT t: select_unit -1 soldier2
+SHIFT y: select_unit -1 soldier3
+SHIFT u: select_unit -1 soldier4
+SHIFT i: select_unit -1 soldier5
+SHIFT o: select_unit -1 soldier6
+SHIFT p: select_unit -1 soldier7
+
+CTRL e: select_units worker
+CTRL r: select_units soldier1
+CTRL t: select_units soldier2
+CTRL y: select_units soldier3
+CTRL u: select_units soldier4
+CTRL i: select_units soldier5
+CTRL o: select_units soldier6
+CTRL p: select_units soldier7
+
+CTRL d: select_units worker
+CTRL f: select_units soldier1
+CTRL g: select_units soldier2
+CTRL h: select_units soldier3
+CTRL j: select_units soldier4
+CTRL k: select_units soldier5
+CTRL l: select_units soldier6
+CTRL SEMICOLON: select_units soldier7
+
+d: select_units worker local
+ALT d: select_units worker local idle
+CTRL ALT d: select_units worker idle
+f: select_units local soldier1
+g: select_units local soldier2
+h: select_units local soldier3
+j: select_units local soldier4
+k: select_units local soldier5
+l: select_units local soldier6
+SEMICOLON: select_units local soldier7
+
+s: select_units local SOLDIER
+CTRL s: select_units SOLDIER
+d: select_units local worker
+CTRL d: select_units worker
+SHIFT s: select_units local worker SOLDIER
+CTRL SHIFT s: select_units worker SOLDIER
+ALT s: select_units local worker SOLDIER
+CTRL ALT s: select_units worker SOLDIER
+
+
+; group units around already selected ones
+
+1: group 1 local
+2: group 2 local
+3: group 3 local
+4: group 4 local
+CTRL 1: group 1
+CTRL 2: group 2
+CTRL 3: group 3
+CTRL 4: group 4
+0: ungroup
+
+
+; miscellaneous
+
+ESCAPE: escape
+
+F1: help 1
+SHIFT F1: help -1
+
+F2: help -1
+CTRL F2: fullscreen
+CTRL SHIFT F2: toggle_cheatmode
+
+F3: say_time
+CTRL SHIFT F3: toggle_tick
+CTRL F3: toggle_talking_clock
+
+F5: history_previous
+F6: history_next
+
+LALT: history_stop
+RALT: history_stop
+LSHIFT: history_stop
+RSHIFT: history_stop
+
+F9: objectives
+
+F10: gamemenu
+CTRL c: gamemenu
+ALT F4: gamemenu
+
+F11: say_players
+
+HOME: volume
+KP_PLUS: volume
+END: volume -1 
+KP_MINUS: volume -1 
+
+CTRL SPACE: immersion

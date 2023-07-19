@@ -1,0 +1,11 @@
+Beta:
+Changed housing to factory
+Fixed typo in readme file
+
+Alpha:
+unit costs fixed
+building costs fixed
+sound bugs fixed.
+
+build:
+Creation!

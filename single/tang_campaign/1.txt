@@ -1,0 +1,68 @@
+; solo map 1
+;
+;  *******
+; 5* + + *
+;  *+*****
+; 3* + + *
+;  ***+***
+; 1* + + *
+;  *******
+;   A B C
+
+title 8511
+intro 8501
+
+; map size
+
+square_width 12
+
+nb_columns 3
+nb_lines 5
+
+; terrain
+
+terrain mountain b4 c4
+terrain bridge b2
+terrain marsh b3
+speed .5 1 b3
+terrain river a2 c2
+remove_meadows a2 b2 c2 b4 c4
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 a3 b3 a5 b5
+west_east_bridges
+
+south_north_paths a3 a4
+south_north_paths b1 b2 ; bridge
+
+; resources
+
+goldmines 25 a1
+goldmines 50 c5
+
+woods 75 a1 c1
+
+nb_meadows_by_square 1
+additional_meadows c3
+remove_meadows a5 b3
+
+; players
+
+player 5 10 -summon_servant_army -summon_servant_army2 -summon_servant_army3 -tang_lv1sightrange -tang_lv2sightrange -tang_lv3sightrange -government_office -county_government -tang_stables -lumbermill -ordnance_supervisor -foundry_bureau -carriage_shop -taoist_temple -tang_shipyard -tang_wall -tang_gate a1 county_government villagers c1 village horizontal_knife_footman
+
+computer_only 0 0 a5 turk_sword_cavalry c5 2 saber_cavalry c3 turk_blade_cavalry
+
+; triggers
+
+timer_coefficient 1
+
+trigger player1 (timer 0) (add_objective 1 8509)
+trigger player1 (timer 0) (add_objective 2 8510)
+
+; This trigger must be defined before the "objective_complete" triggers
+; or the cut scene will never be played (the game will quit before).
+trigger player1 (has 2 village drillground) (cut_scene 8502)
+
+trigger player1 (has 2 village) (objective_complete 1)
+trigger player1 (has drillground) (objective_complete 2)

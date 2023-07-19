@@ -1,0 +1,461 @@
+; can't do this as it causes hell
+;clear
+
+def thing
+added ; turns off horn sound for when stuff appears, no one uses horns in the second world war
+
+def unit
+production 10000 ; research, train or upgrade_to
+blocked 10001
+
+def building
+production 10000 ; research, train or upgrade_to
+blocked 10001
+death 10002 10003
+alert 10004 ; alarm
+
+; buildings
+
+def barracks
+title 99
+noise repeat 30 10005
+
+def allies_barracks
+is_a barracks
+
+def german_barracks
+is_a barracks
+
+def soviet_barracks
+is_a barracks
+
+def advanced_soviet_barracks
+is_a soviet_barracks
+title 7057
+
+def command_center
+is_a building
+launch_attack 10070
+title 7003
+
+def allies_command_center
+is_a command_center
+title 7006 7003
+
+def nuclear_command_center
+is_a allies_command_center
+title 7052
+
+def german_command_center
+is_a command_center
+title 7001 7003
+
+def soviet_command_center
+is_a command_center
+title 7002 7003
+
+def guardtower
+launch_attack 10006 10007
+attack_hit
+
+def german_guardtower
+is_a guardtower
+
+def cannontower
+launch_attack 10053 10054
+attack_hit 10021 10022 10023
+
+def flak_cannon
+is_a building
+launch_attack 10071 10072
+title 7045
+
+def oil_depot
+is_a building
+title 7008
+
+def supply_center
+is_a building
+title 7007
+noise repeat 30 10015 10016
+
+def factory
+is_a building
+title 7009
+noise repeat 20 10017 10018 10019
+
+def allies_factory
+is_a factory
+
+def german_factory
+is_a factory
+
+def soviet_factory
+is_a factory
+
+def air_command_center
+is_a building
+title 7010 7003
+noise repeat 30 10020
+
+def allies_air_command_center
+is_a air_command_center
+
+def german_air_command_center
+is_a air_command_center
+
+def soviet_air_command_center
+is_a air_command_center
+
+def tech_center
+is_a building
+title 7011
+
+def allies_tech_center
+is_a tech_center
+
+def german_tech_center
+is_a tech_center
+
+def soviet_tech_center
+is_a tech_center
+
+def bomber_command
+is_a building
+title 7044
+
+def allies_bomber_command
+is_a bomber_command
+
+def german_bomber_command
+is_a bomber_command
+
+def soviet_bomber_command
+is_a bomber_command
+
+def v2_rocket_launcher
+is_a building
+title 7055
+
+; units
+
+def workman
+is_a walking_unit
+title 7004
+noise_when_exploiting_goldmine repeat 1.6 1038
+noise_when_exploiting_wood repeat 1.6 1038
+noise_when_building repeat 5 10008 10009
+store_resource_0 1099
+keyboard worker
+
+def labourer
+is_a workman
+title 7024
+
+def allies_workman
+is_a workman
+
+def german_workman
+is_a workman
+
+def soviet_workman
+is_a workman
+
+def rifleman
+is_a walking_unit
+title 7005
+launch_attack 10010 10011 10012 10013 10014
+keyboard soldier1
+
+def allies_rifleman
+is_a rifleman
+
+def german_rifleman
+is_a rifleman
+
+def soviet_rifleman
+is_a rifleman
+
+; these discount infantry just inherit from their real versions
+def discount_soviet_rifleman
+is_a soviet_rifleman
+
+def rocket_infantry
+is_a walking_unit
+attack_hit 10021 10022 10023
+keyboard soldier2
+
+def allies_rocket_infantry
+is_a rocket_infantry
+title 7013 7012
+launch_attack 10028 10029
+
+def german_rocket_infantry
+is_a rocket_infantry
+title 7014
+launch_attack 10026 10027
+
+def soviet_rocket_infantry
+is_a rocket_infantry
+title 7054
+
+def discount_soviet_rocket_infantry
+is_a soviet_rocket_infantry
+
+def partisan
+is_a walking_unit
+title 7015
+attack_hit 10024 10025
+keyboard soldier2
+
+def tank
+is_a unit
+death 10037 10038 10039
+attack_hit 10021 10022 10023 ; on the assumption that tanks will use cannons
+
+def scout
+is_a tank
+attack_hit
+launch_attack 10059 10060
+move 10061 10062 9999 9999 9999 9999
+move_on_grass 10061 10062 9999 9999 9999 9999
+move_on_leaves 10061 10064 9999 9999 9999 9999
+move_on_gravel 10061 10064 9999 9999 9999 9999
+move_on_wood 10061 10063 9999 9999 9999 9999
+keyboard soldier3
+
+def allies_scout
+is_a scout
+title 7034 7033
+
+def german_scout
+is_a scout
+title 7036 7033
+
+def soviet_scout
+is_a scout
+title 7035 7033
+
+def light_tank
+is_a tank
+move 10030 10032 9999 9999 9999 9999
+move_on_grass 10030 10032 9999 9999 9999 9999
+move_on_leaves 10030 10031 9999 9999 9999 9999
+move_on_gravel 10030 10031 9999 9999 9999 9999
+move_on_wood 10030 10032 9999 9999 9999 9999
+keyboard soldier3
+
+def allies_light_tank
+is_a light_tank
+title 7017 7016
+launch_attack 10035 10036
+
+def german_light_tank
+is_a light_tank
+title 7019 7016
+launch_attack 10035 10036
+
+def soviet_light_tank
+is_a light_tank
+title 7018 7016
+launch_attack 10033 10034
+
+def medium_tank
+is_a tank
+launch_attack 10040 10041
+move 10042 10043 9999 9999 9999 9999
+move_on_grass 10042 10043 9999 9999 9999 9999
+move_on_leaves 10042 10044 9999 9999 9999 9999
+move_on_gravel 10042 10044 9999 9999 9999 9999
+move_on_wood 10042 10044 9999 9999 9999 9999
+keyboard soldier4
+
+def allies_medium_tank
+is_a medium_tank
+title 7021 7020
+
+def german_medium_tank
+is_a medium_tank
+title 7023 7020
+
+def soviet_medium_tank
+is_a medium_tank
+title 7022 7020
+
+def heavy_tank
+is_a tank
+launch_attack 10057 10058
+move 10055 10056 9999 9999 9999 9999
+move_on_grass 10055 10056 9999 9999 9999 9999
+move_on_leaves 10055 10056 9999 9999 9999 9999
+move_on_gravel 10055 10056 9999 9999 9999 9999
+move_on_wood 10055 10056 9999 9999 9999 9999
+keyboard soldier5
+
+def allies_heavy_tank
+is_a heavy_tank
+title 7030 7029
+
+def german_heavy_tank
+is_a heavy_tank
+title 7032 7029
+
+def soviet_heavy_tank
+is_a heavy_tank
+title 7031 7029
+
+def artillery
+is_a tank
+launch_attack 10047 10048
+attack_hit 10051 10052
+move 10045 10046 9999 9999 9999 9999
+move_on_grass 10045 10046 9999 9999 9999 9999
+move_on_leaves 10045 10046 9999 9999 9999 9999
+move_on_gravel 10045 10046 9999 9999 9999 9999
+move_on_wood 10045 10046 9999 9999 9999 9999
+keyboard soldier6
+
+def allies_artillery
+is_a artillery
+title 7026 7025
+
+def german_artillery
+is_a artillery
+title 7028 7025
+
+def soviet_artillery
+is_a artillery
+launch_attack 10049 10050
+title 7027 7025
+
+def super_heavy_tank
+is_a heavy_tank
+
+def allies_super_heavy_tank
+is_a super_heavy_tank
+title 7037 7029
+
+def german_super_heavy_tank
+is_a super_heavy_tank
+title 7039 7029
+
+def soviet_super_heavy_tank
+is_a super_heavy_tank
+title 7038 7029
+
+def flak_trak
+is_a tank
+move 10073 10074 9999 9999 9999 9999
+move_on_grass 10073 10074 9999 9999 9999 9999
+move_on_leaves 10073 10074 9999 9999 9999 9999
+move_on_gravel 10073 10074 9999 9999 9999 9999
+move_on_wood 10073 10074 9999 9999 9999 9999
+attack_hit 10071 10072
+title 7046
+keyboard soldier3
+
+def allies_flak_trak
+is_a flak_trak
+attack_hit 10075 10076
+title 7047
+
+def german_flak_trak
+is_a flak_trak
+
+def soviet_flak_trak
+is_a flak_trak
+
+; aircraft
+
+def plane
+is_a unit
+
+def bomber
+is_a plane
+launch_attack 10065 10066
+attack_hit 10051 10052
+noise loop 10069
+
+def allies_bomber
+is_a bomber
+launch_attack 10067 10068
+title 7041
+
+def german_bomber
+is_a bomber
+title 7043
+
+def soviet_bomber
+is_a bomber
+title 7042
+
+def fighter
+is_a plane
+attack_hit 10077 10078
+noise loop 10069
+keyboard soldier7
+
+def allies_fighter
+is_a fighter
+title 7049
+
+def german_fighter
+is_a fighter
+title 7051
+
+def soviet_fighter
+is_a fighter
+title 7050
+
+; abilities
+
+def allies_a_callin_bombers
+title 7040
+
+def german_a_callin_bombers
+title 7040
+
+def soviet_a_callin_bombers
+title 7040
+
+def allies_a_callin_fighters
+title 7048
+
+def german_a_callin_fighters
+title 7048
+
+def soviet_a_callin_fighters
+title 7048
+
+def nuclear_strike
+title 7053
+alert 10080
+
+def v2_rocket
+title 7056
+alert 10081
+
+; resources
+
+def goldmine
+is_a resource_deposit
+title 81
+exhausted 1047
+ground gravel
+
+def wood
+is_a resource_deposit
+title 81
+exhausted 1047
+ground wood
+
+; races
+
+def allies_race
+title 7000
+
+def german_race
+title 7001
+
+def soviet_race
+title 7002

@@ -1,0 +1,892 @@
+clear
+def parameters
+nb_of_resource_types 2
+def goldmine
+class deposit
+resource_type 0
+extraction_time 2
+extraction_qty 2
+
+def wood
+class deposit
+resource_type 1
+extraction_time 5
+extraction_qty 2
+
+def empire
+class race
+townhall housing
+farm farm
+blacksmith library
+workshop tankfactory
+lumbermill droidfactory
+stables transportfactory
+magestower walkerfactory
+dragonslair airfactory
+temple sithtemple
+necropolis deathstarfactory
+barracks deathstarfactory
+peasant alien
+footman sith
+archer sithlord
+knight aat
+catapult catd
+dragon droidgunship
+mage dsd
+priest hfs
+new_flying_machine mtt
+necromancer walker
+dragon tiefighter 
+easy empire_easy
+aggressive empire_hard
+
+
+def rebbles
+class race
+townhall ahousing
+farm farm
+blacksmith library
+barracks clonetrooperfactory
+workshop atankfactory
+lumbermill gunshipfactory
+stables atransportfactory
+magestower bongofactory
+dragonslair aairfactory
+temple jeditemple
+necropolis spafactory
+footman barcspeeder
+archer bongo
+turbotank knight
+new_flyingmachine landspeeder
+mage asultgunboat
+priest attackgunship
+catapult spa
+dragon vwf
+necromancer ywf
+peasant aalien
+easy rebble_easy
+aggressive rebble_hard
+
+def alien
+class worker
+cost 4 0
+time_cost 10
+food_cost 1
+hp_max 4
+speed 1.5
+damage 0.5
+range 3
+cooldown 1.5
+can_build farm housing library sithtemple tankfactory transportfactory droidfactory walkerfactory airfactory deathstarfactory troopfactory
+
+def troop
+class soldier
+cost 6 0
+time_cost 10
+food_cost 1
+hp_max 30
+speed 4
+armor 1
+range 4
+cooldown 1
+damage 8
+target_types ground
+
+def sith
+class soldier
+cost 10 0
+time_cost 15
+food_cost 1
+hp_max 50
+speed 3
+armor 0.5
+range 3
+cooldown 2
+damage 10
+target_types ground
+
+def sithlord
+class soldier
+cost 20 0
+time_cost 18
+food_cost 1
+hp_max 80
+speed 5
+armor 0.5
+range 5
+cooldown 1
+damage 15
+target_types ground
+
+def aat
+class soldier
+cost 10 10
+time_cost 15
+food_cost 1
+can_use armour
+hp_max 100
+speed 3
+armor 3
+range 5
+cooldown 1
+damage 30
+target_types ground air
+
+def stardestroyer
+class soldier
+cost 50 50
+time_cost 50
+can_use armour
+food_cost 2
+hp_max 100
+speed 5
+armor 4
+range 5
+cooldown 2
+damage 100
+target_types ground air
+airground_type air
+transport_volume 99
+
+def starcruzer
+class soldier
+cost 100 100
+can_use armour
+time_cost 100
+food_cost 3
+hp_max 500
+speed 5
+armor 6
+range 6
+cooldown 4
+damage 300
+damage_radius 5
+splash 1
+is_balistic 1
+target_types ground air
+airground_type air
+transport_volume 99
+
+def catd
+class soldier
+cost 20 15
+time_cost 20
+food_cost 1
+can_use armour
+hp_max 30
+speed 4
+armor 0.5
+range 3
+cooldown 1
+damage 20
+
+def droidgunship
+class soldier
+cost 30 30
+time_cost 30
+food_cost 1
+can_use armour
+hp_max 80
+speed 4
+armor 5
+range 5
+cooldown 1
+damage 20
+target_types ground air
+airground_type air
+transport_volume 99
+
+def dsd
+class soldier
+cost 40 40
+time_cost 40
+food_cost 0
+can_use armour
+hp_max 20
+speed 8
+armor 0
+range 3
+cooldown 0.5
+damage 5
+target_types ground
+
+
+def hfs
+class soldier
+cost 60 60
+time_cost 60
+can_use armour
+food_cost 0
+hp_max 50
+speed 3
+armor 3
+range 8
+cooldown 2
+damage 20
+damage_radius 3
+airground_type air
+target_types ground
+transport_volume 99
+
+def walker
+class soldier
+cost 90 90
+time_cost 60
+food_cost 1
+hp_max 200
+can_use armour
+speed 15
+armor 20
+range 5
+cooldown 0.1
+damage 25
+transport_volume 99
+
+def tiefighter
+class soldier
+cost 20 20
+time_cost 20
+food_cost 1
+hp_max 50
+speed 5
+armor 0.5
+range 3
+cooldown 0.5
+damage 5
+target_types ground air
+airground_type air
+transport_volume 99
+
+def mtt
+class soldier
+cost 50 50
+food_cost 2
+hp_max 50
+speed 5
+armor 0.5
+can_use armour
+range 3
+cooldown 2
+damage 2
+target_types air
+airground_type air
+time_cost 30
+transport_volume 99
+transport_capacity 98
+
+def farm
+class building
+cost 5 5
+food_provided 8
+hp_max 300
+armor 2.5
+time_cost 60
+
+def housing
+class building
+cost 16 12
+hp_max 500
+armor 2.5
+can_upgrade_to greatmetalshouse greatsupplieshouse
+time_cost 30
+storable_resource_types 0 1
+can_train alien
+
+def library
+class building
+cost 20 20
+hp_max 200
+armor 2.5
+time_cost 30
+can_research duplicator
+
+def alibrary
+class building
+cost 20 20
+hp_max 200
+armor 2.5
+time_cost 30
+can_research duplicator artilaryresearch
+
+def tankfactory
+class building
+cost 30 30
+hp_max 500
+armor 2.5
+time_cost 50
+can_train aat
+
+def droidfactory
+class building
+cost 40 40
+hp_max 500
+armor 2.5
+time_cost 50
+can_train catd droidgunship dsd hfs
+
+def transportfactory
+class building
+cost 50 50
+hp_max 500
+armor 2.5
+time_cost 50
+can_train mtt
+
+def walkerfactory
+class building
+cost 60 60
+hp_max 500
+armor 2.5
+time_cost 50
+can_train walker
+
+def airfactory
+class building
+cost 70 70
+hp_max 500
+armor 2.5
+time_cost 50
+can_train tiefighter stardestroyer starcruzer
+
+def troopfactory
+class building
+cost 30 30
+hp_max 500
+armor 2.5
+time_cost 50
+can_train troop
+
+def sithtemple
+class building
+cost 20 20
+hp_max 500
+armor 2.5
+time_cost 50
+can_train sith sithlord
+
+def deathstarfactory
+class building
+cost 90 90
+hp_max 500
+armor 2.5
+time_cost 50
+can_train deathstar
+
+def deathstar
+class soldier
+time_cost 200
+cost 5000 5000
+hp_max 10000
+armour 20
+speed 6
+food_cost 10
+damage 500
+damage_radius 7
+splash 1
+target_types ground air
+airground_type air
+cooldown 2
+can_use armour
+range 9
+is_balistic 1
+is_repairable 1
+
+def armour
+class upgrade
+cost 8 10
+time_cost 60
+effect apply_bonus armor
+
+
+
+def townhall
+class building
+decay 1
+
+def keep
+class building
+decay 1
+
+def castle
+class building
+decay 1
+
+def scouttower
+class building
+decay 1
+
+def barracks
+class building
+decay 1
+
+def stables
+class building
+decay 1
+
+def temple
+class building
+decay 1
+
+def workshop
+class building
+decay 1
+
+def blacksmith
+class building
+decay 1
+
+def lumbermill
+class building
+decay 1
+
+def dragonslair
+class building
+decay 1
+
+def magestower
+class building
+decay 1
+
+def necropolis
+class building
+decay 1
+
+def peasant
+class soldier
+decay 1
+
+def footman
+class soldier
+decay 1
+
+def archer
+class soldier
+decay 1
+
+def darkarcher
+class soldier
+decay 1
+
+def knight
+class soldier
+decay 1
+
+def dragon
+class soldier
+decay 1
+
+def catapult
+class soldier
+decay 1
+
+def flyingmachine
+class soldier
+decay 1
+
+def new_flyingmachine
+class soldier
+decay 1
+
+def mage
+class soldier
+decay 1
+
+def priest
+class soldier
+decay 1
+
+def necromancer
+class soldier
+decay 1
+
+def skeleton
+class soldier
+decay 1
+
+def zombie
+class soldier
+decay 1
+
+def duplicator 
+class upgrade
+cost 30 30
+time_cost 30
+
+
+def greatsupplieshouse
+class building
+cost 22 31 
+time_cost 30
+hp_max 800
+heal_level 2
+requirements duplicator
+can_recruit alien
+storable_resource_types 0
+storage_bonus 48
+
+
+
+def greatmetalshouse
+class building
+cost 22 31 
+time_cost 30
+hp_max 800
+heal_level 2
+requirements duplicator
+can_recruit alien
+storable_resource_types 1
+storage_bonus 0 48
+
+
+def aalien
+class worker
+cost 4 0
+time_cost 10
+food_cost 1
+hp_max 4
+speed 1.5
+damage 0.5
+range 3
+cooldown 1.5
+can_build farm ahousing alibrary jeditemple clonetrooperfactory atankfactory gunshipfactory atransportfactory bongofactory aairfactory spafactory
+
+
+def jeditemple
+class building
+cost 20 20
+hp_max 500
+armor 2.5
+time_cost 50
+can_train jedi jediknight jedimaster
+
+def clonetrooperfactory
+class building
+cost 30 30
+hp_max 500
+armor 2.5
+time_cost 50
+can_train clonetrooper
+
+def atankfactory
+class building
+cost 30 30
+hp_max 500
+armor 2.5
+time_cost 50
+can_train tt
+
+def gunshipfactory
+class building
+cost 40 40
+hp_max 500
+armor 2.5
+time_cost 50
+can_train agb ags
+
+def atransportfactory
+class building
+cost 50 50
+hp_max 500
+armor 2.5
+time_cost 50
+can_train barcspeeder landspeeder 
+
+def bongofactory
+class building
+cost 60 60
+hp_max 500
+armor 2.5
+time_cost 50
+can_train bongo
+
+def aairfactory
+class building
+cost 70 70
+hp_max 500
+armor 2.5
+time_cost 50
+can_train vwf ywf xwf rbc
+
+def spafactory
+class building
+cost 90 90
+hp_max 500
+armor 2.5
+time_cost 50
+can_train spa
+
+
+def barcspeeder
+class soldier
+cost 6 0
+time_cost 10
+food_cost 0
+hp_max 50
+speed 6
+armor 0.5
+range 5
+cooldown 2
+damage 30
+target_types ground
+transport_volume 33
+transport_capacity 1
+keyboard soldier7
+
+def bongo
+class soldier
+cost 90 90
+time_cost 90
+food_cost 2
+hp_max 100
+speed 4
+armor 3
+range 6
+can_use armour
+cooldown 1
+damage 50
+target_types ground air
+keyboard soldier6
+
+def tt
+class soldier
+cost 30 30
+time_cost 20
+food_cost 1
+hp_max 750
+speed 3
+can_use armour
+armor 20
+range 6
+cooldown 3
+damage 200
+target_types ground air
+keyboard soldier2
+
+def landspeeder
+class soldier
+cost 6 0
+time_cost 10
+food_cost 0
+hp_max 50
+speed 6
+armor 0.5
+range 5
+cooldown 1
+damage 30
+target_types ground
+transport_capacity 1
+transport_volume 33
+keyboard soldier7
+
+def agb
+class soldier
+cost 30 30
+time_cost 30
+food_cost 1
+hp_max 100
+can_use armour
+speed 4
+armor 0.5
+range 4
+cooldown 1
+damage 40
+target_types ground air
+airground_type air
+transport_volume 99
+keyboard soldier4
+
+def ags
+class soldier
+cost 60 60
+time_cost 60
+food_cost 2
+hp_max 200
+can_use armour
+speed 6
+armor 4
+range 7
+cooldown 0.5
+damage 40
+target_types ground air
+airground_type air
+transport_volume 99
+keyboard soldier4
+
+def spa
+class soldier
+cost 100 100
+time_cost 100
+food_cost 3
+hp_max 1000
+speed 3
+requirements artilaryresearch
+armor 25
+range 8
+cooldown 4
+damage 400
+damage_radius 5
+splash 1
+target_types ground air
+transport_volume 45
+airground_type ground
+
+
+def rbc
+class soldier
+cost 90 90
+time_cost 50
+food_cost 2
+hp_max 500
+can_use armour
+speed 6
+armor 20
+range 6
+cooldown 1
+damage 120
+target_types air
+airground_type air
+transport_volume 99
+keyboard soldier5
+
+def jedi
+class soldier
+cost 6 0
+time_cost 10
+food_cost 1
+hp_max 50
+speed 3
+armor 0.5
+range 3
+cooldown 2
+damage 10
+target_types ground
+keyboard soldier1
+
+def jediknight
+class soldier
+cost 12 0
+time_cost 12
+food_cost 1
+hp_max 50
+speed 4
+armor 0.5
+range 4
+cooldown 1.4
+damage 20
+target_types ground
+keyboard soldier1
+
+def jedimaster
+class soldier
+cost 24 0
+time_cost 24
+food_cost 1
+hp_max 80
+speed 6
+armor 0.5
+range 6
+cooldown 0.5
+damage 30
+target_types ground
+keyboard soldier1
+
+def clonetrooper
+class soldier
+cost 6 0
+time_cost 10
+food_cost 1
+hp_max 30
+speed 4
+armor 1
+range 4
+cooldown 1
+damage 8
+keyboard soldier1
+
+def xwf
+class soldier
+cost 30 30
+time_cost 30
+food_cost 1
+hp_max 50
+speed 4
+armor 2
+range 4
+cooldown 1
+can_use armour
+damage 20
+airground_type air
+target_types ground air
+keyboard soldier7
+
+def ywf
+class soldier
+cost 40 40
+time_cost 40
+food_cost 1
+hp_max 50
+speed 5
+can_use armour
+armor 3
+range 5
+cooldown 1
+damage 30
+airground_type air
+target_types ground air
+keyboard soldier7
+
+def vwf
+class soldier
+cost 60 60
+time_cost 60
+food_cost 1
+hp_max 50
+speed 6
+can_use armour
+armor 3
+range 6
+cooldown 1
+damage 30
+airground_type air
+target_types ground air
+keyboard soldier7
+
+def ahousing
+class building
+cost 16 12
+hp_max 500
+armor 2.5
+can_upgrade_to agreatmetalshouse agreatsupplieshouse
+time_cost 30
+storable_resource_types 0 1
+can_train aalien
+
+
+def agreatsupplieshouse
+class building
+cost 22 31 
+time_cost 30
+hp_max 800
+heal_level 2
+requirements duplicator
+can_recruit aalien
+storable_resource_types 0
+storage_bonus 48
+
+
+
+def agreatmetalshouse
+class building
+cost 22 31 
+time_cost 30
+hp_max 800
+heal_level 2
+requirements duplicator
+can_recruit aalien
+storable_resource_types 1
+storage_bonus 0 48
+
+def artilaryresearch
+class upgrade
+cost 80 100
+time_cost 90

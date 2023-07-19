@@ -1,0 +1,81 @@
+; solo map 1
+;
+;  *******
+; 5* + + *
+;  *+*****
+; 3* + + *
+;  ***+***
+; 1* + + *
+;  *******
+;   A B C
+
+title 8512
+intro 8530
+global_food_limit 1000
+
+; map size
+
+square_width 12
+
+nb_columns 3
+nb_lines 5
+
+; terrain
+
+terrain mountain b4 c4
+terrain bridge b2
+terrain marsh b3
+speed .5 1 b3
+terrain river a2 c2
+remove_meadows a2 a2 a2 a2 a2 b2 b2 b2 b2 b2 c2 c2 c2 c2 c2 b3 b3 b3 b3 b3
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 a3 b3 a5 b5
+west_east_bridges
+
+south_north_paths a3 a4
+south_north_paths b1 b2 ; bridge
+
+; resources
+
+goldmines 75 a1
+goldmines 150 a3
+goldmines 500 a4 c4
+goldmines 1000 a5 c5
+
+woods 75 a1 c1
+woods 150 c3
+woods 300 a4 c4
+woods 500 a5 c5
+
+nb_meadows_by_square 8
+remove_meadows a5 b3
+
+; players
+
+player 200 200 -summon_servant_army2 -summon_servant_army3 -tang_lv1sightrange -tang_lv2sightrange -tang_lv3sightrange -summon_servant_army -horse_speed -tang_shipyard -tang_wall -tang_gate -leather_armor -horizontal_knife -mo_knife -saber -footman_armor -bright_light_armor -tang_improvement -tang_improvement2 -add_speed -minus_speed -horselance -mysterious_armor crossbow u_thunder a1 county_government 10 villagers b1 5 village c1 horizontal_knife_footman
+
+computer_only 0 0 a5 turk_sword_cavalry c5 2 saber_cavalry c3 turk_blade_cavalry
+
+; triggers
+
+timer_coefficient 1
+
+trigger player1 (timer 0) (add_objective 1 8533)
+trigger player1 (timer 0) (add_objective 2 8534)
+trigger player1 (timer 0) (add_objective 3 8535)
+trigger player1 (timer 0) (add_objective 4 8536)
+
+; This trigger must be defined before the "objective_complete" triggers
+; or the cut scene will never be played (the game will quit before).
+trigger player1 (has governor's_house 20 tang_archer 20 modao_footman 20 tang_light_cavalry 5 marching_vehicle 5 tang_siege_vehicle 5 taoist_priest 5 black_cavalry) (cut_scene 8502)
+
+trigger player1 (has governor's_house) (objective_complete 1)
+trigger player1 (has 20 tang_pikemen 20 tang_archer 20 modao_footman 20 tang_light_cavalry) (objective_complete 2)
+trigger player1 (has 5 marching_vehicle 5 tang_siege_vehicle) (objective_complete 3)
+trigger player1 (has 5 taoist_priest 5 black_cavalry) (objective_complete 4)
+
+
+trigger player1 (has 1 drillground) (cut_scene 8537)
+trigger player1 (has 1 drillground 1 lumbermill 1 foundry_bureau 1 tang_stables) (cut_scene 8538)

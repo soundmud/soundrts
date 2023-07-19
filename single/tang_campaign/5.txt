@@ -1,0 +1,177 @@
+; solo map 2
+;
+;  *******
+; 5* + + *
+;  ***+***
+; 3* + + *
+;  *+***+*
+; 1* + + *
+;  *******
+;   A B C
+
+title 8545
+intro 8546
+trigger player1 (timer 0) (add_objective 1 8549)
+
+
+; map size
+
+square_width 12
+global_food_limit 1000
+
+nb_columns 3
+nb_lines 10
+
+
+; terrain
+
+high_grounds b4 b8
+terrain ford a2 c2
+terrain river b2
+terrain marsh b3
+speed .5 1 a2 c2 b3 b4; half speed in the ford, the marsh and the mountain pass
+
+; paths (give only the starting square)
+
+west_east_paths a1 b1 a3 b3 a5 b5 a6 b6 a8 b8 a9 b9 a10 b10
+west_east_bridges
+
+south_north_paths a4 a5 a6 a7 a8 a9 b3 b4 b5 b6 b7 b8 b9 c4 c5 c6 c7 c8 c9
+south_north_paths a1 c1 a2 c2 ; ford
+
+; resources
+
+goldmines 150 a1
+goldmines 300 c3
+goldmine 800 a4 c4
+
+woods 300 c1 c3 c3 a4 c4
+
+nb_meadows_by_square 5
+remove_meadows a2 a2 a2 a2 a2 b2 b2 b2 b2 b2 c2 c2 c2 c2 c2 b3 b3 b3 b3 b3
+
+
+; players (human or computer)
+
+player 1000 1000 -tang_shipyard a1 government_office village 10 villagers b1 20 village c1 lumbermill foundry_bureau tang_stables b4 10 villagers 4 drillground 20 modao_footman 20 tang_archer 20 tang_light_cavalry 20 tang_siege_vehicle
+
+; computer only
+
+computer_only 0 0 a7 5 turk_archer_cavalry b7 5 turk_blade_cavalry c7 5 saber_cavalry a8 6 medium_trebuchet b8 6 turk_archer_cavalry c8 6 saber_cavalry a9 7 turk_archer_cavalry b9 7 turk_archer_cavalry c9 7 saber_cavalry a10 8 turk_archer_cavalry b10 8 turk_blade_cavalry c10 8 turk_spear_cavalry u_rain
+
+; triggers
+
+timer_coefficient 1
+
+trigger computer1 (timer 60) (order (a7 5 turk_archer_cavalry b7 5 turk_blade_cavalry c7 5 saber_cavalry) ((go a1) (go c1) (auto_attack)))
+
+trigger computer1 (timer 120) (order (a8 6 medium_trebuchet b8 6 turk_archer_cavalry c8 6 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 180) (order (a9 7 turk_archer_cavalry b9 7 turk_archer_cavalry c9 7 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 185) (order (a10 8 turk_archer_cavalry) ((go a7)))
+trigger computer1 (timer 190) (order (b10 8 turk_blade_cavalry) ((go b7)))
+trigger computer1 (timer 195) (order (c10 8 turk_spear_cavalry) ((go c7)))
+
+trigger computer1 (timer 200) (add_units a7 6 medium_trebuchet b7 6 turk_blade_cavalry c7 6 saber_cavalry a8 7 turk_blade_cavalry b8 7 turk_archer_cavalry c8 7 saber_cavalry a9 8 turk_blade_cavalry b9 8 turk_archer_cavalry c9 8 saber_cavalry a10 9 turk_archer_cavalry b10 9 turk_blade_cavalry c10 9 turk_spear_cavalry)
+
+trigger computer1 (timer 260) (order (a7 8 turk_archer_cavalry b7 8 turk_blade_cavalry c7 8 turk_spear_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 320) (order (a7 6 medium_trebuchet b7 6 turk_blade_cavalry c7 6 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 380) (order (a8 7 turk_blade_cavalry b8 7 turk_archer_cavalry c8 7 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 440) (order (a9 8 turk_blade_cavalry b9 8 turk_archer_cavalry c9 8 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 445) (order (a10 9 turk_archer_cavalry) ((go a7)))
+trigger computer1 (timer 450) (order (b10 9 turk_blade_cavalry) ((go b7)))
+trigger computer1 (timer 455) (order (c10 9 turk_spear_cavalry) ((go c7)))
+
+trigger computer1 (timer 460) (add_units a7 10 medium_trebuchet b7 10 turk_blade_cavalry c7 10 saber_cavalry a8 12 turk_blade_cavalry b8 12 turk_archer_cavalry c8 12 saber_cavalry a9 14 turk_blade_cavalry b9 14 turk_archer_cavalry c9 14 saber_cavalry a10 16 turk_archer_cavalry b10 16 turk_blade_cavalry c10 16 turk_spear_cavalry)
+
+trigger computer1 (timer 520) (order (a7 9 turk_archer_cavalry b7 9 turk_blade_cavalry c7 9 turk_spear_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 580) (order (a7 10 medium_trebuchet b7 10 turk_blade_cavalry c7 10 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 640) (order (a8 12 turk_blade_cavalry b8 12 turk_archer_cavalry c8 12 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 700) (order (a9 14 turk_blade_cavalry b9 14 turk_archer_cavalry c9 14 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 705) (order (a10 16 turk_archer_cavalry) ((go a7)))
+trigger computer1 (timer 710) (order (b10 16 turk_blade_cavalry) ((go b7)))
+trigger computer1 (timer 705) (order (c10 16 turk_spear_cavalry) ((go c7)))
+
+trigger computer1 (timer 710) (add_units a7 14 medium_trebuchet b7 14 turk_blade_cavalry c7 14 saber_cavalry a8 16 turk_blade_cavalry b8 16 turk_archer_cavalry c8 16 saber_cavalry a9 18 turk_blade_cavalry b9 18 turk_archer_cavalry c9 18 saber_cavalry a10 20 turk_archer_cavalry b10 20 turk_blade_cavalry c10 20 turk_spear_cavalry)
+
+trigger computer1 (timer 770) (order (a7 16 turk_archer_cavalry b7 16 turk_blade_cavalry c7 16 turk_spear_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger player1 (timer 800) (cut_scene 8551)
+
+trigger computer1 (timer 830) (order (a7 14 medium_trebuchet b7 14 turk_blade_cavalry c7 14 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 890) (order (a8 16 turk_blade_cavalry b8 16 turk_archer_cavalry c8 16 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger player1 (timer 920) (cut_scene 8552 )
+trigger player1 (timer 920) (add_units b5 20 ballista 20 black_cavalry 20 modao_footman)
+
+trigger computer1 (timer 950) (order (a9 18 turk_blade_cavalry b9 18 turk_archer_cavalry c9 18 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 955) (order (a10 20 turk_archer_cavalry) ((go a7)))
+trigger computer1 (timer 960) (order (b10 20 turk_blade_cavalry) ((go b7)))
+trigger computer1 (timer 965) (order (c10 20 turk_spear_cavalry) ((go c7)))
+
+trigger computer1 (timer 970) (add_units a7 20 medium_trebuchet b7 20 turk_blade_cavalry c7 20 saber_cavalry a8 30 turk_blade_cavalry b8 30 turk_archer_cavalry c8 30 saber_cavalry a9 40 turk_blade_cavalry b9 40 turk_archer_cavalry c9 40 saber_cavalry a10 50 turk_archer_cavalry b10 50 turk_blade_cavalry c10 50 turk_spear_cavalry)
+
+trigger computer1 (timer 1030) (order (a7 20 turk_archer_cavalry b7 20 turk_blade_cavalry c7 20 turk_spear_cavalry) ((go c1) (go a1) (auto_attack)))
+
+
+trigger computer1 (timer 1090) (order (a7 50 medium_trebuchet b7 50 turk_blade_cavalry c7 50 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 1150) (order (a8 60 turk_blade_cavalry b8 60 turk_archer_cavalry c8 60 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 1210) (order (a9 70 turk_blade_cavalry b9 70 turk_archer_cavalry c9 70 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 1215) (order (a10 80 turk_archer_cavalry) ((go a7)))
+trigger computer1 (timer 1220) (order (b10 80 turk_blade_cavalry) ((go b7)))
+trigger computer1 (timer 1225) (order (c10 80 turk_spear_cavalry) ((go c7)))
+
+trigger computer1 (timer 1230) (add_units a7 60 medium_trebuchet b7 60 turk_blade_cavalry c7 60 saber_cavalry a8 70 turk_blade_cavalry b8 70 turk_archer_cavalry c8 70 saber_cavalry a9 80 turk_blade_cavalry b9 80 turk_archer_cavalry c9 80 saber_cavalry a10 90 turk_archer_cavalry b10 90 turk_blade_cavalry c10 90 turk_spear_cavalry)
+
+trigger computer1 (timer 1290) (order (a7 80 turk_archer_cavalry b7 80 turk_blade_cavalry c7 80 turk_spear_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 1350) (order (a7 60 medium_trebuchet b7 60 turk_blade_cavalry c7 60 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 1410) (order (a8 70 turk_blade_cavalry b8 70 turk_archer_cavalry c8 70 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 1470) (order (a9 80 turk_blade_cavalry b9 80 turk_archer_cavalry c9 80 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 1475) (order (a10 90 turk_archer_cavalry) ((go a7)))
+trigger computer1 (timer 1480) (order (b10 90 turk_blade_cavalry) ((go b7)))
+trigger computer1 (timer 1485) (order (c10 90 turk_spear_cavalry) ((go c7)))
+
+trigger computer1 (timer 1490) (add_units a7 70 medium_trebuchet b7 70 turk_blade_cavalry c7 70 saber_cavalry a8 80 turk_blade_cavalry b8 80 turk_archer_cavalry c8 80 saber_cavalry a9 90 turk_blade_cavalry b9 90 turk_archer_cavalry c9 90 saber_cavalry a10 100 turk_archer_cavalry b10 100 turk_blade_cavalry c10 100 turk_spear_cavalry)
+
+trigger computer1 (timer 1550) (order (a7 90 turk_archer_cavalry b7 90 turk_blade_cavalry c7 90 turk_spear_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 1610) (order (a7 70 medium_trebuchet b7 70 turk_blade_cavalry c7 70 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 1670) (order (a8 80 turk_blade_cavalry b8 80 turk_archer_cavalry c8 80 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 1730) (order (a9 90 turk_blade_cavalry b9 90 turk_archer_cavalry c9 90 saber_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger computer1 (timer 1735) (order (a10 100 turk_archer_cavalry) ((go a7)))
+trigger computer1 (timer 1740) (order (b10 100 turk_blade_cavalry) ((go b7)))
+trigger computer1 (timer 1745) (order (c10 100 turk_spear_cavalry) ((go c7)))
+
+trigger computer1 (timer 1750) (add_units b10 pasha_tent b7 50 siege_ram b8 80 medium_trebuchet b9 80 turk_spear_cavalry b10 80 turk_whistlinger_cavalry)
+
+trigger player1 (timer 1800) (cut_scene 8553 )
+trigger player1 (timer 1800) (add_units a3 30 ballista 30 black_cavalry 30 modao_footman c3 30 ballista 30 black_cavalry 30 modao_footman)
+
+trigger computer1 (timer 1810) (order (a7 100 turk_archer_cavalry b7 100 turk_blade_cavalry c7 100 turk_spear_cavalry) ((go c1) (go a1) (auto_attack)))
+
+trigger player1 (timer 1850) (cut_scene 8554)
+trigger player1 (timer 1851) (cut_scene 8555)
+
+trigger computer1 (timer 1870) (order (b7 50 siege_ram b8 80 turk_whistlinger) ((go c1) (go a1) (auto_attack)))
+trigger computer1 (timer 1870) (add_units b4 20 rain b5 20 rain)
+trigger computer1 (timer 1880) (order (b9 80 turk_spear_cavalry b10 80 turk_whistlinger_cavalry) ((use set_stumbling_blocks b4)(auto_attack)))
+
+trigger computer1 (timer 1885) (add_units a4 30 medium_trebuchet c4 30 medium_trebuchet)
+trigger computer1 (timer 1885) (add_units b6 50 turk_spear_cavalry 50 turk_whistlinger_cavalry 50 golden_wolf)
+
+trigger computer1 (timer 1890) (order (b6 50 turk_spear_cavalry 50 turk_whistlinger_cavalry 50 golden_wolf) ((go c1) (go a1) (auto_attack)))
+
+trigger player1 (has_entered b4) (cut_scene 8506)
+trigger player1 (timer 2160) (cut_scene 8556)
+trigger player1 (timer 2160) (objective_complete 1)
+trigger all (no_unit_left) (defeat)

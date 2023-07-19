@@ -1,0 +1,15 @@
+Licence:
+
+This is the licence for the Starwars mod release by Nathan Tech for SoundRTS by SoundMUD.
+
+1: Distribution:
+Feel free to distribute the mod to whom ever you so please provided that all files remain the same, unchanged, untouched, untampered with.
+
+2: Modification
+You may not modify the mod in any way shape or form.
+Written permission will not be given and therefore this is a unique product of Nathan Tech and may not be modified by anyone else.
+This includes sound files.
+You may not translate the mod into any other language unless given express permission by Nathan Tech via email in writing.
+
+3: Sounds.
+You may use any sound file from the mod, providing Nathan Tech is given credit for the sound in what ever product it is used in.

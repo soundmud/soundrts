@@ -1,0 +1,67 @@
+﻿; coding: utf_8
+; replacement strings for things we're renaming
+; or is it better to add new ones and style.txt them up?
+81        banco
+131        crédito
+133        petróleo
+137        petróleo
+
+; our own new stuff
+7000        Aliados
+7001        Alemán
+7002        Unión Soviética
+7003        Centro de Comando
+7004        Trabajador
+7005        soldado con rifle
+7006        Aliado
+7007        Centro de Recursos
+7008        Depósito de petrÓleo
+7009        fábrica
+7010        ar
+7011        centro de tecnología
+7012        infantería
+7013        P I A T
+7014        Panzerfaust
+7015        Partisan
+7016        tanque pequeño
+7017        Stuart
+7018        T70
+7019        Panzer 38
+7020        tanque mediano
+7021        Sherman
+7022        T34
+7023        Panther
+7024        Elaborador
+7025        artillería
+7026        Bispo
+7027        Katiusha
+7028        Hummel
+7029        tanque pesado
+7030        Churchill
+7031        KV 1
+7032        Tiger
+7033	veículo de exploración
+7034	Jeep
+7035	BA 64
+7036	Stummel
+7037	Pershing
+7038	I S 2
+7039	Royal Tiger
+7040	Llamar bombarderos de apoio
+7041	Typhoon
+7042	I L 2
+7043	Stuka
+7044	Comando de Bombarderos
+7045	Flak cannon
+7046	Flak trak
+7047	M16 Metade faixas
+7048	Llamar aviones de combate
+7049	Spitfire
+7050	Yak Plano de Ataque
+7051	FW 1 0 9
+7052	Bunker de comando Nuclear
+7053	Ataque nuclear
+7054	Granadero
+7055	V2 lançador de foguetes
+7056	Fogo V2 foguete
+7057	Cuartel avançado
