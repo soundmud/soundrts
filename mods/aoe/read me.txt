@@ -1,0 +1,33 @@
+This mod attempts to restore the war scene between the Tang Empire and the Turkic Khanate 1000 years ago.
+
+The northern nomads are good at riding and archery. They live in no fixed place. At the same time, the most important thing in the northern grasslands is war horses, so stables can be built in the early days of the Turks, and because the people of the grasslands are naturally qualified warriors, the cost of cavalry is low, and they can form a scale and fight blitzkrieg in a very short time.
+Due to the characteristics of nomadic nomads, the bases of the Turks can move at will, and their survivability is not bad.
+However, the grassland resources in the north are scarce, and the smelting technology of the nomadic peoples is slightly inferior to that of the farming peoples in the south. Therefore, it will take some time for the Turks to build a blacksmith shop to upgrade their equipment. At the same time, the nomads are not very good at attacking fortifications, and they will appear a little helpless when facing a fortified city with heavy troops.
+Therefore, the Turks should use their superb mobility and assault capabilities as soon as possible to solve the battle as soon as possible in the early stage, so as to avoid entering a weak stage in the mid-term.
+If the Turks can survive the weak stage in the mid-term and enter the later stage, they can show their talents again. The heavy cavalry with 1.2-meter spears, the Turkic shaman that can output and heal, and the blessing of the Sirius God will give the enemy a headache.
+If fighting on a map with waterway terrain, the Turks need to do their best to avoid fighting with the opponent on the water, because the Turks are extremely bad at water stations, and also because of the lack of resources in the north, the lack of technical personnel, and the lack of sufficient ability to build strong ships.
+
+Features of this mod:
+
+
+1: Drawing on the Age of Empires, try to realize the restraint relationship between units, the restraint relationship is as follows.
+
+
+Light infantry beats heavy infantry, heavy infantry beats light cavalry, and light cavalry beats light infantry.
+
+
+Horsearcher counters melee light cavalry, but is countered by archers, heavy cavalry is the strongest unit.
+
+
+2: This mod attempts to realize that units can manually switch between melee and long-range forms.
+
+
+For example, the disadvantage of archers is that when the opponent is within 4m, they will not be able to shoot arrows. At this time, we need to switch the archers into melee combat mode, and they will draw out their weapons and fight with the opponent.
+
+
+Each cavalry is also equipped with bows and arrows, so can switch to ranged form.
+
+
+The specific content can be explored in detail.
+
+It is recommended to play with the soundpac provided by me, it will feel great.

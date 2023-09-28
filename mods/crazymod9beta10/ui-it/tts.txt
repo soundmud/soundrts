@@ -14,7 +14,7 @@
 77009 bosco dei briganti
 77010 filibustieri di legno
 77011 hospedale
-77012 sanità pubblica
+77012 salute pubblica
 77013 campo di addestramento
 77014 moschettiere
 77015 estrattore di magnesite
@@ -31,7 +31,7 @@
 77026 sortilegio
 77027 ectoplasma
 77028 sprigionare ectoplasma
-77029 nebbia malefica
+77029 nebbia malvagia
 77030 torre spettrale
 77031 demone
 77032 cimitero
@@ -41,8 +41,8 @@
 77036 seminare l'albero della serenità
 77037 albero delle tenebre
 77038 albero della serenita'
-77039 riutilizzare i cadaveri nelle piante carnivore
-77040 riutilizzare i cadaveri nelle piante medicinali
+77039 recuperare i cadaveri nelle piante carnivore
+77040 recuperare i cadaveri dalle piante medicinali
 77041 pianta carnivora
 77042 pianta medicinale
 77043 magnesite di alta qualita'
@@ -54,7 +54,7 @@
 77049 domare i leoni
 77050 balestriere
 77051 gas lacrimogeno
-77052 granatiere
+77052 lanciatore di granate
 77053 punto di partenza
 77054 visione
 77055 fortilizio
@@ -77,11 +77,11 @@
 77072 rogo
 77073 arciere agile clonato
 77074 spionaggio con il dirigibile
-77075 superarmatura
-77076 superattacco
-77077 supervita
-77078 superrapidità
-77079 superesorcismo
+77075 armatura super
+77076 attacco super
+77077 vita super
+77078 rapidita' super
+77079 esorcismo super
 77080 cannone al plasma surriscaldato
 77081 fattoria
 77082 dirigibile a caccia
@@ -91,7 +91,7 @@
 77086 computer mainframe
 77087 supercomputer
 77088 impresa idroponica
-77089 fabbrica robotizzata
+77089 fabbrica robottizzata
 77090 laboratorio ottico
 77091 fattoria di idrofili
 77092 modulatore di segnale
@@ -118,20 +118,19 @@
 77113 mausoleo
 77114 volta
 77115 dragone scheletrico
-77116 soffio della morte
+77116 fiato della morte
 77117 cripta
 77118 labirinto
 77119 bara
 77120 becchino
-77121 Torre magica
 77122 fantasma
 77123 spettro in armatura
 77124 cavallo alato
 77125 cavallo alato mansueto
-77126 thestri
+77126 thestral
 77127 torre di controllo
 77128 cadavere
-77129 trappola con frecce
+77129 trappola di frecce
 77130 saltare sul muro
 77131 spettro di fuoco
 77132 per chiamare gli spettri di fuoco
@@ -141,7 +140,7 @@
 77136 portale instabile
 77137 portale
 77138 lanciafiamme
-77139 troll di guerra
+77139 canti di guerra
 77140 torre di difesa
 77141 radura
 77142 citta' arborea
@@ -172,8 +171,8 @@
 77167 tempesta verde
 77168 trasformazione dei cadaveri in fantasmi
 77169 radici penetranti
-77170 trasformazione dei cadaveri in zombie
-77171 trasformazione dei corpi in golem di carne
+77170 trasformazione dei corpi in zombie
+77171 trasformazione dei corpi in carne di golem
 77172 campo magnetico
 77173 campo magnetico incontrollato
 77174 torre di controllo
@@ -186,9 +185,9 @@
 77181 nido
 77182 tipi
 77183 trappola di chiodi
-77184 bracciante
-77185 troll picchiatore
-77186 troll massacratore
+77184 fattorino
+77185 pugile
+77186 troll
 77187 torre delle foglie
 77188 torre con foglie aguzze
 77189 orco lanciatore di pietre
@@ -199,7 +198,7 @@
 77194 sacerdote wodoo
 77195 torre solare
 77196 kamikaze
-77197 sfera trasportante
+77197 trasporto di sfere
 77198 esplosivi di altissima qualita'
 77199 possesso
 77200 tradizionale
@@ -221,14 +220,14 @@
 77216 bomba nascosta
 77217 struttura rinforzata
 77218 cerchio di elementi
-77219 torre del fuoco
-77220 torre dell'acqua
-77221 torre dell'aria
+77219 torre di fuoco
+77220 torre d'acqua
+77221 torre degli aerei
 77222 torre della terra
 77223 elementi di fuoco
 77224 elementi d'acqua
-77225 elementi d'aria
-77226 elementi di terra
+77225 elementi degli aerei
+77226 elementi della terra
 77227 elementi
 77228 lanciatore magnetico
 77229 parassita
@@ -238,13 +237,13 @@
 77233 laboratorio di larve
 77234 riproduttore transgenico
 77235 incubatrice per la moltiplicazione
-77236 albero di frutta
-77237 termitaio
+77236 frutteto
+77237 nido di termiti
 77238 albero di miele
 77239 stanza fangosa
 77240 galleria del fungo
 77241 albero luccicante
-77242 albero Divoratore
+77242 albero Devourer
 77243 termiti guardiane
 77244 termite conquistatrice
 77245 ape regina
@@ -268,11 +267,11 @@
 77263 genera larve
 77264 larva
 77265 ferromone della sopravvivenza
-77266 spore tossiche
-77267 spore allucinogene
-77268 spore protettrici
-77269 lavoratore in cammino
-77270 lavoratore alato
+77266 batteri tossici
+77267 batteri allucinogeni
+77268 batteri protettori
+77269 operaio in cammino
+77270 operaio malato
 77271 elfo oscuro
 77272 capanna
 77273 villa
@@ -290,13 +289,13 @@
 77285 dottoressa
 77286 dardi volanti
 77287 vortice
-77288 tromba d'aria
+77288 wvortice di vento
 77289 tecniche di lancio
 77290 velocità delle animazioni
 77291 Coltellata fatale
 77292 fumo
 77293 chiama le ombre
-77294 casa dei custodi di elefanti
+77294 casa del conduttore di elefanti
 77295 volatile
 77296 piccione
 77297 pioggia di frecce
@@ -307,7 +306,7 @@
 77302 albero vorace
 77303 sistema radice
 77304 furioso
-77305 troll furioso
+77305 canto rabbioso
 77306 foglia d'acciaio
 77307 piccioni ammaestrati
 77308 fantoccio animato
@@ -316,28 +315,21 @@
 77311 vite pacifica
 77312 vite invasiva
 77313 seminare una vite pacifica
-77314 piazza trappola di frecce
+77314 imposta la trappola di frecce
 77315 terremoto
-77316 deflagrazione
+77316 vortice di fuoco
 77317 recupero
-77318 colpo di vento
+77318 soffio di vento
 77319 eruzione vulcanica
-77320 golem di fango
+77320 golem fangoso
 77321 tempesta di sabbia
 77322 nuvola di vapore
 77323 cielo nuvoloso
-77324 custode di elefanti
+77324 conduttore di elefanti
 77325 elefante con torretta
 77326 assorbimento dell'anima
 77327 campo della necromanzia
-77328 esplosione di cadavere
+77328 esplosione cadaverica
 77329 carogna
-77330 trasmissione dell'infezione ai cadaveri
+77330 trasmssione l'infezione ai corpi
 77331 ombra
-77332 agente segreto
-77333 piazza bomba nascosta
-77334 piazza trappola elettrica
-77335 piazza trappola d'ossa
-77336 piazza trappola di radici
-77337 piazza trappola di chiodi
-77338 rilascia agente segreto

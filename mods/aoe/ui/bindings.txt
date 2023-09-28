@@ -1,0 +1,36 @@
+b: order_shortcut ; order shortcuts are defined in style.txt
+
+ALT Z : do_again ; reselect the previously validated order
+ALT X: do_again now ; if no target is required, validate the order
+SHIFT ALT X: do_again now queue_order ; if no target is required, validate the order
+
+
+ALT f: select_units soldier1 local idle
+CTRL ALT f: select_units soldier1 idle
+ALT g: select_units soldier2 local idle
+CTRL ALT g: select_units soldier2 idle
+ALT h: select_units soldier3 local idle
+CTRL ALT h: select_units soldier3 idle
+ALT j: select_units soldier4 local idle
+CTRL ALT j: select_units soldier4 idle
+ALT k: select_units soldier5 local idle
+CTRL ALT k: select_units soldier5 idle
+ALT l: select_units soldier6 local idle
+CTRL ALT l: select_units soldier6 idle
+ALT SEMICOLON: select_units soldier7 local idle
+CTRL ALT SEMICOLON: select_units soldier7 idle
+
+ALT r: select_units1 soldier1 local idle
+CTRL ALT r: select_units1 soldier1 idle
+ALT t: select_units1 soldier2 local idle
+CTRL ALT t: select_units1 soldier2 idle
+ALT y: select_units1 soldier3 local idle
+CTRL ALT y: select_units1 soldier3 idle
+ALT u: select_units1 soldier4 local idle
+CTRL ALT u: select_units1 soldier4 idle
+ALT i: select_units1 soldier5 local idle
+CTRL ALT i: select_units1 soldier5 idle
+ALT o: select_units1 soldier6 local idle
+CTRL ALT o: select_units1 soldier6 idle
+ALT p: select_units soldier7 local idle
+CTRL ALT p: select_units soldier7 idle

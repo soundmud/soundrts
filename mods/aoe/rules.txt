@@ -1,0 +1,2630 @@
+
+clear
+
+def parameters
+nb_of_resource_types 2 ; gold and wood
+
+
+
+; resource deposits
+
+def goldmine
+class deposit
+resource_type 0 ; gold
+extraction_time 3
+extraction_qty 1
+
+def wood
+class deposit
+resource_type 1 ; wood
+extraction_time 20
+extraction_qty 2
+
+
+
+; races
+
+def tang_empire
+class race
+
+townhall county_government
+keep government_office
+castle governor's_house
+farm village
+barracks drillground
+stables tang_stables
+blacksmith foundry_bureau
+wall tang_wall
+gate tang_gate
+massive_wall tang_massive_wall
+massive_gate tang_massive_gate
+scouttower tang_scouttower
+guardtower watchtower
+cannontower crossbowtower
+workshop ordnance_supervisor
+workshop carriage_shop
+dragonslair carriage_shop
+magestower taoist_temple
+peasant villagers
+footman horizontal_knife_footman
+footman modao_footman
+archer tang_archer
+archer tang_crossbowman
+archer tang_arbalester
+archer tang_cavalry_archer
+knight tang_light_cavalry
+knight black_cavalry
+catapult tang_siege_vehicle
+catapult ballista
+dragon golden_dragon
+mage taoist_priest
+new_flyingmachine wood_bird
+boat yacht
+destroyer fightingship
+battleship buildingship
+submarine walkship
+easy tang_empire_easy
+aggressive tang_empire_hard
+
+
+def turkic_hanate
+class race
+
+townhall archim_tent
+keep hakemu_tent
+castle pasha_tent
+farm turk_pasture
+barracks turk_barracks
+stables turk_stables
+blacksmith turk_blacksmith
+magestower turk_shaman_temple
+scouttower turk_scouttower
+wall turk_wall
+massive_wall turk_massive_wall
+gate turk_gate
+massive_gate tang_massive_gate
+workshop turk_arms_workshop
+dragonslair birdhouse
+shipyard turk_shipyard
+peasant turk_herdsmen
+footman turk_spearmen
+archer turk_archer
+darkarcher turk_whistlinger
+mage turk_shaman
+archer turk_archer_cavalry
+knight turk_sword_cavalry
+knight saber_cavalry
+knight turk_blade_cavalry
+catapult turk_trebuchet
+catapult medium_trebuchet
+catapult siege_ram
+new_flyingmachine turkic_finch
+dragon golden_wolf
+boat raft
+destroyer fishingship
+battleship riprapship
+submarine riprapship
+easy turkic_hanate_easy
+aggressive turkic_hanate_hard
+
+
+def byzantine_empire
+class race
+
+townhall town_center
+keep governor's_palace
+castle constantinople
+farm fruit_estate
+barracks b_barracks
+stables b_stables
+blacksmith b_blacksmith
+workshop armament_institute
+magestower church
+shipyard dock
+wall b_wall
+gate b_gate
+massive_wall b_massive_wall
+massive_gate b_massive_gate
+scouttower guard_tower
+guardtower fortress
+cannontower catapulttower
+peasant serf
+footman b_pikemen
+footman axemen
+archer b_archer
+archer b_cavalry_archer
+knight b_pike_cavalry
+knight iron_paladin
+mage b_priest
+catapult b_catapult
+catapult medium_catapult
+catapult heavy_catapult
+dragon double_headed_eagle
+boat dromon
+destroyer heavy_dromon
+battleship royal_dromon
+submarine dromon_remote_mode
+easy byzantine_empire_easy
+aggressive byzantine_empire_hard
+
+
+; upgrades (research)
+
+;public_upgrade_research
+
+
+def leather_armor
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus armor 0.5
+
+def archer_weapon
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus damage 1
+
+def archer_range
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus range 1
+
+def ridingbow
+class upgrade
+cost 10 15
+time_cost 60
+effect bonus damage 0.5
+
+def ridingbow_range
+class upgrade
+cost 10 15
+time_cost 60
+effect bonus range 1
+
+def saber
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus damage 2
+
+def horse_speed
+class upgrade
+cost 15 5
+time_cost 60
+effect apply_bonus speed
+
+def improvement
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus armor -3
+
+def improvement2
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus armor 3
+
+def lv1attackspeed
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus cooldown -0.1
+
+def lv2attackspeed
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus cooldown -0.1
+
+def lv3attackspeed
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus cooldown -0.1
+
+def lv1sightrange
+class upgrade
+time_cost 60
+effect bonus sight_range 1
+
+def lv2sightrange
+class upgrade
+effect bonus sight_range 1
+
+def lv3sightrange
+class upgrade
+effect bonus sight_range 2
+
+
+
+;tang_upgrade research
+
+def u_thunder
+class upgrade
+cost 50 0
+time_cost 120
+effect bonus damage 50
+
+def horizontal_knife
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus damage 2.5
+
+def mo_knife
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus damage 3
+
+def footman_armor
+class upgrade
+cost 10 12
+time_cost 60
+effect bonus armor 1.5
+requirements government_office
+
+def bright_light_armor
+class upgrade
+cost 10 12
+time_cost 60
+effect bonus armor 1
+requirements government_office
+
+
+def tang_lv1attackspeed
+is_a lv1attackspeed
+requirements county_government
+
+def tang_lv2attackspeed
+is_a lv2attackspeed
+requirements government_office
+
+def tang_lv3attackspeed
+is_a lv3attackspeed
+requirements governor's_house
+
+def tang_lv1sightrange
+is_a lv1sightrange
+requirements county_government
+
+def tang_lv2sightrange
+is_a lv2sightrange
+requirements government_office
+
+def tang_lv3sightrange
+is_a lv3sightrange
+requirements governor's_house
+
+def tang_improvement
+is_a improvement
+requirements footman_armor
+
+def tang_improvement2
+is_a improvement2
+requirements minus_speed
+
+def add_speed
+class upgrade
+effect bonus speed 0.5
+requirements tang_improvement
+
+def minus_speed
+class upgrade
+effect bonus speed -0.5
+requirements add_speed
+
+def horselance
+class upgrade
+cost 14 16
+time_cost 60
+effect bonus damage 3
+requirements governor's_house
+
+def mysterious_armor
+class upgrade
+cost 14 16
+time_cost 60
+effect bonus armor 2
+requirements governor's_house
+
+def crossbow
+class upgrade
+cost 20 30
+time_cost 60
+effect apply_bonus damage
+requirements lumbermill governor's_house foundry_bureau
+
+
+;turk_upgrade_research
+
+def sword
+class upgrade
+cost 8 10
+time_cost 60
+effect apply_bonus damage
+
+def blade
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus damage 2
+
+def spear
+class upgrade
+cost 15 15
+time_cost 60
+effect bonus damage 2
+
+def whistling
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus damage 1
+requirements pasha_tent
+
+def ring_armor
+class upgrade
+cost 13 16
+time_cost 60
+effect bonus damage 1.5
+requirements pasha_tent
+
+def tk_lv1attackspeed
+is_a lv1attackspeed
+requirements archim_tent
+
+def tk_lv2attackspeed
+is_a lv2attackspeed
+requirements hakemu_tent
+
+def tk_lv3attackspeed
+is_a lv3attackspeed
+requirements pasha_tent
+
+def tk_lv1sightrange
+is_a lv1sightrange
+requirements archim_tent
+
+def tk_lv2sightrange
+is_a lv2sightrange
+requirements hakemu_tent
+
+def tk_lv3sightrange
+is_a lv3sightrange
+requirements pasha_tent
+
+def improve_your_diet
+class upgrade
+cost 30 30
+time_cost 60
+effect bonus hp_max 10
+requirement pasha_tent
+
+
+;b_upgrade_research
+
+def u_rain
+class upgrade
+cost 80 0
+time_cost 120
+effect bonus is_a_cloaker 1
+
+def pike
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus damage 2
+
+
+def axe
+class upgrade
+cost 8 10
+time_cost 60
+effect apply_bonus damage
+
+def light_shield
+class upgrade
+cost 8 10
+time_cost 60
+effect bonus armor 0.5
+
+def heavy_sword
+class upgrade
+cost 8 10
+time_cost 60
+effect apply_bonus damage
+
+def buckler
+class upgrade
+cost 10 12
+time_cost 60
+effect bonus armor 0.5
+requirements governor's_palace
+
+def heavy_shield
+class upgrade
+cost 10 12
+time_cost 60
+effect bonus armor 0.5
+requirements governor's_palace
+
+def scale_armor
+class upgrade
+cost 14 16
+time_cost 60
+effect bonus armor 0.5
+requirements constantinople
+
+def chain_mail
+class upgrade
+cost 14 16
+time_cost 60
+effect bonus armor 0.5
+requirements constantinople
+
+def traction_power
+class upgrade
+cost 15 5
+time_cost 60
+effect bonus range 2
+
+def a_javelin
+class upgrade
+cost 20 30
+time_cost 60
+effect bonus damage 5
+requirements constantinople
+
+def speed_up_slash
+class upgrade
+effect bonus cooldown -0.5
+requirements b_improvement
+
+def slow_slash
+class upgrade
+effect bonus cooldown 0.5
+requirements speed_up_slash
+
+
+def c_resurrection
+class upgrade
+cost 50 0
+time_cost 120
+requirements constantinople
+
+def b_lv1attackspeed
+is_a lv1attackspeed
+requirements town_center
+
+def b_lv2attackspeed
+is_a lv2attackspeed
+requirements governor's_palace
+
+def b_lv3attackspeed
+is_a lv3attackspeed
+requirements constantinople
+
+def b_lv1sightrange
+is_a lv1sightrange
+requirements town_center
+
+def b_lv2sightrange
+is_a lv2sightrange
+effect bonus sight_range 1
+requirements governor's_palace
+
+def b_lv3sightrange
+is_a lv3sightrange
+effect bonus sight_range 2
+requirements constantinople
+
+def b_improvement
+is_a improvement
+requirements heavy_shield scale_armor chain_mail
+
+def b_improvement2
+is_a improvement2
+requirements slow_slash
+
+
+;tang_skill
+
+def summon_servant_army
+class ability
+mana_cost 100
+effect summon 20 2 wangman_spearmen 2 nanshao_footman 2 xi_archer
+
+def summon_servant_army2
+is_a summon_servant_army
+effect summon 30 4 wangman_spearmen 4 nanshao_footman 4 xi_archer 4 shatuo_cavalry
+
+def summon_servant_army3
+is_a summon_servant_army
+effect summon 40 6 wangman_spearmen 6 nanshao_footman 6 xi_archer 6 shatuo_cavalry 6 nanzhao_heavy_cavalry
+
+def a_protection_law
+class ability
+requirements u_protection_law
+mana_cost 100
+effect recall
+effect_target ask
+effect_range inf
+universal_notification 1
+
+def a_lobby
+class ability
+mana_cost 50
+effect conversion
+effect_target ask
+
+def a_summon_golden_dragon
+class ability
+mana_cost 200
+effect summon 120 2 golden_dragon
+
+def thunder
+class effect
+harm_level 100
+harm_target_type
+can_use u_thunder
+
+def a_thunder
+class ability
+mana_cost 100
+effect summon 2 thunder
+effect_target ask
+effect_range 12
+universal_notification 1
+
+def projectile_rocks
+class ability
+mana_cost 50
+effect summon 1 rocks
+effect_target ask
+effect_range 12
+universal_notification 1
+
+def shoot_arrows
+class ability
+mana_cost 50
+effect summon 1 arrows
+effect_target ask
+effect_range 4
+universal_notification 1
+
+
+;turk_skill
+
+def bewitched
+class ability
+mana_cost 150
+effect conversion
+effect_target ask
+
+def trip_lock
+class building
+provides_survival 0
+hp_max 1
+range 6
+cooldown 6
+damage 15
+is_invisible 1
+splash 1
+damage_radius 0.5
+is_buildable_anywhere 1
+
+def set_stumbling_blocks
+class ability
+mana_cost 100
+requirements pasha_tent
+effect summon 0 trip_lock
+effect_target ask
+effect_range square
+
+def ambush
+class ability
+mana_cost 200
+effect summon 30 20 turk_sword_cavalry 20 turk_archer
+
+def summon_sirius
+class ability
+mana_cost 200
+effect summon 120 2 golden_wolf
+
+def rain
+class effect
+heal_level 5
+is_cloakable 0
+can_use u_rain
+
+def a_rain
+class ability
+mana_cost 150
+effect summon 30 rain
+effect_target ask
+effect_range 24
+
+def bewitched
+class ability
+mana_cost 150
+effect conversion
+effect_target ask
+
+def summon_turkic_finch
+class ability
+requirements birdhouse
+mana_cost 200
+effect summon 120 4 turkic_finch
+
+
+;b_skill
+
+def javelin
+is_a nonedamager
+cooldown 2
+damage 5
+can_use a_javelin
+
+def throwing_javelin
+class ability
+mana_cost 100
+effect summon 1 javelin
+effect_target ask
+effect_range 12
+
+def summon_double_headed_eagle
+class ability
+mana_cost 200
+effect summon 120 2 double_headed_eagle
+
+def summon_mercenaries
+class ability
+mana_cost 100
+effect summon 20 2 native_hussars 2 turkic_mercenary_cavalry 2 varangian_guard
+
+def summon_mercenaries2
+is_a summon_mercenaries
+effect summon 30 4 native_hussars 4 turkic_mercenary_cavalry 4 varangian_guard
+
+def summon_mercenaries3
+is_a summon_mercenaries
+effect summon 40 6 native_hussars 6 turkic_mercenary_cavalry 6 varangian_guard 6 heavy_pike_cavalry
+
+def greek_fire
+class effect
+harm_level 30
+harm_target_type
+
+def fire_greek_fire
+class ability
+mana_cost 200
+time_cost 10
+effect summon 5 2 greek_fire
+effect_target ask
+effect_range 12
+universal_notification 1
+
+def b_resurrection
+class ability
+requirements c_resurrection
+mana_cost 150
+effect resurrection 6
+
+def b_conversion
+class ability
+mana_cost 150
+effect conversion
+effect_target ask
+
+
+
+
+
+; units
+
+;worker
+
+
+def villagers
+is_a workman
+can_build village drillground carriage_shop tang_leathershop lumbermill foundry_bureau tang_wall tang_gate tang_scouttower county_government tang_stables ordnance_supervisor tang_shipyard taoist_temple
+
+def turk_herdsmen
+is_a workman
+hp_max 20
+damage 1.5
+can_build turk_pasture turk_barracks lumbermill turk_blacksmith turk_leathershop turk_wall turk_gate turk_scouttower archim_tent turk_stables turk_arms_workshop birdhouse turk_shaman_temple turk_shipyard
+can_use improve_your_diet
+
+
+def serf
+is_a workman
+can_build fruit_estate b_barracks b_leathershop lumbermill mine b_blacksmith town_center b_stables armament_institute dock church b_wall b_gate guard_tower 
+
+
+;soldiers
+
+def melee_unit
+class soldier
+
+def workman
+class worker
+cost 4 0
+food_cost 1
+time_cost 10
+hp_max 25
+speed 1.5
+range 0.8
+cooldown 1
+damage 1
+;can_use a_improved_wood_gathering
+
+
+def light_infantry
+is_a melee_unit
+cost 5 1
+time_cost 12
+food_cost 1
+hp_max 45
+speed 1.5
+armor 0
+range 0
+sight_range 6
+cooldown 1.5
+damage 6
+
+def heavy_infantry
+is_a melee_unit
+cost 15 0
+food_cost 1
+time_cost 15
+hp_max 70
+speed 1
+armor 0.5
+range 0
+sight_range 6
+cooldown 1.5
+damage 8
+damage_vs heavy_cavalrys 45
+
+def spearmen
+is_a melee_unit
+cost 3 0
+food_cost 1
+time_cost 12
+speed 1
+range 0
+sight_range 6
+hp_max 45
+cooldown 2
+damage 3
+damage_vs cavalrys 18
+armor 0
+
+def pikemen
+is_a melee_unit
+cost 4 0
+food_cost 1
+time_cost 12
+speed 1
+range 0
+sight_range 6
+hp_max 45
+cooldown 2
+damage 4
+damage_vs cavalrys 26
+armor 0
+
+
+def cavalrys
+is_a melee_unit
+armor_vs archers 1.6 crossbowman 2 arbalester 2.7 range_siege_equipment1 39 range_siege_equipment2 49 range_siege_equipment3 74
+
+
+def light_cavalry
+is_a cavalrys
+cost 10 1
+food_cost 2
+time_cost 15
+hp_max 60
+speed 2.5
+speed_bonus 2.5
+armor 0
+range 0
+sight_range 6
+cooldown 1.5
+damage 7
+damage_vs heavy_infantry 3.5
+transport_volume 2
+
+def middle_cavalry
+is_a cavalrys
+requirements stables
+cost 14 0
+food_cost 2
+time_cost 30
+hp_max 80
+speed 2.5
+armor 0
+range 0
+sight_range 6
+cooldown 1.4
+damage 7
+speed_bonus 1.5
+damage_vs auxiliary_class 19 heavy_infantry 3.5
+transport_volume 2
+
+def heavy_cavalry
+is_a cavalrys
+cost  20 10
+food_cost 3
+time_cost 40
+hp_max 100
+speed 2
+speed_bonus 2
+armor 0
+range 0
+sight_range 6
+cooldown 1.3
+damage 12
+damage_vs auxiliary_class 25 heavy_infantry 6
+transport_volume 3
+
+def range_unit
+class soldier
+
+
+def archers
+is_a range_unit
+cost 5 1
+time_cost 12
+food_cost 1
+hp_max 30
+speed 1.5
+sight_range 6
+requirements lumbermill
+armor 0
+cooldown 1.5
+target_types ground air
+range 4
+is_ballistic 1
+damage 3.2
+damage_vs heavy_infantry 11 spearmen pikemen 5.6 flying 9
+can_use archer_weapon leather_armor archer_range
+
+def crossbowman
+is_a archers
+cost 20 6
+time_cost 48
+hp_max 35
+sight_range 7
+range 5
+damage 4.25
+damage_vs heavy_infantry 12 spearmen pikemen 6.8 flying 10
+
+def arbalester
+is_a crossbowman
+cost 80 24
+time_cost 144
+hp_max 40
+range 5
+damage 5.4
+damage_vs heavy_infantry 13 spearmen pikemen 8.1 
+
+def skirmisher
+is_a range_unit
+cost 5 1
+requirements lumbermill
+time_cost 22
+hp_max 30
+damage 1.8
+damage_vs archers cavalry_archer cavalry_archer2 4.5
+cooldown 2.5
+speed 1
+range 4
+minimal_range 1
+sight_range 6
+armor 1.5
+is_ballistic 1
+can_use archer_weapon archer_range footman_armor
+
+def elite_skirmisher
+is_a skirmisher
+cost 20 6
+time_cost 88
+hp_max 35
+damage 2.7
+damage_vs archers 6.3 cavalry_archer cavalry_archer2 spearmen pikemen 5.4
+range 5
+armor 2.5
+
+def imperial_skirmisher
+is_a elite_skirmisher
+cost 60 12
+time_cost 264
+damage 3.6
+damage_vs archers 8.1 cavalry_archer cavalry_archer2 spearmen pikemen 6.3
+armor 3
+
+def cavalry_archer
+is_a range_unit
+cost 10 1
+food_cost 2
+time_cost 15
+hp_max 50
+speed 2.5
+speed_bonus 2.5
+armor 0
+can_use ridingbow bright_light_armor ridingbow_range horse_speed
+range 4
+sight_range 6
+range_bonus 1
+target_types ground air
+hp_max 40
+cooldown 1.5
+damage 3
+damage_vs spearmen pikemen 4
+
+def cavalry_archer2
+is_a range_unit
+cost 25 15
+food_cost 2
+time_cost 30
+hp_max 60
+speed 2.5
+speed_bonus 2.5
+armor 0
+can_use ridingbow bright_light_armor ridingbow_range horse_speed
+range 4
+sight_range 6
+range_bonus 1
+target_types ground air
+cooldown 1.5
+damage 3.5
+damage_vs spearmen pikemen 4.5
+damage_radius 0.25
+splash 1
+is_repairable 1
+is_healable 0
+transport_volume 4
+corpse 0
+
+
+def range_siege_equipment
+class soldier
+
+def range_siege_equipment1
+is_a def range_siege_equipment
+cost 20 20
+food_cost 2
+time_cost 46
+hp_max 50
+speed 0.6
+range 7
+sight_range 9
+minimal_range 3
+is_ballistic 1
+cooldown 6
+damage 40
+damage_vs buildings 80 transporters 20 melee_siege_equipment 123
+damage_radius 0.25
+splash 1
+is_repairable 1
+is_healable 0
+transport_volume 4
+corpse 0
+
+def range_siege_equipment2
+is_a range_siege_equipment1
+cost 60 60
+time_cost 138
+hp_max 60
+range 8
+sight_range 10
+minimal_range 3
+damage 50
+damage_vs buildings 90 transporters 30 melee_siege_equipment 133
+damage_radius 0.25
+
+def range_siege_equipment3
+is_a range_siege_equipment2
+cost 120 120
+time_cost 414
+hp_max 70
+damage 75
+damage_radius 0.25
+damage_vs buildings 100 transporters 40 melee_siege_equipment 138
+range 8
+minimal_range 3
+sight_range 10
+
+def melee_siege_equipment
+is_a def range_siege_equipment
+cost 150 120
+time_cost 150
+hp_max 200
+armor 80
+armor_vs melee_unit workman -3
+speed 0.6
+cooldown 5
+damage 2
+damage_vs buildings 200
+damage_radius 0.25
+range 0
+splash 1
+transport_capacity 6
+transport_volume 99
+
+def transporters
+class soldier
+cost 5 5
+food_cost 1
+time_cost 10
+hp_max 100
+speed 2
+speed_bonus 0.5
+sight_range 6
+can_use horse_speed
+is_cloakable 0
+transport_capacity 5
+transport_volume 99
+
+
+def tang_archer
+is_a archers
+can_upgrade_to horizontal_knife_footman tang_crossbowman
+
+def tang_pikemen
+is_a pikemen
+mana_max 0
+
+def horizontal_knife_footman
+is_a light_infantry
+cost 5 1
+can_use horizontal_knife leather_armor
+can_upgrade_to tang_archer
+
+def tang_skirmisher
+is_a skirmisher
+can_upgrade_to tang_elite_skirmisher
+
+def tang_elite_skirmisher
+is_a elite_skirmisher
+requirements government_office
+can_upgrade_to tang_imperial_skirmisher
+
+def tang_imperial_skirmisher
+is_a imperial_skirmisher
+requirements governor's_house
+can_upgrade_to 
+
+def tang_archer2
+is_a modao_footman
+hp_max 30
+sight_range 6
+requirements lumbermill
+cooldown 1.5
+target_types ground air
+range 4
+is_ballistic 1
+damage 2
+damage_bonus 1
+can_use archer_weapon archer_range leather_armor 
+speed 1
+can_research add_speed minus_speed
+can_upgrade_to modao_footman tang_crossbowman
+
+def tang_crossbowman
+is_a crossbowman
+requirements government_office
+can_upgrade_to tang_arbalester
+
+def tang_arbalester
+is_a arbalester
+requirements governor's_house
+
+
+def xi_archer
+is_a archers
+corpse 0
+
+def wangman_spearmen
+is_a spearmen
+damage_bonus 2
+can_use spear leather_armor
+corpse 0
+
+def turk_archer
+is_a archers
+can_use archer_weapon leather_armor archer_range improve_your_diet
+can_upgrade_to turk_whistlinger
+
+def turk_spearmen
+is_a wangman_spearmen
+can_use spear leather_armor improve_your_diet
+
+def turk_whistlinger
+is_a archers
+cost 10 5
+time_cost 75
+hp_max 35
+sight_range 8
+requirements lumbermill turk_shaman_temple pasha_tent
+can_use whistling leather_armor archer_range improve_your_diet
+cooldown 3
+range 5
+damage 8
+is_invisible 1
+can_upgrade_to 
+
+def turk_skirmisher
+is_a skirmisher
+can_use archer_weapon archer_range leather_armor improve_your_diet
+can_upgrade_to elite_skirmisher2
+
+def turk_elite_skirmisher
+is_a elite_skirmisher
+can_use archer_weapon archer_range leather_armor improve_your_diet
+requirements hakemu_tent
+can_upgrade_to 
+
+def b_pikemen
+is_a pikemen
+damage_bonus 2
+mana_max 200
+can_use pike leather_armor light_shield
+
+def b_archer
+is_a archers
+can_use archer_weapon archer_range light_shield
+can_upgrade_to axemen b_crossbowman
+
+def b_crossbowman
+is_a crossbowman
+can_use archer_weapon archer_range light_shield
+requirements governor's_palace
+can_upgrade_to b_arbalester
+
+def b_arbalester
+is_a arbalester
+can_use archer_weapon archer_range light_shield
+requirements constantinople
+
+def axemen
+is_a light_infantry
+cooldown 2
+damage 4.5
+damage_bonus 2
+can_use axe light_shield
+requirements b_blacksmith
+can_upgrade_to b_archer
+
+def b_skirmisher
+is_a skirmisher
+can_use archer_weapon archer_range light_shield
+can_upgrade_to elite_skirmisher3
+
+def b_elite_skirmisher
+is_a elite_skirmisher
+requirements governor's_palace
+can_upgrade_to b_imperial_skirmisher
+
+def b_imperial_skirmisher
+is_a imperial_skirmisher
+requirements constantinople
+can_upgrade_to 
+
+def modao_footman
+is_a heavy_infantry
+can_use mo_knife footman_armor tang_improvement add_speed tang_improvement2 minus_speed
+can_research add_speed minus_speed
+requirements foundry_bureau government_office
+
+def nanshao_footman
+is_a heavy_infantry
+damage 12
+corpse 0
+
+def sword_shield_men
+is_a heavy_infantry
+armor 1
+can_use heavy_sword heavy_shield scale_armor chain_mail b_improvement b_improvement2 speed_up_slash slow_slash
+can_research speed_up_slash slow_slash
+requirements b_blacksmith governor's_palace
+
+def varangian_guard
+is_a heavy_infantry
+hp_max 65
+can_use axe buckler chain_mail
+corpse 0
+
+def tang_light_cavalry
+is_a light_cavalry
+can_use saber bright_light_armor horse_speed tang_lv1sightrange tang_lv2sightrange tang_lv3sightrange
+requirements government_office tang_stables
+can_upgrade_to tang_cavalry_archer
+
+def tang_cavalry_archer
+is_a cavalry_archer
+can_use ridingbow bright_light_armor ridingbow_range horse_speed
+requirements lumbermill government_office stables
+can_upgrade_to tang_light_cavalry
+
+def shatuo_cavalry
+is_a light_cavalry
+can_use saber leather_armor bright_light_armor horse_speed tang_lv1sightrange tang_lv2sightrange tang_lv3sightrange
+corpse 0
+can_upgrade_to shatuo_cavalry_archer
+
+def shatuo_cavalry_archer
+is_a cavalry_archer
+can_use ridingbow bright_light_armor ridingbow_range horse_speed
+can_upgrade_to shatuo_cavalry
+
+def turk_archer_cavalry
+is_a cavalry_archer
+cost 8 1
+mana_max 200
+mana_regen 1
+requirements lumbermill stables
+can_use ridingbow leather_armor ridingbow_range horse_speed summon_turkic_finch improve_your_diet tk_lv1sightrange tk_lv2sightrange tk_lv3sightrange
+can_upgrade_to turk_sword_cavalry
+
+def turk_sword_cavalry
+is_a light_cavalry
+cost 8 1
+mana_max 200
+mana_regen 1
+can_use sword leather_armor horse_speed summon_turkic_finch improve_your_diet tk_lv1sightrange tk_lv2sightrange tk_lv3sightrange
+requirements turk_stables
+can_upgrade_to turk_archer_cavalry
+
+def saber_cavalry
+is_a light_cavalry
+cost 8 1
+mana_max 200
+mana_regen 1
+can_use saber leather_armor horse_speed summon_turkic_finch improve_your_diet tk_lv1sightrange tk_lv2sightrange tk_lv3sightrange
+can_upgrade_to turk_archer_cavalry2
+
+def turk_archer_cavalry2
+is_a cavalry_archer
+cost 8 1
+can_upgrade_to saber_cavalry
+
+def turk_blade_cavalry
+is_a light_cavalry
+cost 8 1
+damage cooldown 1.3
+mana_max 200
+mana_regen 1
+can_use blade leather_armor horse_speed summon_turkic_finch improve_your_diet tk_lv1sightrange tk_lv2sightrange tk_lv3sightrange
+requirements turk_stables
+sight_range 6
+can_upgrade_to turk_archer_cavalry3
+
+def turk_archer_cavalry3
+is_a cavalry_archer
+cost 8 1
+can_upgrade_to turk_blade_cavalry
+
+def native_cavalry
+is_a light_cavalry
+cost 8 1
+mana_max 200
+can_use pike light_shield throwing_javelin horse_speed
+transport_volume 2
+corpse 0
+
+def turkic_mercenary_cavalry
+is_a cavalry_archer
+cost 8 1
+corpse 0
+can_upgrade_to turkic_cavalry_melee_mode
+
+def turkic_cavalry_melee_mode
+is_a saber_cavalry
+can_use pike leather_armor buckler horse_speed throwing_javelin
+ can_upgrade_to turkic_mercenary_cavalry
+corpse 0
+
+def turk_middle_cavalry
+is_a middle_cavalry
+requirements hakemu_tent
+damage_bonus 2
+can_use saber leather_armor horse_speed summon_turkic_finch improve_your_diet tk_lv1sightrange tk_lv2sightrange tk_lv3sightrange
+
+def turk_middle_archer_cavalry
+is_a cavalry_archer
+cost 6 1
+hp_max 45
+requirements lumbermill stables
+can_use ridingbow leather_armor ridingbow_range horse_speed summon_turkic_finch improve_your_diet tk_lv1sightrange tk_lv2sightrange tk_lv3sightrange
+can_upgrade_to turk_middle_cavalry
+
+def pike_cavalry
+is_a middle_cavalry
+can_use pike1 heavy_shield scale_armor chain_mail horse_speed b_lv1sightrange b_lv2sightrange b_lv3sightrange
+damage_bonus 2
+requirements b_stables
+
+def b_cavalry_archer
+is_a cavalry_archer
+can_use ridingbow bright_light_armor ridingbow_range horse_speed
+requirements lumbermill governor's_palace stables
+hp_max 45
+can_use ridingbow ridingbow_range buckler heavy_shield scale_armor chain_mail horse_speed
+can_upgrade_to pike_cavalry
+
+
+def black_cavalry
+is_a heavy_cavalry
+requirements tang_stables governor's_house
+can_use horselance mysterious_armor horse_speed tang_lv1sightrange tang_lv2sightrange tang_lv3sightrange
+can_upgrade_to horsecrossbowmen
+
+def horsecrossbowmen
+is_a cavalry_archer2
+requirements lumbermill stables governor's_house
+transport_volume 3
+can_use crossbow mysterious_armor horse_speed tang_lv1sightrange tang_lv2sightrange tang_lv3sightrange
+can_upgrade_to black_cavalry
+
+def nanzhao_heavy_cavalry
+is_a heavy_cavalry
+damage 15
+corpse 0
+
+def turk_spear_cavalry
+is_a heavy_cavalry
+time_cost 30
+hp_max 100
+mana_max 200
+mana_regen 1 ; mana / second
+requirements turk_stables pasha_tent
+can_use spear ring_armor horse_speed set_stumbling_blocks improve_your_diet turk_lv1sightrange turk_lv2sightrange turk_lv3sightrange
+damage_bonus 2
+can_upgrade_to turk_whistlinger_cavalry
+
+def turk_whistlinger_cavalry
+is_a cavalry_archer2
+can_upgrade_to turk_spear_cavalry
+
+def iron_paladin
+is_a heavy_cavalry
+hp_max 120
+requirements b_stables constantinople
+damage_bonus 3
+can_use heavy_sword buckler scale_armor chain_mail horse_speed b_lv1sightrange b_lv2sightrange b_lv3sightrange
+
+def heavy_pike_cavalry
+is_a heavy_cavalry
+damage_bonus 2
+can_use pike buckler scale_armor chain_mail horse_speed
+corpse 0
+
+
+def tang_siege_vehicle
+is_a range_siege_equipment1
+requirements government_office
+
+def ballista
+is_a range_siege_equipment3
+requirements governor's_house
+can_use crossbow
+
+def turk_trebuchet
+is_a range_siege_equipment1
+can_upgrade_to medium_trebuchet
+
+def medium_trebuchet
+is_a range_siege_equipment2
+requirements pasha_tent
+
+def siege_ram
+is_a melee_siege_equipment
+requirements pasha_tent
+
+def b_catapult
+is_a range_siege_equipment1
+can_use traction_power
+can_upgrade_to medium_catapult
+
+def medium_catapult
+is_a range_siege_equipment2
+requirements constantinople
+can_use traction_power
+can_upgrade_to heavy_catapult
+
+def heavy_catapult
+is_a range_siege_equipment3
+requirements constantinople
+can_use traction_power
+can_upgrade_to 
+
+def marching_vehicle
+is_a transporters
+
+def flying
+class soldier
+food_cost 3
+airground_type air
+hp_max 30
+;hp_regen 0.15
+speed 1.75
+range 4
+sight_range 6
+cooldown 4
+damage 4
+target_types ground air
+damage_radius 1
+transport_volume 99
+corpse 0
+
+
+def golden_dragon
+is_a flying
+is_a_detector 1
+is_cloakable 0
+splash 1
+
+
+def golden_wolf
+is_a flying
+hp_max 60
+;hp_regen 0.15
+range 1
+sight_range 6
+cooldown 1.5
+damage 7.5
+is_a_detector 1
+is_cloakable 0
+
+
+def turkic_finch
+is_a flying
+food_cost 1
+is_a_detector 1
+hp_max 20
+;hp_regen 0.15
+range 0.8
+cooldown 1
+damage 1
+target_types air
+
+
+def double_headed_eagle
+is_a flying
+hp_max 55
+;hp_regen 0.15
+range 1
+cooldown 2
+damage 12
+is_a_detector 1
+
+
+def auxiliary_class
+class soldier
+cost 20 10
+food_cost 3
+time_cost 30
+hp_max 60
+mana_max 200
+mana_regen 1 ; mana / second
+speed 1
+range 6
+sight_range 8
+cooldown 1.5
+damage 5.5
+transport_volume 2
+
+def taoist_priest
+is_a auxiliary_class
+can_use a_summon_golden_dragon a_thunder a_lobby
+heal_level 5
+target_types ground air
+
+def turk_shaman
+is_a auxiliary_class
+can_use a_rain summon_sirius bewitched
+cooldown 1.5
+damage 5.5
+target_types ground air
+
+def b_priest
+is_a auxiliary_class
+cooldown 0
+damage 0
+can_use b_superhealer b_conversion b_resurrection summon_double_headed_eagle
+heal_level 5
+
+def ship
+class soldier
+cost 10 15
+food_cost 1
+time_cost 10
+airground_type water
+hp_max 100
+armor 1
+speed 1.5
+sight_range 6
+is_repairable 1
+is_healable 0
+transport_volume 99
+corpse 0
+
+def yacht
+is_a ship
+transport_capacity 20
+
+def fightingship
+is_a ship
+cost 20 25
+food_cost 1
+time_cost 20
+requirements lumbermill
+hp_max 60 ;  130/33
+armor 1
+speed 1.5
+range 6
+sight_range 8
+range_bonus 1
+is_ballistic 1
+cooldown 1.5
+damage 2
+target_types ground air
+can_use archer_weapon archer_range
+can_upgrade_to stickship
+
+def stickship
+is_a fightingship
+requirements foundry_bureau
+range 0
+sight_range 6
+cooldown 1.5
+damage 9
+armor 1
+can_use
+corpse 0
+can_upgrade_to fightingship
+
+def walkship
+is_a ship
+requirements ordnance_supervisor
+cost 15 18
+time_cost 45
+food_cost 3
+hp_max 150 ;  130/33
+mana_max 50
+mana_regen 10.25 ; mana / second
+speed 2.5
+is_repairable 1
+is_healable 0
+airground_type water
+range 0
+	sight_range 6
+cooldown 1.5
+damage 10
+armor 2
+transport_volume 99
+corpse 0
+can_use projectile_rocks
+
+def buildingship
+is_a ship
+cost 200 200
+food_cost 3
+time_cost 184
+requirements lumbermill ordnance_supervisor governor's_house
+hp_max 100
+speed 0.6
+range 12
+sight_range 14
+minimal_range 4
+is_ballistic 1
+cooldown 6
+damage 20
+damage_bonus 2
+damage_radius 1
+armor 4
+splash 1
+is_repairable 1
+is_healable 0
+airground_type water
+transport_volume 99
+corpse 0
+can_use crossbow
+
+def dash
+is_a ship
+cost 20 34
+food_cost 1
+time_cost 20
+hp_max 55
+mana_max 50
+mana_regen 33 ; mana / second
+armor 0
+speed 2.5
+is_repairable 1
+is_healable 0
+airground_type water
+sight_range 10
+requirements lumbermill taoist_temple
+can_use shoot_arrows
+transport_volume 99
+corpse 0
+is_invisible 1
+is_a_detector 1
+
+def raft
+is_a ship
+cost 5 5
+food_cost 1
+time_cost 15
+airground_type water
+hp_max 90
+armor 2
+speed 1.5
+sight_range 6
+is_repairable 1
+is_healable 0
+is_a_detector 1
+transport_capacity 10
+transport_volume 99
+corpse 0
+
+def fishingship
+is_a ship
+cost 5 5
+food_cost 1
+requirements lumbermill
+time_cost 15
+airground_type water
+hp_max 60
+armor 0
+speed 1.5
+sight_range 8
+range 6
+range_bonus 1
+cooldown 1.5
+damage 2
+can_use archer_weapon archer_range
+is_repairable 1
+is_healable 0
+transport_volume 99
+corpse 0
+
+def riprapship
+is_a ship
+cost 20 20
+food_cost 3
+time_cost 43
+requirements lumbermill turk_arms_workshop
+hp_max 50
+speed 0.6
+range 7
+sight_range 9
+minimal_range 3
+is_ballistic 1
+cooldown 6
+damage 15
+damage_radius 0.25
+armor 3
+splash 1
+is_repairable 1
+is_healable 0
+airground_type water
+transport_volume 99
+corpse 0
+
+def dromon
+is_a ship
+cost 10 15
+food_cost 1
+time_cost 20
+airground_type water
+hp_max 50
+mana_max 200
+mana_regen 1 ; mana / second
+armor 1
+speed 2.3
+is_repairable 1
+is_healable 0
+is_a_detector 1
+range 6
+sight_range 8
+cooldown 1.5
+damage 2
+armor 6
+target_types ground air
+can_use archer_weapon archer_range fire_greek_fire
+transport_capacity 15
+transport_volume 99
+corpse 0
+requirements lumbermill
+
+def heavy_dromon
+is_a ship
+cost 30 20
+food_cost 2
+time_cost 92
+airground_type water
+hp_max 60
+armor 3.5
+speed 0.6
+is_repairable 1
+is_healable 0
+range 10
+sight_range 12
+minimal_range 3
+cooldown 6
+damage 10
+damage_radius 0.25
+is_ballistic 1
+splash 1
+transport_volume 99
+corpse 0
+can_upgrade_to dromon_melee_mode
+requirements governor's_palace
+
+def dromon_melee_mode
+is_a heavy_dromon
+range 1
+cooldown 2.4
+damage 16
+damage_radius 0
+minimal_range 0
+is_ballistic 0
+splash 0
+can_upgrade_to heavy_dromon
+requirements governor's_palace
+
+def royal_dromon
+is_a ship
+cost 200 200
+food_cost 3
+time_cost 184
+airground_type water
+hp_max 70
+armor 4
+speed 0.6
+is_repairable 1
+is_healable 0
+range 0
+sight_range 4
+cooldown 2
+damage 15
+transport_volume 99
+corpse 0
+can_upgrade_to dromon_remote_mode
+requirements constantinople
+
+def dromon_remote_mode
+is_a royal_dromon
+range 12
+sight_range 14
+minimal_range 4
+cooldown 6
+damage 20
+is_ballistic 1
+splash 1
+damage_radius 0.2
+can_use traction_power
+requirements constantinople
+can_upgrade_to royal_dromon
+
+
+
+; buildings
+
+def buildings
+class building
+
+
+def building1
+is_a buildings
+cost 5 5
+food_provided 12
+hp_max 500
+time_cost 60
+
+
+def village
+is_a building1
+
+def turk_pasture
+is_a building1
+time 45
+food_provided 9
+hp_max 500
+	requirements archim_tent
+transport_volume 1
+
+def fruit_estate
+is_a building1
+requirements town_center
+
+def building2
+is_a buildings
+cost 7 9
+food_provided 0
+hp_max 800
+time_cost 90
+
+
+def drillground
+is_a building2
+requirements county_government
+can_train tang_pikemen tang_archer tang_skirmisher modao_footman tang_light_cavalry black_cavalry
+
+def turk_barracks
+is_a building2
+hp_max 800
+requirements archim_tent
+can_train turk_spearmen turk_archer turk_skirmisher turk_saber_cavalry turk_blade_cavalry turk_middle_cavalry turk_spear_cavalry
+transport_volume 1
+
+def b_barracks
+is_a building2
+hp_max 800
+requirements town_center
+can_train b_pikemen b_archer b_skirmisher3 sword_shield_men pike_cavalry iron_paladin
+
+def building3
+is_a buildings
+cost 8 10
+food_provided 0
+time_cost 90
+hp_max 500
+
+def foundry_bureau
+is_a building3
+requirements county_government
+can_research pike horizontal_knife mo_knife saber footman_armor tang_improvement tang_improvement2 bright_light_armor horselance mysterious_armor
+
+def turk_blacksmith
+is_a building3
+hp_max 500
+time_cost 90
+requirements hakemu_tent
+can_research spear1 spear2 spear3 sword blade saber ring_armor
+transport_volume 1
+
+def b_blacksmith
+is_a building3
+requirements town_center
+can_research pike1 pike2 pike3 axe light_shield heavy_sword heavy_shield buckler a_javelin scale_armor chain_mail b_improvement b_improvement2
+
+def building4
+is_a buildings
+cost 6 9
+food_provided 0
+hp_max 500
+time_cost 60
+storable_resource_types 1
+storage_bonus 0 1 ; gold bonus is +0, wood bonus is +1
+can_research archer_weapon archer_range ridingbow ridingbow_range
+
+def lumbermill
+is_a building4
+
+def mine
+is_a building4
+storable_resource_types 0
+storage_bonus 1 0
+requirements governor's_palace
+
+def building5
+is_a buildings
+cost 5 5
+food_provided 0
+hp_max 500
+time_cost 90
+can_research leather_armor
+
+def tang_leathershop
+is_a building5
+requirements county_government
+
+def turk_leathershop
+is_a building5
+requirements archim_tent
+transport_volume 1
+
+def b_leathershop
+is_a building5
+requirements town_center
+
+def building6
+is_a buildings
+cost 10 15
+food_provided 0
+hp_max 600
+time_cost 90
+can_research horse_speed
+
+def stables
+is_a building6
+
+def tang_stables
+is_a stables
+requirements government_office
+
+def turk_stables
+is_a stables
+cost 10 15
+time 60
+requirements archim_tent
+transport_volume 1
+
+def b_stables
+is_a stables
+requirements governor's_palace
+
+def building7
+is_a buildings
+cost 12 16
+food_provided 1
+hp_max 800
+time_cost 135
+heal_level 1
+storable_resource_types 0 1
+
+def county_government
+is_a building7
+mana_max 200
+can_train villagers
+can_use summon_servant_army
+can_research tang_lv1sightrange
+can_upgrade_to government_office
+
+def government_office
+is_a county_government
+cost 22 31 ; this is the total cost
+time_cost 315 ; this is the total cost
+hp_max 1600
+heal_level 2
+requirements drillground
+can_research tang_lv2sightrange
+can_use summon_servant_army2
+can_upgrade_to governor's_house
+
+def governor's_house
+is_a government_office
+cost 42 61 ; this is the total cost
+time_cost 675 ; this is the total cost
+hp_max 3200
+heal_level 4
+requirements drillground lumbermill foundry_bureau tang_stables
+can_research tang_lv3sightrange
+can_use summon_servant_army3
+can_upgrade_to
+
+def archim_tent
+is_a building7
+cost 10 14
+hp_max 800
+time_cost 135
+heal_level 0
+can_research tk_lv1sightrange
+can_train turk_herdsmen
+can_upgrade_to movearchim_tent hakemu_tent 
+
+def hakemu_tent
+is_a archim_tent
+cost 22 35
+time_cost 315 ; this is the total cost
+hp_max 1600
+requirements turk_stables turk_barracks
+can_research tk_lv2sightrange
+can_upgrade_to movearchim_tent2 pasha_tent
+
+def pasha_tent
+is_a hakemu_tent
+cost 44 67
+time_cost 675
+hp_max 2400
+requirements turk_arms_workshop
+can_research tk_lv3sightrange improve_your_diet
+can_upgrade_to movearchim_tent3
+
+def movearchim_tent
+is_a transporters
+cost 10 14
+food_provided 1
+time_cost 135
+hp_max 800
+can_upgrade_to archim_tent
+food_cost 0
+speed 2
+speed_bonus 0.5
+can_use horse_speed
+damage 0
+is_repairable 1
+is_healable 0
+transport_capacity 10
+transport_volume 99
+corpse 0
+
+def movearchim_tent2
+is_a movearchim_tent
+hp_max 800
+cost 22 35
+food_provided 1
+time_cost 315
+can_upgrade_to archim_tent
+food_cost 0
+speed 2
+speed_bonus 0.5
+can_use horse_speed
+damage 0
+is_repairable 1
+is_healable 0
+transport_capacity 20
+transport_volume 99
+corpse 0
+can_upgrade_to hakemu_tent
+
+
+def movearchim_tent3
+is_a movearchim_tent
+cost 44 67
+hp_max 1200
+food_provided 1
+time_cost 675
+food_cost 0
+speed 2
+speed_bonus 0.5
+can_use horse_speed
+damage 0
+is_repairable 1
+is_healable 0
+transport_capacity 30
+transport_volume 99
+corpse 0
+can_upgrade_to pasha_tent
+
+
+def town_center
+is_a building7
+mana_max 200
+can_train serf
+can_use summon_mercenaries
+can_research b_lv1sightrange
+can_upgrade_to governor's_palace
+
+def governor's_palace
+is_a town_center
+cost 22 31
+time_cost 315
+hp_max 1600
+heal_level 2
+requirements b_barracks
+can_use summon_mercenaries2
+can_research b_lv2sightrange
+can_upgrade_to constantinople
+
+def constantinople
+is_a governor's_palace
+cost 42 61
+time_cost 675
+hp_max 3200
+heal_level 4
+requirements lumbermill b_blacksmith b_stables
+can_use summon_mercenaries3
+can_research b_lv3sightrange
+can_upgrade_to
+
+def building8
+is_a buildings
+cost 10 15
+food_provided 0
+hp_max 1000
+time_cost 90
+
+def ordnance_supervisor
+is_a building8
+requirements government_office
+can_train tang_siege_vehicle ballista
+can_research crossbow
+
+def turk_arms_workshop
+is_a building8
+hp_max 400
+requirements hakemu_tent
+can_train turk_trebuchet siege_ram
+can_research whistling
+transport_volume 1
+
+def armament_institute
+is_a building8
+requirements governor's_palace
+can_train b_catapult
+can_research traction_power
+
+def carriage_shop
+is_a building8
+cost 16 24
+time_cost 90
+requirements county_government
+can_train marching_vehicle 
+food_provided 0
+hp_max 600
+
+def building9
+is_a buildings
+cost 15 20
+food_provided 0
+hp_max 1000
+time_cost 90
+
+
+def taoist_temple
+is_a building9
+requirements governor's_house
+can_train taoist_priest
+can_research u_thunder
+
+def turk_shaman_temple
+is_a building9
+hp_max 450
+requirements pasha_tent
+can_train turk_shaman
+can_research u_rain
+transport_volume 1
+
+def church
+is_a building9
+requirements constantinople
+can_train b_priest
+can_research c_resurrection
+
+def birdhouse
+is_a building1
+food_provided 1
+cost 7 7
+time_cost 105
+hp_max 80
+transport_volume 1
+
+def building10
+is_a buildings
+cost 6 2
+hp_max 800
+time_cost 60
+bonus_height 1
+sight_range 12
+can_upgrade_to watchtower crossbowtower
+is_buildable_anywhere 1
+provides_survival 0
+is_a_detector 1
+
+
+def tang_scouttower
+is_a building10
+
+def watchtower
+is_a tang_scouttower
+cost 20 30
+hp_max 4000
+time_cost 140
+transport_capacity 70
+transport_volume 99
+
+def crossbowtower
+is_a tang_scouttower
+cost 200 200
+requirements lumbermill ordnance_supervisor governor's_house
+hp_max 800
+time_cost 190
+range 10
+range_bonus 2
+sight_range 14
+minimal_range 4
+is_ballistic 1
+splash 1
+cooldown 6
+damage 20
+damage_vs tang_light_cavalry turk_sword_cavalry turk_blade_cavalry saber_cavalry turk_middle_cavalry pike_cavalry black_cavalry nanzhao_heavy_cavalry turk_spear_cavalry iron_paladin heavy_pike_cavalry 8 marching_vehicle 20
+damage_bonus 2
+damage_radius 0.25
+can_use archer_weapon archer_range
+
+def turk_scouttower
+is_a building10
+can_upgrade_to ambush_circle
+
+def ambush_circle
+is_a turk_scouttower
+cost 18 12
+time_cost 110
+requirements hakemu_tent
+hp_max 100
+mana_max 200
+is_invisible 1
+can_use ambush
+
+
+def guard_tower
+is_a building10
+cost 6 2
+time_cost 60
+bonus_height 1
+sight_range 12
+can_upgrade_to fortress catapulttower
+is_buildable_anywhere 1
+provides_survival 0
+is_a_detector 1
+
+def fortress
+is_a guard_tower
+cost 20 30
+hp_max 4000
+time_cost 140
+bonus_height 1
+sight_range 12
+is_buildable_anywhere 1
+provides_survival 1
+is_a_detector 1
+transport_capacity 70
+requirements governor's_palace
+transport_volume 99
+
+def catapulttower
+is_a guard_tower
+cost 200 200
+requirements lumbermill armament_institute constantinople
+hp_max 800;  130/3
+time_cost 190
+bonus_height 1
+range 10
+range_bonus 2
+sight_range 14
+minimal_range 4
+is_ballistic 1
+splash 1
+cooldown 6
+damage 20
+damage_vs tang_light_cavalry turk_sword_cavalry turk_blade_cavalry saber_cavalry turk_middle_cavalry pike_cavalry black_cavalry nanzhao_heavy_cavalry turk_spear_cavalry iron_paladin heavy_pike_cavalry 8 marching_vehicle 20
+damage_radius 0.25
+can_use traction_power
+
+def building11
+is_a buildings
+cost 7 9
+food_provided 0
+hp_max 500
+time_cost 90
+is_buildable_on_exits_only 1
+provides_survival 0
+transport_capacity 4
+
+def building12
+is_a buildings
+cost 10 10
+food_provided 0
+hp_max 450
+time_cost 90
+is_buildable_on_exits_only 1
+is_a_gate 1
+provides_survival 0
+transport_capacity 4
+
+def tang_wall
+is_a building11
+can_upgrade_to tang_massive_wall
+
+def tang_massive_wall
+is_a tang_wall
+cost 21 27
+food_provided 0
+hp_max 2000
+time_cost 270
+is_buildable_on_exits_only 1
+provides_survival 0
+requirements government_office
+can_upgrade_to 
+transport_capacity 8
+
+def tang_gate
+is_a building12
+can_upgrade_to tang_massive_gate
+
+def tang_massive_gate
+is_a tang_gate
+cost 30 30
+hp_max 1800
+time_cost 270
+is_a_gate 1
+requirements government_office
+can_upgrade_to 
+transport_capacity 8
+
+def turk_wall
+is_a building11
+can_upgrade_to turk_massive_wall
+
+def turk_massive_wall
+is_a turk_wall
+cost 21 27
+hp_max 1800
+time_cost 270
+requirements hakemu_tent
+can_upgrade_to 
+transport_capacity 8
+
+def turk_gate
+is_a building12
+cost 10 10
+hp_max 400
+is_a_gate 1
+can_upgrade_to turk_massive_gate
+
+def turk_massive_gate
+is_a turk_gate
+cost 30 30
+hp_max 1600
+time_cost 270
+is_a_gate 1
+requirements hakemu_tent
+can_upgrade_to 
+transport_capacity 8
+
+def b_wall
+is_a building11
+can_upgrade_to b_massive_wall
+
+def b_massive_wall
+is_a b_wall
+cost 21 27
+hp_max 2000
+time_cost 270
+requirements governor's_palace
+can_upgrade_to 
+transport_capacity 8
+
+def b_gate
+is_a building12
+can_upgrade_to b_massive_gate
+
+def b_massive_gate
+is_a b_gate
+cost 30 30
+hp_max 1800
+time_cost 270
+is_a_gate 1
+requirements governor's_palace
+can_upgrade_to 
+transport_capacity 8
+
+def building13
+is_a buildings
+cost 10 15
+food_provided 0
+hp_max 800
+time_cost 180
+is_buildable_near_water_only 1
+
+def tang_shipyard
+is_a building13
+requirements county_government lumbermill
+can_train yacht fightingship walkship buildingship dash
+
+def turk_shipyard
+is_a building13
+hp_max 800
+time_cost 60
+requirements archim_tent lumbermill
+can_train raft fishingship riprapship
+
+def dock
+is_a building13
+requirements town_center lumbermill
+can_train dromon heavy_dromon royal_dromon
+
+; abilities (passive or active)
+
+
+
+
+
+
+;def a_improved_wood_gathering
+;effect bonus stored_wood --
+;requirements lumbermill
+
+
+
+
+
+; other units
+
+def instant_death ; used by some maps to create dead units
+class effect
+harm_level 10000
+harm_target_type
+decay 1
+
+
+def rocks
+is_a nonedamager
+range 12
+cooldown 2
+damage 20
+damage_radius 0.25
+splash 1
+
+
+def arrows
+is_a nonedamager
+range 12
+cooldown 2
+damage 18
+damage_bonus 20.5
+target_types ground air
+is_ballistic 1
+can_use archer_weapon archer_armor_archer_range
+
+
+def earthquake
+class effect
+harm_level 1
+harm_target_type building
+
+def quicksand ; or surface
+class effect
+harm_level 1
+harm_target_type ground unit
+
+def eyesight
+class effect
+is_invisible 1
+is_a_detector 1
+airground_type air
+
+
+def nonedamager
+class soldier
+food_cost 0
+is_healable 0
+corpse 0
+transport_volume 99
+is_teleportable 0
+is_vulnerable 0
+
+def townhall
+class building
+decay 1
+def keep
+class building
+decay 1
+
+def castle
+class building
+decay 1
+
+def farm
+class building
+decay 1
+
+def barracks
+class building
+decay 1
+
+def blacksmith
+class building
+decay 1
+
+def scouttower
+class building
+decay 1
+
+def guardtower
+class building
+decay 1
+
+def cannontower
+class building
+decay 1
+
+def scouttower
+class building
+decay 1
+
+def temple
+class building
+decay 1
+
+def workshop
+class building
+decay 1
+
+def shipyard
+class building
+decay 1
+
+def dragonslair
+class building
+decay 1
+
+def magestower
+class building
+decay 1
+
+def necropolis
+class building
+decay 1
+
+def peasant
+class soldier
+decay 1
+
+def footman
+class soldier
+decay 1
+
+def archer
+class soldier
+decay 1
+
+def darkarcher
+class soldier
+decay 1
+
+def knight
+class soldier
+decay 1
+
+def dragon
+class soldier
+decay 1
+
+def catapult
+class soldier
+decay 1
+
+def flyingmachine
+class soldier
+decay 1
+
+def new_flyingmachine
+class soldier
+decay 1
+
+def mage
+class soldier
+decay 1
+def priest
+class soldier
+decay 1
+
+def necromancer
+class soldier
+decay 1
+
+def skeleton
+class soldier
+decay 1
+
+def zombie
+class soldier
+decay 1
+
+def boat
+decay 1
+
+def destroyer
+class soldier
+decay 1
+
+def battleship
+class soldier
+decay 1
+
+def submarine
+class soldier
+decay 1

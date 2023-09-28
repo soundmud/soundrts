@@ -1,0 +1,58 @@
+8500 The Turks were about to invade the borders of the Tang Dynasty, and the Tang Empire was filled with the atmosphere of an imminent war.
+8501 The marshal intends to send you to the border to garrison, and prepare for war.Note: Do not stay too far from the border.
+8502 Nicely done!
+
+8504 The vanguard of the Turkic army is coming, we must give them a head-on blow and frustrate them, by the way, we don't have many cavalry, so we have to use them in the right place.
+8510 Building a barracks
+
+8511 Chapter 1: Pre-war preparations
+
+8512 Chapter 2: Preparation of soldiers and horses
+
+8530 After learning the basic construction of buildings, you need to learn to upgrade your base, recruit troops and other operations.
+
+8531 Beginner Instruction
+
+8532 Upgrade the county office to governor office, recruit 20 pikemen, 20 archers, 20 modao_footman, 20 light cavalry, 5 marching carts, 5 siege_vehicle, 5 taoist_priest and 5 basilisk cavalry.
+
+8533 Upgrading county_offices to governors_office
+
+8534 Recruit 20 pikemen, 20 archers, 20 modao_footman 20 light cavalry
+
+8535 Recruiting 5 marching carts and 5 siege_vehicle
+
+8536 Recruit 5 taoist_priest and 5 black cavalry
+
+8537 Well done, once the barracks are available, you can upgrade your base to level 2.
+
+8538 You have met the requirements to upgrade your base to level 3.
+
+8539 Chapter 3: Combat Skills
+
+8540 Now that the troops are sufficient, it's time to get familiar with the combat aspect. The game has a certain type of restraint relationship, in general, the gun and spear class grams cavalry, cavalry grams long-range, long-range grams gun and spear class and heavy infantry, siege equipment grams long-range, in addition to the overall restraint, there are more detailed restraint relationship waiting for you to explore.
+
+8541 The northern Turkic army has always been a threat to our Tang Empire, relying on the cavalry advantage to come and go, often forcing our troops to run for their lives. The scouts have really found a considerable number of Turkic troops wandering not far from the border of our Tang Empire with unknown purpose. After discussion, we decided to take a risk and sneak out of the city to attack their camp.
+
+8542 Destroy all enemies
+
+8543 Chapter 4: A Head-On Attack.
+
+8544 From this chapter will enter the real battle session, the enemy will launch round after round of attacks, the time to test the overall quality of the player has arrived.
+
+8545 Chapter 5: The Final Showdown
+
+8546 The main force of the Turk has pressed into our army in full force, it seems that a vicious battle is imminent, and I think it will be quite tragic.
+
+8549 Hold on to the city
+
+8551 report.... Just received the news, the marshal is worried about our defending the city's strength is tight, decided to send a don't reinforce us, hope the general must ensure that the city is not lost.
+
+8552 Look, it's reinforcements, reinforcements are here, at b5!!!
+
+8553 This was the last wave of support given to us by the marshal, and we were concerned about losses, so this support entered the city through the south gate, at a3 and c3.
+
+8554 The battle has come to such a level that you did not expect, now the soldiers are sleepy, the city is desperate for food, but the Turkic offensive does not seem to weaken at all, you can not help but start to worry, so you decided to call the general officers to discuss countermeasures.
+
+8555 After discussion, we all agreed that we can't stick to the city gates, we should consider the situation after the gates are broken, after repeated discussion and deduction, you came up with the countermeasure of using the complex terrain inside the city to restrain the enemy, weak things can't be done, when immediately give up the city gates, retreat to the city.
+
+8556 In you already feel stretched to the limit, there is nothing to do, but suddenly found that the opposite Turkic camp seems to be slowly retreating, while the opposite also came the sound of sounding gold, Zheng Yu you base station of the Turkic army heard immediately after the formula stopped, quickly disengaged from the battlefield. It turns out does not mean that you guys feel helpless, the opposite Turkic equally clueless, in the case of paying such a large number of casualties also did not take this city, the morale of the Turkic army has fallen to the bottom, has not been suitable to continue to fight, while they fear that your main force will feel at any time, and decided to give up this city and seek another way.

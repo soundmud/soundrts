@@ -128,7 +128,10 @@ def replay_menu():
     menu = Menu(mp.OBSERVE_RECORDED_GAME)
     for n in replay_filenames():
         if n.endswith(".txt"):
-            menu.append([time.strftime("%c", time.localtime(int(n[:-4])))], (replay, n))
+            try:
+                menu.append([time.strftime("%c", time.localtime(int(n[:-4])))], (replay, n))
+            except ValueError:
+                menu.append((n[:-4]), (replay, n))
     menu.append(mp.QUIT2, None)
     menu.run()
 

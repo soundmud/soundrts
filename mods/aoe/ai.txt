@@ -1,0 +1,691 @@
+def tang_empire_easy
+research 1
+send_soldiers_to_base 1
+retaliate 1
+a_thunder 1
+load_all 1
+unload_all 1
+a_come_back_to_life 1
+a_lobby 1
+a_summon_golden_dragon 1
+watchdog 600
+constant_attacks 0 ; constantly ;attack if powerful enough
+research 1 ; do the research if enough resources
+
+label tang_empire1
+get county_government 6 villagers 1 lumbermill 1 drillground 
+get 3 tang_archer
+get government_office
+get 1 tang_stables 1 tang_leathershop 1 foundry_bureau
+get 5 light_cavalry 1 tang_scouttower
+get 5 modao_footman 5 light_cavalry 
+get ordnance_supervisor
+get 5 tang_siege_vehicle
+get 16 villagers
+get 20 modao_footman 10 light_cavalry
+get 2 drillground
+get 26 tang_archer
+get 2 government_office
+get 16 tang_archer 16 modao_footman
+get 18 tang_siege_vehicle
+get 28 light_cavalry
+get 3 drillground
+get 24 villagers
+get 40 tang_archer
+attack
+get 10 light_cavalry
+get governor's_house
+get 20 ballista
+get 3 modao_footman 10 light_cavalry 10 marksman
+attack
+get 32 villagers
+get 4 drillground
+get 10 black_cavalry
+get 70 tang_archer
+attack
+get 10 ballista
+get 3 taoist_temple
+get 10 taoist_priest
+get 44 villagers
+get 3 taoist_temple
+get 50 taoist_priest
+attack
+get 10 marksman
+get 4 government_office
+get 2 drillground
+get 20 black_cavalry 
+get 80 tang_archer
+attack
+get 80 light_cavalry
+attack
+get 80 tang_siege_vehicle
+attack
+get 3 taoist_temple
+get 90 taoist_priest
+attack
+get 5 government_office
+goto tang_empire1
+
+def tang_empire_hard
+send_soldiers_to_base 1
+retaliate 1
+a_thunder 1
+load_all 1
+unload_all 1
+a_come_back_to_life 1
+a_lobby 1
+a_summon_golden_dragon 1
+watchdog 600
+constant_attacks 1 ; constantly attack if powerful enough
+research 1 ; do the research if enough resources
+
+label phase1
+get county_government 9 villagers 1 lumbermill 1 drillground 
+goto_random very_early_rush early_rush rush phase2
+
+label very_early_rush
+get tang_leathershop foundry_bureau
+goto_random early_rush phase2
+
+label early_rush
+get 3 tang_archer 3 modao_footman
+attack
+get government_office
+get 1 tang_stables 1 ordnance_supervisor
+goto_random rush phase2
+
+label rush
+get 9 villagers
+get 5 tang_archer 8 light_cavalry 3 modao_footman
+attack
+get 2 drillground 10 modao_footman 10 light_cavalry
+attack
+goto phase2
+
+label phase2
+get 20 villagers
+get 15 tang_archer 5 light_cavalry
+get 1 government_office
+goto_random basic_defense marksmans ballistas light_cavalrys tang_archers taoist_priests tang_siege_vehicles rage rage2 rage3
+
+label rage
+get 1 governor's_house
+get 3 taoist_temple 2 ordnance_supervisor
+get 10 modao_footman 10 tang_archer 5 light_cavalry 10 ballista
+attack
+get 5 tang_archer 10 black_cavalry 10 taoist_priest 10 ballista
+attack
+get 12 taoist_priest
+attack
+goto phase3
+
+label rage2
+get 40 light_cavalry 13 marksman
+attack
+get 7 drillground 125 modao_footman 
+attack
+get 5 ballista
+attack
+goto phase3
+
+label rage3
+get 2 villagers
+get 25 modao_footman 25 light_cavalry 25 taoist_priest
+attack
+get 10 taoist_priest
+attack
+get 23 tang_archer
+attack
+get 6 marksman
+attack
+get 4 ballista
+attack
+get 18 taoist_priest
+goto phase3
+
+label tang_siege_vehicles
+get 3 ordnance_supervisor 5 tang_siege_vehicle
+attack
+get 12 tang_siege_vehicle
+attack
+get 30 tang_siege_vehicle
+attack
+goto phase3
+
+label basic_defense
+get 30 tang_archer 10 tang_siege_vehicle
+get 60 tang_archer 20 tang_siege_vehicle
+get 10 tang_scouttower 13 crossbowtower
+get 1 governor's_house
+goto phase3
+
+label ballistas
+get 1 ordnance_supervisor 1 government_office 29 ballista
+attack
+goto phase3
+
+label taoist_priests
+get 5 villagers
+get 2 taoist_temple 12 taoist_priest
+attack
+get 25 taoist_priest
+attack
+get 35 taoist_priest
+attack
+goto phase3
+
+label marksmans
+get 1 marksman
+attack
+get 3 marksman
+attack
+get 14 marksman
+attack
+goto phase3
+
+label black_cavalrys
+get 14 black_cavalry
+attack
+get 24 black_cavalry
+attack
+get 16 black_cavalry
+attack
+goto phase3
+
+label light_cavalrys
+get 20 light_cavalry
+attack
+get 40 light_cavalry
+attack
+get 62 light_cavalry
+attack
+goto phase3
+
+label tang_archers
+get 25 tang_archer
+attack
+get 42 tang_archer
+get 4 marksman
+attack
+goto phase3
+
+label modao_footman
+get 2 modao_footman
+attack
+get 20 modao_footman
+attack
+goto phase3
+
+label phase3
+goto phase2
+
+; a passive AI, useful for heavily scripted maps (using triggers with timers)
+def timers
+retaliate 0 ; don't retaliate if a unit is attacked or flee
+
+
+
+def turkic_hanate_easy
+research 1
+send_soldiers_to_base 1
+retaliate 1
+load_all 1
+unload_all 1
+a_rain 1
+summon_sirius 1
+summon_turkic_finch 1
+set_stumbling_blocks 1
+a_divination 1
+a_curse 1
+watchdog 600 ; never stay on the same line for more than 20 minutes
+constant_attacks 0 ; constantly ;attack if powerful enough
+research 1 ; do the research if enough resources
+
+label turkic_hanate1
+get archim_tent 6 turk_herdsmen 1 lumbermill 1 turk_stables turk_barracks
+get 2 turk_archer
+get hakemu_tent
+get turk_leathershop turk_blacksmith
+get 5 turk_archer 5 turk_blade_cavalry
+get 1 turk_scouttower
+get 5 turk_archer_cavalry 5 turk_saber_cavalry 
+get 5 turk_blade_cavalry 5 saber_cavalry
+get turk_arms_workshop
+get 5 turk_trebuchet
+get 16 turk_herdsmen
+get 20 turk_blade_cavalry 10 turk_archer_cavalry
+get 2 turk_barracks
+get 10 turk_archer_cavalry 10 turk_blade_cavalry 10 turk_archer
+get 2 hakemu_tent
+get 16 turk_archer 16 turk_blade_cavalry
+get 18 turk_trebuchet
+get 28 turk_blade_cavalry
+get 3 turk_barracks
+get 24 turk_herdsmen
+get 40 turk_archer_cavalry
+attack
+get 2 turk_arms_workshop
+get 5 turk_trebuchet
+get pasha_tent
+get 5 turk_blade_cavalry
+get 3 turk_spear_cavalry 10 turk_archer_cavalry 5 turk_whistlinger
+get 32 turk_herdsmen
+get 4 turk_barracks
+get 10 turk_spear_cavalry
+get 5 turk_whistlinger
+get 70 turk_archer
+get 10 turk_trebuchet
+get 3 turk_shaman_temple
+get 10 turk_shaman
+get 44 turk_herdsmen
+get 3 turk_shaman_temple
+get 50 turk_shaman
+attack
+get 10 turk_whistlinger
+get 4 hakemu_tent
+get 2 turk_barracks
+get 20 turk_spear_cavalry 
+get 80 turk_archer
+attack
+get 80 turk_blade_cavalry
+attack
+get 80 turk_trebuchet
+attack
+get 3 turk_shaman_temple
+get 90 turk_shaman
+attack
+get 5 hakemu_tent
+goto turkic_hanate1
+
+def turkic_hanate_hard
+research 1
+send_soldiers_to_base 1
+retaliate 1
+load_all 1
+unload_all 1
+a_rain 1
+summon_sirius 1
+summon_turkic_finch 1
+set_stumbling_blocks 1
+a_divination 1
+a_curse 1
+watchdog 600 ; never stay on the same line for more than 20 minutes
+constant_attacks 1 ; constantly attack if powerful enough
+research 1 ; do the research if enough resources
+
+label phase1
+get archim_tent 9 turk_herdsmen 1 lumbermill 1 turk_barracks 
+goto_random very_early_rush early_rush rush phase2
+
+label very_early_rush
+get turk_leathershop turk_stables
+goto_random early_rush phase2
+
+label early_rush
+get 3 turk_tang_archer 3 turk_blade_cavalry
+attack
+get hakemu_tent
+get 1 turk_blacksmith 1 arms_workshop
+goto_random rush phase2
+
+label rush
+get 9 turk_herdsmen
+get 5 turk_archer 8 turk_blade_cavalry 3 saber_cavalry
+attack
+get 2 turk_barracks 10 saber_cavalry 10 turk_archer_cavalry
+attack
+goto phase2
+
+label phase2
+get 20 turk_herdsmen
+get 15 turk_archer 5 turk_blade_cavalry
+get 1 hakemu_tent
+goto_random basic_defense turk_whistlingers turk_trebuchets turk_archer_cavalrys turk_archers turk_shamans turk_scouttowers rage rage2 rage3
+
+label rage
+get 1 pasha_tent
+get 3 turk_shaman_temple 2 arms_workshop
+get 10 saber_cavalry 10 turk_archer_cavalry 5 turk_blade_cavalry 10 turk_trebuchet
+attack
+get 5 turk_archer_cavalry 10 turk_spear_cavalry 10 turk_shaman 10 turk_trebuchet
+attack
+get 12 turk_shaman
+attack
+goto phase3
+
+label rage2
+get 40 turk_blade_cavalry 13 turk_whistlinger
+attack
+get 7 turk_barracks 125 saber_cavalry 
+attack
+get 5 turk_trebuchet 
+attack
+goto phase3
+
+label rage3
+get 2 villagers
+get 25 saber_cavalry 25 turk_archer_cavalry 25 turk_shaman
+attack
+get 10 turk_shaman
+attack
+get 23 turk_archer
+attack
+get 6 turk_whistlinger
+attack
+get 4 turk_trebuchet
+attack
+get 18 turk_shaman
+goto phase3
+
+label turk_trebuchets
+get 3 arms_workshop 5 turk_trebuchet
+attack
+get 12 turk_trebuchet
+attack
+get 30 turk_trebuchet
+attack
+goto phase3
+
+label basic_defense
+get 30 turk_archer 1 turk_scouttower 10 turk_trebuchet
+get 60 turk_archer 1 turk_scouttower 20 turk_trebuchet
+get 10 turk_scouttower
+get 1 pasha_tent
+goto phase3
+
+label turk_archer_cavalrys
+get 1 turk_barracks 1 hakemu_tent 29 turk_archer_cavalry
+attack
+goto phase3
+
+label turk_shamans
+get 5 turk_herdsmen
+get 2 turk_shaman_temple 12 turk_shaman
+attack
+get 25 turk_shaman
+attack
+get 35 turk_shaman
+attack
+goto phase3
+
+label turk_whistlingers
+get 1 turk_whistlinger
+attack
+get 3 turk_whistlinger 5 turk_archer_cavalry
+attack
+get 14 turk_whistlinger
+attack
+goto phase3
+
+label turk_spear_cavalrys
+get 14 turk_spear_cavalry
+attack
+get 24 turk_spear_cavalry
+attack
+get 16 turk_spear_cavalry
+attack
+goto phase3
+
+label saber_cavalrys
+get 20 saber_cavalry
+attack
+get 40 saber_cavalry
+attack
+get 62 saber_cavalry
+attack
+goto phase3
+
+label turk_archers
+get 25 turk_archer
+attack
+get 42 turk_archer
+get 4 turk_whistlinger
+attack
+goto phase3
+
+label turk_blade_cavalry
+get 4 turk_blade_cavalry
+attack
+get 20 turk_blade_cavalry
+attack
+goto phase3
+
+label phase3
+goto phase2
+
+; a passive AI, useful for heavily scripted maps (using triggers with timers)
+def timers
+retaliate 0 ; don't retaliate if a unit is attacked or flee
+
+def byzantine_empire_easy
+research 1
+send_soldiers_to_base 1
+a_resurrection 1
+retaliate 1
+load_all 1
+unload_all 1
+throwing_javelin 1
+summon_double_headed_eagle 1
+watchdog 600
+constant_attacks 0 ; constantly ;attack if powerful enough
+research 1 ; do the research if enough resources
+
+label byzantine_empire1
+get town_center 9 serf 1 lumbermill 1 b_barracks 1 b_blacksmith
+get 3 pikemen
+get governor's_palace
+get 1 mine 1 b_stables 1 b_leathershop
+get 15 pike_cavalry 15 b_archer
+get 1 guard_tower
+get 10 sword_shield_men 10 pike_cavalry
+get armament_institute
+get 5 b_catapult
+get 16 serf
+get 20 sword_shield_men 10 pike_cavalry
+get 2 b_barracks
+get 26 b_archer
+get 2 governor's_palace
+get 16 tang_archer 16 sword_shield_men
+get 18 b_catapult
+get 28 pike_cavalry
+get 3 b_barracks
+get 24 serf
+get 40 b_archer
+attack
+get 2 armament_institute
+get 5 b_catapult 10 pike_cavalry
+get constantinople
+get 20 b_catapult
+get 3 iron_paladin 10 pike_cavalry
+get 32 serf
+get 4 b_barracks
+get 10 iron_paladin
+get 5 pike_cavalry
+get 70 sword_shield_men 
+attack
+get 10 b_catapult
+get 3 church
+get 10 b_priest
+get 20 pikemen
+get 44 serf
+get 3 church
+get 50 b_priest
+get 10 iron_paladin
+attack
+get 4 governor's_palace
+get 2 b_barracks
+get 20 iron_paladin 
+get 40 b_archer 40 sword_shield_men
+attack
+get 80 pike_cavalry
+attack
+get 80 b_catapult
+attack
+get 3 church
+get 90 b_priest 90 pikemen
+attack
+get 5 governor's_palace
+goto byzantine_empire1
+
+def byzantine_empire_hard
+send_soldiers_to_base 1
+retaliate 1
+a_resurrection 1
+load_all 1
+unload_all 1
+throwing_javelin 1
+summon_double_headed_eagle 1
+summon_mercenaries 1
+watchdog 600
+constant_attacks 1 ; constantly attack if powerful enough
+research 1 ; do the research if enough resources
+
+label phase1
+get town_center 9 serf 1 lumbermill 1 b_barracks
+goto_random very_early_rush early_rush rush phase2
+
+label very_early_rush
+get 1 b_blacksmith
+goto_random early_rush phase2
+
+label early_rush
+get 3 pikemen
+get governor's_palace
+get 1 mine 1 b_stables 1 leathershop 1 armament_institute
+goto_random rush phase2
+
+label rush
+get 9 serf
+get 5 b_archer 8 pike_cavalry 3 sword_shield_men
+attack
+get 2 b_barracks 10 sword_shield_men 10 pike_cavalry
+attack
+goto phase2
+
+label phase2
+get 20 serf
+get 15 b_archer 1 guard_tower 5 pike_cavalry
+get 1 governor's_palace
+goto_random basic_defense pikemens axemens b_catapults pike_cavalrys b_archers b_priests guard_towers b_catapults rage rage2 rage3
+
+label rage
+get 1 constantinople
+get 3 church 2 armament_institute
+get 10 pikemen 10 b_archer 5 pike_cavalry 10 b_catapult
+attack
+get 5 b_archer 10 iron_paladin 10 b_priest 10 b_catapult
+attack
+get 12 b_priest
+attack
+goto phase3
+
+label rage2
+get 40 pike_cavalry 13 axemen
+attack
+get 7 b_barracks 125 sword_shield_men 
+attack
+get 5 b_catapult
+attack
+goto phase3
+
+label rage3
+get 2 serf
+get 25 sword_shield_men 25 pike_cavalry 25 b_priest
+attack
+get 10 b_priest
+attack
+get 23 b_archer
+attack
+get 6 axemen
+attack
+get 4 b_catapult
+attack
+get 18 b_priest
+goto phase3
+
+label b_catapults
+get 3 armament_institute 5 b_catapult
+attack
+get 12 b_catapult
+attack
+get 30 b_catapult
+attack
+goto phase3
+
+label basic_defense
+get 30 b_archer 30 pikemen 1 guard_tower 10 b_catapult
+get 60 b_archer 60 pikemen 1 guard_tower 20 b_catapult
+get 10 guard_tower 13 catapulttower
+get 1 constantinople
+goto phase3
+
+label b_catapults
+get 1 armament_institute 1 governor's_palace 29 b_catapult
+attack
+goto phase3
+
+label b_priests
+get 5 serf
+get 2 church 12 b_priest
+attack
+get 25 b_priest
+attack
+get 35 b_priest
+attack
+goto phase3
+
+label axemens
+get 1 axemen
+attack
+get 3 axemen 3 pike_cavalry
+attack
+get 14 axemen
+attack
+goto phase3
+
+label iron_paladins
+get 14 iron_paladin
+attack
+get 24 iron_paladin
+attack
+get 16 iron_paladin
+attack
+goto phase3
+
+label pike_cavalrys
+get 20 pike_cavalry
+attack
+get 40 pike_cavalry
+attack
+get 62 pike_cavalry
+attack
+goto phase3
+
+label b_archers
+get 25 b_archer
+attack
+get 42 b_archer
+get 4 axemen
+attack
+goto phase3
+
+label pikemens
+get 25 pikemen
+attack
+get 42 pikemen
+attack
+goto phase3
+
+label sword_shield_men
+get 2 sword_shield_men
+attack
+get 20 sword_shield_men
+attack
+goto phase3
+
+label phase3
+goto phase2
+
+; a passive AI, useful for heavily scripted maps (using triggers with timers)
+def timers
+retaliate 0 ; don't retaliate if a unit is attacked or flee
