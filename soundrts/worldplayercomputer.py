@@ -175,7 +175,8 @@ class Computer(Player):
                     )
 
     def _build_a_warehouse_if_useful(self):
-        if self.missing_resources(self._best_warehouse().cost):
+        warehouse = self._best_warehouse()
+        if warehouse is None or self.missing_resources(warehouse.cost):
             return
         for deposit in [
             o.target
