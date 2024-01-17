@@ -28,6 +28,7 @@ except:
     warning("couldn't set locale")
 
 import os
+from pathlib import Path
 import sys
 import time
 import webbrowser
@@ -119,9 +120,9 @@ def replay(n):
     ReplayGame(os.path.join(REPLAYS_PATH, n)).run()
 
 
-def replay_filenames(minimal_size=None):
+def replay_filenames(minimal_size=1):
     for n in sorted(os.listdir(REPLAYS_PATH), reverse=True):
-        if not minimal_size or len(open(os.path.join(REPLAYS_PATH, n)).read()) >= minimal_size:
+        if Path(REPLAYS_PATH, n).stat().st_size >= minimal_size:
             yield n
 
 
