@@ -1,3 +1,9 @@
+# when evaluating how much time the TTS will take to say a message
+# should a digit take more time?
+# 1: same time
+# 3: 3 times as much
+tts_digit_coefficient = 3
+
 # flattening of the y coordinate of the positional sounds
 # 1.0: no flattening
 # 2.0: the objects will feel closer from each other

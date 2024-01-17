@@ -27,6 +27,10 @@ class _TTS:
     def Speak(self, text):
         self.o.output(text, interrupt=True)
         self._end_time = time.time() + len(text) * self._wait_delay_per_character
+        nb_digits = sum(c.isdigit() for c in text)
+        from soundrts import parameters
+        digit_bonus = parameters.d.get("tts_digit_coefficient", 1) - 1
+        self._end_time += nb_digits * digit_bonus * self._wait_delay_per_character
 
     def Stop(self):
         self.o.output("", interrupt=True)
