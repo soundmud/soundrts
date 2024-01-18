@@ -168,10 +168,6 @@ class Square(_Space):
             del d["spiral"]
         return d
 
-    def enter(self, o):
-        super().enter(o)
-        o._previous_square = self
-
     def is_near(self, square):  # FIXME: not used (remove?)
         try:
             return (abs(self.col - square.col), abs(self.row - square.row)) in (

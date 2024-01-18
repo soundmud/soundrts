@@ -103,6 +103,7 @@ class Entity:
             self.place.leave(self)
             if not new_place:
                 self.place.world.unregister_entity(self)
+        self._previous_square = self.place
         self.place = new_place
         if new_place:
             new_place.enter(self)

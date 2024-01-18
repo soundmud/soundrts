@@ -677,6 +677,7 @@ class Creature(Entity):
             ):
                 self.notify("flee")
                 self.take_order(["go", s.id], imperative=True)
+                break
 
     def decide(self):
         if self.is_inside:
