@@ -4,6 +4,31 @@ Release notes
 
 .. contents::
 
+1.3.8
+-----
+
+For multiplayer games, this version requires:
+
+- client: 1.3.8 or later
+- server: 1.2-c12 or later
+
+Main changes from 1.3.7:
+
+- added tts_digit_coefficient in cfg/parameters.toml
+
+Bugs fixed:
+
+- paths between ground and water will be kept if both squares are ground
+- units will flee to the previous square more often
+- properly handle replay files that are not timestamps (thanks to dnl-nash)
+- send bug reports only if the client is an executable
+
+Translations:
+
+- added Belarusian translation (thanks to Uladzimir)
+- updated Slovak translation (thanks to Marco Oros)
+
+
 1.3.7
 -----
 
