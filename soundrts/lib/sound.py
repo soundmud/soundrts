@@ -90,9 +90,10 @@ class SoundSource:
         if not self._volume_too_low():
             self.channel = psounds.find_a_channel(self.priority)
             if self.channel is not None:
+                self.channel.stop()
+                self._update_volume(force=True)
                 self.channel.play(self.sound, self.loop)
                 self.channel.set_endevent(pygame.locals.USEREVENT + 1)
-                self._update_volume(force=True)
         if self.is_playing():
             psounds.remember_start_time(self.sound)
 
