@@ -1,0 +1,34 @@
+; an easy AI
+def zombie_easy
+label beginning
+get 1 zombie_barracks
+label game
+get 1 mindless_slave 5 zombie_footman 
+get 6 zombie_fighter
+get 8 mindless_slave 15 zombie_footman
+get 3 great_zombie_archer
+goto game
+; an agressive AI, attacking when each wave is ready (sometimes earlier if the strength is sufficient)
+def zombie_aggressive
+
+watchdog 600 ; never stay on the same line for more than 10 minutes
+constant_attacks 1 ; constantly attack if powerful enough
+get 1 zombie_barracks
+Get 1 zombie_defender
+label beginning
+
+goto_random small_army medium_army big_army
+label small_army
+get 6 mindless_slave 2 zombie_footman
+attack
+goto beginning
+
+label medium_army
+get 6 mindless_slave 5 zombie_footman 2 great_zombie_archer
+attack
+goto beginning
+
+label big_army
+get 6 mindless_slave 10 zombie_archer 10 zombie_footman
+attack
+goto beginning

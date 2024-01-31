@@ -1,0 +1,12 @@
+; coding: utf-8
+11 farm of brains
+ 1 Zombie training grounds
+2 graveyard
+3 mindless slave
+4 zombie footman
+5 zombie
+6 zombie archer
+7 zombie barracks
+16 zombie warrior
+17 great zombie archer
+18 zombie defender

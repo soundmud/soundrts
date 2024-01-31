@@ -1,0 +1,12 @@
+; coding: utf-8
+11 farma muzgów
+ 1 obóz treningowy zombi
+2 cmentarz
+3 bezmyślny niewolnik
+4 piechur zombi
+5 zombi
+6 łucznik zombi
+7 baraki zombi
+16 wojownik zombi
+17 potężny łucznik zombi
+18 obrońca zombi
