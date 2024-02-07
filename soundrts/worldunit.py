@@ -241,6 +241,10 @@ class Creature(Entity):
 
     @property
     def menace(self):
+        if self.damage:
+            return self.damage
+        if self.transport_capacity:
+            return self.transport_capacity * PRECISION * 2
         return self.damage
 
     @property
@@ -673,6 +677,7 @@ class Creature(Entity):
             ):
                 self.notify("flee")
                 self.take_order(["go", s.id], imperative=True)
+                break
 
     def decide(self):
         if self.is_inside:

@@ -16,7 +16,8 @@ from .version import VERSION_FOR_BUG_REPORTS
 log.set_version(VERSION_FOR_BUG_REPORTS)
 log.clear_handlers()
 log.add_secure_file_handler(CLIENT_LOG_PATH, "w")
-log.add_http_handler("http://jlpo.free.fr/soundrts/metaserver")
+if VERSION_FOR_BUG_REPORTS.startswith("v"):  # executable
+    log.add_http_handler("http://jlpo.free.fr/soundrts/metaserver")
 log.add_console_handler()
 
 import locale
@@ -27,6 +28,7 @@ except:
     warning("couldn't set locale")
 
 import os
+from pathlib import Path
 import sys
 import time
 import webbrowser
@@ -118,9 +120,9 @@ def replay(n):
     ReplayGame(os.path.join(REPLAYS_PATH, n)).run()
 
 
-def replay_filenames(minimal_size=None):
+def replay_filenames(minimal_size=1):
     for n in sorted(os.listdir(REPLAYS_PATH), reverse=True):
-        if not minimal_size or len(open(os.path.join(REPLAYS_PATH, n)).read()) >= minimal_size:
+        if Path(REPLAYS_PATH, n).stat().st_size >= minimal_size:
             yield n
 
 
@@ -128,7 +130,11 @@ def replay_menu():
     menu = Menu(mp.OBSERVE_RECORDED_GAME)
     for n in replay_filenames():
         if n.endswith(".txt"):
-            menu.append([time.strftime("%c", time.localtime(int(n[:-4])))], (replay, n))
+            try:
+                name = time.strftime("%c", time.localtime(int(n[:-4])))
+            except ValueError:
+                name = n[:-4]
+            menu.append([name], (replay, n))
     menu.append(mp.QUIT2, None)
     menu.run()
 
