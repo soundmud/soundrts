@@ -954,16 +954,17 @@ class GameInterface:
             pass
         return b
 
-    def run_game(self, game):
+    def run_game(self, game, new=True):
         t = threading.Thread(target=game.world.loop)
         t.daemon = True
         t.start()
 
         update_orders_list()  # when style has changed
-        game.pre_run()
-        if game.world.objective:
-            voice.confirmation(mp.OBJECTIVE + game.world.objective)
-        self.load_bindings(self.get_bindings())
+        if new:
+            game.pre_run()
+            if game.world.objective:
+                voice.confirmation(mp.OBJECTIVE + game.world.objective)
+            self.load_bindings(self.get_bindings())
         if PROFILE:
             cProfile.runctx("self._loop()", globals(), locals(), "interface_profile.tmp")
         else:

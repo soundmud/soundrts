@@ -205,7 +205,9 @@ class _Savable:
         definitions._ai = self._ai
         style.copy(self._style)
         update_orders_list()  # when style has changed
-        self.interface.run_game(self)
+        self.interface.run_game(self, new=False)
+        if self.record_replay:
+            self._replay_file.close()
 
 
 class TrainingGame(_MultiplayerGame, _Savable):
