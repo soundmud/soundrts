@@ -9,7 +9,7 @@ os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 import random
 import sys
 import time
-from multiprocessing import Process
+from multiprocessing import Process, Lock
 
 try:
     import win32gui
@@ -221,10 +221,19 @@ class Wait:
         return self.end <= time.time()
 
 
+lock = Lock()  # might be useful if something is shared at runtime
+
+
 class Save:
+
     def run(self, interface):
-        print("save")
-        interface.gm_save()
+        lock.acquire()
+        print("saving...")
+        try:
+            interface.gm_save()
+            print("ok")
+        finally:
+            lock.release()
         return True
 
 
