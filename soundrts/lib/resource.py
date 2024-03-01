@@ -73,7 +73,7 @@ def _preferred_language():
         return cfg
     else:
         try:
-            return locale.getdefaultlocale()[0]
+            return locale.getlocale()[0]
         except ValueError:
             warning(
                 "Couldn't get the system language. "
