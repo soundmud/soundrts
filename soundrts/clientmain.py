@@ -8,7 +8,7 @@ if not config.debug_mode:
 
     os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 
-from .lib import log, resource
+from .lib import log
 from .lib.log import exception, warning
 from .paths import CLIENT_LOG_PATH
 from .version import VERSION_FOR_BUG_REPORTS
@@ -19,13 +19,6 @@ log.add_secure_file_handler(CLIENT_LOG_PATH, "w")
 if VERSION_FOR_BUG_REPORTS.startswith("v"):  # executable
     log.add_http_handler("http://jlpo.free.fr/soundrts/metaserver")
 log.add_console_handler()
-
-import locale
-
-try:
-    locale.setlocale(locale.LC_ALL, "")
-except:
-    warning("couldn't set locale")
 
 import os
 from pathlib import Path
