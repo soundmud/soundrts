@@ -174,6 +174,12 @@ class Menu:
             self.choice_done = True
 
     def _process_keydown(self, e):
+
+        # In order to avoid the accumulation of repeated KEYDOWN events
+        # (this glitch happens when building the menu takes too much time),
+        # remove additional KEYDOWN events from the queue.
+        pygame.event.clear([KEYDOWN])
+
         if e.key in [K_ESCAPE, K_LEFT]:
             self.choice_index = len(self.choices) - 1
             return self._confirm_choice()
