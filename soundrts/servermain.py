@@ -1,4 +1,3 @@
-import asyncore
 import re
 import socket
 import sys
@@ -9,6 +8,7 @@ import urllib.request
 from functools import lru_cache
 
 from . import config, discovery, options, paths
+from .batteries import asyncore
 from .lib.log import exception, info, warning
 from .lib.ticker import Ticker
 from .metaserver import MAIN_METASERVER_URL

@@ -1,9 +1,9 @@
-import asynchat
 import re
 import sys
 import time
 from typing import TYPE_CHECKING
 
+from .batteries import asynchat
 from .lib.log import exception, info, warning
 from .lib.msgs import encode_msg
 from .lib.resource import res

@@ -1,11 +1,11 @@
 import sys
-import telnetlib
 import threading
 import time
 
 from . import config
 from . import msgparts as mp
 from . import options, servermain
+from .batteries import telnetlib
 from .clientmedia import voice
 from .clientservermenu import ServerMenu
 from .clientversion import revision_checker
