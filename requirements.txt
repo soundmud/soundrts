@@ -5,7 +5,7 @@ git+https://github.com/soundmud/accessible_output2
 chardet
 cloudpickle
 requests
-tomli
+tomli; python_version<"3.11"
 
 docutils
 cx_Freeze
