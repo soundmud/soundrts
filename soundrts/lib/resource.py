@@ -12,7 +12,14 @@ from typing import List
 from soundrts.definitions import rules, load_ai, style
 from soundrts.lib.log import warning, exception
 from soundrts.lib.package import PackageStack, Package
-from soundrts.lib.sound_cache import sounds
+try:
+    from soundrts.lib.sound_cache import sounds
+except ModuleNotFoundError:
+    # the server doesn't need the sound cache
+    class Sounds:
+        def load_default(self, *args):
+            pass
+    sounds = Sounds()
 from .. import config, options
 from ..mapfile import Map
 from ..pack import unpack_file
@@ -318,8 +325,12 @@ def _get_multi_maps():
     maps = []
     maps.extend(official_multiplayer_maps())
     _add_custom_multi(maps)
-    from .message import Message
-    maps.sort(key=lambda x: Message(x.title).translate_and_collapse(remove_sounds=True))
+
+    def text_only_title(map_):
+        # custom maps will appear after official maps
+        return [part.lower() if isinstance(part, str) else chr(ord("z") + 1) for part in map_.title]
+
+    maps.sort(key=text_only_title)
     _copy_recommended_maps(maps)
     return maps
 
