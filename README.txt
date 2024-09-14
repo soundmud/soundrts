@@ -5,7 +5,7 @@ Feel free to experiment on the code base, but don't feel obliged to contribute b
 The license for the Python source code is a BSD 3-clause license (LICENSE.txt).
 The license for the rest is unclear at the moment.
 
-Tested with Python 3.8.
+Tested with Python 3.11.
 
 To install the requirements:
 pip install -r requirements.txt -U

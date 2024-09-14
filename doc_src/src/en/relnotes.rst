@@ -4,6 +4,25 @@ Release notes
 
 .. contents::
 
+1.3.8.1
+-------
+
+For multiplayer games, this version requires:
+
+- client: 1.3.8 or later
+- server: 1.2-c12 or later
+
+Main changes from 1.3.8:
+
+Bugs fixed:
+
+- in a restored game, the R key would select any soldier (thanks to Marco Oros for reporting the bug)
+- when building a menu takes too much time, repeated keys would accumulate
+- hopefully avoid any volume glitch when a sound source is created
+- custom maps will appear after official maps
+- running server.py doesn't require any package
+
+
 1.3.8
 -----
 
