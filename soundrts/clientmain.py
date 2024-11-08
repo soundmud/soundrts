@@ -20,6 +20,13 @@ if VERSION_FOR_BUG_REPORTS.startswith("v"):  # executable
     log.add_http_handler("http://jlpo.free.fr/soundrts/metaserver")
 log.add_console_handler()
 
+import locale
+
+try:
+    locale.setlocale(locale.LC_ALL, "")
+except:
+    warning("couldn't set locale")
+
 import os
 from pathlib import Path
 import sys
