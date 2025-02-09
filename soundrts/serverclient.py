@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 from .batteries import asynchat
 from .lib.log import exception, info, warning
 from .lib.msgs import encode_msg
-from .lib.resource import res
 from .pack import pack_buffer
 
 if TYPE_CHECKING:
@@ -20,16 +19,6 @@ from .serverroom import (
     WaitingForTheGameToStart,
     _State,
 )
-
-
-def _map(map_index_or_name):
-    maps = res.multiplayer_maps()
-    try:
-        return maps[int(map_index_or_name)]
-    except ValueError:
-        for scenario in maps:
-            if map_index_or_name in scenario.name:
-                return scenario
 
 
 class ConnectionToClient(asynchat.async_chat):
@@ -121,7 +110,7 @@ class ConnectionToClient(asynchat.async_chat):
             self.push(
                 "maps %s\n"
                 % " ".join(
-                    [",".join([str(y) for y in x.title]) for x in res.multiplayer_maps()]
+                    [",".join([str(y) for y in x.title]) for x in self.server.maps]
                 )
             )
         else:
@@ -198,12 +187,21 @@ class ConnectionToClient(asynchat.async_chat):
 
     # "in the lobby" commands
 
+    def _map_from(self, map_index_or_name):
+        maps = self.server.maps
+        try:
+            return maps[int(map_index_or_name)]
+        except ValueError:
+            for scenario in maps:
+                if map_index_or_name in scenario.name:
+                    return scenario
+
     def cmd_create(self, args: str) -> None:
         map_index_or_name = args[0]
         speed = float(args[1])
         is_public = len(args) >= 3 and args[2] == "public"
         if self.server.can_create(self):
-            map_ = _map(map_index_or_name)
+            map_ = self._map_from(map_index_or_name)
             if map_:
                 self._create_game(map_, speed, is_public)
         else:

@@ -343,7 +343,7 @@ def _save_downloaded_map(b, name):
         warning("couldn't write %s", name)
 
 
-def _resource_stack():
+def create_resource_stack():
     if options.mods is not None:
         mods = options.mods
     else:
@@ -360,4 +360,4 @@ def _resource_stack():
     return result
 
 
-res = _resource_stack()
+res = create_resource_stack()

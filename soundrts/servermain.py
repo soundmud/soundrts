@@ -10,6 +10,7 @@ from functools import lru_cache
 from . import config, discovery, options, paths
 from .batteries import asyncore
 from .lib.log import exception, info, warning
+from .lib.resource import create_resource_stack
 from .lib.ticker import Ticker
 from .metaserver import MAIN_METASERVER_URL
 from .serverclient import ConnectionToClient
@@ -120,6 +121,8 @@ class Server(asyncore.dispatcher):
         else:
             self.nb_games_max = 10
             self.nb_clients_max = 40
+        res = create_resource_stack()
+        self.maps = res.multiplayer_maps()
 
     next_id = 0
 
