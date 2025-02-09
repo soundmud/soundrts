@@ -63,7 +63,7 @@ class ServerInAThread(threading.Thread):
 def start_server_and_connect(parameters):
     info("active threads: %s", threading.enumerate())
     ServerInAThread(parameters).start()
-    time.sleep(0.01)  # Linux needs a small delay (at least on the Eee PC 4G)
+    servermain.server_ready.wait(10)
     revision_checker.start_if_needed()
     connect_and_play()
     info("active threads: %s", threading.enumerate())

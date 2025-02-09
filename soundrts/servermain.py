@@ -103,6 +103,9 @@ def _forward_port():
         )
 
 
+server_ready = threading.Event()
+
+
 class Server(asyncore.dispatcher):
     def __init__(self, parameters, is_standalone):
         self.parameters = parameters
@@ -123,6 +126,7 @@ class Server(asyncore.dispatcher):
             self.nb_clients_max = 40
         res = create_resource_stack()
         self.maps = res.multiplayer_maps()
+        server_ready.set()
 
     next_id = 0
 
