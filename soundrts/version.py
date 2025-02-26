@@ -5,7 +5,7 @@ from .lib.resource import res
 
 VERSION = "1.3.8.1"
 IS_DEV_VERSION = config.debug_mode
-CLIENT_COMPATIBILITY = "15"
+CLIENT_COMPATIBILITY = "16"
 SERVER_COMPATIBILITY = "0"
 
 

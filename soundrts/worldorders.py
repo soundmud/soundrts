@@ -487,7 +487,7 @@ class ResearchOrder(ProductionOrder):
         if type_name in unit.player.upgrades:
             return False
         for u in unit.player.units:
-            for w in unit.orders:
+            for w in u.orders:
                 if w.__class__ == ResearchOrder and w.type.__name__ == type_name:
                     return False
         return True
