@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="vi"> <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.21.2: https://docutils.sourceforge.io/" />
+<title>Ghi chú phát hành</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+Despite the name, some widely supported CSS2 features are used.
+
+See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+.subscript {
+  vertical-align: sub;
+  font-size: smaller }
+
+.superscript {
+  vertical-align: super;
+  font-size: smaller }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, .code .error {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left, table.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right, table.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/* text-align: left } */
+
+.align-top    {
+  vertical-align: top }
+
+.align-middle {
+  vertical-align: middle }
+
+.align-bottom {
+  vertical-align: bottom }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { color: gray; } /* line numbers */
+pre.code, code { background-color: #eeeeee }
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic, pre.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+/* "booktabs" style (no vertical lines) */
+table.docutils.booktabs {
+  border: 0px;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.docutils.booktabs * {
+  border: 0px;
+}
+table.docutils.booktabs th {
+  border-bottom: thin solid;
+  text-align: left;
+}
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="release-notes">
+<h1 class="title">Ghi chú phát hành</h1>
+
+<div class="contents topic" id="contents">
+<p class="topic-title"><a class="reference internal" href="#top">Nội dung</a></p>
+<ul class="simple">
+<li><a class="reference internal" href="#section-1" id="toc-entry-1">1.3.8.1</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-2">1.3.8</a></li>
+<li><a class="reference internal" href="#section-3" id="toc-entry-3">1.3.7</a></li>
+<li><a class="reference internal" href="#section-4" id="toc-entry-4">1.3.6</a></li>
+<li><a class="reference internal" href="#section-5" id="toc-entry-5">1.3.5</a></li>
+<li><a class="reference internal" href="#section-6" id="toc-entry-6">1.3.4</a></li>
+<li><a class="reference internal" href="#section-7" id="toc-entry-7">1.3.3</a></li>
+<li><a class="reference internal" href="#section-8" id="toc-entry-8">1.3.2</a></li>
+<li><a class="reference internal" href="#section-9" id="toc-entry-9">1.3.1</a></li>
+<li><a class="reference internal" href="#section-10" id="toc-entry-10">1.3.0</a></li>
+</ul>
+</div>
+<div class="section" id="section-1">
+<h1><a class="toc-backref" href="#toc-entry-1">1.3.8.1</a></h1>
+<p>Đối với trò chơi nhiều người chơi, phiên bản này yêu cầu:</p>
+<ul class="simple">
+<li>client: 1.3.8 hoặc mới hơn</li>
+<li>server: 1.2-c12 hoặc mới hơn</li>
+</ul>
+<p>Những thay đổi chính từ 1.3.8:</p>
+<p>Lỗi đã sửa:</p>
+<ul class="simple">
+<li>trong một trò chơi được khôi phục, phím R sẽ chọn bất kỳ binh lính nào (cảm ơn Marco Oros đã báo cáo lỗi)</li>
+<li>khi việc xây dựng menu mất quá nhiều thời gian, các phím lặp lại sẽ tích lũy</li>
+<li>hy vọng tránh được bất kỳ trục trặc âm lượng nào khi nguồn âm thanh được tạo</li>
+<li>bản đồ tùy chỉnh sẽ xuất hiện sau bản đồ chính thức</li>
+<li>chạy server.py không yêu cầu bất kỳ gói nào</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h1><a class="toc-backref" href="#toc-entry-2">1.3.8</a></h1>
+<p>Đối với trò chơi nhiều người chơi, phiên bản này yêu cầu:</p>
+<ul class="simple">
+<li>client: 1.3.8 hoặc mới hơn</li>
+<li>server: 1.2-c12 hoặc mới hơn</li>
+</ul>
+<p>Những thay đổi chính từ 1.3.7:</p>
+<ul class="simple">
+<li>đã thêm tts_digit_coefficient trong cfg/parameters.toml</li>
+</ul>
+<p>Lỗi đã sửa:</p>
+<ul class="simple">
+<li>đường đi giữa đất và nước sẽ được giữ lại nếu cả hai ô đều là đất</li>
+<li>các đơn vị sẽ chạy trốn về ô trước đó thường xuyên hơn</li>
+<li>xử lý đúng các tệp phát lại không phải là dấu thời gian (cảm ơn dnl-nash)</li>
+<li>chỉ gửi báo cáo lỗi nếu client là tệp thực thi</li>
+</ul>
+<p>Bản dịch:</p>
+<ul class="simple">
+<li>đã thêm bản dịch tiếng Belarus (cảm ơn Uladzimir)</li>
+<li>đã cập nhật bản dịch tiếng Slovak (cảm ơn Marco Oros)</li>
+</ul>
+</div>
+<div class="section" id="section-3">
+<h1><a class="toc-backref" href="#toc-entry-3">1.3.7</a></h1>
+<p>Đối với trò chơi nhiều người chơi, phiên bản này yêu cầu:</p>
+<ul class="simple">
+<li>client: 1.3.7 hoặc mới hơn</li>
+<li>server: 1.2-c12 hoặc mới hơn</li>
+</ul>
+<p>Thay đổi từ 1.3.6:</p>
+<p>Bây giờ các đơn vị có thể tấn công từ bên trong xe cộ hoặc công trình:</p>
+<ul class="simple">
+<li>đơn vị tầm xa có thể tấn công như bình thường</li>
+<li>đơn vị cận chiến chỉ có thể tấn công từ mặt đất và không có thêm tầm bắn</li>
+<li>đơn vị cận chiến không thể tấn công từ xe bay</li>
+<li>trong trò chơi mặc định: đơn vị có thể vào trong tường, cổng và tháp</li>
+</ul>
+<p>Đã sửa lỗi với các cuộc phản công vào ô lân cận:</p>
+<ul class="simple">
+<li>các đơn vị không thể phản công sẽ giữ im lặng</li>
+<li>đơn vị phòng thủ sẽ không phản công</li>
+</ul>
+<p>Khác:</p>
+<ul class="simple">
+<li>đã khôi phục thông báo "tấn công!"</li>
+<li>sửa lỗi: một đơn vị sẽ không vào công trình nếu lệnh được đưa ra từ một ô khác</li>
+<li>đã sửa: khôi phục trò chơi</li>
+<li>các cuộc tấn công giữa các ô có thể hoạt động tốt hơn</li>
+</ul>
+<p>Modding:</p>
+<ul class="simple">
+<li>đã thêm armor_vs</li>
+<li>bây giờ "damage_vs" hoạt động với "is_a" (bao gồm nhiều cấp độ "kế thừa" và nhiều "kế thừa")</li>
+</ul>
+<p>Tạo bản đồ:</p>
+<ul class="simple">
+<li>bản đồ "multi" chính thức đã được chuyển đến res/multi</li>
+<li>bản đồ chơi mạng dạng "thư mục" phải được nén zip để chơi trực tuyến</li>
+<li>đã xóa tệp "maperror.txt" (thông tin đã có trong thông báo lỗi trong trò chơi).</li>
+</ul>
+<p>Thay đổi định dạng chiến dịch:</p>
+<ul class="simple">
+<li>mods.txt được thay thế bằng từ khóa "mods" trong campaign.txt</li>
+<li>từ khóa "title" trong campaign.txt</li>
+<li>ràng buộc mới: bản đồ nhiệm vụ phức tạp phải được lưu trữ dưới dạng tệp zip</li>
+</ul>
+</div>
+<div class="section" id="section-4">
+<h1><a class="toc-backref" href="#toc-entry-4">1.3.6</a></h1>
+<p>Đối với trò chơi nhiều người chơi, phiên bản này yêu cầu:</p>
+<ul class="simple">
+<li>client: 1.3.6 hoặc mới hơn</li>
+<li>server: 1.2-c12 hoặc mới hơn</li>
+</ul>
+<p>Thay đổi từ 1.3.5:</p>
+<p>Hành vi đơn vị:</p>
+<ul class="simple">
+<li>sửa lỗi: các đơn vị tấn công gần đó sẽ tự động phản công trở lại (chúng sẽ di chuyển đến ô của kẻ tấn công và sau đó quay trở lại vị trí bắt đầu của chúng)</li>
+<li>sửa lỗi: đơn vị phòng thủ sẽ chạy trốn trở lại</li>
+</ul>
+<p>Giao diện:</p>
+<ul class="simple">
+<li>mô tả các đơn vị được kiểm soát sẽ ít gây nhầm lẫn hơn</li>
+<li>cải thiện theo dõi nhóm (phím cách): giao diện thường sẽ theo dõi phía trước của nhóm</li>
+<li>sửa lỗi: trong style.txt, noise_if_very_damaged sẽ không bao giờ phát</li>
+<li>sửa lỗi: SAPI không hoạt động</li>
+</ul>
+<p>Nước:</p>
+<ul class="simple">
+<li>từ bây giờ, trò chơi sẽ không tạo ra các đường đi lưỡng cư (giải quyết vấn đề sau: nếu con đường ngắn nhất đến đích bao gồm một ô nước, các đơn vị trên bộ sẽ đi vào nước và chết)</li>
+<li>đã khắc phục sự cố: một pháp sư có thể gọi các đơn vị nước về các ô không phải nước (Bây giờ một pháp sư sẽ gọi các đơn vị nước về ô nước liền kề gần nhất.)</li>
+</ul>
+<p>Chơi mạng:</p>
+<ul class="simple">
+<li>việc khởi động một máy chủ không riêng tư sẽ tự động cấu hình bộ định tuyến (chỉ hoạt động nếu UPnP được kích hoạt trên bộ định tuyến; cấu hình sẽ tự động bị bộ định tuyến xóa sau 20 phút không hoạt động)</li>
+<li>cấu hình máy chủ độc lập dễ dàng hơn</li>
+<li>tự động phát hiện máy chủ cục bộ bằng cách phát sóng UDP (Máy chủ cục bộ sẽ xuất hiện trong menu "chọn một máy chủ trong danh sách".)</li>
+<li>sửa lỗi: trong các trò chơi nhiều người chơi, người chơi không phải quản trị viên có thể đặt tốc độ chậm hơn</li>
+</ul>
+<p>Bản dịch:</p>
+<ul class="simple">
+<li>đã cập nhật bản dịch tiếng Bồ Đào Nha Brazil, tiếng Trung, tiếng Séc, tiếng Ý và tiếng Slovak</li>
+</ul>
+<p>Tạo bản đồ:</p>
+<ul class="simple">
+<li>khi có thể, đưa ra cảnh báo thay vì lỗi bản đồ</li>
+<li>sửa lỗi: trong một số trường hợp, một trình kích hoạt đã chọn nhiều đơn vị hơn quy định. Ví dụ, nếu có 3 con rồng và nhiều lính bộ trong a1, (a1 10 dragon footman) sẽ chọn 3 con rồng và 7 lính bộ.</li>
+</ul>
+</div>
+<div class="section" id="section-5">
+<h1><a class="toc-backref" href="#toc-entry-5">1.3.5</a></h1>
+<p>Đối với trò chơi nhiều người chơi, phiên bản này yêu cầu:</p>
+<ul class="simple">
+<li>client: 1.3.5 hoặc mới hơn</li>
+<li>server: 1.2-c12 hoặc mới hơn</li>
+</ul>
+<p>Thay đổi từ 1.3.4:</p>
+<ul class="simple">
+<li>sửa lỗi: không thể lưu trò chơi với địa hình</li>
+<li>đã sửa: âm thanh bị đánh không được phát ra nếu nó giết chết mục tiêu</li>
+<li>đã sửa: trò chơi sẽ bị treo nếu không có đủ không gian trong một ô để tạo ra một đơn vị</li>
+</ul>
+<p>Quốc tế hóa:</p>
+<ul class="simple">
+<li>đã chuyển đổi tất cả các tệp tts.txt sang UTF-8 có chữ ký BOM. Mã hóa vẫn được định nghĩa rõ ràng trong dòng đầu tiên là UTF-8. Chữ ký BOM có thể giúp một số trình soạn thảo văn bản tự động chọn UTF-8.</li>
+<li>sẽ luôn sử dụng UTF-8 (hoặc ASCII) cho các tệp văn bản khác ngoài tts.txt (rules.txt, style.txt, v.v.)</li>
+<li>đã cập nhật bản dịch tiếng Tây Ban Nha (cảm ơn Oscar Corona)</li>
+</ul>
+</div>
+<div class="section" id="section-6">
+<h1><a class="toc-backref" href="#toc-entry-6">1.3.4</a></h1>
+<p>Đối với trò chơi nhiều người chơi, phiên bản này yêu cầu:</p>
+<ul class="simple">
+<li>client: 1.3.4 hoặc mới hơn</li>
+<li>server: 1.2-c12 hoặc mới hơn</li>
+</ul>
+<p>Thay đổi từ 1.3.3:</p>
+<ul class="simple">
+<li>có lẽ đã sửa lỗi giọng nói trong một vài trường hợp nữa (vui lòng báo cáo nếu bạn vẫn không thể khởi động client)</li>
+<li>đã khôi phục lưu và khôi phục (có vẻ như đang hoạt động, nhưng hãy cẩn thận)</li>
+<li>đã khôi phục tài nguyên vô hạn và công nghệ cho "máy tính hung hăng 2" (thú vị hơn)</li>
+</ul>
+<p>Chơi mạng:</p>
+<ul class="simple">
+<li>client sẽ nhớ danh sách máy chủ đã tải xuống trước đó và sử dụng nó nếu máy chủ meta tạm thời ngừng hoạt động</li>
+<li>trong "nhập địa chỉ IP của máy chủ", nhập địa chỉ IP trống sẽ chọn máy tính của bạn (không cần nhập: "localhost")</li>
+<li>máy chủ độc lập: đã xóa phụ thuộc pygame</li>
+</ul>
+<p>Giao diện:</p>
+<ul class="simple">
+<li>lệnh console: "a u_recall" sẽ thêm nâng cấp recall vào người chơi hiện tại</li>
+<li>sửa lỗi nhỏ: giao diện sẽ không theo dõi một đơn vị bên trong phương tiện vận chuyển (nếu đơn vị đó ở chế độ theo dõi trước khi được vận chuyển)</li>
+</ul>
+<p>Quốc tế hóa:</p>
+<ul class="simple">
+<li>đã cập nhật bản dịch tiếng Ý (cảm ơn Luigi Russo)</li>
+</ul>
+<p>Chiến dịch chính:</p>
+<ul class="simple">
+<li>đã thêm chương 12, một bản đồ nhỏ để cho thấy rừng rậm hoạt động như thế nào (luật là: "bất kỳ con đường nào giữa hai khu rừng rậm đều bị chặn")</li>
+</ul>
+<p>Mẹo: để nhanh chóng kiểm tra các cải tiến trong một chương cụ thể của chiến dịch bạn đã chơi:</p>
+<ul class="simple">
+<li>nhấn phím "console" dưới Escape và nhấn "v" và Enter để chiến thắng ngay lập tức</li>
+<li>hoặc chỉnh sửa user/campaigns.ini: trong [single_campaign] "chapter = 12" chẳng hạn</li>
+</ul>
+</div>
+<div class="section" id="section-7">
+<h1><a class="toc-backref" href="#toc-entry-7">1.3.3</a></h1>
+<p>Đối với trò chơi nhiều người chơi, phiên bản này yêu cầu:</p>
+<ul class="simple">
+<li>client: 1.3.3 hoặc mới hơn (nếu tương thích)</li>
+<li>server: 1.2-c12, 1.3.0, 1.3.1, 1.3.2, 1.3.3 hoặc mới hơn (nếu tương thích)</li>
+</ul>
+<p>Thay đổi từ 1.3.2:</p>
+<ul class="simple">
+<li>sửa lỗi: một đơn vị sẽ không dừng lại sau khi sử dụng một khả năng yêu cầu đến gần hơn (sương mù chết người, trừ tà...) và sẽ di chuyển về phía kẻ thù...</li>
+<li>sửa lỗi: trò chơi sẽ yêu cầu mục tiêu cho một khả năng tập trung vào người sử dụng phép (ví dụ: hồi sinh xác chết)</li>
+<li>sửa lỗi: không thể nhìn thấy nước từ vùng đất thấp (ví dụ trong bản đồ jl7)</li>
+</ul>
+<p>Giao diện bản đồ sẽ tự nhiên hơn:</p>
+<ul class="simple">
+<li>di chuyển trên bản đồ sẽ không gây va chạm nếu bạn điều khiển một đơn vị bay</li>
+<li>di chuyển trên bản đồ sẽ không gây va chạm nếu bạn đang xác định mục tiêu của lệnh gọi về (ví dụ)</li>
+<li>đã xóa va chạm giữa nước và vùng đất thấp</li>
+</ul>
+<p>Rừng rậm:</p>
+<ul class="simple">
+<li>sửa lỗi: rừng rậm sẽ tạo ra đường đi khi bị xóa (ngay cả khi không có đường đi nào trước đó)</li>
+<li>bây giờ rừng là rừng rậm nếu chúng có ít nhất 7 gỗ (thay vì 3)</li>
+<li>bản đồ nhiều người chơi 8: đã cập nhật (7 gỗ) và cải thiện (kinh tế nhanh hơn)</li>
+<li>trình chỉnh sửa: đã cập nhật bảng màu địa hình (rừng rậm nếu có ít nhất 7 gỗ)</li>
+</ul>
+<p>Quốc tế hóa:</p>
+<ul class="simple">
+<li>sửa lỗi: bản đồ có ký tự không phải US-ASCII không thể đọc được trên các nền tảng sử dụng GBK hoặc UTF-8 theo mặc định (bây giờ bản đồ luôn được đọc dưới dạng UTF-8 và các lỗi được thay thế bằng "?")</li>
+<li>đã chuyển đổi các bản đồ sau sang UTF-8: bs2, can1, qc1, qc2 và qc3</li>
+<li>đã cập nhật bản dịch tiếng Ba Lan (cảm ơn Patryk Mojsiewicz)</li>
+</ul>
+<p>Những thay đổi nhỏ trong chiến dịch chính:</p>
+<ul class="simple">
+<li>chương 9: với lỗi "sương mù chết người" đã được sửa, pháp sư gọi hồn sẽ dễ quản lý hơn</li>
+<li>cải thiện một chút chương 5 và 10</li>
+</ul>
+<p>Mẹo: để nhanh chóng kiểm tra các cải tiến trong một chương cụ thể của chiến dịch bạn đã chơi:</p>
+<ul class="simple">
+<li>nhấn phím "console" dưới Escape và nhấn "v" và Enter để chiến thắng ngay lập tức</li>
+<li>hoặc chỉnh sửa user/campaigns.ini: trong [single_campaign] "chapter = 11" chẳng hạn</li>
+</ul>
+</div>
+<div class="section" id="section-8">
+<h1><a class="toc-backref" href="#toc-entry-8">1.3.2</a></h1>
+<p>Thay đổi từ 1.3.1:</p>
+<p>Những thay đổi chính:</p>
+<ul class="simple">
+<li>menu "chọn một máy chủ" sẽ bao gồm bất kỳ máy chủ nào có phiên bản máy chủ tương thích (không chỉ cùng phiên bản) để các máy chủ không cần phải cập nhật thường xuyên</li>
+<li>các client tương thích với các phiên bản khác nhau sẽ được phép chơi cùng nhau</li>
+<li>các máy chủ "gần nhất" sẽ xuất hiện đầu tiên trong menu "chọn một máy chủ" (máy chủ có độ trễ phản hồi nhỏ nhất)</li>
+<li>thời gian thực hiện để kiểm tra xem máy chủ có khả dụng hay không sẽ được đề cập (tính bằng mili giây) trong menu "chọn một máy chủ" để so sánh</li>
+<li>các máy chủ không khả dụng sẽ không xuất hiện trong menu "chọn một máy chủ"</li>
+</ul>
+<p>Những thay đổi nhỏ:</p>
+<ul class="simple">
+<li>giảm nhẹ mức độ chi tiết của server.log</li>
+<li>cải thiện hướng dẫn máy chủ độc lập (vẫn chưa hoàn hảo)</li>
+<li>đã thêm "ghi chú phát hành" vào tài liệu</li>
+</ul>
+</div>
+<div class="section" id="section-9">
+<h1><a class="toc-backref" href="#toc-entry-9">1.3.1</a></h1>
+<p>Thay đổi từ 1.3.0:</p>
+<ul class="simple">
+<li>có lẽ đã sửa: trò chơi không khởi động được trên Windows 7 (ImportError: DLL load failed while importing _socket)</li>
+<li>đã sửa: đôi khi trò chơi không khởi động được cho đến khi thư mục "gen_py" trong "appdatalocalTemp" bị xóa (AttributeError: module 'win32com.gen_py...' has no attribute 'CLSIDToClassMap')</li>
+<li>đã sửa: vcruntime140.dll có thể bị thiếu</li>
+<li>đã sửa: không thể lấy danh sách máy chủ</li>
+<li>đã sửa: nhấn A sẽ hoạt động như trước và nhấn Control+A sẽ chỉ chọn các lệnh không hoạt động</li>
+</ul>
+</div>
+<div class="section" id="section-10">
+<h1><a class="toc-backref" href="#toc-entry-10">1.3.0</a></h1>
+<p>Thay đổi từ 1.2-c12:</p>
+<p>Những thay đổi chính:</p>
+<ul class="simple">
+<li>chỉ tường và cổng mới có thể được xây dựng trên lối ra (hoặc bất kỳ công trình nào "chỉ có thể xây dựng trên lối ra")</li>
+<li>bây giờ một tháp chỉ có thể được xây dựng ở trung tâm của một ô phụ, và chỉ một tháp cho mỗi ô phụ. Vị trí của một tháp có thể được chọn theo nhiều cách:<ul>
+<li>trong chế độ phóng to: chọn ô phụ hiện tại (phải trống)</li>
+<li>trong chế độ ô vuông: chọn bất kỳ ô phụ trống nào, bắt đầu từ ô trung tâm</li>
+<li>nếu bất kỳ đối tượng nào được chọn: chọn ô phụ bao quanh (phải trống)</li>
+</ul>
+</li>
+<li>bây giờ trình đọc màn hình là TTS mặc định</li>
+</ul>
+<p>Thay đổi kỹ thuật:</p>
+<ul class="simple">
+<li>đã di chuyển sang Python 3</li>
+<li>đã thay thế tất cả TTS bằng accessible_output2 (đã vá để hỗ trợ Linux)</li>
+</ul>
+<p>Lỗi đã sửa:</p>
+<ul class="simple">
+<li>không thể điều khiển một đơn vị được hồi sinh đang ở trong một nhóm</li>
+<li>một công nhân đã hoãn việc xây dựng hoặc thu thập để loại bỏ kẻ xâm nhập sẽ không quay lại nhiệm vụ của mình và sẽ hoàn thành nó tại chỗ</li>
+<li>một đơn vị có thể nhìn thấy cao nguyên từ bên dưới</li>
+<li>một đơn vị không thể nhìn theo đường chéo</li>
+<li>không thể chọn một ô làm mục tiêu để xây dựng cổng (một lối ra trống sẽ được chọn)</li>
+</ul>
+<p>Cải tiến giao diện:</p>
+<ul class="simple">
+<li>chế độ phóng to: xác thực lệnh xây tường (hoặc cổng) mà không chọn mục tiêu cụ thể sẽ tự động chọn lối ra cục bộ (nếu nó không bị chặn)</li>
+<li>tab sẽ chọn bất kỳ kẻ thù nào trước</li>
+<li>nhấn escape khi một mục tiêu được chọn sẽ chọn ô hiện tại</li>
+<li>sửa lỗi: bây giờ vào hoặc thoát chế độ phóng to sẽ chọn ô nhỏ hoặc ô làm mục tiêu (thay vì giữ mục tiêu đã chọn)</li>
+<li>đã thêm dấu phẩy trong một số tin nhắn (cho rõ ràng)</li>
+<li>tóm tắt kẻ thù ngắn hơn</li>
+<li>sửa lỗi: sẽ nói "công trường xây dựng" chứ không phải loại công trình</li>
+<li>sửa lỗi: trong chế độ phóng to, lệnh mặc định cho một công trình không đặt điểm tập kết thành ô phụ mà thành ô vuông</li>
+<li>sửa lỗi: trò chơi bị tạm dừng sẽ không thoát</li>
+<li>sửa lỗi: nhấn Space sẽ cho biết các lệnh chính xác ngay cả khi một số đơn vị có các lệnh khác nhau (Điều này rất hữu ích để kiểm tra xem có bao nhiêu công nhân đang thu thập vàng, gỗ, v.v. (bằng cách nhấn D). Điều này có thể hữu ích để biết có bao nhiêu đơn vị trong một nhóm đang di chuyển và bao nhiêu đã đến. Nhấn Control + Shift + S sẽ cung cấp một bản tóm tắt đầy đủ về các lệnh của binh lính và công nhân.)</li>
+<li>trong chế độ xây dựng, tab sẽ chọn đồng cỏ trước lối ra</li>
+<li>mô tả của lệnh tuần tra sẽ tóm tắt lại tất cả các điểm tham chiếu</li>
+<li>sửa lỗi: nhấn Tab sẽ chọn các lối ra bị chặn</li>
+<li>sửa lỗi: không còn có thể xây một bức tường khác trên cùng một lối ra</li>
+<li>chế độ phóng to: nếu không tìm thấy đất xây dựng trong khi lệnh xây dựng đã được xác thực trên một ô phụ, một lỗi sẽ được đưa ra (thay vì tìm kiếm đất xây dựng trong ô bao quanh</li>
+</ul>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,859 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="vi"> <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.21.2: https://docutils.sourceforge.io/" />
+<title>Hướng dẫn tạo bản đồ</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+Despite the name, some widely supported CSS2 features are used.
+
+See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+.subscript {
+  vertical-align: sub;
+  font-size: smaller }
+
+.superscript {
+  vertical-align: super;
+  font-size: smaller }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, .code .error {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left, table.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right, table.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/* text-align: left } */
+
+.align-top    {
+  vertical-align: top }
+
+.align-middle {
+  vertical-align: middle }
+
+.align-bottom {
+  vertical-align: bottom }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { color: gray; } /* line numbers */
+pre.code, code { background-color: #eeeeee }
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic, pre.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+/* "booktabs" style (no vertical lines) */
+table.docutils.booktabs {
+  border: 0px;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.docutils.booktabs * {
+  border: 0px;
+}
+table.docutils.booktabs th {
+  border-bottom: thin solid;
+  text-align: left;
+}
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="map-making-guide">
+<h1 class="title">Hướng dẫn tạo bản đồ</h1>
+
+<div class="contents topic" id="contents">
+<p class="topic-title"><a class="reference internal" href="#top">Nội dung</a></p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="toc-entry-1">Giới thiệu</a></li>
+<li><a class="reference internal" href="#multiplayer-maps" id="toc-entry-2">Bản đồ chơi mạng</a><ul>
+<li><a class="reference internal" href="#where-to-store-a-new-multiplayer-map" id="toc-entry-3">Nơi lưu trữ bản đồ chơi mạng mới</a></li>
+<li><a class="reference internal" href="#how-to-edit-a-map" id="toc-entry-4">Cách chỉnh sửa bản đồ</a></li>
+<li><a class="reference internal" href="#how-to-test-a-map" id="toc-entry-5">Cách kiểm tra bản đồ</a></li>
+<li><a class="reference internal" href="#how-to-find-and-remove-an-error" id="toc-entry-6">Cách tìm và xóa lỗi</a></li>
+<li><a class="reference internal" href="#comments" id="toc-entry-7">Chú thích</a></li>
+<li><a class="reference internal" href="#basic-properties" id="toc-entry-8">Thuộc tính cơ bản</a><ul>
+<li><a class="reference internal" href="#title" id="toc-entry-9">Title</a></li>
+<li><a class="reference internal" href="#objective" id="toc-entry-10">Objective</a></li>
+<li><a class="reference internal" href="#nb-players-min-and-nb-players-max" id="toc-entry-11">Nb_players_min và nb_players_max</a></li>
+<li><a class="reference internal" href="#global-food-limit" id="toc-entry-12">Global_food_limit</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#defining-the-terrain" id="toc-entry-13">Xác định địa hình</a><ul>
+<li><a class="reference internal" href="#square-width" id="toc-entry-14">Square_width</a></li>
+<li><a class="reference internal" href="#nb-lines-and-nb-columns" id="toc-entry-15">Nb_lines và nb_columns</a></li>
+<li><a class="reference internal" href="#west-east-paths-and-south-north-paths" id="toc-entry-16">West_east_paths và south_north_paths</a></li>
+<li><a class="reference internal" href="#west-east-bridges-and-south-north-bridges" id="toc-entry-17">West_east_bridges và south_north_bridges</a></li>
+<li><a class="reference internal" href="#general-case-west-east-and-south-north" id="toc-entry-18">Trường hợp chung: west_east và south_north</a></li>
+<li><a class="reference internal" href="#goldmines-woods-and-other-resource-deposits" id="toc-entry-19">Goldmines, woods, và các mỏ tài nguyên khác</a></li>
+<li><a class="reference internal" href="#nb-meadows-by-square" id="toc-entry-20">Nb_meadows_by_square</a></li>
+<li><a class="reference internal" href="#additional-meadows" id="toc-entry-21">Additional_meadows</a></li>
+<li><a class="reference internal" href="#remove-meadows" id="toc-entry-22">Remove_meadows</a></li>
+<li><a class="reference internal" href="#high-grounds" id="toc-entry-23">High_grounds</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#defining-the-starting-resources-of-the-players" id="toc-entry-24">Xác định tài nguyên khởi đầu của người chơi</a><ul>
+<li><a class="reference internal" href="#case-1-same-resources-for-everybody" id="toc-entry-25">Trường hợp 1: tài nguyên giống nhau cho mọi người</a><ul>
+<li><a class="reference internal" href="#starting-resources" id="toc-entry-26">starting_resources</a></li>
+<li><a class="reference internal" href="#starting-units" id="toc-entry-27">starting_units</a></li>
+<li><a class="reference internal" href="#starting-squares" id="toc-entry-28">starting_squares</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#case-2-different-resources-depending-on-the-player" id="toc-entry-29">Trường hợp 2: tài nguyên khác nhau tùy thuộc vào người chơi</a><ul>
+<li><a class="reference internal" href="#player" id="toc-entry-30">player</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#types-list" id="toc-entry-31">Danh sách loại</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-monsters" id="toc-entry-32">Thêm quái vật</a><ul>
+<li><a class="reference internal" href="#add-a-computer-only-starting-point" id="toc-entry-33">Thêm điểm bắt đầu computer_only</a></li>
+<li><a class="reference internal" href="#add-triggers-to-make-the-monsters-move" id="toc-entry-34">Thêm trình kích hoạt để làm quái vật di chuyển</a><ul>
+<li><a class="reference internal" href="#important-add-the-default-multiplayer-triggers" id="toc-entry-35">Quan trọng: thêm trình kích hoạt chơi mạng mặc định</a></li>
+<li><a class="reference internal" href="#patrol" id="toc-entry-36">Patrol</a></li>
+<li><a class="reference internal" href="#attack-at-a-specific-moment" id="toc-entry-37">Tấn công vào một thời điểm cụ thể</a></li>
+<li><a class="reference internal" href="#switch-to-another-ai" id="toc-entry-38">Chuyển sang AI khác</a></li>
+<li><a class="reference internal" href="#add-units" id="toc-entry-39">Add units</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#random-choice-end-choice-and-end-random-choice" id="toc-entry-40">#random_choice,  #end_choice và #end_random_choice</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#advanced-multiplayer-maps-how-to-change-the-rules-and-the-aspect-of-the-game" id="toc-entry-41">Bản đồ chơi mạng nâng cao: cách thay đổi luật chơi và giao diện của trò chơi</a><ul>
+<li><a class="reference internal" href="#map-structure" id="toc-entry-42">Cấu trúc bản đồ</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#single-player-campaigns" id="toc-entry-43">Chiến dịch chơi đơn</a><ul>
+<li><a class="reference internal" href="#where-to-store-a-new-single-player-campaign" id="toc-entry-44">Nơi lưu trữ chiến dịch chơi đơn mới</a></li>
+<li><a class="reference internal" href="#structure-of-the-campaign-folder" id="toc-entry-45">Cấu trúc của thư mục chiến dịch</a><ul>
+<li><a class="reference internal" href="#required-mods-file" id="toc-entry-46">Tệp mod bắt buộc</a></li>
+<li><a class="reference internal" href="#chapter-files" id="toc-entry-47">Tệp chương</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#syntax-of-a-chapter-file" id="toc-entry-48">Cú pháp của tệp chương</a><ul>
+<li><a class="reference internal" href="#syntax-of-a-mission-chapter-file" id="toc-entry-49">Cú pháp của tệp chương nhiệm vụ</a><ul>
+<li><a class="reference internal" href="#intro" id="toc-entry-50">Intro</a></li>
+<li><a class="reference internal" href="#add-objective" id="toc-entry-51">Add_objective</a></li>
+<li><a class="reference internal" href="#objective-complete-action-in-a-trigger" id="toc-entry-52">Objective_complete (hành động trong trình kích hoạt)</a></li>
+<li><a class="reference internal" href="#timer-coefficiency" id="toc-entry-53">Timer coefficiency</a></li>
+<li><a class="reference internal" href="#cut-scene-action-in-a-trigger" id="toc-entry-54">Cut_scene (hành động trong trình kích hoạt)</a></li>
+<li><a class="reference internal" href="#ai-orders" id="toc-entry-55">Lệnh AI</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#syntax-of-a-cut-scene-chapter-file" id="toc-entry-56">Cú pháp của tệp chương cắt cảnh</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#map-editor-experimental" id="toc-entry-57">Trình chỉnh sửa bản đồ (thử nghiệm)</a><ul>
+<li><a class="reference internal" href="#launch-the-editor" id="toc-entry-58">Khởi chạy trình chỉnh sửa</a></li>
+<li><a class="reference internal" href="#select-a-terrain-from-the-palette" id="toc-entry-59">Chọn địa hình từ bảng màu</a></li>
+<li><a class="reference internal" href="#apply-a-terrain-to-a-square" id="toc-entry-60">Áp dụng địa hình cho một ô</a></li>
+<li><a class="reference internal" href="#toggle-path-to-a-neighbor" id="toc-entry-61">Bật/tắt đường đi đến ô lân cận</a></li>
+<li><a class="reference internal" href="#save-map" id="toc-entry-62">Lưu bản đồ</a></li>
+<li><a class="reference internal" href="#quit-editor" id="toc-entry-63">Thoát trình chỉnh sửa</a></li>
+<li><a class="reference internal" href="#add-units-1" id="toc-entry-64">Thêm đơn vị</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#toc-entry-1">Giới thiệu</a></h1>
+<p>Cách tốt nhất để bắt đầu có lẽ là tạo một bản đồ chơi mạng và kiểm tra nó với máy tính.</p>
+</div>
+<div class="section" id="multiplayer-maps">
+<h1><a class="toc-backref" href="#toc-entry-2">Bản đồ chơi mạng</a></h1>
+<div class="section" id="where-to-store-a-new-multiplayer-map">
+<h2><a class="toc-backref" href="#toc-entry-3">Nơi lưu trữ bản đồ chơi mạng mới</a></h2>
+<p>Nếu bạn được phép ghi vào thư mục nơi SoundRTS (hoặc SoundRTS test) được cài đặt,
+thì bạn có thể lưu trữ bản đồ chơi mạng đầu tiên của mình trong thư mục "multi".</p>
+<p>Nếu bạn không được phép ghi vào thư mục program files vì bạn làm việc ở chế độ không phải quản trị viên, bạn có thể lưu trữ tệp bản đồ đang làm việc của mình trong thư mục "multi"
+trong "C:\Documents and Settings\TênĐăngNhậpCủaBạn\Application Data\SoundRTS". Thư mục này được tạo lần đầu tiên bạn khởi động SoundRTS, trừ khi có thư mục "user" tồn tại gần soundrts.exe.
+Một giải pháp khác là cài đặt SoundRTS vào một thư mục mà bạn được phép ghi, và làm việc trong thư mục được đề cập ở đoạn trước.</p>
+</div>
+<div class="section" id="how-to-edit-a-map">
+<h2><a class="toc-backref" href="#toc-entry-4">Cách chỉnh sửa bản đồ</a></h2>
+<p>Mở tệp bằng trình soạn thảo văn bản.
+Viết bằng chữ thường, ngay cả khi chữ hoa/thường có thể sẽ bị bỏ qua.</p>
+</div>
+<div class="section" id="how-to-test-a-map">
+<h2><a class="toc-backref" href="#toc-entry-5">Cách kiểm tra bản đồ</a></h2>
+<p>Để kiểm tra bản đồ, khởi động SoundRTS và vào menu chơi đơn. Bạn có thể chơi với máy tính trên các bản đồ chơi mạng.
+Bản đồ được tải lại mỗi khi bạn bắt đầu một trò chơi, vì vậy bạn không cần phải khởi động lại SoundRTS để kiểm tra các sửa đổi.
+Một tổ hợp phím hữu ích là Control Shift F2: nếu bạn là người duy nhất trên bản đồ, bạn sẽ có thể kiểm tra toàn bộ bản đồ (không có sương mù chiến tranh).</p>
+</div>
+<div class="section" id="how-to-find-and-remove-an-error">
+<h2><a class="toc-backref" href="#toc-entry-6">Cách tìm và xóa lỗi</a></h2>
+<p>Nếu, khi bạn bắt đầu bản đồ, bạn nhận được thông báo "lỗi bản đồ" và quay lại menu, thì đôi khi bạn có thể tìm thấy thông tin bổ sung (nhưng khó hiểu) trong "client.log" hoặc trong "server.log", thường nằm trong thư mục "user/tmp".</p>
+<p>Nếu bạn vẫn không hiểu lỗi ở đâu, vui lòng liên hệ với tôi, trực tiếp hoặc tại danh sách soundRTSChat.</p>
+</div>
+<div class="section" id="comments">
+<h2><a class="toc-backref" href="#toc-entry-7">Chú thích</a></h2>
+<p>Các dòng bắt đầu bằng dấu chấm phẩy là chú thích. Chú thích bị bỏ qua trong quá trình chạy.
+Mọi thứ sau dấu chấm phẩy cho đến cuối dòng cũng là chú thích.</p>
+</div>
+<div class="section" id="basic-properties">
+<h2><a class="toc-backref" href="#toc-entry-8">Thuộc tính cơ bản</a></h2>
+<div class="section" id="title">
+<h3><a class="toc-backref" href="#toc-entry-9">Title</a></h3>
+<p>"title 4018 5000" có nghĩa là: "tiêu đề của bản đồ là âm thanh 4018 theo sau bởi âm thanh 5000".</p>
+</div>
+<div class="section" id="objective">
+<h3><a class="toc-backref" href="#toc-entry-10">Objective</a></h3>
+<p>"objective 145 88" có nghĩa là: "mục tiêu của bản đồ là âm thanh 145 theo sau bởi âm thanh 88".</p>
+</div>
+<div class="section" id="nb-players-min-and-nb-players-max">
+<h3><a class="toc-backref" href="#toc-entry-11">Nb_players_min và nb_players_max</a></h3>
+<p>"nb_players_min 2" có nghĩa là: "Cần 2 người chơi để bắt đầu trò chơi."
+"nb_players_max 4" có nghĩa là: "Tối đa 4 người chơi trong bản đồ này."</p>
+</div>
+<div class="section" id="global-food-limit">
+<h3><a class="toc-backref" href="#toc-entry-12">Global_food_limit</a></h3>
+<p>Mới trong phiên bản beta 9e.</p>
+<p>Cập nhật trong phiên bản beta 10 o: giới hạn lương thực này không còn được chia cho người chơi nữa.</p>
+<p>"global_food_limit 200" có nghĩa là: "Mỗi người chơi không thể có nhiều hơn 200 lương thực, ngay cả khi anh ta xây thêm nông trại."</p>
+</div>
+</div>
+<div class="section" id="defining-the-terrain">
+<h2><a class="toc-backref" href="#toc-entry-13">Xác định địa hình</a></h2>
+<div class="section" id="square-width">
+<h3><a class="toc-backref" href="#toc-entry-14">Square_width</a></h3>
+<p>"square_width 12" có nghĩa là: "chiều rộng ô là 12 mét".
+Bạn không nên sửa đổi tham số này, vì các đối tượng có thể không nghe được nếu chúng ở quá xa.</p>
+</div>
+<div class="section" id="nb-lines-and-nb-columns">
+<h3><a class="toc-backref" href="#toc-entry-15">Nb_lines và nb_columns</a></h3>
+<p>"nb_lines 7" có nghĩa là: "lưới có 7 dòng".
+"nb_columns 7" có nghĩa là: "lưới có 7 cột".
+Giới hạn cho cột là 26 và không có giới hạn cho dòng, nhưng giới hạn thực tế có lẽ không xa 26, vì lý do hiệu suất.
+Cảnh báo: nb_rows không được dùng nữa và có cùng ý nghĩa với nb_columns.</p>
+</div>
+<div class="section" id="west-east-paths-and-south-north-paths">
+<h3><a class="toc-backref" href="#toc-entry-16">West_east_paths và south_north_paths</a></h3>
+<p>"west_east_paths a1 c1 d1 f1" có nghĩa là: "thêm đường đi từ a1 đến b1, từ c1 đến d1, từ d1 đến e1, và từ f1 đến g1".
+Bạn chỉ cần cung cấp ô ở cực tây của đường đi.
+"south_north_paths a1 a3 a4 a6" có nghĩa là: "thêm đường đi từ a1 đến a2, từ a3 đến a4, từ a4 đến a5, và từ a6 đến a7".
+Bạn chỉ cần cung cấp ô ở cực nam của đường đi.</p>
+</div>
+<div class="section" id="west-east-bridges-and-south-north-bridges">
+<h3><a class="toc-backref" href="#toc-entry-17">West_east_bridges và south_north_bridges</a></h3>
+<p>Cầu hoạt động hoàn toàn giống như đường đi.</p>
+</div>
+<div class="section" id="general-case-west-east-and-south-north">
+<h3><a class="toc-backref" href="#toc-entry-18">Trường hợp chung: west_east và south_north</a></h3>
+<p>"west_east road a1 c1 d1" có nghĩa là: "thêm một lối ra với kiểu 'road' từ a1 đến b1, từ c1 đến d1, từ d1 đến e1"</p>
+<p>'road' phải được định nghĩa trong style.txt</p>
+<p>Lưu ý: "west_east_paths" giống như "west_east path"</p>
+<p>Lưu ý: "south_north_bridges" giống như "south_north bridge"</p>
+</div>
+<div class="section" id="goldmines-woods-and-other-resource-deposits">
+<h3><a class="toc-backref" href="#toc-entry-19">Goldmines, woods, và các mỏ tài nguyên khác</a></h3>
+<p>"goldmine 150 a2 b7 g6 f1" có nghĩa là: "thêm các mỏ vàng với 150 vàng tại a2, b7, g6 và f1".</p>
+<p>"wood 150 a2 b7 g6 f1" có nghĩa là: "thêm các khu rừng với 150 gỗ tại a2, b7, g6 và f1".</p>
+<p>"goldmine" và "wood" được định nghĩa trong rules.txt là các mỏ tài nguyên ("class deposit").</p>
+<p>Các từ khóa số nhiều cũ ("goldmines" và "woods") vẫn hoạt động.</p>
+</div>
+<div class="section" id="nb-meadows-by-square">
+<h3><a class="toc-backref" href="#toc-entry-20">Nb_meadows_by_square</a></h3>
+<p>"nb_meadows_by_square 2" có nghĩa là: "tự động lấp đầy bản đồ với 2 đồng cỏ trong mỗi ô".</p>
+</div>
+<div class="section" id="additional-meadows">
+<h3><a class="toc-backref" href="#toc-entry-21">Additional_meadows</a></h3>
+<p>"additional_meadows a2 b7 g6 f1" có nghĩa là: "thêm 1 đồng cỏ vào các ô a2, b7, g6 và f1".
+"additional_meadows a2 a2 g6" có nghĩa là: "thêm 2 đồng cỏ vào a2 và 1 đồng cỏ vào g6".</p>
+</div>
+<div class="section" id="remove-meadows">
+<h3><a class="toc-backref" href="#toc-entry-22">Remove_meadows</a></h3>
+<p>remove_meadows làm ngược lại với additional_meadows.</p>
+</div>
+<div class="section" id="high-grounds">
+<h3><a class="toc-backref" href="#toc-entry-23">High_grounds</a></h3>
+<p>Mới trong SoundRTS 1.2 alpha 9.</p>
+<p>"high_grounds a2 b7" có nghĩa là: "a2 và b7 sẽ có độ cao cao hơn"</p>
+</div>
+</div>
+<div class="section" id="defining-the-starting-resources-of-the-players">
+<h2><a class="toc-backref" href="#toc-entry-24">Xác định tài nguyên khởi đầu của người chơi</a></h2>
+<div class="section" id="case-1-same-resources-for-everybody">
+<h3><a class="toc-backref" href="#toc-entry-25">Trường hợp 1: tài nguyên giống nhau cho mọi người</a></h3>
+<p>Sử dụng kết hợp các lệnh sau:</p>
+<div class="section" id="starting-resources">
+<h4><a class="toc-backref" href="#toc-entry-26">starting_resources</a></h4>
+<p>"starting_resources 10 10" có nghĩa là: "mỗi người chơi bắt đầu với 10 vàng và 10 gỗ."</p>
+</div>
+<div class="section" id="starting-units">
+<h4><a class="toc-backref" href="#toc-entry-27">starting_units</a></h4>
+<p>"starting_units townhall farm peasant" có nghĩa là: "mỗi người chơi bắt đầu với 1 nhà chính, 1 nông trại và 1 nông dân."</p>
+<p>"starting_units townhall 2 farm peasant" có nghĩa là: "mỗi người chơi bắt đầu với 1 nhà chính, 2 nông trại và 1 nông dân."</p>
+<p>Kể từ SoundRTS 1.1, starting_units cũng có thể chứa:</p>
+<ul class="simple">
+<li>nâng cấp và nghiên cứu: "starting_units u_teleportation" có nghĩa là: "mỗi người chơi đã nghiên cứu xong dịch chuyển tức thời."</li>
+<li>đơn vị, công trình, khả năng, nâng cấp/nghiên cứu bị cấm (chúng sẽ không xuất hiện trên menu):<ul>
+<li>"starting_units -u_teleportation" có nghĩa là: "mỗi người chơi không thể nghiên cứu dịch chuyển tức thời."</li>
+<li>"starting_units -a_teleportation" có nghĩa là: "mỗi người chơi không thể sử dụng dịch chuyển tức thời."</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="starting-squares">
+<h4><a class="toc-backref" href="#toc-entry-28">starting_squares</a></h4>
+<p>"starting_squares a2 b7 g6 f1" có nghĩa là: "các ô bắt đầu của người chơi là a2, b7, g6 và f1."</p>
+<p>Các đơn vị và công trình khởi đầu sẽ được tạo trong các ô này.</p>
+</div>
+</div>
+<div class="section" id="case-2-different-resources-depending-on-the-player">
+<h3><a class="toc-backref" href="#toc-entry-29">Trường hợp 2: tài nguyên khác nhau tùy thuộc vào người chơi</a></h3>
+<div class="section" id="player">
+<h4><a class="toc-backref" href="#toc-entry-30">player</a></h4>
+<p>Lệnh "player" xác định một điểm bắt đầu có thể được sử dụng bởi người chơi hoặc bởi AI máy tính (trong các trò chơi nhiều người chơi).</p>
+<p>Lệnh này có thể được lặp lại nhiều lần trong một bản đồ chơi mạng.</p>
+<p>"player 5 10 -townhall a1 townhall peasant c1 footman"
+có nghĩa là: "một người chơi sẽ bắt đầu với 5 vàng, 10 gỗ, sẽ không được phép xây dựng nhà chính, sẽ có một nhà chính và một nông dân tại A1, một lính bộ tại C1.</p>
+</div>
+</div>
+<div class="section" id="types-list">
+<h3><a class="toc-backref" href="#toc-entry-31">Danh sách loại</a></h3>
+<p>Dưới đây là một số tên loại chính xác được sử dụng trong <a class="reference internal" href="#starting-units">starting_units</a>, <a class="reference internal" href="#player">player</a> và <a class="reference internal" href="#computer-only">computer_only</a>.
+Để có danh sách đầy đủ, hãy kiểm tra tệp rules.txt: tên nằm ngay sau câu lệnh "def".</p>
+<ul class="simple">
+<li>đơn vị: peasant footman archer knight catapult dragon mage priest necromancer</li>
+<li>công trình: farm barracks lumbermill blacksmith townhall stables workshop dragonslair magestower</li>
+<li>khả năng: a_teleportation</li>
+<li>nâng cấp/nghiên cứu: u_teleportation melee_weapon</li>
+</ul>
+</div>
+</div>
+<div class="section" id="adding-monsters">
+<h2><a class="toc-backref" href="#toc-entry-32">Thêm quái vật</a></h2>
+<div class="section" id="add-a-computer-only-starting-point">
+<h3><a class="toc-backref" href="#toc-entry-33">Thêm điểm bắt đầu computer_only</a></h3>
+<p id="computer-only">Lệnh "computer_only" xác định một điểm bắt đầu sẽ luôn được chơi bởi AI máy tính. AI này sẽ thù địch với bất kỳ người chơi hoặc AI nào khác.</p>
+<p>Lệnh này có thể được lặp lại nhiều lần nhưng hãy cẩn thận: quá nhiều AI có thể làm chậm trò chơi.
+Vì vậy, hãy sử dụng một AI nếu các đơn vị này không được cho là sẽ chiến đấu với nhau (ví dụ: nhiều con rồng trên khắp bản đồ).</p>
+<p>computer_only 0 0 a3 dragon b1 dragon
+có nghĩa là: "thêm một AI máy tính với 0 vàng, 0 gỗ, một con rồng tại A3 và một con rồng tại B1."</p>
+</div>
+<div class="section" id="add-triggers-to-make-the-monsters-move">
+<h3><a class="toc-backref" href="#toc-entry-34">Thêm trình kích hoạt để làm quái vật di chuyển</a></h3>
+<div class="section" id="important-add-the-default-multiplayer-triggers">
+<h4><a class="toc-backref" href="#toc-entry-35">Quan trọng: thêm trình kích hoạt chơi mạng mặc định</a></h4>
+<p>Nếu một bản đồ chơi mạng xác định ít nhất một trình kích hoạt, các trình kích hoạt chơi mạng mặc định sẽ bị bỏ qua. Mục đích là để cho phép các điều kiện chiến thắng tùy chỉnh.</p>
+<p>Để giữ các điều kiện chiến thắng mặc định, các trình kích hoạt sau phải được thêm rõ ràng vào bản đồ (hoặc trò chơi sẽ không tự động dừng lại):</p>
+<pre class="literal-block">
+trigger players (no_enemy_player_left) (victory)
+trigger players (no_building_left) (defeat)
+trigger computers (no_unit_left) (defeat)
+</pre>
+<p>Lưu ý: trình kích hoạt thứ ba không thực sự cần thiết.</p>
+</div>
+<div class="section" id="patrol">
+<h4><a class="toc-backref" href="#toc-entry-36">Patrol</a></h4>
+<p>Để ra lệnh cho tối đa 10 con rồng từ d1 tuần tra giữa d1 và d9:</p>
+<pre class="literal-block">
+trigger computer1 (timer 0) (order (d1 10 dragon) ((patrol d9)))
+</pre>
+</div>
+<div class="section" id="attack-at-a-specific-moment">
+<h4><a class="toc-backref" href="#toc-entry-37">Tấn công vào một thời điểm cụ thể</a></h4>
+<p>Để ra lệnh cho tối đa 10 con rồng từ e3 tấn công b2 sau 20 phút (tốc độ bình thường):</p>
+<pre class="literal-block">
+timer_coefficient 60
+trigger computer1 (timer 20) (order (e3 10 dragon) ((go b2)))
+</pre>
+</div>
+<div class="section" id="switch-to-another-ai">
+<h4><a class="toc-backref" href="#toc-entry-38">Chuyển sang AI khác</a></h4>
+<p>AI mặc định cho computer_only là AI chỉ dùng trình kích hoạt, không làm gì cả. Để chuyển sang "easy" (còn được gọi là "máy tính yên tĩnh"):</p>
+<pre class="literal-block">
+trigger computer1 (timer 0) (ai easy)
+</pre>
+</div>
+<div class="section" id="add-units">
+<h4><a class="toc-backref" href="#toc-entry-39">Add units</a></h4>
+<p>Để thêm 10 con rồng tại A1:</p>
+<pre class="literal-block">
+trigger computer1 (timer 0) (add_units a1 10 dragon)
+</pre>
+</div>
+</div>
+</div>
+<div class="section" id="random-choice-end-choice-and-end-random-choice">
+<h2><a class="toc-backref" href="#toc-entry-40">#random_choice,  #end_choice và #end_random_choice</a></h2>
+<p>(mới trong beta 9g)
+Chỉ thị tiền xử lý này chọn ngẫu nhiên giữa 2 hoặc nhiều lựa chọn được phân định bởi #random_choice, #end_choice và bởi #end_random_choice cho lựa chọn cuối cùng.
+Mỗi lựa chọn bao gồm không hoặc nhiều dòng.
+Có thể sử dụng nhiều hơn một chỉ thị #random_choice trong một tệp bản đồ, nhưng chúng không thể lồng vào nhau.</p>
+<p>Điều này có thể được sử dụng ví dụ để đặt tài nguyên ngẫu nhiên. Ví dụ:</p>
+<pre class="literal-block">
+#random_choice
+goldmines 500 e2 c6 b3 f5
+#end_choice
+goldmines 500 d2 d6 b4 f4
+#end_choice
+goldmines 500 c2 e6 b5 f3
+#end_random_choice
+</pre>
+<p>Các dòng trên có nghĩa là: "thêm một mỏ vàng tại e2, c6, b3 và f5, hoặc tại d2, d6, b4 và f4, hoặc tại c2, e6, b5 và f3". Bằng cách này, tài nguyên được cân bằng (tất nhiên nếu tôi không mắc lỗi). Đây chỉ là một ví dụ.</p>
+<p>Tiêu đề của bản đồ và số lượng người chơi không thể thay đổi theo cách này vì bộ tiền xử lý được chạy khi bản đồ được tải (nghĩa là: rất lâu sau khi menu chơi đơn được tải).</p>
+</div>
+</div>
+<div class="section" id="advanced-multiplayer-maps-how-to-change-the-rules-and-the-aspect-of-the-game">
+<h1><a class="toc-backref" href="#toc-entry-41">Bản đồ chơi mạng nâng cao: cách thay đổi luật chơi và giao diện của trò chơi</a></h1>
+<div class="section" id="map-structure">
+<h2><a class="toc-backref" href="#toc-entry-42">Cấu trúc bản đồ</a></h2>
+<p>Bản đồ nâng cao là một thư mục chứa một tệp có tên "map.txt" với nội dung của một bản đồ thông thường, và hầu hết các tệp và thư mục mà bạn tìm thấy trong thư mục "res":
+rules.txt, ai.txt, các thư mục ui và nội dung của chúng.</p>
+<p>Lưu ý: hiện tại, trong thư mục bản đồ hoặc chiến dịch, phiên bản địa phương hóa của style.txt (ví dụ: ui-fr/style.txt) không được tải.
+Tuy nhiên, âm thanh địa phương hóa được tải.</p>
+</div>
+</div>
+<div class="section" id="single-player-campaigns">
+<h1><a class="toc-backref" href="#toc-entry-43">Chiến dịch chơi đơn</a></h1>
+<div class="section" id="where-to-store-a-new-single-player-campaign">
+<h2><a class="toc-backref" href="#toc-entry-44">Nơi lưu trữ chiến dịch chơi đơn mới</a></h2>
+<p>Nếu bạn được phép ghi vào thư mục nơi SoundRTS (hoặc SoundRTS test) được cài đặt, thì bạn có thể lưu trữ chiến dịch đầu tiên của mình trong thư mục "single".</p>
+<p>Nếu bạn không được phép ghi vào thư mục program files vì bạn làm việc ở chế độ không phải quản trị viên, bạn có thể lưu trữ tệp bản đồ đang làm việc của mình trong thư mục "single"
+trong "C:\Documents and Settings\TênĐăngNhậpCủaBạn\Application Data\SoundRTS". Thư mục này được tạo lần đầu tiên bạn khởi động SoundRTS.
+Một giải pháp khác là cài đặt SoundRTS vào một thư mục mà bạn được phép ghi, và làm việc trong thư mục được đề cập ở đoạn trước.</p>
+</div>
+<div class="section" id="structure-of-the-campaign-folder">
+<h2><a class="toc-backref" href="#toc-entry-45">Cấu trúc của thư mục chiến dịch</a></h2>
+<p>Tên của thư mục chiến dịch sẽ được sử dụng bởi menu chơi đơn. Các chiến dịch chính thức sẽ có tiêu đề riêng trong thư mục "ui".
+Thư mục chứa các tệp chương. Nó cũng chứa các tệp và thư mục bắt chước cấu trúc của thư mục "res": rules.txt, ai.txt, ui...</p>
+<div class="section" id="required-mods-file">
+<h3><a class="toc-backref" href="#toc-entry-46">Tệp mod bắt buộc</a></h3>
+<p>Mới trong SoundRTS 1.2 alpha 10.</p>
+<p>Một chiến dịch có thể xác định các mod mà nó yêu cầu. Các mod bắt buộc sẽ được tải tự động.</p>
+<p>Các mod bắt buộc được định nghĩa trong một tệp có tên "mods.txt", trong thư mục chiến dịch:</p>
+<ul class="simple">
+<li>tệp là một danh sách tên mod được phân tách bằng dấu phẩy;</li>
+<li>nếu tệp không tồn tại, các mod hiện tại sẽ được giữ lại;</li>
+<li>nếu tệp trống, trò chơi "vanilla" (nguyên bản) sẽ được tải.</li>
+</ul>
+</div>
+<div class="section" id="chapter-files">
+<h3><a class="toc-backref" href="#toc-entry-47">Tệp chương</a></h3>
+<p>Tệp chương là các tệp văn bản có tên "0.txt", "1.txt", "2.txt", v.v. Khi một chiến dịch được bắt đầu lần đầu tiên, chỉ có chương 0 khả dụng. Khi một chương kết thúc, chương tiếp theo có thể được chạy. Số của chương cao nhất có sẵn được lưu trữ tự động trong tệp cấu hình của người chơi có tên campaigns.ini.</p>
+<p>Một tệp chương mô tả một chương nhiệm vụ hoặc một chương cắt cảnh.</p>
+<p>Phải có ít nhất một tệp chương, được gọi là "0.txt".</p>
+</div>
+</div>
+<div class="section" id="syntax-of-a-chapter-file">
+<h2><a class="toc-backref" href="#toc-entry-48">Cú pháp của tệp chương</a></h2>
+<p>Một chương là một nhiệm vụ hoặc một đoạn cắt cảnh.</p>
+<div class="section" id="syntax-of-a-mission-chapter-file">
+<h3><a class="toc-backref" href="#toc-entry-49">Cú pháp của tệp chương nhiệm vụ</a></h3>
+<p>Một tệp nhiệm vụ không khác nhiều so với một bản đồ chơi mạng.
+Cấu trúc bản đồ nâng cao cũng được phép: trong trường hợp đó, tên thư mục là số của chương.</p>
+<p>Các lệnh sau không được sử dụng trong một nhiệm vụ chơi đơn: nb_players_min, nb_players_max, starting_squares, starting_units, starting_resources.</p>
+<div class="section" id="intro">
+<h4><a class="toc-backref" href="#toc-entry-50">Intro</a></h4>
+<p>Lưu ý: một số có thể đại diện cho một tin nhắn văn bản được định nghĩa trong tts.txt (mới trong SoundRTS 1.2 alpha 9).</p>
+<p>Ví dụ: "intro 7500 7501 7502" có nghĩa là: "trước khi trò chơi bắt đầu, phát 7500.ogg, 7501.ogg và 7502.ogg (hoặc văn bản nếu được định nghĩa trong tts.txt)".
+Lệnh intro xác định một chuỗi âm thanh và văn bản sẽ được phát trước khi trò chơi bắt đầu. Khi người chơi nhấn một phím, yếu tố tiếp theo trong chuỗi sẽ được phát. Một intro có thể ví dụ là một tiêu đề với nhạc, sau đó là một cảnh với cuộc thảo luận giữa các nhân vật, sau đó là một cuộc họp giao ban. Sau intro, trò chơi sẽ thông báo các mục tiêu của nhiệm vụ.</p>
+</div>
+<div class="section" id="add-objective">
+<h4><a class="toc-backref" href="#toc-entry-51">Add_objective</a></h4>
+<p>"add_objective player1 1 7000" có nghĩa là: "thêm mục tiêu số 1 với âm thanh 7000.ogg"</p>
+<p>Tất cả các mục tiêu phải được hoàn thành để giành chiến thắng trong một nhiệm vụ. Nếu một mục tiêu chính thất bại, ví dụ khi một nhân vật quan trọng chết, nhiệm vụ sẽ bị hủy bỏ.</p>
+</div>
+<div class="section" id="objective-complete-action-in-a-trigger">
+<h4><a class="toc-backref" href="#toc-entry-52">Objective_complete (hành động trong trình kích hoạt)</a></h4>
+<p>Hành động này chỉ có thể được bao gồm trong phần hành động của một trình kích hoạt.</p>
+<p>"objective_complete 1" có nghĩa là: "bây giờ mục tiêu 1 đã hoàn thành"</p>
+<p>Ví dụ về trình kích hoạt:</p>
+<p>"trigger player1 (has barracks) (objective_complete 2)" có nghĩa là: "thêm trình kích hoạt sau cho player1: nếu anh ta có ít nhất 1 trại lính thì mục tiêu 2 được hoàn thành"</p>
+</div>
+<div class="section" id="timer-coefficiency">
+<h4><a class="toc-backref" href="#toc-entry-53">Timer coefficiency (Hệ số bộ đếm thời gian)</a></h4>
+<p>Hệ số bộ đếm thời gian có thể được sử dụng để đo thời gian cho các trình kích hoạt trong một khối nhất định.</p>
+<p>Ví dụ, nếu bạn biết rằng bạn muốn tất cả các trình kích hoạt của mình xảy ra trong các khối nửa phút nhất định, bạn có thể đặt hệ số bộ đếm thời gian thành 30 như sau.</p>
+<p>"timer_coefficient 30"</p>
+<p>Bất cứ khi nào khoảng thời gian này trôi qua, bộ đếm thời gian sẽ tăng lên (tăng 1). Sau đó, bạn có thể liên kết các trình kích hoạt với bộ đếm thời gian đạt đến một số nhất định. Ví dụ, nếu bạn muốn làm cho quân tiếp viện xuất hiện trên bản đồ sau 90 giây (3 lần tăng 30 giây), bạn sẽ làm như sau.</p>
+<p>"trigger player1 (timer 3) (add_units a1 10 footman)" ; sau ba lần đếm thời gian, cung cấp cho người chơi 10 lính bộ tại a1</p>
+</div>
+<div class="section" id="cut-scene-action-in-a-trigger">
+<h4><a class="toc-backref" href="#toc-entry-54">Cut_scene (hành động trong trình kích hoạt)</a></h4>
+<p>Lưu ý: sự phân biệt giữa âm thanh phát trực tuyến và âm thanh được tải trước đã bị loại bỏ trong SoundRTS 1.2. Tất cả âm thanh được tải trước.</p>
+<p>Lưu ý: một số có thể đại diện cho một tin nhắn văn bản được định nghĩa trong tts.txt (mới trong SoundRTS 1.2 alpha 9).</p>
+<p>Một đoạn cắt cảnh có thể được kích hoạt giữa trò chơi: khi có thứ gì đó được khám phá, khi quân tiếp viện đến, v.v.</p>
+<p>"cut_scene 7500 7501" có nghĩa là: phát đoạn cắt cảnh bao gồm các âm thanh 7500 và 7501.</p>
+<p>Ví dụ về trình kích hoạt:</p>
+<p>"trigger player1 (has_entered d5) (cut_scene 7500)" có nghĩa là: "thêm trình kích hoạt sau cho player1: nếu anh ta đã vào ô d5, thì phát đoạn cắt cảnh bao gồm âm thanh 7500.ogg"</p>
+<p>Timer và timer_coefficient (điều kiện trong trình kích hoạt)</p>
+<p>"timer_coefficient 60"</p>
+<p>'trigger player1 (timer 2) (cut_scene 7500)" có nghĩa là: "sau 2 phút (2 x 60 giây) phát tệp âm thanh 7500.ogg."</p>
+</div>
+<div class="section" id="ai-orders">
+<h4><a class="toc-backref" href="#toc-entry-55">Lệnh AI</a></h4>
+<p>Có thể kiểm soát các hành động của máy tính trong một nhiệm vụ, để thêm một số thử thách. Bạn sẽ phải làm điều này bằng cách trực tiếp làm cho các đơn vị của chúng nhận lệnh tại các trình kích hoạt nhất định.</p>
+<p>Ví dụ, chúng ta có thể làm cho lực lượng AI tại A1 di chuyển đến vị trí người chơi đã biết tại A3, nơi sẽ giao chiến với lực lượng người chơi khi gặp phải. Ở đây, chúng ta sẽ phát động một cuộc tấn công với 10 lính bộ vào người chơi.</p>
+<p>"timer_coefficient 60"</p>
+<p>"trigger computer1 (timer 1) (order (a3 10 footman) ((go a1)))"</p>
+<p>Việc đặt dấu ngoặc đơn ở đây rất quan trọng, để đóng gói đúng các lệnh vào đúng phần của trình kích hoạt này. Nếu vì lý do nào đó trình kích hoạt của bạn dường như không hoạt động, hãy thử kiểm tra lại dấu ngoặc đơn của bạn.</p>
+<p>Cũng có thể xếp hàng các lệnh cho các đơn vị nhất định tuân theo. Trong kịch bản tiếp theo này, hãy tưởng tượng người chơi có căn cứ trải rộng trên a1 và b1. Sau đó, chúng ta cần ra lệnh cho lính bộ đi đến b1 sau khi chúng hoàn thành với a1. Chúng ta sẽ làm điều đó như sau.</p>
+<p>"trigger computer1 (timer 1) (order (a3 10 footman) ((go a1) (go b1)))"</p>
+<p>Cuối cùng, nếu bạn muốn các đơn vị AI chuyển sang chế độ "auto_attack", nơi chúng sẽ săn lùng bất kỳ đơn vị người chơi nào còn sống sót sau khi dọn dẹp căn cứ của họ, bạn cũng có thể làm điều này.</p>
+<p>"trigger computer1 (timer 1) (order (a3 10 footman) ((go a1) (go b1) (auto_attack)))"</p>
+<p>Bạn cũng có thể sử dụng lệnh để làm cho máy tính tự đào tạo đơn vị của mình, sau đó bạn có thể làm đối tượng của các lệnh sau này. Ở đây, chúng ta sẽ ra lệnh cho trại lính của máy tính ngay lập tức đào tạo thêm 10 lính bộ để thay thế những người chúng ta sắp gửi đi tấn công người chơi.</p>
+<p>trigger computer1 (timer 0) (order (a1 barracks) ((train footman) (train footman) (train footman))) ; và cứ thế cho đến khi bạn có 10 lệnh train footman</p>
+<p>Lưu ý rằng mỗi lệnh đào tạo phải riêng biệt, bạn không thể làm như sau: (train 10 footman)</p>
+<p>Đây không phải là cách duy nhất để tăng số lượng đơn vị mà người chơi máy tính có sẵn, bạn cũng có thể sử dụng lệnh add_units như được hiển thị ở đây.</p>
+<p>trigger computer1 (timer 0) (add_units a1 10 footman)</p>
+<p>Tuy nhiên, điều này là ngay lập tức và không cung cấp cho người chơi bất kỳ cách nào để ảnh hưởng đến sự kiện này. Trong kịch bản khác, người chơi có thể ngăn máy tính có đợt lính bộ tiếp theo bằng cách phá hủy trại lính được sử dụng để đào tạo chúng. Bằng cách này, những lính bộ này sẽ xuất hiện bất kể thế nào.</p>
+</div>
+</div>
+<div class="section" id="syntax-of-a-cut-scene-chapter-file">
+<h3><a class="toc-backref" href="#toc-entry-56">Cú pháp của tệp chương cắt cảnh</a></h3>
+<p>Lưu ý: sự phân biệt giữa âm thanh phát trực tuyến và âm thanh được tải trước đã bị loại bỏ trong SoundRTS 1.2. Tất cả âm thanh được tải trước.</p>
+<p>Lưu ý: một số có thể đại diện cho một tin nhắn văn bản được định nghĩa trong tts.txt (mới trong SoundRTS 1.2 alpha 9).</p>
+<p>Một chương cắt cảnh là một chuỗi âm thanh có thể bị gián đoạn. Khi chương cắt cảnh đã được phát, chương tiếp theo sẽ được mở khóa.
+Đừng nhầm lẫn với các đoạn cắt cảnh ngắn hơn được chạy bởi một trình kích hoạt trong một nhiệm vụ khi một điều kiện được đáp ứng (ví dụ: khám phá một ô), hoặc với phần giới thiệu của nhiệm vụ (hoặc cuộc họp giao ban).</p>
+<p>Các tệp chương cắt cảnh chỉ có 3 dòng. Ví dụ:
+cut_scene_chapter
+title 7000
+sequence 7500 7501 7502</p>
+<p>Dòng đầu tiên là một từ khóa được sử dụng để cho trò chơi biết rằng chương này là một đoạn cắt cảnh chứ không phải là một nhiệm vụ.
+Dòng tiêu đề được sử dụng trong menu chiến dịch.
+Dòng sequence có nghĩa là: "phát âm thanh 7500.ogg theo sau bởi 7501 và 7502; nếu người chơi nhấn một phím, bỏ qua âm thanh hiện tại và phát âm thanh tiếp theo."</p>
+</div>
+</div>
+</div>
+<div class="section" id="map-editor-experimental">
+<h1><a class="toc-backref" href="#toc-entry-57">Trình chỉnh sửa bản đồ (thử nghiệm)</a></h1>
+<p>Ứng dụng khách bao gồm một trình chỉnh sửa bản đồ thử nghiệm cho các bản đồ chơi mạng. Nó chỉ hoạt động đối với địa hình, vì vậy bạn vẫn phải chỉnh sửa bản đồ thủ công cho các đơn vị.</p>
+<div class="section" id="launch-the-editor">
+<h2><a class="toc-backref" href="#toc-entry-58">Khởi chạy trình chỉnh sửa</a></h2>
+<p>Bắt đầu một trò chơi trên một bản đồ. Bản đồ này sẽ là điểm bắt đầu. Vào bảng điều khiển (nhấn phím dưới escape) và nhập lệnh: "edit". Nhấn Enter. Các gán phím của trình chỉnh sửa sẽ được tải từ res/ui/editor_bindings.txt.</p>
+</div>
+<div class="section" id="select-a-terrain-from-the-palette">
+<h2><a class="toc-backref" href="#toc-entry-59">Chọn địa hình từ bảng màu</a></h2>
+<p>Nhấn PageUp hoặc PageDown để chọn một địa hình. Ý nghĩa của mỗi địa hình được lưu trữ trong res/ui/editor_palette.txt</p>
+</div>
+<div class="section" id="apply-a-terrain-to-a-square">
+<h2><a class="toc-backref" href="#toc-entry-60">Áp dụng địa hình cho một ô</a></h2>
+<p>Nhấn Enter để áp dụng địa hình cho ô hiện tại. Các ô lân cận có cùng đặc điểm (mặt đất và cùng độ cao) sẽ được liên kết tự động bằng một đường đi. Các ô khác nhau sẽ bị xóa đường đi.</p>
+</div>
+<div class="section" id="toggle-path-to-a-neighbor">
+<h2><a class="toc-backref" href="#toc-entry-61">Bật/tắt đường đi đến ô lân cận</a></h2>
+<p>Nhấn Control + Shift + mũi tên để thêm hoặc xóa đường đi theo hướng tương ứng.</p>
+</div>
+<div class="section" id="save-map">
+<h2><a class="toc-backref" href="#toc-entry-62">Lưu bản đồ</a></h2>
+<p>Nhấn Control + s để lưu bản đồ. Tệp sẽ không bao giờ ghi đè lên tệp khác. Tên của tệp sẽ là user/multi/editor0.txt, editor1.txt, editor2.txt, v.v.</p>
+</div>
+<div class="section" id="quit-editor">
+<h2><a class="toc-backref" href="#toc-entry-63">Thoát trình chỉnh sửa</a></h2>
+<p>Nhấn F10 và thoát trò chơi để rời khỏi trình chỉnh sửa. Bản đồ sẽ được tự động lưu đề phòng (nhưng đừng quá trông cậy vào nó). Tên của nó là user/multi/editor_autosave.txt</p>
+</div>
+<div class="section" id="add-units-1">
+<h2><a class="toc-backref" href="#toc-entry-64">Thêm đơn vị</a></h2>
+<p>Mở tệp trong trình soạn thảo văn bản. Sử dụng các lệnh được đề cập trong <a class="reference internal" href="#defining-the-starting-resources-of-the-players">Xác định tài nguyên khởi đầu của người chơi</a>.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

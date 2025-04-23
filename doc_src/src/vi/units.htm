@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="vi"> <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.21.2: https://docutils.sourceforge.io/" />
+<title>Hướng dẫn về Đơn vị</title> <style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+Despite the name, some widely supported CSS2 features are used.
+
+See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+.subscript {
+  vertical-align: sub;
+  font-size: smaller }
+
+.superscript {
+  vertical-align: super;
+  font-size: smaller }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, .code .error {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left, table.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right, table.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/* text-align: left } */
+
+.align-top    {
+  vertical-align: top }
+
+.align-middle {
+  vertical-align: middle }
+
+.align-bottom {
+  vertical-align: bottom }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { color: gray; } /* line numbers */
+pre.code, code { background-color: #eeeeee }
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic, pre.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+/* "booktabs" style (no vertical lines) */
+table.docutils.booktabs {
+  border: 0px;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.docutils.booktabs * {
+  border: 0px;
+}
+table.docutils.booktabs th {
+  border-bottom: thin solid;
+  text-align: left;
+}
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="units-guide">
+<h1 class="title">Hướng dẫn về Đơn vị</h1> <div class="contents topic" id="contents">
+<p class="topic-title"><a class="reference internal" href="#top">Nội dung</a></p>
+<ul class="simple">
+<li><a class="reference internal" href="#units" id="toc-entry-1">1. Đơn vị</a><ul> <li><a class="reference internal" href="#peasant" id="toc-entry-2">Nông dân</a></li> <li><a class="reference internal" href="#footman" id="toc-entry-3">Lính bộ</a></li> <li><a class="reference internal" href="#archer" id="toc-entry-4">Cung thủ</a></li> <li><a class="reference internal" href="#boat" id="toc-entry-5">Thuyền</a></li> <li><a class="reference internal" href="#new-flyingmachine" id="toc-entry-6">Máy bay trinh sát</a></li> <li><a class="reference internal" href="#knight" id="toc-entry-7">Kỵ sĩ</a></li> <li><a class="reference internal" href="#destroyer" id="toc-entry-8">Khu trục hạm</a></li> <li><a class="reference internal" href="#submarine" id="toc-entry-9">Tàu ngầm</a></li> <li><a class="reference internal" href="#darkarcher" id="toc-entry-10">Hắc tiễn thủ</a></li> <li><a class="reference internal" href="#priest" id="toc-entry-11">Thầy tu</a></li> <li><a class="reference internal" href="#battleship" id="toc-entry-12">Chiến hạm</a></li> <li><a class="reference internal" href="#catapult" id="toc-entry-13">Máy bắn đá</a></li> <li><a class="reference internal" href="#dragon" id="toc-entry-14">Rồng</a></li> <li><a class="reference internal" href="#flyingmachine" id="toc-entry-15">Máy bay chiến đấu</a></li> <li><a class="reference internal" href="#mage" id="toc-entry-16">Pháp sư</a></li> <li><a class="reference internal" href="#necromancer" id="toc-entry-17">Pháp sư gọi hồn</a></li> <li><a class="reference internal" href="#skeleton" id="toc-entry-18">Lính xương</a></li> <li><a class="reference internal" href="#zombie" id="toc-entry-19">Thây ma</a></li> </ul>
+</li>
+<li><a class="reference internal" href="#buildings" id="toc-entry-20">2. Công trình</a><ul> <li><a class="reference internal" href="#scouttower" id="toc-entry-21">Tháp canh trinh sát</a></li> <li><a class="reference internal" href="#farm" id="toc-entry-22">Nông trại</a></li> <li><a class="reference internal" href="#guardtower" id="toc-entry-23">Tháp canh gác</a></li> <li><a class="reference internal" href="#lumbermill" id="toc-entry-24">Xưởng gỗ</a></li> <li><a class="reference internal" href="#barracks" id="toc-entry-25">Trại lính</a></li> <li><a class="reference internal" href="#wall" id="toc-entry-26">Tường thành</a></li> <li><a class="reference internal" href="#blacksmith" id="toc-entry-27">Lò rèn</a></li> <li><a class="reference internal" href="#gate" id="toc-entry-28">Cổng thành</a></li> <li><a class="reference internal" href="#cannontower" id="toc-entry-29">Tháp pháo</a></li> <li><a class="reference internal" href="#shipyard" id="toc-entry-30">Xưởng đóng tàu</a></li> <li><a class="reference internal" href="#stables" id="toc-entry-31">Chuồng ngựa</a></li> <li><a class="reference internal" href="#workshop" id="toc-entry-32">Xưởng cơ khí</a></li> <li><a class="reference internal" href="#townhall" id="toc-entry-33">Nhà chính</a></li> <li><a class="reference internal" href="#dragonslair" id="toc-entry-34">Hang rồng</a></li> <li><a class="reference internal" href="#magestower" id="toc-entry-35">Tháp pháp sư</a></li> <li><a class="reference internal" href="#necropolis" id="toc-entry-36">Thành phố chết</a></li> <li><a class="reference internal" href="#temple" id="toc-entry-37">Đền thờ</a></li> <li><a class="reference internal" href="#massive-wall" id="toc-entry-38">Tường thành kiên cố</a></li> <li><a class="reference internal" href="#keep" id="toc-entry-39">Đồn lũy</a></li> <li><a class="reference internal" href="#massive-gate" id="toc-entry-40">Cổng thành kiên cố</a></li> <li><a class="reference internal" href="#castle" id="toc-entry-41">Thành trì</a></li> </ul>
+</li>
+<li><a class="reference internal" href="#abilities" id="toc-entry-42">3. Khả năng</a><ul> <li><a class="reference internal" href="#a-conversion" id="toc-entry-43">Chiêu dụ</a></li> <li><a class="reference internal" href="#a-deadly-fog" id="toc-entry-44">Sương độc</a></li> <li><a class="reference internal" href="#a-exorcism" id="toc-entry-45">Trừ tà</a></li> <li><a class="reference internal" href="#a-holy-vision" id="toc-entry-46">Tầm nhìn thần thánh</a></li> <li><a class="reference internal" href="#a-meteors" id="toc-entry-47">Mưa thiên thạch</a></li> <li><a class="reference internal" href="#a-raise-dead" id="toc-entry-48">Gọi hồn</a></li> <li><a class="reference internal" href="#a-recall" id="toc-entry-49">Gọi về</a></li> <li><a class="reference internal" href="#a-resurrection" id="toc-entry-50">Hồi sinh</a></li> <li><a class="reference internal" href="#a-summon-dragon" id="toc-entry-51">Triệu hồi rồng</a></li> </ul>
+</li>
+<li><a class="reference internal" href="#upgrades-and-research" id="toc-entry-52">4. Nâng cấp và Nghiên cứu</a><ul> <li><a class="reference internal" href="#archer-armor" id="toc-entry-53">Giáp cung thủ</a></li> <li><a class="reference internal" href="#archer-range" id="toc-entry-54">Tầm bắn cung thủ</a></li> <li><a class="reference internal" href="#archer-weapon" id="toc-entry-55">Vũ khí cung thủ</a></li> <li><a class="reference internal" href="#melee-armor" id="toc-entry-56">Giáp cận chiến</a></li> <li><a class="reference internal" href="#melee-weapon" id="toc-entry-57">Vũ khí cận chiến</a></li> <li><a class="reference internal" href="#horse-speed" id="toc-entry-58">Tốc độ ngựa</a></li> <li><a class="reference internal" href="#u-conversion" id="toc-entry-59">Nâng cấp Chiêu dụ</a></li> <li><a class="reference internal" href="#u-deadly-fog" id="toc-entry-60">Nâng cấp Sương độc</a></li> <li><a class="reference internal" href="#u-exorcism" id="toc-entry-61">Nâng cấp Trừ tà</a></li> <li><a class="reference internal" href="#u-meteors" id="toc-entry-62">Nâng cấp Mưa thiên thạch</a></li> <li><a class="reference internal" href="#u-recall" id="toc-entry-63">Nâng cấp Gọi về</a></li> <li><a class="reference internal" href="#u-resurrection" id="toc-entry-64">Nâng cấp Hồi sinh</a></li> <li><a class="reference internal" href="#u-summon-dragon" id="toc-entry-65">Nâng cấp Triệu hồi rồng</a></li> <li><a class="reference internal" href="#superhealer" id="toc-entry-66">Siêu hồi máu</a></li> </ul>
+</li>
+</ul>
+</div>
+<div class="section" id="units">
+<h1><a class="toc-backref" href="#toc-entry-1">1. Đơn vị</a></h1> <div class="section" id="peasant">
+<h2><a class="toc-backref" href="#toc-entry-2">Nông dân</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#townhall">Nhà chính</a>, <a class="reference internal" href="#keep">Đồn lũy</a>, <a class="reference internal" href="#castle">Thành trì</a></li> <li>Tổng chi phí: 4 vàng, 0 gỗ</li> <li>Tổng chi phí lương thực: 1 khẩu phần</li> <li>Tổng thời gian: 10 giây</li> <li>Máu: 4 điểm máu</li> <li>Tấn công: 1.5 điểm máu mỗi 1 giây</li> <li>Tầm tấn công: 0.8 mét</li> <li>Tốc độ: 1.5 mét mỗi giây</li> <li>Có thể xây: <a class="reference internal" href="#farm">Nông trại</a>, <a class="reference internal" href="#barracks">Trại lính</a>, <a class="reference internal" href="#lumbermill">Xưởng gỗ</a>, <a class="reference internal" href="#blacksmith">Lò rèn</a>, <a class="reference internal" href="#wall">Tường thành</a>, <a class="reference internal" href="#gate">Cổng thành</a>, <a class="reference internal" href="#scouttower">Tháp canh trinh sát</a>, <a class="reference internal" href="#townhall">Nhà chính</a>, <a class="reference internal" href="#stables">Chuồng ngựa</a>, <a class="reference internal" href="#workshop">Xưởng cơ khí</a>, <a class="reference internal" href="#dragonslair">Hang rồng</a>, <a class="reference internal" href="#magestower">Tháp pháp sư</a>, <a class="reference internal" href="#temple">Đền thờ</a>, <a class="reference internal" href="#necropolis">Thành phố chết</a>, <a class="reference internal" href="#shipyard">Xưởng đóng tàu</a></li> </ul>
+</div>
+<div class="section" id="footman">
+<h2><a class="toc-backref" href="#toc-entry-3">Lính bộ</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#barracks">Trại lính</a></li> <li>Tổng chi phí: 6 vàng, 0 gỗ</li> <li>Tổng chi phí lương thực: 1 khẩu phần</li> <li>Tổng thời gian: 12 giây</li> <li>Máu: 15 điểm máu</li> <li>Giáp: 0.5 điểm máu</li> <li>Điểm cộng nâng cấp giáp: 1 điểm máu</li> <li>Tấn công: 3.5 điểm máu mỗi 1.5 giây</li> <li>Điểm cộng nâng cấp tấn công: 2.5 điểm máu</li> <li>Tầm tấn công: 1 mét</li> <li>Tốc độ: 1.5 mét mỗi giây</li> <li>Cải tiến tiềm năng: <a class="reference internal" href="#melee-armor">Giáp cận chiến</a>, <a class="reference internal" href="#melee-weapon">Vũ khí cận chiến</a></li> </ul>
+</div>
+<div class="section" id="archer">
+<h2><a class="toc-backref" href="#toc-entry-4">Cung thủ</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#barracks">Trại lính</a></li> <li>Yêu cầu: <a class="reference internal" href="#lumbermill">Xưởng gỗ</a></li> <li>Tổng chi phí: 5 vàng, 1 gỗ</li> <li>Tổng chi phí lương thực: 1 khẩu phần</li> <li>Tổng thời gian: 15 giây</li> <li>Máu: 10 điểm máu</li> <li>Giáp: 0 điểm máu</li> <li>Tấn công: 2.5 điểm máu mỗi 1.5 giây</li> <li>Tầm tấn công: 4 mét</li> <li>Có thể tấn công các đơn vị ở ô liền kề nếu độ cao của chúng thấp hơn (mới trong SoundRTS 1.2 alpha 9).</li> <li>Tốc độ: 1.5 mét mỗi giây</li> <li>Có thể nâng cấp thành: <a class="reference internal" href="#darkarcher">Hắc tiễn thủ</a></li> <li>Cải tiến tiềm năng: <a class="reference internal" href="#archer-armor">Giáp cung thủ</a>, <a class="reference internal" href="#archer-range">Tầm bắn cung thủ</a>, <a class="reference internal" href="#archer-weapon">Vũ khí cung thủ</a></li> </ul>
+</div>
+<div class="section" id="boat">
+<h2><a class="toc-backref" href="#toc-entry-5">Thuyền</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#shipyard">Xưởng đóng tàu</a></li> <li>Tổng chi phí: 5 vàng, 5 gỗ</li> <li>Tổng chi phí lương thực: 1 khẩu phần</li> <li>Tổng thời gian: 10 giây</li> <li>Máu: 30 điểm máu</li> <li>Tốc độ: 1.5 mét mỗi giây</li> </ul>
+</div>
+<div class="section" id="new-flyingmachine">
+<h2><a class="toc-backref" href="#toc-entry-6">Máy bay trinh sát</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#workshop">Xưởng cơ khí</a></li> <li>Tổng chi phí: 5 vàng, 5 gỗ</li> <li>Tổng chi phí lương thực: 1 khẩu phần</li> <li>Tổng thời gian: 10 giây</li> <li>Máu: 30 điểm máu</li> <li>Tốc độ: 1.5 mét mỗi giây</li> <li>Phát hiện đơn vị tàng hình</li> </ul>
+</div>
+<div class="section" id="knight">
+<h2><a class="toc-backref" href="#toc-entry-7">Kỵ sĩ</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#barracks">Trại lính</a></li> <li>Yêu cầu: <a class="reference internal" href="#stables">Chuồng ngựa</a></li> <li>Tổng chi phí: 15 vàng, 0 gỗ</li> <li>Tổng chi phí lương thực: 2 khẩu phần</li> <li>Tổng thời gian: 20 giây</li> <li>Máu: 45 điểm máu</li> <li>Giáp: 1 điểm máu</li> <li>Điểm cộng nâng cấp giáp: 1.5 điểm máu</li> <li>Tấn công: 6 điểm máu mỗi 1.5 giây</li> <li>Điểm cộng nâng cấp tấn công: 6 điểm máu</li> <li>Tầm tấn công: 1 mét</li> <li>Tốc độ: 2.5 mét mỗi giây</li> <li>Cải tiến tiềm năng: <a class="reference internal" href="#melee-armor">Giáp cận chiến</a>, <a class="reference internal" href="#melee-weapon">Vũ khí cận chiến</a>, <a class="reference internal" href="#horse-speed">Tốc độ ngựa</a></li> </ul>
+</div>
+<div class="section" id="destroyer">
+<h2><a class="toc-backref" href="#toc-entry-8">Khu trục hạm</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#shipyard">Xưởng đóng tàu</a></li> <li>Yêu cầu: <a class="reference internal" href="#lumbermill">Xưởng gỗ</a></li> <li>Tổng chi phí: 11 vàng, 4 gỗ</li> <li>Tổng chi phí lương thực: 2 khẩu phần</li> <li>Tổng thời gian: 14 giây</li> <li>Máu: 43 điểm máu</li> <li>Giáp: 1 điểm máu</li> <li>Tấn công: 6 điểm máu mỗi 1.5 giây</li> <li>Tầm tấn công: 6 mét</li> <li>Có thể tấn công các đơn vị ở ô liền kề nếu độ cao của chúng thấp hơn (mới trong SoundRTS 1.2 alpha 9).</li> <li>Tốc độ: 1.5 mét mỗi giây</li> <li>Cải tiến tiềm năng: <a class="reference internal" href="#archer-range">Tầm bắn cung thủ</a>, <a class="reference internal" href="#archer-weapon">Vũ khí cung thủ</a></li> </ul>
+</div>
+<div class="section" id="submarine">
+<h2><a class="toc-backref" href="#toc-entry-9">Tàu ngầm</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#shipyard">Xưởng đóng tàu</a></li> <li>Yêu cầu: <a class="reference internal" href="#lumbermill">Xưởng gỗ</a>, <a class="reference internal" href="#magestower">Tháp pháp sư</a></li> <li>Tổng chi phí: 11 vàng, 4 gỗ</li> <li>Tổng chi phí lương thực: 1 khẩu phần</li> <li>Tổng thời gian: 14 giây</li> <li>Máu: 43 điểm máu</li> <li>Giáp: 1 điểm máu</li> <li>Tấn công: 6 điểm máu mỗi 1.5 giây</li> <li>Tầm tấn công: 6 mét</li> <li>Có thể tấn công các đơn vị ở ô liền kề nếu độ cao của chúng thấp hơn (mới trong SoundRTS 1.2 alpha 9).</li> <li>Tốc độ: 1.5 mét mỗi giây</li> <li>Phát hiện đơn vị tàng hình</li> <li>Tàng hình</li> <li>Cải tiến tiềm năng: <a class="reference internal" href="#archer-range">Tầm bắn cung thủ</a>, <a class="reference internal" href="#archer-weapon">Vũ khí cung thủ</a></li> </ul>
+</div>
+<div class="section" id="darkarcher">
+<h2><a class="toc-backref" href="#toc-entry-10">Hắc tiễn thủ</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#lumbermill">Xưởng gỗ</a>, <a class="reference internal" href="#magestower">Tháp pháp sư</a></li> <li>Tổng chi phí: 10 vàng, 5 gỗ</li> <li>Tổng chi phí lương thực: 1 khẩu phần</li> <li>Tổng thời gian: 75 giây</li> <li>Máu: 12 điểm máu</li> <li>Giáp: 0 điểm máu</li> <li>Tấn công: 10 điểm máu mỗi 3 giây</li> <li>Tầm tấn công: 5 mét</li> <li>Có thể tấn công các đơn vị ở ô liền kề nếu độ cao của chúng thấp hơn (mới trong SoundRTS 1.2 alpha 9).</li> <li>Tốc độ: 1.5 mét mỗi giây</li> <li>Tàng hình</li> <li>Cải tiến tiềm năng: <a class="reference internal" href="#archer-armor">Giáp cung thủ</a>, <a class="reference internal" href="#archer-range">Tầm bắn cung thủ</a>, <a class="reference internal" href="#archer-weapon">Vũ khí cung thủ</a></li> </ul>
+</div>
+<div class="section" id="priest">
+<h2><a class="toc-backref" href="#toc-entry-11">Thầy tu</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#temple">Đền thờ</a></li> <li>Tổng chi phí: 15 vàng, 7 gỗ</li> <li>Tổng chi phí lương thực: 2 khẩu phần</li> <li>Tổng thời gian: 20 giây</li> <li>Máu: 30 điểm máu</li> <li>Tốc độ: 1 mét mỗi giây</li> <li>Sức mạnh hồi máu: 1</li> <li>Khả năng đặc biệt: <a class="reference internal" href="#a-conversion">Chiêu dụ</a>, <a class="reference internal" href="#a-exorcism">Trừ tà</a>, <a class="reference internal" href="#a-holy-vision">Tầm nhìn thần thánh</a>, <a class="reference internal" href="#a-resurrection">Hồi sinh</a></li> <li>Cải tiến tiềm năng: <a class="reference internal" href="#superhealer">Siêu hồi máu</a></li> </ul>
+</div>
+<div class="section" id="battleship">
+<h2><a class="toc-backref" href="#toc-entry-12">Chiến hạm</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#shipyard">Xưởng đóng tàu</a></li> <li>Yêu cầu: <a class="reference internal" href="#lumbermill">Xưởng gỗ</a>, <a class="reference internal" href="#workshop">Xưởng cơ khí</a></li> <li>Tổng chi phí: 15 vàng, 10 gỗ</li> <li>Tổng chi phí lương thực: 3 khẩu phần</li> <li>Tổng thời gian: 30 giây</li> <li>Máu: 30 điểm máu</li> <li>Tấn công: 8 điểm máu mỗi 4 giây</li> <li>Bán kính sát thương (vùng ảnh hưởng): 0.25 mét</li> <li>Tầm tấn công: 12 mét</li> <li>Có thể tấn công các đơn vị ở ô liền kề nếu độ cao của chúng thấp hơn (mới trong SoundRTS 1.2 alpha 9).</li> <li>Tốc độ: 0.75 mét mỗi giây</li> </ul>
+</div>
+<div class="section" id="catapult">
+<h2><a class="toc-backref" href="#toc-entry-13">Máy bắn đá</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#workshop">Xưởng cơ khí</a></li> <li>Tổng chi phí: 15 vàng, 10 gỗ</li> <li>Tổng chi phí lương thực: 2 khẩu phần</li> <li>Tổng thời gian: 30 giây</li> <li>Máu: 30 điểm máu</li> <li>Tấn công: 8 điểm máu mỗi 4 giây</li> <li>Bán kính sát thương (vùng ảnh hưởng): 0.25 mét</li> <li>Tầm tấn công: 12 mét</li> <li>Có thể tấn công các đơn vị ở ô liền kề nếu độ cao của chúng thấp hơn (mới trong SoundRTS 1.2 alpha 9).</li> <li>Tốc độ: 0.75 mét mỗi giây</li> </ul>
+</div>
+<div class="section" id="dragon">
+<h2><a class="toc-backref" href="#toc-entry-14">Rồng</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#dragonslair">Hang rồng</a></li> <li>Tổng chi phí: 15 vàng, 10 gỗ</li> <li>Tổng chi phí lương thực: 3 khẩu phần</li> <li>Tổng thời gian: 15 giây</li> <li>Máu: 30 điểm máu</li> <li>Hồi máu: 0.15 điểm máu mỗi giây</li> <li>Tấn công: 4 điểm máu mỗi 4 giây</li> <li>Bán kính sát thương (vùng ảnh hưởng): 1 mét</li> <li>Tầm tấn công: 4 mét</li> <li>Tốc độ: 1.75 mét mỗi giây</li> </ul>
+</div>
+<div class="section" id="flyingmachine">
+<h2><a class="toc-backref" href="#toc-entry-15">Máy bay chiến đấu</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#workshop">Xưởng cơ khí</a></li> <li>Yêu cầu: <a class="reference internal" href="#magestower">Tháp pháp sư</a></li> <li>Tổng chi phí: 20 vàng, 10 gỗ</li> <li>Tổng chi phí lương thực: 3 khẩu phần</li> <li>Tổng thời gian: 30 giây</li> <li>Máu: 30 điểm máu</li> <li>Tấn công: 8 điểm máu mỗi 1.5 giây</li> <li>Tầm tấn công: 5 mét</li> <li>Tốc độ: 1.5 mét mỗi giây</li> </ul>
+</div>
+<div class="section" id="mage">
+<h2><a class="toc-backref" href="#toc-entry-16">Pháp sư</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#magestower">Tháp pháp sư</a></li> <li>Tổng chi phí: 20 vàng, 10 gỗ</li> <li>Tổng chi phí lương thực: 3 khẩu phần</li> <li>Tổng thời gian: 30 giây</li> <li>Máu: 30 điểm máu</li> <li>Tấn công: 8 điểm máu mỗi 1.5 giây</li> <li>Tầm tấn công: 6 mét</li> <li>Tốc độ: 1 mét mỗi giây</li> <li>Khả năng đặc biệt: <a class="reference internal" href="#a-meteors">Mưa thiên thạch</a>, <a class="reference internal" href="#a-recall">Gọi về</a>, <a class="reference internal" href="#a-summon-dragon">Triệu hồi rồng</a></li> </ul>
+</div>
+<div class="section" id="necromancer">
+<h2><a class="toc-backref" href="#toc-entry-17">Pháp sư gọi hồn</a></h2> <ul class="simple">
+<li>Huấn luyện bởi: <a class="reference internal" href="#necropolis">Thành phố chết</a></li> <li>Tổng chi phí: 20 vàng, 10 gỗ</li> <li>Tổng chi phí lương thực: 3 khẩu phần</li> <li>Tổng thời gian: 30 giây</li> <li>Máu: 30 điểm máu</li> <li>Tấn công: 8 điểm máu mỗi 1.5 giây</li> <li>Tầm tấn công: 6 mét</li> <li>Tốc độ: 1 mét mỗi giây</li> <li>Khả năng đặc biệt: <a class="reference internal" href="#a-deadly-fog">Sương độc</a>, <a class="reference internal" href="#a-raise-dead">Gọi hồn</a></li> </ul>
+</div>
+<div class="section" id="skeleton">
+<h2><a class="toc-backref" href="#toc-entry-18">Lính xương</a></h2> <ul class="simple">
+<li>Tổng chi phí:</li>
+<li>Máu: 15 điểm máu</li> <li>Giáp: 0 điểm máu</li> <li>Tấn công: 2.5 điểm máu mỗi 1.5 giây</li> <li>Tầm tấn công: 4 mét</li> <li>Có thể tấn công các đơn vị ở ô liền kề nếu độ cao của chúng thấp hơn (mới trong SoundRTS 1.2 alpha 9).</li> <li>Tốc độ: 1.5 mét mỗi giây</li> <li>Cải tiến tiềm năng: <a class="reference internal" href="#archer-armor">Giáp cung thủ</a>, <a class="reference internal" href="#archer-range">Tầm bắn cung thủ</a>, <a class="reference internal" href="#archer-weapon">Vũ khí cung thủ</a></li> </ul>
+</div>
+<div class="section" id="zombie">
+<h2><a class="toc-backref" href="#toc-entry-19">Thây ma</a></h2> <ul class="simple">
+<li>Tổng chi phí:</li>
+<li>Máu: 23 điểm máu</li> <li>Giáp: 0.5 điểm máu</li> <li>Điểm cộng nâng cấp giáp: 1 điểm máu</li> <li>Tấn công: 5 điểm máu mỗi 3 giây</li> <li>Điểm cộng nâng cấp tấn công: 2.5 điểm máu</li> <li>Tầm tấn công: 1 mét</li> <li>Tốc độ: 1 mét mỗi giây</li> <li>Cải tiến tiềm năng: <a class="reference internal" href="#melee-armor">Giáp cận chiến</a>, <a class="reference internal" href="#melee-weapon">Vũ khí cận chiến</a></li> </ul>
+</div>
+</div>
+<div class="section" id="buildings">
+<h1><a class="toc-backref" href="#toc-entry-20">2. Công trình</a></h1> <div class="section" id="scouttower">
+<h2><a class="toc-backref" href="#toc-entry-21">Tháp canh trinh sát</a></h2> <ul class="simple">
+<li>Tổng chi phí: 6 vàng, 2 gỗ</li> <li>Tổng thời gian: 60 giây</li> <li>Máu: 33 điểm máu</li> <li>Có thể nâng cấp thành: <a class="reference internal" href="#guardtower">Tháp canh gác</a>, <a class="reference internal" href="#cannontower">Tháp pháo</a></li> <li>Có lợi thế độ cao (hữu ích cho tầm nhìn và có thể cả tầm tấn công)</li> </ul>
+</div>
+<div class="section" id="farm">
+<h2><a class="toc-backref" href="#toc-entry-22">Nông trại</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#townhall">Nhà chính</a></li> <li>Tổng chi phí: 5 vàng, 5 gỗ</li> <li>Tổng thời gian: 45 giây</li> <li>Máu: 133.3 điểm máu</li> <li>Cung cấp lương thực: 8 khẩu phần</li> </ul>
+</div>
+<div class="section" id="guardtower">
+<h2><a class="toc-backref" href="#toc-entry-23">Tháp canh gác</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#lumbermill">Xưởng gỗ</a></li> <li>Tổng chi phí: 11 vàng, 4 gỗ</li> <li>Tổng thời gian: 140 giây</li> <li>Máu: 43 điểm máu</li> <li>Giáp: 1 điểm máu</li> <li>Tấn công: 6 điểm máu mỗi 1.5 giây</li> <li>Tầm tấn công: 6 mét</li> <li>Có thể tấn công các đơn vị ở ô liền kề nếu độ cao của chúng thấp hơn (mới trong SoundRTS 1.2 alpha 9).</li> <li>Có lợi thế độ cao (hữu ích cho tầm nhìn và có thể cả tầm tấn công)</li> <li>Cải tiến tiềm năng: <a class="reference internal" href="#archer-range">Tầm bắn cung thủ</a>, <a class="reference internal" href="#archer-weapon">Vũ khí cung thủ</a></li> </ul>
+</div>
+<div class="section" id="lumbermill">
+<h2><a class="toc-backref" href="#toc-entry-24">Xưởng gỗ</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#townhall">Nhà chính</a></li> <li>Tổng chi phí: 6 vàng, 9 gỗ</li> <li>Tổng thời gian: 68 giây</li> <li>Máu: 200 điểm máu</li> <li>Có thể chứa: gỗ</li> <li>Có thể nghiên cứu: <a class="reference internal" href="#archer-weapon">Vũ khí cung thủ</a>, <a class="reference internal" href="#archer-armor">Giáp cung thủ</a>, <a class="reference internal" href="#archer-range">Tầm bắn cung thủ</a></li> </ul>
+</div>
+<div class="section" id="barracks">
+<h2><a class="toc-backref" href="#toc-entry-25">Trại lính</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#townhall">Nhà chính</a></li> <li>Tổng chi phí: 7 vàng, 9 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 266.7 điểm máu</li> <li>Có thể huấn luyện: <a class="reference internal" href="#footman">Lính bộ</a>, <a class="reference internal" href="#archer">Cung thủ</a>, <a class="reference internal" href="#knight">Kỵ sĩ</a></li> </ul>
+</div>
+<div class="section" id="wall">
+<h2><a class="toc-backref" href="#toc-entry-26">Tường thành</a></h2> <ul class="simple">
+<li>Tổng chi phí: 7 vàng, 9 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 500 điểm máu</li> <li>Có thể nâng cấp thành: <a class="reference internal" href="#massive-wall">Tường thành kiên cố</a></li> </ul>
+</div>
+<div class="section" id="blacksmith">
+<h2><a class="toc-backref" href="#toc-entry-27">Lò rèn</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#townhall">Nhà chính</a></li> <li>Tổng chi phí: 8 vàng, 10 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 266.7 điểm máu</li> <li>Có thể nghiên cứu: <a class="reference internal" href="#melee-weapon">Vũ khí cận chiến</a>, <a class="reference internal" href="#melee-armor">Giáp cận chiến</a></li> </ul>
+</div>
+<div class="section" id="gate">
+<h2><a class="toc-backref" href="#toc-entry-28">Cổng thành</a></h2> <ul class="simple">
+<li>Tổng chi phí: 10 vàng, 10 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 450 điểm máu</li> <li>Có thể nâng cấp thành: <a class="reference internal" href="#massive-gate">Cổng thành kiên cố</a></li> </ul>
+</div>
+<div class="section" id="cannontower">
+<h2><a class="toc-backref" href="#toc-entry-29">Tháp pháo</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#blacksmith">Lò rèn</a></li> <li>Tổng chi phí: 16 vàng, 5 gỗ</li> <li>Tổng thời gian: 190 giây</li> <li>Máu: 53 điểm máu</li> <li>Giáp: 1 điểm máu</li> <li>Tấn công: 8 điểm máu mỗi 4 giây</li> <li>Bán kính sát thương (vùng ảnh hưởng): 1 mét</li> <li>Tầm tấn công: 7 mét</li> <li>Có thể tấn công các đơn vị ở ô liền kề nếu độ cao của chúng thấp hơn (mới trong SoundRTS 1.2 alpha 9).</li> <li>Có lợi thế độ cao (hữu ích cho tầm nhìn và có thể cả tầm tấn công)</li> </ul>
+</div>
+<div class="section" id="shipyard">
+<h2><a class="toc-backref" href="#toc-entry-30">Xưởng đóng tàu</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#townhall">Nhà chính</a>, <a class="reference internal" href="#lumbermill">Xưởng gỗ</a></li> <li>Tổng chi phí: 10 vàng, 15 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 266.7 điểm máu</li> <li>Có thể huấn luyện: <a class="reference internal" href="#boat">Thuyền</a>, <a class="reference internal" href="#destroyer">Khu trục hạm</a>, <a class="reference internal" href="#battleship">Chiến hạm</a>, <a class="reference internal" href="#submarine">Tàu ngầm</a></li> </ul>
+</div>
+<div class="section" id="stables">
+<h2><a class="toc-backref" href="#toc-entry-31">Chuồng ngựa</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#keep">Đồn lũy</a></li> <li>Tổng chi phí: 10 vàng, 15 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 266.7 điểm máu</li> <li>Có thể nghiên cứu: <a class="reference internal" href="#horse-speed">Tốc độ ngựa</a></li> </ul>
+</div>
+<div class="section" id="workshop">
+<h2><a class="toc-backref" href="#toc-entry-32">Xưởng cơ khí</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#keep">Đồn lũy</a></li> <li>Tổng chi phí: 10 vàng, 15 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 266.7 điểm máu</li> <li>Có thể huấn luyện: <a class="reference internal" href="#catapult">Máy bắn đá</a>, <a class="reference internal" href="#new-flyingmachine">Máy bay trinh sát</a>, <a class="reference internal" href="#flyingmachine">Máy bay chiến đấu</a></li> </ul>
+</div>
+<div class="section" id="townhall">
+<h2><a class="toc-backref" href="#toc-entry-33">Nhà chính</a></h2> <ul class="simple">
+<li>Tổng chi phí: 12 vàng, 16 gỗ</li> <li>Tổng thời gian: 135 giây</li> <li>Máu: 400 điểm máu</li> <li>Cung cấp lương thực: 1 khẩu phần</li> <li>Sức mạnh hồi máu: 1</li> <li>Có thể chứa: vàng, gỗ</li> <li>Có thể huấn luyện: <a class="reference internal" href="#peasant">Nông dân</a></li> <li>Có thể nâng cấp thành: <a class="reference internal" href="#keep">Đồn lũy</a></li> </ul>
+</div>
+<div class="section" id="dragonslair">
+<h2><a class="toc-backref" href="#toc-entry-34">Hang rồng</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#castle">Thành trì</a></li> <li>Tổng chi phí: 15 vàng, 20 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 266.7 điểm máu</li> <li>Có thể huấn luyện: <a class="reference internal" href="#dragon">Rồng</a></li> </ul>
+</div>
+<div class="section" id="magestower">
+<h2><a class="toc-backref" href="#toc-entry-35">Tháp pháp sư</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#castle">Thành trì</a></li> <li>Tổng chi phí: 15 vàng, 20 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 266.7 điểm máu</li> <li>Có thể huấn luyện: <a class="reference internal" href="#mage">Pháp sư</a></li> <li>Có thể nghiên cứu: <a class="reference internal" href="#u-recall">Nâng cấp Gọi về</a>, <a class="reference internal" href="#u-summon-dragon">Nâng cấp Triệu hồi rồng</a>, <a class="reference internal" href="#u-meteors">Nâng cấp Mưa thiên thạch</a></li> </ul>
+</div>
+<div class="section" id="necropolis">
+<h2><a class="toc-backref" href="#toc-entry-36">Thành phố chết</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#castle">Thành trì</a></li> <li>Tổng chi phí: 10 vàng, 30 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 300 điểm máu</li> <li>Có thể huấn luyện: <a class="reference internal" href="#necromancer">Pháp sư gọi hồn</a></li> <li>Có thể nghiên cứu: <a class="reference internal" href="#u-deadly-fog">Nâng cấp Sương độc</a></li> </ul>
+</div>
+<div class="section" id="temple">
+<h2><a class="toc-backref" href="#toc-entry-37">Đền thờ</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#keep">Đồn lũy</a></li> <li>Tổng chi phí: 10 vàng, 30 gỗ</li> <li>Tổng thời gian: 90 giây</li> <li>Máu: 300 điểm máu</li> <li>Có thể huấn luyện: <a class="reference internal" href="#priest">Thầy tu</a></li> <li>Có thể nghiên cứu: <a class="reference internal" href="#superhealer">Siêu hồi máu</a>, <a class="reference internal" href="#u-exorcism">Nâng cấp Trừ tà</a>, <a class="reference internal" href="#u-conversion">Nâng cấp Chiêu dụ</a>, <a class="reference internal" href="#u-resurrection">Nâng cấp Hồi sinh</a></li> </ul>
+</div>
+<div class="section" id="massive-wall">
+<h2><a class="toc-backref" href="#toc-entry-38">Tường thành kiên cố</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#keep">Đồn lũy</a></li> <li>Tổng chi phí: 21 vàng, 27 gỗ</li> <li>Tổng thời gian: 270 giây</li> <li>Máu: 2000 điểm máu</li> </ul>
+</div>
+<div class="section" id="keep">
+<h2><a class="toc-backref" href="#toc-entry-39">Đồn lũy</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#barracks">Trại lính</a></li> <li>Tổng chi phí: 22 vàng, 31 gỗ</li> <li>Tổng thời gian: 315 giây</li> <li>Máu: 800 điểm máu</li> <li>Cung cấp lương thực: 1 khẩu phần</li> <li>Sức mạnh hồi máu: 2</li> <li>Có thể chứa: vàng, gỗ</li> <li>Có thể huấn luyện: <a class="reference internal" href="#peasant">Nông dân</a></li> <li>Có thể nâng cấp thành: <a class="reference internal" href="#castle">Thành trì</a></li> </ul>
+</div>
+<div class="section" id="massive-gate">
+<h2><a class="toc-backref" href="#toc-entry-40">Cổng thành kiên cố</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#keep">Đồn lũy</a></li> <li>Tổng chi phí: 30 vàng, 30 gỗ</li> <li>Tổng thời gian: 270 giây</li> <li>Máu: 1800 điểm máu</li> </ul>
+</div>
+<div class="section" id="castle">
+<h2><a class="toc-backref" href="#toc-entry-41">Thành trì</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#barracks">Trại lính</a>, <a class="reference internal" href="#lumbermill">Xưởng gỗ</a>, <a class="reference internal" href="#blacksmith">Lò rèn</a>, <a class="reference internal" href="#stables">Chuồng ngựa</a></li> <li>Tổng chi phí: 42 vàng, 61 gỗ</li> <li>Tổng thời gian: 675 giây</li> <li>Máu: 1600 điểm máu</li> <li>Cung cấp lương thực: 1 khẩu phần</li> <li>Sức mạnh hồi máu: 4</li> <li>Có thể chứa: vàng, gỗ</li> <li>Có thể huấn luyện: <a class="reference internal" href="#peasant">Nông dân</a></li> </ul>
+</div>
+</div>
+<div class="section" id="abilities">
+<h1><a class="toc-backref" href="#toc-entry-42">3. Khả năng</a></h1> <div class="section" id="a-conversion">
+<h2><a class="toc-backref" href="#toc-entry-43">Chiêu dụ</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#u-conversion">Nâng cấp Chiêu dụ</a></li> <li>Chi phí mana: 150 điểm mana</li> <li>Tổng chi phí:</li>
+</ul>
+</div>
+<div class="section" id="a-deadly-fog">
+<h2><a class="toc-backref" href="#toc-entry-44">Sương độc</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#u-deadly-fog">Nâng cấp Sương độc</a></li> <li>Chi phí mana: 150 điểm mana</li> <li>Tổng chi phí:</li>
+</ul>
+</div>
+<div class="section" id="a-exorcism">
+<h2><a class="toc-backref" href="#toc-entry-45">Trừ tà</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#u-exorcism">Nâng cấp Trừ tà</a></li> <li>Chi phí mana: 150 điểm mana</li> <li>Tổng chi phí:</li>
+</ul>
+</div>
+<div class="section" id="a-holy-vision">
+<h2><a class="toc-backref" href="#toc-entry-46">Tầm nhìn thần thánh</a></h2> <ul class="simple">
+<li>Chi phí mana: 30 điểm mana</li> <li>Tổng chi phí:</li>
+</ul>
+</div>
+<div class="section" id="a-meteors">
+<h2><a class="toc-backref" href="#toc-entry-47">Mưa thiên thạch</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#u-meteors">Nâng cấp Mưa thiên thạch</a></li> <li>Chi phí mana: 150 điểm mana</li> <li>Tổng chi phí:</li>
+</ul>
+</div>
+<div class="section" id="a-raise-dead">
+<h2><a class="toc-backref" href="#toc-entry-48">Gọi hồn</a></h2> <ul class="simple">
+<li>Chi phí mana: 50 điểm mana</li> <li>Tổng chi phí:</li>
+</ul>
+</div>
+<div class="section" id="a-recall">
+<h2><a class="toc-backref" href="#toc-entry-49">Gọi về</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#u-recall">Nâng cấp Gọi về</a></li> <li>Chi phí mana: 150 điểm mana</li> <li>Tổng chi phí:</li>
+</ul>
+</div>
+<div class="section" id="a-resurrection">
+<h2><a class="toc-backref" href="#toc-entry-50">Hồi sinh</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#u-resurrection">Nâng cấp Hồi sinh</a></li> <li>Chi phí mana: 150 điểm mana</li> <li>Tổng chi phí:</li>
+</ul>
+</div>
+<div class="section" id="a-summon-dragon">
+<h2><a class="toc-backref" href="#toc-entry-51">Triệu hồi rồng</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#u-summon-dragon">Nâng cấp Triệu hồi rồng</a></li> <li>Chi phí mana: 150 điểm mana</li> <li>Tổng chi phí:</li>
+</ul>
+</div>
+</div>
+<div class="section" id="upgrades-and-research">
+<h1><a class="toc-backref" href="#toc-entry-52">4. Nâng cấp và Nghiên cứu</a></h1> <div class="section" id="archer-armor">
+<h2><a class="toc-backref" href="#toc-entry-53">Giáp cung thủ</a></h2> <ul class="simple">
+<li>Tổng chi phí: 8 vàng, 10 gỗ</li> <li>Tổng thời gian: 60 giây</li> <li>Hiệu ứng: giáp + 0.5</li> </ul>
+</div>
+<div class="section" id="archer-range">
+<h2><a class="toc-backref" href="#toc-entry-54">Tầm bắn cung thủ</a></h2> <ul class="simple">
+<li>Tổng chi phí: 8 vàng, 10 gỗ</li> <li>Tổng thời gian: 60 giây</li> <li>Hiệu ứng: tầm bắn + 1</li> </ul>
+</div>
+<div class="section" id="archer-weapon">
+<h2><a class="toc-backref" href="#toc-entry-55">Vũ khí cung thủ</a></h2> <ul class="simple">
+<li>Tổng chi phí: 8 vàng, 10 gỗ</li> <li>Tổng thời gian: 60 giây</li> <li>Hiệu ứng: sát thương + 1.5</li> </ul>
+</div>
+<div class="section" id="melee-armor">
+<h2><a class="toc-backref" href="#toc-entry-56">Giáp cận chiến</a></h2> <ul class="simple">
+<li>Tổng chi phí: 8 vàng, 10 gỗ</li> <li>Tổng thời gian: 60 giây</li> <li>Hiệu ứng: áp dụng điểm cộng nâng cấp giáp của đơn vị</li> </ul>
+</div>
+<div class="section" id="melee-weapon">
+<h2><a class="toc-backref" href="#toc-entry-57">Vũ khí cận chiến</a></h2> <ul class="simple">
+<li>Tổng chi phí: 8 vàng, 10 gỗ</li> <li>Tổng thời gian: 60 giây</li> <li>Hiệu ứng: áp dụng điểm cộng nâng cấp sát thương của đơn vị</li> </ul>
+</div>
+<div class="section" id="horse-speed">
+<h2><a class="toc-backref" href="#toc-entry-58">Tốc độ ngựa</a></h2> <ul class="simple">
+<li>Tổng chi phí: 15 vàng, 5 gỗ</li> <li>Tổng thời gian: 60 giây</li> <li>Hiệu ứng: tốc độ + 2.5</li> </ul>
+</div>
+<div class="section" id="u-conversion">
+<h2><a class="toc-backref" href="#toc-entry-59">Nâng cấp Chiêu dụ</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#castle">Thành trì</a></li> <li>Tổng chi phí: 50 vàng, 0 gỗ</li> <li>Tổng thời gian: 120 giây</li> </ul>
+</div>
+<div class="section" id="u-deadly-fog">
+<h2><a class="toc-backref" href="#toc-entry-60">Nâng cấp Sương độc</a></h2> <ul class="simple">
+<li>Tổng chi phí: 50 vàng, 0 gỗ</li> <li>Tổng thời gian: 120 giây</li> </ul>
+</div>
+<div class="section" id="u-exorcism">
+<h2><a class="toc-backref" href="#toc-entry-61">Nâng cấp Trừ tà</a></h2> <ul class="simple">
+<li>Tổng chi phí: 50 vàng, 0 gỗ</li> <li>Tổng thời gian: 120 giây</li> </ul>
+</div>
+<div class="section" id="u-meteors">
+<h2><a class="toc-backref" href="#toc-entry-62">Nâng cấp Mưa thiên thạch</a></h2> <ul class="simple">
+<li>Tổng chi phí: 50 vàng, 0 gỗ</li> <li>Tổng thời gian: 120 giây</li> </ul>
+</div>
+<div class="section" id="u-recall">
+<h2><a class="toc-backref" href="#toc-entry-63">Nâng cấp Gọi về</a></h2> <ul class="simple">
+<li>Tổng chi phí: 50 vàng, 0 gỗ</li> <li>Tổng thời gian: 120 giây</li> </ul>
+</div>
+<div class="section" id="u-resurrection">
+<h2><a class="toc-backref" href="#toc-entry-64">Nâng cấp Hồi sinh</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#castle">Thành trì</a></li> <li>Tổng chi phí: 50 vàng, 0 gỗ</li> <li>Tổng thời gian: 120 giây</li> </ul>
+</div>
+<div class="section" id="u-summon-dragon">
+<h2><a class="toc-backref" href="#toc-entry-65">Nâng cấp Triệu hồi rồng</a></h2> <ul class="simple">
+<li>Tổng chi phí: 50 vàng, 0 gỗ</li> <li>Tổng thời gian: 120 giây</li> </ul>
+</div>
+<div class="section" id="superhealer">
+<h2><a class="toc-backref" href="#toc-entry-66">Siêu hồi máu</a></h2> <ul class="simple">
+<li>Yêu cầu: <a class="reference internal" href="#castle">Thành trì</a></li> <li>Tổng chi phí: 80 vàng, 0 gỗ</li> <li>Tổng thời gian: 120 giây</li> <li>Hiệu ứng: sức mạnh hồi máu + 9</li> </ul>
+</div>
+</div>
+</div>
+</body>
+</html>
