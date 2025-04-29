@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="vi"> <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.21.2: https://docutils.sourceforge.io/" />
+<title>Sách hướng dẫn chơi game</title> <style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+Despite the name, some widely supported CSS2 features are used.
+
+See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+.subscript {
+  vertical-align: sub;
+  font-size: smaller }
+
+.superscript {
+  vertical-align: super;
+  font-size: smaller }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, .code .error {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left, table.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right, table.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/* text-align: left } */
+
+.align-top    {
+  vertical-align: top }
+
+.align-middle {
+  vertical-align: middle }
+
+.align-bottom {
+  vertical-align: bottom }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { color: gray; } /* line numbers */
+pre.code, code { background-color: #eeeeee }
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic, pre.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+/* "booktabs" style (no vertical lines) */
+table.docutils.booktabs {
+  border: 0px;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.docutils.booktabs * {
+  border: 0px;
+}
+table.docutils.booktabs th {
+  border-bottom: thin solid;
+  text-align: left;
+}
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="game-manual">
+<h1 class="title">Sách hướng dẫn chơi game</h1> <div class="contents topic" id="contents">
+<p class="topic-title"><a class="reference internal" href="#top">Nội dung</a></p> <ul class="simple">
+<li><a class="reference internal" href="#introduction" id="toc-entry-1">1. Giới thiệu</a></li> <li><a class="reference internal" href="#tutorial" id="toc-entry-2">2. Hướng dẫn chơi</a><ul> <li><a class="reference internal" href="#chapter-1-tutorial" id="toc-entry-3">2.1 Hướng dẫn Chương 1</a></li> <li><a class="reference internal" href="#chapter-2-tutorial" id="toc-entry-4">2.2 Hướng dẫn Chương 2</a></li> <li><a class="reference internal" href="#hints-and-tips" id="toc-entry-5">2.3 Gợi ý và mẹo</a></li> </ul>
+</li>
+<li><a class="reference internal" href="#commands-list" id="toc-entry-6">3. Danh sách lệnh</a><ul> <li><a class="reference internal" href="#moving-on-the-map" id="toc-entry-7">Di chuyển trên bản đồ</a></li> <li><a class="reference internal" href="#choosing-a-unit-to-control" id="toc-entry-8">Chọn đơn vị để điều khiển</a></li> <li><a class="reference internal" href="#giving-an-order-main-method" id="toc-entry-9">Ra lệnh: phương pháp chính</a></li> <li><a class="reference internal" href="#giving-an-order-alternate-faster-method" id="toc-entry-10">Ra lệnh: phương pháp thay thế, nhanh hơn</a></li> <li><a class="reference internal" href="#giving-an-order-using-shortcuts" id="toc-entry-11">Ra lệnh: sử dụng phím tắt</a></li> <li><a class="reference internal" href="#examining-the-situation" id="toc-entry-12">Kiểm tra tình hình</a></li> <li><a class="reference internal" href="#giving-an-order-without-cancelling-the-previous-ones-queuing-commands" id="toc-entry-13">Ra lệnh không hủy lệnh trước đó (xếp hàng lệnh)</a></li> <li><a class="reference internal" href="#giving-an-imperative-order" id="toc-entry-14">Ra mệnh lệnh bắt buộc</a></li> <li><a class="reference internal" href="#attacking-a-friendly-unit" id="toc-entry-15">Tấn công đơn vị đồng minh</a></li> <li><a class="reference internal" href="#blocking-an-exit" id="toc-entry-16">Chặn lối ra</a></li> <li><a class="reference internal" href="#zoom-mode-experimental" id="toc-entry-17">Chế độ thu phóng (thử nghiệm)</a></li> <li><a class="reference internal" href="#recallable-control-groups" id="toc-entry-18">Nhóm điều khiển có thể gọi lại</a></li> <li><a class="reference internal" href="#in-the-menus" id="toc-entry-19">Trong menu</a></li> <li><a class="reference internal" href="#other-commands" id="toc-entry-20">Các lệnh khác</a></li> </ul>
+</li>
+<li><a class="reference internal" href="#multiplayer-games" id="toc-entry-21">4. Chơi mạng</a><ul> <li><a class="reference internal" href="#starting-a-multiplayer-game" id="toc-entry-22">4.1 Bắt đầu một trận chơi mạng</a></li> <li><a class="reference internal" href="#chatting" id="toc-entry-23">4.2 Trò chuyện</a></li> <li><a class="reference internal" href="#team-play" id="toc-entry-24">4.3 Chơi theo đội</a></li> <li><a class="reference internal" href="#how-to-make-your-server-accessible-to-other-players" id="toc-entry-25">4.4 Cách làm cho máy chủ của bạn truy cập được bởi người chơi khác</a></li> <li><a class="reference internal" href="#how-to-download-a-map-from-a-server" id="toc-entry-26">4.5 Cách tải bản đồ từ máy chủ</a></li> </ul>
+</li>
+<li><a class="reference internal" href="#game-elements" id="toc-entry-27">5. Các yếu tố trong game</a><ul> <li><a class="reference internal" href="#food" id="toc-entry-28">Thực phẩm</a></li> <li><a class="reference internal" href="#tech-upgrades" id="toc-entry-29">Nâng cấp công nghệ</a></li> <li><a class="reference internal" href="#flying-units" id="toc-entry-30">Đơn vị bay</a></li> <li><a class="reference internal" href="#invisible-units-and-detectors" id="toc-entry-31">Đơn vị tàng hình và đơn vị dò tìm</a></li> </ul>
+</li>
+<li><a class="reference internal" href="#more-details-for-customization" id="toc-entry-32">6. Chi tiết khác để tùy chỉnh</a><ul> <li><a class="reference internal" href="#soundrts-ini" id="toc-entry-33">SoundRTS.ini</a></li>
+<li><a class="reference internal" href="#command-line-options" id="toc-entry-34">Tùy chọn dòng lệnh</a></li> <li><a class="reference internal" href="#sound-pack" id="toc-entry-35">Gói âm thanh</a></li> <li><a class="reference internal" href="#wait-delay-per-character" id="toc-entry-36">wait_delay_per_character</a></li>
+<li><a class="reference internal" href="#temporary-folder" id="toc-entry-37">Thư mục tạm</a></li> <li><a class="reference internal" href="#user-folder" id="toc-entry-38">Thư mục người dùng</a></li> <li><a class="reference internal" href="#how-to-create-a-portable-version-of-soundrts" id="toc-entry-39">Cách tạo phiên bản di động của SoundRTS</a></li> <li><a class="reference internal" href="#how-to-change-the-default-speed-in-single-player-games" id="toc-entry-40">Cách thay đổi tốc độ mặc định trong màn chơi đơn</a></li> <li><a class="reference internal" href="#changing-some-key-bindings" id="toc-entry-41">Thay đổi một số gán phím</a></li> <li><a class="reference internal" href="#creating-an-app-for-mac" id="toc-entry-42">Tạo ứng dụng cho Mac</a></li> <li><a class="reference internal" href="#using-the-windows-installer-with-a-limited-account-windows-xp" id="toc-entry-43">Sử dụng trình cài đặt Windows với tài khoản bị hạn chế (Windows XP)</a></li> <li><a class="reference internal" href="#what-makes-a-map-an-official-multiplayer-map" id="toc-entry-44">Điều gì khiến một bản đồ trở thành bản đồ chơi mạng chính thức?</a></li> <li><a class="reference internal" href="#how-to-select-a-different-language" id="toc-entry-45">Làm thế nào để chọn ngôn ngữ khác?</a></li> </ul>
+</li>
+<li><a class="reference internal" href="#credits" id="toc-entry-46">7. Ghi công</a></li> </ul>
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#toc-entry-1">1. Giới thiệu</a></h1> <p>Chào mừng đến với SoundRTS!</p> <p>SoundRTS là một game chiến thuật thời gian thực lấy cảm hứng từ Warcraft và Starcraft, nhưng là một audiogame, vì vậy được điều chỉnh cho người khiếm thị.
+Trong trò chơi này, bạn sẽ khám phá xung quanh, khai thác mỏ vàng và rừng gỗ, xây dựng công trình, tuyển mộ nông dân và binh lính, và chiến đấu với kẻ địch!</p> <p>Mặc định, trò chơi ở chế độ bản đồ: bạn đang hướng về phía bắc, và bạn có thể chọn tất cả các đối tượng mà không cần xoay hướng.
+Nhưng bạn cũng có thể chơi ở chế độ góc nhìn thứ nhất, rất tốt cho việc khám phá và tấn công.</p> </div>
+<div class="section" id="tutorial">
+<h1><a class="toc-backref" href="#toc-entry-2">2. Hướng dẫn chơi</a></h1> <p>Phần hướng dẫn này sẽ giúp bạn học các điều khiển chính của trò chơi.</p> <div class="section" id="chapter-1-tutorial">
+<h2><a class="toc-backref" href="#toc-entry-3">2.1 Hướng dẫn Chương 1</a></h2> <p>Nếu bạn sử dụng Jaws hoặc trình đọc màn hình khác, bạn có thể phải tắt nó đi để sử dụng bàn phím.</p> <p>Khi trò chơi bắt đầu, bạn sẽ nghe tên của ô nơi bạn đang đứng: "A1". Sự hiện diện của một mỏ vàng ở A1 cũng được thông báo. Để kiểm tra ô này, nhấn Tab nhiều lần. Bạn sẽ nhận thấy ô này chỉ có một lối ra (một con đường), một mỏ vàng, một khu rừng, nhà chính 1 (đó là căn cứ của bạn), và nông dân 1.</p> <p>Sau đó nhấn "Page Down" để biết liệu có ô nào khác có thể kiểm tra được không. Bạn sẽ nghe thấy "C1", nơi chứa (nhấn Tab để biết) một nông trại, một con đường, một khu rừng và bộ binh 1.</p> <p>Nếu bạn nhấn "Page Down" một lần nữa, bạn sẽ lại ở "A1". Điều đó có nghĩa là chỉ có 2 ô có thể được kiểm tra bây giờ.</p> <p>Một cách khác để di chuyển trên bản đồ là sử dụng các Phím Mũi tên. Bằng cách này, bạn có thể di chuyển qua các ô chưa biết để ra lệnh đi đến một ô chưa biết.</p> <p>Mục tiêu của bản đồ này là xây dựng 1 nông trại và 1 trại lính. Chỉ có nông dân mới có thể xây dựng. Nhưng anh ta cần vàng và gỗ, và một không gian trống (một đồng cỏ). Để biết bạn có bao nhiêu vàng, gỗ, thực phẩm, hãy nhấn Z, X và C.</p> <p>Hãy ra lệnh cho nông dân khai thác vàng. Đầu tiên, để điều khiển anh ta, nhấn Q cho đến khi bạn nghe "nông dân 1, đang chờ mệnh lệnh!". Sau đó, nhấn A cho đến khi bạn chọn "khai thác"; rồi nhấn Tab cho đến khi bạn chọn mỏ vàng; sau đó nhấn Enter để xác nhận. Nông dân sẽ bắt đầu khai thác vàng.</p> <p>Để đi nhanh hơn bạn sẽ cần nhiều nông dân hơn. Nhấn Q cho đến khi bạn điều khiển nhà chính. Sau đó, nhấn A cho đến khi bạn chọn "tuyển mộ nông dân" rồi nhấn Enter. Sau vài giây, một nông dân mới, nông dân 2, sẽ xuất hiện.</p> <p>Để yêu cầu nông dân 2 khai thác gỗ, làm giống như người đầu tiên, hoặc, để nhanh hơn, nhấn A cho đến khi bạn điều khiển nông dân 2, sau đó nhấn Tab để chọn mỏ vàng, rồi nhấn "Backspace". Phím này sẽ thực hiện hành động mặc định trên mục tiêu đã chọn: ở đây, hành động mặc định là "khai thác mỏ vàng".</p> <p>Trước khi tuyển mộ nông dân thứ ba, hãy ra lệnh cho nhà chính 1 rằng những nông dân mới được tuyển mộ sẽ phải khai thác mỏ vàng này. Để làm điều đó, nhấn Q cho đến khi bạn điều khiển nhà chính 1. Sau đó nhấn Tab cho đến khi bạn chọn mỏ vàng. Cuối cùng, nhấn "Backspace" để ra lệnh mặc định cho nhà chính: "tập kết tại mỏ vàng". Sau đó nhấn A để chọn "tuyển mộ nông dân", rồi nhấn Enter để xác nhận.</p> <p>Khi bạn có đủ vàng hoặc khi mỏ vàng cạn kiệt, nhấn D để điều khiển tất cả nông dân rồi nhấn Tab cho đến khi bạn chọn rừng gỗ. Sau đó nhấn "Backspace" để bắt đầu khai thác.</p> <p>Phần còn lại không khó.</p> </div>
+<div class="section" id="chapter-2-tutorial">
+<h2><a class="toc-backref" href="#toc-entry-4">2.2 Hướng dẫn Chương 2</a></h2> <p>Gợi ý : tập hợp các đơn vị chiến đấu của bạn. Để làm điều này, hãy điều khiển chúng (bằng phím S) và cho chúng tuần tra giữa các ô bạn muốn bảo vệ.</p> </div>
+<div class="section" id="hints-and-tips">
+<h2><a class="toc-backref" href="#toc-entry-5">2.3 Gợi ý và mẹo</a></h2> <ul class="simple">
+<li>Giữ lực lượng của bạn tập trung.</li> <li>Cho binh lính của bạn tuần tra. Binh lính tuần tra có thể bảo vệ một khu vực lớn hơn trong khi vẫn giữ lực lượng tập trung.</li> <li>Sử dụng điểm tập kết cho các công trình. Các công trình có thể tuyển mộ đơn vị có thể xác định một điểm tập kết. Các đơn vị mới sẽ nhắm đến điểm tập kết này. Ví dụ, một nông dân mới sẽ khai thác mỏ vàng.</li> <li>Sử dụng chế độ phòng thủ để do thám. Một đơn vị ở chế độ phòng thủ sẽ bỏ chạy nếu gặp kẻ địch mạnh hơn. Bằng cách này, bạn có thể biết có bao nhiêu kẻ địch trong một ô mà không phải hy sinh đơn vị do thám. Nông dân mặc định ở chế độ phòng thủ nhưng binh lính cũng có thể được đặt ở chế độ này.</li> <li>Một đơn vị đang bỏ chạy sẽ quên các mệnh lệnh của nó. Ví dụ, một nông dân đang khai thác vàng sẽ không quay lại làm việc sau khi bỏ chạy, trong khi nếu anh ta chiến đấu và sống sót, anh ta sẽ tiếp tục khai thác vàng.</li> </ul>
+</div>
+</div>
+<div class="section" id="commands-list">
+<h1><a class="toc-backref" href="#toc-entry-6">3. Danh sách lệnh</a></h1> <p>Trò chơi bao gồm việc ra lệnh cho các đơn vị và công trình của bạn. Để ra lệnh cho một đơn vị, trước tiên bạn phải điều khiển nó.
+Nếu bạn nhấn F10 trong khi chơi, bạn sẽ vào menu trò chơi.
+Nếu bạn sử dụng Jaws hoặc trình đọc màn hình khác, bạn có thể phải tắt nó đi để sử dụng bàn phím.</p> <div class="section" id="moving-on-the-map">
+<h2><a class="toc-backref" href="#toc-entry-7">Di chuyển trên bản đồ</a></h2> <p>Các phím mũi tên giúp bạn di chuyển từ ô này sang ô khác trên bản đồ. Nếu có đường đi trực tiếp giữa ô hiện tại và ô mới, bạn sẽ nghe thấy tiếng động tùy thuộc vào loại đường đi (con đường hoặc cây cầu). Nếu không có đường đi trực tiếp, bạn sẽ nghe thấy tiếng va chạm và bạn sẽ ở lại ô cũ (nhấn control + phím mũi tên để di chuyển vượt chướng ngại vật). Nếu bạn chưa biết liệu có đường đi tồn tại hay không (ô chưa biết) thì sẽ không có tiếng động nào được nghe thấy.</p> <p>Nhấn shift + phím mũi tên để di chuyển nhiều ô cùng một lúc.</p> <p>Một cách khác để di chuyển trên bản đồ là nhấn Page Up, sẽ đưa bạn đến ô đáng chú ý tiếp theo mà không cần đi qua các ô trống. Kể từ SoundRTS 1.1 alpha 3, một số biến thể có sẵn:</p> <ul class="simple">
+<li>nhấn Alt + PageUp/PageDown để chọn ô chưa biết trước đó/tiếp theo</li> <li>nhấn Shift + PageUp/PageDown để chọn Ô chứa tài nguyên trước đó/tiếp theo</li> </ul>
+<p>Khi bạn điều khiển một đơn vị và bạn nhấn Space, bạn sẽ tự động theo dõi nó khi nó di chuyển từ ô này sang ô khác.</p> </div>
+<div class="section" id="choosing-a-unit-to-control">
+<h2><a class="toc-backref" href="#toc-entry-8">Chọn đơn vị để điều khiển</a></h2> <p>Để điều khiển đơn vị cục bộ tiếp theo, nhấn Q.</p> <p>Để điều khiển công trình tiếp theo, nhấn W.
+Để điều khiển nông dân tiếp theo, nhấn E. Để điều khiển tất cả nông dân cục bộ, nhấn D.
+Để điều khiển nông dân nhàn rỗi tiếp theo, nhấn Alt E. Để điều khiển tất cả nông dân nhàn rỗi cục bộ, nhấn Alt D.
+Để điều khiển bộ binh tiếp theo, nhấn R. Để điều khiển tất cả bộ binh cục bộ, nhấn F.
+Để điều khiển cung thủ tiếp theo, nhấn T. Để điều khiển tất cả cung thủ cục bộ, nhấn G.
+Để điều khiển kỵ sĩ tiếp theo, nhấn Y. Để điều khiển tất cả kỵ sĩ cục bộ, nhấn H.
+Để điều khiển máy bắn đá tiếp theo, nhấn U. Để điều khiển tất cả máy bắn đá cục bộ, nhấn J.
+Để điều khiển rồng tiếp theo, nhấn I. Để điều khiển tất cả rồng cục bộ, nhấn K.
+Để điều khiển pháp sư tiếp theo, nhấn O. Để điều khiển tất cả pháp sư cục bộ, nhấn L.</p> <p>Khi một phím giúp bạn điều khiển đơn vị tiếp theo, phím đó kết hợp với Shift sẽ giúp bạn điều khiển đơn vị trước đó. Ví dụ, để điều khiển nông dân trước đó, nhấn Shift + E.</p> <p>Để điều khiển tất cả các đơn vị cùng loại và trong cùng ô với đơn vị hiện tại, nhấn 1.
+Để điều khiển chỉ một nửa hoặc một phần ba, nhấn 2 hoặc 3.
+Để dừng điều khiển một nhóm, nhấn 0.</p> <p>Để điều khiển tất cả binh lính cục bộ, nhấn S.
+Để điều khiển tất cả binh lính và nông dân, nhấn Alt + S.</p> <p>Khi một phím giúp bạn điều khiển một nhóm đơn vị cục bộ, phím đó kết hợp với control sẽ giúp bạn điều khiển một nhóm từ toàn bộ bản đồ. Ví dụ, để điều khiển tất cả bộ binh, nhấn Control + R hoặc Control + F.</p> </div>
+<div class="section" id="giving-an-order-main-method">
+<h2><a class="toc-backref" href="#toc-entry-9">Ra lệnh: phương pháp chính</a></h2> <p>Để ra lệnh cho một đơn vị đang được điều khiển, phương pháp chính bao gồm việc chọn lệnh trong danh sách và chọn mục tiêu nếu hành động yêu cầu.</p> <p>Để chọn lệnh trong danh sách, nhấn A (và Shift A) để chọn lệnh.</p> <p>Nếu bạn phải chọn mục tiêu, nhấn Tab (và Shift Tab) để chọn mục tiêu. Để chọn một ô ở xa làm mục tiêu, sử dụng các phím mũi tên.</p> <p>Nhấn Enter để xác nhận lựa chọn của bạn.</p> </div>
+<div class="section" id="giving-an-order-alternate-faster-method">
+<h2><a class="toc-backref" href="#toc-entry-10">Ra lệnh: phương pháp thay thế, nhanh hơn</a></h2> <p>Phương pháp thứ hai để ra lệnh bao gồm việc chọn mục tiêu bằng Tab (hoặc các phím mũi tên) và sau đó nhấn Backspace. Lệnh mặc định sẽ được đưa ra. Ví dụ, một nông dân nhắm vào mỏ vàng sẽ khai thác nó nếu bạn nhấn Backspace.</p> </div>
+<div class="section" id="giving-an-order-using-shortcuts">
+<h2><a class="toc-backref" href="#toc-entry-11">Ra lệnh: sử dụng phím tắt</a></h2> <p>Để ra lệnh bằng phím tắt, nhấn Alt + A. Một thông báo sẽ cho biết danh sách các phím tắt có sẵn cho đơn vị đang được điều khiển.
+Nhấn phím tắt và lệnh sẽ được thực hiện ngay lập tức, trừ khi cần chọn mục tiêu.</p> </div>
+<div class="section" id="examining-the-situation">
+<h2><a class="toc-backref" href="#toc-entry-12">Kiểm tra tình hình</a></h2> <p>Để kiểm tra đơn vị đang được điều khiển (hoặc nhóm đang được điều khiển), nhấn Space. Hơn nữa, bạn sẽ di chuyển đến ô mà đơn vị (hoặc người dẫn đầu nhóm) đang chiếm giữ.</p> <p>Để biết bạn có bao nhiêu vàng, nhấn Z. Nhấn X cho gỗ, nhấn C cho thực phẩm.</p> <p>Để biết lượng máu của đơn vị hiện tại nhấn V.</p> <p>Để kiểm tra lại một đối tượng được chọn bằng Tab, nhấn Control.</p> </div>
+<div class="section" id="giving-an-order-without-cancelling-the-previous-ones-queuing-commands">
+<h2><a class="toc-backref" href="#toc-entry-13">Ra lệnh không hủy lệnh trước đó (xếp hàng lệnh)</a></h2> <p>Giữ phím Shift trước khi nhấn Enter để xác nhận lệnh.</p> <p>Nó cũng hoạt động đối với các lệnh mặc định: giữ phím Shift trước khi nhấn Backspace.</p> <p>Nhấn Space để kiểm tra xem đơn vị có nhiều lệnh cần thực hiện hay không.</p> <p>Dưới đây là một số tình huống mà việc xếp hàng lệnh sẽ hữu ích:</p> <ul class="simple">
+<li>Ví dụ 1: bạn muốn một nông dân do thám mọi ô xuất phát trên bản đồ (để biết kẻ địch ở đâu). Điều khiển nông dân, di chuyển con trỏ đến một ô xuất phát, sau đó nhấn Shift + Backspace. Lặp lại cho mỗi ô xuất phát.</li> <li>Ví dụ 2: bạn muốn một nông dân khai thác nhiều tài nguyên. Nhắm vào một tài nguyên, nhấn Shift + Backspace. Lặp lại. Khi một tài nguyên cạn kiệt, nông dân sẽ khai thác tài nguyên tiếp theo.</li> </ul>
+</div>
+<div class="section" id="giving-an-imperative-order">
+<h2><a class="toc-backref" href="#toc-entry-14">Ra mệnh lệnh bắt buộc</a></h2> <p>Nếu bạn giữ phím Control trước khi nhấn Enter hoặc Backspace, lệnh sẽ là mệnh lệnh bắt buộc.</p> <p>Các đơn vị có mệnh lệnh bắt buộc sẽ có xu hướng bỏ qua bất cứ thứ gì không liên quan trực tiếp đến mệnh lệnh. Nếu chúng phải đi đâu đó và gặp phải đơn vị địch, chúng sẽ đơn giản bỏ qua chúng. Điều này nguy hiểm trong hầu hết các trường hợp nhưng có thể hữu ích trong một số trường hợp, ví dụ như để tập trung vào một mục tiêu rất quan trọng.</p> <p>Dưới đây là một số tình huống mà mệnh lệnh bắt buộc sẽ hữu ích:</p> <ul class="simple">
+<li>Ví dụ 1: bạn muốn các đơn vị của mình tấn công một công trình hoặc đơn vị địch cụ thể và bỏ qua phần còn lại. Chọn mục tiêu và nhấn Control + Backspace.</li> <li>Ví dụ 2: bạn muốn các đơn vị của mình rút lui khỏi một nơi và bỏ qua các đơn vị địch. Chọn một ô khác và nhấn Control + Backspace.</li> </ul>
+<p>Bạn cũng có thể xếp hàng các mệnh lệnh bắt buộc. Giữ Control + Shift thay vì Shift.</p> </div>
+<div class="section" id="attacking-a-friendly-unit">
+<h2><a class="toc-backref" href="#toc-entry-15">Tấn công đơn vị đồng minh</a></h2> <p>Nhắm vào đơn vị đó và nhấn Shift Backspace: các đơn vị sẽ tấn công mục tiêu.</p> <p>Ngoại lệ: nếu mục tiêu là một công trình bị hư hại (hoặc một đơn vị có thể sửa chữa như máy bắn đá) và bạn đang điều khiển nông dân, họ sẽ sửa chữa mục tiêu.</p> </div>
+<div class="section" id="blocking-an-exit">
+<h2><a class="toc-backref" href="#toc-entry-16">Chặn lối ra</a></h2> <p>Mới trong 1.2 alpha 10.</p>
+<p>Để chặn một lối ra (con đường, cây cầu), bạn có thể:</p> <ul class="simple">
+<li>ra lệnh cho một đơn vị (hoặc nhiều đơn vị) chặn đường (ra lệnh "chặn đường" hoặc sử dụng back space với lối ra làm mục tiêu);</li> <li>xây tường thành trên đó;</li> <li>xây bất kỳ công trình nào trên đó.</li> </ul>
+<p>Một đơn vị hoặc một cổng thành sẽ cho phép các đơn vị đồng minh đi qua.</p> </div>
+<div class="section" id="zoom-mode-experimental">
+<h2><a class="toc-backref" href="#toc-entry-17">Chế độ thu phóng (thử nghiệm)</a></h2> <p>Mới trong 1.2 alpha 10.</p>
+<p>F8: vào hoặc thoát chế độ thu phóng. Escape cũng thoát chế độ thu phóng.</p> <p>Ô vuông được chia thành 3 x 3 ô nhỏ hơn. Một ô được thu phóng có thể được sử dụng làm mục tiêu cho một mệnh lệnh (chủ yếu là di chuyển đến).</p> </div>
+<div class="section" id="recallable-control-groups">
+<h2><a class="toc-backref" href="#toc-entry-18">Nhóm điều khiển có thể gọi lại</a></h2> <p>Mới trong 1.2 alpha 10.</p>
+<p>Control + 6, 7, 8 hoặc 9: đặt nhóm 6, 7, 8 hoặc 9 với các đơn vị hiện đang được điều khiển</p>
+<p>Shift + 6, 7, 8 hoặc 9: mở rộng nhóm 6, 7, 8 hoặc 9 với các đơn vị hiện đang được điều khiển</p>
+<p>6, 7, 8 hoặc 9: gọi lại nhóm 6, 7, 8 hoặc 9</p>
+</div>
+<div class="section" id="in-the-menus">
+<h2><a class="toc-backref" href="#toc-entry-19">Trong menu</a></h2> <p>Các phím mũi tên cũng hoạt động: Lên và Xuống để chọn, Phải để xác nhận, Trái để hủy.</p> <p>Nhấn bất kỳ chữ cái nào để chọn mục tiếp theo bắt đầu bằng chữ cái đó.
+Nhấn shift + bất kỳ chữ cái nào để chọn mục trước đó bắt đầu bằng chữ cái đó.</p> </div>
+<div class="section" id="other-commands">
+<h2><a class="toc-backref" href="#toc-entry-20">Các lệnh khác</a></h2> <p>F5 và F6: tin nhắn trước/sau trong lịch sử.
+Alt: ngắt câu hiện tại.</p> <p>Để thoát một trò chơi hoặc truy cập menu trò chơi, nhấn F10. Alt F4 và Control C cũng làm điều tương tự.</p> <p>Control + Space: đưa trò chơi vào chế độ góc nhìn thứ nhất. Escape: quay lại chế độ bản đồ.</p> <p>Home/End, +/- của bàn phím số: tăng/giảm âm lượng chung.
+Control Home/End, control +/- của bàn phím số: tăng/giảm âm lượng tương đối của giọng nói.</p> <p>F3: đọc thời gian
+Control F3: bật/tắt chuông báo phút (mặc định tắt)</p> <p>Control + Tab chỉ chọn rừng gỗ, mỏ vàng, đồng cỏ, và các mục tiêu có thể sửa chữa hoặc xây dựng (công trình bị hư hại, công trường xây dựng, máy bắn đá bị hư hại...).</p> <p>Alt + R chọn lại lệnh đã đưa ra trước đó. Hữu ích để huấn luyện cùng một đơn vị hoặc xây dựng cùng một loại công trình nhiều lần.
+Alt + G chọn lại lệnh đã đưa ra trước đó và xác thực nó nếu không cần tham số bổ sung. Ví dụ, để huấn luyện thêm 5 cung thủ, nhấn Alt + G 5 lần.
+Kể từ SoundRTS 1.1 alpha 3, Alt + A giống như Alt + G.</p> <p>Dấu huyền ` (phím dưới Escape): lệnh console (chỉ trong chế độ chơi đơn). Các lệnh hữu ích duy nhất hiện tại là add_units (để nhận đơn vị hoặc công trình ngay lập tức) và victory (để thắng, ví dụ để bỏ qua một chương). Ví dụ về lệnh "add_units": "add_units a1 100 archer". Mới trong SoundRTS 1.2 alpha 9.</p> </div>
+</div>
+<div class="section" id="multiplayer-games">
+<h1><a class="toc-backref" href="#toc-entry-21">4. Chơi mạng</a></h1> <div class="section" id="starting-a-multiplayer-game">
+<h2><a class="toc-backref" href="#toc-entry-22">4.1 Bắt đầu một trận chơi mạng</a></h2> <p>Chọn "chơi mạng", sau đó "chọn một máy chủ trong danh sách".</p> <p>Trong một máy chủ công cộng, bạn sẽ có thể tổ chức một phòng chơi.</p> <p>Mẹo: khi bạn đang đợi người chơi trực tuyến, bạn có thể khởi chạy SoundRTS lần thứ hai và chơi cục bộ ở chế độ chơi đơn. Khi có người chơi xuất hiện, nhấn F10 để tạm dừng trò chơi cục bộ của bạn và bắt đầu chơi trực tuyến.</p> </div>
+<div class="section" id="chatting">
+<h2><a class="toc-backref" href="#toc-entry-23">4.2 Trò chuyện</a></h2> <p>Bạn có thể trò chuyện trong sảnh chờ máy chủ, trong phòng chờ trước trận đấu và trong suốt trận đấu. Tuy nhiên, người tổ chức phòng chơi tạm thời không khả dụng trong quá trình chọn bản đồ và tốc độ trò chơi.</p> <p>Để nói điều gì đó với mọi người trong cùng một phòng hoặc trận đấu, nhấn F7, nhập tin nhắn của bạn và nhấn enter.</p> <p>Một lựa chọn khác là sử dụng Skype (hoặc bất kỳ phần mềm tương tự nào) nếu bạn biết những người chơi khác.</p> </div>
+<div class="section" id="team-play">
+<h2><a class="toc-backref" href="#toc-entry-24">4.3 Chơi theo đội</a></h2> <p>Các đội phải được tạo trước khi trận đấu bắt đầu. Chúng không thể thay đổi trong suốt trận đấu.</p> <p>Người chơi đồng minh chia sẻ kiến thức về bản đồ, chiến thắng, các nâng cấp (mới trong SoundRTS 1.2 alpha 9), và các đơn vị của họ có thể giúp đỡ lẫn nhau. Một nông dân có thể sử dụng kho chứa của đồng minh để lưu trữ tài nguyên (tài nguyên vẫn sẽ được cộng vào quân đội của nông dân đó).</p> <p>Trong một trận đấu trên máy chủ, máy tính không phải là đồng minh theo mặc định.</p> <p>Lưu ý: Trong một trận chơi đơn từ menu "chơi đơn", máy tính là đồng minh.</p> <p>Mẹo: để chơi một trận chơi đơn với máy tính là đồng minh, hãy khởi chạy một máy chủ riêng tư.</p> </div>
+<div class="section" id="how-to-make-your-server-accessible-to-other-players">
+<h2><a class="toc-backref" href="#toc-entry-25">4.4 Cách làm cho máy chủ của bạn truy cập được bởi người chơi khác</a></h2> <p>Nếu bộ định tuyến của bạn đã kích hoạt UPnP, máy chủ sẽ tự động cấu hình nó.</p> <p>Để kiểm tra xem máy chủ của bạn có thể truy cập được từ bên ngoài mạng cục bộ của bạn hay không, hãy đợi người chơi kết nối hoặc lý tưởng nhất là nhờ một người bạn kết nối từ bên ngoài. Biện pháp cuối cùng, bạn cũng có thể sử dụng một trang web kiểm tra chuyển tiếp cổng (ví dụ: google "port forwarding tester"). Hãy thận trọng: tôi không thể đảm bảo rằng loại trang web này không độc hại! Ví dụ, trang web không nên yêu cầu bạn cài đặt một công cụ.</p> <p>Trong hầu hết các trường hợp, bạn sẽ phải cấu hình bộ định tuyến của mình để chuyển tiếp các kết nối TCP đến qua cổng 2500 đến địa chỉ IP cục bộ của máy chủ của bạn.</p> <p>Bạn cũng có thể phải cấu hình DHCP trong bộ định tuyến để đảm bảo rằng máy chủ của bạn luôn có cùng một địa chỉ IP cục bộ.</p> <p>Nếu bạn đang ở sau tường lửa, bạn có thể phải đảm bảo rằng các kết nối TCP đến qua cổng 2500 được cho phép.</p> <p>Về các máy chủ độc lập: ngay cả khi máy chủ độc lập của bạn có thể truy cập được từ bên ngoài, bạn có thể không kết nối được với nó từ mạng cục bộ của mình bằng cách sử dụng "chọn một máy chủ trong danh sách". "Nhập địa chỉ IP của máy chủ" hoạt động trong hầu hết các trường hợp, nhưng điều đó không có nghĩa là máy chủ có thể truy cập được từ bên ngoài.</p> </div>
+<div class="section" id="how-to-download-a-map-from-a-server">
+<h2><a class="toc-backref" href="#toc-entry-26">4.5 Cách tải bản đồ từ máy chủ</a></h2> <p>Chơi một trận đấu với bản đồ mà bạn muốn tải xuống. Ngay trước khi trận đấu bắt đầu, bản đồ sẽ xuất hiện trong <a class="reference internal" href="#temporary-folder">thư mục tạm</a> và sẽ ở đó cho đến khi một bản đồ khác ghi đè lên nó. Tùy thuộc vào định dạng bản đồ, nó sẽ là một tệp văn bản có tên recent_map.txt hoặc một thư mục có tên recent_map.</p> </div>
+</div>
+<div class="section" id="game-elements">
+<h1><a class="toc-backref" href="#toc-entry-27">5. Các yếu tố trong game</a></h1> <div class="section" id="food">
+<h2><a class="toc-backref" href="#toc-entry-28">Thực phẩm</a></h2> <p>Việc huấn luyện một đơn vị mới chỉ có thể xảy ra nếu người chơi có đủ khẩu phần thực phẩm. Nếu một số nông trại bị phá hủy hoặc các đơn vị mới được thu nhận mà không cần huấn luyện, và khẩu phần thực phẩm trở nên không đủ, các đơn vị hiện tại sẽ được giữ lại mà không có vấn đề gì. Tuy nhiên, sẽ không được phép huấn luyện thêm.</p> </div>
+<div class="section" id="tech-upgrades">
+<h2><a class="toc-backref" href="#toc-entry-29">Nâng cấp công nghệ</a></h2> <p>Các nâng cấp áp dụng cho tất cả các đơn vị của người chơi, hiện tại và tương lai.</p> </div>
+<div class="section" id="flying-units">
+<h2><a class="toc-backref" href="#toc-entry-30">Đơn vị bay</a></h2> <p>Kể từ SoundRTS 1.1, các đơn vị bay bay thẳng đến mục tiêu, bỏ qua đường đi trên bộ.</p> </div>
+<div class="section" id="invisible-units-and-detectors">
+<h2><a class="toc-backref" href="#toc-entry-31">Đơn vị tàng hình và đơn vị dò tìm</a></h2> <p>Để phòng thủ chống lại một đơn vị tàng hình, có ít nhất 3 cách:</p> <ul class="simple">
+<li>mang theo một đơn vị dò tìm (hoặc sử dụng phép dò tìm) và tấn công đơn vị đó</li> <li>sử dụng phép thuật hủy diệt diện rộng lên ô chứa đơn vị đó</li> <li>bỏ qua đơn vị tàng hình và phá hủy tất cả các công trình của đối phương đủ nhanh</li> </ul>
+</div>
+</div>
+<div class="section" id="more-details-for-customization">
+<h1><a class="toc-backref" href="#toc-entry-32">6. Chi tiết khác để tùy chỉnh</a></h1> <div class="section" id="soundrts-ini">
+<h2><a class="toc-backref" href="#toc-entry-33">SoundRTS.ini</a></h2>
+<p>Tệp này nằm trong <a class="reference internal" href="#user-folder">Thư mục người dùng</a>. Nó chứa các tham số khác nhau về cách trò chơi hoạt động. Khi SoundRTS khởi động, nếu SoundRTS.ini chứa lỗi, một tệp mới sẽ được tạo với càng nhiều tham số càng tốt được khôi phục từ tệp bị hỏng.</p> </div>
+<div class="section" id="command-line-options">
+<h2><a class="toc-backref" href="#toc-entry-34">Tùy chọn dòng lệnh</a></h2> <p>Từ dòng lệnh, tùy chọn -h cung cấp danh sách các tùy chọn có sẵn.</p> <p>Tùy chọn --mods ghi đè dòng "mods =" từ <a class="reference internal" href="#soundrts-ini">SoundRTS.ini</a>. Ví dụ, để khởi động SoundRTS với mod soundpack và mod orc: soundrts.exe --mods=soundpack,orc</p> </div>
+<div class="section" id="sound-pack">
+<h2><a class="toc-backref" href="#toc-entry-35">Gói âm thanh</a></h2> <p>SoundRTS đi kèm với một mod có tên "soundpack" chứa các âm thanh thay thế. Để kích hoạt mod này, trong <a class="reference internal" href="#soundrts-ini">SoundRTS.ini</a> thay thế dòng "mods =" bằng "mods = soundpack". Sau đó khởi động lại trò chơi.</p> </div>
+<div class="section" id="wait-delay-per-character">
+<h2><a class="toc-backref" href="#toc-entry-36">wait_delay_per_character</a></h2>
+<p>Vì đôi khi khó biết khi nào trình đọc màn hình đã nói xong, một giải pháp tạm ổn là ước tính thời lượng của một tin nhắn.
+Vì vậy, một tham số gọi là "wait_delay_per_character" xác định thời gian SoundRTS sẽ đợi trước khi gửi tin nhắn tiếp theo.
+Với "wait_delay_per_character = .1" và một tin nhắn dài 10 ký tự, SoundRTS sẽ đợi .1 * 10 = 1 giây.</p> <p>Tăng giá trị của wait_delay_per_character nếu một số tin nhắn bị gián đoạn bởi tin nhắn tiếp theo.</p> <p>Giảm giá trị của wait_delay_per_character nếu khoảng lặng giữa hai tin nhắn quá dài.</p> </div>
+<div class="section" id="temporary-folder">
+<h2><a class="toc-backref" href="#toc-entry-37">Thư mục tạm</a></h2> <p>Thư mục tạm chứa các bản ghi (log) và bản đồ đã chơi trước đó.</p> <p>Thư mục tạm nằm trong <a class="reference internal" href="#user-folder">thư mục người dùng</a> dưới dạng một thư mục có tên "tmp".</p> </div>
+<div class="section" id="user-folder">
+<h2><a class="toc-backref" href="#toc-entry-38">Thư mục người dùng</a></h2> <p>Thư mục người dùng chứa cài đặt trò chơi, bản đồ và mod tùy chỉnh, và thư mục tạm.
+Một cách dễ dàng để tìm thư mục người dùng là mở nó từ menu tùy chọn.</p> <p>Nếu thư mục chính chứa một thư mục có tên "user", thư mục này sẽ là thư mục người dùng.
+Nếu thư mục "user" không tồn tại, thư mục người dùng sẽ được đặt tùy thuộc vào hệ điều hành:</p> <ul class="simple">
+<li>Windows XP: "C:\Documents and settings\tên_đăng_nhập_của_bạn\Application data\SoundRTS unstable"</li> <li>Linux: "home/tên_đăng_nhập_của_bạn/.SoundRTS unstable"</li> </ul>
+</div>
+<div class="section" id="how-to-create-a-portable-version-of-soundrts">
+<h2><a class="toc-backref" href="#toc-entry-39">Cách tạo phiên bản di động của SoundRTS</a></h2> <p>Kể từ SoundRTS 1.0 beta 10 p, có thể lưu trữ tất cả các tệp trò chơi (log, cấu hình, bản đồ tùy chỉnh...) trong thư mục trò chơi. Đây là cách thực hiện:</p> <ul class="simple">
+<li>cài đặt SoundRTS</li>
+<li>Windows: sao chép <cite>thư mục trò chơi</cite> từ "Program files" sang một thư mục có thể ghi (màn hình nền, ổ USB, v.v.)</li> <li>Trong thư mục SoundRTS mới, tạo một thư mục có tên "user". "user" có thể là bản sao của một <a class="reference internal" href="#user-folder">thư mục người dùng</a> hiện có (tuy nhiên, phiên bản phải giống nhau).</li> <li>Windows: để khởi chạy chương trình, thực thi "soundrts.exe".</li> </ul>
+</div>
+<div class="section" id="how-to-change-the-default-speed-in-single-player-games">
+<h2><a class="toc-backref" href="#toc-entry-40">Cách thay đổi tốc độ mặc định trong màn chơi đơn</a></h2> <p>Tìm <a class="reference internal" href="#soundrts-ini">SoundRTS.ini</a> trong <a class="reference internal" href="#user-folder">thư mục người dùng</a> và sửa đổi dòng "speed = ...". Sử dụng một số nguyên.</p> </div>
+<div class="section" id="changing-some-key-bindings">
+<h2><a class="toc-backref" href="#toc-entry-41">Thay đổi một số gán phím</a></h2> <p>Kể từ SoundRTS 1.1, bố cục bàn phím được định nghĩa trong một tệp có tên bindings.txt nằm trong <cite>thư mục trò chơi</cite>.</p> </div>
+<div class="section" id="creating-an-app-for-mac">
+<h2><a class="toc-backref" href="#toc-entry-42">Tạo ứng dụng cho Mac</a></h2> <p>Nếu bạn đã cài đặt thành công phiên bản đa nền tảng cho Mac, có lẽ bạn có thể tạo một ứng dụng để dễ dàng cài đặt cho những người chơi khác.
+Dưới đây là một số gợi ý. Sử dụng py2app.
+Bạn không cần mã nguồn. Ví dụ, tạo một tệp có tên soundrts_launcher.py chỉ chứa dòng này: "import soundrts".
+Bạn cũng có thể tạo một tệp có tên server_launcher.py với dòng: "import server".
+Hãy chắc chắn rằng việc chạy "python soundrts_launcher.py" thực sự hoạt động.</p> </div>
+<div class="section" id="using-the-windows-installer-with-a-limited-account-windows-xp">
+<h2><a class="toc-backref" href="#toc-entry-43">Sử dụng trình cài đặt Windows với tài khoản bị hạn chế (Windows XP)</a></h2> <p>Bạn có thể sử dụng tài khoản Windows XP bị hạn chế để cài đặt SoundRTS. Chỉ cần chọn một thư mục khác ngoài thư mục "program files".</p> <p>Ngay cả khi bạn cài đặt SoundRTS bằng tài khoản quản trị viên, bạn vẫn có thể chơi bằng tài khoản bị hạn chế.</p> </div>
+<div class="section" id="what-makes-a-map-an-official-multiplayer-map">
+<h2><a class="toc-backref" href="#toc-entry-44">Điều gì khiến một bản đồ trở thành bản đồ chơi mạng chính thức?</a></h2> <p>Các bản đồ chơi mạng chính thức không có âm thanh nào được phát trước tiêu đề của chúng. Các bản đồ chơi mạng chính thức được liệt kê trong cfg/official_maps.txt
+với checksum để đảm bảo rằng chúng chưa bị sửa đổi.</p> </div>
+<div class="section" id="how-to-select-a-different-language">
+<h2><a class="toc-backref" href="#toc-entry-45">Làm thế nào để chọn ngôn ngữ khác?</a></h2> <p>Nếu tệp cfg/language.txt trống, chương trình sẽ tự động chọn ngôn ngữ của hệ thống.
+Để chọn một ngôn ngữ cụ thể, nhập mã ngôn ngữ vào cfg/language.txt, ví dụ: "en", "fr-ca", "pt" hoặc "pt-BR".
+Kiểm tra thư mục res để tìm xem mã ngôn ngữ nào được cung cấp.</p> </div>
+</div>
+<div class="section" id="credits">
+<h1><a class="toc-backref" href="#toc-entry-46">7. Ghi công</a></h1> <p>Lưu ý: danh sách sau đây không đầy đủ. Cảm ơn tất cả những người đã giúp đỡ!</p> <p>Trò chơi này được viết bởi SoundMUD (<a class="reference external" href="mailto:soundmud&#64;gmail.com">soundmud&#64;gmail.com</a>).</p> <p>Khám phá cộng đồng nói tiếng Pháp về các trò chơi âm thanh dễ tiếp cận và những ý tưởng ban đầu: Sabine Gorecki.
+Nhiều thử nghiệm và khuyến khích trong giai đoạn đầu của SoundMUD: Alex.
+Thử nghiệm đầu tiên của SoundMUD với Linux: Miguel.
+Khởi động lại dự án SoundMUD, khuyến khích trong giai đoạn thứ hai của SoundMUD để hoàn thành trò chơi chiến thuật, và rất nhiều thử nghiệm: Louis-Rock Lampron và Martin Morin.</p> <p>Bản dịch tiếng Việt: Đào Đức Trung từ ddt.one, Lồng tiếng cho các NPC: Anh em trong nhóm ddt.one.
+Bản dịch tiếng Anh: SoundMUD.
+Bản dịch tiếng Đức: Alexander Westphal từ Gameport.
+Bản dịch tiếng Ý: Gabriel Battaglia.
+Bản dịch tiếng Tây Ban Nha: Alan.</p> <p>Cải thiện giọng nói và âm thanh tiếng Anh: Bryan Smart.</p> <p>Bản đồ chơi mạng 101 - biên giới: Bryan Smart.</p> </div>
+</div>
+</body>
+</html>

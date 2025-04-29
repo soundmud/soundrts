@@ -1,0 +1,517 @@
+﻿; coding: utf-8
+
+0	không có gì!
+1	bạn là
+
+3	phía trước bạn
+4	phía sau bạn
+5	Mệnh lệnh của bạn?
+
+23	và
+
+38	bạn có
+39	điểm máu còn
+40	cấp độ
+
+54	tại
+55	mét
+
+59	người chơi
+60	bạn là
+61	đã bị tiêu diệt
+
+65	phút
+66	giây
+67	phía bắc
+68	phía nam
+69	phía đông
+70	phía tây
+71	phía đông bắc
+72	phía tây bắc
+73	phía đông nam
+74	phía tây nam
+79	trong đồng cỏ bao quanh bởi rừng cây
+80	cây
+81	mỏ vàng
+82	nhà chính
+83	nông trại
+84	con đường
+85	nông dân
+86	bộ binh
+87	cung thủ
+88	kẻ địch
+89	đồng minh
+99	trại lính
+100	di chuyển
+101	xây dựng
+102	khai thác
+103	tuần tra
+104	chế độ
+105	rõ!
+106	dừng lại
+107	tại
+108	tại
+110	tấn công
+111	phòng thủ
+112	giữ vị trí
+113	ẩn mình
+114	tấn công
+115	tới
+116	tại phía đông
+117	tại phía tây
+118	sửa chữa
+119	trên
+120	giao tranh
+121	chống lại
+122	đồng cỏ
+123	tuyển mộ
+124	sẵn sàng!
+125	tập kết
+126	hoàn thành
+127	hủy bỏ
+128	công trình
+129	yêu cầu
+130	đơn vị
+131	vàng
+132	gỗ
+133	thực phẩm
+134	chứa
+135	không đủ
+136	như cũ!
+137	thực phẩm
+138	bạn đang điều khiển
+139	một nhóm
+
+142	sản xuất tạm dừng
+143	hàng đợi đã đầy
+144	cạn kiệt
+145	vô hiệu hóa
+146	mất
+147	sản xuất
+148	xưởng gỗ
+149	Chiến thắng!
+150	Thất bại!
+151	1
+152	cảnh báo
+153	cây cầu
+154	mở
+155	bạn đã đạt cấp độ
+156	tại trung tâm
+
+
+
+2008	nhấn F5 để nghe lại
+2010	nhấn
+2011	để
+2012	Tab
+2013	chọn
+2014	Enter
+2015	xác nhận
+2016	A và Q
+2017	ra lệnh
+2018	Z và S
+2019	điều khiển đơn vị khác
+2020	X hoặc W
+2021	kiểm tra tài nguyên
+2022	1, 2 hoặc 3
+2023	điều khiển một nhóm
+2024	0
+2025	điều khiển một đơn vị
+2026	backspace
+2027	ra lệnh thường dùng cho mục tiêu đã chọn
+2028	F5 và F6
+2029	lịch sử
+2030	Alt
+2031	ngắt lời nói
+2032	escape
+2033	hủy bỏ
+2034	shift
+2035	lùi lại
+2036	mở menu
+2037	phím mũi tên
+2038	di chuyển trên bản đồ
+2039	control
+2040	bỏ qua chướng ngại vật
+2041	page down
+2042	di chuyển đến ô đáng chú ý tiếp theo
+2043	space
+2044	di chuyển đến ô của đơn vị đang điều khiển, và theo dõi đơn vị này
+2045	điều khiển đơn vị cục bộ tiếp theo
+2046	chọn mục tiêu tiếp theo
+2047	chọn lệnh tiếp theo
+2048	điều khiển tất cả đơn vị cùng loại và cùng ô với đơn vị hiện tại
+2049	xác nhận lệnh hiện tại
+2050	ra lệnh phổ biến nhất cho mục tiêu hiện tại
+2051	nghe số lượng vàng, gỗ và thực phẩm bạn có
+2052	nghe lượng máu của đơn vị hiện tại
+2053	điều khiển một nửa số đơn vị cùng loại và cùng ô với đơn vị hiện tại
+2054	chỉ điều khiển 1 đơn vị
+2055	q
+2056	điều khiển tất cả binh lính tại ô hiện tại
+2057	điều khiển tất cả nông dân tại ô hiện tại
+2058	điều khiển công trình tiếp theo
+2059	điều khiển nông dân tiếp theo
+3000	0
+3001	1
+3002	2
+3003	3
+3004	4
+3005	5
+3006	6
+3007	7
+3008	8
+3009	9
+3010	10
+3011	11
+3012	12
+3013	13
+3014	14
+3015	15
+3016	16
+3017	17
+3018	18
+3019	19
+3020	20
+3021	21
+3030	30
+3031	31
+3040	40
+3041	41
+3050	50
+3051	51
+3060	60
+3061	61
+3070	70
+3071	71
+3080	80
+3090	90	
+3100	trăm
+3101	nghìn
+3102	triệu
+
+4000	trò chơi
+4001	Internet
+4002	nội bộ
+4004	đang xử lý
+4005	thất bại
+4006	thành công!
+4007	vui lòng lựa chọn
+4008	vui lòng gửi góp ý đến jlpo@free.fr
+4009	Thoát
+4010	Menu
+4011	tiếp tục
+4012	lỗi phiên bản
+4014	game chiến thuật
+4015	chương
+4016	chơi đơn
+4017	bản đồ
+4018	chơi mạng
+4019	tham gia
+4020	mục tiêu: 
+4021	chống đỡ các đợt tấn công của địch
+4022	đã sản xuất
+4023	đã tạo ra
+4024	đã tiêu thụ
+4025	công trình
+4026	điểm số
+
+4028	nhấn F1 để được trợ giúp
+4029	menu chính
+4030	vui lòng lựa chọn
+4031	chơi đơn,
+4032	chơi trên máy tính
+4033	chơi mạng,
+4034	chơi qua Internet
+4035	máy chủ,
+4036	khởi chạy máy chủ trên máy tính để tạo phòng chơi mạng
+4037	tùy chọn,
+4038	thay đổi thiết lập của bạn
+
+4041	thoát,
+4042	thoát chương trình này
+4043	loại máy chủ nào?
+4044	máy chủ thường
+4045	chỉ bạn mới có thể tạo phòng chơi
+4046	máy chủ công cộng
+4047	người chơi khách có thể tạo phòng chơi
+4048	hủy bỏ
+4049	Máy chủ của bạn có lẽ không thể đăng ký với máy chủ danh sách. Vui lòng kiểm tra kết nối Internet.
+4051	tạm biệt
+4052	nhấn Tab để chọn. nhấn Enter để xác nhận.
+4053	chấp nhận lời mời từ
+4054	tham gia lại phòng chơi
+4055	Bắt đầu một phòng chơi
+4056	chào mừng
+4057	lỗi : có quá nhiều phòng chơi
+4058	mời
+4059	bắt đầu
+4060	hủy phòng chơi này
+4061	rời phòng chơi này
+4062	trận đấu sẽ bắt đầu sau 5 giây
+4063	trận đấu sẽ bắt đầu khi chủ phòng sẵn sàng
+4064	nhấn enter để xác nhận
+
+4066	nhấn tab liên tục để duyệt qua các đối tượng nhìn thấy được
+4067	nhấn tab để chọn mục tiêu rồi nhấn enter để xác nhận
+
+4070	hủy trận đấu
+4071	tiếp tục trận đấu
+4072	Không thể kết nối máy chủ danh sách. Vui lòng kiểm tra kết nối Internet.
+4073	máy chủ được tạo bởi
+4074	cho
+4075	hủy bỏ
+4076	quay lại menu trước
+4077	Hiện tại, không có máy chủ nào được đăng ký trên máy chủ danh sách. Vui lòng thử lại sau.
+4078	máy chủ
+4079	sử dụng phiên bản tương thích. Vui lòng chọn một máy chủ.
+4080	lỗi: máy chủ không thể khởi động
+4081	lỗi: không thể kết nối máy chủ. Máy chủ đã đóng, hoặc bị chặn bởi tường lửa, hoặc do bộ định tuyến.
+4082	lỗi: nhận được dữ liệu không mong muốn từ máy chủ. Đây không phải là máy chủ SoundRTS
+4083	lỗi: kết nối bị máy chủ từ chối. Đây không phải là máy chủ SoundRTS
+4084	hoặc tên đăng nhập của bạn đã bị từ chối
+4085	lỗi khi kết nối đến máy chủ
+4086	menu tùy chọn
+4087	Thay đổi tên đăng nhập của bạn
+
+4096	lưu,
+4097	lưu các thay đổi rồi quay lại menu chính
+4098	hủy,
+4099	quay lại menu chính mà không lưu thay đổi
+
+4101	một cửa sổ mới sẽ mở
+4102	kết nối đã bị ngắt
+4103	đặt tốc độ trò chơi thành chậm
+4104	đặt tốc độ trò chơi thành thường
+4105	đặt tốc độ trò chơi thành nhanh
+
+4112	lưu màn chơi
+4113	tải lại màn chơi đã lưu
+4114	chơi với máy tính trên bản đồ
+4115	máy tính đấu máy tính
+
+4118	quay lại menu trước
+4119	chọn một máy chủ trong danh sách
+4120	nhập địa chỉ IP của máy chủ
+4121	máy chủ riêng tư
+4122	Máy chủ sẽ không được thêm vào danh sách.
+
+4200	sản lượng gỗ được cải thiện
+4201	máy bắn đá
+4202	đang chờ mệnh lệnh
+4203	của
+4204	không thể xây ở đây
+4205	bạn không điều khiển đơn vị nào
+4206	hiển thị hiện đang bật
+4207	hiển thị hiện đang tắt
+4208	không rõ
+4209	trong sương mù của chiến tranh
+4210	F10 để vào menu
+4211	chế độ góc nhìn thứ nhất
+4212	chế độ bản đồ
+4213	lò rèn
+4214	nâng cấp
+4215	kiếm
+4216	cung tên
+4217	giáp bộ binh
+4218	giáp cung thủ
+4219	tới
+4220	đồn lũy
+4221	thành trì
+4222	chuồng ngựa
+4223	menu của
+4224	 vừa thay đổi.
+4225	kỵ sĩ
+4226	xưởng cơ khí
+4227	hang rồng
+4228	tháp pháp sư
+4229	pháp sư
+4230	máy bay chiến đấu
+4231	rồng
+4232	lỗi máy chủ
+4233	tầm bắn cung
+4234	một phiên bản mới hơn của chương trình này đã có trên Internet
+4235	nhập tên đăng nhập mới của bạn
+4236	chỉ sử dụng chữ cái và số
+4237	sai tên đăng nhập
+4238	tên đăng nhập hiện tại được giữ lại
+4239	tên đăng nhập mới
+4240	vừa đăng nhập
+4241	vừa tham gia
+4242	người chơi
+4243	mời bạn
+4244	Chưa đủ người chơi. Số người tối thiểu là
+4245	tên đăng nhập hiện tại
+4246	đã đạt giới hạn dân số
+4247	điểm mana còn
+4248	nghiên cứu
+4249	siêu hồi máu
+4250	dịch chuyển tức thời
+4251	tới
+4252	không đủ mana
+4253	phần trăm âm lượng
+4254	tốc độ ngựa
+4255	đặt điểm tập kết cho đơn vị mới
+4256	đã thu thập
+4257	máy tính hiếu chiến
+4258	máy tính thụ động
+4259	vừa đăng xuất
+4260	trên máy chủ của
+4261	vừa rời trò chơi
+4262	gói âm thanh tùy chọn
+4263	hiện đang bật
+4264	hiện đang tắt
+4265	chế độ ăn gian
+4266	chơi lại
+4267	chiến dịch
+4268	mục tiêu mới
+4269	mục tiêu hoàn thành
+4270	nhiệm vụ hoàn thành
+4271	chương
+4272	mở đầu
+4273	kết thúc
+4274	chiêu dụ
+4275	tháp trinh sát
+4276	tháp canh
+4277	tháp pháo
+4278	chất hàng
+4279	chất tất cả
+4280	dỡ hàng
+4281	dỡ tất cả
+4282	đi vào
+4283	hắc tiễn thủ
+
+5000 a
+5001 b
+5002 c
+5003 d
+5004 e
+5005 f
+5006 g
+5007 h
+5008 i
+5009 j
+5010 k
+5011 l
+5012 m
+5013 n
+5014 o
+5015 p
+5016 q
+5017 r
+5018 s
+5019 t
+5020 u
+5021 v
+5022 w
+5023 x
+5024 y
+5025 z
+
+5026	dấu chấm
+
+4284 di chuyển
+4285 gia nhập liên minh
+4286 đã liên minh
+4287 nói:
+4288 nhập tin nhắn của bạn:
+
+4289 tàng hình
+4290 đơn vị dò tìm
+4291 đơn vị tàng hình
+
+4292 triệu hồi
+4293 gọi hồn
+4294 hồi sinh
+
+4295 thây ma
+4296 lính xương
+
+4297 thầy tu
+4298 đền thờ
+
+4299 thánh quang soi rọi
+4300 trừ tà
+
+4301 tộc Người
+4302 tộc Orc
+
+4303 pháp sư gọi hồn
+4304 thành phố chết
+
+4305 sương độc
+4306 thiên thạch
+
+4307 gọi về
+
+4308 đá
+4309 mỏ đá
+
+4311 đã bị đánh bại
+4312 Bạn đã thua.
+4313 Bạn đang ở chế độ quan sát.
+
+4314 cao nguyên
+
+4315 xem lại trận đấu đã ghi
+4316 Nhấn Control Shift F4 để quan sát người chơi khác.
+
+4317 Nhập lệnh.
+
+4318 thu phóng
+
+4319 sửa đổi thứ tự tải mod
+4320 thêm mod vào danh sách
+4321 danh sách trống
+4322 Đang tải...
+
+4323 các gói
+4324 menu gói
+4325 cài đặt một gói
+4326 gỡ cài đặt một gói
+4327 cập nhật một gói
+4328 Đang tải về...
+4329 Đang giải nén...
+4330 Không tìm thấy mod:
+
+4331 tường
+4332 cổng
+4333 chặn đường
+
+4334 phe ngẫu nhiên
+
+4335 Đã đạt giới hạn đơn vị
+
+4336 mở thư mục người dùng
+4337 tài liệu
+
+4338 tường thành kiên cố
+4339 cổng thành kiên cố
+4340	Mở phòng chơi công cộng
+4341	Các Mod
+4342	Gói âm thanh
+4343 tốc độ
+
+4344 biển
+4345 hồ
+4346 sông
+4347 núi
+4348 cầu
+4349 chỗ cạn
+4350 đầm lầy
+4351 đại dương
+4352 đèo núi
+
+4353 bật tự động sửa chữa
+4354 tắt tự động sửa chữa
+4355 bật tự động thu thập
+4356 tắt tự động thu thập
+
+4357 xưởng tàu
+4358 thuyền
+4359 khu trục hạm
+4360 chiến hạm
+4361 tàu ngầm
+
+4362 đồng cỏ
+4363 rừng
+4364 rừng rậm

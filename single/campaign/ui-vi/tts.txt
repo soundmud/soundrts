@@ -1,0 +1,6 @@
+﻿; coding: utf-8
+
+7500	Một binh đoàn địch không rõ từ đâu xuất hiện và đang phá hủy mọi thứ! Phải làm gì đó...
+7501	Lãnh chúa đã cử ngài đến xây dựng căn cứ gần biên giới. Đừng đi quá xa, vì vài kẻ địch đã được phát hiện gần đây.
+7502	Làm tốt lắm!
+7503	Hộ tống máy bắn đá đến I1.

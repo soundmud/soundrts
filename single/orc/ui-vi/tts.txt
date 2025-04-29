@@ -1,0 +1,7 @@
+﻿; coding: utf-8
+
+7000	trang trại heo
+7001	trại lính Orc
+7002	đại sảnh
+7003	lao công Peon
+7004	chiến binh Grunt
