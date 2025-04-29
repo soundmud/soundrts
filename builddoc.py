@@ -17,7 +17,7 @@ def build(dest="."):
     except OSError:
         pass
 
-    for lang in ("es", "it"):
+    for lang in ("es", "it", "vi"):
         p = join(SRC, lang, "htm")
         dp = join(DEST, lang)
         try:
