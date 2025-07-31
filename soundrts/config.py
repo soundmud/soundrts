@@ -81,7 +81,12 @@ def _copy_to_module(c):
     error = False
     for section, option, default, converter in _options:
         try:
-            raw_value = c.get(section, option)
+            # Check if environment variable exists for this option
+            env_value = os.getenv(option.upper())
+            if env_value is not None:
+                raw_value = env_value
+            else:
+                raw_value = c.get(section, option)
         except configparser.Error:
             info("%r option is missing (will be: %r)", option, default)
             value = default
