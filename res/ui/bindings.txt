@@ -111,6 +111,8 @@ BACKSLASH: command_unit
 w: select_unit 1 building
 ALT w: select_unit 1 building idle
 CTRL w: select_unit 1 building even_if_no_menu ; include buildings without a menu (farms for example)
+b: select_units local building
+CTRL s: select_units building
 e: select_unit 1 worker
 
 ALT e: select_unit 1 worker idle
