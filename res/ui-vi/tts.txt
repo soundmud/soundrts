@@ -69,7 +69,7 @@
 125	tập kết
 126	hoàn thành
 127	hủy bỏ
-128	công trình
+128	xây dựng
 129	yêu cầu
 130	đơn vị
 131	vàng
