@@ -528,16 +528,20 @@ class UpgradeToOrder(ProductionOrder):
             self.unit.is_buildable_anywhere and not self.type.is_buildable_anywhere
         )
         blocked_exit = self.unit.blocked_exit
+        building_land = self.unit.building_land
         if consume_meadow:
             meadow = place.find_nearest_meadow(self.unit)
             if meadow:
                 x, y = meadow.x, meadow.y
+                building_land = meadow
                 meadow.delete()
             else:
                 self.unit.notify("order_impossible")
                 return
         self.unit.delete()
         unit = self.type(player, place, x, y)
+        if not unit.is_buildable_anywhere:
+            unit.building_land = building_land
         if blocked_exit:
             unit.block(blocked_exit)
         if hp != hp_max:
