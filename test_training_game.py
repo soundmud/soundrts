@@ -1,4 +1,4 @@
-#! .venv\Scripts\python.exe
+#!/usr/bin/env python3
 import traceback
 
 from soundrts import config

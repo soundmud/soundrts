@@ -125,13 +125,13 @@ class Player:
     def raise_threat(self, subsquare, delta):
         try:
             self._subsquare_threat[subsquare] += delta
-        except:
+        except KeyError:
             self._subsquare_threat[subsquare] = delta
 
     def _get_threat(self, subsquare):
         try:
             return self._subsquare_threat[subsquare]
-        except:
+        except KeyError:
             return 0
 
     def get_safest_subsquare(self, place):
@@ -338,14 +338,14 @@ class Player:
                     menace = o.menace
                     try:
                         self._enemy_menace[place] += menace
-                    except:
+                    except KeyError:
                         self._enemy_menace[place] = menace
                         self._enemy_presence.append(place)
                     if not o.is_melee:
                         for place in place.neighbors:
                             try:
                                 self._enemy_menace[place] += menace // 10
-                            except:
+                            except KeyError:
                                 self._enemy_menace[place] = menace // 10
                 elif isinstance(o, Corpse):
                     self._places_with_corpses.add(place)
@@ -416,12 +416,27 @@ class Player:
 
     def balance(self, *squares, add=None, mult=1):
         # The first square is where the fight will be.
-        # TODO: take into account: versus air, ground
-        # TODO: take into account: allies (in first square)
+        enemies = self.known_enemies(squares[0])
+        has_air = any(getattr(e, "airground_type", "ground") == "air" for e in enemies)
+        has_ground = any(getattr(e, "airground_type", "ground") != "air" for e in enemies)
+
+        def _can_contribute(u):
+            if not enemies:
+                return True  # unknown composition, count everything
+            return (has_air and "air" in u.target_types) or (
+                has_ground and "ground" in u.target_types
+            )
+
         a = 0
         for u in self.units:
-            if u.place in squares or u is add:
+            if (u.place in squares or u is add) and _can_contribute(u):
                 a += u.menace
+        # count allied units at the primary square
+        for p in self.world.players:
+            if p is not self and p in self.allied:
+                for u in p.units:
+                    if u.place is squares[0] and _can_contribute(u):
+                        a += u.menace
         try:
             return a * mult // self.enemy_menace(squares[0])
         except ZeroDivisionError:
@@ -448,7 +463,7 @@ class Player:
                     )
                 if u.speed:
                     u.actual_speed = max(u.actual_speed, VERY_SLOW)  # never stuck
-            except:
+            except (AttributeError, TypeError, KeyError):
                 u.actual_speed = u.speed
         for g in list(self.groups.values()):
             if g:
@@ -803,7 +818,7 @@ class Player:
                         except NotEnoughSpaceError:
                             warning("not enough space")
                             self.units[-1].delete()
-                        except:
+                        except Exception:
                             exception("couldn't add unit: %s", cls)
                 else:
                     self.send_voice_important(mp.BEEP)
@@ -1044,9 +1059,9 @@ class Player:
                             )
                         else:
                             u.take_order(args, forget_previous, imperative, order_id)
-                    except:
+                    except Exception:
                         exception("problem with order: %s" % args)
-        except:
+        except Exception:
             exception("problem with order: %s" % args)
 
     def cmd_control(self, args):

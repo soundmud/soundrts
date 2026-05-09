@@ -51,7 +51,7 @@ def stereo(x, y, xo, yo, o, volume=1, no_distance=False):
         if no_distance:
             k = 1.3
         else:
-            k = 2.0  # TODO: attenuate less? (especially in overhead view)
+            k = 1.3  # reduced rear attenuation for better overhead-view clarity
         vg /= k
         vd /= k
     vg = min(vg * volume / d, 1)

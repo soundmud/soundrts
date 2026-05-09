@@ -225,7 +225,7 @@ class Computer(Player):
                 u.take_order(["gather", deposit.id])
                 try:
                     self._gathered_deposits[deposit] += 1
-                except:
+                except KeyError:
                     self._gathered_deposits[deposit] = 1
 
     def _should_play_this_turn(self):
@@ -308,7 +308,7 @@ class Computer(Player):
             return -100, 0, 0
         try:
             workers = self._gathered_deposits[deposit]
-        except:
+        except KeyError:
             workers = 0
         # The resources difference is taken into account only if the difference is significant.
         return (
@@ -332,7 +332,7 @@ class Computer(Player):
                 if u.orders and u.orders[0].keyword == "gather":
                     try:
                         self._gathered_deposits[u.orders[0].target] += 1
-                    except:
+                    except KeyError:
                         self._gathered_deposits[u.orders[0].target] = 1
             elif isinstance(u, BuildingSite):
                 self._building_sites.append(u)
@@ -708,8 +708,12 @@ class Computer(Player):
                     effect = rules.get(ability, "effect")
                     if effect and "summon" in effect[:1] and type in effect:
                         if rules.get(ability, "effect_target") == ["ask"]:
-                            self.order(1, maker, ["use", ability, self.units[0].id])
-                            # TODO select best place
+                            target = (
+                                self._enemy_presence[0]
+                                if self._enemy_presence
+                                else self.units[0]
+                            )
+                            self.order(1, maker, ["use", ability, target.id])
                         else:
                             self.order(1, maker, ["use", ability])
                         break
@@ -779,7 +783,7 @@ class Computer(Player):
                     try:
                         self._waiting_menace[o.target] += u.menace
                         self._waiting_units[o.target].append(u)
-                    except:
+                    except KeyError:
                         self._waiting_menace[o.target] = u.menace
                         self._waiting_units[o.target] = [u]
         self._time_has_come = {}
@@ -802,7 +806,7 @@ class Computer(Player):
             return False
         try:
             return self._time_has_come[place]
-        except:
+        except KeyError:
             return False
 
     def _friendly_presence(self, place):

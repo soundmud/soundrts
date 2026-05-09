@@ -2,19 +2,23 @@ from cx_Freeze import setup, Executable
 
 from soundrts.version import VERSION
 
-# Dependencies are automatically detected, but it might need
-# fine tuning.
-build_options = {'packages': [], 'excludes': []}
-
 import sys
-base = 'Win32GUI' if sys.platform=='win32' else None
+import os
+
+build_options = {
+    "packages": ["pygame", "accessible_output2", "chardet", "cloudpickle", "requests"],
+    "excludes": ["Cython", "scipy", "numpy", "tkinter"],
+    "include_files": ["res", "single", "mods", "cfg"],
+}
 
 executables = [
-    Executable('soundrts.py', base=base)
+    Executable("soundrts.py", base=None, target_name="soundrts")
 ]
 
-setup(name='soundrts',
-      version = VERSION.replace("-dev", ".9999"),
-      description = '',
-      options = {'build_exe': build_options},
-      executables = executables)
+setup(
+    name="SoundRTS",
+    version=VERSION.replace("-dev", ".9999"),
+    description="SoundRTS audio game",
+    options={"build_exe": build_options},
+    executables=executables,
+)

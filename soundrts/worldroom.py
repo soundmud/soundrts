@@ -168,16 +168,6 @@ class Square(_Space):
             del d["spiral"]
         return d
 
-    def is_near(self, square):  # FIXME: not used (remove?)
-        try:
-            return (abs(self.col - square.col), abs(self.row - square.row)) in (
-                (0, 1),
-                (1, 0),
-                (1, 1),
-            )
-        except AttributeError:  # not a square
-            return False
-
     def clean(self):
         for o in self.objects:
             o.clean()

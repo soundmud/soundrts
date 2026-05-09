@@ -1,4 +1,4 @@
-#! .venv\Scripts\python.exe
+#!/usr/bin/env python3
 """
 From the command-line, type: py setup.py build
 Or activate the virtual environment and type: python setup.py build

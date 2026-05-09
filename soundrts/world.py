@@ -190,7 +190,7 @@ class World:
     def can_harm(self, unit_type_name, other_type_name):
         try:
             return self.harm_target_types[(unit_type_name, other_type_name)]
-        except:
+        except KeyError:
             unit = rules.unit_class(unit_type_name)
             other = rules.unit_class(other_type_name)
             if other is None:
@@ -245,7 +245,7 @@ class World:
                 k = (u.x // A, u.y // A)
                 try:
                     p._buckets[k].append(u)
-                except:
+                except KeyError:
                     p._buckets[k] = [u]
 
     def _update_cloaking(self):
@@ -315,7 +315,7 @@ class World:
             if p in self.players:
                 try:
                     p.update()
-                except:
+                except Exception:
                     exception("")
         self.random.shuffle(self.active_objects)
         for o in self.active_objects[:]:
@@ -323,7 +323,7 @@ class World:
             if o.place is not None:
                 try:
                     o.update()
-                except:
+                except Exception:
                     exception("")
 
         # slow updates (called every second)
@@ -376,7 +376,7 @@ class World:
                         observed_before_squares,
                         collision_debug,
                     )
-            except:
+            except Exception:
                 exception("")
 
         # if no "true" player is playing any more, end the game
@@ -609,12 +609,12 @@ class World:
                     self.computers_starts[int(o[-1:]) - 1][2].append(
                         [condition, action]
                     )
-                except:
+                except (ValueError, IndexError):
                     map_warning("trigger " + " ".join(words), "%s is unknown" % o)
             elif o[:-1] == "player":
                 try:
                     self.players_starts[int(o[-1:]) - 1][2].append([condition, action])
-                except:
+                except (ValueError, IndexError):
                     map_warning("trigger " + " ".join(words), "%s is unknown" % o)
             else:
                 map_warning("trigger " + " ".join(words), "%s is unknown" % o)
@@ -670,9 +670,10 @@ class World:
                     ):
                         map_error(line, "unknown: %s" % _w)
             if w in ["title", "objective", "intro"]:
-                setattr(
-                    self, w, [int(x) for x in words[1:]]
-                )  # TODO: error msg (sounds)
+                try:
+                    setattr(self, w, [int(x) for x in words[1:]])
+                except ValueError:
+                    map_error(line, "%s values must be integer sound IDs" % w)
             elif w in [
                 "square_width",
                 "nb_rows",
@@ -690,7 +691,7 @@ class World:
                     if w == "nb_rows":
                         self.nb_columns = self.nb_rows
                         warning("nb_rows is deprecated, use nb_columns instead")
-                except:
+                except (ValueError, IndexError):
                     map_error(line, "%s must be an integer" % w)
             elif w in ["south_north", "west_east"]:
                 squares = words[2:]
@@ -706,13 +707,26 @@ class World:
                 for c in words[1:]:
                     try:
                         starting_resources.append(to_int(c))
-                    except:
+                    except ValueError:
                         map_error(line, "expected an integer but found %s" % c)
             elif rules.get(w, "class") == ["deposit"]:
-                for sq in words[2:]:  # TODO: error msg (squares)
-                    self.map_objects.append([sq, w, words[1]])
+                if len(words) < 3:
+                    map_error(line, "%s requires a quantity and at least one square" % w)
+                else:
+                    try:
+                        int(words[1])
+                    except ValueError:
+                        map_error(line, "%s: quantity must be an integer, got %s" % (w, words[1]))
+                    deposit_squares = words[2:]
+                    check_squares(line, deposit_squares)
+                    for sq in deposit_squares:
+                        self.map_objects.append([sq, w, words[1]])
             elif w in ["starting_units"]:
-                getattr(self, w).extend(words[1:])  # TODO: error msg (types)
+                for unit_type in words[1:]:
+                    if rules.unit_class(unit_type) is None:
+                        map_warning(line, "unknown unit type: %s" % unit_type)
+                    else:
+                        self.starting_units.append(unit_type)
             elif w in ["player", "computer_only", "computer"]:
                 self.specific_starts.append(" ".join(words))  # just for the editor
                 self._add_start(w, words)
@@ -857,7 +871,7 @@ class World:
                         order()
                     else:
                         player.execute_command(order)
-                except:
+                except Exception:
                     exception("")
             else:
                 time.sleep(0.001)

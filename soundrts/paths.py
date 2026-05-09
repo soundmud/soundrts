@@ -4,23 +4,42 @@ from soundrts import parameters
 
 
 def _mkdir(path):
-    if not os.path.exists(path):
-        try:
-            os.mkdir(path)
-        except:
-            # no log file at this stage
-            print("cannot make dir: %s" % path)
+    try:
+        os.makedirs(path, exist_ok=True)
+        return True
+    except Exception:
+        # no log file at this stage
+        print("cannot make dir: %s" % path)
+        return False
 
 
-if os.path.exists("user"):
-    CONFIG_DIR_PATH = "user"
-elif "APPDATA" in os.environ:  # Windows
-    CONFIG_DIR_PATH = os.path.join(os.environ["APPDATA"], "SoundRTS")
-elif "HOME" in os.environ:
-    CONFIG_DIR_PATH = os.path.join(os.environ["HOME"], ".SoundRTS")
-else:
-    CONFIG_DIR_PATH = "user"
-_mkdir(CONFIG_DIR_PATH)
+def _is_writable_directory(path):
+    if not _mkdir(path):
+        return False
+    probe = os.path.join(path, ".write_test")
+    try:
+        with open(probe, "w"):
+            pass
+        os.remove(probe)
+        return True
+    except Exception:
+        return False
+
+
+def _config_dir_candidates():
+    if os.path.exists("user"):
+        yield "user"
+    if "APPDATA" in os.environ:  # Windows
+        yield os.path.join(os.environ["APPDATA"], "SoundRTS")
+    if "HOME" in os.environ:
+        yield os.path.join(os.environ["HOME"], ".SoundRTS")
+    yield "user"
+
+
+for _candidate in _config_dir_candidates():
+    if _is_writable_directory(_candidate):
+        CONFIG_DIR_PATH = _candidate
+        break
 
 TMP_PATH = os.path.join(CONFIG_DIR_PATH, "tmp")
 _mkdir(TMP_PATH)

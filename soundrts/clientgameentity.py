@@ -110,7 +110,7 @@ class EntityView:
     def footstep_interval(self):
         try:
             s = self.model.actual_speed
-        except:
+        except AttributeError:
             s = self.model.speed
         try:
             return 1000.0 / s / 2 + self.footstep_random
@@ -157,7 +157,7 @@ class EntityView:
     def ext_title(self):
         try:
             return self.title + mp.AT + self.place.title
-        except:
+        except Exception:
             exception("problem with %s.ext_title", self.type_name)
 
     def _menu(self, strict=False):
@@ -165,7 +165,7 @@ class EntityView:
         try:  # TODO: remove this "try... except" when rules.txt checking is implemented
             for order_class in get_orders_list():
                 menu.extend(order_class.menu(self, strict=strict))
-        except:
+        except Exception:
             exception("problem with %s.menu() of %s", order_class, self.type_name)
         return menu
 

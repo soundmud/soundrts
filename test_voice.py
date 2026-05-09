@@ -1,4 +1,4 @@
-#! .venv\Scripts\python.exe
+#!/usr/bin/env python3
 from soundrts.clientmedia import init_media
 from soundrts.lib.voice import voice
 
