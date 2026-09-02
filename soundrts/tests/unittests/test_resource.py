@@ -1,6 +1,16 @@
-from soundrts.lib.resource import ResourceStack, localized_paths, res, official_multiplayer_maps
-from soundrts.lib.resource import best_language_match, localized_path
+import warnings
 
+from soundrts.lib.resource import ResourceStack, localized_paths, res
+from soundrts.lib.resource import official_multiplayer_maps
+from soundrts.lib.resource import best_language_match, localized_path
+from soundrts.lib.resource import _preferred_language
+
+
+
+def test_preferred_language_does_not_emit_deprecation_warning():
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DeprecationWarning)
+        assert _preferred_language()
 
 def test_localize_path():
     assert localized_path("/ui", "fr").replace("\\", "/") == "/ui-fr"
