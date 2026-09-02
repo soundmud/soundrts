@@ -38,7 +38,8 @@ def _unpack(player_orders):
 def send_error_to_metaserver(error_msg):
     try:
         params = urllib.parse.urlencode({"method": "add", "msg": error_msg})
-        urllib.request.urlopen(METASERVER_URL + "errors.php?%s" % params).read()
+        with urllib.request.urlopen(METASERVER_URL + "errors.php?%s" % params) as response:
+            response.read()
     except:
         exception("could not send error message to web server")
 

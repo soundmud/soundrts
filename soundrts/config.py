@@ -66,7 +66,8 @@ def save(name=CONFIG_FILE_PATH):
         if not c.has_section(section):
             c.add_section(section)
         c.set(section, option, str(getattr(_module, option)))
-    c.write(open(name, "w"))
+    with open(name, "w") as f:
+        c.write(f)
 
 
 def make_a_copy(name):
@@ -100,7 +101,8 @@ def _copy_to_module(c):
 def load(name=CONFIG_FILE_PATH):
     if os.path.isfile(name):
         c = configparser.ConfigParser()
-        c.read_file(open(name))
+        with open(name) as f:
+            c.read_file(f)
         error = _copy_to_module(c)
         if error:
             warning("Error in %s.", name)

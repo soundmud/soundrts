@@ -19,7 +19,8 @@ class Stats:
 
     def _read_file(self):
         if os.path.exists(self.filepath):
-            lines = open(self.filepath).readlines()
+            with open(self.filepath) as f:
+                lines = f.readlines()
         else:
             lines = []
         stats = {}

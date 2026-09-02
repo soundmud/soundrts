@@ -26,7 +26,8 @@ from .version import SERVER_COMPATIBILITY
 REGISTER_INTERVAL = 10 * 60  # register server every 10 minutes
 REGISTER_URL = MAIN_METASERVER_URL + "servers_register.php"
 UNREGISTER_URL = MAIN_METASERVER_URL + "servers_unregister.php"
-WHATISMYIP_URL = open("cfg/whatismyip.txt").read().strip()
+with open("cfg/whatismyip.txt") as f:
+    WHATISMYIP_URL = f.read().strip()
 
 
 @lru_cache()
@@ -35,12 +36,8 @@ def _public_ip():
         warning(f"using the public IP address specified in the options: {options.ip}")
         return options.ip
     try:
-        ip = (
-            urllib.request.urlopen(WHATISMYIP_URL, timeout=3)
-            .read()
-            .decode("ascii")
-            .strip()
-        )
+        with urllib.request.urlopen(WHATISMYIP_URL, timeout=3) as response:
+            ip = response.read().decode("ascii").strip()
         if not re.match("^[0-9.]{7,40}$", ip):
             ip = ""
     except:
@@ -212,7 +209,8 @@ class Server(asyncore.dispatcher):
     def unregister(self):
         try:
             info("unregistering server...")
-            s = urllib.request.urlopen(UNREGISTER_URL + "?ip=" + _public_ip()).read()
+            with urllib.request.urlopen(UNREGISTER_URL + "?ip=" + _public_ip()) as response:
+                s = response.read()
         except:
             s = "couldn't access to the metaserver"
         if s:
@@ -220,11 +218,12 @@ class Server(asyncore.dispatcher):
 
     def _register(self):
         try:
-            s = urllib.request.urlopen(
+            with urllib.request.urlopen(
                 REGISTER_URL
                 + "?version=%s&login=%s&ip=%s&port=%s"
                 % (SERVER_COMPATIBILITY, self.login, _public_ip(), options.port)
-            ).read()
+            ) as response:
+                s = response.read()
         except:
             s = "couldn't access to the metaserver"
         if s:

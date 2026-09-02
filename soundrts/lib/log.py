@@ -31,7 +31,10 @@ class HTTPHandler(logging.Handler):
         msg = f"exception with version={_version} platform={platform.platform()}:\n{record.exc_text}"
         params = urllib.parse.urlencode({"msg": msg})
         try:
-            urllib.request.urlopen(f"{self._url}/logging_errors.php?{params}").read()
+            with urllib.request.urlopen(
+                f"{self._url}/logging_errors.php?{params}"
+            ) as response:
+                response.read()
         except:
             pass
         self._done = True

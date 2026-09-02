@@ -11,7 +11,8 @@ from .version import SERVER_COMPATIBILITY
 # old value used by some features (stats, ...)
 METASERVER_URL = "http://jlpo.free.fr/soundrts/metaserver/"
 
-MAIN_METASERVER_URL = open("cfg/metaserver.txt").read().strip()
+with open("cfg/metaserver.txt") as f:
+    MAIN_METASERVER_URL = f.read().strip()
 DEFAULT_SERVERS_PATH = "cfg/default_servers.txt"
 RECENT_SERVERS_PATH = os.path.join(TMP_PATH, "recent_servers.txt")
 
@@ -23,7 +24,8 @@ def _add_time_and_version(line):
 
 
 def _default_servers():
-    lines = open(DEFAULT_SERVERS_PATH).readlines()
+    with open(DEFAULT_SERVERS_PATH) as f:
+        lines = f.readlines()
     return [
         _add_time_and_version(line)
         for line in lines

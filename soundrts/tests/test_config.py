@@ -54,13 +54,17 @@ def test_load_defaults_if_file_with_errors(cfg):
         os.unlink(o)
     except:
         pass
-    s = open(n).read()
+    with open(n) as f:
+        s = f.read()
     try:
         config.load(n)
-        assert s != open(n).read()
+        with open(n) as f:
+            assert s != f.read()
     finally:
-        open(n, "w").write(s)
-        assert s == open(n).read()
+        with open(n, "w") as f:
+            f.write(s)
+        with open(n) as f:
+            assert s == f.read()
     assert config.login == "player"
     assert config.num_channels == 16
     assert config.timeout == 60.0
