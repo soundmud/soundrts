@@ -183,17 +183,18 @@ class _Savable:
         return odict
 
     def save(self):
-        f = open(SAVE_PATH, "wb")
-        i = stats.Stats(None, None)._get_weak_user_id()
-        f.write(("%s\n" % i).encode(encoding="ascii"))
-        self._rules = rules
-        self._ai = definitions._ai
-        self._style = style
-        if self.record_replay:
-            self._replay_file.flush()
-            os.fsync(self._replay_file.fileno())  # just to be sure
-            self._replay_file_content = open(self._replay_file.name).read()
-        cloudpickle.dump(self, f)
+        with open(SAVE_PATH, "wb") as f:
+            i = stats.Stats(None, None)._get_weak_user_id()
+            f.write(("%s\n" % i).encode(encoding="ascii"))
+            self._rules = rules
+            self._ai = definitions._ai
+            self._style = style
+            if self.record_replay:
+                self._replay_file.flush()
+                os.fsync(self._replay_file.fileno())  # just to be sure
+                with open(self._replay_file.name) as replay_file:
+                    self._replay_file_content = replay_file.read()
+            cloudpickle.dump(self, f)
 
     def run_on(self):
         if self.record_replay:

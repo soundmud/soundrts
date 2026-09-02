@@ -126,7 +126,8 @@ class Menu:
         self.remember = remember
         if self.remember is not None:
             try:
-                self._remembered_choice = open(_remember_path(remember)).read()
+                with open(_remember_path(remember)) as f:
+                    self._remembered_choice = f.read()
             except:
                 self._remembered_choice = ""
 

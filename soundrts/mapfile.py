@@ -37,8 +37,12 @@ class Map:
 
     @staticmethod
     def load(f, name):
+        try:
+            buffer = f.read()
+        finally:
+            f.close()
         m = Map()
-        m._init_from_buffer(f.read(), name)
+        m._init_from_buffer(buffer, name)
         return m
 
     def _load_from_text_file(self, f):
@@ -47,13 +51,14 @@ class Map:
 
     def _load_from_package(self, package):
         self.resources = resource_layer(package, self.name)
-        self._load_from_text_file(self.resources.open_text("map.txt"))
+        with self.resources.open_text("map.txt") as f:
+            self._load_from_text_file(f)
 
     def _init_from_path(self, path):
         self.name = _name_from_path(path)
         if path.endswith(".txt"):
-            f = open(path, encoding="utf-8", errors="replace")
-            self._load_from_text_file(f)
+            with open(path, encoding="utf-8", errors="replace") as f:
+                self._load_from_text_file(f)
         else:
             package = Package.from_path(path)
             self._load_from_package(package)
@@ -71,8 +76,8 @@ class Map:
         self.name = _name_from_path(path)
         if path.endswith(".txt"):
             s = buffer.decode(encoding="utf-8", errors="replace")
-            f = io.StringIO(s, newline=None)
-            self._load_from_text_file(f)
+            with io.StringIO(s, newline=None) as f:
+                self._load_from_text_file(f)
         else:
             package = ZipPackage(ZipFile(io.BytesIO(buffer)))
             self._load_from_package(package)

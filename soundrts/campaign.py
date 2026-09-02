@@ -67,7 +67,8 @@ class CutSceneChapter(Chapter):
         self._load()
 
     def _load(self):
-        s = self.campaign.resources.open_text(self.path).read()
+        with self.campaign.resources.open_text(self.path) as t:
+            s = t.read()
         # header
         m = re.search("(?m)^title[ \t]+([0-9 ]+)$", s)
         if m:
@@ -105,7 +106,8 @@ class Campaign:
 
     def _set_title_and_mods(self):
         if self.resources.isfile("campaign.txt"):
-            s = self.resources.open_text("campaign.txt").read()
+            with self.resources.open_text("campaign.txt") as t:
+                s = t.read()
         else:
             s = ""
         m = re.search("(?m)^title[ \t]+([A-Za-z0-9 ]+)$", s)
@@ -123,7 +125,8 @@ class Campaign:
 
     def _set_mods_from_mods_txt(self):
         if self.resources.isfile("mods.txt"):
-            self.mods = self.resources.open_text("mods.txt").read()
+            with self.resources.open_text("mods.txt") as t:
+                self.mods = t.read()
 
     def _set_chapters(self):
         self.chapters = []
@@ -137,8 +140,7 @@ class Campaign:
             if self._is_a_cutscene(filename):
                 c = CutSceneChapter(self, number, filename)
             else:
-                file = self.resources.open_binary(filename)
-                map_ = Map.load(file, filename)
+                map_ = Map.load(self.resources.open_binary(filename), filename)
                 map_.name = self.name + "/" + str(number)
                 c = MissionChapter(self, number, map_)
             self.chapters.append(c)
@@ -161,7 +163,8 @@ class Campaign:
     def _get_bookmark(self):
         c = configparser.ConfigParser()
         if os.path.isfile(CAMPAIGNS_CONFIG_PATH):
-            c.read_file(open(CAMPAIGNS_CONFIG_PATH))
+            with open(CAMPAIGNS_CONFIG_PATH) as f:
+                c.read_file(f)
         return c.getint(self._id(), "chapter", fallback=0)
 
     def _available_chapters(self):
@@ -170,7 +173,8 @@ class Campaign:
     def _set_bookmark(self, number):
         c = configparser.ConfigParser()
         if os.path.isfile(CAMPAIGNS_CONFIG_PATH):
-            c.read_file(open(CAMPAIGNS_CONFIG_PATH))
+            with open(CAMPAIGNS_CONFIG_PATH) as f:
+                c.read_file(f)
         if self._id() not in c.sections():
             c.add_section(self._id())
         c.set(self._id(), "chapter", repr(number))

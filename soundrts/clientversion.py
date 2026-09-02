@@ -29,7 +29,8 @@ class RevisionChecker(threading.Thread):
             if _patch(VERSION) != -1:
                 major_minor = ".".join(VERSION.split(".")[:2])
                 url = f"http://jlpo.free.fr/soundrts/{major_minor}version.txt"
-                latest_version = urllib.request.urlopen(url).read().strip().decode()
+                with urllib.request.urlopen(url) as response:
+                    latest_version = response.read().strip().decode()
                 if "404" not in latest_version and _patch(VERSION) < _patch(
                     latest_version
                 ):

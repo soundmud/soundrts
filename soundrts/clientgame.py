@@ -438,7 +438,8 @@ class GameInterface:
                 for p in self.world.players:
                     p.triggers = []
                 self._bindings = Bindings()
-                self._bindings.load(open("res/ui/editor_bindings.txt").read(), self)
+                with open("res/ui/editor_bindings.txt") as f:
+                    self._bindings.load(f.read(), self)
                 voice.item(["editor"])
             else:
                 voice.item(mp.BEEP)
@@ -949,7 +950,8 @@ class GameInterface:
     def get_bindings(self):
         b = res.text("ui/bindings", append=True, localize=True)
         try:
-            b += "\n" + open(CUSTOM_BINDINGS_PATH).read()
+            with open(CUSTOM_BINDINGS_PATH) as f:
+                b += "\n" + f.read()
         except OSError:
             pass
         return b
